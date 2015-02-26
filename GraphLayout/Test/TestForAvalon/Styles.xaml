@@ -1,0 +1,78 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="clr-namespace:TestForAvalon"
+    xmlns:av="clr-namespace:Microsoft.Msagl.ControlForWpfObsolete;assembly=Microsoft.Msagl.ControlForWPF"                    
+    >
+
+  <Style TargetType="{x:Type av:NodeShape}">
+    <Style.Triggers>
+      <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Node.UserData.IsInteriorNode}" Value="true">
+        <Setter Property="av:NodeShape.BackBrush">
+          <Setter.Value>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+              <LinearGradientBrush.GradientStops>
+                <GradientStop Color="#00dfff" Offset="0"/>
+                <GradientStop Color="#000fff" Offset="1"/>
+              </LinearGradientBrush.GradientStops>
+            </LinearGradientBrush>
+          </Setter.Value>
+        </Setter>
+      </DataTrigger>
+    </Style.Triggers>
+    <Setter Property="BackBrush">
+      <Setter.Value>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+          <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#ffffff" Offset="0"/>
+            <GradientStop Color="#ffffff" Offset="1"/>
+          </LinearGradientBrush.GradientStops>
+        </LinearGradientBrush>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="BorderPen">
+      <Setter.Value>
+        <Pen Brush="Gray" Thickness="1"/>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="SelectedBrush">
+      <Setter.Value>
+        <RadialGradientBrush Center=".5,.5" RadiusX="1" RadiusY="1">
+          <RadialGradientBrush.GradientStops>
+            <GradientStop Color="#ff0000" Offset="0"/>
+            <GradientStop Color="Transparent" Offset="1"/>
+          </RadialGradientBrush.GradientStops>
+        </RadialGradientBrush>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="HighlightBrush">
+      <Setter.Value>
+        <RadialGradientBrush Center=".5,.5" RadiusX="1" RadiusY="1">
+          <RadialGradientBrush.GradientStops>
+            <GradientStop Color="#00ff00" Offset="0"/>
+            <GradientStop Color="Transparent" Offset="1"/>
+          </RadialGradientBrush.GradientStops>
+        </RadialGradientBrush>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="NormalBrush">
+      <Setter.Value>
+        <RadialGradientBrush Center=".5,.5" RadiusX="1" RadiusY="1">
+          <RadialGradientBrush.GradientStops>
+            <GradientStop Color="#ffffff" Offset="0"/>
+            <GradientStop Color="Transparent" Offset="1"/>
+          </RadialGradientBrush.GradientStops>
+        </RadialGradientBrush>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="HighlightSelectedBrush">
+      <Setter.Value>
+        <RadialGradientBrush Center=".5,.5" RadiusX="1" RadiusY="1">
+          <RadialGradientBrush.GradientStops>
+            <GradientStop Color="#ffff00" Offset="0"/>
+            <GradientStop Color="Transparent" Offset="1"/>
+          </RadialGradientBrush.GradientStops>
+        </RadialGradientBrush>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</ResourceDictionary>

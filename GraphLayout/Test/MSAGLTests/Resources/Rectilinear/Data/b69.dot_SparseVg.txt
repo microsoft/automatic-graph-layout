@@ -1,0 +1,1604 @@
+// -geom C:\Users\tedhar\AppData\Local\Temp\b69.dot.msagl.geom -nowritevg -nowritescansegs -nowritepaddedobs -sparsevg
+Seed 0x0
+RandomArgs -0- 0 -0- False
+Padding 1
+EdgeSeparation 1
+RouteToCenter False
+ArrowheadLength 7
+UseFreePortsForObstaclePorts False
+UseSparseVisibilityGraph True
+UseObstacleRectangles False
+BendPenalty 4
+LimitPortVisibilitySpliceToEndpointBoundingBox False
+WantPaths True
+WantNudger True
+WantVerify True
+StraightTolerance 0.001
+CornerTolerance 0.1
+Vertices 3959 Edges 6834
+
+BEGIN UNPADDED_OBSTACLES
+Begin RoundedRect
+  Id 0
+  x -2361.54914093018 y 1206.43620014191 w 240.51948547363 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 1
+  [157.54945373535, 0], [0, 23.12759971619], [-1004.29417419434, 1467]
+End Ellipse
+Begin Ellipse
+  Id 2
+  [131.62757873535, 0], [0, 23.12759971619], [-3272.49169921875, 182]
+End Ellipse
+Begin Ellipse
+  Id 3
+  [142.00909423828, 0], [0, 23.12759971619], [-3272.49169921875, 775]
+End Ellipse
+Begin Ellipse
+  Id 4
+  [129.55857086182, 0], [0, 23.12759971619], [-658.52861022949, 353]
+End Ellipse
+Begin Ellipse
+  Id 5
+  [132.65753173828, 0], [0, 23.12759971619], [-2600.57904052734, 627]
+End Ellipse
+Begin Ellipse
+  Id 6
+  [130.57940673828, 0], [0, 23.12759971619], [-1948.36302185059, 1218]
+End Ellipse
+Begin RoundedRect
+  Id 7
+  x -1121.46407318115 y 1240.43620014191 w 234.33979797363 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 8
+  x -766.8801574707 y -11.56379985809 w 216.70309448242 h 23.12759971619 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 9
+  x -2348.09146118164 y 193.43620014191 w 213.604125976561 h 23.12759971619 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 10
+  [128.52862548828, 0], [0, 23.12759971619], [-2600.57904052734, 513]
+End Ellipse
+Begin Ellipse
+  Id 11
+  [130.59762573242, 0], [0, 23.12759971619], [-2600.57904052734, 205]
+End Ellipse
+Begin RoundedRect
+  Id 12
+  x -2344.98339080811 y 509.43620014191 w 207.38798522949 h 23.1275997161899 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 13
+  [133.69659423828, 0], [0, 23.12759971619], [-2600.57904052734, 934]
+End Ellipse
+Begin Ellipse
+  Id 14
+  [113.99998474121, 0], [0, 23.12759971619], [-3272.49169921875, 275]
+End Ellipse
+Begin Ellipse
+  Id 15
+  [132.65753173828, 0], [0, 23.12759971619], [-1350.05973815918, 423]
+End Ellipse
+Begin Ellipse
+  Id 16
+  [127.48956298828, 0], [0, 23.12759971619], [-1948.36302185059, 741]
+End Ellipse
+Begin Ellipse
+  Id 17
+  [130.59762573242, 0], [0, 23.12759971619], [-1350.05973815918, 1252]
+End Ellipse
+Begin Ellipse
+  Id 18
+  [129.55857086182, 0], [0, 23.12759971619], [-658.52861022949, 718]
+End Ellipse
+Begin Ellipse
+  Id 19
+  [130.58851623535, 0], [0, 23.12759971619], [-1948.36302185059, 616]
+End Ellipse
+Begin RoundedRect
+  Id 20
+  x -4257.10221862793 y 354.43620014191 w 250.93745422363 h 23.1275997161899 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 21
+  x -3678.96038818359 y 388.43620014191 w 215.64579772949 h 23.1275997161899 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 22
+  x -1466.19513702393 y 1353.43620014191 w 232.27079772949 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 23
+  x -3072.3582611084 y 1172.43620014191 w 216.70309448242 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 24
+  [196.95178222656, 0], [0, 23.12759971619], [-2600.57904052734, 262]
+End Ellipse
+Begin Ellipse
+  Id 25
+  [115.04815673828, 0], [0, 23.12759971619], [-1662.18142700195, 1344]
+End Ellipse
+Begin Ellipse
+  Id 26
+  [128.52862548828, 0], [0, 23.12759971619], [-4417.31834411621, 366]
+End Ellipse
+Begin RoundedRect
+  Id 27
+  x -3098.79510498047 y 261.43620014191 w 269.576782226561 h 23.1275997161899 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 28
+  [79.79295349121, 0], [0, 23.12759971619], [-1350.05973815918, 1410]
+End Ellipse
+Begin Ellipse
+  Id 29
+  [128.52862548828, 0], [0, 23.12759971619], [-2600.57904052734, 741]
+End Ellipse
+Begin RoundedRect
+  Id 30
+  x -3073.3973236084 y 592.43620014191 w 218.78121948242 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 31
+  [121.29164886475, 0], [0, 23.12759971619], [-2600.57904052734, 684]
+End Ellipse
+Begin RoundedRect
+  Id 32
+  x -766.36518096924 y 1455.43620014191 w 215.67314147949 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 33
+  [130.57940673828, 0], [0, 23.12759971619], [-2600.57904052734, 1184]
+End Ellipse
+Begin RoundedRect
+  Id 34
+  x -1147.89636230469 y 33.43620014191 w 287.2043762207 h 23.12759971619 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 35
+  [130.59762573242, 0], [0, 23.12759971619], [-658.52861022949, 1252]
+End Ellipse
+Begin Ellipse
+  Id 36
+  [128.52862548828, 0], [0, 23.12759971619], [-1948.36302185059, 684]
+End Ellipse
+Begin RoundedRect
+  Id 37
+  x -2348.09146118164 y 147.43620014191 w 213.604125976561 h 23.12759971619 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 38
+  x -1782.46395874023 y 330.43620014191 w 240.56506347656 h 23.1275997161899 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 39
+  [128.51039886475, 0], [0, 23.12759971619], [-2600.57904052734, 456]
+End Ellipse
+Begin Ellipse
+  Id 40
+  [127.48044586182, 0], [0, 23.12759971619], [-1948.36302185059, 296]
+End Ellipse
+Begin Ellipse
+  Id 41
+  [137.82550048828, 0], [0, 23.12759971619], [-2600.57904052734, 866]
+End Ellipse
+Begin Ellipse
+  Id 42
+  [124.39060211182, 0], [0, 23.12759971619], [-3272.49169921875, 400]
+End Ellipse
+Begin Ellipse
+  Id 43
+  [132.65753173828, 0], [0, 23.12759971619], [-3272.49169921875, 570]
+End Ellipse
+Begin Ellipse
+  Id 44
+  [136.79554748535, 0], [0, 23.12759971619], [-2600.57904052734, 570]
+End Ellipse
+Begin Ellipse
+  Id 45
+  [133.69659423828, 0], [0, 23.12759971619], [-2600.57904052734, 1059]
+End Ellipse
+Begin RoundedRect
+  Id 46
+  x -3070.8133392334 y 387.43620014191 w 213.61325073242 h 23.1275997161899 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 47
+  x -3696.08668518066 y 706.43620014191 w 249.89839172363 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 48
+  x -1143.21147155762 y 1410.43620014191 w 277.83459472656 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 49
+  x -3678.46364593506 y 354.43620014191 w 214.65231323242 h 23.1275997161899 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 50
+  x -2349.64550018311 y 854.43620014191 w 216.71220397949 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 51
+  x -1770.54208374023 y 1240.43620014191 w 216.72131347656 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 52
+  [156.52861022949, 0], [0, 23.12759971619], [-658.52861022949, 45]
+End Ellipse
+Begin RoundedRect
+  Id 53
+  x -1786.08700561523 y 1149.43620014191 w 247.81115722656 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 54
+  x -766.88471221924 y 1489.43620014191 w 216.71220397949 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 55
+  [114.00909423828, 0], [0, 23.12759971619], [-3272.49169921875, 718]
+End Ellipse
+Begin Ellipse
+  Id 56
+  [75.63670349121, 0], [0, 23.12759971619], [-1350.05973815918, 1184]
+End Ellipse
+Begin RoundedRect
+  Id 57
+  x -2344.98339080811 y 543.43620014191 w 207.38798522949 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 58
+  x -2371.93975830078 y 1331.43620014191 w 261.30072021484 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 59
+  x -2348.61555480957 y 672.43620014191 w 214.65231323242 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 60
+  [125.40232086182, 0], [0, 23.12759971619], [-1948.36302185059, 1161]
+End Ellipse
+Begin Ellipse
+  Id 61
+  [132.65753173828, 0], [0, 23.12759971619], [-2600.57904052734, 1116]
+End Ellipse
+Begin Ellipse
+  Id 62
+  [131.62757873535, 0], [0, 23.12759971619], [-3272.49169921875, 125]
+End Ellipse
+Begin Ellipse
+  Id 63
+  [129.55857086182, 0], [0, 23.12759971619], [-3272.49169921875, 332]
+End Ellipse
+Begin RoundedRect
+  Id 64
+  x -3071.3328704834 y 729.43620014191 w 214.65231323242 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 65
+  [125.38409423828, 0], [0, 23.12759971619], [-2600.57904052734, 1320]
+End Ellipse
+Begin RoundedRect
+  Id 66
+  x -1125.09623718262 y 1274.43620014191 w 241.60412597656 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 67
+  x -2348.09146118164 y 284.43620014191 w 213.604125976561 h 23.1275997161899 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 68
+  [128.52862548828, 0], [0, 23.12759971619], [-2600.57904052734, 342]
+End Ellipse
+Begin Ellipse
+  Id 69
+  [134.72653198242, 0], [0, 23.12759971619], [-2600.57904052734, 809]
+End Ellipse
+Begin Ellipse
+  Id 70
+  [129.53122711182, 0], [0, 23.12759971619], [-3272.49169921875, 1184]
+End Ellipse
+Begin RoundedRect
+  Id 71
+  x -1776.75366973877 y 1274.43620014191 w 229.14448547363 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 72
+  x -3094.64340209961 y 1263.43620014191 w 261.27337646484 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 73
+  x -2349.64094543457 y 1138.43620014191 w 216.70309448242 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 74
+  [138.86456298828, 0], [0, 23.12759971619], [-3272.49169921875, 1252]
+End Ellipse
+Begin RoundedRect
+  Id 75
+  x -3073.3973236084 y 1036.43620014191 w 218.78121948242 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 76
+  x -2348.09602355957 y 979.43620014191 w 213.61325073242 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 77
+  [129.55857086182, 0], [0, 23.12759971619], [-1350.05973815918, 1320]
+End Ellipse
+Begin RoundedRect
+  Id 78
+  x -3072.36737060547 y 182.43620014191 w 216.721313476561 h 23.12759971619 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 79
+  x -3074.43182373047 y 1070.43620014191 w 220.850219726561 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 80
+  [143.03903198242, 0], [0, 23.12759971619], [-1350.05973815918, 718]
+End Ellipse
+Begin Ellipse
+  Id 81
+  [127.48956298828, 0], [0, 23.12759971619], [-2600.57904052734, 399]
+End Ellipse
+Begin RoundedRect
+  Id 82
+  x -1137.01811218262 y 706.43620014191 w 265.44787597656 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 83
+  x -3096.21566772461 y 695.43620014191 w 264.41790771484 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 84
+  [115.04815673828, 0], [0, 23.12759971619], [-3851.12572479248, 366]
+End Ellipse
+Begin Ellipse
+  Id 85
+  [134.72653198242, 0], [0, 23.12759971619], [-3272.49169921875, 1025]
+End Ellipse
+Begin Ellipse
+  Id 86
+  [128.52862548828, 0], [0, 23.12759971619], [-658.52861022949, 1365]
+End Ellipse
+Begin RoundedRect
+  Id 87
+  x -3091.02492523193 y 114.43620014191 w 254.03642272949 h 23.12759971619 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 88
+  [81.86196136475, 0], [0, 23.12759971619], [-2600.57904052734, 125]
+End Ellipse
+Begin Ellipse
+  Id 89
+  [130.59762573242, 0], [0, 23.12759971619], [-2600.57904052734, 991]
+End Ellipse
+Begin RoundedRect
+  Id 90
+  x -3071.3328704834 y 501.43620014191 w 214.65231323242 h 23.1275997161899 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 91
+  x -2349.64094543457 y 1172.43620014191 w 216.70309448242 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 92
+  [121.26430511475, 0], [0, 23.12759971619], [-1948.36302185059, 521]
+End Ellipse
+Begin RoundedRect
+  Id 93
+  x -1771.57203674316 y 604.43620014191 w 218.78121948242 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 94
+  x -1112.13529968262 y 377.43620014191 w 215.68225097656 h 23.1275997161899 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 95
+  [123.35153961182, 0], [0, 23.12759971619], [-3851.12572479248, 718]
+End Ellipse
+Begin Ellipse
+  Id 96
+  [117.11716461182, 0], [0, 23.12759971619], [-1948.36302185059, 1286]
+End Ellipse
+Begin RoundedRect
+  Id 97
+  x -3071.32375335693 y 421.43620014191 w 214.63407897949 h 23.1275997161899 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 98
+  x -1111.62033081055 y 1376.43620014191 w 214.65231323242 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 99
+  x -1112.65483093262 y 1194.43620014191 w 216.72131347656 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 100
+  [121.24607086182, 0], [0, 23.12759971619], [-3272.49169921875, 1082]
+End Ellipse
+Begin Ellipse
+  Id 101
+  [156.52861022949, 0], [0, 23.12759971619], [-1350.05973815918, 45]
+End Ellipse
+Begin RoundedRect
+  Id 102
+  x -3075.46633148193 y 558.43620014191 w 222.91923522949 h 23.1275997161902 rX 0 rY 0
+End RoundedRect
+END UNPADDED_OBSTACLES
+
+BEGIN PORTS
+Relative [0, 0] pId 0 sId 0
+Relative [0, 0] pId 1 sId 1
+Relative [0, 0] pId 2 sId 2
+Relative [0, 0] pId 3 sId 3
+Relative [0, 0] pId 4 sId 4
+Relative [0, 0] pId 5 sId 5
+Relative [0, 0] pId 6 sId 6
+Relative [0, 0] pId 7 sId 7
+Relative [0, 0] pId 8 sId 8
+Relative [0, 0] pId 9 sId 9
+Relative [0, 0] pId 10 sId 10
+Relative [0, 0] pId 11 sId 11
+Relative [0, 0] pId 12 sId 12
+Relative [0, 0] pId 13 sId 13
+Relative [0, 0] pId 14 sId 14
+Relative [0, 0] pId 15 sId 15
+Relative [0, 0] pId 16 sId 16
+Relative [0, 0] pId 17 sId 17
+Relative [0, 0] pId 18 sId 18
+Relative [0, 0] pId 19 sId 19
+Relative [0, 0] pId 20 sId 20
+Relative [0, 0] pId 21 sId 21
+Relative [0, 0] pId 22 sId 22
+Relative [0, 0] pId 23 sId 23
+Relative [0, 0] pId 24 sId 24
+Relative [0, 0] pId 25 sId 25
+Relative [0, 0] pId 26 sId 26
+Relative [0, 0] pId 27 sId 27
+Relative [0, 0] pId 28 sId 28
+Relative [0, 0] pId 29 sId 29
+Relative [0, 0] pId 30 sId 30
+Relative [0, 0] pId 31 sId 31
+Relative [0, 0] pId 32 sId 32
+Relative [0, 0] pId 33 sId 33
+Relative [0, 0] pId 34 sId 34
+Relative [0, 0] pId 35 sId 35
+Relative [0, 0] pId 36 sId 36
+Relative [0, 0] pId 37 sId 37
+Relative [0, 0] pId 38 sId 38
+Relative [0, 0] pId 39 sId 39
+Relative [0, 0] pId 40 sId 40
+Relative [0, 0] pId 41 sId 41
+Relative [0, 0] pId 42 sId 42
+Relative [0, 0] pId 43 sId 43
+Relative [0, 0] pId 44 sId 44
+Relative [0, 0] pId 45 sId 45
+Relative [0, 0] pId 46 sId 46
+Relative [0, 0] pId 47 sId 47
+Relative [0, 0] pId 48 sId 48
+Relative [0, 0] pId 49 sId 49
+Relative [0, 0] pId 50 sId 50
+Relative [0, 0] pId 51 sId 51
+Relative [0, 0] pId 52 sId 52
+Relative [0, 0] pId 53 sId 53
+Relative [0, 0] pId 54 sId 54
+Relative [0, 0] pId 55 sId 55
+Relative [0, 0] pId 56 sId 56
+Relative [0, 0] pId 57 sId 57
+Relative [0, 0] pId 58 sId 58
+Relative [0, 0] pId 59 sId 59
+Relative [0, 0] pId 60 sId 60
+Relative [0, 0] pId 61 sId 61
+Relative [0, 0] pId 62 sId 62
+Relative [0, 0] pId 63 sId 63
+Relative [0, 0] pId 64 sId 64
+Relative [0, 0] pId 65 sId 65
+Relative [0, 0] pId 66 sId 66
+Relative [0, 0] pId 67 sId 67
+Relative [0, 0] pId 68 sId 68
+Relative [0, 0] pId 69 sId 69
+Relative [0, 0] pId 70 sId 70
+Relative [0, 0] pId 71 sId 71
+Relative [0, 0] pId 72 sId 72
+Relative [0, 0] pId 73 sId 73
+Relative [0, 0] pId 74 sId 74
+Relative [0, 0] pId 75 sId 75
+Relative [0, 0] pId 76 sId 76
+Relative [0, 0] pId 77 sId 77
+Relative [0, 0] pId 78 sId 78
+Relative [0, 0] pId 79 sId 79
+Relative [0, 0] pId 80 sId 80
+Relative [0, 0] pId 81 sId 81
+Relative [0, 0] pId 82 sId 82
+Relative [0, 0] pId 83 sId 83
+Relative [0, 0] pId 84 sId 84
+Relative [0, 0] pId 85 sId 85
+Relative [0, 0] pId 86 sId 86
+Relative [0, 0] pId 87 sId 87
+Relative [0, 0] pId 88 sId 88
+Relative [0, 0] pId 89 sId 89
+Relative [0, 0] pId 90 sId 90
+Relative [0, 0] pId 91 sId 91
+Relative [0, 0] pId 92 sId 92
+Relative [0, 0] pId 93 sId 93
+Relative [0, 0] pId 94 sId 94
+Relative [0, 0] pId 95 sId 95
+Relative [0, 0] pId 96 sId 96
+Relative [0, 0] pId 97 sId 97
+Relative [0, 0] pId 98 sId 98
+Relative [0, 0] pId 99 sId 99
+Relative [0, 0] pId 100 sId 100
+Relative [0, 0] pId 101 sId 101
+Relative [0, 0] pId 102 sId 102
+END PORTS
+
+BEGIN ROUTING_SPECS
+97 -> 39 aS False aT True aL 10 aW 0 lW 1
+42 -> 97 aS False aT True aL 10 aW 0 lW 1
+30 -> 5 aS False aT True aL 10 aW 0 lW 1
+43 -> 30 aS False aT True aL 10 aW 0 lW 1
+102 -> 44 aS False aT True aL 10 aW 0 lW 1
+43 -> 102 aS False aT True aL 10 aW 0 lW 1
+76 -> 16 aS False aT True aL 10 aW 0 lW 1
+13 -> 76 aS False aT True aL 10 aW 0 lW 1
+85 -> 76 aS False aT True aL 10 aW 0 lW 1
+89 -> 76 aS False aT True aL 10 aW 0 lW 1
+45 -> 76 aS False aT True aL 10 aW 0 lW 1
+91 -> 6 aS False aT True aL 10 aW 0 lW 1
+69 -> 91 aS False aT True aL 10 aW 0 lW 1
+33 -> 91 aS False aT True aL 10 aW 0 lW 1
+70 -> 91 aS False aT True aL 10 aW 0 lW 1
+50 -> 19 aS False aT True aL 10 aW 0 lW 1
+41 -> 50 aS False aT True aL 10 aW 0 lW 1
+61 -> 50 aS False aT True aL 10 aW 0 lW 1
+93 -> 15 aS False aT True aL 10 aW 0 lW 1
+19 -> 93 aS False aT True aL 10 aW 0 lW 1
+92 -> 93 aS False aT True aL 10 aW 0 lW 1
+16 -> 93 aS False aT True aL 10 aW 0 lW 1
+68 -> 93 aS False aT True aL 10 aW 0 lW 1
+3 -> 93 aS False aT True aL 10 aW 0 lW 1
+61 -> 93 aS False aT True aL 10 aW 0 lW 1
+36 -> 93 aS False aT True aL 10 aW 0 lW 1
+40 -> 93 aS False aT True aL 10 aW 0 lW 1
+78 -> 11 aS False aT True aL 10 aW 0 lW 1
+2 -> 78 aS False aT True aL 10 aW 0 lW 1
+47 -> 55 aS False aT True aL 10 aW 0 lW 1
+95 -> 47 aS False aT True aL 10 aW 0 lW 1
+64 -> 29 aS False aT True aL 10 aW 0 lW 1
+55 -> 64 aS False aT True aL 10 aW 0 lW 1
+87 -> 88 aS False aT True aL 10 aW 0 lW 1
+62 -> 87 aS False aT True aL 10 aW 0 lW 1
+37 -> 40 aS False aT True aL 10 aW 0 lW 1
+11 -> 37 aS False aT True aL 10 aW 0 lW 1
+88 -> 37 aS False aT True aL 10 aW 0 lW 1
+2 -> 37 aS False aT True aL 10 aW 0 lW 1
+94 -> 4 aS False aT True aL 10 aW 0 lW 1
+19 -> 94 aS False aT True aL 10 aW 0 lW 1
+40 -> 94 aS False aT True aL 10 aW 0 lW 1
+15 -> 94 aS False aT True aL 10 aW 0 lW 1
+92 -> 94 aS False aT True aL 10 aW 0 lW 1
+62 -> 94 aS False aT True aL 10 aW 0 lW 1
+36 -> 94 aS False aT True aL 10 aW 0 lW 1
+53 -> 56 aS False aT True aL 10 aW 0 lW 1
+60 -> 53 aS False aT True aL 10 aW 0 lW 1
+99 -> 35 aS False aT True aL 10 aW 0 lW 1
+17 -> 99 aS False aT True aL 10 aW 0 lW 1
+56 -> 99 aS False aT True aL 10 aW 0 lW 1
+51 -> 17 aS False aT True aL 10 aW 0 lW 1
+74 -> 51 aS False aT True aL 10 aW 0 lW 1
+98 -> 86 aS False aT True aL 10 aW 0 lW 1
+28 -> 98 aS False aT True aL 10 aW 0 lW 1
+48 -> 28 aS False aT True aL 10 aW 0 lW 1
+28 -> 48 aS False aT True aL 10 aW 0 lW 1
+66 -> 35 aS False aT True aL 10 aW 0 lW 1
+28 -> 66 aS False aT True aL 10 aW 0 lW 1
+67 -> 40 aS False aT True aL 10 aW 0 lW 1
+11 -> 67 aS False aT True aL 10 aW 0 lW 1
+85 -> 67 aS False aT True aL 10 aW 0 lW 1
+2 -> 67 aS False aT True aL 10 aW 0 lW 1
+75 -> 61 aS False aT True aL 10 aW 0 lW 1
+85 -> 75 aS False aT True aL 10 aW 0 lW 1
+82 -> 18 aS False aT True aL 10 aW 0 lW 1
+80 -> 82 aS False aT True aL 10 aW 0 lW 1
+46 -> 81 aS False aT True aL 10 aW 0 lW 1
+63 -> 46 aS False aT True aL 10 aW 0 lW 1
+20 -> 84 aS False aT True aL 10 aW 0 lW 1
+26 -> 20 aS False aT True aL 10 aW 0 lW 1
+49 -> 68 aS False aT True aL 10 aW 0 lW 1
+84 -> 49 aS False aT True aL 10 aW 0 lW 1
+9 -> 40 aS False aT True aL 10 aW 0 lW 1
+11 -> 9 aS False aT True aL 10 aW 0 lW 1
+24 -> 9 aS False aT True aL 10 aW 0 lW 1
+2 -> 9 aS False aT True aL 10 aW 0 lW 1
+71 -> 17 aS False aT True aL 10 aW 0 lW 1
+96 -> 71 aS False aT True aL 10 aW 0 lW 1
+32 -> 1 aS False aT True aL 10 aW 0 lW 1
+1 -> 32 aS False aT True aL 10 aW 0 lW 1
+23 -> 33 aS False aT True aL 10 aW 0 lW 1
+70 -> 23 aS False aT True aL 10 aW 0 lW 1
+38 -> 15 aS False aT True aL 10 aW 0 lW 1
+68 -> 38 aS False aT True aL 10 aW 0 lW 1
+38 -> 4 aS False aT True aL 10 aW 0 lW 1
+84 -> 38 aS False aT True aL 10 aW 0 lW 1
+21 -> 100 aS False aT True aL 10 aW 0 lW 1
+84 -> 21 aS False aT True aL 10 aW 0 lW 1
+79 -> 69 aS False aT True aL 10 aW 0 lW 1
+100 -> 79 aS False aT True aL 10 aW 0 lW 1
+73 -> 6 aS False aT True aL 10 aW 0 lW 1
+69 -> 73 aS False aT True aL 10 aW 0 lW 1
+33 -> 73 aS False aT True aL 10 aW 0 lW 1
+70 -> 73 aS False aT True aL 10 aW 0 lW 1
+34 -> 52 aS False aT True aL 10 aW 0 lW 1
+101 -> 34 aS False aT True aL 10 aW 0 lW 1
+0 -> 6 aS False aT True aL 10 aW 0 lW 1
+6 -> 0 aS False aT True aL 10 aW 0 lW 1
+100 -> 0 aS False aT True aL 10 aW 0 lW 1
+22 -> 86 aS False aT True aL 10 aW 0 lW 1
+25 -> 22 aS False aT True aL 10 aW 0 lW 1
+57 -> 92 aS False aT True aL 10 aW 0 lW 1
+68 -> 57 aS False aT True aL 10 aW 0 lW 1
+5 -> 57 aS False aT True aL 10 aW 0 lW 1
+69 -> 57 aS False aT True aL 10 aW 0 lW 1
+39 -> 57 aS False aT True aL 10 aW 0 lW 1
+81 -> 57 aS False aT True aL 10 aW 0 lW 1
+31 -> 57 aS False aT True aL 10 aW 0 lW 1
+7 -> 35 aS False aT True aL 10 aW 0 lW 1
+17 -> 7 aS False aT True aL 10 aW 0 lW 1
+60 -> 7 aS False aT True aL 10 aW 0 lW 1
+77 -> 7 aS False aT True aL 10 aW 0 lW 1
+65 -> 7 aS False aT True aL 10 aW 0 lW 1
+83 -> 31 aS False aT True aL 10 aW 0 lW 1
+3 -> 83 aS False aT True aL 10 aW 0 lW 1
+12 -> 92 aS False aT True aL 10 aW 0 lW 1
+68 -> 12 aS False aT True aL 10 aW 0 lW 1
+5 -> 12 aS False aT True aL 10 aW 0 lW 1
+69 -> 12 aS False aT True aL 10 aW 0 lW 1
+39 -> 12 aS False aT True aL 10 aW 0 lW 1
+81 -> 12 aS False aT True aL 10 aW 0 lW 1
+31 -> 12 aS False aT True aL 10 aW 0 lW 1
+72 -> 65 aS False aT True aL 10 aW 0 lW 1
+74 -> 72 aS False aT True aL 10 aW 0 lW 1
+58 -> 96 aS False aT True aL 10 aW 0 lW 1
+65 -> 58 aS False aT True aL 10 aW 0 lW 1
+58 -> 25 aS False aT True aL 10 aW 0 lW 1
+90 -> 10 aS False aT True aL 10 aW 0 lW 1
+43 -> 90 aS False aT True aL 10 aW 0 lW 1
+14 -> 90 aS False aT True aL 10 aW 0 lW 1
+59 -> 36 aS False aT True aL 10 aW 0 lW 1
+29 -> 59 aS False aT True aL 10 aW 0 lW 1
+69 -> 59 aS False aT True aL 10 aW 0 lW 1
+31 -> 59 aS False aT True aL 10 aW 0 lW 1
+3 -> 59 aS False aT True aL 10 aW 0 lW 1
+5 -> 59 aS False aT True aL 10 aW 0 lW 1
+39 -> 59 aS False aT True aL 10 aW 0 lW 1
+27 -> 24 aS False aT True aL 10 aW 0 lW 1
+14 -> 27 aS False aT True aL 10 aW 0 lW 1
+END ROUTING_SPECS
+
+BEGIN PADDED_OBSTACLES
+END PADDED_OBSTACLES
+
+BEGIN CONVEX_HULLS
+END CONVEX_HULLS
+
+BEGIN HSCAN_SEGMENTS
+END HSCAN_SEGMENTS
+
+BEGIN VSCAN_SEGMENTS
+END VSCAN_SEGMENTS
+
+BEGIN VISIBILITY_VERTICES
+END VISIBILITY_VERTICES
+
+BEGIN VISIBILITY_EDGES
+END VISIBILITY_EDGES
+
+BEGIN PATHS
+Source 0 Target 6
+Begin Curve
+  [[-2121.02965545655, 1219.5] -> [-2088.66749770585, 1219.5]]
+End Curve
+Source 1 Target 32
+Begin Curve
+  [[-847.076435937844, 1468.5] -> [-776.36518096924, 1468.5]]
+End Curve
+Source 2 Target 9
+Begin Curve
+  [[-3140.8641204834, 182] -> [-3076.86737066311, 182]]
+  [[-3076.86737066311, 182] -> [-3075.86737066311, 181]]
+  [[-3075.86737066311, 181] -> [-3075.86737066311, 179.3724]]
+  [[-3075.86737066311, 179.3724] -> [-3074.86737066311, 178.3724]]
+  [[-3074.86737066311, 178.3724] -> [-2242.289398, 178.3724]]
+  [[-2242.289398, 178.3724] -> [-2241.289398, 179.3724]]
+  [[-2241.289398, 179.3724] -> [-2241.289398, 183.43620014191]]
+End Curve
+Source 2 Target 37
+Begin Curve
+  [[-3141.97620240303, 179] -> [-3079.86737066311, 179]]
+  [[-3079.86737066311, 179] -> [-3078.86737066311, 178]]
+  [[-3078.86737066311, 178] -> [-3078.86737066311, 159.3724]]
+  [[-3078.86737066311, 159.3724] -> [-3077.86737066311, 158.3724]]
+  [[-3077.86737066311, 158.3724] -> [-2358.09146118164, 158.3724]]
+End Curve
+Source 2 Target 67
+Begin Curve
+  [[-3272.491699, 205.12759971619] -> [-3272.491699, 244.3724]]
+  [[-3272.491699, 244.3724] -> [-3271.491699, 245.3724]]
+  [[-3271.491699, 245.3724] -> [-2811.29158, 245.3724]]
+  [[-2811.29158, 245.3724] -> [-2810.29158, 246.3724]]
+  [[-2810.29158, 246.3724] -> [-2810.29158, 293.60905]]
+  [[-2810.29158, 293.60905] -> [-2809.29158, 294.60905]]
+  [[-2809.29158, 294.60905] -> [-2358.09146118164, 294.60905]]
+End Curve
+Source 2 Target 78
+Begin Curve
+  [[-3141.97620240303, 185] -> [-3107.6157455, 185]]
+  [[-3107.6157455, 185] -> [-3106.6157455, 186]]
+  [[-3106.6157455, 186] -> [-3106.6157455, 193]]
+  [[-3106.6157455, 193] -> [-3105.6157455, 194]]
+  [[-3105.6157455, 194] -> [-3082.36737060547, 194]]
+End Curve
+Source 3 Target 59
+Begin Curve
+  [[-3130.48260498047, 775] -> [-2242.289398, 775]]
+  [[-2242.289398, 775] -> [-2241.289398, 774]]
+  [[-2241.289398, 774] -> [-2241.289398, 705.5637998581]]
+End Curve
+Source 3 Target 83
+Begin Curve
+  [[-3131.68239720975, 772] -> [-3116.628437, 772]]
+  [[-3116.628437, 772] -> [-3115.628437, 771]]
+  [[-3115.628437, 771] -> [-3115.628437, 708]]
+  [[-3115.628437, 708] -> [-3114.628437, 707]]
+  [[-3114.628437, 707] -> [-3106.21566772461, 707]]
+End Curve
+Source 3 Target 93
+Begin Curve
+  [[-3131.68239720975, 778] -> [-1661.681427, 778]]
+  [[-1661.681427, 778] -> [-1660.681427, 777]]
+  [[-1660.681427, 777] -> [-1660.681427, 637.5637998581]]
+End Curve
+Source 5 Target 12
+Begin Curve
+  [[-2469.04229247259, 624] -> [-2419.20144670833, 624]]
+  [[-2419.20144670833, 624] -> [-2418.20144670833, 623]]
+  [[-2418.20144670833, 623] -> [-2418.20144670833, 540.9362]]
+  [[-2418.20144670833, 540.9362] -> [-2417.20144670833, 539.9362]]
+  [[-2417.20144670833, 539.9362] -> [-2242.289398, 539.9362]]
+  [[-2242.289398, 539.9362] -> [-2241.289398, 538.9362]]
+End Curve
+Source 5 Target 57
+Begin Curve
+  [[-2467.92150878906, 627] -> [-2242.289398, 627]]
+  [[-2242.289398, 627] -> [-2241.289398, 626]]
+  [[-2241.289398, 626] -> [-2241.289398, 576.5637998581]]
+End Curve
+Source 5 Target 59
+Begin Curve
+  [[-2469.04229247259, 630] -> [-2242.289398, 630]]
+  [[-2242.289398, 630] -> [-2241.289398, 631]]
+  [[-2241.289398, 631] -> [-2241.289398, 662.43620014191]]
+End Curve
+Source 6 Target 0
+Begin Curve
+  [[-2076.44680746867, 1222.5] -> [-2111.02965545655, 1222.5]]
+End Curve
+Source 7 Target 35
+Begin Curve
+  [[-887.12427520752, 1252] -> [-799.12623596191, 1252]]
+End Curve
+Source 9 Target 40
+Begin Curve
+  [[-2134.48733520508, 205] -> [-1950.863022, 205]]
+  [[-1950.863022, 205] -> [-1949.863022, 206]]
+  [[-1949.863022, 206] -> [-1949.863022, 262.874001356525]]
+End Curve
+Source 11 Target 9
+Begin Curve
+  [[-2470.25638403747, 203.5] -> [-2358.09146118164, 203.5]]
+End Curve
+Source 11 Target 37
+Begin Curve
+  [[-2600.579041, 181.87240028381] -> [-2600.579041, 162.3724]]
+  [[-2600.579041, 162.3724] -> [-2599.579041, 161.3724]]
+  [[-2599.579041, 161.3724] -> [-2358.09146118164, 161.3724]]
+End Curve
+Source 11 Target 67
+Begin Curve
+  [[-2470.25638403747, 206.5] -> [-2401.1272580025, 206.5]]
+  [[-2401.1272580025, 206.5] -> [-2400.1272580025, 207.5]]
+  [[-2400.1272580025, 207.5] -> [-2400.1272580025, 290.60905]]
+  [[-2400.1272580025, 290.60905] -> [-2399.1272580025, 291.60905]]
+  [[-2399.1272580025, 291.60905] -> [-2358.09146118164, 291.60905]]
+End Curve
+Source 12 Target 92
+Begin Curve
+  [[-2137.59540557862, 521] -> [-2079.62732696534, 521]]
+End Curve
+Source 13 Target 76
+Begin Curve
+  [[-2466.88244628906, 934] -> [-2242.289398, 934]]
+  [[-2242.289398, 934] -> [-2241.289398, 935]]
+  [[-2241.289398, 935] -> [-2241.289398, 969.43620014191]]
+End Curve
+Source 14 Target 27
+Begin Curve
+  [[-3158.49171447754, 275] -> [-3129.6434095, 275]]
+  [[-3129.6434095, 275] -> [-3128.6434095, 274]]
+  [[-3128.6434095, 274] -> [-3127.6434095, 273]]
+  [[-3127.6434095, 273] -> [-3108.79510498047, 273]]
+End Curve
+Source 14 Target 90
+Begin Curve
+  [[-3272.491699, 298.12759971619] -> [-3272.491699, 304.3724]]
+  [[-3272.491699, 304.3724] -> [-3271.491699, 305.3724]]
+  [[-3271.491699, 305.3724] -> [-3118.69631375, 305.3724]]
+  [[-3118.69631375, 305.3724] -> [-3117.69631375, 306.3724]]
+  [[-3117.69631375, 306.3724] -> [-3117.69631375, 510.5]]
+  [[-3117.69631375, 510.5] -> [-3116.69631375, 511.5]]
+  [[-3116.69631375, 511.5] -> [-3081.3328704834, 511.5]]
+End Curve
+Source 15 Target 94
+Begin Curve
+  [[-1217.4022064209, 423] -> [-1008.294174, 423]]
+  [[-1008.294174, 423] -> [-1007.294174, 422]]
+  [[-1007.294174, 422] -> [-1007.294174, 410.5637998581]]
+End Curve
+Source 16 Target 93
+Begin Curve
+  [[-1820.87345886231, 741] -> [-1664.681427, 741]]
+  [[-1664.681427, 741] -> [-1663.681427, 740]]
+  [[-1663.681427, 740] -> [-1663.681427, 637.5637998581]]
+End Curve
+Source 17 Target 7
+Begin Curve
+  [[-1220.56549258249, 1249] -> [-1131.46407318115, 1249]]
+End Curve
+Source 17 Target 99
+Begin Curve
+  [[-1350.059738, 1228.87240028381] -> [-1350.059738, 1225.0638]]
+  [[-1350.059738, 1225.0638] -> [-1349.059738, 1224.0638]]
+  [[-1349.059738, 1224.0638] -> [-1006.794174, 1224.0638]]
+  [[-1006.794174, 1224.0638] -> [-1005.794174, 1223.0638]]
+End Curve
+Source 19 Target 93
+Begin Curve
+  [[-1818.04945567802, 617.5] -> [-1781.57203674316, 617.5]]
+End Curve
+Source 19 Target 94
+Begin Curve
+  [[-1818.04945567802, 614.5] -> [-1776.0720369975, 614.5]]
+  [[-1776.0720369975, 614.5] -> [-1775.0720369975, 613.5]]
+  [[-1775.0720369975, 613.5] -> [-1775.0720369975, 397.3724]]
+  [[-1775.0720369975, 397.3724] -> [-1774.0720369975, 396.3724]]
+  [[-1774.0720369975, 396.3724] -> [-1122.13529968262, 396.3724]]
+End Curve
+Source 20 Target 84
+Begin Curve
+  [[-4006.1647644043, 366] -> [-3976.17388153076, 366]]
+End Curve
+Source 21 Target 100
+Begin Curve
+  [[-3463.3145904541, 400] -> [-3419.0007929975, 400]]
+  [[-3419.0007929975, 400] -> [-3418.0007929975, 401]]
+  [[-3418.0007929975, 401] -> [-3418.0007929975, 1050.6276]]
+  [[-3418.0007929975, 1050.6276] -> [-3417.0007929975, 1051.6276]]
+  [[-3417.0007929975, 1051.6276] -> [-3273.491699, 1051.6276]]
+  [[-3273.491699, 1051.6276] -> [-3272.491699, 1052.6276]]
+End Curve
+Source 22 Target 86
+Begin Curve
+  [[-1233.92433929444, 1363.5] -> [-796.786622690943, 1363.5]]
+End Curve
+Source 23 Target 33
+Begin Curve
+  [[-2855.65516662598, 1184] -> [-2741.15844726562, 1184]]
+End Curve
+Source 24 Target 9
+Begin Curve
+  [[-2403.62725830078, 262] -> [-2242.289398, 262]]
+  [[-2242.289398, 262] -> [-2241.289398, 261]]
+  [[-2241.289398, 261] -> [-2241.289398, 226.5637998581]]
+End Curve
+Source 25 Target 22
+Begin Curve
+  [[-1547.13327026367, 1344] -> [-1507.6642035, 1344]]
+  [[-1507.6642035, 1344] -> [-1506.6642035, 1345]]
+  [[-1506.6642035, 1345] -> [-1506.6642035, 1364]]
+  [[-1506.6642035, 1364] -> [-1505.6642035, 1365]]
+  [[-1505.6642035, 1365] -> [-1476.19513702393, 1365]]
+End Curve
+Source 26 Target 20
+Begin Curve
+  [[-4288.78971862793, 366] -> [-4267.10221862793, 366]]
+End Curve
+Source 27 Target 24
+Begin Curve
+  [[-2829.21832275391, 273] -> [-2823.296448, 273]]
+  [[-2823.296448, 273] -> [-2822.296448, 272]]
+  [[-2822.296448, 272] -> [-2822.296448, 263]]
+  [[-2822.296448, 263] -> [-2821.296448, 262]]
+  [[-2821.296448, 262] -> [-2807.5308227539, 262]]
+End Curve
+Source 28 Target 48
+Begin Curve
+  [[-1271.79177995589, 1414.5] -> [-1209.2391285, 1414.5]]
+  [[-1209.2391285, 1414.5] -> [-1208.2391285, 1415.5]]
+  [[-1208.2391285, 1415.5] -> [-1208.2391285, 1422.5]]
+  [[-1208.2391285, 1422.5] -> [-1207.2391285, 1423.5]]
+  [[-1207.2391285, 1423.5] -> [-1153.21147155762, 1423.5]]
+End Curve
+Source 28 Target 66
+Begin Curve
+  [[-1271.79177995589, 1405.5] -> [-1198.681511, 1405.5]]
+  [[-1198.681511, 1405.5] -> [-1197.681511, 1404.5]]
+  [[-1197.681511, 1404.5] -> [-1197.681511, 1296.0638]]
+  [[-1197.681511, 1296.0638] -> [-1196.681511, 1295.0638]]
+  [[-1196.681511, 1295.0638] -> [-1135.09623718262, 1295.0638]]
+End Curve
+Source 28 Target 98
+Begin Curve
+  [[-1270.43478625191, 1408.5] -> [-1191.943558, 1408.5]]
+  [[-1191.943558, 1408.5] -> [-1190.943558, 1407.5]]
+  [[-1190.943558, 1407.5] -> [-1190.943558, 1389]]
+  [[-1190.943558, 1389] -> [-1189.943558, 1388]]
+  [[-1189.943558, 1388] -> [-1121.62033081055, 1388]]
+End Curve
+Source 29 Target 59
+Begin Curve
+  [[-2472.05041503906, 741] -> [-2245.289398, 741]]
+  [[-2245.289398, 741] -> [-2244.289398, 740]]
+  [[-2244.289398, 740] -> [-2244.289398, 705.5637998581]]
+End Curve
+Source 30 Target 5
+Begin Curve
+  [[-2964.006714, 615.5637998581] -> [-2964.006714, 626]]
+  [[-2964.006714, 626] -> [-2963.006714, 627]]
+  [[-2963.006714, 627] -> [-2743.23657226562, 627]]
+End Curve
+Source 31 Target 12
+Begin Curve
+  [[-2480.3121484119, 681] -> [-2416.20144670833, 681]]
+  [[-2416.20144670833, 681] -> [-2415.20144670833, 680]]
+  [[-2415.20144670833, 680] -> [-2415.20144670833, 520.5]]
+  [[-2415.20144670833, 520.5] -> [-2414.20144670833, 519.5]]
+  [[-2414.20144670833, 519.5] -> [-2354.98339080811, 519.5]]
+End Curve
+Source 31 Target 57
+Begin Curve
+  [[-2479.28739166259, 684] -> [-2413.20144670833, 684]]
+  [[-2413.20144670833, 684] -> [-2412.20144670833, 683]]
+  [[-2412.20144670833, 683] -> [-2412.20144670833, 559]]
+  [[-2412.20144670833, 559] -> [-2411.20144670833, 558]]
+  [[-2411.20144670833, 558] -> [-2354.98339080811, 558]]
+End Curve
+Source 31 Target 59
+Begin Curve
+  [[-2480.3121484119, 687] -> [-2358.61555480957, 687]]
+End Curve
+Source 32 Target 1
+Begin Curve
+  [[-766.36518096924, 1465.5] -> [-837.076435937845, 1465.5]]
+End Curve
+Source 33 Target 73
+Begin Curve
+  [[-2600.579041, 1160.87240028381] -> [-2600.579041, 1152.5]]
+  [[-2600.579041, 1152.5] -> [-2599.579041, 1151.5]]
+  [[-2599.579041, 1151.5] -> [-2359.64094543457, 1151.5]]
+End Curve
+Source 33 Target 91
+Begin Curve
+  [[-2469.99963378906, 1184] -> [-2359.64094543457, 1184]]
+End Curve
+Source 34 Target 52
+Begin Curve
+  [[-860.69198608399, 45] -> [-825.05722045898, 45]]
+End Curve
+Source 36 Target 93
+Begin Curve
+  [[-1820.10500938914, 682.5] -> [-1667.681427, 682.5]]
+  [[-1667.681427, 682.5] -> [-1666.681427, 681.5]]
+  [[-1666.681427, 681.5] -> [-1666.681427, 637.5637998581]]
+End Curve
+Source 36 Target 94
+Begin Curve
+  [[-1820.10500938914, 685.5] -> [-1002.294174, 685.5]]
+  [[-1002.294174, 685.5] -> [-1001.294174, 684.5]]
+  [[-1001.294174, 684.5] -> [-1001.294174, 410.5637998581]]
+End Curve
+Source 37 Target 40
+Begin Curve
+  [[-2134.48733520508, 159] -> [-1947.863022, 159]]
+  [[-1947.863022, 159] -> [-1946.863022, 160]]
+  [[-1946.863022, 160] -> [-1946.863022, 262.874001355887]]
+End Curve
+Source 38 Target 4
+Begin Curve
+  [[-1541.89889526367, 340.5] -> [-1107.63529971749, 340.5]]
+  [[-1107.63529971749, 340.5] -> [-1106.63529971749, 341.5]]
+  [[-1106.63529971749, 341.5] -> [-1106.63529971749, 352]]
+  [[-1106.63529971749, 352] -> [-1105.63529971749, 353]]
+  [[-1105.63529971749, 353] -> [-798.08718109131, 353]]
+End Curve
+Source 38 Target 15
+Begin Curve
+  [[-1541.89889526367, 343.5] -> [-1351.059738, 343.5]]
+  [[-1351.059738, 343.5] -> [-1350.059738, 344.5]]
+  [[-1350.059738, 344.5] -> [-1350.059738, 389.87240028381]]
+End Curve
+Source 39 Target 12
+Begin Curve
+  [[-2473.15438746476, 453] -> [-2245.289398, 453]]
+  [[-2245.289398, 453] -> [-2244.289398, 454]]
+  [[-2244.289398, 454] -> [-2244.289398, 499.43620014191]]
+End Curve
+Source 39 Target 57
+Begin Curve
+  [[-2472.06864166259, 456] -> [-2398.20144670833, 456]]
+  [[-2398.20144670833, 456] -> [-2397.20144670833, 457]]
+  [[-2397.20144670833, 457] -> [-2397.20144670833, 548]]
+  [[-2397.20144670833, 548] -> [-2396.20144670833, 549]]
+  [[-2396.20144670833, 549] -> [-2354.98339080811, 549]]
+End Curve
+Source 39 Target 59
+Begin Curve
+  [[-2473.15438746476, 459] -> [-2401.20144670833, 459]]
+  [[-2401.20144670833, 459] -> [-2400.20144670833, 460]]
+  [[-2400.20144670833, 460] -> [-2400.20144670833, 683]]
+  [[-2400.20144670833, 683] -> [-2399.20144670833, 684]]
+  [[-2399.20144670833, 684] -> [-2358.61555480957, 684]]
+End Curve
+Source 40 Target 93
+Begin Curve
+  [[-1948.363022, 319.12759971619] -> [-1948.363022, 386.3724]]
+  [[-1948.363022, 386.3724] -> [-1947.363022, 387.3724]]
+  [[-1947.363022, 387.3724] -> [-1660.181427, 387.3724]]
+  [[-1660.181427, 387.3724] -> [-1659.181427, 388.3724]]
+  [[-1659.181427, 388.3724] -> [-1659.181427, 594.43620014191]]
+End Curve
+Source 40 Target 94
+Begin Curve
+  [[-1820.88257598877, 296] -> [-1110.63529971749, 296]]
+  [[-1110.63529971749, 296] -> [-1109.63529971749, 297]]
+  [[-1109.63529971749, 297] -> [-1109.63529971749, 367.43620014191]]
+End Curve
+Source 41 Target 50
+Begin Curve
+  [[-2463.04372734729, 864.5] -> [-2359.64550018311, 864.5]]
+End Curve
+Source 42 Target 97
+Begin Curve
+  [[-3272.491699, 423.12759971619] -> [-3272.491699, 432]]
+  [[-3272.491699, 432] -> [-3271.491699, 433]]
+  [[-3271.491699, 433] -> [-3081.32375335693, 433]]
+End Curve
+Source 43 Target 30
+Begin Curve
+  [[-3272.491699, 593.12759971619] -> [-3272.491699, 603]]
+  [[-3272.491699, 603] -> [-3271.491699, 604]]
+  [[-3271.491699, 604] -> [-3083.3973236084, 604]]
+End Curve
+Source 43 Target 90
+Begin Curve
+  [[-3272.491699, 546.87240028381] -> [-3272.491699, 515.5]]
+  [[-3272.491699, 515.5] -> [-3271.491699, 514.5]]
+  [[-3271.491699, 514.5] -> [-3081.3328704834, 514.5]]
+End Curve
+Source 43 Target 102
+Begin Curve
+  [[-3139.83416748047, 570] -> [-3085.46633148193, 570]]
+End Curve
+Source 45 Target 76
+Begin Curve
+  [[-2466.88244628906, 1059] -> [-2240.789398, 1059]]
+  [[-2240.789398, 1059] -> [-2239.789398, 1058]]
+  [[-2239.789398, 1058] -> [-2239.789398, 1012.5637998581]]
+End Curve
+Source 46 Target 81
+Begin Curve
+  [[-2857.20008850098, 399] -> [-2738.06860351562, 399]]
+End Curve
+Source 47 Target 55
+Begin Curve
+  [[-3446.18829345703, 718] -> [-3396.50079345703, 718]]
+End Curve
+Source 48 Target 28
+Begin Curve
+  [[-1143.21147155762, 1420.5] -> [-1204.2391285, 1420.5]]
+  [[-1204.2391285, 1420.5] -> [-1205.2391285, 1419.5]]
+  [[-1205.2391285, 1419.5] -> [-1205.2391285, 1412.5]]
+  [[-1205.2391285, 1412.5] -> [-1206.2391285, 1411.5]]
+  [[-1206.2391285, 1411.5] -> [-1260.43478625191, 1411.5]]
+End Curve
+Source 49 Target 68
+Begin Curve
+  [[-3463.81133270264, 366] -> [-3121.69631375, 366]]
+  [[-3121.69631375, 366] -> [-3120.69631375, 365]]
+  [[-3120.69631375, 365] -> [-3120.69631375, 343]]
+  [[-3120.69631375, 343] -> [-3119.69631375, 342]]
+  [[-3119.69631375, 342] -> [-2739.10766601562, 342]]
+End Curve
+Source 50 Target 19
+Begin Curve
+  [[-2132.93329620362, 866] -> [-2081.3916469975, 866]]
+  [[-2081.3916469975, 866] -> [-2080.3916469975, 865]]
+  [[-2080.3916469975, 865] -> [-2080.3916469975, 658.3724]]
+  [[-2080.3916469975, 658.3724] -> [-2079.3916469975, 657.3724]]
+  [[-2079.3916469975, 657.3724] -> [-1949.363022, 657.3724]]
+  [[-1949.363022, 657.3724] -> [-1948.363022, 656.3724]]
+  [[-1948.363022, 656.3724] -> [-1948.363022, 649.12759971619]]
+End Curve
+Source 51 Target 17
+Begin Curve
+  [[-1553.82077026367, 1252] -> [-1490.6573638916, 1252]]
+End Curve
+Source 53 Target 56
+Begin Curve
+  [[-1662.181427, 1172.5637998581] -> [-1662.181427, 1183]]
+  [[-1662.181427, 1183] -> [-1661.181427, 1184]]
+  [[-1661.181427, 1184] -> [-1435.69644165039, 1184]]
+End Curve
+Source 55 Target 64
+Begin Curve
+  [[-3158.48260498047, 718] -> [-3113.628437, 718]]
+  [[-3113.628437, 718] -> [-3112.628437, 719]]
+  [[-3112.628437, 719] -> [-3112.628437, 740]]
+  [[-3112.628437, 740] -> [-3111.628437, 741]]
+  [[-3111.628437, 741] -> [-3081.3328704834, 741]]
+End Curve
+Source 56 Target 99
+Begin Curve
+  [[-1274.42303466797, 1184] -> [-1005.294174, 1184]]
+  [[-1005.294174, 1184] -> [-1004.294174, 1185]]
+End Curve
+Source 57 Target 92
+Begin Curve
+  [[-2137.59540557862, 555] -> [-1949.363022, 555]]
+  [[-1949.363022, 555] -> [-1948.363022, 554]]
+End Curve
+Source 58 Target 25
+Begin Curve
+  [[-2110.63903808594, 1343.333333] -> [-1944.934311, 1343.333333]]
+  [[-1944.934311, 1343.333333] -> [-1943.934311, 1344.333333]]
+  [[-1943.934311, 1344.333333] -> [-1943.934311, 1345.333333]]
+  [[-1943.934311, 1345.333333] -> [-1942.934311, 1346.333333]]
+  [[-1942.934311, 1346.333333] -> [-1786.64256580269, 1346.333333]]
+End Curve
+Source 58 Target 96
+Begin Curve
+  [[-2110.63903808594, 1340.333333] -> [-1949.363022, 1340.333333]]
+  [[-1949.363022, 1340.333333] -> [-1948.363022, 1339.333333]]
+  [[-1948.363022, 1339.333333] -> [-1948.363022, 1319.12759971619]]
+End Curve
+Source 59 Target 36
+Begin Curve
+  [[-2133.96324157715, 684] -> [-2086.89164733887, 684]]
+End Curve
+Source 60 Target 7
+Begin Curve
+  [[-1823.22473167836, 1162.5] -> [-1790.5870059975, 1162.5]]
+  [[-1790.5870059975, 1162.5] -> [-1789.5870059975, 1163.5]]
+  [[-1789.5870059975, 1163.5] -> [-1789.5870059975, 1220.0638]]
+  [[-1789.5870059975, 1220.0638] -> [-1788.5870059975, 1221.0638]]
+  [[-1788.5870059975, 1221.0638] -> [-1003.794174, 1221.0638]]
+  [[-1003.794174, 1221.0638] -> [-1002.794174, 1222.0638]]
+  [[-1002.794174, 1222.0638] -> [-1002.794174, 1230.43620014191]]
+End Curve
+Source 60 Target 53
+Begin Curve
+  [[-1823.22473167836, 1159.5] -> [-1796.08700561523, 1159.5]]
+End Curve
+Source 61 Target 50
+Begin Curve
+  [[-2540.58803169878, 1095.3724] -> [-2401.20144670833, 1095.3724]]
+  [[-2401.20144670833, 1095.3724] -> [-2400.20144670833, 1094.3724]]
+  [[-2400.20144670833, 1094.3724] -> [-2400.20144670833, 868.5]]
+  [[-2400.20144670833, 868.5] -> [-2399.20144670833, 867.5]]
+  [[-2399.20144670833, 867.5] -> [-2359.64550018311, 867.5]]
+End Curve
+Source 61 Target 93
+Begin Curve
+  [[-2514.70256805818, 1098.3724] -> [-1658.681427, 1098.3724]]
+  [[-1658.681427, 1098.3724] -> [-1657.681427, 1097.3724]]
+  [[-1657.681427, 1097.3724] -> [-1657.681427, 637.5637998581]]
+End Curve
+Source 62 Target 87
+Begin Curve
+  [[-3140.98722072344, 124] -> [-3116.9445225, 124]]
+  [[-3116.9445225, 124] -> [-3115.9445225, 125]]
+  [[-3115.9445225, 125] -> [-3115.9445225, 126]]
+  [[-3115.9445225, 126] -> [-3114.9445225, 127]]
+  [[-3114.9445225, 127] -> [-3101.02492523193, 127]]
+End Curve
+Source 62 Target 94
+Begin Curve
+  [[-3272.491699, 148.12759971619] -> [-3272.491699, 154.3724]]
+  [[-3272.491699, 154.3724] -> [-3271.491699, 155.3724]]
+  [[-3271.491699, 155.3724] -> [-2352.591460992, 155.3724]]
+  [[-2352.591460992, 155.3724] -> [-2351.591460992, 156.3724]]
+  [[-2351.591460992, 156.3724] -> [-2351.591460992, 392.3724]]
+  [[-2351.591460992, 392.3724] -> [-2350.591460992, 393.3724]]
+  [[-2350.591460992, 393.3724] -> [-1122.13529968262, 393.3724]]
+End Curve
+Source 63 Target 46
+Begin Curve
+  [[-3142.93312835693, 332] -> [-2965.006714, 332]]
+  [[-2965.006714, 332] -> [-2964.006714, 333]]
+  [[-2964.006714, 333] -> [-2964.006714, 377.43620014191]]
+End Curve
+Source 64 Target 29
+Begin Curve
+  [[-2856.68055725098, 741] -> [-2739.10766601562, 741]]
+End Curve
+Source 65 Target 7
+Begin Curve
+  [[-2600.579041, 1343.12759971619] -> [-2600.579041, 1379.0638]]
+  [[-2600.579041, 1379.0638] -> [-2599.579041, 1380.0638]]
+  [[-2599.579041, 1380.0638] -> [-1218.0011670025, 1380.0638]]
+  [[-1218.0011670025, 1380.0638] -> [-1217.0011670025, 1379.0638]]
+  [[-1217.0011670025, 1379.0638] -> [-1217.0011670025, 1282.6276]]
+  [[-1217.0011670025, 1282.6276] -> [-1216.0011670025, 1281.6276]]
+  [[-1216.0011670025, 1281.6276] -> [-1159.630844, 1281.6276]]
+  [[-1159.630844, 1281.6276] -> [-1158.630844, 1280.6276]]
+  [[-1158.630844, 1280.6276] -> [-1158.630844, 1256]]
+  [[-1158.630844, 1256] -> [-1157.630844, 1255]]
+  [[-1157.630844, 1255] -> [-1131.46407318115, 1255]]
+End Curve
+Source 65 Target 58
+Begin Curve
+  [[-2475.19494628906, 1320] -> [-2242.289398, 1320]]
+  [[-2242.289398, 1320] -> [-2241.289398, 1321]]
+  [[-2241.289398, 1321] -> [-2241.289398, 1321.43620014191]]
+End Curve
+Source 66 Target 35
+Begin Curve
+  [[-883.49211120606, 1286] -> [-659.52861, 1286]]
+  [[-659.52861, 1286] -> [-658.52861, 1285]]
+End Curve
+Source 67 Target 40
+Begin Curve
+  [[-2134.48733520508, 296] -> [-2085.84346771241, 296]]
+End Curve
+Source 68 Target 12
+Begin Curve
+  [[-2472.6023084527, 344.14095] -> [-2239.289398, 344.14095]]
+  [[-2239.289398, 344.14095] -> [-2238.289398, 345.14095]]
+  [[-2238.289398, 345.14095] -> [-2238.289398, 499.43620014191]]
+End Curve
+Source 68 Target 38
+Begin Curve
+  [[-2473.85228943661, 338.14095] -> [-1792.46395874023, 338.14095]]
+End Curve
+Source 68 Target 57
+Begin Curve
+  [[-2475.26601847609, 347.14095] -> [-2422.20144670833, 347.14095]]
+  [[-2422.20144670833, 347.14095] -> [-2421.20144670833, 348.14095]]
+  [[-2421.20144670833, 348.14095] -> [-2421.20144670833, 551]]
+  [[-2421.20144670833, 551] -> [-2420.20144670833, 552]]
+  [[-2420.20144670833, 552] -> [-2354.98339080811, 552]]
+End Curve
+Source 68 Target 93
+Begin Curve
+  [[-2472.13910929629, 341.14095] -> [-2068.115921, 341.14095]]
+  [[-2068.115921, 341.14095] -> [-2067.115921, 342.14095]]
+  [[-2067.115921, 342.14095] -> [-2067.115921, 389.3724]]
+  [[-2067.115921, 389.3724] -> [-2066.115921, 390.3724]]
+  [[-2066.115921, 390.3724] -> [-1663.181427, 390.3724]]
+  [[-1663.181427, 390.3724] -> [-1662.181427, 391.3724]]
+  [[-1662.181427, 391.3724] -> [-1662.181427, 594.43620014191]]
+End Curve
+Source 69 Target 12
+Begin Curve
+  [[-2470.46529774366, 803] -> [-2410.20144670833, 803]]
+  [[-2410.20144670833, 803] -> [-2409.20144670833, 802]]
+  [[-2409.20144670833, 802] -> [-2409.20144670833, 523.5]]
+  [[-2409.20144670833, 523.5] -> [-2408.20144670833, 522.5]]
+  [[-2408.20144670833, 522.5] -> [-2354.98339080811, 522.5]]
+End Curve
+Source 69 Target 57
+Begin Curve
+  [[-2466.99077259074, 806] -> [-2407.20144670833, 806]]
+  [[-2407.20144670833, 806] -> [-2406.20144670833, 805]]
+  [[-2406.20144670833, 805] -> [-2406.20144670833, 562]]
+  [[-2406.20144670833, 562] -> [-2405.20144670833, 561]]
+  [[-2405.20144670833, 561] -> [-2354.98339080811, 561]]
+End Curve
+Source 69 Target 59
+Begin Curve
+  [[-2465.85250854492, 809] -> [-2239.289398, 809]]
+  [[-2239.289398, 809] -> [-2238.289398, 808]]
+  [[-2238.289398, 808] -> [-2238.289398, 705.5637998581]]
+End Curve
+Source 69 Target 73
+Begin Curve
+  [[-2466.99077259074, 812] -> [-2354.5709535, 812]]
+  [[-2354.5709535, 812] -> [-2353.5709535, 813]]
+  [[-2353.5709535, 813] -> [-2353.5709535, 1100.3724]]
+  [[-2353.5709535, 1100.3724] -> [-2352.5709535, 1101.3724]]
+  [[-2352.5709535, 1101.3724] -> [-2242.289398, 1101.3724]]
+  [[-2242.289398, 1101.3724] -> [-2241.289398, 1102.3724]]
+  [[-2241.289398, 1102.3724] -> [-2241.289398, 1128.43620014191]]
+End Curve
+Source 69 Target 91
+Begin Curve
+  [[-2470.46529774366, 815] -> [-2398.20144670833, 815]]
+  [[-2398.20144670833, 815] -> [-2397.20144670833, 816]]
+  [[-2397.20144670833, 816] -> [-2397.20144670833, 1180]]
+  [[-2397.20144670833, 1180] -> [-2396.20144670833, 1181]]
+  [[-2396.20144670833, 1181] -> [-2359.64094543457, 1181]]
+End Curve
+Source 70 Target 23
+Begin Curve
+  [[-3142.96047210693, 1184] -> [-3082.3582611084, 1184]]
+End Curve
+Source 70 Target 73
+Begin Curve
+  [[-3273.991699, 1160.87395105798] -> [-3273.991699, 1149.5]]
+  [[-3273.991699, 1149.5] -> [-3272.991699, 1148.5]]
+  [[-3272.991699, 1148.5] -> [-2359.64094543457, 1148.5]]
+End Curve
+Source 70 Target 91
+Begin Curve
+  [[-3272.491699, 1207.12759971619] -> [-3272.491699, 1209.6276]]
+  [[-3272.491699, 1209.6276] -> [-3271.491699, 1210.6276]]
+  [[-3271.491699, 1210.6276] -> [-2467.499634008, 1210.6276]]
+  [[-2467.499634008, 1210.6276] -> [-2466.499634008, 1209.6276]]
+  [[-2466.499634008, 1209.6276] -> [-2466.499634008, 1188]]
+  [[-2466.499634008, 1188] -> [-2465.499634008, 1187]]
+  [[-2465.499634008, 1187] -> [-2359.64094543457, 1187]]
+End Curve
+Source 71 Target 17
+Begin Curve
+  [[-1547.60918426514, 1286] -> [-1352.559738, 1286]]
+  [[-1352.559738, 1286] -> [-1351.559738, 1285]]
+End Curve
+Source 72 Target 65
+Begin Curve
+  [[-2833.37002563477, 1275] -> [-2601.579041, 1275]]
+  [[-2601.579041, 1275] -> [-2600.579041, 1276]]
+  [[-2600.579041, 1276] -> [-2600.579041, 1286.87240028381]]
+End Curve
+Source 73 Target 6
+Begin Curve
+  [[-2241.289398, 1161.5637998581] -> [-2241.289398, 1167.9362]]
+  [[-2241.289398, 1167.9362] -> [-2240.289398, 1168.9362]]
+  [[-2240.289398, 1168.9362] -> [-2112.4848975, 1168.9362]]
+  [[-2112.4848975, 1168.9362] -> [-2111.4848975, 1169.9362]]
+  [[-2111.4848975, 1169.9362] -> [-2111.4848975, 1212.5]]
+  [[-2111.4848975, 1212.5] -> [-2110.4848975, 1213.5]]
+  [[-2110.4848975, 1213.5] -> [-2086.44680746867, 1213.5]]
+End Curve
+Source 74 Target 51
+Begin Curve
+  [[-3133.91951125251, 1250.5] -> [-1780.54208374023, 1250.5]]
+End Curve
+Source 74 Target 72
+Begin Curve
+  [[-3133.91951125251, 1253.5] -> [-2965.006714, 1253.5]]
+  [[-2965.006714, 1253.5] -> [-2964.006714, 1254.5]]
+End Curve
+Source 75 Target 61
+Begin Curve
+  [[-2854.61610412598, 1048] -> [-2738.7756349975, 1048]]
+  [[-2738.7756349975, 1048] -> [-2737.7756349975, 1049]]
+  [[-2737.7756349975, 1049] -> [-2737.7756349975, 1084.6276]]
+  [[-2737.7756349975, 1084.6276] -> [-2736.7756349975, 1085.6276]]
+  [[-2736.7756349975, 1085.6276] -> [-2601.579041, 1085.6276]]
+  [[-2601.579041, 1085.6276] -> [-2600.579041, 1086.6276]]
+End Curve
+Source 76 Target 16
+Begin Curve
+  [[-2134.48277282715, 991] -> [-1949.363022, 991]]
+  [[-1949.363022, 991] -> [-1948.363022, 990]]
+  [[-1948.363022, 990] -> [-1948.363022, 774.12759971619]]
+End Curve
+Source 77 Target 7
+Begin Curve
+  [[-1348.559738, 1296.87395040422] -> [-1348.559738, 1279.6276]]
+  [[-1348.559738, 1279.6276] -> [-1347.559738, 1278.6276]]
+  [[-1347.559738, 1278.6276] -> [-1216.9621120025, 1278.6276]]
+  [[-1216.9621120025, 1278.6276] -> [-1215.9621120025, 1277.6276]]
+  [[-1215.9621120025, 1277.6276] -> [-1215.9621120025, 1253]]
+  [[-1215.9621120025, 1253] -> [-1214.9621120025, 1252]]
+  [[-1214.9621120025, 1252] -> [-1131.46407318115, 1252]]
+End Curve
+Source 78 Target 11
+Begin Curve
+  [[-2855.64605712891, 194] -> [-2794.4113615, 194]]
+  [[-2794.4113615, 194] -> [-2793.4113615, 195]]
+  [[-2793.4113615, 195] -> [-2793.4113615, 204]]
+  [[-2793.4113615, 204] -> [-2792.4113615, 205]]
+  [[-2792.4113615, 205] -> [-2741.17666625976, 205]]
+End Curve
+Source 79 Target 69
+Begin Curve
+  [[-2853.58160400391, 1082] -> [-2742.9045409975, 1082]]
+  [[-2742.9045409975, 1082] -> [-2741.9045409975, 1081]]
+  [[-2741.9045409975, 1081] -> [-2741.9045409975, 840.3724]]
+  [[-2741.9045409975, 840.3724] -> [-2740.9045409975, 839.3724]]
+  [[-2740.9045409975, 839.3724] -> [-2601.579041, 839.3724]]
+  [[-2601.579041, 839.3724] -> [-2600.579041, 838.3724]]
+End Curve
+Source 80 Target 82
+Begin Curve
+  [[-1207.02070617676, 718] -> [-1147.01811218262, 718]]
+End Curve
+Source 81 Target 12
+Begin Curve
+  [[-2473.35790285208, 397.5] -> [-2242.289398, 397.5]]
+  [[-2242.289398, 397.5] -> [-2241.289398, 398.5]]
+  [[-2241.289398, 398.5] -> [-2241.289398, 499.43620014191]]
+End Curve
+Source 81 Target 57
+Begin Curve
+  [[-2473.35790285208, 400.5] -> [-2425.20144670833, 400.5]]
+  [[-2425.20144670833, 400.5] -> [-2424.20144670833, 401.5]]
+  [[-2424.20144670833, 401.5] -> [-2424.20144670833, 554]]
+  [[-2424.20144670833, 554] -> [-2423.20144670833, 555]]
+  [[-2423.20144670833, 555] -> [-2354.98339080811, 555]]
+End Curve
+Source 82 Target 18
+Begin Curve
+  [[-871.57023620606, 718] -> [-798.08718109131, 718]]
+End Curve
+Source 83 Target 31
+Begin Curve
+  [[-2964.006714, 695.43620014191] -> [-2964.006714, 685]]
+  [[-2964.006714, 685] -> [-2963.006714, 684]]
+  [[-2963.006714, 684] -> [-2731.87068939209, 684]]
+End Curve
+Source 84 Target 21
+Begin Curve
+  [[-3851.125725, 389.12759971619] -> [-3851.125725, 399]]
+  [[-3851.125725, 399] -> [-3850.125725, 400]]
+  [[-3850.125725, 400] -> [-3688.96038818359, 400]]
+End Curve
+Source 84 Target 38
+Begin Curve
+  [[-3851.125725, 342.87240028381] -> [-3851.125725, 246.3724]]
+  [[-3851.125725, 246.3724] -> [-3850.125725, 245.3724]]
+  [[-3850.125725, 245.3724] -> [-3333.5366105, 245.3724]]
+  [[-3333.5366105, 245.3724] -> [-3332.5366105, 246.3724]]
+  [[-3332.5366105, 246.3724] -> [-3332.5366105, 247.3724]]
+  [[-3332.5366105, 247.3724] -> [-3331.5366105, 248.3724]]
+  [[-3331.5366105, 248.3724] -> [-2820.296448, 248.3724]]
+  [[-2820.296448, 248.3724] -> [-2819.296448, 249.3724]]
+  [[-2819.296448, 249.3724] -> [-2819.296448, 299.60905]]
+  [[-2819.296448, 299.60905] -> [-2818.296448, 300.60905]]
+  [[-2818.296448, 300.60905] -> [-2355.591460992, 300.60905]]
+  [[-2355.591460992, 300.60905] -> [-2354.591460992, 301.60905]]
+  [[-2354.591460992, 301.60905] -> [-2354.591460992, 334.14095]]
+  [[-2354.591460992, 334.14095] -> [-2353.591460992, 335.14095]]
+  [[-2353.591460992, 335.14095] -> [-1792.46395874023, 335.14095]]
+End Curve
+Source 84 Target 49
+Begin Curve
+  [[-3736.0775680542, 366] -> [-3688.46364593506, 366]]
+End Curve
+Source 85 Target 67
+Begin Curve
+  [[-3138.90343128215, 1022] -> [-2404.20144670833, 1022]]
+  [[-2404.20144670833, 1022] -> [-2403.20144670833, 1021]]
+  [[-2403.20144670833, 1021] -> [-2403.20144670833, 298.60905]]
+  [[-2403.20144670833, 298.60905] -> [-2402.20144670833, 297.60905]]
+  [[-2402.20144670833, 297.60905] -> [-2358.09146118164, 297.60905]]
+End Curve
+Source 85 Target 75
+Begin Curve
+  [[-3138.90343128215, 1028] -> [-2965.006714, 1028]]
+  [[-2965.006714, 1028] -> [-2964.006714, 1029]]
+End Curve
+Source 85 Target 76
+Begin Curve
+  [[-3137.76516723633, 1025] -> [-2243.789398, 1025]]
+  [[-2243.789398, 1025] -> [-2242.789398, 1024]]
+  [[-2242.789398, 1024] -> [-2242.789398, 1012.5637998581]]
+End Curve
+Source 87 Target 88
+Begin Curve
+  [[-2836.98850250244, 126] -> [-2760.7147525, 126]]
+  [[-2760.7147525, 126] -> [-2759.7147525, 125.5]]
+  [[-2759.7147525, 125.5] -> [-2758.7147525, 125]]
+  [[-2758.7147525, 125] -> [-2692.44100189209, 125]]
+End Curve
+Source 88 Target 37
+Begin Curve
+  [[-2518.71707916259, 125] -> [-2242.289398, 125]]
+  [[-2242.289398, 125] -> [-2241.289398, 126]]
+  [[-2241.289398, 126] -> [-2241.289398, 137.43620014191]]
+End Curve
+Source 89 Target 76
+Begin Curve
+  [[-2469.98141479492, 991] -> [-2358.09602355957, 991]]
+End Curve
+Source 90 Target 10
+Begin Curve
+  [[-2856.68055725098, 513] -> [-2739.10766601562, 513]]
+End Curve
+Source 91 Target 6
+Begin Curve
+  [[-2132.93785095215, 1184] -> [-2115.4848975, 1184]]
+  [[-2115.4848975, 1184] -> [-2114.4848975, 1185]]
+  [[-2114.4848975, 1185] -> [-2114.4848975, 1215.5]]
+  [[-2114.4848975, 1215.5] -> [-2113.4848975, 1216.5]]
+  [[-2113.4848975, 1216.5] -> [-2088.66749770585, 1216.5]]
+End Curve
+Source 92 Target 93
+Begin Curve
+  [[-1827.35403496187, 522.5] -> [-1666.181427, 522.5]]
+  [[-1666.181427, 522.5] -> [-1665.181427, 523.5]]
+  [[-1665.181427, 523.5] -> [-1665.181427, 594.43620014191]]
+End Curve
+Source 92 Target 94
+Begin Curve
+  [[-1827.35403496187, 519.5] -> [-1005.294174, 519.5]]
+  [[-1005.294174, 519.5] -> [-1004.294174, 518.5]]
+  [[-1004.294174, 518.5] -> [-1004.294174, 410.5637998581]]
+End Curve
+Source 93 Target 15
+Begin Curve
+  [[-1552.79081726074, 616] -> [-1351.059738, 616]]
+  [[-1351.059738, 616] -> [-1350.059738, 615]]
+  [[-1350.059738, 615] -> [-1350.059738, 456.12759971619]]
+End Curve
+Source 94 Target 4
+Begin Curve
+  [[-896.45304870606, 389] -> [-659.52861, 389]]
+  [[-659.52861, 389] -> [-658.52861, 388]]
+  [[-658.52861, 388] -> [-658.52861, 386.12759971619]]
+End Curve
+Source 95 Target 47
+Begin Curve
+  [[-3727.77418518066, 718] -> [-3706.08668518066, 718]]
+End Curve
+Source 96 Target 71
+Begin Curve
+  [[-1831.24585723877, 1286] -> [-1786.75366973877, 1286]]
+End Curve
+Source 97 Target 39
+Begin Curve
+  [[-2964.006714, 444.5637998581] -> [-2964.006714, 455]]
+  [[-2964.006714, 455] -> [-2963.006714, 456]]
+  [[-2963.006714, 456] -> [-2739.08943939209, 456]]
+End Curve
+Source 98 Target 86
+Begin Curve
+  [[-1004.294174, 1376.43620014191] -> [-1004.294174, 1367.5]]
+  [[-1004.294174, 1367.5] -> [-1003.294174, 1366.5]]
+  [[-1003.294174, 1366.5] -> [-796.786622690943, 1366.5]]
+End Curve
+Source 99 Target 35
+Begin Curve
+  [[-895.93351745606, 1206] -> [-659.52861, 1206]]
+  [[-659.52861, 1206] -> [-658.52861, 1207]]
+  [[-658.52861, 1207] -> [-658.52861, 1218.87240028381]]
+End Curve
+Source 100 Target 0
+Begin Curve
+  [[-3270.991699, 1105.12582975199] -> [-3270.991699, 1156.3724]]
+  [[-3270.991699, 1156.3724] -> [-3269.991699, 1157.3724]]
+  [[-3269.991699, 1157.3724] -> [-2464.499634008, 1157.3724]]
+  [[-2464.499634008, 1157.3724] -> [-2463.499634008, 1158.3724]]
+  [[-2463.499634008, 1158.3724] -> [-2463.499634008, 1217]]
+  [[-2463.499634008, 1217] -> [-2462.499634008, 1218]]
+  [[-2462.499634008, 1218] -> [-2371.54914093018, 1218]]
+End Curve
+Source 100 Target 79
+Begin Curve
+  [[-3151.24562835693, 1082] -> [-3084.43182373047, 1082]]
+End Curve
+Source 101 Target 34
+Begin Curve
+  [[-1193.53112792969, 45] -> [-1157.89636230469, 45]]
+End Curve
+Source 102 Target 44
+Begin Curve
+  [[-2852.54709625244, 570] -> [-2747.37458801269, 570]]
+End Curve
+END PATHS

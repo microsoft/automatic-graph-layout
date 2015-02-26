@@ -1,0 +1,2508 @@
+﻿digraph G {
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" [ shape=box label="microsoft.visualstudio.enterprisetools.sdmdesigners.dll" ]
+"perfpkg.dll" [ shape=box label="perfpkg.dll" ]
+"microsoft.vsdesigner.dll" [ shape=box label="microsoft.vsdesigner.dll" ]
+"microsoft.visualstudio.qualitytools.testcasemanagement.dll" [ shape=box label="microsoft.visualstudio.qualitytools.testcasemanagement.dll" ]
+"microsoft.visualstudio.editors.dll" [ shape=box label="microsoft.visualstudio.editors.dll" ]
+"microsoft.visualstudio.teamfoundation.versioncontrol.dll" [ shape=box label="microsoft.visualstudio.teamfoundation.versioncontrol.dll" ]
+"microsoft.visualstudio.datatools.dll" [ shape=box label="microsoft.visualstudio.datatools.dll" ]
+"microsoft.visualstudio.tools.office.designer.office2007.dll" [ shape=box label="microsoft.visualstudio.tools.office.designer.office2007.dll" ]
+"microsoft.visualstudio.modeling.artifactmapper.vshost.dll" [ shape=box label="microsoft.visualstudio.modeling.artifactmapper.vshost.dll" ]
+"microsoft.visualstudio.teamfoundation.build.dll" [ shape=box label="microsoft.visualstudio.teamfoundation.build.dll" ]
+"microsoft.visualstudio.teamfoundation.teamexplorer.dll" [ shape=box label="microsoft.visualstudio.teamfoundation.teamexplorer.dll" ]
+"microsoft.visualstudio.xaml.dll" [ shape=box label="microsoft.visualstudio.xaml.dll" ]
+"microsoft.visualstudio.enterprisetools.classdesigner.dll" [ shape=box label="microsoft.visualstudio.enterprisetools.classdesigner.dll" ]
+"microsoft.visualstudio.qualitytools.vsip.dll" [ shape=box label="microsoft.visualstudio.qualitytools.vsip.dll" ]
+"microsoft.visualstudio.teamsystem.integration.dll" [ shape=box label="microsoft.visualstudio.teamsystem.integration.dll" ]
+"microsoft.visualstudio.qualitytools.loadtestpackage.dll" [ shape=box label="microsoft.visualstudio.qualitytools.loadtestpackage.dll" ]
+"workiteamtrackingtests.dll" [ shape=box label="workiteamtrackingtests.dll" ]
+"microsoft.teamfoundation.build.tasks.versioncontrol.dll" [ shape=box label="microsoft.teamfoundation.build.tasks.versioncontrol.dll" ]
+"microsoft.teamfoundation.versioncontrol.controls.dll" [ shape=box label="microsoft.teamfoundation.versioncontrol.controls.dll" ]
+"microsoft.visualstudio.datadesign.syncdesigner.dslpackage.dll" [ shape=box label="microsoft.visualstudio.datadesign.syncdesigner.dslpackage.dll" ]
+"microsoft.visualstudio.teamfoundation.workitemtracking.dll" [ shape=box label="microsoft.visualstudio.teamfoundation.workitemtracking.dll" ]
+"microsoft.visualstudio.testtools.testgeneration.dll" [ shape=box label="microsoft.visualstudio.testtools.testgeneration.dll" ]
+"tfsbuildservice.exe" [ shape=box label="tfsbuildservice.exe" ]
+"microsoft.visualstudio.enterprisetools.typesystem.dll" [ shape=box label="microsoft.visualstudio.enterprisetools.typesystem.dll" ]
+"projectmanagementsrvtests.dll" [ shape=box label="projectmanagementsrvtests.dll" ]
+"microsoft.teamfoundation.build.unittest.servertests.dll" [ shape=box label="microsoft.teamfoundation.build.unittest.servertests.dll" ]
+"microsoft.visualstudio.exporttemplate.dll" [ shape=box label="microsoft.visualstudio.exporttemplate.dll" ]
+"microsoft.visualstudio.tools.office.project.office2003.dll" [ shape=box label="microsoft.visualstudio.tools.office.project.office2003.dll" ]
+"microsoft.visualstudio.web.dll" [ shape=box label="microsoft.visualstudio.web.dll" ]
+"microsoft.teamfoundation.build.client.dll" [ shape=box label="microsoft.teamfoundation.build.client.dll" ]
+"microsoft.teamfoundation.build.server.logger.dll" [ shape=box label="microsoft.teamfoundation.build.server.logger.dll" ]
+"microsoft.visualstudio.whidbey.teamfoundation.qa.vsip.dll" [ shape=box label="microsoft.visualstudio.whidbey.teamfoundation.qa.vsip.dll" ]
+"microsoft.teamfoundation.build.server.dll" [ shape=box label="microsoft.teamfoundation.build.server.dll" ]
+"microsoft.visualstudio.publish.dll" [ shape=box label="microsoft.visualstudio.publish.dll" ]
+"microsoft.visualstudio.qualitytools.linking.dll" [ shape=box label="microsoft.visualstudio.qualitytools.linking.dll" ]
+"maui.visualstudio.current.projectmanagement.dll" [ shape=box label="maui.visualstudio.current.projectmanagement.dll" ]
+"microsoft.teamfoundation.officeintegration.common.dll" [ shape=box label="microsoft.teamfoundation.officeintegration.common.dll" ]
+"microsoft.visualstudio.enterprisetools.shell.dll" [ shape=box label="microsoft.visualstudio.enterprisetools.shell.dll" ]
+"microsoft.visualstudio.commonide.dll" [ shape=box label="microsoft.visualstudio.commonide.dll" ]
+"microsoft.visualstudio.qualitytools.tips.tuippackage.dll" [ shape=box label="microsoft.visualstudio.qualitytools.tips.tuippackage.dll" ]
+"microsoft.visualstudio.tools.office.addinproject.office2007.dll" [ shape=box label="microsoft.visualstudio.tools.office.addinproject.office2007.dll" ]
+"microsoft.visualbasic.upgradesnippet.dll" [ shape=box label="microsoft.visualbasic.upgradesnippet.dll" ]
+"microsoft.visualstudio.templatewizard.dll" [ shape=box label="microsoft.visualstudio.templatewizard.dll" ]
+"microsoft.visualstudio.tools.applications.hosting.dll" [ shape=box label="microsoft.visualstudio.tools.applications.hosting.dll" ]
+"microsoft.visualstudio.tools.office.excel.dll" [ shape=box label="microsoft.visualstudio.tools.office.excel.dll" ]
+"microsoft.teamfoundation.versioncontrol.client.dll" [ shape=box label="microsoft.teamfoundation.versioncontrol.client.dll" ]
+"microsoft.compactframework.design.model.dll" [ shape=box label="microsoft.compactframework.design.model.dll" ]
+"microsoft.compactframework.design.data.dll" [ shape=box label="microsoft.compactframework.design.data.dll" ]
+"microsoft.teamfoundation.versioncontrol.server.eventfilter.dll" [ shape=box label="microsoft.teamfoundation.versioncontrol.server.eventfilter.dll" ]
+"microsoft.build.nonshippingtasks.dll" [ shape=box label="microsoft.build.nonshippingtasks.dll" ]
+"microsoft.visualstudio.teamfoundation.qa.versioncontrol.dll" [ shape=box label="microsoft.visualstudio.teamfoundation.qa.versioncontrol.dll" ]
+"versioncontroltests.dll" [ shape=box label="versioncontroltests.dll" ]
+"microsoft.visualstudio.performancetools.visualization.dll" [ shape=box label="microsoft.visualstudio.performancetools.visualization.dll" ]
+"microsoft.teamfoundation.versioncontrol.server.dll" [ shape=box label="microsoft.teamfoundation.versioncontrol.server.dll" ]
+"microsoft.visualstudio.qualitytools.codecoverage.dll" [ shape=box label="microsoft.visualstudio.qualitytools.codecoverage.dll" ]
+"microsoft.visualstudio.officetools.project.dll" [ shape=box label="microsoft.visualstudio.officetools.project.dll" ]
+"microsoft.visualstudio.smartdevice.wizard.testprojectwizards.dll" [ shape=box label="microsoft.visualstudio.smartdevice.wizard.testprojectwizards.dll" ]
+"microsoft.visualstudio.teamfoundation.qa.dll" [ shape=box label="microsoft.visualstudio.teamfoundation.qa.dll" ]
+"microsoft.visualstudio.data.providers.common.dll" [ shape=box label="microsoft.visualstudio.data.providers.common.dll" ]
+"microsoft.visualstudio.data.providers.sqlserver.dll" [ shape=box label="microsoft.visualstudio.data.providers.sqlserver.dll" ]
+"microsoft.visualstudio.currituck.test.dll" [ shape=box label="microsoft.visualstudio.currituck.test.dll" ]
+"teambuildupgrade.exe" [ shape=box label="teambuildupgrade.exe" ]
+"cqconverter.exe" [ shape=box label="cqconverter.exe" ]
+"sdconverter.exe" [ shape=box label="sdconverter.exe" ]
+"microsoft.teamfoundation.build.controls.dll" [ shape=box label="microsoft.teamfoundation.build.controls.dll" ]
+"tf.exe" [ shape=box label="tf.exe" ]
+"microsoft.visualstudio.data.package.dll" [ shape=box label="microsoft.visualstudio.data.package.dll" ]
+"microsoft.visualstudio.qualitytools.webtestplayback.dll" [ shape=box label="microsoft.visualstudio.qualitytools.webtestplayback.dll" ]
+"microsoft.visualstudio.qualitytools.wizard.testprojectwizards.dll" [ shape=box label="microsoft.visualstudio.qualitytools.wizard.testprojectwizards.dll" ]
+"microsoft.visualstudio.teamfoundation.dll" [ shape=box label="microsoft.visualstudio.teamfoundation.dll" ]
+"microsoft.visualstudio.tools.office.runtime.dll" [ shape=box label="microsoft.visualstudio.tools.office.runtime.dll" ]
+"microsoft.teamfoundation.workitemtracking.adapter.dll" [ shape=box label="microsoft.teamfoundation.workitemtracking.adapter.dll" ]
+"microsoft.teamfoundation.warehouse.dll" [ shape=box label="microsoft.teamfoundation.warehouse.dll" ]
+"microsoft.visualstudio.qualitytools.checkinpolicies.dll" [ shape=box label="microsoft.visualstudio.qualitytools.checkinpolicies.dll" ]
+"presentationdesignhost.dll" [ shape=box label="presentationdesignhost.dll" ]
+"microsoft.teamfoundation.workitemtracking.server.dataservices.dll" [ shape=box label="microsoft.teamfoundation.workitemtracking.server.dataservices.dll" ]
+"microsoft.visualstudio.qualitytools.loadtest.dll" [ shape=box label="microsoft.visualstudio.qualitytools.loadtest.dll" ]
+"synctops.exe" [ shape=box label="synctops.exe" ]
+"microsoft.visualstudio.qualitytools.operationalstore.clienthelper.dll" [ shape=box label="microsoft.visualstudio.qualitytools.operationalstore.clienthelper.dll" ]
+"microsoft.visualstudio.qualitytools.cmi.dll" [ shape=box label="microsoft.visualstudio.qualitytools.cmi.dll" ]
+"microsoft.visualstudio.ordesigner.dsl.dll" [ shape=box label="microsoft.visualstudio.ordesigner.dsl.dll" ]
+"microsoft.visualstudio.qualitytools.loadtestui.dll" [ shape=box label="microsoft.visualstudio.qualitytools.loadtestui.dll" ]
+"microsoft.visualstudio.qualitytools.warehouseadapter.dll" [ shape=box label="microsoft.visualstudio.qualitytools.warehouseadapter.dll" ]
+"microsoft.visualstudio.qualitytools.warehousecommon.dll" [ shape=box label="microsoft.visualstudio.qualitytools.warehousecommon.dll" ]
+"vsinstr.exe" [ shape=box label="vsinstr.exe" ]
+"microsoft.visualstudio.qualitytools.plugins.codecoverage.dll" [ shape=box label="microsoft.visualstudio.qualitytools.plugins.codecoverage.dll" ]
+"microsoft.visualstudio.qualitytools.publishserver.dll" [ shape=box label="microsoft.visualstudio.qualitytools.publishserver.dll" ]
+"c1xxast.dll" [ shape=box label="c1xxast.dll" ]
+"tfsbuildupgrade.exe" [ shape=box label="tfsbuildupgrade.exe" ]
+"microsoft.teamfoundation.reportingtests.base.dll" [ shape=box label="microsoft.teamfoundation.reportingtests.base.dll" ]
+"vssconverter.exe" [ shape=box label="vssconverter.exe" ]
+"microsoft.teamfoundation.versioncontrol.adapter.dll" [ shape=box label="microsoft.teamfoundation.versioncontrol.adapter.dll" ]
+"microsoft.build.nonshipping.diagnosticlogger.unittests.dll" [ shape=box label="microsoft.build.nonshipping.diagnosticlogger.unittests.dll" ]
+"microsoft.vsdesigner.management.dll" [ shape=box label="microsoft.vsdesigner.management.dll" ]
+"microsoft.visualstudio.whidbey.teamfoundation.qa.testhelper.dll" [ shape=box label="microsoft.visualstudio.whidbey.teamfoundation.qa.testhelper.dll" ]
+"microsoft.visualstudio.tools.office.common.dll" [ shape=box label="microsoft.visualstudio.tools.office.common.dll" ]
+"microsoft.visualc.vscodeprovider.dll" [ shape=box label="microsoft.visualc.vscodeprovider.dll" ]
+"microsoft.teamfoundation.reportingtests.adapters.dll" [ shape=box label="microsoft.teamfoundation.reportingtests.adapters.dll" ]
+"microsoft.teamfoundation.build.unittest.dropmanagement.dll" [ shape=box label="microsoft.teamfoundation.build.unittest.dropmanagement.dll" ]
+"createprojectapi.dll" [ shape=box label="createprojectapi.dll" ]
+"psconverter.exe" [ shape=box label="psconverter.exe" ]
+"microsoft.visualstudio.tools.office.word.dll" [ shape=box label="microsoft.visualstudio.tools.office.word.dll" ]
+"logviewer.exe" [ shape=box label="logviewer.exe" ]
+"vscontentinstaller.exe" [ shape=box label="vscontentinstaller.exe" ]
+"link.exe" [ shape=box label="link.exe" ]
+"microsoft.visualstudio.vspsmo.dll" [ shape=box label="microsoft.visualstudio.vspsmo.dll" ]
+"microsoft.visualstudio.enterprisetools.phoenix.shell.dll" [ shape=box label="microsoft.visualstudio.enterprisetools.phoenix.shell.dll" ]
+"microsoft.teamfoundation.versioncontrol.clienttests.dll" [ shape=box label="microsoft.teamfoundation.versioncontrol.clienttests.dll" ]
+"microsoft.teamfoundation.build.server.checkinnotification.dll" [ shape=box label="microsoft.teamfoundation.build.server.checkinnotification.dll" ]
+"microsoft.teamfoundation.workitemtracking.controls.dll" [ shape=box label="microsoft.teamfoundation.workitemtracking.controls.dll" ]
+"microsoft.visualstudio.qualitytools.agentobject.dll" [ shape=box label="microsoft.visualstudio.qualitytools.agentobject.dll" ]
+"microsoft.visualstudio.officetools.workflow.debugconfigwizard.dll" [ shape=box label="microsoft.visualstudio.officetools.workflow.debugconfigwizard.dll" ]
+"microsoft.teamfoundation.reportingtests.infrastructure.dll" [ shape=box label="microsoft.teamfoundation.reportingtests.infrastructure.dll" ]
+"microsoft.teamfoundation.dogfood.checkinpolicies.dll" [ shape=box label="microsoft.teamfoundation.dogfood.checkinpolicies.dll" ]
+"microsoft.visualstudio.officetools.designer.dll" [ shape=box label="microsoft.visualstudio.officetools.designer.dll" ]
+"microsoft.teamfoundation.officeintegration.project.dll" [ shape=box label="microsoft.teamfoundation.officeintegration.project.dll" ]
+"microsoft.teamfoundation.dll" [ shape=box label="microsoft.teamfoundation.dll" ]
+"microsoft.teamfoundation.build.unittest.clienttests.dll" [ shape=box label="microsoft.teamfoundation.build.unittest.clienttests.dll" ]
+"microsoft.visualbasic.upgradewizard.dll" [ shape=box label="microsoft.visualbasic.upgradewizard.dll" ]
+"microsoft.teamfoundation.build.tasks.dll" [ shape=box label="microsoft.teamfoundation.build.tasks.dll" ]
+"microsoft.build.nativetasks.dll" [ shape=box label="microsoft.build.nativetasks.dll" ]
+"microsoft.teamfoundation.versioncontrol.servertests.dll" [ shape=box label="microsoft.teamfoundation.versioncontrol.servertests.dll" ]
+"microsoft.teamfoundation.build.unittest.createworkitemtask.dll" [ shape=box label="microsoft.teamfoundation.build.unittest.createworkitemtask.dll" ]
+"microsoft.build.filetracker.unittest.dll" [ shape=box label="microsoft.build.filetracker.unittest.dll" ]
+"microsoft.teamfoundation.workitemtracking.server.eventfilter.dll" [ shape=box label="microsoft.teamfoundation.workitemtracking.server.eventfilter.dll" ]
+"microsoft.teamfoundation.build.unittest.continuousintegration.dll" [ shape=box label="microsoft.teamfoundation.build.unittest.continuousintegration.dll" ]
+"microsoft.visualjava.upgradewizard.dll" [ shape=box label="microsoft.visualjava.upgradewizard.dll" ]
+"microsoft.teamfoundation.build.adapter.dll" [ shape=box label="microsoft.teamfoundation.build.adapter.dll" ]
+"microsoft.teamfoundation.build.server.eventfilter.dll" [ shape=box label="microsoft.teamfoundation.build.server.eventfilter.dll" ]
+"microsoft.teamfoundation.build.common.dll" [ shape=box label="microsoft.teamfoundation.build.common.dll" ]
+"vsfiltertest.exe" [ shape=box label="vsfiltertest.exe" ]
+"vsperfcontrol.dll" [ shape=box label="vsperfcontrol.dll" ]
+"microsoft.teamfoundation.workitemtracking.client.dll" [ shape=box label="microsoft.teamfoundation.workitemtracking.client.dll" ]
+"microsoft.visualstudio.commonide.unittest.dll" [ shape=box label="microsoft.visualstudio.commonide.unittest.dll" ]
+"microsoft.teamfoundation.versioncontrol.server.checkinnotification.dll" [ shape=box label="microsoft.teamfoundation.versioncontrol.server.checkinnotification.dll" ]
+"microsoft.teamfoundation.workitemtracking.server.dataaccesslayer.dll" [ shape=box label="microsoft.teamfoundation.workitemtracking.server.dataaccesslayer.dll" ]
+"microsoft.visualstudio.data.compatibility.dll" [ shape=box label="microsoft.visualstudio.data.compatibility.dll" ]
+"microsoft.teamfoundation.server.dll" [ shape=box label="microsoft.teamfoundation.server.dll" ]
+"microsoft.visualstudio.qualitytools.tips.unittest.adapter.dll" [ shape=box label="microsoft.visualstudio.qualitytools.tips.unittest.adapter.dll" ]
+"tfsbuild.exe" [ shape=box label="tfsbuild.exe" ]
+"microsoft.visualstudio.tools.office.buildtasks.office2007.dll" [ shape=box label="microsoft.visualstudio.tools.office.buildtasks.office2007.dll" ]
+"currituckutils.exe" [ shape=box label="currituckutils.exe" ]
+"microsoft.visualstudio.qualitytools.tmi.dll" [ shape=box label="microsoft.visualstudio.qualitytools.tmi.dll" ]
+"tfsserverscheduler.exe" [ shape=box label="tfsserverscheduler.exe" ]
+"c2.dll" [ shape=box label="c2.dll" ]
+"cqverifier.exe" [ shape=box label="cqverifier.exe" ]
+"microsoft.visualstudio.teamfoundation.qa.ui.dll" [ shape=box label="microsoft.visualstudio.teamfoundation.qa.ui.dll" ]
+"tfshtmltoplaintext.exe" [ shape=box label="tfshtmltoplaintext.exe" ]
+"microsoft.visualstudio.tools.applications.addinmanager.dll" [ shape=box label="microsoft.visualstudio.tools.applications.addinmanager.dll" ]
+"presentationdesigndeveloper.dll" [ shape=box label="presentationdesigndeveloper.dll" ]
+"draft.presentationdesigndeveloper.dll" [ shape=box label="draft.presentationdesigndeveloper.dll" ]
+"vb7tld.dll" [ shape=box label="vb7tld.dll" ]
+"microsoft.visualstudio.qualitytools.hostadapters.aspnetagent.dll" [ shape=box label="microsoft.visualstudio.qualitytools.hostadapters.aspnetagent.dll" ]
+"vbupgrade.exe" [ shape=box label="vbupgrade.exe" ]
+"vbupgrade.engine.dll" [ shape=box label="vbupgrade.engine.dll" ]
+"microsoft.visualstudio.xmldesigner.dll" [ shape=box label="microsoft.visualstudio.xmldesigner.dll" ]
+"ssgui.dll" [ shape=box label="ssgui.dll" ]
+"c1xx.dll" [ shape=box label="c1xx.dll" ]
+"c1ast.dll" [ shape=box label="c1ast.dll" ]
+"microsoft.visualstudio.web.application.dll" [ shape=box label="microsoft.visualstudio.web.application.dll" ]
+"vbu.exe" [ shape=box label="vbu.exe" ]
+"setupwarehouse.exe" [ shape=box label="setupwarehouse.exe" ]
+"_witimport.exe" [ shape=box label="_witimport.exe" ]
+"msdiff.dll" [ shape=box label="msdiff.dll" ]
+"msenc90.dll" [ shape=box label="msenc90.dll" ]
+"ncdump.exe" [ shape=box label="ncdump.exe" ]
+"msenv.dll" [ shape=box label="msenv.dll" ]
+"vsperfreport.exe" [ shape=box label="vsperfreport.exe" ]
+"natdbgee.dll" [ shape=box label="natdbgee.dll" ]
+"vsperfmon.exe" [ shape=box label="vsperfmon.exe" ]
+"microsoft.teamfoundation.server.admin.dll" [ shape=box label="microsoft.teamfoundation.server.admin.dll" ]
+"vswizard.dll" [ shape=box label="vswizard.dll" ]
+"ncbstress.exe" [ shape=box label="ncbstress.exe" ]
+"spyxx.exe" [ shape=box label="spyxx.exe" ]
+"microsoft.visualstudio.qualitytools.operationalstore.servicehelper.dll" [ shape=box label="microsoft.visualstudio.qualitytools.operationalstore.servicehelper.dll" ]
+"sd2hatverifier.exe" [ shape=box label="sd2hatverifier.exe" ]
+"qtcontroller.exe" [ shape=box label="qtcontroller.exe" ]
+"rsobjects.dll" [ shape=box label="rsobjects.dll" ]
+"taskrun.exe" [ shape=box label="taskrun.exe" ]
+"microsoft.visualstudio.qualitytools.commandline.dll" [ shape=box label="microsoft.visualstudio.qualitytools.commandline.dll" ]
+"ssscc.dll" [ shape=box label="ssscc.dll" ]
+"ssadmin.exe" [ shape=box label="ssadmin.exe" ]
+"ssexp.exe" [ shape=box label="ssexp.exe" ]
+"print3.exe" [ shape=box label="print3.exe" ]
+"microsoft.teamfoundation.common.library.dll" [ shape=box label="microsoft.teamfoundation.common.library.dll" ]
+"witfields.exe" [ shape=box label="witfields.exe" ]
+"microsoft.teamfoundation.officeintegration.excel.dll" [ shape=box label="microsoft.teamfoundation.officeintegration.excel.dll" ]
+"pftcl.exe" [ shape=box label="pftcl.exe" ]
+"qtagentserviceui.exe" [ shape=box label="qtagentserviceui.exe" ]
+"microsoft.teamfoundation.build.unittest.commontest.dll" [ shape=box label="microsoft.teamfoundation.build.unittest.commontest.dll" ]
+"qtagentservice.exe" [ shape=box label="qtagentservice.exe" ]
+"microsoft.teamfoundation.build.unittest.queue.dll" [ shape=box label="microsoft.teamfoundation.build.unittest.queue.dll" ]
+"psverifier.exe" [ shape=box label="psverifier.exe" ]
+"microsoft.teamfoundation.versioncontrol.common.integration.dll" [ shape=box label="microsoft.teamfoundation.versioncontrol.common.integration.dll" ]
+"vsct.exe" [ shape=box label="vsct.exe" ]
+"microsoft.visualstudio.deploywizard.dll" [ shape=box label="microsoft.visualstudio.deploywizard.dll" ]
+"microsoft.visualstudio.enterprise.aspnethelper.dll" [ shape=box label="microsoft.visualstudio.enterprise.aspnethelper.dll" ]
+"microsoft.visualstudio.qualitytools.tips.generictest.adapter.dll" [ shape=box label="microsoft.visualstudio.qualitytools.tips.generictest.adapter.dll" ]
+"vsperf90.dll" [ shape=box label="vsperf90.dll" ]
+"microsoft.visualstudio.qualitytools.tips.unittest.tip.dll" [ shape=box label="microsoft.visualstudio.qualitytools.tips.unittest.tip.dll" ]
+"microsoft.visualstudio.qualitytools.tips.manualtest.adapter.dll" [ shape=box label="microsoft.visualstudio.qualitytools.tips.manualtest.adapter.dll" ]
+"microsoft.visualstudio.qualitytools.tips.orderedtest.tip.dll" [ shape=box label="microsoft.visualstudio.qualitytools.tips.orderedtest.tip.dll" ]
+"microsoft.visualstudio.qualitytools.recorderbar.dll" [ shape=box label="microsoft.visualstudio.qualitytools.recorderbar.dll" ]
+"microsoft.visualstudio.performancetools.counterinfo.dll" [ shape=box label="microsoft.visualstudio.performancetools.counterinfo.dll" ]
+"microsoft.visualstudio.qualitytools.controller.spooledjob.dll" [ shape=box label="microsoft.visualstudio.qualitytools.controller.spooledjob.dll" ]
+"microsoft.visualstudio.teamsystem.common.dll" [ shape=box label="microsoft.visualstudio.teamsystem.common.dll" ]
+"vsperfreader.dll" [ shape=box label="vsperfreader.dll" ]
+"microsoft.visualstudio.importprojectfolderwizard.dll" [ shape=box label="microsoft.visualstudio.importprojectfolderwizard.dll" ]
+"versioncontrolhelperlibrary.dll" [ shape=box label="versioncontrolhelperlibrary.dll" ]
+"microsoft.visualstudio.qualitytools.controllerobject.dll" [ shape=box label="microsoft.visualstudio.qualitytools.controllerobject.dll" ]
+"vcbuild.exe" [ shape=box label="vcbuild.exe" ]
+"microsoft.visualstudio.data.providers.oracle.dll" [ shape=box label="microsoft.visualstudio.data.providers.oracle.dll" ]
+"tfsfieldmapping.exe" [ shape=box label="tfsfieldmapping.exe" ]
+"microsoft.teamfoundation.versioncontrol.server.proxy.dll" [ shape=box label="microsoft.teamfoundation.versioncontrol.server.proxy.dll" ]
+"microsoft.visualstudio.tools.office.addinproject.office2003.dll" [ shape=box label="microsoft.visualstudio.tools.office.addinproject.office2003.dll" ]
+"microsoft.teamfoundation.versioncontrol.server.proxytests.dll" [ shape=box label="microsoft.teamfoundation.versioncontrol.server.proxytests.dll" ]
+"microsoft.teamfoundation.versioncontrol.common.diffenginetests.dll" [ shape=box label="microsoft.teamfoundation.versioncontrol.common.diffenginetests.dll" ]
+"microsoft.wizardframeworkvs90nonship.dll" [ shape=box label="microsoft.wizardframeworkvs90nonship.dll" ]
+"microsoft.visualstudio.tools.office.excel.adapter.dll" [ shape=box label="microsoft.visualstudio.tools.office.excel.adapter.dll" ]
+"vsperfcmd.exe" [ shape=box label="vsperfcmd.exe" ]
+"microsoft.visualstudio.tools.applications.interopadapter.dll" [ shape=box label="microsoft.visualstudio.tools.applications.interopadapter.dll" ]
+"tfsuploadreports.exe" [ shape=box label="tfsuploadreports.exe" ]
+"microsoft.wizardframeworkvs.dll" [ shape=box label="microsoft.wizardframeworkvs.dll" ]
+"microsoft.visualstudio.qualitytools.tips.webloadtest.tip.dll" [ shape=box label="microsoft.visualstudio.qualitytools.tips.webloadtest.tip.dll" ]
+"microsoft.visualstudio.coverage.monitor.dll" [ shape=box label="microsoft.visualstudio.coverage.monitor.dll" ]
+"tfssecurity.exe" [ shape=box label="tfssecurity.exe" ]
+"tfsplaintexttohtml.exe" [ shape=box label="tfsplaintexttohtml.exe" ]
+"vsperfcorprof.dll" [ shape=box label="vsperfcorprof.dll" ]
+"microsoft.visualc.vscodeparser.dll" [ shape=box label="microsoft.visualc.vscodeparser.dll" ]
+"cedpedt.dll" [ shape=box label="cedpedt.dll" ]
+"cedpplg.dll" [ shape=box label="cedpplg.dll" ]
+"mfcm90.dll" [ shape=box label="mfcm90.dll" ]
+"cedpdpl.dll" [ shape=box label="cedpdpl.dll" ]
+"buildwatch.unittests.dll" [ shape=box label="buildwatch.unittests.dll" ]
+"customsearchprovider.unittest.dll" [ shape=box label="customsearchprovider.unittest.dll" ]
+"c1.dll" [ shape=box label="c1.dll" ]
+"mfcm90ud.dll" [ shape=box label="mfcm90ud.dll" ]
+"microsoft.build.datadriventasks.unittest.dll" [ shape=box label="microsoft.build.datadriventasks.unittest.dll" ]
+"microsoft.build.nativetasks.unittests.dll" [ shape=box label="microsoft.build.nativetasks.unittests.dll" ]
+"mfcm90u.dll" [ shape=box label="mfcm90u.dll" ]
+"cedpprj.dll" [ shape=box label="cedpprj.dll" ]
+"changesetsfromworkitems.exe" [ shape=box label="changesetsfromworkitems.exe" ]
+"mfcm90d.dll" [ shape=box label="mfcm90d.dll" ]
+"designerpad.exe" [ shape=box label="designerpad.exe" ]
+"microsoft.teamfoundation.qa.security.dll" [ shape=box label="microsoft.teamfoundation.qa.security.dll" ]
+"kbc.dll" [ shape=box label="kbc.dll" ]
+"presentationdesignmarkup.dll" [ shape=box label="presentationdesignmarkup.dll" ]
+"asbackuprestore.exe" [ shape=box label="asbackuprestore.exe" ]
+"natdbgde.dll" [ shape=box label="natdbgde.dll" ]
+"astutil.exe" [ shape=box label="astutil.exe" ]
+"vsperfpresentation.dll" [ shape=box label="vsperfpresentation.dll" ]
+"analyze.exe" [ shape=box label="analyze.exe" ]
+"ms.binaryfilelogger.dll" [ shape=box label="ms.binaryfilelogger.dll" ]
+"agentconfigutil.exe" [ shape=box label="agentconfigutil.exe" ]
+"dpdpl.dll" [ shape=box label="dpdpl.dll" ]
+"dpprj.dll" [ shape=box label="dpprj.dll" ]
+"dpplg.dll" [ shape=box label="dpplg.dll" ]
+"dpedt.dll" [ shape=box label="dpedt.dll" ]
+"cldiff.exe" [ shape=box label="cldiff.exe" ]
+"microsoft.build.tasks.generator.unittests.dll" [ shape=box label="microsoft.build.tasks.generator.unittests.dll" ]
+"microsoft.visualstudio.teamfoundation.client.dll" [ shape=box label="microsoft.visualstudio.teamfoundation.client.dll" ]
+"microsoft.build.visualjsharp.dll" [ shape=box label="microsoft.build.visualjsharp.dll" ]
+"microsoft.teamfoundation.adapter.dll" [ shape=box label="microsoft.teamfoundation.adapter.dll" ]
+"regularexpressionlanguageserviceunittests.dll" [ shape=box label="regularexpressionlanguageserviceunittests.dll" ]
+"regcap.exe" [ shape=box label="regcap.exe" ]
+"diffmerge.exe" [ shape=box label="diffmerge.exe" ]
+"proxygen.exe" [ shape=box label="proxygen.exe" ]
+"microsoft.visualstudio.modeling.diagrams.dll" [ shape=box label="microsoft.visualstudio.modeling.diagrams.dll" ]
+"microsoft.visualstudio.smartdevice.testhostadapter.dll" [ shape=box label="microsoft.visualstudio.smartdevice.testhostadapter.dll" ]
+"draft.xamllanguageservice.dll" [ shape=box label="draft.xamllanguageservice.dll" ]
+"prune3.exe" [ shape=box label="prune3.exe" ]
+"cpde.dll" [ shape=box label="cpde.dll" ]
+"prototypeeditor.exe" [ shape=box label="prototypeeditor.exe" ]
+"avvspkdh.dll" [ shape=box label="avvspkdh.dll" ]
+"driv.exe" [ shape=box label="driv.exe" ]
+"tstcon32.exe" [ shape=box label="tstcon32.exe" ]
+"compluslm.dll" [ shape=box label="compluslm.dll" ]
+"microsoft.visualstudio.tools.applications.adapter.dll" [ shape=box label="microsoft.visualstudio.tools.applications.adapter.dll" ]
+"bissubscribe.exe" [ shape=box label="bissubscribe.exe" ]
+"tlstest.exe" [ shape=box label="tlstest.exe" ]
+"tshell.dll" [ shape=box label="tshell.dll" ]
+"unittestguirunner.exe" [ shape=box label="unittestguirunner.exe" ]
+"remotevssscc.dll" [ shape=box label="remotevssscc.dll" ]
+"diagramhost.exe" [ shape=box label="diagramhost.exe" ]
+"microsoft.visualstudio.toolboxcontrolinstaller.dll" [ shape=box label="microsoft.visualstudio.toolboxcontrolinstaller.dll" ]
+"presentationdesignextensibility.dll" [ shape=box label="presentationdesignextensibility.dll" ]
+"microsoft.teamfoundation.workitemtracking.proxy.dll" [ shape=box label="microsoft.teamfoundation.workitemtracking.proxy.dll" ]
+"microsoft.visualstudio.qualitytools.msbuildtasks.dll" [ shape=box label="microsoft.visualstudio.qualitytools.msbuildtasks.dll" ]
+"microsoft.visualstudio.coverage.analysis.dll" [ shape=box label="microsoft.visualstudio.coverage.analysis.dll" ]
+"fabrikam.westcoasthelpdesk.mtos.dll" [ shape=box label="fabrikam.westcoasthelpdesk.mtos.dll" ]
+"errlook.exe" [ shape=box label="errlook.exe" ]
+"vdt80p.dll" [ shape=box label="vdt80p.dll" ]
+"f1viewer.exe" [ shape=box label="f1viewer.exe" ]
+"astio.dll" [ shape=box label="astio.dll" ]
+"fabrikam.westcoasthelpdesk.webclient.dll" [ shape=box label="fabrikam.westcoasthelpdesk.webclient.dll" ]
+"mswebprj.dll" [ shape=box label="mswebprj.dll" ]
+"microsoft.visualstudio.qualitytools.loadtestexec.dll" [ shape=box label="microsoft.visualstudio.qualitytools.loadtestexec.dll" ]
+"vdtqpapkg.dll" [ shape=box label="vdtqpapkg.dll" ]
+"coveragereport.exe" [ shape=box label="coveragereport.exe" ]
+"microsoft.visualstudio.qualitytools.tips.orderedtest.adapter.dll" [ shape=box label="microsoft.visualstudio.qualitytools.tips.orderedtest.adapter.dll" ]
+"microsoft.visualstudio.qualitytools.tips.manualtest.tip.dll" [ shape=box label="microsoft.visualstudio.qualitytools.tips.manualtest.tip.dll" ]
+"coveran.exe" [ shape=box label="coveran.exe" ]
+"dsref80.dll" [ shape=box label="dsref80.dll" ]
+"vbupgrade.dll" [ shape=box label="vbupgrade.dll" ]
+"atltracetool8.exe" [ shape=box label="atltracetool8.exe" ]
+"microsoft.visualstudio.qualitytools.tips.generictest.tip.dll" [ shape=box label="microsoft.visualstudio.qualitytools.tips.generictest.tip.dll" ]
+"enctest.exe" [ shape=box label="enctest.exe" ]
+"vdt80.dll" [ shape=box label="vdt80.dll" ]
+"qtagent.exe" [ shape=box label="qtagent.exe" ]
+"microsoft.visualstudio.qualitytools.tips.manualtest.objectmodel.dll" [ shape=box label="microsoft.visualstudio.qualitytools.tips.manualtest.objectmodel.dll" ]
+"ecbuild.dll" [ shape=box label="ecbuild.dll" ]
+"outputenv.exe" [ shape=box label="outputenv.exe" ]
+"msbuildconvert.exe" [ shape=box label="msbuildconvert.exe" ]
+"msbuild.exe" [ shape=box label="msbuild.exe" ]
+"msemp.dll" [ shape=box label="msemp.dll" ]
+"slist_ut.exe" [ shape=box label="slist_ut.exe" ]
+"oldintegeroverflow.dll" [ shape=box label="oldintegeroverflow.dll" ]
+"stresstarget.exe" [ shape=box label="stresstarget.exe" ]
+"subscribe.exe" [ shape=box label="subscribe.exe" ]
+"secadmin.exe" [ shape=box label="secadmin.exe" ]
+"p2pspider.unittests.dll" [ shape=box label="p2pspider.unittests.dll" ]
+"ssservice.exe" [ shape=box label="ssservice.exe" ]
+"mpishim.exe" [ shape=box label="mpishim.exe" ]
+"ss.exe" [ shape=box label="ss.exe" ]
+"msvbprj.dll" [ shape=box label="msvbprj.dll" ]
+"cl.exe" [ shape=box label="cl.exe" ]
+"msvhwdv.dll" [ shape=box label="msvhwdv.dll" ]
+"msvhw.dll" [ shape=box label="msvhw.dll" ]
+"srcedit.dll" [ shape=box label="srcedit.dll" ]
+"mspdbcore.dll" [ shape=box label="mspdbcore.dll" ]
+"microsoft.teamfoundation.common.dll" [ shape=box label="microsoft.teamfoundation.common.dll" ]
+"createsccfolder.exe" [ shape=box label="createsccfolder.exe" ]
+"mspft80.dll" [ shape=box label="mspft80.dll" ]
+"mspdbst.dll" [ shape=box label="mspdbst.dll" ]
+"mspdbsrv.exe" [ shape=box label="mspdbsrv.exe" ]
+"tfsdeleteproject.exe" [ shape=box label="tfsdeleteproject.exe" ]
+"phoenix.exe" [ shape=box label="phoenix.exe" ]
+"microsoft.visualstudio.tools.office.ribbon.dll" [ shape=box label="microsoft.visualstudio.tools.office.ribbon.dll" ]
+"pgodb80.dll" [ shape=box label="pgodb80.dll" ]
+"pgodump.exe" [ shape=box label="pgodump.exe" ]
+"pgomgr.exe" [ shape=box label="pgomgr.exe" ]
+"tfssample.exe" [ shape=box label="tfssample.exe" ]
+"bscmake.exe" [ shape=box label="bscmake.exe" ]
+"preprocess.dll" [ shape=box label="preprocess.dll" ]
+"tfsgssinit.exe" [ shape=box label="tfsgssinit.exe" ]
+"microsoft.visualstudio.tools.office.outlook.dll" [ shape=box label="microsoft.visualstudio.tools.office.outlook.dll" ]
+"tfsprovider.dll" [ shape=box label="tfsprovider.dll" ]
+"createds.exe" [ shape=box label="createds.exe" ]
+"ctloc.dll" [ shape=box label="ctloc.dll" ]
+"microsoft.visualstudio.wpfflavor.dll" [ shape=box label="microsoft.visualstudio.wpfflavor.dll" ]
+"taskdump.exe" [ shape=box label="taskdump.exe" ]
+"csspkg.dll" [ shape=box label="csspkg.dll" ]
+"tasklib.dll" [ shape=box label="tasklib.dll" ]
+"testundn.exe" [ shape=box label="testundn.exe" ]
+"microsoft.visualstudio.vspsqlenum.dll" [ shape=box label="microsoft.visualstudio.vspsqlenum.dll" ]
+"tfgetdbdata.exe" [ shape=box label="tfgetdbdata.exe" ]
+"pgocvt.exe" [ shape=box label="pgocvt.exe" ]
+"testctclibrary.dll" [ shape=box label="testctclibrary.dll" ]
+"tests.dll" [ shape=box label="tests.dll" ]
+"glass.exe" [ shape=box label="glass.exe" ]
+"webdirprj.dll" [ shape=box label="webdirprj.dll" ]
+"vsmsbuild.exe" [ shape=box label="vsmsbuild.exe" ]
+"webmigration.dll" [ shape=box label="webmigration.dll" ]
+"libtest.exe" [ shape=box label="libtest.exe" ]
+"microsoft.visualstudio.data.framework.dll" [ shape=box label="microsoft.visualstudio.data.framework.dll" ]
+"lregdll.dll" [ shape=box label="lregdll.dll" ]
+"microsoft.compactframework.build.tasks.dll" [ shape=box label="microsoft.compactframework.build.tasks.dll" ]
+"webappupgrade.dll" [ shape=box label="webappupgrade.dll" ]
+"vsta_ep32.exe" [ shape=box label="vsta_ep32.exe" ]
+"windowsprefast.dll" [ shape=box label="windowsprefast.dll" ]
+"winfxcustomcontroltemplatewizard.dll" [ shape=box label="winfxcustomcontroltemplatewizard.dll" ]
+"microsoft.visualstudio.currituck.test.webservice.dll" [ shape=box label="microsoft.visualstudio.currituck.test.webservice.dll" ]
+"microsoft.visualstudio.enterprisetools.dll" [ shape=box label="microsoft.visualstudio.enterprisetools.dll" ]
+"vsmacros.dll" [ shape=box label="vsmacros.dll" ]
+"westcoastsales.dll" [ shape=box label="westcoastsales.dll" ]
+"microsoft.visualstudio.enterprisetools.phoenix.engine.dll" [ shape=box label="microsoft.visualstudio.enterprisetools.phoenix.engine.dll" ]
+"microsoft.build.tasks.v3.5.dll" [ shape=box label="microsoft.build.tasks.v3.5.dll" ]
+"vssverfier.exe" [ shape=box label="vssverfier.exe" ]
+"microsoft.build.datadriventasks.dll" [ shape=box label="microsoft.build.datadriventasks.dll" ]
+"makehm.exe" [ shape=box label="makehm.exe" ]
+"microsoft.build.filetracker.dll" [ shape=box label="microsoft.build.filetracker.dll" ]
+"microsoft.teamfoundation.workitemtracking.client.cache.dll" [ shape=box label="microsoft.teamfoundation.workitemtracking.client.cache.dll" ]
+"microsoft.teamfoundation.workitemtracking.client.datastore.dll" [ shape=box label="microsoft.teamfoundation.workitemtracking.client.datastore.dll" ]
+"maui.visualstudio.current.teamsystem.dll" [ shape=box label="maui.visualstudio.current.teamsystem.dll" ]
+"mcee.dll" [ shape=box label="mcee.dll" ]
+"microsoft.visualbasic.upgradeextensions.dll" [ shape=box label="microsoft.visualbasic.upgradeextensions.dll" ]
+"microsoft.build.nonshipping.diagnosticlogger.dll" [ shape=box label="microsoft.build.nonshipping.diagnosticlogger.dll" ]
+"microsoft.visualstudio.qualitytools.executioncommon.dll" [ shape=box label="microsoft.visualstudio.qualitytools.executioncommon.dll" ]
+"vsperfsrv.exe" [ shape=box label="vsperfsrv.exe" ]
+"microsoft.build.kbc.unittest.dll" [ shape=box label="microsoft.build.kbc.unittest.dll" ]
+"microsoft.teamfoundation.versioncontrol.server.proxyperftests.dll" [ shape=box label="microsoft.teamfoundation.versioncontrol.server.proxyperftests.dll" ]
+"vssprovider.dll" [ shape=box label="vssprovider.dll" ]
+"microsoft.visualstudio.data.host.dll" [ shape=box label="microsoft.visualstudio.data.host.dll" ]
+"vscover90.dll" [ shape=box label="vscover90.dll" ]
+"guidgen.exe" [ shape=box label="guidgen.exe" ]
+"workbench.exe" [ shape=box label="workbench.exe" ]
+"vsperfanalysis.dll" [ shape=box label="vsperfanalysis.dll" ]
+"mergecl.exe" [ shape=box label="mergecl.exe" ]
+"microsoft.expression.framework.dll" [ shape=box label="microsoft.expression.framework.dll" ]
+"wmiscriptutils.dll" [ shape=box label="wmiscriptutils.dll" ]
+"microsoft.visualstudio.profiler.filtering.test.dll" [ shape=box label="microsoft.visualstudio.profiler.filtering.test.dll" ]
+"workitemtypeformviewer.exe" [ shape=box label="workitemtypeformviewer.exe" ]
+"microsoft.sdm.operatingsystem.dll" [ shape=box label="microsoft.sdm.operatingsystem.dll" ]
+"microsoft.sdm.webapplication.dll" [ shape=box label="microsoft.sdm.webapplication.dll" ]
+"workitemtestengine.dll" [ shape=box label="workitemtestengine.dll" ]
+"microsoft.visualstudio.projectconverters.dll" [ shape=box label="microsoft.visualstudio.projectconverters.dll" ]
+"microsoft.teamfoundation.client.dll" [ shape=box label="microsoft.teamfoundation.client.dll" ]
+"microsoft.sdm.constraints.dll" [ shape=box label="microsoft.sdm.constraints.dll" ]
+"htmled.dll" [ shape=box label="htmled.dll" ]
+"microsoft.visualstudio.ordesigner.dslpackage.dll" [ shape=box label="microsoft.visualstudio.ordesigner.dslpackage.dll" ]
+"witexplorer.exe" [ shape=box label="witexplorer.exe" ]
+"integeroverflow.dll" [ shape=box label="integeroverflow.dll" ]
+"vscovview.exe" [ shape=box label="vscovview.exe" ]
+"microsoft.datawarehouse.dll" [ shape=box label="microsoft.datawarehouse.dll" ]
+"microsoft.visualstudio.tools.office.hosting.office2003.dll" [ shape=box label="microsoft.visualstudio.tools.office.hosting.office2003.dll" ]
+"acd.exe" [ shape=box label="acd.exe" ]
+"microsoft.devdiv.buildtasks.unittests.dll" [ shape=box label="microsoft.devdiv.buildtasks.unittests.dll" ]
+"targetdependencyscanner.exe" [ shape=box label="targetdependencyscanner.exe" ]
+"vstoexcel2007clientpkg.dll" [ shape=box label="vstoexcel2007clientpkg.dll" ]
+"systemmenucheck.dll" [ shape=box label="systemmenucheck.dll" ]
+"vstoinstaller.exe" [ shape=box label="vstoinstaller.exe" ]
+"vstostoragewrapper.dll" [ shape=box label="vstostoragewrapper.dll" ]
+"vstoword2003clientpkg.dll" [ shape=box label="vstoword2003clientpkg.dll" ]
+"vstoruntimestoragectrl.dll" [ shape=box label="vstoruntimestoragectrl.dll" ]
+"vstowfproject.dll" [ shape=box label="vstowfproject.dll" ]
+"ssarc.exe" [ shape=box label="ssarc.exe" ]
+"vstoword2003adaptor.dll" [ shape=box label="vstoword2003adaptor.dll" ]
+"vstooffice2003designer.dll" [ shape=box label="vstooffice2003designer.dll" ]
+"vstooffice2003project.dll" [ shape=box label="vstooffice2003project.dll" ]
+"vstooffice2007designer.dll" [ shape=box label="vstooffice2007designer.dll" ]
+"vstopersist.dll" [ shape=box label="vstopersist.dll" ]
+"vstoloader.dll" [ shape=box label="vstoloader.dll" ]
+"ssrestor.exe" [ shape=box label="ssrestor.exe" ]
+"vstoword2007adaptor.dll" [ shape=box label="vstoword2007adaptor.dll" ]
+"witexport.exe" [ shape=box label="witexport.exe" ]
+"retarg.exe" [ shape=box label="retarg.exe" ]
+"sales_opportunity.dll" [ shape=box label="sales_opportunity.dll" ]
+"cmddef.dll" [ shape=box label="cmddef.dll" ]
+"scriptle2.dll" [ shape=box label="scriptle2.dll" ]
+"witimport.exe" [ shape=box label="witimport.exe" ]
+"zipexestub.exe" [ shape=box label="zipexestub.exe" ]
+"vsadirprj.dll" [ shape=box label="vsadirprj.dll" ]
+"compsvcspkg.dll" [ shape=box label="compsvcspkg.dll" ]
+"rascal.exe" [ shape=box label="rascal.exe" ]
+"xapp.exe" [ shape=box label="xapp.exe" ]
+"vwdexpress.exe" [ shape=box label="vwdexpress.exe" ]
+"sqlde.dll" [ shape=box label="sqlde.dll" ]
+"sqlle.dll" [ shape=box label="sqlle.dll" ]
+"vstoword2007clientpkg.dll" [ shape=box label="vstoword2007clientpkg.dll" ]
+"vstst-fileconverter.exe" [ shape=box label="vstst-fileconverter.exe" ]
+"spyxxhk.dll" [ shape=box label="spyxxhk.dll" ]
+"winfxbrowserapplicationtemplatewizard.dll" [ shape=box label="winfxbrowserapplicationtemplatewizard.dll" ]
+"sdmc.exe" [ shape=box label="sdmc.exe" ]
+"microsoft.build.utilities.v3.5.dll" [ shape=box label="microsoft.build.utilities.v3.5.dll" ]
+"webdev.webserver.exe" [ shape=box label="webdev.webserver.exe" ]
+"shmetapdb.dll" [ shape=box label="shmetapdb.dll" ]
+"vstoexcel2007adaptor.dll" [ shape=box label="vstoexcel2007adaptor.dll" ]
+"ssapi.dll" [ shape=box label="ssapi.dll" ]
+"vbexpress.exe" [ shape=box label="vbexpress.exe" ]
+"vshost32.exe" [ shape=box label="vshost32.exe" ]
+"vshost.exe" [ shape=box label="vshost.exe" ]
+"vsctedit.exe" [ shape=box label="vsctedit.exe" ]
+"vsctcompress.dll" [ shape=box label="vsctcompress.dll" ]
+"vsdiag_regwcf.exe" [ shape=box label="vsdiag_regwcf.exe" ]
+"vsdebug.dll" [ shape=box label="vsdebug.dll" ]
+"bisscriptedsetuputility.exe" [ shape=box label="bisscriptedsetuputility.exe" ]
+"vb7to8.exe" [ shape=box label="vb7to8.exe" ]
+"vsmsvrp.dll" [ shape=box label="vsmsvrp.dll" ]
+"uxcop.exe" [ shape=box label="uxcop.exe" ]
+"mfc90.dll" [ shape=box label="mfc90.dll" ]
+"vbc.exe" [ shape=box label="vbc.exe" ]
+"vb7to8dl.dll" [ shape=box label="vb7to8dl.dll" ]
+"vslog.dll" [ shape=box label="vslog.dll" ]
+"atlprov.dll" [ shape=box label="atlprov.dll" ]
+"vsapkg.dll" [ shape=box label="vsapkg.dll" ]
+"vsamnu.dll" [ shape=box label="vsamnu.dll" ]
+"vsassert.dll" [ shape=box label="vsassert.dll" ]
+"vsapkgp.dll" [ shape=box label="vsapkgp.dll" ]
+"vsa7director.dll" [ shape=box label="vsa7director.dll" ]
+"vsacompsvcspkg.dll" [ shape=box label="vsacompsvcspkg.dll" ]
+"vsaenv.exe" [ shape=box label="vsaenv.exe" ]
+"visualstudiomssccithunk.exe" [ shape=box label="visualstudiomssccithunk.exe" ]
+"vcexpress.exe" [ shape=box label="vcexpress.exe" ]
+"vscovreport.exe" [ shape=box label="vscovreport.exe" ]
+"atl90.dll" [ shape=box label="atl90.dll" ]
+"vcencbld.dll" [ shape=box label="vcencbld.dll" ]
+"vsavb7dt.dll" [ shape=box label="vsavb7dt.dll" ]
+"vdtflav.dll" [ shape=box label="vdtflav.dll" ]
+"vcsexpress.exe" [ shape=box label="vcsexpress.exe" ]
+"vsavbproj.dll" [ shape=box label="vsavbproj.dll" ]
+"updatesubscriberfieldtosid.exe" [ shape=box label="updatesubscriberfieldtosid.exe" ]
+"vstaremotingserver.dll" [ shape=box label="vstaremotingserver.dll" ]
+"tfsadminutil.exe" [ shape=box label="tfsadminutil.exe" ]
+"vstlbinf.dll" [ shape=box label="vstlbinf.dll" ]
+"msobj80.dll" [ shape=box label="msobj80.dll" ]
+"tfscredutil.exe" [ shape=box label="tfscredutil.exe" ]
+"tfsdb.exe" [ shape=box label="tfsdb.exe" ]
+"vstaproject.dll" [ shape=box label="vstaproject.dll" ]
+"vstadteprovider.dll" [ shape=box label="vstadteprovider.dll" ]
+"vstoexcel2003adaptor.dll" [ shape=box label="vstoexcel2003adaptor.dll" ]
+"tdnamespaceextension.dll" [ shape=box label="tdnamespaceextension.dll" ]
+"vstoexcel2003clientpkg.dll" [ shape=box label="vstoexcel2003clientpkg.dll" ]
+"tcprops.dll" [ shape=box label="tcprops.dll" ]
+"vsctlibrary.dll" [ shape=box label="vsctlibrary.dll" ]
+"vstoaddin2003clientpkg.dll" [ shape=box label="vstoaddin2003clientpkg.dll" ]
+"vstoapartmentshim.dll" [ shape=box label="vstoapartmentshim.dll" ]
+"vstoaddin2007clientpkg.dll" [ shape=box label="vstoaddin2007clientpkg.dll" ]
+"tfserverstatusvalidator.exe" [ shape=box label="tfserverstatusvalidator.exe" ]
+"vssln.dll" [ shape=box label="vssln.dll" ]
+"tsdevpkg.dll" [ shape=box label="tsdevpkg.dll" ]
+"vssproviderstub.dll" [ shape=box label="vssproviderstub.dll" ]
+"tfsupgradertm.exe" [ shape=box label="tfsupgradertm.exe" ]
+"undname.exe" [ shape=box label="undname.exe" ]
+"al.exe" [ shape=box label="al.exe" ]
+"msvcp90.dll" [ shape=box label="msvcp90.dll" ]
+"microsoft.visualstudio.qualitytools.common.dll" [ shape=box label="microsoft.visualstudio.qualitytools.common.dll" ]
+"buildwatch.filecomparers.dll" [ shape=box label="buildwatch.filecomparers.dll" ]
+"vsta.exe" [ shape=box label="vsta.exe" ]
+"vstaclientpkg.dll" [ shape=box label="vstaclientpkg.dll" ]
+"tfsofficeadd-in.dll" [ shape=box label="tfsofficeadd-in.dll" ]
+"mspdb80.dll" [ shape=box label="mspdb80.dll" ]
+"tfsupgrade.exe" [ shape=box label="tfsupgrade.exe" ]
+"tfsproviderstub.dll" [ shape=box label="tfsproviderstub.dll" ]
+"tfsreg.exe" [ shape=box label="tfsreg.exe" ]
+"fabrikam.westcoasthelpdesk.winclient.workitem.dll" [ shape=box label="fabrikam.westcoasthelpdesk.winclient.workitem.dll" ]
+"fabrikam.westcoasthelpdesk.winclient.exe" [ shape=box label="fabrikam.westcoasthelpdesk.winclient.exe" ]
+"getcpuid.exe" [ shape=box label="getcpuid.exe" ]
+"microsoft.visualstudio.qualitytools.hostadapters.aspnetadapter.dll" [ shape=box label="microsoft.visualstudio.qualitytools.hostadapters.aspnetadapter.dll" ]
+"microsoft.visualstudio.qualitytools.recorderbarbho90.dll" [ shape=box label="microsoft.visualstudio.qualitytools.recorderbarbho90.dll" ]
+"encmgr.dll" [ shape=box label="encmgr.dll" ]
+"microsoft.sdm.web.dll" [ shape=box label="microsoft.sdm.web.dll" ]
+"etpproj.dll" [ shape=box label="etpproj.dll" ]
+"hdiff.exe" [ shape=box label="hdiff.exe" ]
+"microsoft.visualstudio.profiler.dll" [ shape=box label="microsoft.visualstudio.profiler.dll" ]
+"inituserconfig.exe" [ shape=box label="inituserconfig.exe" ]
+"htmdlgs.dll" [ shape=box label="htmdlgs.dll" ]
+"glimport.exe" [ shape=box label="glimport.exe" ]
+"glexport.exe" [ shape=box label="glexport.exe" ]
+"microsoft.visualstudio.modeling.diagrams.graphobject.dll" [ shape=box label="microsoft.visualstudio.modeling.diagrams.graphobject.dll" ]
+"graphobjecttest.exe" [ shape=box label="graphobjecttest.exe" ]
+"editbin.exe" [ shape=box label="editbin.exe" ]
+"microsoft.visualstudio.tools.applications.blueprints.dll" [ shape=box label="microsoft.visualstudio.tools.applications.blueprints.dll" ]
+"microsoft.visualstudio.tools.applications.designtime.dll" [ shape=box label="microsoft.visualstudio.tools.applications.designtime.dll" ]
+"devenv.exe" [ shape=box label="devenv.exe" ]
+"microsoft.visualstudio.testtools.buildshadowstask.dll" [ shape=box label="microsoft.visualstudio.testtools.buildshadowstask.dll" ]
+"microsoft.visualstudio.tools.applications.projectgen.dll" [ shape=box label="microsoft.visualstudio.tools.applications.projectgen.dll" ]
+"microsoft.visualstudio.tools.applications.proxyservices.dll" [ shape=box label="microsoft.visualstudio.tools.applications.proxyservices.dll" ]
+"deployacceptancetests.dll" [ shape=box label="deployacceptancetests.dll" ]
+"ddupd.exe" [ shape=box label="ddupd.exe" ]
+"dumpbin.exe" [ shape=box label="dumpbin.exe" ]
+"drivercheck.exe" [ shape=box label="drivercheck.exe" ]
+"microsoft.visualstudio.qualitytools.tips.generictest.objectmodel.dll" [ shape=box label="microsoft.visualstudio.qualitytools.tips.generictest.objectmodel.dll" ]
+"microsoft.visualstudio.qualitytools.tips.orderedtest.objectmodel.dll" [ shape=box label="microsoft.visualstudio.qualitytools.tips.orderedtest.objectmodel.dll" ]
+"dirprj.dll" [ shape=box label="dirprj.dll" ]
+"dexplore.exe" [ shape=box label="dexplore.exe" ]
+"microsoft.visualstudio.qualitytools.tips.unittest.objectmodel.dll" [ shape=box label="microsoft.visualstudio.qualitytools.tips.unittest.objectmodel.dll" ]
+"presentationdesigninteraction.dll" [ shape=box label="presentationdesigninteraction.dll" ]
+"microsoft.teamfoundation.workitemtracking.client.querylanguage.dll" [ shape=box label="microsoft.teamfoundation.workitemtracking.client.querylanguage.dll" ]
+"microsoft.teamfoundation.workitemtracking.client.ruleengine.dll" [ shape=box label="microsoft.teamfoundation.workitemtracking.client.ruleengine.dll" ]
+"microsoft.build.conversion.v3.5.dll" [ shape=box label="microsoft.build.conversion.v3.5.dll" ]
+"microsoft.teamfoundation.workitemtracking.server.dll" [ shape=box label="microsoft.teamfoundation.workitemtracking.server.dll" ]
+"mfc90u.dll" [ shape=box label="mfc90u.dll" ]
+"mfc90d.dll" [ shape=box label="mfc90d.dll" ]
+"microsoft.visualstudio.wizardframework.dll" [ shape=box label="microsoft.visualstudio.wizardframework.dll" ]
+"mfc90ud.dll" [ shape=box label="mfc90ud.dll" ]
+"microsoft.sdm.system.dll" [ shape=box label="microsoft.sdm.system.dll" ]
+"microsoft.sdm.configuration.dll" [ shape=box label="microsoft.sdm.configuration.dll" ]
+"microsoft.sdm.iis.dll" [ shape=box label="microsoft.sdm.iis.dll" ]
+"microsoft.sdm.filesystem.dll" [ shape=box label="microsoft.sdm.filesystem.dll" ]
+"microsoft.build.tasks.generator.exe" [ shape=box label="microsoft.build.tasks.generator.exe" ]
+"microsoft.teamfoundation.versioncontrol.commontests.dll" [ shape=box label="microsoft.teamfoundation.versioncontrol.commontests.dll" ]
+"microsoft.data.connectionui.dialog.dll" [ shape=box label="microsoft.data.connectionui.dialog.dll" ]
+"microsoft.visualstudio.modeling.artifactmapper.dll" [ shape=box label="microsoft.visualstudio.modeling.artifactmapper.dll" ]
+"metade.dll" [ shape=box label="metade.dll" ]
+"microsoft.build.engine.dll" [ shape=box label="microsoft.build.engine.dll" ]
+"sdmcore.dll" [ shape=box label="sdmcore.dll" ]
+"lib.exe" [ shape=box label="lib.exe" ]
+"kbcapp.exe" [ shape=box label="kbcapp.exe" ]
+"jsee.dll" [ shape=box label="jsee.dll" ]
+"install.exe" [ shape=box label="install.exe" ]
+"sdmcompile.dll" [ shape=box label="sdmcompile.dll" ]
+"microsoft.visualstudio.hostingprocess.utilities.dll" [ shape=box label="microsoft.visualstudio.hostingprocess.utilities.dll" ]
+"mdcwalker.exe" [ shape=box label="mdcwalker.exe" ]
+"makezipexe.exe" [ shape=box label="makezipexe.exe" ]
+"vspmsg.dll" [ shape=box label="vspmsg.dll" ]
+"microsoft.visualstudio.csharp.services.language.dll" [ shape=box label="microsoft.visualstudio.csharp.services.language.dll" ]
+"msvbver.dll" [ shape=box label="msvbver.dll" ]
+"microsoft.visualstudio.debugger.runtime.dll" [ shape=box label="microsoft.visualstudio.debugger.runtime.dll" ]
+"magellanccviewer.dll" [ shape=box label="magellanccviewer.dll" ]
+"microsoft.visualstudio.vspsmoenum.dll" [ shape=box label="microsoft.visualstudio.vspsmoenum.dll" ]
+"pgosweep.exe" [ shape=box label="pgosweep.exe" ]
+"currituckomperftest.exe" [ shape=box label="currituckomperftest.exe" ]
+"currituckofficepopulate.exe" [ shape=box label="currituckofficepopulate.exe" ]
+"currituckconnperfprofiledriver.exe" [ shape=box label="currituckconnperfprofiledriver.exe" ]
+"currituckofficeperfdriver.exe" [ shape=box label="currituckofficeperfdriver.exe" ]
+"vbupgrade.utils.dll" [ shape=box label="vbupgrade.utils.dll" ]
+"microsoft.visualstudio.vspregsvrenum.dll" [ shape=box label="microsoft.visualstudio.vspregsvrenum.dll" ]
+"currituckpopulate.exe" [ shape=box label="currituckpopulate.exe" ]
+"ml.exe" [ shape=box label="ml.exe" ]
+"currituckperfprofiledriver.exe" [ shape=box label="currituckperfprofiledriver.exe" ]
+"p2pspider.exe" [ shape=box label="p2pspider.exe" ]
+"pgort80.dll" [ shape=box label="pgort80.dll" ]
+"msbsc90.dll" [ shape=box label="msbsc90.dll" ]
+"msbuildserver.exe" [ shape=box label="msbuildserver.exe" ]
+"pdbcopy.exe" [ shape=box label="pdbcopy.exe" ]
+"mofdump.exe" [ shape=box label="mofdump.exe" ]
+"mkss.exe" [ shape=box label="mkss.exe" ]
+"msbuildserver.unittest.dll" [ shape=box label="msbuildserver.unittest.dll" ]
+"microsoft.vsa.hosting.designtime.dll" [ shape=box label="microsoft.vsa.hosting.designtime.dll" ]
+"msenvmnu.dll" [ shape=box label="msenvmnu.dll" ]
+"csc.exe" [ shape=box label="csc.exe" ]
+"csformatui.dll" [ shape=box label="csformatui.dll" ]
+"microsoft.webpublisher.dll" [ shape=box label="microsoft.webpublisher.dll" ]
+"projectgen.exe" [ shape=box label="projectgen.exe" ]
+"mswebdeployproj.dll" [ shape=box label="mswebdeployproj.dll" ]
+"protogen.exe" [ shape=box label="protogen.exe" ]
+"msvcm90d.dll" [ shape=box label="msvcm90d.dll" ]
+"microsoft.visualstudio.tools.office.controls.containercontrol.dll" [ shape=box label="microsoft.visualstudio.tools.office.controls.containercontrol.dll" ]
+"msvcp90d.dll" [ shape=box label="msvcp90d.dll" ]
+"dbgw64.exe" [ shape=box label="dbgw64.exe" ]
+"ddconv.exe" [ shape=box label="ddconv.exe" ]
+"microsoft.visualstudio.vspwmienum.dll" [ shape=box label="microsoft.visualstudio.vspwmienum.dll" ]
+"publicize.exe" [ shape=box label="publicize.exe" ]
+"cvtres.exe" [ shape=box label="cvtres.exe" ]
+"dbgclr.exe" [ shape=box label="dbgclr.exe" ]
+"microsoft.visualstudio.tools.office.controls.unmanagedwrapper.dll" [ shape=box label="microsoft.visualstudio.tools.office.controls.unmanagedwrapper.dll" ]
+"natdbgex.dll" [ shape=box label="natdbgex.dll" ]
+"projectaggregator.dll" [ shape=box label="projectaggregator.dll" ]
+"nmake.exe" [ shape=box label="nmake.exe" ]
+"msvcm90.dll" [ shape=box label="msvcm90.dll" ]
+"mstest.exe" [ shape=box label="mstest.exe" ]
+"customsearchprovider.dll" [ shape=box label="customsearchprovider.dll" ]
+"microsoft.visualj.upgradeengineinterface.dll" [ shape=box label="microsoft.visualj.upgradeengineinterface.dll" ]
+"envdte80.dll" [ shape=box label="envdte80.dll" ]
+"microsoft.wizardframework.dll" [ shape=box label="microsoft.wizardframework.dll" ]
+"microsoft.visualstudio.zip.dll" [ shape=box label="microsoft.visualstudio.zip.dll" ]
+"msvcr90d.dll" [ shape=box label="msvcr90d.dll" ]
+"microsoft.visualstudio.shell.interop.9.0.dll" [ shape=box label="microsoft.visualstudio.shell.interop.9.0.dll" ]
+"microsoft.visualstudio.data.core.dll" [ shape=box label="microsoft.visualstudio.data.core.dll" ]
+"microsoft.visualstudio.vshelp80.dll" [ shape=box label="microsoft.visualstudio.vshelp80.dll" ]
+"microsoft.visualstudio.data.services.dll" [ shape=box label="microsoft.visualstudio.data.services.dll" ]
+"microsoft.tli.interop.dll" [ shape=box label="microsoft.tli.interop.dll" ]
+"cppcodeprovider.dll" [ shape=box label="cppcodeprovider.dll" ]
+"microsoft.visualstudio.vcprojectengine.dll" [ shape=box label="microsoft.visualstudio.vcprojectengine.dll" ]
+"microsoft.data.connectionui.dll" [ shape=box label="microsoft.data.connectionui.dll" ]
+"regularexpressionlanguageservice.dll" [ shape=box label="regularexpressionlanguageservice.dll" ]
+"microsoft.visualstudio.data.dll" [ shape=box label="microsoft.visualstudio.data.dll" ]
+"envdte.dll" [ shape=box label="envdte.dll" ]
+"stdole.dll" [ shape=box label="stdole.dll" ]
+"microsoft.visualstudio.vshelp.dll" [ shape=box label="microsoft.visualstudio.vshelp.dll" ]
+"microsoft.datawarehouse.interfaces.dll" [ shape=box label="microsoft.datawarehouse.interfaces.dll" ]
+"microsoft.sdm.manager.dll" [ shape=box label="microsoft.sdm.manager.dll" ]
+"msdis150.dll" [ shape=box label="msdis150.dll" ]
+"microsoft.expression.diagnostics.dll" [ shape=box label="microsoft.expression.diagnostics.dll" ]
+"microsoft.devdiv.buildtasks.dll" [ shape=box label="microsoft.devdiv.buildtasks.dll" ]
+"vslangproj.dll" [ shape=box label="vslangproj.dll" ]
+"webdev.webhost.dll" [ shape=box label="webdev.webhost.dll" ]
+"vswebsite.interop.dll" [ shape=box label="vswebsite.interop.dll" ]
+"mfcmifc80.dll" [ shape=box label="mfcmifc80.dll" ]
+"microsoft.visualstudio.vccodemodel.dll" [ shape=box label="microsoft.visualstudio.vccodemodel.dll" ]
+"vsperfcontrol.interop.dll" [ shape=box label="vsperfcontrol.interop.dll" ]
+"microsoft.build.framework.dll" [ shape=box label="microsoft.build.framework.dll" ]
+"microsoft.visualbasic.upgradeengineinterface.dll" [ shape=box label="microsoft.visualbasic.upgradeengineinterface.dll" ]
+"sourcedepot.interop.dll" [ shape=box label="sourcedepot.interop.dll" ]
+"kablok.runtime.dll" [ shape=box label="kablok.runtime.dll" ]
+"microsoft.visualstudio.virtualtreegrid.dll" [ shape=box label="microsoft.visualstudio.virtualtreegrid.dll" ]
+"msvcr90.dll" [ shape=box label="msvcr90.dll" ]
+"clearquest.interop.dll" [ shape=box label="clearquest.interop.dll" ]
+"microsoft.visualstudio.data.interop.dll" [ shape=box label="microsoft.visualstudio.data.interop.dll" ]
+"microsoft.mshtml.dll" [ shape=box label="microsoft.mshtml.dll" ]
+"microsoft.visualstudio.teamsystem.performancewizard.dll" [ shape=box label="microsoft.visualstudio.teamsystem.performancewizard.dll" ]
+"searchprovidercore.dll" [ shape=box label="searchprovidercore.dll" ]
+"nunit.framework.dll" [ shape=box label="nunit.framework.dll" ]
+"microsoft.visualstudio.qualitytools.unittestframework.dll" [ shape=box label="microsoft.visualstudio.qualitytools.unittestframework.dll" ]
+"microsoft.shdocvw.dll" [ shape=box label="microsoft.shdocvw.dll" ]
+"codeundertest.dll" [ shape=box label="codeundertest.dll" ]
+"microsoft.web.design.client.dll" [ shape=box label="microsoft.web.design.client.dll" ]
+"fabrikam.westcoasthelpdesk.sqlcodeprovider.dll" [ shape=box label="fabrikam.westcoasthelpdesk.sqlcodeprovider.dll" ]
+"microsoft.visualstudio.qualitytools.webtestframework.dll" [ shape=box label="microsoft.visualstudio.qualitytools.webtestframework.dll" ]
+"microsoft.visualstudio.qualitytools.loadtestframework.dll" [ shape=box label="microsoft.visualstudio.qualitytools.loadtestframework.dll" ]
+"microsoft.teamfoundation.databaseinstaller.dll" [ shape=box label="microsoft.teamfoundation.databaseinstaller.dll" ]
+"microsoft.teamfoundation.versioncontrol.common.dll" [ shape=box label="microsoft.teamfoundation.versioncontrol.common.dll" ]
+"microsoft.windows.design.dll" [ shape=box label="microsoft.windows.design.dll" ]
+"microsoft.visualstudio.tools.applications.comrpcchannel.dll" [ shape=box label="microsoft.visualstudio.tools.applications.comrpcchannel.dll" ]
+"vstostoragewrapper.interop.dll" [ shape=box label="vstostoragewrapper.interop.dll" ]
+"buildwatch.exe" [ shape=box label="buildwatch.exe" ]
+"microsoft.visualstudio.tools.applications.contract2.dll" [ shape=box label="microsoft.visualstudio.tools.applications.contract2.dll" ]
+"microsoft.visualstudio.tools.applications.contract.dll" [ shape=box label="microsoft.visualstudio.tools.applications.contract.dll" ]
+"microsoft.visualstudio.modeling.dll" [ shape=box label="microsoft.visualstudio.modeling.dll" ]
+"microsoft.teamfoundation.officeintegration.interop.dll" [ shape=box label="microsoft.teamfoundation.officeintegration.interop.dll" ]
+"microsoft.visualstudio.tools.office.controls.managedwrapper.dll" [ shape=box label="microsoft.visualstudio.tools.office.controls.managedwrapper.dll" ]
+"microsoft.visualstudio.tools.applications.runtime.contract.dll" [ shape=box label="microsoft.visualstudio.tools.applications.runtime.contract.dll" ]
+"msddsp.dll" [ shape=box label="msddsp.dll" ]
+"msddslmp.dll" [ shape=box label="msddslmp.dll" ]
+"vsperfdata.dll" [ shape=box label="vsperfdata.dll" ]
+"microsoft.visualstudio.managedinterfaces.dll" [ shape=box label="microsoft.visualstudio.managedinterfaces.dll" ]
+"microsoft.visualstudio.managedinterfaces.wcf.dll" [ shape=box label="microsoft.visualstudio.managedinterfaces.wcf.dll" ]
+"vslangproj80.dll" [ shape=box label="vslangproj80.dll" ]
+"microsoft.visualstudio.qualitytools.resource.dll" [ shape=box label="microsoft.visualstudio.qualitytools.resource.dll" ]
+"microsoft.visualstudio.vspgridcontrol.dll" [ shape=box label="microsoft.visualstudio.vspgridcontrol.dll" ]
+"microsoft.visualstudio.datatools.interop.dll" [ shape=box label="microsoft.visualstudio.datatools.interop.dll" ]
+"microsoft.visualstudio.datadesign.syncdesigner.dsl.dll" [ shape=box label="microsoft.visualstudio.datadesign.syncdesigner.dsl.dll" ]
+"microsoft.visualstudio.vspconnectioninfo.dll" [ shape=box label="microsoft.visualstudio.vspconnectioninfo.dll" ]
+"microsoft.visualstudio.vspsqltdiagm.dll" [ shape=box label="microsoft.visualstudio.vspsqltdiagm.dll" ]
+"microsoft.visualstudio.wcfreference.interop.dll" [ shape=box label="microsoft.visualstudio.wcfreference.interop.dll" ]
+"microsoft.visualstudio.diagnostics.servicemodelsink.dll" [ shape=box label="microsoft.visualstudio.diagnostics.servicemodelsink.dll" ]
+"microsoft.analysisservices.dll" [ shape=box label="microsoft.analysisservices.dll" ]
+"microsoft.visualstudio.csharp.options.dll" [ shape=box label="microsoft.visualstudio.csharp.options.dll" ]
+"microsoft.visualstudio.profiler.filtering.dll" [ shape=box label="microsoft.visualstudio.profiler.filtering.dll" ]
+"microsoft.visualstudio.qualitytools.nicservices.dll" [ shape=box label="microsoft.visualstudio.qualitytools.nicservices.dll" ]
+"microsoft.visualstudio.vscontentinstaller.dll" [ shape=box label="microsoft.visualstudio.vscontentinstaller.dll" ]
+"uxcopinterfaces.dll" [ shape=box label="uxcopinterfaces.dll" ]
+"microsoft.visualstudio.hostingprocess.utilities.sync.dll" [ shape=box label="microsoft.visualstudio.hostingprocess.utilities.sync.dll" ]
+"vswebsite.interop90.dll" [ shape=box label="vswebsite.interop90.dll" ]
+"microsoft.visualstudio.templatewizardinterface.dll" [ shape=box label="microsoft.visualstudio.templatewizardinterface.dll" ]
+"microsoft.wizardframework90nonship.dll" [ shape=box label="microsoft.wizardframework90nonship.dll" ]
+"microsoft.vsa.hosting.dll" [ shape=box label="microsoft.vsa.hosting.dll" ]
+"microsoft.visualstudio.web.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualstudio.web.dll" -> "microsoft.visualstudio.data.dll"
+"microsoft.visualstudio.web.dll" -> "microsoft.visualstudio.data.interop.dll"
+"microsoft.visualstudio.web.application.dll" -> "envdte80.dll"
+"microsoft.visualstudio.web.dll" -> "microsoft.visualstudio.datatools.interop.dll"
+"microsoft.visualstudio.web.dll" -> "envdte.dll"
+"microsoft.visualstudio.web.dll" -> "microsoft.visualstudio.datatools.dll"
+"microsoft.visualstudio.whidbey.teamfoundation.qa.testhelper.dll" -> "microsoft.teamfoundation.workitemtracking.proxy.dll"
+"microsoft.visualstudio.whidbey.teamfoundation.qa.testhelper.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.visualstudio.whidbey.teamfoundation.qa.testhelper.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.visualstudio.web.dll" -> "microsoft.web.design.client.dll"
+"microsoft.visualstudio.whidbey.teamfoundation.qa.testhelper.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.visualstudio.whidbey.teamfoundation.qa.testhelper.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.visualstudio.web.application.dll" -> "envdte.dll"
+"microsoft.visualstudio.vspsmo.dll" -> "microsoft.visualstudio.vspsmoenum.dll"
+"microsoft.visualstudio.vspsmo.dll" -> "microsoft.visualstudio.vspregsvrenum.dll"
+"microsoft.visualstudio.vspsmo.dll" -> "microsoft.visualstudio.vspconnectioninfo.dll"
+"microsoft.visualstudio.tools.office.word.dll" -> "microsoft.visualstudio.tools.applications.runtime.contract.dll"
+"microsoft.visualstudio.tools.office.word.dll" -> "microsoft.visualstudio.tools.office.common.dll"
+"microsoft.visualstudio.vspregsvrenum.dll" -> "microsoft.visualstudio.vspsmoenum.dll"
+"microsoft.visualstudio.vspsmo.dll" -> "microsoft.visualstudio.vspsqlenum.dll"
+"microsoft.visualstudio.vspwmienum.dll" -> "microsoft.visualstudio.vspsmoenum.dll"
+"microsoft.visualstudio.web.application.dll" -> "microsoft.visualstudio.shell.interop.9.0.dll"
+"microsoft.visualstudio.web.application.dll" -> "vslangproj.dll"
+"microsoft.visualstudio.vspsmoenum.dll" -> "microsoft.visualstudio.vspconnectioninfo.dll"
+"microsoft.visualstudio.vspsqlenum.dll" -> "microsoft.visualstudio.vspsmoenum.dll"
+"microsoft.visualstudio.vspsqlenum.dll" -> "microsoft.visualstudio.vspconnectioninfo.dll"
+"microsoft.visualstudio.whidbey.teamfoundation.qa.vsip.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.visualstudio.xaml.dll" -> "presentationdesignhost.dll"
+"microsoft.visualstudio.xaml.dll" -> "presentationdesignextensibility.dll"
+"microsoft.visualstudio.xmldesigner.dll" -> "msddsp.dll"
+"microsoft.visualstudio.xaml.dll" -> "microsoft.expression.framework.dll"
+"microsoft.visualstudio.xaml.dll" -> "draft.xamllanguageservice.dll"
+"microsoft.visualstudio.xaml.dll" -> "draft.presentationdesigndeveloper.dll"
+"microsoft.visualstudio.xmldesigner.dll" -> "msddslmp.dll"
+"microsoft.vsdesigner.dll" -> "microsoft.visualstudio.managedinterfaces.dll"
+"microsoft.vsdesigner.dll" -> "microsoft.visualstudio.shell.interop.9.0.dll"
+"microsoft.vsdesigner.dll" -> "microsoft.visualstudio.datatools.interop.dll"
+"microsoft.visualstudio.xmldesigner.dll" -> "envdte.dll"
+"microsoft.visualstudio.xmldesigner.dll" -> "microsoft.vsdesigner.dll"
+"microsoft.vsa.hosting.designtime.dll" -> "microsoft.vsa.hosting.dll"
+"microsoft.visualstudio.xaml.dll" -> "envdte.dll"
+"microsoft.visualstudio.whidbey.teamfoundation.qa.vsip.dll" -> "microsoft.teamfoundation.officeintegration.common.dll"
+"microsoft.visualstudio.whidbey.teamfoundation.qa.vsip.dll" -> "microsoft.wizardframework.dll"
+"microsoft.visualstudio.whidbey.teamfoundation.qa.vsip.dll" -> "envdte80.dll"
+"microsoft.visualstudio.whidbey.teamfoundation.qa.vsip.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.visualstudio.whidbey.teamfoundation.qa.vsip.dll" -> "microsoft.visualstudio.teamfoundation.client.dll"
+"microsoft.visualstudio.whidbey.teamfoundation.qa.vsip.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.visualstudio.wizardframework.dll" -> "envdte.dll"
+"microsoft.visualstudio.xaml.dll" -> "vslangproj.dll"
+"microsoft.visualstudio.xaml.dll" -> "presentationdesignmarkup.dll"
+"microsoft.visualstudio.xaml.dll" -> "microsoft.windows.design.dll"
+"microsoft.visualstudio.wpfflavor.dll" -> "envdte.dll"
+"microsoft.visualstudio.wpfflavor.dll" -> "vslangproj80.dll"
+"microsoft.visualstudio.xaml.dll" -> "presentationdesigninteraction.dll"
+"microsoft.visualstudio.tools.office.word.dll" -> "microsoft.visualstudio.tools.office.runtime.dll"
+"microsoft.visualstudio.tools.office.designer.office2007.dll" -> "envdte.dll"
+"microsoft.visualstudio.tools.office.designer.office2007.dll" -> "microsoft.visualstudio.tools.office.runtime.dll"
+"microsoft.visualstudio.tools.office.designer.office2007.dll" -> "microsoft.visualstudio.tools.applications.runtime.contract.dll"
+"microsoft.visualstudio.tools.office.designer.office2007.dll" -> "microsoft.visualstudio.tools.applications.contract.dll"
+"microsoft.visualstudio.tools.office.designer.office2007.dll" -> "microsoft.visualstudio.tools.office.excel.dll"
+"microsoft.visualstudio.tools.office.designer.office2007.dll" -> "microsoft.visualstudio.tools.applications.blueprints.dll"
+"microsoft.visualstudio.tools.office.designer.office2007.dll" -> "microsoft.visualstudio.tools.office.controls.containercontrol.dll"
+"microsoft.visualstudio.tools.office.designer.office2007.dll" -> "microsoft.visualstudio.tools.office.common.dll"
+"microsoft.visualstudio.tools.office.designer.office2007.dll" -> "microsoft.vsdesigner.dll"
+"microsoft.visualstudio.tools.office.excel.adapter.dll" -> "microsoft.visualstudio.tools.applications.contract.dll"
+"microsoft.visualstudio.tools.office.designer.office2007.dll" -> "microsoft.visualstudio.tools.office.word.dll"
+"microsoft.visualstudio.tools.office.designer.office2007.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualstudio.tools.office.designer.office2007.dll" -> "microsoft.visualstudio.tools.applications.adapter.dll"
+"microsoft.visualstudio.tools.office.controls.unmanagedwrapper.dll" -> "msvcr90.dll"
+"microsoft.visualstudio.tools.office.buildtasks.office2007.dll" -> "microsoft.build.utilities.v3.5.dll"
+"microsoft.visualstudio.tools.office.buildtasks.office2007.dll" -> "microsoft.visualstudio.tools.office.runtime.dll"
+"microsoft.visualstudio.tools.office.buildtasks.office2007.dll" -> "microsoft.build.framework.dll"
+"microsoft.visualstudio.tools.office.addinproject.office2007.dll" -> "microsoft.visualstudio.tools.office.outlook.dll"
+"microsoft.visualstudio.tools.office.addinproject.office2007.dll" -> "microsoft.wizardframework.dll"
+"microsoft.visualstudio.tools.office.addinproject.office2007.dll" -> "microsoft.wizardframeworkvs.dll"
+"microsoft.visualstudio.tools.office.buildtasks.office2007.dll" -> "microsoft.visualstudio.tools.office.outlook.dll"
+"microsoft.visualstudio.tools.office.common.dll" -> "microsoft.visualstudio.tools.applications.runtime.contract.dll"
+"microsoft.visualstudio.tools.office.common.dll" -> "microsoft.visualstudio.tools.applications.adapter.dll"
+"microsoft.visualstudio.tools.office.controls.containercontrol.dll" -> "microsoft.visualstudio.tools.office.controls.managedwrapper.dll"
+"microsoft.visualstudio.tools.office.common.dll" -> "vstostoragewrapper.interop.dll"
+"microsoft.visualstudio.tools.office.common.dll" -> "microsoft.visualstudio.tools.office.ribbon.dll"
+"microsoft.visualstudio.tools.office.common.dll" -> "microsoft.visualstudio.tools.office.runtime.dll"
+"microsoft.visualstudio.tools.office.excel.adapter.dll" -> "microsoft.visualstudio.tools.office.runtime.dll"
+"microsoft.visualstudio.tools.office.project.office2003.dll" -> "envdte80.dll"
+"microsoft.visualstudio.tools.office.ribbon.dll" -> "envdte.dll"
+"microsoft.visualstudio.tools.office.ribbon.dll" -> "envdte80.dll"
+"microsoft.visualstudio.tools.office.project.office2003.dll" -> "microsoft.visualstudio.tools.office.hosting.office2003.dll"
+"microsoft.visualstudio.tools.office.project.office2003.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualstudio.tools.office.project.office2003.dll" -> "microsoft.visualstudio.wizardframework.dll"
+"microsoft.visualstudio.tools.office.runtime.dll" -> "microsoft.visualstudio.tools.applications.contract.dll"
+"microsoft.visualstudio.tools.office.runtime.dll" -> "microsoft.visualstudio.tools.applications.addinmanager.dll"
+"microsoft.visualstudio.tools.office.word.dll" -> "microsoft.visualstudio.tools.office.controls.managedwrapper.dll"
+"microsoft.visualstudio.tools.office.word.dll" -> "microsoft.visualstudio.tools.office.ribbon.dll"
+"microsoft.visualstudio.tools.office.runtime.dll" -> "microsoft.visualstudio.tools.applications.runtime.contract.dll"
+"microsoft.visualstudio.tools.office.runtime.dll" -> "microsoft.visualstudio.tools.applications.interopadapter.dll"
+"microsoft.visualstudio.tools.office.runtime.dll" -> "microsoft.visualstudio.tools.applications.adapter.dll"
+"microsoft.visualstudio.tools.office.project.office2003.dll" -> "microsoft.visualstudio.templatewizardinterface.dll"
+"microsoft.visualstudio.tools.office.excel.dll" -> "microsoft.visualstudio.tools.office.ribbon.dll"
+"microsoft.visualstudio.tools.office.excel.dll" -> "microsoft.visualstudio.tools.office.runtime.dll"
+"microsoft.visualstudio.tools.office.excel.dll" -> "microsoft.visualstudio.tools.applications.runtime.contract.dll"
+"microsoft.visualstudio.tools.office.excel.adapter.dll" -> "microsoft.visualstudio.tools.applications.runtime.contract.dll"
+"microsoft.visualstudio.tools.office.excel.dll" -> "microsoft.visualstudio.tools.applications.contract.dll"
+"microsoft.visualstudio.tools.office.excel.dll" -> "microsoft.visualstudio.tools.office.controls.managedwrapper.dll"
+"microsoft.visualstudio.tools.office.excel.dll" -> "microsoft.visualstudio.tools.office.common.dll"
+"microsoft.visualstudio.tools.office.outlook.dll" -> "microsoft.visualstudio.tools.office.common.dll"
+"microsoft.visualstudio.tools.office.project.office2003.dll" -> "envdte.dll"
+"microsoft.visualstudio.tools.office.project.office2003.dll" -> "microsoft.visualstudio.publish.dll"
+"microsoft.visualstudio.tools.office.hosting.office2003.dll" -> "envdte.dll"
+"microsoft.visualstudio.tools.office.hosting.office2003.dll" -> "envdte80.dll"
+"microsoft.visualstudio.tools.office.outlook.dll" -> "microsoft.visualstudio.tools.office.runtime.dll"
+"microsoft.vsdesigner.dll" -> "vslangproj.dll"
+"mswebdeployproj.dll" -> "msvcr90.dll"
+"mswebprj.dll" -> "atl90.dll"
+"mswebprj.dll" -> "msvcr90.dll"
+"msvhw.dll" -> "msvcr90.dll"
+"msvhwdv.dll" -> "atl90.dll"
+"msvhwdv.dll" -> "msvcr90.dll"
+"natdbgde.dll" -> "msvcr90.dll"
+"natdbgee.dll" -> "msvcr90.dll"
+"natdbgee.dll" -> "msvcp90.dll"
+"natdbgex.dll" -> "msvcr90.dll"
+"natdbgde.dll" -> "mspdb80.dll"
+"natdbgde.dll" -> "msdis150.dll"
+"natdbgee.dll" -> "atl90.dll"
+"msvhw.dll" -> "atl90.dll"
+"mspft80.dll" -> "msvcr90.dll"
+"mspft80.dll" -> "msvcp90.dll"
+"mstest.exe" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"mspdbsrv.exe" -> "mspdbcore.dll"
+"mspdbst.dll" -> "msvcr90.dll"
+"mspdbst.dll" -> "msobj80.dll"
+"msvbprj.dll" -> "msvcr90.dll"
+"msvcm90d.dll" -> "msvcr90d.dll"
+"msvcp90.dll" -> "msvcr90.dll"
+"msvcp90d.dll" -> "msvcr90d.dll"
+"msvbprj.dll" -> "msvcp90.dll"
+"msvbver.dll" -> "msvcr90.dll"
+"msvcm90.dll" -> "msvcr90.dll"
+"ncbstress.exe" -> "atl90.dll"
+"perfpkg.dll" -> "vslangproj.dll"
+"perfpkg.dll" -> "microsoft.teamfoundation.client.dll"
+"perfpkg.dll" -> "vsperfanalysis.dll"
+"perfpkg.dll" -> "microsoft.visualstudio.performancetools.counterinfo.dll"
+"perfpkg.dll" -> "microsoft.visualstudio.performancetools.visualization.dll"
+"perfpkg.dll" -> "vsperfcontrol.interop.dll"
+"perfpkg.dll" -> "envdte.dll"
+"perfpkg.dll" -> "vsperfpresentation.dll"
+"perfpkg.dll" -> "microsoft.build.tasks.v3.5.dll"
+"perfpkg.dll" -> "microsoft.visualstudio.virtualtreegrid.dll"
+"perfpkg.dll" -> "microsoft.visualstudio.vcprojectengine.dll"
+"perfpkg.dll" -> "microsoft.visualstudio.vshelp.dll"
+"perfpkg.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"pdbcopy.exe" -> "msvcr90.dll"
+"ncdump.exe" -> "msvcp90.dll"
+"ncdump.exe" -> "mspdbcore.dll"
+"nmake.exe" -> "msvcr90.dll"
+"ncbstress.exe" -> "msvcr90.dll"
+"ncbstress.exe" -> "msvcp90.dll"
+"ncdump.exe" -> "msvcr90.dll"
+"oldintegeroverflow.dll" -> "msvcr90.dll"
+"p2pspider.exe" -> "microsoft.build.engine.dll"
+"p2pspider.unittests.dll" -> "microsoft.build.engine.dll"
+"p2pspider.unittests.dll" -> "nunit.framework.dll"
+"oldintegeroverflow.dll" -> "msvcp90.dll"
+"outputenv.exe" -> "microsoft.teamfoundation.client.dll"
+"outputenv.exe" -> "microsoft.teamfoundation.dll"
+"mspdbsrv.exe" -> "msvcr90.dll"
+"microsoft.webpublisher.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.wizardframeworkvs.dll" -> "envdte.dll"
+"microsoft.wizardframeworkvs.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.vsdesigner.management.dll" -> "microsoft.visualstudio.vcprojectengine.dll"
+"microsoft.vsdesigner.management.dll" -> "microsoft.visualstudio.vccodemodel.dll"
+"microsoft.vsdesigner.management.dll" -> "microsoft.vsdesigner.dll"
+"microsoft.wizardframeworkvs.dll" -> "microsoft.wizardframework.dll"
+"mkss.exe" -> "msvcr90.dll"
+"ml.exe" -> "msvcr90.dll"
+"mofdump.exe" -> "msvcr90.dll"
+"microsoft.wizardframeworkvs90nonship.dll" -> "envdte.dll"
+"microsoft.wizardframeworkvs90nonship.dll" -> "microsoft.wizardframework90nonship.dll"
+"microsoft.wizardframeworkvs90nonship.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.vsdesigner.management.dll" -> "envdte.dll"
+"microsoft.vsdesigner.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.vsdesigner.dll" -> "microsoft.visualstudio.data.dll"
+"microsoft.vsdesigner.dll" -> "microsoft.visualstudio.wizardframework.dll"
+"microsoft.vsdesigner.dll" -> "envdte.dll"
+"microsoft.vsdesigner.dll" -> "microsoft.visualstudio.templatewizardinterface.dll"
+"microsoft.vsdesigner.dll" -> "microsoft.visualstudio.wcfreference.interop.dll"
+"microsoft.vsdesigner.dll" -> "microsoft.build.tasks.v3.5.dll"
+"microsoft.vsdesigner.dll" -> "microsoft.visualstudio.data.services.dll"
+"microsoft.vsdesigner.dll" -> "envdte80.dll"
+"microsoft.vsdesigner.management.dll" -> "vslangproj.dll"
+"microsoft.vsdesigner.dll" -> "microsoft.visualstudio.data.interop.dll"
+"microsoft.vsdesigner.dll" -> "microsoft.visualstudio.data.core.dll"
+"microsoft.vsdesigner.dll" -> "microsoft.visualstudio.datatools.dll"
+"mpishim.exe" -> "msvcr90.dll"
+"msenc90.dll" -> "mspdb80.dll"
+"msenc90.dll" -> "msobj80.dll"
+"msenv.dll" -> "atl90.dll"
+"msemp.dll" -> "msvcr90.dll"
+"msemp.dll" -> "msvcp90.dll"
+"msenc90.dll" -> "msvcr90.dll"
+"msenv.dll" -> "msvcr90.dll"
+"mspdb80.dll" -> "msvcr90.dll"
+"mspdbcore.dll" -> "msvcr90.dll"
+"mspdbcore.dll" -> "msobj80.dll"
+"msenv.dll" -> "msvcp90.dll"
+"msenvmnu.dll" -> "msvcr90.dll"
+"msobj80.dll" -> "msvcr90.dll"
+"msdiff.dll" -> "mfc90u.dll"
+"ms.binaryfilelogger.dll" -> "microsoft.build.framework.dll"
+"msbsc90.dll" -> "msvcr90.dll"
+"msbuild.exe" -> "microsoft.build.engine.dll"
+"mpishim.exe" -> "msvcp90.dll"
+"ms.binaryfilelogger.dll" -> "microsoft.build.utilities.v3.5.dll"
+"ms.binaryfilelogger.dll" -> "nunit.framework.dll"
+"msbuild.exe" -> "microsoft.build.framework.dll"
+"msbuildserver.unittest.dll" -> "nunit.framework.dll"
+"msdiff.dll" -> "msvcr90.dll"
+"msdiff.dll" -> "msvcp90.dll"
+"msbuildconvert.exe" -> "microsoft.build.conversion.v3.5.dll"
+"msbuildconvert.exe" -> "microsoft.build.engine.dll"
+"msbuildserver.exe" -> "msbuild.exe"
+"microsoft.visualstudio.tools.office.addinproject.office2007.dll" -> "microsoft.visualstudio.wizardframework.dll"
+"microsoft.visualstudio.qualitytools.warehouseadapter.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.visualstudio.qualitytools.warehouseadapter.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.visualstudio.qualitytools.warehouseadapter.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.visualstudio.qualitytools.vsip.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.vsip.dll" -> "microsoft.visualstudio.teamsystem.common.dll"
+"microsoft.visualstudio.qualitytools.vsip.dll" -> "envdte80.dll"
+"microsoft.visualstudio.qualitytools.warehouseadapter.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.warehousecommon.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.visualstudio.qualitytools.warehousecommon.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.warehousecommon.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.warehouseadapter.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.warehousecommon.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.visualstudio.qualitytools.warehousecommon.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.visualstudio.qualitytools.vsip.dll" -> "microsoft.visualstudio.virtualtreegrid.dll"
+"microsoft.visualstudio.qualitytools.tmi.dll" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"microsoft.visualstudio.qualitytools.tmi.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.tmi.dll" -> "microsoft.visualstudio.enterprise.aspnethelper.dll"
+"microsoft.visualstudio.qualitytools.tips.webloadtest.tip.dll" -> "microsoft.visualstudio.qualitytools.webtestframework.dll"
+"microsoft.visualstudio.qualitytools.tips.webloadtest.tip.dll" -> "envdte.dll"
+"microsoft.visualstudio.qualitytools.tips.webloadtest.tip.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.tmi.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.vsip.dll" -> "microsoft.visualstudio.data.dll"
+"microsoft.visualstudio.qualitytools.vsip.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.vsip.dll" -> "microsoft.visualstudio.vccodemodel.dll"
+"microsoft.visualstudio.qualitytools.vsip.dll" -> "vslangproj.dll"
+"microsoft.visualstudio.qualitytools.vsip.dll" -> "envdte.dll"
+"microsoft.visualstudio.qualitytools.vsip.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualstudio.qualitytools.webtestplayback.dll" -> "microsoft.visualstudio.qualitytools.webtestframework.dll"
+"microsoft.visualstudio.teamfoundation.build.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.visualstudio.teamfoundation.build.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.visualstudio.teamfoundation.build.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.visualstudio.smartdevice.wizard.testprojectwizards.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualstudio.smartdevice.wizard.testprojectwizards.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.smartdevice.wizard.testprojectwizards.dll" -> "envdte80.dll"
+"microsoft.visualstudio.teamfoundation.build.dll" -> "microsoft.visualstudio.teamfoundation.client.dll"
+"microsoft.visualstudio.teamfoundation.build.dll" -> "microsoft.teamfoundation.build.client.dll"
+"microsoft.visualstudio.teamfoundation.build.dll" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.visualstudio.teamfoundation.build.dll" -> "microsoft.wizardframework.dll"
+"microsoft.visualstudio.teamfoundation.build.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.visualstudio.teamfoundation.build.dll" -> "microsoft.visualstudio.teamfoundation.dll"
+"microsoft.visualstudio.teamfoundation.build.dll" -> "microsoft.teamfoundation.build.common.dll"
+"microsoft.visualstudio.smartdevice.wizard.testprojectwizards.dll" -> "microsoft.visualstudio.qualitytools.vsip.dll"
+"microsoft.visualstudio.qualitytools.webtestplayback.dll" -> "microsoft.visualstudio.teamsystem.common.dll"
+"microsoft.visualstudio.qualitytools.wizard.testprojectwizards.dll" -> "vslangproj.dll"
+"microsoft.visualstudio.qualitytools.wizard.testprojectwizards.dll" -> "envdte.dll"
+"microsoft.visualstudio.qualitytools.webtestplayback.dll" -> "microsoft.mshtml.dll"
+"microsoft.visualstudio.qualitytools.webtestplayback.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.webtestplayback.dll" -> "microsoft.visualstudio.virtualtreegrid.dll"
+"microsoft.visualstudio.qualitytools.wizard.testprojectwizards.dll" -> "microsoft.visualstudio.templatewizardinterface.dll"
+"microsoft.visualstudio.smartdevice.testhostadapter.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.smartdevice.wizard.testprojectwizards.dll" -> "envdte.dll"
+"microsoft.visualstudio.smartdevice.wizard.testprojectwizards.dll" -> "microsoft.visualstudio.templatewizardinterface.dll"
+"microsoft.visualstudio.qualitytools.wizard.testprojectwizards.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.wizard.testprojectwizards.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.smartdevice.testhostadapter.dll" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"microsoft.visualstudio.qualitytools.tips.unittest.tip.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.testcasemanagement.dll" -> "microsoft.visualstudio.enterprise.aspnethelper.dll"
+"microsoft.visualstudio.qualitytools.testcasemanagement.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.testcasemanagement.dll" -> "microsoft.visualstudio.teamsystem.common.dll"
+"microsoft.visualstudio.qualitytools.testcasemanagement.dll" -> "microsoft.visualstudio.data.dll"
+"microsoft.visualstudio.qualitytools.testcasemanagement.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.testcasemanagement.dll" -> "microsoft.visualstudio.virtualtreegrid.dll"
+"microsoft.visualstudio.qualitytools.testcasemanagement.dll" -> "microsoft.wizardframework.dll"
+"microsoft.visualstudio.qualitytools.tips.generictest.adapter.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.tips.generictest.objectmodel.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.tips.generictest.tip.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.testcasemanagement.dll" -> "envdte80.dll"
+"microsoft.visualstudio.qualitytools.tips.generictest.adapter.dll" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"microsoft.visualstudio.qualitytools.tips.generictest.adapter.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.testcasemanagement.dll" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"microsoft.visualstudio.qualitytools.recorderbar.dll" -> "microsoft.shdocvw.dll"
+"microsoft.visualstudio.qualitytools.recorderbar.dll" -> "microsoft.visualstudio.qualitytools.webtestframework.dll"
+"microsoft.visualstudio.qualitytools.recorderbar.dll" -> "microsoft.mshtml.dll"
+"microsoft.visualstudio.qualitytools.publishserver.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.visualstudio.qualitytools.publishserver.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.publishserver.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.recorderbarbho90.dll" -> "msvcr90.dll"
+"microsoft.visualstudio.qualitytools.testcasemanagement.dll" -> "microsoft.visualstudio.vcprojectengine.dll"
+"microsoft.visualstudio.qualitytools.testcasemanagement.dll" -> "microsoft.visualstudio.qualitytools.vsip.dll"
+"microsoft.visualstudio.qualitytools.testcasemanagement.dll" -> "microsoft.visualstudio.qualitytools.tmi.dll"
+"microsoft.visualstudio.qualitytools.testcasemanagement.dll" -> "microsoft.visualstudio.teamsystem.performancewizard.dll"
+"microsoft.visualstudio.qualitytools.testcasemanagement.dll" -> "vslangproj.dll"
+"microsoft.visualstudio.qualitytools.testcasemanagement.dll" -> "envdte.dll"
+"microsoft.visualstudio.qualitytools.tips.generictest.tip.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.tips.tuippackage.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.tips.tuippackage.dll" -> "microsoft.visualstudio.teamsystem.common.dll"
+"microsoft.visualstudio.qualitytools.tips.tuippackage.dll" -> "envdte80.dll"
+"microsoft.visualstudio.qualitytools.tips.tuippackage.dll" -> "microsoft.visualstudio.templatewizardinterface.dll"
+"microsoft.visualstudio.qualitytools.tips.tuippackage.dll" -> "microsoft.visualstudio.qualitytools.vsip.dll"
+"microsoft.visualstudio.qualitytools.tips.tuippackage.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.tips.unittest.adapter.dll" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"microsoft.visualstudio.qualitytools.tips.unittest.objectmodel.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.tips.unittest.tip.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.tips.unittest.tip.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"microsoft.visualstudio.qualitytools.tips.unittest.adapter.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.tips.unittest.adapter.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"microsoft.visualstudio.qualitytools.tips.unittest.adapter.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.tips.tuippackage.dll" -> "envdte.dll"
+"microsoft.visualstudio.qualitytools.tips.manualtest.objectmodel.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.tips.manualtest.objectmodel.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.tips.manualtest.tip.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.tips.manualtest.adapter.dll" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"microsoft.visualstudio.qualitytools.tips.manualtest.adapter.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.tips.manualtest.adapter.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.tips.manualtest.tip.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.tips.orderedtest.tip.dll" -> "microsoft.visualstudio.qualitytools.tmi.dll"
+"microsoft.visualstudio.qualitytools.tips.orderedtest.tip.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.tips.orderedtest.tip.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.tips.orderedtest.adapter.dll" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"microsoft.visualstudio.qualitytools.tips.orderedtest.adapter.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.tips.orderedtest.objectmodel.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.teamfoundation.build.dll" -> "microsoft.wizardframeworkvs.dll"
+"microsoft.visualstudio.templatewizard.dll" -> "microsoft.visualstudio.templatewizardinterface.dll"
+"microsoft.visualstudio.templatewizard.dll" -> "vswebsite.interop.dll"
+"microsoft.visualstudio.templatewizard.dll" -> "envdte80.dll"
+"microsoft.visualstudio.templatewizard.dll" -> "vslangproj.dll"
+"microsoft.visualstudio.templatewizard.dll" -> "envdte.dll"
+"microsoft.visualstudio.templatewizard.dll" -> "microsoft.visualstudio.vshelp80.dll"
+"microsoft.visualstudio.testtools.buildshadowstask.dll" -> "microsoft.build.framework.dll"
+"microsoft.visualstudio.testtools.testgeneration.dll" -> "vswebsite.interop.dll"
+"microsoft.visualstudio.testtools.testgeneration.dll" -> "microsoft.visualstudio.vccodemodel.dll"
+"microsoft.visualstudio.testtools.testgeneration.dll" -> "microsoft.visualstudio.virtualtreegrid.dll"
+"microsoft.visualstudio.testtools.testgeneration.dll" -> "vslangproj.dll"
+"microsoft.visualstudio.testtools.testgeneration.dll" -> "envdte.dll"
+"microsoft.visualstudio.testtools.testgeneration.dll" -> "microsoft.visualstudio.vcprojectengine.dll"
+"microsoft.visualstudio.teamsystem.integration.dll" -> "microsoft.visualstudio.teamsystem.common.dll"
+"microsoft.visualstudio.teamsystem.common.dll" -> "envdte80.dll"
+"microsoft.visualstudio.teamsystem.integration.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.visualstudio.teamsystem.integration.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.visualstudio.teamfoundation.workitemtracking.dll" -> "microsoft.teamfoundation.officeintegration.common.dll"
+"microsoft.visualstudio.teamsystem.common.dll" -> "envdte.dll"
+"microsoft.visualstudio.teamsystem.common.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualstudio.teamsystem.integration.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.visualstudio.teamsystem.integration.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.teamsystem.integration.dll" -> "microsoft.teamfoundation.build.client.dll"
+"microsoft.visualstudio.teamsystem.integration.dll" -> "microsoft.teamfoundation.workitemtracking.controls.dll"
+"microsoft.visualstudio.teamsystem.integration.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.visualstudio.teamsystem.integration.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.visualstudio.teamsystem.integration.dll" -> "microsoft.visualstudio.teamfoundation.dll"
+"microsoft.visualstudio.testtools.testgeneration.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.tools.applications.interopadapter.dll" -> "microsoft.visualstudio.tools.applications.contract.dll"
+"microsoft.visualstudio.tools.applications.interopadapter.dll" -> "msvcr90.dll"
+"microsoft.visualstudio.tools.applications.interopadapter.dll" -> "microsoft.visualstudio.tools.applications.adapter.dll"
+"microsoft.visualstudio.tools.applications.hosting.dll" -> "microsoft.build.tasks.v3.5.dll"
+"microsoft.visualstudio.tools.applications.hosting.dll" -> "envdte80.dll"
+"microsoft.visualstudio.tools.applications.hosting.dll" -> "microsoft.visualstudio.tools.applications.addinmanager.dll"
+"microsoft.visualstudio.tools.applications.projectgen.dll" -> "microsoft.visualstudio.zip.dll"
+"microsoft.visualstudio.tools.office.addinproject.office2003.dll" -> "microsoft.visualstudio.wizardframework.dll"
+"microsoft.visualstudio.tools.office.addinproject.office2007.dll" -> "envdte.dll"
+"microsoft.visualstudio.tools.office.addinproject.office2007.dll" -> "microsoft.visualstudio.templatewizardinterface.dll"
+"microsoft.visualstudio.tools.applications.proxyservices.dll" -> "microsoft.tli.interop.dll"
+"microsoft.visualstudio.tools.office.addinproject.office2003.dll" -> "envdte.dll"
+"microsoft.visualstudio.tools.office.addinproject.office2003.dll" -> "microsoft.visualstudio.templatewizardinterface.dll"
+"microsoft.visualstudio.tools.applications.hosting.dll" -> "microsoft.visualstudio.tools.office.runtime.dll"
+"microsoft.visualstudio.tools.applications.adapter.dll" -> "microsoft.visualstudio.tools.applications.contract.dll"
+"microsoft.visualstudio.tools.applications.adapter.dll" -> "microsoft.visualstudio.tools.applications.contract2.dll"
+"microsoft.visualstudio.tools.applications.addinmanager.dll" -> "microsoft.visualstudio.tools.applications.contract.dll"
+"microsoft.visualstudio.testtools.testgeneration.dll" -> "envdte80.dll"
+"microsoft.visualstudio.toolboxcontrolinstaller.dll" -> "envdte.dll"
+"microsoft.visualstudio.toolboxcontrolinstaller.dll" -> "envdte80.dll"
+"microsoft.visualstudio.tools.applications.addinmanager.dll" -> "microsoft.visualstudio.tools.applications.comrpcchannel.dll"
+"microsoft.visualstudio.tools.applications.designtime.dll" -> "envdte.dll"
+"microsoft.visualstudio.tools.applications.hosting.dll" -> "envdte.dll"
+"microsoft.visualstudio.tools.applications.hosting.dll" -> "microsoft.build.utilities.v3.5.dll"
+"microsoft.visualstudio.tools.applications.addinmanager.dll" -> "microsoft.visualstudio.tools.applications.contract2.dll"
+"microsoft.visualstudio.tools.applications.addinmanager.dll" -> "microsoft.visualstudio.tools.applications.adapter.dll"
+"microsoft.visualstudio.tools.applications.blueprints.dll" -> "microsoft.build.utilities.v3.5.dll"
+"microsoft.visualstudio.teamfoundation.workitemtracking.dll" -> "microsoft.teamfoundation.workitemtracking.controls.dll"
+"microsoft.visualstudio.teamfoundation.qa.ui.dll" -> "microsoft.visualstudio.teamfoundation.qa.dll"
+"microsoft.visualstudio.teamfoundation.qa.versioncontrol.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.visualstudio.teamfoundation.qa.versioncontrol.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.visualstudio.teamfoundation.qa.ui.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.visualstudio.teamfoundation.qa.ui.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.visualstudio.teamfoundation.qa.ui.dll" -> "maui.visualstudio.current.teamsystem.dll"
+"microsoft.visualstudio.teamfoundation.qa.versioncontrol.dll" -> "maui.visualstudio.current.teamsystem.dll"
+"microsoft.visualstudio.teamfoundation.teamexplorer.dll" -> "microsoft.visualstudio.zip.dll"
+"microsoft.visualstudio.teamfoundation.teamexplorer.dll" -> "microsoft.teamfoundation.officeintegration.interop.dll"
+"microsoft.visualstudio.teamfoundation.teamexplorer.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.visualstudio.teamfoundation.qa.versioncontrol.dll" -> "microsoft.visualstudio.teamfoundation.qa.dll"
+"microsoft.visualstudio.teamfoundation.qa.versioncontrol.dll" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.visualstudio.teamfoundation.qa.versioncontrol.dll" -> "microsoft.visualstudio.teamfoundation.qa.ui.dll"
+"microsoft.visualstudio.teamfoundation.qa.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"microsoft.visualstudio.teamfoundation.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.visualstudio.teamfoundation.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.visualstudio.teamfoundation.dll" -> "envdte.dll"
+"microsoft.visualstudio.teamfoundation.client.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.visualstudio.teamfoundation.client.dll" -> "microsoft.visualstudio.teamfoundation.dll"
+"microsoft.visualstudio.teamfoundation.client.dll" -> "microsoft.wizardframework.dll"
+"microsoft.visualstudio.teamfoundation.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.visualstudio.teamfoundation.qa.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.visualstudio.teamfoundation.qa.dll" -> "maui.visualstudio.current.teamsystem.dll"
+"microsoft.visualstudio.teamfoundation.qa.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.visualstudio.teamfoundation.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualstudio.teamfoundation.qa.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.visualstudio.teamfoundation.qa.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.visualstudio.teamfoundation.teamexplorer.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.visualstudio.teamfoundation.versioncontrol.dll" -> "microsoft.wizardframework.dll"
+"microsoft.visualstudio.teamfoundation.versioncontrol.dll" -> "envdte80.dll"
+"microsoft.visualstudio.teamfoundation.versioncontrol.dll" -> "microsoft.wizardframeworkvs.dll"
+"microsoft.visualstudio.teamfoundation.versioncontrol.dll" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.visualstudio.teamfoundation.versioncontrol.dll" -> "microsoft.visualstudio.teamfoundation.workitemtracking.dll"
+"microsoft.visualstudio.teamfoundation.versioncontrol.dll" -> "microsoft.teamfoundation.versioncontrol.controls.dll"
+"microsoft.visualstudio.teamfoundation.workitemtracking.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.visualstudio.teamfoundation.workitemtracking.dll" -> "microsoft.visualstudio.teamfoundation.client.dll"
+"microsoft.visualstudio.teamfoundation.workitemtracking.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.visualstudio.teamfoundation.workitemtracking.dll" -> "microsoft.visualstudio.teamfoundation.dll"
+"microsoft.visualstudio.teamfoundation.workitemtracking.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.visualstudio.teamfoundation.workitemtracking.dll" -> "microsoft.teamfoundation.workitemtracking.proxy.dll"
+"microsoft.visualstudio.teamfoundation.workitemtracking.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.visualstudio.teamfoundation.versioncontrol.dll" -> "microsoft.visualstudio.teamfoundation.dll"
+"microsoft.visualstudio.teamfoundation.teamexplorer.dll" -> "microsoft.teamfoundation.officeintegration.common.dll"
+"microsoft.visualstudio.teamfoundation.teamexplorer.dll" -> "microsoft.wizardframework.dll"
+"microsoft.visualstudio.teamfoundation.teamexplorer.dll" -> "microsoft.wizardframeworkvs.dll"
+"microsoft.visualstudio.teamfoundation.teamexplorer.dll" -> "microsoft.visualstudio.teamfoundation.client.dll"
+"microsoft.visualstudio.teamfoundation.teamexplorer.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.visualstudio.teamfoundation.teamexplorer.dll" -> "microsoft.visualstudio.teamfoundation.dll"
+"microsoft.visualstudio.teamfoundation.versioncontrol.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.visualstudio.teamfoundation.versioncontrol.dll" -> "envdte.dll"
+"microsoft.visualstudio.teamfoundation.versioncontrol.dll" -> "microsoft.visualstudio.teamfoundation.client.dll"
+"microsoft.visualstudio.teamfoundation.versioncontrol.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.visualstudio.teamfoundation.versioncontrol.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.visualstudio.teamfoundation.versioncontrol.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.visualstudio.teamfoundation.versioncontrol.dll" -> "microsoft.teamfoundation.client.dll"
+"vsavb7dt.dll" -> "msvcr90.dll"
+"vsavbproj.dll" -> "msvcr90.dll"
+"vscontentinstaller.exe" -> "microsoft.visualstudio.zip.dll"
+"vsapkg.dll" -> "msvcr90.dll"
+"vsapkgp.dll" -> "msvcr90.dll"
+"vsassert.dll" -> "msvcr90.dll"
+"vscontentinstaller.exe" -> "envdte.dll"
+"vscover90.dll" -> "msvcp90.dll"
+"vscovreport.exe" -> "microsoft.visualstudio.coverage.analysis.dll"
+"vscovview.exe" -> "microsoft.visualstudio.coverage.analysis.dll"
+"vscontentinstaller.exe" -> "microsoft.wizardframework90nonship.dll"
+"vscontentinstaller.exe" -> "microsoft.visualstudio.vscontentinstaller.dll"
+"vscover90.dll" -> "msvcr90.dll"
+"vsamnu.dll" -> "msvcr90.dll"
+"versioncontroltests.dll" -> "microsoft.visualstudio.teamfoundation.qa.versioncontrol.dll"
+"versioncontroltests.dll" -> "versioncontrolhelperlibrary.dll"
+"versioncontroltests.dll" -> "microsoft.visualstudio.teamfoundation.qa.dll"
+"versioncontrolhelperlibrary.dll" -> "microsoft.visualstudio.teamfoundation.qa.dll"
+"versioncontrolhelperlibrary.dll" -> "microsoft.visualstudio.teamfoundation.qa.ui.dll"
+"versioncontroltests.dll" -> "maui.visualstudio.current.teamsystem.dll"
+"versioncontroltests.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"vsacompsvcspkg.dll" -> "msvcr90.dll"
+"vsadirprj.dll" -> "msvcr90.dll"
+"vsaenv.exe" -> "msvcr90.dll"
+"versioncontroltests.dll" -> "microsoft.visualstudio.teamfoundation.qa.ui.dll"
+"visualstudiomssccithunk.exe" -> "msvcr90.dll"
+"vsa7director.dll" -> "msvcr90.dll"
+"vscovview.exe" -> "microsoft.visualstudio.virtualtreegrid.dll"
+"vsinstr.exe" -> "vspmsg.dll"
+"vsinstr.exe" -> "msdis150.dll"
+"vslog.dll" -> "msvcr90.dll"
+"vsinstr.exe" -> "msvcr90.dll"
+"vsinstr.exe" -> "msvcp90.dll"
+"vsinstr.exe" -> "mspdb80.dll"
+"vsmacros.dll" -> "msvcr90.dll"
+"vsmsvrp.dll" -> "msvcr90.dll"
+"vsperf90.dll" -> "msvcr90.dll"
+"vsperf90.dll" -> "msvcp90.dll"
+"vsmacros.dll" -> "msvcp90.dll"
+"vsmsbuild.exe" -> "microsoft.build.utilities.v3.5.dll"
+"vsmsbuild.exe" -> "microsoft.build.engine.dll"
+"vshost32.exe" -> "microsoft.visualstudio.hostingprocess.utilities.sync.dll"
+"vsctcompress.dll" -> "msvcr90.dll"
+"vsctedit.exe" -> "vsctlibrary.dll"
+"vsctlibrary.dll" -> "vsctcompress.dll"
+"vsct.exe" -> "microsoft.build.utilities.v3.5.dll"
+"vsct.exe" -> "microsoft.build.framework.dll"
+"vsct.exe" -> "vsctlibrary.dll"
+"vsdebug.dll" -> "msvcr90.dll"
+"vsfiltertest.exe" -> "mspdb80.dll"
+"vsfiltertest.exe" -> "msdis150.dll"
+"vshost.exe" -> "microsoft.visualstudio.hostingprocess.utilities.sync.dll"
+"vsdiag_regwcf.exe" -> "microsoft.visualstudio.diagnostics.servicemodelsink.dll"
+"vsfiltertest.exe" -> "msvcr90.dll"
+"vsfiltertest.exe" -> "msvcp90.dll"
+"versioncontrolhelperlibrary.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"updatesubscriberfieldtosid.exe" -> "microsoft.teamfoundation.dll"
+"uxcop.exe" -> "uxcopinterfaces.dll"
+"vb7tld.dll" -> "rsobjects.dll"
+"undname.exe" -> "msvcr90.dll"
+"unittestguirunner.exe" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"unittestguirunner.exe" -> "microsoft.visualstudio.qualitytools.common.dll"
+"vb7tld.dll" -> "mfc90.dll"
+"vb7to8dl.dll" -> "msvcr90.dll"
+"vbc.exe" -> "msvcr90.dll"
+"vbexpress.exe" -> "msvcr90.dll"
+"vb7tld.dll" -> "msvcr90.dll"
+"vb7tld.dll" -> "msvcp90.dll"
+"vb7to8.exe" -> "msvcr90.dll"
+"tstcon32.exe" -> "msvcr90.dll"
+"tfsupgradertm.exe" -> "microsoft.analysisservices.dll"
+"tfsuploadreports.exe" -> "microsoft.teamfoundation.common.dll"
+"tfsuploadreports.exe" -> "microsoft.teamfoundation.client.dll"
+"tfsserverscheduler.exe" -> "microsoft.teamfoundation.dll"
+"tfsserverscheduler.exe" -> "microsoft.teamfoundation.build.client.dll"
+"tfsupgrade.exe" -> "microsoft.analysisservices.dll"
+"tfsuploadreports.exe" -> "microsoft.teamfoundation.dll"
+"tshell.dll" -> "atl90.dll"
+"tshell.dll" -> "msvcr90.dll"
+"tstcon32.exe" -> "mfc90.dll"
+"tlstest.exe" -> "msvcr90.dll"
+"tlstest.exe" -> "msvcp90.dll"
+"tsdevpkg.dll" -> "msvcr90.dll"
+"vbu.exe" -> "rsobjects.dll"
+"vcencbld.dll" -> "msvcr90.dll"
+"vcexpress.exe" -> "msvcr90.dll"
+"vcsexpress.exe" -> "msvcr90.dll"
+"vcbuild.exe" -> "atl90.dll"
+"vcbuild.exe" -> "msvcr90.dll"
+"vcbuild.exe" -> "msvcp90.dll"
+"vdt80.dll" -> "msvcr90.dll"
+"vdtflav.dll" -> "msvcr90.dll"
+"vdtqpapkg.dll" -> "microsoft.visualstudio.datatools.interop.dll"
+"vdtqpapkg.dll" -> "microsoft.visualstudio.data.interop.dll"
+"vdt80.dll" -> "msvcp90.dll"
+"vdt80p.dll" -> "msvcr90.dll"
+"vdt80p.dll" -> "msvcp90.dll"
+"vbupgrade.utils.dll" -> "kablok.runtime.dll"
+"vbupgrade.dll" -> "kablok.runtime.dll"
+"vbupgrade.dll" -> "vbupgrade.utils.dll"
+"vbupgrade.engine.dll" -> "kablok.runtime.dll"
+"vbu.exe" -> "mfc90.dll"
+"vbu.exe" -> "msvcr90.dll"
+"vbu.exe" -> "msvcp90.dll"
+"vbupgrade.engine.dll" -> "vbupgrade.dll"
+"vbupgrade.exe" -> "mfc90.dll"
+"vbupgrade.exe" -> "msvcr90.dll"
+"vbupgrade.exe" -> "msvcp90.dll"
+"vbupgrade.engine.dll" -> "vbupgrade.utils.dll"
+"vbupgrade.engine.dll" -> "msvcr90.dll"
+"vbupgrade.exe" -> "rsobjects.dll"
+"vsperf90.dll" -> "vsperfcorprof.dll"
+"webdev.webserver.exe" -> "webdev.webhost.dll"
+"webdirprj.dll" -> "atl90.dll"
+"webdirprj.dll" -> "msvcr90.dll"
+"vwdexpress.exe" -> "msvcr90.dll"
+"webappupgrade.dll" -> "atl90.dll"
+"webappupgrade.dll" -> "msvcr90.dll"
+"webmigration.dll" -> "atl90.dll"
+"windowsprefast.dll" -> "msvcr90.dll"
+"windowsprefast.dll" -> "msvcp90.dll"
+"winfxbrowserapplicationtemplatewizard.dll" -> "envdte.dll"
+"webmigration.dll" -> "msvcr90.dll"
+"westcoastsales.dll" -> "sales_opportunity.dll"
+"westcoastsales.dll" -> "microsoft.vsa.hosting.dll"
+"vswizard.dll" -> "msvcp90.dll"
+"vstoruntimestoragectrl.dll" -> "msvcr90.dll"
+"vstostoragewrapper.dll" -> "msvcr90.dll"
+"vstowfproject.dll" -> "msvcr90.dll"
+"vstooffice2003project.dll" -> "msvcr90.dll"
+"vstooffice2007designer.dll" -> "msvcr90.dll"
+"vstopersist.dll" -> "msvcr90.dll"
+"vstoword2003adaptor.dll" -> "msvcr90.dll"
+"vstst-fileconverter.exe" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"vswizard.dll" -> "atl90.dll"
+"vswizard.dll" -> "msvcr90.dll"
+"vstoword2003clientpkg.dll" -> "msvcr90.dll"
+"vstoword2007adaptor.dll" -> "msvcr90.dll"
+"vstoword2007clientpkg.dll" -> "msvcr90.dll"
+"winfxcustomcontroltemplatewizard.dll" -> "envdte.dll"
+"workiteamtrackingtests.dll" -> "microsoft.teamfoundation.dll"
+"workiteamtrackingtests.dll" -> "microsoft.visualstudio.teamfoundation.qa.dll"
+"workiteamtrackingtests.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"workiteamtrackingtests.dll" -> "microsoft.teamfoundation.qa.security.dll"
+"workiteamtrackingtests.dll" -> "microsoft.teamfoundation.client.dll"
+"workiteamtrackingtests.dll" -> "maui.visualstudio.current.teamsystem.dll"
+"workiteamtrackingtests.dll" -> "microsoft.visualstudio.teamfoundation.qa.ui.dll"
+"workitemtypeformviewer.exe" -> "microsoft.teamfoundation.workitemtracking.controls.dll"
+"xapp.exe" -> "msvcr90.dll"
+"zipexestub.exe" -> "microsoft.visualstudio.zip.dll"
+"workitemtestengine.dll" -> "microsoft.visualstudio.currituck.test.dll"
+"workitemtestengine.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"workitemtypeformviewer.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"workiteamtrackingtests.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"witexport.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"witfields.exe" -> "microsoft.teamfoundation.common.dll"
+"witfields.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"winfxcustomcontroltemplatewizard.dll" -> "envdte80.dll"
+"witexplorer.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"witexplorer.exe" -> "microsoft.teamfoundation.client.dll"
+"witfields.exe" -> "microsoft.teamfoundation.client.dll"
+"workbench.exe" -> "envdte.dll"
+"workbench.exe" -> "microsoft.vsa.hosting.designtime.dll"
+"workiteamtrackingtests.dll" -> "microsoft.visualstudio.currituck.test.dll"
+"witimport.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"wmiscriptutils.dll" -> "atl90.dll"
+"wmiscriptutils.dll" -> "msvcr90.dll"
+"vstooffice2003designer.dll" -> "msvcr90.dll"
+"vsperfpresentation.dll" -> "vsperfdata.dll"
+"vsperfreader.dll" -> "msvcr90.dll"
+"vsperfreader.dll" -> "msvcp90.dll"
+"vsperfmon.exe" -> "vspmsg.dll"
+"vsperfpresentation.dll" -> "vsperfanalysis.dll"
+"vsperfpresentation.dll" -> "vsperfreader.dll"
+"vsperfreader.dll" -> "vspmsg.dll"
+"vsperfsrv.exe" -> "msvcr90.dll"
+"vsperfsrv.exe" -> "msvcp90.dll"
+"vspmsg.dll" -> "msvcr90.dll"
+"vsperfreport.exe" -> "vsperfanalysis.dll"
+"vsperfreport.exe" -> "vsperfreader.dll"
+"vsperfreport.exe" -> "vsperfpresentation.dll"
+"vsperfmon.exe" -> "msvcp90.dll"
+"vsperfcmd.exe" -> "msvcp90.dll"
+"vsperfcmd.exe" -> "vspmsg.dll"
+"vsperfcontrol.dll" -> "atl90.dll"
+"vsperfanalysis.dll" -> "vsperfreader.dll"
+"vsperfanalysis.dll" -> "vsperfdata.dll"
+"vsperfcmd.exe" -> "msvcr90.dll"
+"vsperfcontrol.dll" -> "msvcr90.dll"
+"vsperfcorprof.dll" -> "msvcp90.dll"
+"vsperfcorprof.dll" -> "vsperf90.dll"
+"vsperfmon.exe" -> "msvcr90.dll"
+"vsperfcontrol.dll" -> "msvcp90.dll"
+"vsperfcontrol.dll" -> "vspmsg.dll"
+"vsperfcorprof.dll" -> "msvcr90.dll"
+"vssconverter.exe" -> "microsoft.teamfoundation.common.dll"
+"vstlbinf.dll" -> "msvcr90.dll"
+"vstoaddin2003clientpkg.dll" -> "msvcr90.dll"
+"vstoaddin2007clientpkg.dll" -> "msvcr90.dll"
+"vstadteprovider.dll" -> "msvcr90.dll"
+"vstaproject.dll" -> "msvcr90.dll"
+"vstaremotingserver.dll" -> "msvcr90.dll"
+"vstoapartmentshim.dll" -> "msvcr90.dll"
+"vstoexcel2007clientpkg.dll" -> "msvcr90.dll"
+"vstoinstaller.exe" -> "microsoft.visualstudio.tools.applications.addinmanager.dll"
+"vstoloader.dll" -> "msvcr90.dll"
+"vstoexcel2003adaptor.dll" -> "msvcr90.dll"
+"vstoexcel2003clientpkg.dll" -> "msvcr90.dll"
+"vstoexcel2007adaptor.dll" -> "msvcr90.dll"
+"vstaclientpkg.dll" -> "msvcr90.dll"
+"vssconverter.exe" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"vssln.dll" -> "msvcr90.dll"
+"vssprovider.dll" -> "msvcr90.dll"
+"vssconverter.exe" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"vssconverter.exe" -> "microsoft.teamfoundation.client.dll"
+"vssconverter.exe" -> "microsoft.teamfoundation.dll"
+"vssprovider.dll" -> "msvcp90.dll"
+"vsta.exe" -> "msvcr90.dll"
+"vsta_ep32.exe" -> "microsoft.visualstudio.tools.applications.contract.dll"
+"vsta_ep32.exe" -> "microsoft.visualstudio.tools.applications.comrpcchannel.dll"
+"vssproviderstub.dll" -> "msvcr90.dll"
+"vssverfier.exe" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"vssverfier.exe" -> "microsoft.teamfoundation.client.dll"
+"tfsserverscheduler.exe" -> "microsoft.teamfoundation.client.dll"
+"qtcontroller.exe" -> "microsoft.visualstudio.qualitytools.common.dll"
+"qtcontroller.exe" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"rascal.exe" -> "msvcr90.dll"
+"qtagentserviceui.exe" -> "microsoft.visualstudio.qualitytools.common.dll"
+"qtagentserviceui.exe" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"qtcontroller.exe" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"regcap.exe" -> "msvcr90.dll"
+"remotevssscc.dll" -> "msvcr90.dll"
+"remotevssscc.dll" -> "msvcp90.dll"
+"retarg.exe" -> "nunit.framework.dll"
+"regcap.exe" -> "lregdll.dll"
+"regularexpressionlanguageserviceunittests.dll" -> "regularexpressionlanguageservice.dll"
+"regularexpressionlanguageserviceunittests.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"qtagentserviceui.exe" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"psconverter.exe" -> "microsoft.teamfoundation.dll"
+"psverifier.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"psverifier.exe" -> "microsoft.teamfoundation.client.dll"
+"psconverter.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"psconverter.exe" -> "microsoft.teamfoundation.workitemtracking.proxy.dll"
+"psconverter.exe" -> "microsoft.teamfoundation.client.dll"
+"psverifier.exe" -> "microsoft.teamfoundation.dll"
+"qtagentservice.exe" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"qtagentservice.exe" -> "microsoft.visualstudio.qualitytools.common.dll"
+"qtagentservice.exe" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"publicize.exe" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"qtagent.exe" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"qtagent.exe" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"rsobjects.dll" -> "mfc90.dll"
+"secadmin.exe" -> "msvcp90.dll"
+"setupwarehouse.exe" -> "microsoft.teamfoundation.common.dll"
+"setupwarehouse.exe" -> "microsoft.teamfoundation.client.dll"
+"sdmcompile.dll" -> "sdmcore.dll"
+"sdmcore.dll" -> "microsoft.sdm.manager.dll"
+"secadmin.exe" -> "msvcr90.dll"
+"setupwarehouse.exe" -> "microsoft.teamfoundation.dll"
+"slist_ut.exe" -> "msvcp90.dll"
+"spyxx.exe" -> "msvcr90.dll"
+"spyxx.exe" -> "msvcp90.dll"
+"setupwarehouse.exe" -> "microsoft.analysisservices.dll"
+"shmetapdb.dll" -> "msvcr90.dll"
+"slist_ut.exe" -> "msvcr90.dll"
+"sdmc.exe" -> "sdmcompile.dll"
+"scriptle2.dll" -> "msvcr90.dll"
+"sd2hatverifier.exe" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"sd2hatverifier.exe" -> "microsoft.teamfoundation.client.dll"
+"rsobjects.dll" -> "msvcr90.dll"
+"rsobjects.dll" -> "msvcp90.dll"
+"sales_opportunity.dll" -> "microsoft.vsa.hosting.dll"
+"sd2hatverifier.exe" -> "sourcedepot.interop.dll"
+"sdconverter.exe" -> "microsoft.teamfoundation.dll"
+"sdconverter.exe" -> "sourcedepot.interop.dll"
+"sdconverter.exe" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"sdconverter.exe" -> "microsoft.teamfoundation.common.dll"
+"sdconverter.exe" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"sdconverter.exe" -> "microsoft.teamfoundation.client.dll"
+"psconverter.exe" -> "microsoft.teamfoundation.common.dll"
+"phoenix.exe" -> "microsoft.visualstudio.modeling.dll"
+"preprocess.dll" -> "kablok.runtime.dll"
+"preprocess.dll" -> "vbupgrade.utils.dll"
+"pgort80.dll" -> "msvcr90.dll"
+"pgosweep.exe" -> "msvcr90.dll"
+"phoenix.exe" -> "microsoft.visualstudio.enterprisetools.phoenix.engine.dll"
+"presentationdesigndeveloper.dll" -> "presentationdesigninteraction.dll"
+"presentationdesignextensibility.dll" -> "presentationdesigninteraction.dll"
+"presentationdesignextensibility.dll" -> "microsoft.windows.design.dll"
+"presentationdesignhost.dll" -> "presentationdesigninteraction.dll"
+"presentationdesigndeveloper.dll" -> "presentationdesignmarkup.dll"
+"presentationdesigndeveloper.dll" -> "microsoft.windows.design.dll"
+"presentationdesigndeveloper.dll" -> "presentationdesignextensibility.dll"
+"pgomgr.exe" -> "pgodb80.dll"
+"pftcl.exe" -> "msvcr90.dll"
+"pftcl.exe" -> "msvcp90.dll"
+"pftcl.exe" -> "astio.dll"
+"perfpkg.dll" -> "microsoft.visualstudio.enterprise.aspnethelper.dll"
+"perfpkg.dll" -> "microsoft.wizardframework.dll"
+"perfpkg.dll" -> "microsoft.wizardframeworkvs.dll"
+"pgocvt.exe" -> "msvcr90.dll"
+"pgodump.exe" -> "msvcr90.dll"
+"pgodump.exe" -> "pgodb80.dll"
+"pgomgr.exe" -> "msvcr90.dll"
+"pgocvt.exe" -> "pgodb80.dll"
+"pgodb80.dll" -> "msvcr90.dll"
+"pgodb80.dll" -> "mspdb80.dll"
+"presentationdesignhost.dll" -> "presentationdesignmarkup.dll"
+"projectmanagementsrvtests.dll" -> "microsoft.teamfoundation.dll"
+"projectmanagementsrvtests.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"projectmanagementsrvtests.dll" -> "maui.visualstudio.current.projectmanagement.dll"
+"projectmanagementsrvtests.dll" -> "microsoft.teamfoundation.qa.security.dll"
+"projectmanagementsrvtests.dll" -> "microsoft.teamfoundation.client.dll"
+"projectmanagementsrvtests.dll" -> "maui.visualstudio.current.teamsystem.dll"
+"protogen.exe" -> "microsoft.visualstudio.modeling.dll"
+"proxygen.exe" -> "microsoft.visualstudio.tools.applications.proxyservices.dll"
+"prune3.exe" -> "msvcr90.dll"
+"prune3.exe" -> "astio.dll"
+"prototypeeditor.exe" -> "microsoft.visualstudio.enterprisetools.shell.dll"
+"prototypeeditor.exe" -> "microsoft.visualstudio.modeling.dll"
+"proxygen.exe" -> "microsoft.tli.interop.dll"
+"projectmanagementsrvtests.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"presentationdesigninteraction.dll" -> "microsoft.windows.design.dll"
+"presentationdesignmarkup.dll" -> "presentationdesigninteraction.dll"
+"presentationdesignmarkup.dll" -> "microsoft.windows.design.dll"
+"presentationdesignhost.dll" -> "microsoft.windows.design.dll"
+"presentationdesignhost.dll" -> "draft.presentationdesigndeveloper.dll"
+"presentationdesignhost.dll" -> "presentationdesignextensibility.dll"
+"presentationdesignmarkup.dll" -> "presentationdesignextensibility.dll"
+"projectaggregator.dll" -> "msvcr90.dll"
+"projectgen.exe" -> "microsoft.visualstudio.tools.applications.projectgen.dll"
+"projectmanagementsrvtests.dll" -> "microsoft.visualstudio.currituck.test.dll"
+"print3.exe" -> "msvcr90.dll"
+"print3.exe" -> "msvcp90.dll"
+"print3.exe" -> "astio.dll"
+"spyxx.exe" -> "mfc90u.dll"
+"tfsbuildservice.exe" -> "microsoft.build.utilities.v3.5.dll"
+"tfsbuildservice.exe" -> "microsoft.teamfoundation.dll"
+"tfsbuildservice.exe" -> "microsoft.teamfoundation.build.common.dll"
+"tfsbuildservice.exe" -> "microsoft.teamfoundation.common.dll"
+"tfsbuildservice.exe" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"tfsbuildservice.exe" -> "microsoft.teamfoundation.client.dll"
+"tfsbuildservice.exe" -> "microsoft.teamfoundation.build.client.dll"
+"tfsbuildupgrade.exe" -> "microsoft.teamfoundation.client.dll"
+"tfsbuildupgrade.exe" -> "microsoft.teamfoundation.dll"
+"tfsbuildupgrade.exe" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"tfsbuildservice.exe" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"tfsbuildupgrade.exe" -> "microsoft.teamfoundation.common.dll"
+"tfsbuildupgrade.exe" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"tfsbuild.exe" -> "microsoft.teamfoundation.build.client.dll"
+"tf.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"tf.exe" -> "microsoft.teamfoundation.client.dll"
+"tf.exe" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"testundn.exe" -> "msvcp90.dll"
+"tf.exe" -> "microsoft.teamfoundation.common.dll"
+"tf.exe" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"tf.exe" -> "microsoft.teamfoundation.versioncontrol.controls.dll"
+"tfsbuild.exe" -> "microsoft.teamfoundation.common.dll"
+"tfsbuild.exe" -> "microsoft.teamfoundation.client.dll"
+"tfsbuild.exe" -> "microsoft.teamfoundation.build.common.dll"
+"tfgetdbdata.exe" -> "microsoft.teamfoundation.client.dll"
+"tfgetdbdata.exe" -> "microsoft.teamfoundation.dll"
+"tfsadminutil.exe" -> "microsoft.teamfoundation.server.admin.dll"
+"tfscredutil.exe" -> "microsoft.teamfoundation.client.dll"
+"tfsprovider.dll" -> "msvcr90.dll"
+"tfsprovider.dll" -> "msvcp90.dll"
+"tfsproviderstub.dll" -> "msvcr90.dll"
+"tfsplaintexttohtml.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"tfsplaintexttohtml.exe" -> "microsoft.teamfoundation.client.dll"
+"tfsplaintexttohtml.exe" -> "microsoft.teamfoundation.dll"
+"tfsreg.exe" -> "microsoft.teamfoundation.dll"
+"tfssecurity.exe" -> "microsoft.teamfoundation.client.dll"
+"tfssecurity.exe" -> "microsoft.teamfoundation.dll"
+"tfsserverscheduler.exe" -> "microsoft.teamfoundation.common.dll"
+"tfssample.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"tfssample.exe" -> "microsoft.teamfoundation.client.dll"
+"tfssecurity.exe" -> "microsoft.teamfoundation.common.dll"
+"tfsofficeadd-in.dll" -> "msvcr90.dll"
+"tfserverstatusvalidator.exe" -> "microsoft.analysisservices.dll"
+"tfsfieldmapping.exe" -> "microsoft.teamfoundation.common.dll"
+"tfsfieldmapping.exe" -> "microsoft.teamfoundation.client.dll"
+"tfsdb.exe" -> "microsoft.teamfoundation.databaseinstaller.dll"
+"tfsdeleteproject.exe" -> "microsoft.teamfoundation.client.dll"
+"tfsdeleteproject.exe" -> "microsoft.teamfoundation.dll"
+"tfsfieldmapping.exe" -> "microsoft.teamfoundation.dll"
+"tfshtmltoplaintext.exe" -> "microsoft.teamfoundation.client.dll"
+"tfshtmltoplaintext.exe" -> "microsoft.teamfoundation.dll"
+"tfshtmltoplaintext.exe" -> "microsoft.teamfoundation.workitemtracking.controls.dll"
+"tfsgssinit.exe" -> "microsoft.teamfoundation.common.dll"
+"tfsgssinit.exe" -> "microsoft.teamfoundation.dll"
+"tfshtmltoplaintext.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"testundn.exe" -> "msvcr90.dll"
+"ssgui.dll" -> "msvcp90.dll"
+"ssgui.dll" -> "ssapi.dll"
+"ssrestor.exe" -> "msvcr90.dll"
+"ssexp.exe" -> "msvcr90.dll"
+"ssgui.dll" -> "mfc90.dll"
+"ssgui.dll" -> "msvcr90.dll"
+"ssscc.dll" -> "mfc90.dll"
+"ssservice.exe" -> "msvcr90.dll"
+"stresstarget.exe" -> "msvcr90.dll"
+"stresstarget.exe" -> "msvcp90.dll"
+"ssscc.dll" -> "msvcr90.dll"
+"ssscc.dll" -> "msvcp90.dll"
+"ssservice.exe" -> "mfc90.dll"
+"ssexp.exe" -> "ssgui.dll"
+"srcedit.dll" -> "atl90.dll"
+"srcedit.dll" -> "msvcr90.dll"
+"ss.exe" -> "msvcr90.dll"
+"spyxxhk.dll" -> "msvcr90.dll"
+"sqlde.dll" -> "msvcr90.dll"
+"sqlle.dll" -> "msvcr90.dll"
+"ss.exe" -> "msvcp90.dll"
+"ssapi.dll" -> "msvcr90.dll"
+"ssarc.exe" -> "msvcr90.dll"
+"ssexp.exe" -> "mfc90.dll"
+"ssadmin.exe" -> "mfc90.dll"
+"ssadmin.exe" -> "ssgui.dll"
+"ssadmin.exe" -> "msvcr90.dll"
+"subscribe.exe" -> "microsoft.teamfoundation.client.dll"
+"teambuildupgrade.exe" -> "microsoft.teamfoundation.common.dll"
+"teambuildupgrade.exe" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"teambuildupgrade.exe" -> "microsoft.teamfoundation.client.dll"
+"taskrun.exe" -> "tasklib.dll"
+"tcprops.dll" -> "msvcr90.dll"
+"tdnamespaceextension.dll" -> "msvcr90.dll"
+"teambuildupgrade.exe" -> "microsoft.teamfoundation.dll"
+"testctclibrary.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"tests.dll" -> "codeundertest.dll"
+"tests.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"teambuildupgrade.exe" -> "microsoft.teamfoundation.build.common.dll"
+"teambuildupgrade.exe" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"testctclibrary.dll" -> "vsctlibrary.dll"
+"taskrun.exe" -> "microsoft.build.framework.dll"
+"synctops.exe" -> "microsoft.teamfoundation.workitemtracking.proxy.dll"
+"synctops.exe" -> "microsoft.teamfoundation.client.dll"
+"synctops.exe" -> "microsoft.teamfoundation.dll"
+"subscribe.exe" -> "microsoft.teamfoundation.dll"
+"synctops.exe" -> "microsoft.teamfoundation.common.dll"
+"synctops.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"systemmenucheck.dll" -> "uxcopinterfaces.dll"
+"tasklib.dll" -> "microsoft.build.utilities.v3.5.dll"
+"tasklib.dll" -> "nunit.framework.dll"
+"taskrun.exe" -> "nunit.framework.dll"
+"targetdependencyscanner.exe" -> "nunit.framework.dll"
+"taskdump.exe" -> "nunit.framework.dll"
+"taskdump.exe" -> "tasklib.dll"
+"microsoft.visualstudio.qualitytools.publishserver.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.compactframework.build.tasks.dll" -> "microsoft.build.framework.dll"
+"microsoft.compactframework.design.data.dll" -> "vslangproj.dll"
+"microsoft.compactframework.design.data.dll" -> "envdte.dll"
+"microsoft.build.visualjsharp.dll" -> "microsoft.build.framework.dll"
+"microsoft.build.visualjsharp.dll" -> "microsoft.build.tasks.v3.5.dll"
+"microsoft.compactframework.build.tasks.dll" -> "microsoft.build.utilities.v3.5.dll"
+"microsoft.compactframework.design.data.dll" -> "microsoft.visualstudio.data.dll"
+"microsoft.compactframework.design.model.dll" -> "microsoft.visualstudio.enterprisetools.typesystem.dll"
+"microsoft.compactframework.design.model.dll" -> "microsoft.visualstudio.enterprisetools.shell.dll"
+"microsoft.compactframework.design.model.dll" -> "microsoft.visualstudio.modeling.dll"
+"microsoft.compactframework.design.data.dll" -> "microsoft.compactframework.build.tasks.dll"
+"microsoft.compactframework.design.data.dll" -> "microsoft.vsdesigner.dll"
+"microsoft.compactframework.design.data.dll" -> "envdte80.dll"
+"microsoft.build.visualjsharp.dll" -> "microsoft.build.utilities.v3.5.dll"
+"microsoft.build.nonshippingtasks.dll" -> "microsoft.build.framework.dll"
+"microsoft.build.nonshippingtasks.dll" -> "microsoft.build.tasks.v3.5.dll"
+"microsoft.build.nonshippingtasks.dll" -> "microsoft.build.visualjsharp.dll"
+"microsoft.build.nonshippingtasks.dll" -> "microsoft.build.utilities.v3.5.dll"
+"microsoft.build.nonshippingtasks.dll" -> "microsoft.build.engine.dll"
+"microsoft.build.nonshippingtasks.dll" -> "nunit.framework.dll"
+"microsoft.build.tasks.generator.exe" -> "microsoft.build.utilities.v3.5.dll"
+"microsoft.build.tasks.v3.5.dll" -> "microsoft.build.utilities.v3.5.dll"
+"microsoft.build.tasks.v3.5.dll" -> "microsoft.build.framework.dll"
+"microsoft.build.utilities.v3.5.dll" -> "microsoft.build.framework.dll"
+"microsoft.build.tasks.generator.unittests.dll" -> "microsoft.build.datadriventasks.dll"
+"microsoft.build.tasks.generator.unittests.dll" -> "microsoft.build.tasks.generator.exe"
+"microsoft.build.tasks.generator.unittests.dll" -> "nunit.framework.dll"
+"microsoft.compactframework.design.model.dll" -> "envdte.dll"
+"microsoft.sdm.web.dll" -> "microsoft.sdm.manager.dll"
+"microsoft.sdm.webapplication.dll" -> "microsoft.sdm.web.dll"
+"microsoft.sdm.webapplication.dll" -> "microsoft.sdm.manager.dll"
+"microsoft.sdm.operatingsystem.dll" -> "microsoft.sdm.manager.dll"
+"microsoft.sdm.operatingsystem.dll" -> "microsoft.sdm.system.dll"
+"microsoft.sdm.system.dll" -> "microsoft.sdm.manager.dll"
+"microsoft.teamfoundation.adapter.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.build.adapter.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.build.adapter.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.build.adapter.dll" -> "microsoft.teamfoundation.build.client.dll"
+"microsoft.teamfoundation.adapter.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.adapter.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.build.adapter.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.sdm.iis.dll" -> "microsoft.sdm.system.dll"
+"microsoft.datawarehouse.dll" -> "stdole.dll"
+"microsoft.datawarehouse.dll" -> "microsoft.datawarehouse.interfaces.dll"
+"microsoft.devdiv.buildtasks.unittests.dll" -> "microsoft.devdiv.buildtasks.dll"
+"microsoft.compactframework.design.model.dll" -> "microsoft.visualstudio.modeling.artifactmapper.vshost.dll"
+"microsoft.compactframework.design.model.dll" -> "microsoft.visualstudio.modeling.artifactmapper.dll"
+"microsoft.data.connectionui.dialog.dll" -> "microsoft.data.connectionui.dll"
+"microsoft.devdiv.buildtasks.unittests.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"microsoft.sdm.constraints.dll" -> "microsoft.sdm.manager.dll"
+"microsoft.sdm.constraints.dll" -> "microsoft.sdm.system.dll"
+"microsoft.sdm.filesystem.dll" -> "microsoft.sdm.manager.dll"
+"microsoft.expression.framework.dll" -> "microsoft.windows.design.dll"
+"microsoft.expression.framework.dll" -> "microsoft.expression.diagnostics.dll"
+"microsoft.sdm.configuration.dll" -> "microsoft.sdm.system.dll"
+"microsoft.build.nonshipping.diagnosticlogger.unittests.dll" -> "microsoft.build.framework.dll"
+"mfcm90.dll" -> "mfcmifc80.dll"
+"mfcm90d.dll" -> "msvcr90d.dll"
+"mfcm90d.dll" -> "mfcmifc80.dll"
+"mfc90ud.dll" -> "msvcr90d.dll"
+"mfcm90.dll" -> "mfc90.dll"
+"mfcm90.dll" -> "msvcr90.dll"
+"mfcm90d.dll" -> "mfc90d.dll"
+"mfcm90ud.dll" -> "msvcr90d.dll"
+"mfcm90ud.dll" -> "mfc90ud.dll"
+"mfcm90ud.dll" -> "mfcmifc80.dll"
+"mfcm90u.dll" -> "msvcr90.dll"
+"mfcm90u.dll" -> "mfcmifc80.dll"
+"mfcm90u.dll" -> "mfc90u.dll"
+"mfc90u.dll" -> "msvcr90.dll"
+"maui.visualstudio.current.teamsystem.dll" -> "microsoft.teamfoundation.client.dll"
+"maui.visualstudio.current.teamsystem.dll" -> "microsoft.teamfoundation.dll"
+"mcee.dll" -> "msvcr90.dll"
+"maui.visualstudio.current.projectmanagement.dll" -> "maui.visualstudio.current.teamsystem.dll"
+"maui.visualstudio.current.projectmanagement.dll" -> "microsoft.teamfoundation.dll"
+"maui.visualstudio.current.projectmanagement.dll" -> "microsoft.mshtml.dll"
+"mcee.dll" -> "msvcp90.dll"
+"metade.dll" -> "msvcr90.dll"
+"mfc90.dll" -> "msvcr90.dll"
+"mfc90d.dll" -> "msvcr90d.dll"
+"mdcwalker.exe" -> "msvcr90.dll"
+"mergecl.exe" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"mergecl.exe" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.build.conversion.v3.5.dll" -> "microsoft.build.engine.dll"
+"microsoft.build.nativetasks.dll" -> "microsoft.build.filetracker.dll"
+"microsoft.build.nativetasks.unittests.dll" -> "microsoft.build.utilities.v3.5.dll"
+"microsoft.build.nativetasks.unittests.dll" -> "nunit.framework.dll"
+"microsoft.build.nativetasks.dll" -> "microsoft.build.datadriventasks.dll"
+"microsoft.build.nativetasks.dll" -> "microsoft.build.utilities.v3.5.dll"
+"microsoft.build.nativetasks.dll" -> "microsoft.build.framework.dll"
+"microsoft.build.nativetasks.unittests.dll" -> "microsoft.build.nativetasks.dll"
+"microsoft.build.nonshipping.diagnosticlogger.unittests.dll" -> "microsoft.build.engine.dll"
+"microsoft.build.nonshipping.diagnosticlogger.unittests.dll" -> "nunit.framework.dll"
+"microsoft.build.nonshipping.diagnosticlogger.unittests.dll" -> "microsoft.build.nonshipping.diagnosticlogger.dll"
+"microsoft.build.nonshipping.diagnosticlogger.dll" -> "microsoft.build.utilities.v3.5.dll"
+"microsoft.build.nonshipping.diagnosticlogger.dll" -> "microsoft.build.framework.dll"
+"microsoft.build.nonshipping.diagnosticlogger.unittests.dll" -> "microsoft.build.utilities.v3.5.dll"
+"microsoft.build.kbc.unittest.dll" -> "kbc.dll"
+"microsoft.build.datadriventasks.unittest.dll" -> "microsoft.build.utilities.v3.5.dll"
+"microsoft.build.datadriventasks.unittest.dll" -> "nunit.framework.dll"
+"microsoft.build.engine.dll" -> "microsoft.build.framework.dll"
+"microsoft.build.datadriventasks.dll" -> "microsoft.build.utilities.v3.5.dll"
+"microsoft.build.datadriventasks.dll" -> "microsoft.build.framework.dll"
+"microsoft.build.datadriventasks.unittest.dll" -> "microsoft.build.datadriventasks.dll"
+"microsoft.build.filetracker.dll" -> "microsoft.build.utilities.v3.5.dll"
+"microsoft.build.filetracker.unittest.dll" -> "microsoft.build.framework.dll"
+"microsoft.build.filetracker.unittest.dll" -> "microsoft.build.filetracker.dll"
+"microsoft.build.kbc.unittest.dll" -> "nunit.framework.dll"
+"microsoft.build.filetracker.dll" -> "microsoft.build.framework.dll"
+"microsoft.build.filetracker.unittest.dll" -> "microsoft.build.utilities.v3.5.dll"
+"microsoft.build.filetracker.unittest.dll" -> "nunit.framework.dll"
+"microsoft.teamfoundation.build.client.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.build.unittest.queue.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"microsoft.teamfoundation.build.unittest.servertests.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.build.unittest.servertests.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.teamfoundation.build.unittest.dropmanagement.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"microsoft.teamfoundation.build.unittest.queue.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.build.unittest.queue.dll" -> "microsoft.teamfoundation.build.client.dll"
+"microsoft.teamfoundation.build.unittest.servertests.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.build.unittest.servertests.dll" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.teamfoundation.build.unittest.servertests.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"microsoft.teamfoundation.client.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.build.unittest.servertests.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.build.unittest.servertests.dll" -> "microsoft.teamfoundation.build.common.dll"
+"microsoft.teamfoundation.build.unittest.servertests.dll" -> "microsoft.teamfoundation.build.client.dll"
+"microsoft.teamfoundation.build.unittest.dropmanagement.dll" -> "microsoft.teamfoundation.build.client.dll"
+"microsoft.teamfoundation.build.unittest.continuousintegration.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.build.unittest.continuousintegration.dll" -> "microsoft.teamfoundation.build.client.dll"
+"microsoft.teamfoundation.build.unittest.continuousintegration.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"microsoft.teamfoundation.build.unittest.commontest.dll" -> "microsoft.teamfoundation.build.common.dll"
+"microsoft.teamfoundation.build.unittest.commontest.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"microsoft.teamfoundation.build.unittest.continuousintegration.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.teamfoundation.build.unittest.createworkitemtask.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.teamfoundation.build.unittest.dropmanagement.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.teamfoundation.build.unittest.dropmanagement.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.build.unittest.dropmanagement.dll" -> "microsoft.teamfoundation.build.controls.dll"
+"microsoft.teamfoundation.build.unittest.createworkitemtask.dll" -> "microsoft.teamfoundation.build.tasks.versioncontrol.dll"
+"microsoft.teamfoundation.build.unittest.createworkitemtask.dll" -> "microsoft.teamfoundation.build.tasks.dll"
+"microsoft.teamfoundation.build.unittest.createworkitemtask.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"microsoft.teamfoundation.client.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.officeintegration.common.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.teamfoundation.officeintegration.common.dll" -> "microsoft.teamfoundation.workitemtracking.controls.dll"
+"microsoft.teamfoundation.officeintegration.common.dll" -> "microsoft.teamfoundation.common.library.dll"
+"microsoft.teamfoundation.officeintegration.common.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.teamfoundation.officeintegration.common.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.officeintegration.common.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.officeintegration.excel.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.officeintegration.project.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.teamfoundation.officeintegration.project.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.officeintegration.project.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.officeintegration.excel.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.teamfoundation.officeintegration.excel.dll" -> "microsoft.teamfoundation.common.library.dll"
+"microsoft.teamfoundation.officeintegration.project.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.officeintegration.common.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.common.library.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.teamfoundation.common.library.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.common.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.common.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.common.library.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.teamfoundation.dogfood.checkinpolicies.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.teamfoundation.dogfood.checkinpolicies.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.teamfoundation.dogfood.checkinpolicies.dll" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.teamfoundation.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.dll" -> "microsoft.teamfoundation.common.library.dll"
+"microsoft.teamfoundation.dogfood.checkinpolicies.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.build.unittest.commontest.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.build.server.checkinnotification.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.build.server.checkinnotification.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.build.server.checkinnotification.dll" -> "microsoft.teamfoundation.build.client.dll"
+"microsoft.teamfoundation.build.controls.dll" -> "microsoft.teamfoundation.build.client.dll"
+"microsoft.teamfoundation.build.controls.dll" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.teamfoundation.build.server.checkinnotification.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.build.server.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.build.server.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.build.server.dll" -> "microsoft.teamfoundation.build.common.dll"
+"microsoft.teamfoundation.build.server.dll" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.teamfoundation.build.server.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.teamfoundation.build.server.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.build.server.dll" -> "microsoft.visualstudio.qualitytools.operationalstore.servicehelper.dll"
+"microsoft.teamfoundation.build.controls.dll" -> "microsoft.teamfoundation.build.common.dll"
+"microsoft.teamfoundation.build.client.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.build.client.dll" -> "microsoft.teamfoundation.build.common.dll"
+"microsoft.teamfoundation.build.client.dll" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.teamfoundation.build.client.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.teamfoundation.build.client.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.teamfoundation.build.client.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.build.common.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.build.controls.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.build.controls.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.teamfoundation.build.controls.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.build.common.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.build.common.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.build.common.dll" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.teamfoundation.build.server.eventfilter.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.build.tasks.versioncontrol.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.build.tasks.versioncontrol.dll" -> "microsoft.build.utilities.v3.5.dll"
+"microsoft.teamfoundation.build.tasks.versioncontrol.dll" -> "microsoft.teamfoundation.build.tasks.dll"
+"microsoft.teamfoundation.build.tasks.versioncontrol.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.build.tasks.versioncontrol.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.teamfoundation.build.tasks.versioncontrol.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.teamfoundation.build.tasks.versioncontrol.dll" -> "microsoft.build.framework.dll"
+"microsoft.teamfoundation.build.unittest.clienttests.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.build.unittest.clienttests.dll" -> "microsoft.teamfoundation.build.client.dll"
+"microsoft.teamfoundation.build.unittest.clienttests.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"microsoft.teamfoundation.build.tasks.versioncontrol.dll" -> "microsoft.teamfoundation.build.client.dll"
+"microsoft.teamfoundation.build.tasks.versioncontrol.dll" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.teamfoundation.build.unittest.clienttests.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.build.tasks.dll" -> "microsoft.teamfoundation.build.client.dll"
+"microsoft.teamfoundation.build.server.logger.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.build.server.logger.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.teamfoundation.build.server.logger.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.build.server.eventfilter.dll" -> "microsoft.teamfoundation.server.dll"
+"microsoft.teamfoundation.build.server.eventfilter.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.build.server.eventfilter.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.build.server.logger.dll" -> "microsoft.teamfoundation.build.tasks.dll"
+"microsoft.teamfoundation.build.tasks.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.build.tasks.dll" -> "microsoft.build.framework.dll"
+"microsoft.teamfoundation.build.tasks.dll" -> "microsoft.teamfoundation.build.common.dll"
+"microsoft.teamfoundation.build.server.logger.dll" -> "microsoft.build.framework.dll"
+"microsoft.teamfoundation.build.server.logger.dll" -> "microsoft.teamfoundation.build.common.dll"
+"microsoft.teamfoundation.build.server.logger.dll" -> "microsoft.teamfoundation.build.client.dll"
+"maui.visualstudio.current.projectmanagement.dll" -> "microsoft.teamfoundation.client.dll"
+"cldiff.exe" -> "microsoft.build.utilities.v3.5.dll"
+"cldiff.exe" -> "nunit.framework.dll"
+"cldiff.exe" -> "microsoft.build.framework.dll"
+"changesetsfromworkitems.exe" -> "microsoft.teamfoundation.client.dll"
+"cl.exe" -> "msvcr90.dll"
+"cl.exe" -> "mspdb80.dll"
+"cmddef.dll" -> "msvcr90.dll"
+"coveragereport.exe" -> "msvcr90.dll"
+"coveragereport.exe" -> "microsoft.visualstudio.coverage.analysis.dll"
+"coveran.exe" -> "microsoft.teamfoundation.common.dll"
+"compluslm.dll" -> "atl90.dll"
+"compluslm.dll" -> "msvcr90.dll"
+"compsvcspkg.dll" -> "msvcr90.dll"
+"changesetsfromworkitems.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"cedpedt.dll" -> "atl90.dll"
+"cedpedt.dll" -> "msvcr90.dll"
+"cedpedt.dll" -> "msvcp90.dll"
+"cedpdpl.dll" -> "atl90.dll"
+"cedpdpl.dll" -> "msvcr90.dll"
+"cedpdpl.dll" -> "msvcp90.dll"
+"cedpplg.dll" -> "atl90.dll"
+"cedpprj.dll" -> "msvcr90.dll"
+"cedpprj.dll" -> "msvcp90.dll"
+"changesetsfromworkitems.exe" -> "microsoft.teamfoundation.common.dll"
+"cedpplg.dll" -> "msvcr90.dll"
+"cedpplg.dll" -> "msvcp90.dll"
+"cedpprj.dll" -> "atl90.dll"
+"coveran.exe" -> "microsoft.visualstudio.coverage.analysis.dll"
+"createprojectapi.dll" -> "microsoft.teamfoundation.dll"
+"createprojectapi.dll" -> "envdte80.dll"
+"createsccfolder.exe" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"createprojectapi.dll" -> "microsoft.visualstudio.zip.dll"
+"createprojectapi.dll" -> "microsoft.teamfoundation.client.dll"
+"createprojectapi.dll" -> "microsoft.visualstudio.teamfoundation.client.dll"
+"createsccfolder.exe" -> "microsoft.teamfoundation.client.dll"
+"csspkg.dll" -> "msvcr90.dll"
+"ctloc.dll" -> "msvcr90.dll"
+"ctloc.dll" -> "msvcp90.dll"
+"csc.exe" -> "msvcr90.dll"
+"csformatui.dll" -> "microsoft.visualstudio.csharp.options.dll"
+"csspkg.dll" -> "atl90.dll"
+"createds.exe" -> "microsoft.teamfoundation.dll"
+"cqconverter.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"cqconverter.exe" -> "microsoft.teamfoundation.workitemtracking.proxy.dll"
+"cqconverter.exe" -> "microsoft.teamfoundation.client.dll"
+"cpde.dll" -> "msvcr90.dll"
+"cpde.dll" -> "msdis150.dll"
+"cqconverter.exe" -> "microsoft.teamfoundation.common.dll"
+"cqconverter.exe" -> "clearquest.interop.dll"
+"cqverifier.exe" -> "clearquest.interop.dll"
+"cqverifier.exe" -> "microsoft.teamfoundation.dll"
+"createds.exe" -> "microsoft.teamfoundation.common.dll"
+"cqconverter.exe" -> "microsoft.teamfoundation.dll"
+"cqverifier.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"cqverifier.exe" -> "microsoft.teamfoundation.client.dll"
+"c2.dll" -> "msobj80.dll"
+"astio.dll" -> "msvcp90.dll"
+"astutil.exe" -> "msvcr90.dll"
+"astutil.exe" -> "msvcp90.dll"
+"asbackuprestore.exe" -> "microsoft.teamfoundation.dll"
+"asbackuprestore.exe" -> "microsoft.analysisservices.dll"
+"astio.dll" -> "msvcr90.dll"
+"astutil.exe" -> "astio.dll"
+"atltracetool8.exe" -> "msvcr90.dll"
+"avvspkdh.dll" -> "atl90.dll"
+"avvspkdh.dll" -> "msvcr90.dll"
+"atl90.dll" -> "msvcr90.dll"
+"atlprov.dll" -> "msvcr90.dll"
+"atltracetool8.exe" -> "mfc90.dll"
+"asbackuprestore.exe" -> "microsoft.teamfoundation.client.dll"
+"_witimport.exe" -> "microsoft.teamfoundation.workitemtracking.server.dataaccesslayer.dll"
+"acd.exe" -> "msvcr90.dll"
+"acd.exe" -> "msvcp90.dll"
+"_witimport.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"_witimport.exe" -> "microsoft.teamfoundation.client.dll"
+"_witimport.exe" -> "microsoft.teamfoundation.dll"
+"agentconfigutil.exe" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"analyze.exe" -> "mfc90.dll"
+"analyze.exe" -> "msvcr90.dll"
+"analyze.exe" -> "ssapi.dll"
+"agentconfigutil.exe" -> "microsoft.visualstudio.qualitytools.common.dll"
+"agentconfigutil.exe" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"al.exe" -> "msvcr90.dll"
+"bisscriptedsetuputility.exe" -> "microsoft.teamfoundation.server.dll"
+"c1xx.dll" -> "mspdb80.dll"
+"c1xx.dll" -> "atlprov.dll"
+"c1xxast.dll" -> "msvcr90.dll"
+"c1ast.dll" -> "mspdb80.dll"
+"c1xx.dll" -> "msvcr90.dll"
+"c1xx.dll" -> "msvcp90.dll"
+"c1xxast.dll" -> "msvcp90.dll"
+"c2.dll" -> "msvcr90.dll"
+"c2.dll" -> "pgodb80.dll"
+"c2.dll" -> "mspdb80.dll"
+"c1xxast.dll" -> "astio.dll"
+"c1xxast.dll" -> "mspdb80.dll"
+"c1xxast.dll" -> "atlprov.dll"
+"c1ast.dll" -> "astio.dll"
+"bscmake.exe" -> "mspdb80.dll"
+"buildwatch.filecomparers.dll" -> "buildwatch.exe"
+"buildwatch.unittests.dll" -> "nunit.framework.dll"
+"bissubscribe.exe" -> "microsoft.teamfoundation.client.dll"
+"bissubscribe.exe" -> "microsoft.teamfoundation.dll"
+"bscmake.exe" -> "msvcr90.dll"
+"buildwatch.unittests.dll" -> "buildwatch.exe"
+"c1.dll" -> "mspdb80.dll"
+"c1ast.dll" -> "msvcr90.dll"
+"c1ast.dll" -> "msvcp90.dll"
+"buildwatch.unittests.dll" -> "buildwatch.filecomparers.dll"
+"c1.dll" -> "msvcr90.dll"
+"c1.dll" -> "msvcp90.dll"
+"currituckconnperfprofiledriver.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"glexport.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"glimport.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"graphobjecttest.exe" -> "microsoft.visualstudio.modeling.diagrams.graphobject.dll"
+"getcpuid.exe" -> "msvcr90.dll"
+"glass.exe" -> "msvcr90.dll"
+"glass.exe" -> "natdbgde.dll"
+"guidgen.exe" -> "mfc90.dll"
+"htmled.dll" -> "atl90.dll"
+"htmled.dll" -> "msvcr90.dll"
+"inituserconfig.exe" -> "microsoft.teamfoundation.qa.security.dll"
+"guidgen.exe" -> "msvcr90.dll"
+"hdiff.exe" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"htmdlgs.dll" -> "atl90.dll"
+"fabrikam.westcoasthelpdesk.winclient.workitem.dll" -> "microsoft.vsa.hosting.dll"
+"errlook.exe" -> "mfc90.dll"
+"errlook.exe" -> "msvcr90.dll"
+"etpproj.dll" -> "msvcr90.dll"
+"encmgr.dll" -> "msvcr90.dll"
+"enctest.exe" -> "msvcr90.dll"
+"enctest.exe" -> "msvcp90.dll"
+"f1viewer.exe" -> "microsoft.visualstudio.performancetools.visualization.dll"
+"fabrikam.westcoasthelpdesk.webclient.dll" -> "microsoft.vsa.hosting.dll"
+"fabrikam.westcoasthelpdesk.webclient.dll" -> "fabrikam.westcoasthelpdesk.mtos.dll"
+"fabrikam.westcoasthelpdesk.winclient.exe" -> "fabrikam.westcoasthelpdesk.winclient.workitem.dll"
+"f1viewer.exe" -> "vsperfpresentation.dll"
+"fabrikam.westcoasthelpdesk.mtos.dll" -> "microsoft.vsa.hosting.dll"
+"fabrikam.westcoasthelpdesk.mtos.dll" -> "fabrikam.westcoasthelpdesk.sqlcodeprovider.dll"
+"install.exe" -> "microsoft.teamfoundation.versioncontrol.server.dll"
+"logviewer.exe" -> "ms.binaryfilelogger.dll"
+"lregdll.dll" -> "msvcr90.dll"
+"lregdll.dll" -> "msvbver.dll"
+"logviewer.exe" -> "microsoft.build.utilities.v3.5.dll"
+"logviewer.exe" -> "nunit.framework.dll"
+"logviewer.exe" -> "microsoft.build.framework.dll"
+"magellanccviewer.dll" -> "microsoft.visualstudio.coverage.analysis.dll"
+"maui.visualstudio.current.projectmanagement.dll" -> "microsoft.visualstudio.currituck.test.dll"
+"maui.visualstudio.current.projectmanagement.dll" -> "microsoft.visualstudio.zip.dll"
+"maui.visualstudio.current.projectmanagement.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"makehm.exe" -> "mfc90.dll"
+"makehm.exe" -> "msvcr90.dll"
+"makezipexe.exe" -> "microsoft.visualstudio.zip.dll"
+"link.exe" -> "msdis150.dll"
+"kbc.dll" -> "microsoft.build.utilities.v3.5.dll"
+"kbc.dll" -> "microsoft.build.engine.dll"
+"kbc.dll" -> "microsoft.build.framework.dll"
+"integeroverflow.dll" -> "msvcr90.dll"
+"integeroverflow.dll" -> "msvcp90.dll"
+"jsee.dll" -> "msvcr90.dll"
+"kbcapp.exe" -> "kbc.dll"
+"link.exe" -> "msvcr90.dll"
+"link.exe" -> "pgodb80.dll"
+"link.exe" -> "mspdb80.dll"
+"lib.exe" -> "msvcr90.dll"
+"libtest.exe" -> "msvcr90.dll"
+"libtest.exe" -> "msvcp90.dll"
+"editbin.exe" -> "msvcr90.dll"
+"ddupd.exe" -> "msvcr90.dll"
+"deployacceptancetests.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"designerpad.exe" -> "microsoft.windows.design.dll"
+"dbgclr.exe" -> "msvcr90.dll"
+"dbgw64.exe" -> "msvcr90.dll"
+"ddconv.exe" -> "msvcr90.dll"
+"designerpad.exe" -> "presentationdesignhost.dll"
+"diagramhost.exe" -> "microsoft.visualstudio.modeling.diagrams.dll"
+"diagramhost.exe" -> "microsoft.visualstudio.modeling.dll"
+"diffmerge.exe" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"designerpad.exe" -> "presentationdesignextensibility.dll"
+"devenv.exe" -> "msvcr90.dll"
+"dexplore.exe" -> "msvcr90.dll"
+"cvtres.exe" -> "msvcr90.dll"
+"currituckperfprofiledriver.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"currituckpopulate.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"currituckutils.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"currituckofficeperfdriver.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"currituckofficepopulate.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"currituckomperftest.exe" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"currituckutils.exe" -> "microsoft.teamfoundation.workitemtracking.proxy.dll"
+"customsearchprovider.unittest.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"customsearchprovider.unittest.dll" -> "customsearchprovider.dll"
+"customsearchprovider.unittest.dll" -> "searchprovidercore.dll"
+"currituckutils.exe" -> "microsoft.teamfoundation.client.dll"
+"currituckutils.exe" -> "microsoft.teamfoundation.dll"
+"customsearchprovider.dll" -> "searchprovidercore.dll"
+"diffmerge.exe" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"draft.xamllanguageservice.dll" -> "presentationdesignmarkup.dll"
+"draft.xamllanguageservice.dll" -> "presentationdesignhost.dll"
+"driv.exe" -> "msvcr90.dll"
+"draft.presentationdesigndeveloper.dll" -> "presentationdesigninteraction.dll"
+"draft.presentationdesigndeveloper.dll" -> "microsoft.windows.design.dll"
+"draft.presentationdesigndeveloper.dll" -> "presentationdesignextensibility.dll"
+"driv.exe" -> "msvcp90.dll"
+"dumpbin.exe" -> "msvcr90.dll"
+"ecbuild.dll" -> "atl90.dll"
+"ecbuild.dll" -> "msvcr90.dll"
+"drivercheck.exe" -> "msvcr90.dll"
+"dsref80.dll" -> "msvcr90.dll"
+"dsref80.dll" -> "msvcp90.dll"
+"draft.presentationdesigndeveloper.dll" -> "presentationdesigndeveloper.dll"
+"dpdpl.dll" -> "msvcp90.dll"
+"dpedt.dll" -> "atl90.dll"
+"dpedt.dll" -> "msvcr90.dll"
+"dirprj.dll" -> "msvcr90.dll"
+"dpdpl.dll" -> "atl90.dll"
+"dpdpl.dll" -> "msvcr90.dll"
+"dpedt.dll" -> "msvcp90.dll"
+"dpprj.dll" -> "atl90.dll"
+"dpprj.dll" -> "msvcr90.dll"
+"dpprj.dll" -> "msvcp90.dll"
+"dpplg.dll" -> "atl90.dll"
+"dpplg.dll" -> "msvcr90.dll"
+"dpplg.dll" -> "msvcp90.dll"
+"microsoft.visualstudio.exporttemplate.dll" -> "vslangproj.dll"
+"microsoft.visualstudio.exporttemplate.dll" -> "envdte.dll"
+"microsoft.visualstudio.exporttemplate.dll" -> "vslangproj80.dll"
+"microsoft.visualstudio.enterprisetools.typesystem.dll" -> "envdte80.dll"
+"microsoft.visualstudio.enterprisetools.typesystem.dll" -> "microsoft.visualstudio.csharp.services.language.dll"
+"microsoft.visualstudio.exporttemplate.dll" -> "microsoft.visualstudio.zip.dll"
+"microsoft.visualstudio.exporttemplate.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualstudio.hostingprocess.utilities.dll" -> "microsoft.visualstudio.hostingprocess.utilities.sync.dll"
+"microsoft.visualstudio.importprojectfolderwizard.dll" -> "envdte.dll"
+"microsoft.visualstudio.importprojectfolderwizard.dll" -> "microsoft.visualstudio.vcprojectengine.dll"
+"microsoft.visualstudio.exporttemplate.dll" -> "vswebsite.interop.dll"
+"microsoft.visualstudio.exporttemplate.dll" -> "microsoft.wizardframework.dll"
+"microsoft.visualstudio.exporttemplate.dll" -> "microsoft.wizardframeworkvs.dll"
+"microsoft.visualstudio.enterprisetools.typesystem.dll" -> "microsoft.visualstudio.virtualtreegrid.dll"
+"microsoft.visualstudio.enterprisetools.shell.dll" -> "microsoft.visualstudio.modeling.dll"
+"microsoft.visualstudio.enterprisetools.shell.dll" -> "envdte.dll"
+"microsoft.visualstudio.enterprisetools.shell.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "sdmcompile.dll"
+"microsoft.visualstudio.enterprisetools.shell.dll" -> "microsoft.visualstudio.modeling.diagrams.dll"
+"microsoft.visualstudio.enterprisetools.shell.dll" -> "microsoft.visualstudio.enterprisetools.dll"
+"microsoft.visualstudio.enterprisetools.shell.dll" -> "microsoft.visualstudio.modeling.artifactmapper.dll"
+"microsoft.visualstudio.enterprisetools.typesystem.dll" -> "microsoft.visualstudio.modeling.dll"
+"microsoft.visualstudio.enterprisetools.typesystem.dll" -> "envdte.dll"
+"microsoft.visualstudio.enterprisetools.typesystem.dll" -> "microsoft.visualstudio.modeling.artifactmapper.dll"
+"microsoft.visualstudio.enterprisetools.shell.dll" -> "microsoft.visualstudio.virtualtreegrid.dll"
+"microsoft.visualstudio.enterprisetools.typesystem.dll" -> "microsoft.visualstudio.enterprisetools.shell.dll"
+"microsoft.visualstudio.enterprisetools.typesystem.dll" -> "microsoft.visualstudio.enterprisetools.dll"
+"microsoft.visualstudio.importprojectfolderwizard.dll" -> "microsoft.visualstudio.wizardframework.dll"
+"microsoft.visualstudio.officetools.designer.dll" -> "microsoft.visualstudio.tools.office.hosting.office2003.dll"
+"microsoft.visualstudio.officetools.designer.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualstudio.officetools.designer.dll" -> "microsoft.vsdesigner.dll"
+"microsoft.visualstudio.modeling.diagrams.dll" -> "microsoft.visualstudio.modeling.dll"
+"microsoft.visualstudio.modeling.diagrams.graphobject.dll" -> "msvcr90.dll"
+"microsoft.visualstudio.officetools.designer.dll" -> "envdte.dll"
+"microsoft.visualstudio.officetools.project.dll" -> "envdte.dll"
+"microsoft.visualstudio.officetools.project.dll" -> "microsoft.visualstudio.wizardframework.dll"
+"microsoft.visualstudio.officetools.project.dll" -> "envdte80.dll"
+"microsoft.visualstudio.officetools.workflow.debugconfigwizard.dll" -> "envdte.dll"
+"microsoft.visualstudio.officetools.project.dll" -> "microsoft.visualstudio.publish.dll"
+"microsoft.visualstudio.officetools.project.dll" -> "microsoft.visualstudio.templatewizardinterface.dll"
+"microsoft.visualstudio.officetools.project.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualstudio.modeling.diagrams.dll" -> "microsoft.visualstudio.modeling.diagrams.graphobject.dll"
+"microsoft.visualstudio.modeling.artifactmapper.vshost.dll" -> "microsoft.visualstudio.modeling.dll"
+"microsoft.visualstudio.modeling.artifactmapper.vshost.dll" -> "envdte.dll"
+"microsoft.visualstudio.modeling.artifactmapper.vshost.dll" -> "vswebsite.interop90.dll"
+"microsoft.visualstudio.modeling.artifactmapper.dll" -> "microsoft.visualstudio.modeling.dll"
+"microsoft.visualstudio.modeling.artifactmapper.vshost.dll" -> "microsoft.visualstudio.enterprisetools.typesystem.dll"
+"microsoft.visualstudio.modeling.artifactmapper.vshost.dll" -> "vslangproj.dll"
+"microsoft.visualstudio.modeling.artifactmapper.vshost.dll" -> "microsoft.visualstudio.vcprojectengine.dll"
+"microsoft.visualstudio.modeling.artifactmapper.vshost.dll" -> "microsoft.visualstudio.vccodemodel.dll"
+"microsoft.visualstudio.modeling.artifactmapper.vshost.dll" -> "microsoft.vsdesigner.dll"
+"microsoft.visualstudio.modeling.artifactmapper.vshost.dll" -> "envdte80.dll"
+"microsoft.visualstudio.modeling.artifactmapper.vshost.dll" -> "vslangproj80.dll"
+"microsoft.visualstudio.modeling.artifactmapper.vshost.dll" -> "microsoft.visualstudio.modeling.artifactmapper.dll"
+"microsoft.visualstudio.modeling.artifactmapper.vshost.dll" -> "vswebsite.interop.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "envdte80.dll"
+"microsoft.visualstudio.enterprise.aspnethelper.dll" -> "envdte.dll"
+"microsoft.visualstudio.enterprise.aspnethelper.dll" -> "vswebsite.interop.dll"
+"microsoft.visualstudio.enterprisetools.classdesigner.dll" -> "microsoft.visualstudio.enterprisetools.typesystem.dll"
+"microsoft.visualstudio.editors.dll" -> "microsoft.vsdesigner.dll"
+"microsoft.visualstudio.editors.dll" -> "envdte80.dll"
+"microsoft.visualstudio.enterprise.aspnethelper.dll" -> "microsoft.visualstudio.shell.interop.9.0.dll"
+"microsoft.visualstudio.enterprisetools.classdesigner.dll" -> "microsoft.visualstudio.modeling.diagrams.dll"
+"microsoft.visualstudio.enterprisetools.classdesigner.dll" -> "envdte.dll"
+"microsoft.visualstudio.enterprisetools.classdesigner.dll" -> "microsoft.visualstudio.modeling.artifactmapper.vshost.dll"
+"microsoft.visualstudio.enterprisetools.classdesigner.dll" -> "microsoft.visualstudio.modeling.artifactmapper.dll"
+"microsoft.visualstudio.enterprisetools.classdesigner.dll" -> "microsoft.visualstudio.enterprisetools.shell.dll"
+"microsoft.visualstudio.enterprisetools.classdesigner.dll" -> "microsoft.visualstudio.enterprisetools.dll"
+"microsoft.visualstudio.enterprisetools.classdesigner.dll" -> "microsoft.visualstudio.modeling.dll"
+"microsoft.visualstudio.editors.dll" -> "microsoft.visualstudio.data.interop.dll"
+"microsoft.visualstudio.editors.dll" -> "microsoft.visualstudio.shell.interop.9.0.dll"
+"microsoft.visualstudio.editors.dll" -> "vslangproj.dll"
+"microsoft.visualstudio.editors.dll" -> "envdte.dll"
+"microsoft.visualstudio.deploywizard.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualstudio.deploywizard.dll" -> "microsoft.visualstudio.wizardframework.dll"
+"microsoft.visualstudio.editors.dll" -> "microsoft.visualstudio.managedinterfaces.dll"
+"microsoft.visualstudio.editors.dll" -> "microsoft.visualstudio.managedinterfaces.wcf.dll"
+"microsoft.visualstudio.editors.dll" -> "microsoft.visualstudio.data.dll"
+"microsoft.visualstudio.editors.dll" -> "vswebsite.interop.dll"
+"microsoft.visualstudio.editors.dll" -> "microsoft.build.tasks.v3.5.dll"
+"microsoft.visualstudio.editors.dll" -> "vslangproj80.dll"
+"microsoft.visualstudio.editors.dll" -> "microsoft.visualstudio.wcfreference.interop.dll"
+"microsoft.visualstudio.editors.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualstudio.enterprisetools.classdesigner.dll" -> "microsoft.visualstudio.virtualtreegrid.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "sdmcore.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "microsoft.visualstudio.data.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "microsoft.visualstudio.modeling.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "envdte.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "microsoft.visualstudio.modeling.artifactmapper.vshost.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "microsoft.visualstudio.modeling.artifactmapper.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "microsoft.visualstudio.virtualtreegrid.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "microsoft.sdm.system.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "microsoft.vsdesigner.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "microsoft.visualstudio.wizardframework.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "vswebsite.interop.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "microsoft.visualstudio.data.interop.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "microsoft.sdm.iis.dll"
+"microsoft.visualstudio.enterprisetools.phoenix.engine.dll" -> "microsoft.visualstudio.modeling.diagrams.dll"
+"microsoft.visualstudio.enterprisetools.phoenix.engine.dll" -> "microsoft.visualstudio.modeling.dll"
+"microsoft.visualstudio.enterprisetools.phoenix.shell.dll" -> "microsoft.visualstudio.enterprisetools.phoenix.engine.dll"
+"microsoft.visualstudio.enterprisetools.classdesigner.dll" -> "envdte80.dll"
+"microsoft.visualstudio.enterprisetools.dll" -> "microsoft.visualstudio.modeling.dll"
+"microsoft.visualstudio.enterprisetools.dll" -> "microsoft.visualstudio.virtualtreegrid.dll"
+"microsoft.visualstudio.enterprisetools.phoenix.shell.dll" -> "microsoft.visualstudio.modeling.diagrams.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "microsoft.visualstudio.modeling.diagrams.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "microsoft.visualstudio.enterprisetools.shell.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "microsoft.visualstudio.enterprisetools.dll"
+"microsoft.visualstudio.enterprisetools.phoenix.shell.dll" -> "microsoft.visualstudio.enterprisetools.shell.dll"
+"microsoft.visualstudio.enterprisetools.phoenix.shell.dll" -> "microsoft.visualstudio.modeling.dll"
+"microsoft.visualstudio.enterprisetools.sdmdesigners.dll" -> "microsoft.visualstudio.enterprisetools.typesystem.dll"
+"microsoft.visualstudio.officetools.workflow.debugconfigwizard.dll" -> "microsoft.visualstudio.templatewizardinterface.dll"
+"microsoft.visualstudio.qualitytools.linking.dll" -> "microsoft.visualstudio.teamsystem.common.dll"
+"microsoft.visualstudio.qualitytools.loadtest.dll" -> "microsoft.visualstudio.qualitytools.webtestframework.dll"
+"microsoft.visualstudio.qualitytools.loadtest.dll" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"microsoft.visualstudio.qualitytools.linking.dll" -> "microsoft.visualstudio.qualitytools.operationalstore.clienthelper.dll"
+"microsoft.visualstudio.qualitytools.linking.dll" -> "microsoft.teamfoundation.workitemtracking.controls.dll"
+"microsoft.visualstudio.qualitytools.linking.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.loadtest.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.loadtestexec.dll" -> "microsoft.visualstudio.virtualtreegrid.dll"
+"microsoft.visualstudio.qualitytools.loadtestpackage.dll" -> "microsoft.visualstudio.qualitytools.webtestframework.dll"
+"microsoft.visualstudio.qualitytools.loadtestpackage.dll" -> "vslangproj.dll"
+"microsoft.visualstudio.qualitytools.loadtest.dll" -> "microsoft.visualstudio.enterprise.aspnethelper.dll"
+"microsoft.visualstudio.qualitytools.loadtest.dll" -> "microsoft.visualstudio.qualitytools.loadtestframework.dll"
+"microsoft.visualstudio.qualitytools.loadtestexec.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.linking.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.visualstudio.qualitytools.controllerobject.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.executioncommon.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.executioncommon.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.controller.spooledjob.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.controllerobject.dll" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"microsoft.visualstudio.qualitytools.controllerobject.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.hostadapters.aspnetadapter.dll" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"microsoft.visualstudio.qualitytools.hostadapters.aspnetagent.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.linking.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.visualstudio.qualitytools.linking.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.visualstudio.qualitytools.hostadapters.aspnetagent.dll" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"microsoft.visualstudio.qualitytools.hostadapters.aspnetagent.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.hostadapters.aspnetagent.dll" -> "microsoft.visualstudio.enterprise.aspnethelper.dll"
+"microsoft.visualstudio.qualitytools.loadtestpackage.dll" -> "envdte.dll"
+"microsoft.visualstudio.qualitytools.operationalstore.clienthelper.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.operationalstore.servicehelper.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.visualstudio.qualitytools.operationalstore.servicehelper.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.operationalstore.clienthelper.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.visualstudio.qualitytools.operationalstore.clienthelper.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.visualstudio.qualitytools.operationalstore.clienthelper.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.operationalstore.servicehelper.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.plugins.codecoverage.dll" -> "microsoft.visualstudio.enterprise.aspnethelper.dll"
+"microsoft.visualstudio.qualitytools.plugins.codecoverage.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.publishserver.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.visualstudio.qualitytools.plugins.codecoverage.dll" -> "microsoft.visualstudio.coverage.monitor.dll"
+"microsoft.visualstudio.qualitytools.plugins.codecoverage.dll" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"microsoft.visualstudio.qualitytools.plugins.codecoverage.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.operationalstore.clienthelper.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.visualstudio.qualitytools.loadtestpackage.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.loadtestpackage.dll" -> "microsoft.visualstudio.teamsystem.common.dll"
+"microsoft.visualstudio.qualitytools.loadtestpackage.dll" -> "microsoft.wizardframework.dll"
+"microsoft.visualstudio.qualitytools.loadtestpackage.dll" -> "microsoft.visualstudio.templatewizardinterface.dll"
+"microsoft.visualstudio.qualitytools.loadtestpackage.dll" -> "microsoft.visualstudio.qualitytools.vsip.dll"
+"microsoft.visualstudio.qualitytools.loadtestpackage.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.loadtestui.dll" -> "microsoft.visualstudio.qualitytools.webtestframework.dll"
+"microsoft.visualstudio.qualitytools.loadtestui.dll" -> "microsoft.wizardframework.dll"
+"microsoft.visualstudio.qualitytools.msbuildtasks.dll" -> "microsoft.build.utilities.v3.5.dll"
+"microsoft.visualstudio.qualitytools.msbuildtasks.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.loadtestui.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.loadtestui.dll" -> "microsoft.visualstudio.virtualtreegrid.dll"
+"microsoft.visualstudio.qualitytools.loadtestui.dll" -> "microsoft.visualstudio.teamsystem.common.dll"
+"microsoft.visualstudio.qualitytools.controller.spooledjob.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.performancetools.visualization.dll" -> "microsoft.visualstudio.teamsystem.common.dll"
+"microsoft.visualstudio.profiler.dll" -> "msvcr90.dll"
+"microsoft.visualstudio.profiler.filtering.test.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"microsoft.visualstudio.performancetools.visualization.dll" -> "vsperfreader.dll"
+"microsoft.visualstudio.performancetools.visualization.dll" -> "vsperfpresentation.dll"
+"microsoft.visualstudio.performancetools.visualization.dll" -> "microsoft.visualstudio.virtualtreegrid.dll"
+"microsoft.visualstudio.profiler.filtering.test.dll" -> "microsoft.visualstudio.profiler.filtering.dll"
+"microsoft.visualstudio.publish.dll" -> "envdte.dll"
+"microsoft.visualstudio.publish.dll" -> "microsoft.visualstudio.editors.dll"
+"microsoft.visualstudio.publish.dll" -> "microsoft.visualstudio.wizardframework.dll"
+"microsoft.visualstudio.projectconverters.dll" -> "envdte.dll"
+"microsoft.visualstudio.projectconverters.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualstudio.publish.dll" -> "vslangproj.dll"
+"microsoft.visualstudio.performancetools.visualization.dll" -> "vsperfanalysis.dll"
+"microsoft.visualstudio.ordesigner.dsl.dll" -> "envdte.dll"
+"microsoft.visualstudio.ordesigner.dsl.dll" -> "microsoft.visualstudio.data.dll"
+"microsoft.visualstudio.ordesigner.dsl.dll" -> "vswebsite.interop.dll"
+"microsoft.visualstudio.officetools.workflow.debugconfigwizard.dll" -> "microsoft.wizardframework.dll"
+"microsoft.visualstudio.officetools.workflow.debugconfigwizard.dll" -> "microsoft.wizardframeworkvs.dll"
+"microsoft.visualstudio.ordesigner.dsl.dll" -> "vslangproj.dll"
+"microsoft.visualstudio.ordesigner.dsl.dll" -> "microsoft.vsdesigner.dll"
+"microsoft.visualstudio.performancetools.counterinfo.dll" -> "msvcp90.dll"
+"microsoft.visualstudio.performancetools.counterinfo.dll" -> "vspmsg.dll"
+"microsoft.visualstudio.performancetools.visualization.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.visualstudio.ordesigner.dslpackage.dll" -> "envdte.dll"
+"microsoft.visualstudio.ordesigner.dslpackage.dll" -> "microsoft.visualstudio.ordesigner.dsl.dll"
+"microsoft.visualstudio.performancetools.counterinfo.dll" -> "msvcr90.dll"
+"microsoft.visualstudio.publish.dll" -> "microsoft.build.tasks.v3.5.dll"
+"microsoft.visualstudio.qualitytools.codecoverage.dll" -> "microsoft.visualstudio.coverage.analysis.dll"
+"microsoft.visualstudio.qualitytools.codecoverage.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.codecoverage.dll" -> "microsoft.visualstudio.virtualtreegrid.dll"
+"microsoft.visualstudio.qualitytools.cmi.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.cmi.dll" -> "envdte80.dll"
+"microsoft.visualstudio.qualitytools.codecoverage.dll" -> "envdte.dll"
+"microsoft.visualstudio.qualitytools.codecoverage.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.commandline.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.common.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.qualitytools.controller.spooledjob.dll" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"microsoft.visualstudio.qualitytools.codecoverage.dll" -> "microsoft.visualstudio.teamsystem.common.dll"
+"microsoft.visualstudio.qualitytools.commandline.dll" -> "microsoft.build.utilities.v3.5.dll"
+"microsoft.visualstudio.qualitytools.commandline.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.cmi.dll" -> "microsoft.visualstudio.vccodemodel.dll"
+"microsoft.visualstudio.qualitytools.agentobject.dll" -> "microsoft.visualstudio.qualitytools.executioncommon.dll"
+"microsoft.visualstudio.qualitytools.agentobject.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.agentobject.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.publish.dll" -> "microsoft.vsdesigner.dll"
+"microsoft.visualstudio.publish.dll" -> "envdte80.dll"
+"microsoft.visualstudio.qualitytools.agentobject.dll" -> "microsoft.visualstudio.qualitytools.nicservices.dll"
+"microsoft.visualstudio.qualitytools.checkinpolicies.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.visualstudio.qualitytools.checkinpolicies.dll" -> "microsoft.teamfoundation.versioncontrol.controls.dll"
+"microsoft.visualstudio.qualitytools.cmi.dll" -> "envdte.dll"
+"microsoft.visualstudio.qualitytools.cmi.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.checkinpolicies.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.visualstudio.qualitytools.checkinpolicies.dll" -> "microsoft.visualstudio.qualitytools.common.dll"
+"microsoft.visualstudio.qualitytools.checkinpolicies.dll" -> "microsoft.visualstudio.qualitytools.resource.dll"
+"microsoft.visualstudio.deploywizard.dll" -> "envdte.dll"
+"microsoft.teamfoundation.versioncontrol.server.proxy.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.versioncontrol.server.proxyperftests.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.teamfoundation.versioncontrol.server.proxyperftests.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.versioncontrol.server.eventfilter.dll" -> "microsoft.teamfoundation.versioncontrol.common.integration.dll"
+"microsoft.teamfoundation.versioncontrol.server.proxy.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.versioncontrol.server.proxy.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.teamfoundation.versioncontrol.server.proxytests.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.versioncontrol.servertests.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.versioncontrol.servertests.dll" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.teamfoundation.versioncontrol.servertests.dll" -> "microsoft.teamfoundation.versioncontrol.server.dll"
+"microsoft.teamfoundation.versioncontrol.server.proxytests.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.teamfoundation.versioncontrol.server.proxytests.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.versioncontrol.servertests.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.versioncontrol.server.eventfilter.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.versioncontrol.server.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.versioncontrol.server.dll" -> "microsoft.teamfoundation.workitemtracking.proxy.dll"
+"microsoft.teamfoundation.versioncontrol.server.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.versioncontrol.server.checkinnotification.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.versioncontrol.server.checkinnotification.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.versioncontrol.server.checkinnotification.dll" -> "microsoft.teamfoundation.versioncontrol.common.integration.dll"
+"microsoft.teamfoundation.versioncontrol.server.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.versioncontrol.server.eventfilter.dll" -> "microsoft.teamfoundation.server.dll"
+"microsoft.teamfoundation.versioncontrol.server.eventfilter.dll" -> "microsoft.teamfoundation.workitemtracking.proxy.dll"
+"microsoft.teamfoundation.versioncontrol.server.eventfilter.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.versioncontrol.server.dll" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.teamfoundation.versioncontrol.server.dll" -> "microsoft.teamfoundation.versioncontrol.common.integration.dll"
+"microsoft.teamfoundation.versioncontrol.server.eventfilter.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.warehouse.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.workitemtracking.client.querylanguage.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.teamfoundation.workitemtracking.client.ruleengine.dll" -> "msvcr90.dll"
+"microsoft.teamfoundation.workitemtracking.controls.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.workitemtracking.client.dll" -> "microsoft.teamfoundation.workitemtracking.proxy.dll"
+"microsoft.teamfoundation.workitemtracking.client.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.workitemtracking.client.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.workitemtracking.controls.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.teamfoundation.workitemtracking.proxy.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.workitemtracking.server.dataaccesslayer.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.workitemtracking.server.dataaccesslayer.dll" -> "microsoft.teamfoundation.workitemtracking.server.dll"
+"microsoft.teamfoundation.workitemtracking.controls.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.workitemtracking.controls.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.workitemtracking.proxy.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.workitemtracking.client.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.warehouse.dll" -> "microsoft.teamfoundation.common.library.dll"
+"microsoft.teamfoundation.workitemtracking.adapter.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.workitemtracking.adapter.dll" -> "microsoft.teamfoundation.workitemtracking.server.dll"
+"microsoft.teamfoundation.warehouse.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.warehouse.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.warehouse.dll" -> "microsoft.analysisservices.dll"
+"microsoft.teamfoundation.workitemtracking.adapter.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.workitemtracking.client.cache.dll" -> "msvcr90.dll"
+"microsoft.teamfoundation.workitemtracking.client.datastore.dll" -> "microsoft.teamfoundation.workitemtracking.proxy.dll"
+"microsoft.teamfoundation.workitemtracking.client.datastore.dll" -> "msvcr90.dll"
+"microsoft.teamfoundation.workitemtracking.adapter.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.workitemtracking.adapter.dll" -> "microsoft.teamfoundation.workitemtracking.server.dataaccesslayer.dll"
+"microsoft.teamfoundation.workitemtracking.client.cache.dll" -> "microsoft.teamfoundation.workitemtracking.proxy.dll"
+"microsoft.teamfoundation.versioncontrol.server.checkinnotification.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.server.admin.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.server.admin.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.server.admin.dll" -> "microsoft.analysisservices.dll"
+"microsoft.teamfoundation.reportingtests.infrastructure.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.reportingtests.infrastructure.dll" -> "microsoft.analysisservices.dll"
+"microsoft.teamfoundation.reportingtests.infrastructure.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"microsoft.teamfoundation.server.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.versioncontrol.adapter.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.versioncontrol.adapter.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.teamfoundation.versioncontrol.adapter.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.server.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.server.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.server.dll" -> "microsoft.teamfoundation.common.library.dll"
+"microsoft.teamfoundation.reportingtests.infrastructure.dll" -> "microsoft.teamfoundation.reportingtests.base.dll"
+"microsoft.teamfoundation.reportingtests.adapters.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.teamfoundation.reportingtests.adapters.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.reportingtests.adapters.dll" -> "microsoft.teamfoundation.reportingtests.base.dll"
+"microsoft.teamfoundation.qa.security.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.qa.security.dll" -> "maui.visualstudio.current.teamsystem.dll"
+"microsoft.teamfoundation.qa.security.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.reportingtests.adapters.dll" -> "microsoft.teamfoundation.build.common.dll"
+"microsoft.teamfoundation.reportingtests.base.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.teamfoundation.reportingtests.base.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.reportingtests.base.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.reportingtests.adapters.dll" -> "microsoft.visualstudio.qualitytools.unittestframework.dll"
+"microsoft.teamfoundation.reportingtests.base.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.reportingtests.base.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.teamfoundation.versioncontrol.adapter.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.versioncontrol.commontests.dll" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.teamfoundation.versioncontrol.controls.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.versioncontrol.controls.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.teamfoundation.versioncontrol.common.integration.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.versioncontrol.common.integration.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.versioncontrol.common.integration.dll" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.teamfoundation.versioncontrol.controls.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.teamfoundation.versioncontrol.controls.dll" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.teamfoundation.versioncontrol.controls.dll" -> "microsoft.visualstudio.teamfoundation.workitemtracking.dll"
+"microsoft.teamfoundation.versioncontrol.controls.dll" -> "microsoft.visualstudio.virtualtreegrid.dll"
+"microsoft.teamfoundation.versioncontrol.controls.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.versioncontrol.controls.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.versioncontrol.controls.dll" -> "microsoft.teamfoundation.workitemtracking.controls.dll"
+"microsoft.teamfoundation.versioncontrol.common.diffenginetests.dll" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.teamfoundation.versioncontrol.client.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.versioncontrol.client.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.versioncontrol.client.dll" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.teamfoundation.versioncontrol.adapter.dll" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.teamfoundation.versioncontrol.client.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.versioncontrol.client.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.teamfoundation.versioncontrol.client.dll" -> "microsoft.teamfoundation.versioncontrol.common.integration.dll"
+"microsoft.teamfoundation.versioncontrol.clienttests.dll" -> "microsoft.teamfoundation.versioncontrol.common.dll"
+"microsoft.teamfoundation.versioncontrol.common.diffenginetests.dll" -> "microsoft.teamfoundation.versioncontrol.commontests.dll"
+"microsoft.teamfoundation.versioncontrol.common.diffenginetests.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.teamfoundation.versioncontrol.clienttests.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.versioncontrol.clienttests.dll" -> "microsoft.teamfoundation.versioncontrol.client.dll"
+"microsoft.teamfoundation.versioncontrol.clienttests.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.workitemtracking.server.dataaccesslayer.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.visualstudio.data.providers.common.dll" -> "microsoft.visualstudio.datatools.interop.dll"
+"microsoft.visualstudio.data.providers.common.dll" -> "microsoft.visualstudio.data.framework.dll"
+"microsoft.visualstudio.data.providers.common.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualstudio.data.package.dll" -> "microsoft.visualstudio.data.interop.dll"
+"microsoft.visualstudio.data.package.dll" -> "microsoft.visualstudio.data.core.dll"
+"microsoft.visualstudio.data.package.dll" -> "microsoft.visualstudio.data.services.dll"
+"microsoft.visualstudio.data.providers.common.dll" -> "microsoft.visualstudio.data.interop.dll"
+"microsoft.visualstudio.data.providers.oracle.dll" -> "microsoft.data.connectionui.dialog.dll"
+"microsoft.visualstudio.data.providers.oracle.dll" -> "microsoft.visualstudio.data.services.dll"
+"microsoft.visualstudio.data.providers.sqlserver.dll" -> "microsoft.visualstudio.datatools.interop.dll"
+"microsoft.visualstudio.data.providers.common.dll" -> "microsoft.visualstudio.data.core.dll"
+"microsoft.visualstudio.data.providers.common.dll" -> "microsoft.visualstudio.data.services.dll"
+"microsoft.visualstudio.data.providers.oracle.dll" -> "microsoft.visualstudio.data.framework.dll"
+"microsoft.visualstudio.data.package.dll" -> "microsoft.data.connectionui.dialog.dll"
+"microsoft.visualstudio.currituck.test.webservice.dll" -> "microsoft.teamfoundation.workitemtracking.proxy.dll"
+"microsoft.visualstudio.data.compatibility.dll" -> "microsoft.visualstudio.data.dll"
+"microsoft.visualstudio.data.compatibility.dll" -> "microsoft.data.connectionui.dll"
+"microsoft.visualstudio.currituck.test.dll" -> "maui.visualstudio.current.teamsystem.dll"
+"microsoft.visualstudio.currituck.test.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.visualstudio.currituck.test.webservice.dll" -> "microsoft.visualstudio.currituck.test.dll"
+"microsoft.visualstudio.data.compatibility.dll" -> "microsoft.visualstudio.data.core.dll"
+"microsoft.visualstudio.data.host.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualstudio.data.host.dll" -> "microsoft.data.connectionui.dialog.dll"
+"microsoft.visualstudio.data.package.dll" -> "microsoft.visualstudio.data.framework.dll"
+"microsoft.visualstudio.data.compatibility.dll" -> "microsoft.visualstudio.data.services.dll"
+"microsoft.visualstudio.data.framework.dll" -> "microsoft.visualstudio.data.core.dll"
+"microsoft.visualstudio.data.framework.dll" -> "microsoft.visualstudio.data.services.dll"
+"microsoft.visualstudio.data.providers.sqlserver.dll" -> "microsoft.visualstudio.data.framework.dll"
+"microsoft.visualstudio.datatools.dll" -> "microsoft.visualstudio.vspconnectioninfo.dll"
+"microsoft.visualstudio.datatools.dll" -> "microsoft.visualstudio.vspsmo.dll"
+"microsoft.visualstudio.datatools.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualstudio.datatools.dll" -> "microsoft.visualstudio.datatools.interop.dll"
+"microsoft.visualstudio.datatools.dll" -> "vslangproj.dll"
+"microsoft.visualstudio.datatools.dll" -> "envdte.dll"
+"microsoft.visualstudio.datatools.dll" -> "microsoft.visualstudio.data.dll"
+"microsoft.visualstudio.datatools.dll" -> "microsoft.visualstudio.vspsqltdiagm.dll"
+"microsoft.visualstudio.datatools.dll" -> "microsoft.visualstudio.vspgridcontrol.dll"
+"microsoft.visualstudio.debugger.runtime.dll" -> "msvcr90.dll"
+"microsoft.visualstudio.datatools.dll" -> "microsoft.visualstudio.data.interop.dll"
+"microsoft.visualstudio.datatools.dll" -> "microsoft.visualstudio.data.core.dll"
+"microsoft.visualstudio.datatools.dll" -> "microsoft.visualstudio.data.services.dll"
+"microsoft.visualstudio.datatools.dll" -> "microsoft.visualstudio.vspsmoenum.dll"
+"microsoft.visualstudio.data.providers.sqlserver.dll" -> "microsoft.visualstudio.data.services.dll"
+"microsoft.visualstudio.datadesign.syncdesigner.dslpackage.dll" -> "microsoft.visualstudio.datadesign.syncdesigner.dsl.dll"
+"microsoft.visualstudio.datadesign.syncdesigner.dslpackage.dll" -> "vslangproj.dll"
+"microsoft.visualstudio.data.providers.sqlserver.dll" -> "microsoft.data.connectionui.dialog.dll"
+"microsoft.visualstudio.data.providers.sqlserver.dll" -> "microsoft.visualstudio.data.interop.dll"
+"microsoft.visualstudio.data.providers.sqlserver.dll" -> "microsoft.visualstudio.data.core.dll"
+"microsoft.visualstudio.datadesign.syncdesigner.dslpackage.dll" -> "envdte.dll"
+"microsoft.visualstudio.datadesign.syncdesigner.dslpackage.dll" -> "microsoft.vsdesigner.dll"
+"microsoft.visualstudio.datadesign.syncdesigner.dslpackage.dll" -> "microsoft.visualstudio.datatools.dll"
+"microsoft.visualstudio.datadesign.syncdesigner.dslpackage.dll" -> "microsoft.visualstudio.data.services.dll"
+"microsoft.visualstudio.datadesign.syncdesigner.dslpackage.dll" -> "microsoft.visualstudio.data.dll"
+"microsoft.visualstudio.datadesign.syncdesigner.dslpackage.dll" -> "microsoft.visualstudio.data.interop.dll"
+"microsoft.visualstudio.datadesign.syncdesigner.dslpackage.dll" -> "microsoft.visualstudio.data.core.dll"
+"microsoft.visualstudio.currituck.test.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.visualbasic.upgradesnippet.dll" -> "microsoft.visualstudio.wizardframework.dll"
+"microsoft.visualbasic.upgradesnippet.dll" -> "vswebsite.interop.dll"
+"microsoft.visualbasic.upgradewizard.dll" -> "microsoft.visualbasic.upgradeengineinterface.dll"
+"microsoft.visualbasic.upgradesnippet.dll" -> "microsoft.visualbasic.upgradeengineinterface.dll"
+"microsoft.visualbasic.upgradesnippet.dll" -> "envdte.dll"
+"microsoft.visualbasic.upgradesnippet.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualbasic.upgradewizard.dll" -> "envdte.dll"
+"microsoft.visualc.vscodeparser.dll" -> "envdte.dll"
+"microsoft.visualc.vscodeparser.dll" -> "microsoft.visualstudio.vccodemodel.dll"
+"microsoft.visualc.vscodeprovider.dll" -> "microsoft.visualc.vscodeparser.dll"
+"microsoft.visualbasic.upgradewizard.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualbasic.upgradewizard.dll" -> "microsoft.visualstudio.wizardframework.dll"
+"microsoft.visualc.vscodeparser.dll" -> "msvcr90.dll"
+"microsoft.visualbasic.upgradesnippet.dll" -> "vslangproj.dll"
+"microsoft.teamfoundation.workitemtracking.server.dataservices.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.teamfoundation.workitemtracking.server.dataservices.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.workitemtracking.server.dataservices.dll" -> "microsoft.teamfoundation.workitemtracking.server.dataaccesslayer.dll"
+"microsoft.teamfoundation.workitemtracking.server.dataaccesslayer.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.teamfoundation.workitemtracking.server.dataservices.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.workitemtracking.server.dataservices.dll" -> "microsoft.teamfoundation.workitemtracking.server.dll"
+"microsoft.teamfoundation.workitemtracking.server.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.workitemtracking.server.eventfilter.dll" -> "microsoft.teamfoundation.dll"
+"microsoft.visualbasic.upgradeextensions.dll" -> "microsoft.build.conversion.v3.5.dll"
+"microsoft.visualbasic.upgradeextensions.dll" -> "microsoft.build.engine.dll"
+"microsoft.teamfoundation.workitemtracking.server.eventfilter.dll" -> "microsoft.teamfoundation.common.dll"
+"microsoft.teamfoundation.workitemtracking.server.eventfilter.dll" -> "microsoft.teamfoundation.server.dll"
+"microsoft.teamfoundation.workitemtracking.server.eventfilter.dll" -> "microsoft.teamfoundation.client.dll"
+"microsoft.visualc.vscodeprovider.dll" -> "envdte.dll"
+"microsoft.visualstudio.commonide.unittest.dll" -> "microsoft.build.framework.dll"
+"microsoft.visualstudio.coverage.analysis.dll" -> "msvcr90.dll"
+"microsoft.visualstudio.coverage.analysis.dll" -> "msvcp90.dll"
+"microsoft.visualstudio.commonide.unittest.dll" -> "microsoft.visualstudio.commonide.dll"
+"microsoft.visualstudio.commonide.unittest.dll" -> "microsoft.build.engine.dll"
+"microsoft.visualstudio.commonide.unittest.dll" -> "nunit.framework.dll"
+"microsoft.visualstudio.coverage.monitor.dll" -> "msvcr90.dll"
+"microsoft.visualstudio.currituck.test.dll" -> "microsoft.teamfoundation.workitemtracking.client.dll"
+"microsoft.visualstudio.currituck.test.dll" -> "microsoft.teamfoundation.qa.security.dll"
+"microsoft.visualstudio.currituck.test.dll" -> "microsoft.teamfoundation.workitemtracking.proxy.dll"
+"microsoft.visualstudio.coverage.monitor.dll" -> "msvcp90.dll"
+"microsoft.visualstudio.coverage.monitor.dll" -> "vspmsg.dll"
+"microsoft.visualstudio.csharp.services.language.dll" -> "envdte.dll"
+"microsoft.visualstudio.commonide.dll" -> "microsoft.wizardframeworkvs.dll"
+"microsoft.visualjava.upgradewizard.dll" -> "envdte.dll"
+"microsoft.visualjava.upgradewizard.dll" -> "microsoft.visualstudio.vshelp.dll"
+"microsoft.visualjava.upgradewizard.dll" -> "microsoft.visualj.upgradeengineinterface.dll"
+"microsoft.visualc.vscodeprovider.dll" -> "microsoft.visualstudio.vcprojectengine.dll"
+"microsoft.visualc.vscodeprovider.dll" -> "microsoft.visualstudio.vccodemodel.dll"
+"microsoft.visualc.vscodeprovider.dll" -> "cppcodeprovider.dll"
+"microsoft.visualjava.upgradewizard.dll" -> "microsoft.visualstudio.wizardframework.dll"
+"microsoft.visualstudio.commonide.dll" -> "microsoft.visualstudio.vshelp80.dll"
+"microsoft.visualstudio.commonide.dll" -> "microsoft.build.framework.dll"
+"microsoft.visualstudio.commonide.dll" -> "microsoft.wizardframework.dll"
+"microsoft.visualstudio.commonide.dll" -> "microsoft.build.conversion.v3.5.dll"
+"microsoft.visualstudio.commonide.dll" -> "microsoft.visualstudio.shell.interop.9.0.dll"
+"microsoft.visualstudio.commonide.dll" -> "microsoft.build.engine.dll"
+}

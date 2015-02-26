@@ -1,0 +1,183 @@
+/*
+Microsoft Automatic Graph Layout,MSAGL 
+
+Copyright (c) Microsoft Corporation
+
+All rights reserved. 
+
+MIT License 
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+""Software""), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Msagl.Core.DataStructures;
+using Microsoft.Msagl.Core.Geometry;
+using Microsoft.Msagl.Core.Geometry.Curves;
+using Microsoft.Msagl.Core.Layout;
+using Microsoft.Msagl.DebugHelpers;
+using Microsoft.Msagl.Routing.Visibility;
+
+namespace Microsoft.Msagl.Layout.LargeGraphLayout
+{
+    /// <summary>
+    /// sets zoom levels for LgNodeInfos
+    /// </summary>
+    internal class DeviceIndependendZoomCalculatorForNodes : IZoomLevelCalculator
+    {
+        public Func<Node, LgNodeInfo> NodeToLgNodeInfo;
+        readonly int maxAmountPerTile;
+        public GeometryGraph Graph { get; set; }
+        public LgLayoutSettings Settings { get; set; }
+        public List<LgNodeInfo> SortedLgNodeInfos { get { return sortedLgNodeInfos; } }
+
+        readonly List<int> _levelNodeCounts = new List<int>();
+
+        public List<int> LevelNodeCounts { get { return _levelNodeCounts; }}
+
+        int unassigned;
+        List<LgNodeInfo> sortedLgNodeInfos;
+        int zoomLevel;
+        internal DeviceIndependendZoomCalculatorForNodes(
+            Func<Node, LgNodeInfo> nodeToLgNodeInfo, GeometryGraph graph, LgLayoutSettings settings, int maxAmountPerTile)
+        {
+            NodeToLgNodeInfo = nodeToLgNodeInfo;
+            this.maxAmountPerTile = maxAmountPerTile;
+            Graph = graph;
+            Settings = settings;
+            unassigned = graph.Nodes.Count;
+        }
+
+        /// <summary>
+        /// We expect that the node Ranks are set before the method call.
+        /// </summary>
+        public void Run() {
+            sortedLgNodeInfos = GetSortedLgNodeInfos();
+            Graph.UpdateBoundingBox();
+            double gridSize = Math.Max(Graph.Width, Graph.Height);
+            zoomLevel = 1;
+
+            while ( SomeNodesAreNotAssigned()) {
+                Console.WriteLine("zoom level {0} grisSize {1}", zoomLevel, gridSize);
+                DrawNodesOnLevel(gridSize);
+                zoomLevel *= 2;
+                gridSize /= 2;
+            }
+            
+
+        }
+
+        internal static Tuple<int, int> PointToTuple(Point graphLeftBottom, Point point, double gridSize)
+        {
+            var dx = point.X - graphLeftBottom.X;
+            var dy = point.Y - graphLeftBottom.Y;
+
+            return new Tuple<int, int>((int)(dx / gridSize), (int)(dy / gridSize));
+        }
+
+
+        void DrawNodesOnLevel(double gridSize) {
+            var tileTable = new Dictionary<Tuple<int, int>, int>();
+            for (int i = 0; i < sortedLgNodeInfos.Count; i++) {
+                var ni = sortedLgNodeInfos[i];
+                var tuple = PointToTuple(Graph.LeftBottom, ni.Center, gridSize);
+                if (!tileTable.ContainsKey(tuple))
+                    tileTable[tuple] = 0;
+
+                int countForTile = tileTable[tuple]++ + 1;
+                if (countForTile > maxAmountPerTile)
+                {
+                    if (_levelNodeCounts.Count == 0 || _levelNodeCounts.Last() != i)
+                        _levelNodeCounts.Add(i);
+                    break;
+                }
+
+                if (ni.ZoomLevelIsNotSet) {
+                    ni.ZoomLevel = zoomLevel;
+                    unassigned--;
+                }
+
+                if (unassigned == 0) {
+                    _levelNodeCounts.Add(i + 1);
+                    break;
+                }
+            }
+
+        }
+
+        bool SomeNodesAreNotAssigned() {
+            return unassigned > 0;
+        }
+
+        static internal double GetDistBetweenBoundingBoxes(Node source, Node target)
+        {
+            var sb = source.BoundingBox;
+            var tb = target.BoundingBox;
+            if (sb.Intersects(tb)) return 0;
+            var spolygon = PolygonFromBox(sb);
+            var tpolygon = PolygonFromBox(tb);
+            return Polygon.Distance(spolygon, tpolygon);
+        }
+
+        static Polygon PolygonFromBox(Rectangle sb)
+        {
+            var spolygon =
+                new Polygon(new Polyline(sb.LeftBottom, sb.LeftTop, sb.RightTop, sb.RightBottom) { Closed = true });
+            return spolygon;
+        }
+        /*
+                void DebugShow(LgNodeInfo[] lgNodeInfoArray) {
+                    var delx = 1000.0/lgNodeInfoArray.Length;
+                    var scaleMult = 5000.0;
+                    var l = new List<DebugCurve>();
+                    for (int i = 0; i < lgNodeInfoArray.Length; i++) {
+                        l.Add(new DebugCurve(new Ellipse(1,1,new Point(i*delx,lgNodeInfoArray[i].Rank*scaleMult))));
+                    }
+                    LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(l);
+                }*/
+
+        List<LgNodeInfo> GetSortedLgNodeInfos()
+        {
+            var ret = Graph.Nodes.Select(n => NodeToLgNodeInfo(n)).ToList();
+            ret.Sort((a, b) => b.Rank.CompareTo(a.Rank));
+            return ret;
+        }
+
+
+#if DEBUG
+
+
+        //        void ShowZoomLevels() {
+        //            var l = new List<DebugCurve>();
+        //            foreach (LgNodeInfo node in Graph.Nodes.Select(n => NodeToLgNodeInfo(n))) {
+        //                l.Add(new DebugCurve(200, 1, "blue", node.BoundaryCurve, String.Format("{0:###.#}", node.ZoomLevel)));
+        //                l.Add(new DebugCurve(100, 1, "black", node.DominatedRect.Perimeter()));
+        //                l.Add(new DebugCurve(new LineSegment(node.BoundaryCurve[0], node.DominatedRect.Center)));
+        //            }
+        //            LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(l);
+        //        }
+#endif
+
+
+
+
+    }
+}

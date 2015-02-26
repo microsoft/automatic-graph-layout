@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsaglDrawingSilverlight", "MsaglDrawingSilverlight.csproj", "{4446E8A0-0927-4DA0-BD33-4528F4DE3BF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "msaglsilverlight", "..\MsaglSilverlight\msaglsilverlight.csproj", "{087254C8-3201-4224-B4D1-DED49F5AD792}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 2
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://vstfcodebox:8080/tfs/psi
+		SccProjectUniqueName0 = MsaglDrawingSilverlight.csproj
+		SccProjectName0 = .
+		SccAuxPath0 = http://vstfcodebox:8080/tfs/psi
+		SccLocalPath0 = .
+		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName1 = ..\\MsaglSilverlight\\msaglsilverlight.csproj
+		SccProjectName1 = ../MsaglSilverlight
+		SccAuxPath1 = http://vstfcodebox:8080/tfs/psi
+		SccLocalPath1 = ..\\MsaglSilverlight
+		SccProvider1 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4446E8A0-0927-4DA0-BD33-4528F4DE3BF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4446E8A0-0927-4DA0-BD33-4528F4DE3BF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4446E8A0-0927-4DA0-BD33-4528F4DE3BF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4446E8A0-0927-4DA0-BD33-4528F4DE3BF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{087254C8-3201-4224-B4D1-DED49F5AD792}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{087254C8-3201-4224-B4D1-DED49F5AD792}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{087254C8-3201-4224-B4D1-DED49F5AD792}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{087254C8-3201-4224-B4D1-DED49F5AD792}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

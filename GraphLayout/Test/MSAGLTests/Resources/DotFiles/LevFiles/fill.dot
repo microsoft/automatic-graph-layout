@@ -1,0 +1,6 @@
+digraph g {
+  node [style = filled]
+  A  [ shape=house color = green]
+  B [margin=10]
+  A -> B
+}

@@ -1,0 +1,111 @@
+digraph test {
+n1 [shape=box];
+n2 [shape=box];
+n3 [shape=box];
+n4 [shape=box];
+n5 [shape=box];
+n6 [shape=box];
+n7 [shape=box];
+n8 [shape=box];
+n9 [shape=box];
+n10 [shape=box];
+n11 [shape=box];
+n12 [shape=box];
+n13 [shape=box];
+n14 [shape=box];
+n15 [shape=box];
+n16 [shape=box];
+n17 [shape=box];
+n18 [shape=box];
+n19 [shape=box];
+n20 [shape=box];
+n21[shape=box];
+n22[shape=box];
+n23[shape=box];
+n24[shape=box];
+n25[shape=box];
+n26[shape=box];
+n26[shape=box];
+n27[shape=box];
+n28[shape=box];
+n29[shape=box];
+n30[shape=box];
+n31[shape=box];
+n32[shape=box];
+n1 -> n2
+
+n1 -> n3
+
+n1 -> n4
+
+n2 -> n5
+
+n3 -> n31
+
+n3 -> n6
+
+n4 -> n7
+
+n4 -> n16
+
+n4 -> n8
+
+n5 -> n31
+
+n6 -> n31
+
+n6 -> n9
+
+n7 -> n10
+
+n8 -> n11
+
+n8 -> n13
+
+n8 -> n14
+
+n9 -> n15
+
+n9 -> n28
+
+n10 -> n16
+
+n15 -> n17
+
+n15 -> n18
+
+n16 -> n19
+
+n16 -> n20
+
+n16 -> n21
+
+n18 -> n22
+
+n19 -> n31
+
+n20 -> n29
+
+n21 -> n23
+
+n21 -> n24
+
+n22 -> n28
+
+n23 -> n26
+
+n24 -> n27
+
+n25 -> n28
+
+n26 -> n29
+
+n27 -> n30
+
+n31 -> n25
+
+n31 -> n32
+
+
+}
+

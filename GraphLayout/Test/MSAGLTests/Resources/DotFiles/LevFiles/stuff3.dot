@@ -1,0 +1,77 @@
+digraph Self { 
+graph [  fontname = "Verdana",
+                        fontsize = 10,
+                        size = "6,6" ];
+node [   shape = box,
+                        sides = 4,
+                        distortion = "0.0",
+                        orientation = "0.0",
+                        skew = "0.0",
+                        color = white,
+                        style = filled,
+                        fontname = "Verdana" ];
+
+  
+
+  "Projects" -> "XLinq"
+  "Projects" -> "Tools"
+  "Projects" -> "XSLT 2.0"
+  "Projects" -> "System.Xml"
+  "Projects" -> "MSXML"
+  
+  "Perf" -> "IBM"
+  "System.Xml" -> "Indigo"
+  "Indigo" -> "eugeneos"
+ 
+  "Tools" -> "XML Editor"
+  "Tools" -> "XSL Debugger"
+  "Tools" -> "XSD Designer"
+  
+  "Community" -> "Books"
+  "Books" -> "Jim Holmes"
+  "Jim Holmes" -> "Tools"
+  
+  "Tools" -> "Dev Reog"
+  "Dev Reog" -> "Remy"
+  "Dev Reog" -> "David"
+  
+  "People" -> "Candidates"  
+  "People" -> "Reviews"
+  "Candidates" -> "Prasanna"
+  
+  "Tools" -> "Frameworks"
+  "Frameworks" -> "GLEE"
+  "Frameworks" -> "MDF"
+  "Frameworks" -> "Dundas"
+  "Frameworks" -> "Avalon"
+  "Frameworks" -> "Nautilus"
+
+  "XML Editor" -> "XAML"  
+  "XAML" -> "Chuck"
+  "XAML" -> "PDarragh"
+  "XAML" -> "Ford"
+  "Ford" -> "Standards"
+  
+
+  "XML Editor" -> "Schema Locator"
+  "XML Editor" -> "Old XSD"
+  "XML Editor" -> "VS Proxy"
+  "XML Editor" -> "DCRs"
+
+  
+  
+  "XSD Designer" -> "Test"
+  "Test" -> "Declarative"  
+  "Declarative" -> "ASML"  
+  "ASML" -> "MSR"
+  "MSR" -> "Phil Fawcett"
+  "MSR" -> "Jim Larus"
+  "MSR" -> "Luca Cardelli"
+  "Mapping" -> "Phil"
+  "Partners" -> "SSMS"
+  "Partners" -> "TSData"
+  "SSMS" -> "Dundas"
+  
+ 
+}
+

@@ -1,0 +1,19 @@
+digraph Self { 
+graph [  fontname = "Verdana",
+                        fontsize = 10,
+                        size = "6,6" ];
+node [   shape = box,
+                        sides = 4,
+                        distortion = "0.0",
+                        orientation = "0.0",
+                        skew = "0.0",
+                        color = white,
+                        style = filled,
+                        fontname = "Verdana" ];
+
+    "image" -> "www" [label="wow"]    
+    "www" -> "image" 
+    "www" -> "sound"
+
+}
+

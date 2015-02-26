@@ -1,0 +1,80 @@
+digraph abstract {
+    CT [lable = "Crash Test"]
+    C1 [label="Crash #1"]
+    C2 [label="Crash #2"]
+    C3 [label="Crash #3"]
+    C4 [label="Crash #4"]
+    C5 [label="Crash #5"]
+    C6 [label="Crash #6"]
+    C7 [label="Crash #7"]
+    C8 [label="Crash #8"]
+    C9 [label="Crash #9"]
+    C10 [label="Crash #10"]
+    R1 [label="Recover #1"]
+    R2 [label="Recover #2"]
+    R3 [label="Recover #3"]
+    R4 [label="Recover #4"]
+    R5 [label="Recover #5"]
+    R6 [label="Recover #6"]
+    R7 [label="Recover #7"]
+    R8 [label="Recover #8"]
+    R9 [label="Recover #9"]
+    R10 [label="Recover #10"]
+
+CT->C1
+CT->C2
+CT->C3
+CT->C4
+CT->C5
+CT->C6
+CT->C7
+CT->C8
+CT->C9
+CT->C10
+
+CT->R1
+CT->R2
+CT->R3
+CT->R4
+CT->R5
+CT->R6
+CT->R7
+CT->R8
+CT->R9
+CT->R10
+
+R1->C1
+R2->C2
+R3->C3
+R4->C4
+R5->C5
+R6->C6
+R7->C7
+R8->C8
+R9->C9
+R10->C10
+
+C10->C9
+C9->C8
+C8->C7
+C7->C6
+C6->C5
+C5->C4
+C4->C3
+C3->C2
+C2->C1
+
+C10->R9
+C9->R8
+C8->R7
+C7->R6
+C6->R5
+C5->R4
+C4->R3
+C3->R2
+C2->R1
+C9->R8
+
+
+
+    }

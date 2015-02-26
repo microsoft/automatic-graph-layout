@@ -1,0 +1,49 @@
+digraph "" {
+graph [
+rankdir=TB
+color="#000000ff"
+bgcolor="#fffff0ff"
+fontcolor="#000000ff"
+fontsize=16
+]
+node [fontcolor="#000000ff",fontsize=16,color="#000000ff",shape=ellipse,label="\N"]
+edge [color="#000000ff",fontcolor="#000000ff",fontsize=16]
+//nodes
+"10"[fontcolor="#000000ff",fontsize=16,color="#000000ff",shape=ellipse,label="Seq{1, 1}"]
+"3"[fontcolor="#000000ff",fontsize=16,color="#000000ff",shape=ellipse,label="Seq{2}"]
+"0"[style="filled",style="filled",fontcolor="#000000ff",fontsize=16,color="#000000ff",shape=ellipse,label="Seq{}",fillcolor="#d3d3d3ff"]
+"1"[fontcolor="#000000ff",fontsize=16,color="#000000ff",shape=ellipse,label="Seq{1}"]
+"6"[fontcolor="#000000ff",fontsize=16,color="#000000ff",shape=ellipse,label="Seq{1, 2}"]
+"7"[fontcolor="#000000ff",fontsize=16,color="#000000ff",shape=ellipse,label="Seq{2, 3}"]
+"4"[fontcolor="#000000ff",fontsize=16,color="#000000ff",shape=ellipse,label="Seq{3, 2}"]
+"5"[fontcolor="#000000ff",fontsize=16,color="#000000ff",shape=ellipse,label="Seq{2, 2}"]
+"2"[fontcolor="#000000ff",fontsize=16,color="#000000ff",shape=ellipse,label="Seq{3}"]
+"8"[fontcolor="#000000ff",fontsize=16,color="#000000ff",shape=ellipse,label="Seq{1, 3}"]
+"9"[fontcolor="#000000ff",fontsize=16,color="#000000ff",shape=ellipse,label="Seq{3, 3}"]
+"12"[fontcolor="#000000ff",fontsize=16,color="#000000ff",shape=ellipse,label="Seq{2, 1}"]
+"11"[fontcolor="#000000ff",fontsize=16,color="#000000ff",shape=ellipse,label="Seq{3, 1}"]
+"10" -> "1"[label="Pop()",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="23"]
+"11" -> "1"[label="Pop()",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="22"]
+"12" -> "1"[label="Pop()",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="21"]
+"1" -> "12"[label="Push(2)",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="20"]
+"1" -> "11"[label="Push(3)",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="19"]
+"1" -> "10"[label="Push(1)",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="18"]
+"1" -> "0"[label="Pop()",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="17"]
+"7" -> "2"[label="Pop()",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="16"]
+"8" -> "2"[label="Pop()",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="15"]
+"9" -> "2"[label="Pop()",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="14"]
+"2" -> "9"[label="Push(3)",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="13"]
+"2" -> "8"[label="Push(1)",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="12"]
+"2" -> "7"[label="Push(2)",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="11"]
+"2" -> "0"[label="Pop()",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="10"]
+"4" -> "3"[label="Pop()",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="9"]
+"5" -> "3"[label="Pop()",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="8"]
+"6" -> "3"[label="Pop()",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="7"]
+"3" -> "0"[label="Pop()",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="6"]
+"3" -> "6"[label="Push(1)",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="5"]
+"3" -> "5"[label="Push(2)",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="4"]
+"3" -> "4"[label="Push(3)",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="3"]
+"0" -> "3"[label="Push(2)",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="2"]
+"0" -> "2"[label="Push(3)",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="1"]
+"0" -> "1"[label="Push(1)",color="#000000ff",fontcolor="#000000ff",fontsize=16,id="0"]
+}

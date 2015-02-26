@@ -1,0 +1,54 @@
+digraph "((((SetupModel x SampleProtocolModel[Cancellation]) x SampleProtocolModel[Credits,MessageParameters]) x SampleProtocolModel[Commands]) x SampleProtocolModel[Scenario1])" {
+
+  rankdir=TB;
+
+  //Initial state
+  node [style = filled, shape = ellipse, peripheries = 1, fillcolor = "#d3d3d3ff"]
+  "0"
+
+  //Accepting states
+  node [style = filled, shape = ellipse, peripheries = 2, fillcolor = white]
+  "2"
+  "5"
+  "8"
+
+
+
+
+
+  //Safe live nonaccepting states
+  node [style = filled, shape = ellipse, peripheries = 1, fillcolor = white]
+  "1"
+  "3"
+  "4"
+  "6"
+  "7"
+  "9"
+  "10"
+
+  //Transitions
+  "0" -> "0" [ label = "Cancel(2)" ];
+  "0" -> "1" [ label = "ReqSetup(0, 2)" ];
+  "1" -> "1" [ label = "Cancel(2)" ];
+  "1" -> "2" [ label = "ResSetup(0, 2, Status(\"Completed\"))" ];
+  "2" -> "3" [ label = "ReqWork(1, 2)" ];
+  "2" -> "2" [ label = "Cancel(2)" ];
+  "3" -> "4" [ label = "ReqWork(2, 2)" ];
+  "3" -> "5" [ label = "ResWork(1, 2, Status(\"Completed\"))" ];
+  "3" -> "3" [ label = "Cancel(2)" ];
+  "5" -> "6" [ label = "ReqWork(2, 2)" ];
+  "5" -> "5" [ label = "Cancel(2)" ];
+  "6" -> "7" [ label = "Cancel(2)" ];
+  "6" -> "8" [ label = "ResWork(2, 2, Status(\"Completed\"))" ];
+  "8" -> "8" [ label = "Cancel(2)" ];
+  "7" -> "7" [ label = "Cancel(2)" ];
+  "7" -> "8" [ label = "ResWork(2, 2, Status(\"Cancelled\"))\nResWork(2, 2, Status(\"Completed\"))" ];
+  "4" -> "9" [ label = "Cancel(2)" ];
+  "4" -> "10" [ label = "ResWork(2, 2, Status(\"Completed\"))" ];
+  "4" -> "6" [ label = "ResWork(1, 2, Status(\"Completed\"))" ];
+  "10" -> "8" [ label = "ResWork(1, 2, Status(\"Completed\"))" ];
+  "10" -> "10" [ label = "Cancel(2)" ];
+  "9" -> "9" [ label = "Cancel(2)" ];
+  "9" -> "10" [ label = "ResWork(2, 2, Status(\"Cancelled\"))\nResWork(2, 2, Status(\"Completed\"))" ];
+  "9" -> "7" [ label = "ResWork(1, 2, Status(\"Completed\"))" ];
+}

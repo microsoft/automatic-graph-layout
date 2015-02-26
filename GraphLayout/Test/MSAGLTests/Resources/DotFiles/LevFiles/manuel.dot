@@ -1,0 +1,219 @@
+digraph G {
+block4165 [shape=box, label="b0(UKEY=4165): MethodHeader (PokerLib.Deck.ShuffleX(System.Int32)); params = [PokerLib.Deck this,System.Int32 times];\n"]
+block4233 [shape=box, label="b1(UKEY=4233): stack0 := this.{PokerLib.Deck}get_SpecSharp::FrameGuard();\n               stack0 := stack0.{Microsoft.Contracts.Guard}get_CanStartWritingTransitively();\n               stack0 := (LogicalNot) stack0;\n               if(stack0) jumpto b3(UKEY=4267);\n"]
+block4250 [shape=box, label="b2(UKEY=4250): jumpto b6(UKEY=4318);\n"]
+block4267 [shape=box, label="b3(UKEY=4267): EMPTY BLOCK\n"]
+block4284 [shape=box, label="b4(UKEY=4284): EMPTY BLOCK\n"]
+block4301 [shape=box, label="b5(UKEY=4301): stack0 := \"The target object of this call must be exposable.\";\n               stack50000 := new Microsoft.Contracts.RequiresException();\n               stack50000.{Microsoft.Contracts.RequiresException}.ctor(stack0);\n               stack0 := stack50000;\n               throw stack0;\n"]
+block4318 [shape=box, label="b6(UKEY=4318): EMPTY BLOCK\n"]
+block4335 [shape=box, label="b7(UKEY=4335): stack0 := 0;\n               stack0 := stack0 > times;\n               if(stack0) jumpto b9(UKEY=4369);\n"]
+block4352 [shape=box, label="b8(UKEY=4352): jumpto b12(UKEY=4420);\n"]
+block4369 [shape=box, label="b9(UKEY=4369): EMPTY BLOCK\n"]
+block4386 [shape=box, label="b10(UKEY=4386): EMPTY BLOCK\n"]
+block4403 [shape=box, label="b11(UKEY=4403): stack0 := \"Precondition '0 <= times' violated from method 'PokerLib.Deck.ShuffleX(System.Int32)'\";\n                stack50000 := new Microsoft.Contracts.RequiresException();\n                stack50000.{Microsoft.Contracts.RequiresException}.ctor(stack0);\n                stack0 := stack50000;\n                throw stack0;\n"]
+block4420 [shape=box, label="b12(UKEY=4420): EMPTY BLOCK\n"]
+block4437 [shape=box, label="b13(UKEY=4437): leave b18(UKEY=4522);\n"]
+block4454 [shape=box, label="b14(UKEY=4454): EMPTY BLOCK\n"]
+block4471 [shape=box, label="b15(UKEY=4471): stack0 = catch(Microsoft.Contracts.ContractMarkerException);\n"]
+block4488 [shape=box, label="b16(UKEY=4488): rethrow;\n"]
+block4505 [shape=box, label="b17(UKEY=4505): EMPTY BLOCK\n"]
+block4522 [shape=box, label="b18(UKEY=4522): nop;\n"]
+block4539 [shape=box, label="b19(UKEY=4539): t := 0;\n"]
+block4556 [shape=box, label="b20(UKEY=4556): stack0 := t >= times;\n                if(stack0) jumpto b47(UKEY=4879);\n"]
+block4573 [shape=box, label="b21(UKEY=4573): i := 0;\n"]
+block4590 [shape=box, label="b22(UKEY=4590): stack0 := this.size;\n                stack0 := i >= stack0;\n                if(stack0) jumpto b43(UKEY=4811);\n"]
+block4607 [shape=box, label="b23(UKEY=4607): stack0 := this.{PokerLib.Deck}get_SpecSharp::FrameGuard();\n                stack1 := (Ldtoken) PokerLib.Deck;\n                stack1 := System.Type.GetTypeFromHandle(stack1);\n                SS$rootFrame := stack0.{Microsoft.Contracts.Guard}StartWritingAtTransitively(stack1);\n                local<5253> := NULL;\n"]
+block4624 [shape=box, label="b24(UKEY=4624): leave b50(UKEY=4930);\n"]
+block4641 [shape=box, label="b25(UKEY=4641): EMPTY BLOCK\n"]
+block4658 [shape=box, label="b26(UKEY=4658): stack0 = catch(System.Exception);\n"]
+block4675 [shape=box, label="b27(UKEY=4675): local<5253> := local<5270>;\n                rethrow;\n"]
+block4692 [shape=box, label="b28(UKEY=4692): EMPTY BLOCK\n"]
+block4709 [shape=box, label="b29(UKEY=4709): EMPTY BLOCK\n"]
+block4029 [shape=box, label="b30(UKEY=4029): stack0 = catch(System.Object);\n                SS$finallyv0 := stack0;\n"]
+block4046 [shape=box, label="b31(UKEY=4046): stack0 := local<5253> is Microsoft.Contracts.ICheckedException;\n                if(stack0) jumpto b33(UKEY=4080);\n"]
+block4063 [shape=box, label="b32(UKEY=4063): jumpto b35(UKEY=4114);\n"]
+block4080 [shape=box, label="b33(UKEY=4080): EMPTY BLOCK\n"]
+block4097 [shape=box, label="b34(UKEY=4097): stack0 := (Ldtoken) PokerLib.Deck;\n                stack0 := System.Type.GetTypeFromHandle(stack0);\n                SS$rootFrame.{Microsoft.Contracts.Guard}EndWritingAtTransitively(stack0);\n"]
+block4114 [shape=box, label="b35(UKEY=4114): EMPTY BLOCK\n"]
+block4131 [shape=box, label="b36(UKEY=4131): EMPTY BLOCK\n"]
+block4148 [shape=box, label="b37(UKEY=4148): rethrow;\n"]
+block4726 [shape=box, label="b38(UKEY=4726): EMPTY BLOCK\n"]
+block4743 [shape=box, label="b39(UKEY=4743): EMPTY BLOCK\n"]
+block4760 [shape=box, label="b40(UKEY=4760): local<5287> := i;\n                stack0 := 1;\n                stack0 := local<5287> + stack0;\n                i := stack0;\n                stack0 := local<5287>;\n"]
+block4777 [shape=box, label="b41(UKEY=4777): nop;\n"]
+block4794 [shape=box, label="b42(UKEY=4794): jumpto b22(UKEY=4590);\n"]
+block4811 [shape=box, label="b43(UKEY=4811): EMPTY BLOCK\n"]
+block4828 [shape=box, label="b44(UKEY=4828): local<5304> := t;\n                stack0 := 1;\n                stack0 := local<5304> + stack0;\n                t := stack0;\n                stack0 := local<5304>;\n"]
+block4845 [shape=box, label="b45(UKEY=4845): nop;\n"]
+block4862 [shape=box, label="b46(UKEY=4862): jumpto b20(UKEY=4556);\n"]
+block4879 [shape=box, label="b47(UKEY=4879): EMPTY BLOCK\n"]
+block4896 [shape=box, label="b48(UKEY=4896): EMPTY BLOCK\n"]
+block4913 [shape=box, label="b49(UKEY=4913): return;\n"]
+block4930 [shape=box, label="b50(UKEY=4930): stack0 := NULL;\n                stack0 := local<5253> == stack0;\n                if(stack0) jumpto b56(UKEY=5032);\n"]
+block4947 [shape=box, label="b51(UKEY=4947): stack0 := local<5253> is Microsoft.Contracts.ICheckedException;\n                if(stack0) jumpto b56(UKEY=5032);\n"]
+block4964 [shape=box, label="b52(UKEY=4964): jumpto b53(UKEY=4981);\n"]
+block4981 [shape=box, label="b53(UKEY=4981): EMPTY BLOCK\n"]
+block4998 [shape=box, label="b54(UKEY=4998): EMPTY BLOCK\n"]
+block5015 [shape=box, label="b55(UKEY=5015): endfinally/endfault;\n                jumpto b39(UKEY=4743);\n"]
+block5032 [shape=box, label="b56(UKEY=5032): EMPTY BLOCK\n"]
+block5049 [shape=box, label="b57(UKEY=5049): stack0 := (Ldtoken) PokerLib.Deck;\n                stack0 := System.Type.GetTypeFromHandle(stack0);\n                SS$rootFrame.{Microsoft.Contracts.Guard}EndWritingAtTransitively(stack0);\n"]
+block5066 [shape=box, label="b58(UKEY=5066): EMPTY BLOCK\n"]
+block5083 [shape=box, label="b59(UKEY=5083): EMPTY BLOCK\n"]
+block5100 [shape=box, label="b60(UKEY=5100): EMPTY BLOCK\n"]
+block5117 [shape=box, label="b61(UKEY=5117): EMPTY BLOCK\n"]
+block5134 [shape=box, label="b62(UKEY=5134): EMPTY BLOCK\n"]
+block5151 [shape=box, label="b63(UKEY=5151): EMPTY BLOCK\n"]
+block5168 [shape=box, label="b64(UKEY=5168): EMPTY BLOCK\n"]
+block5185 [shape=box, label="b65(UKEY=5185): EMPTY BLOCK\n"]
+block5202 [shape=box, label="b66(UKEY=5202): local<5270> := stack0;\n"]
+block5219 [shape=box, label="b67(UKEY=5219): stack0 := NULL;\n                stack0 := local<5253> == stack0;\n                if(stack0) jumpto b33(UKEY=4080);\n"]
+block5236 [shape=box, label="b68(UKEY=5236): SS$Contract Marker := stack0;\n"]
+block4182 [shape=box, label="b69(UKEY=4182): EMPTY BLOCK\n"]
+block4199 [shape=box, label="b70(UKEY=4199): unwind;\n"]
+block4216 [shape=box, label="b71(UKEY=4216): EMPTY BLOCK\n"]
+block4165 -> block4233;
+block4165 -> block4199 [style=dotted];
+block4233 -> block4250;
+block4233 -> block4267;
+block4233 -> block4471 [style=dotted];
+block4250 -> block4318;
+block4250 -> block4471 [style=dotted];
+block4267 -> block4284;
+block4267 -> block4471 [style=dotted];
+block4284 -> block4301;
+block4284 -> block4471 [style=dotted];
+block4301 -> block4471 [style=dotted];
+block4318 -> block4335;
+block4318 -> block4471 [style=dotted];
+block4335 -> block4352;
+block4335 -> block4369;
+block4335 -> block4471 [style=dotted];
+block4352 -> block4420;
+block4352 -> block4471 [style=dotted];
+block4369 -> block4386;
+block4369 -> block4471 [style=dotted];
+block4386 -> block4403;
+block4386 -> block4471 [style=dotted];
+block4403 -> block4471 [style=dotted];
+block4420 -> block4437;
+block4420 -> block4471 [style=dotted];
+block4437 -> block4522;
+block4437 -> block4471 [style=dotted];
+block4454 -> block4471;
+block4454 -> block4199 [style=dotted];
+block4471 -> block5236;
+block4471 -> block4199 [style=dotted];
+block4488 -> block4199 [style=dotted];
+block4505 -> block4522;
+block4505 -> block4199 [style=dotted];
+block4522 -> block4539;
+block4522 -> block4199 [style=dotted];
+block4539 -> block4556;
+block4539 -> block4199 [style=dotted];
+block4556 -> block4573;
+block4556 -> block4879;
+block4556 -> block4199 [style=dotted];
+block4573 -> block4590;
+block4573 -> block4199 [style=dotted];
+block4590 -> block4607;
+block4590 -> block4811;
+block4590 -> block4199 [style=dotted];
+block4607 -> block4624;
+block4607 -> block4199 [style=dotted];
+block4624 -> block4930;
+block4624 -> block4658 [style=dotted];
+block4641 -> block4658;
+block4641 -> block4029 [style=dotted];
+block4658 -> block5202;
+block4658 -> block4029 [style=dotted];
+block4675 -> block4029 [style=dotted];
+block4692 -> block5066;
+block4692 -> block4029 [style=dotted];
+block4709 -> block4029;
+block4709 -> block4199 [style=dotted];
+block4029 -> block5219;
+block4029 -> block4199 [style=dotted];
+block4046 -> block4063;
+block4046 -> block4080;
+block4046 -> block4199 [style=dotted];
+block4063 -> block4114;
+block4063 -> block4199 [style=dotted];
+block4080 -> block4097;
+block4080 -> block4199 [style=dotted];
+block4097 -> block4114;
+block4097 -> block4199 [style=dotted];
+block4114 -> block4131;
+block4114 -> block4199 [style=dotted];
+block4131 -> block4148;
+block4131 -> block4199 [style=dotted];
+block4148 -> block4199 [style=dotted];
+block4726 -> block4743;
+block4726 -> block4199 [style=dotted];
+block4743 -> block4760;
+block4743 -> block4199 [style=dotted];
+block4760 -> block4777;
+block4760 -> block4199 [style=dotted];
+block4777 -> block4794;
+block4777 -> block4199 [style=dotted];
+block4794 -> block4590;
+block4794 -> block4199 [style=dotted];
+block4811 -> block4828;
+block4811 -> block4199 [style=dotted];
+block4828 -> block4845;
+block4828 -> block4199 [style=dotted];
+block4845 -> block4862;
+block4845 -> block4199 [style=dotted];
+block4862 -> block4556;
+block4862 -> block4199 [style=dotted];
+block4879 -> block4896;
+block4879 -> block4199 [style=dotted];
+block4896 -> block4913;
+block4896 -> block4199 [style=dotted];
+block4913 -> block4182;
+block4913 -> block4199 [style=dotted];
+block4930 -> block4947;
+block4930 -> block5032;
+block4930 -> block4199 [style=dotted];
+block4947 -> block4964;
+block4947 -> block5032;
+block4947 -> block4199 [style=dotted];
+block4964 -> block4981;
+block4964 -> block4199 [style=dotted];
+block4981 -> block4998;
+block4981 -> block4199 [style=dotted];
+block4998 -> block5015;
+block4998 -> block4199 [style=dotted];
+block5015 -> block4743;
+block5015 -> block4199 [style=dotted];
+block5032 -> block5049;
+block5032 -> block4199 [style=dotted];
+block5049 -> block4981;
+block5049 -> block4199 [style=dotted];
+block5066 -> block5083;
+block5066 -> block5168;
+block5066 -> block4199 [style=dotted];
+block5083 -> block5100;
+block5083 -> block5168;
+block5083 -> block4199 [style=dotted];
+block5100 -> block5117;
+block5100 -> block4199 [style=dotted];
+block5117 -> block5134;
+block5117 -> block4199 [style=dotted];
+block5134 -> block5151;
+block5134 -> block4199 [style=dotted];
+block5151 -> block4743;
+block5151 -> block4199 [style=dotted];
+block5168 -> block5185;
+block5168 -> block4199 [style=dotted];
+block5185 -> block5117;
+block5185 -> block4199 [style=dotted];
+block5202 -> block4675;
+block5202 -> block4029 [style=dotted];
+block5219 -> block4046;
+block5219 -> block4080;
+block5219 -> block4199 [style=dotted];
+block5236 -> block4488;
+block5236 -> block4199 [style=dotted];
+block4182 -> block4216;
+block4199 -> block4216;
+}

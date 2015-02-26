@@ -1,0 +1,178 @@
+// -geom C:\Users\tedhar\AppData\Local\Temp\fsmNoLabels.dot.msagl.geom -nowritevg -nowritescansegs -nowritepaddedobs -sparsevg
+Seed 0x0
+RandomArgs -0- 0 -0- False
+Padding 1
+EdgeSeparation 1
+RouteToCenter False
+ArrowheadLength 7
+UseFreePortsForObstaclePorts False
+UseSparseVisibilityGraph True
+UseObstacleRectangles False
+BendPenalty 4
+LimitPortVisibilitySpliceToEndpointBoundingBox False
+WantPaths True
+WantNudger True
+WantVerify True
+StraightTolerance 0.001
+CornerTolerance 0.1
+Vertices 151 Edges 245
+
+BEGIN UNPADDED_OBSTACLES
+Begin RoundedRect
+  Id 0
+  x 777.87107658386 y -102.05468654633 w 40.1796836853 h 20.10937309265 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 1
+  x 685.91405105591 y -89.05468654633 w 40.1796836853 h 20.10937309265 rX 0 rY 0
+End RoundedRect
+Begin RoundedRect
+  Id 2
+  x 502 y -87.05468654633 w 40.1796836853 h 20.10937309265 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 3
+  [40.1796836853, 0], [0, 20.10937309265], [981.87496948242, -61]
+End Ellipse
+Begin Ellipse
+  Id 4
+  [40.1796836853, 0], [0, 20.10937309265], [614.04686737061, -77]
+End Ellipse
+Begin RoundedRect
+  Id 5
+  x 869.82810211182 y -71.05468654633 w 40.1796836853 h 20.10937309265 rX 0 rY 0
+End RoundedRect
+Begin Ellipse
+  Id 6
+  [40.1796836853, 0], [0, 20.10937309265], [797.96091842651, 0]
+End Ellipse
+Begin Ellipse
+  Id 7
+  [40.1796836853, 0], [0, 20.10937309265], [797.96091842651, -51]
+End Ellipse
+Begin RoundedRect
+  Id 8
+  x 869.82810211182 y -102.05468654633 w 40.1796836853 h 20.10937309265 rX 0 rY 0
+End RoundedRect
+END UNPADDED_OBSTACLES
+
+BEGIN PORTS
+Relative [0, 0] pId 0 sId 0
+Relative [0, 0] pId 1 sId 1
+Relative [0, 0] pId 2 sId 2
+Relative [0, 0] pId 3 sId 3
+Relative [0, 0] pId 4 sId 4
+Relative [0, 0] pId 5 sId 5
+Relative [0, 0] pId 6 sId 6
+Relative [0, 0] pId 7 sId 7
+Relative [0, 0] pId 8 sId 8
+END PORTS
+
+BEGIN ROUTING_SPECS
+3 -> 8 aS False aT True aL 10 aW 0 lW 1
+3 -> 5 aS False aT True aL 10 aW 0 lW 1
+5 -> 6 aS False aT True aL 10 aW 0 lW 1
+8 -> 2 aS False aT True aL 10 aW 0 lW 1
+8 -> 0 aS False aT True aL 10 aW 0 lW 1
+8 -> 7 aS False aT True aL 10 aW 0 lW 1
+0 -> 1 aS False aT True aL 10 aW 0 lW 1
+2 -> 0 aS False aT True aL 10 aW 0 lW 1
+1 -> 4 aS False aT True aL 10 aW 0 lW 1
+1 -> 0 aS False aT True aL 10 aW 0 lW 1
+4 -> 2 aS False aT True aL 10 aW 0 lW 1
+4 -> 0 aS False aT True aL 10 aW 0 lW 1
+END ROUTING_SPECS
+
+BEGIN PADDED_OBSTACLES
+END PADDED_OBSTACLES
+
+BEGIN CONVEX_HULLS
+END CONVEX_HULLS
+
+BEGIN HSCAN_SEGMENTS
+END HSCAN_SEGMENTS
+
+BEGIN VSCAN_SEGMENTS
+END VSCAN_SEGMENTS
+
+BEGIN VISIBILITY_VERTICES
+END VISIBILITY_VERTICES
+
+BEGIN VISIBILITY_EDGES
+END VISIBILITY_EDGES
+
+BEGIN PATHS
+Source 0 Target 1
+Begin Curve
+  [[777.87107658386, -92.554687] -> [707.003893, -92.554687]]
+  [[707.003893, -92.554687] -> [706.003893, -91.554687]]
+End Curve
+Source 1 Target 0
+Begin Curve
+  [[726.09373474121, -78.445313] -> [796.960918, -78.445313]]
+  [[796.960918, -78.445313] -> [797.960918, -79.445313]]
+End Curve
+Source 1 Target 4
+Begin Curve
+  [[685.91405105591, -79] -> [671.695301, -79]]
+  [[671.695301, -79] -> [670.695301, -78]]
+  [[670.695301, -78] -> [670.695301, -76.5]]
+  [[670.695301, -76.5] -> [669.695301, -75.5]]
+  [[669.695301, -75.5] -> [664.114615686181, -75.5]]
+End Curve
+Source 2 Target 0
+Begin Curve
+  [[523.589842, -87.05468654633] -> [523.589842, -104.554687]]
+  [[523.589842, -104.554687] -> [524.589842, -105.554687]]
+  [[524.589842, -105.554687] -> [796.960918, -105.554687]]
+  [[796.960918, -105.554687] -> [797.960918, -104.554687]]
+End Curve
+Source 3 Target 5
+Begin Curve
+  [[941.69528579712, -61] -> [920.00778579712, -61]]
+End Curve
+Source 3 Target 8
+Begin Curve
+  [[981.874969, -81.10937309265] -> [981.874969, -91]]
+  [[981.874969, -91] -> [980.874969, -92]]
+  [[980.874969, -92] -> [920.00778579712, -92]]
+End Curve
+Source 4 Target 0
+Begin Curve
+  [[654.114615686181, -78.5] -> [666.695301, -78.5]]
+  [[666.695301, -78.5] -> [667.695301, -79.5]]
+  [[667.695301, -79.5] -> [667.695301, -94.554687]]
+  [[667.695301, -94.554687] -> [668.695301, -95.554687]]
+  [[668.695301, -95.554687] -> [767.87107658386, -95.554687]]
+End Curve
+Source 4 Target 2
+Begin Curve
+  [[573.86718368531, -77] -> [552.1796836853, -77]]
+End Curve
+Source 5 Target 6
+Begin Curve
+  [[889.917944, -50.94531345368] -> [889.917944, -1]]
+  [[889.917944, -1] -> [888.917944, 0]]
+  [[888.917944, 0] -> [848.14060211181, 0]]
+End Curve
+Source 8 Target 0
+Begin Curve
+  [[869.82810211182, -93.5] -> [828.05076026916, -93.5]]
+End Curve
+Source 8 Target 2
+Begin Curve
+  [[889.917944, -102.05468654633] -> [889.917944, -107.554687]]
+  [[889.917944, -107.554687] -> [888.917944, -108.554687]]
+  [[888.917944, -108.554687] -> [521.589842, -108.554687]]
+  [[521.589842, -108.554687] -> [520.589842, -107.554687]]
+  [[520.589842, -107.554687] -> [520.589842, -97.05468654633]]
+End Curve
+Source 8 Target 7
+Begin Curve
+  [[869.82810211182, -90.5] -> [854.984352, -90.5]]
+  [[854.984352, -90.5] -> [853.984352, -89.5]]
+  [[853.984352, -89.5] -> [853.984352, -52]]
+  [[853.984352, -52] -> [852.984352, -51]]
+  [[852.984352, -51] -> [848.14060211181, -51]]
+End Curve
+END PATHS

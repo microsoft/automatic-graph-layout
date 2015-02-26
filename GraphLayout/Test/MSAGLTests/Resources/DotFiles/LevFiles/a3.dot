@@ -1,0 +1,6 @@
+digraph G {
+  a [ shape = box ]
+  rankdir = BT;
+  a -> b [label="AAAA"]
+  a -> b [ label ="BBBBB"]
+}

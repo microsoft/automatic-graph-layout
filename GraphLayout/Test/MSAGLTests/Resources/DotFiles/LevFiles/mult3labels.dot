@@ -1,0 +1,6 @@
+digraph G {
+  a -> b [ label = "label"]
+  b -> a [ label = "label"]
+  a -> b [ label = "label"]
+  label="this is a graph"
+}

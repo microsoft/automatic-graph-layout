@@ -1,0 +1,11 @@
+digraph g {
+	HoverRest:Normal->HoverToFlight:In
+	HoverRest:Normal->HoverForward:In
+	HoverForward:Normal->Fall:In
+	HoverForward:Normal->HoverToFlight:In
+	HoverForward:Target->HoverForwardToStop:In
+	HoverForwardToStop:Normal->HoverRest:In
+	HoverForwardToStop:Normal->HoverToFlight:In
+	HoverForwardToStop:Normal->HoverForward:In
+	HoverForwardToStop:Normal->HoverRest:In
+}

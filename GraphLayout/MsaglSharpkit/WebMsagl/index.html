@@ -1,0 +1,132 @@
+﻿<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Web MSAGL Test</title>
+
+    <script src="Scripts/Components/RequireJS/require.js"></script>
+
+    <!-- CSS for IDD. Not needed for Canvas graphs. -->
+    <link rel="stylesheet" type="text/css" href="css/idd.css" />
+
+    <script>
+        require.config({
+            'paths': {
+                'rx': 'Scripts/rx',
+                'jquery': 'Scripts/jquery-2.1.3',
+                'rx.jquery': 'Scripts/rx.jQuery',
+                'idd': 'Scripts/idd',
+                'jquery-ui': 'Scripts/jquery-ui-1.11.2'
+            },
+            waitSeconds: 30
+        })
+        require(['jquery', 'rx'], function ($, rx) {
+            require(['jquery-ui', 'rx.jquery'], function (jQueryUI, rxjQuery) {
+                require(['idd', 'index'], function (InteractiveDataDisplay, index) {
+                    window.index = index;
+                    index.init();
+                })
+            })
+        });
+    </script>
+
+    <style>
+        .block {
+            height: 530px;
+            width: 530px;
+            margin: 5px;
+            float: left;
+        }
+
+        header {
+        }
+
+        .blockContent {
+            height: 500px;
+            width: 500px;
+            border: 0 solid blue;
+        }
+
+        .graphJsonText {
+            height: 500px;
+            width: 500px;
+            padding: 0;
+            border: 1px solid black;
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body>
+    <div class="block">
+        <header>Input JSON:</header>
+        <div class="blockContent">
+            <textarea class="graphJsonText" id="graphJsonTextIn" style="height:460px"></textarea>
+            <div>
+                <button style="display: inline" onclick="index.onLoadFourNodes()">Default</button>
+                <button style="display: inline" onclick="index.onLoadManyNodes()">Random</button>
+                Nodes: <input type="number" id="randomGraphNodes" value="100" style="width:50px" />
+                Edges: <input type="number" id="randomGraphEdges" value="200" style="width:50px" />
+                <input type="checkbox" id="randomGraphCustom" checked="checked" />Custom nodes
+            </div>
+            <div>
+                <button style="display: inline" onclick="index.onUpdateClicked()">Update</button>
+                <input type="checkbox" id="updateCanvas" checked="checked" />Canvas
+                <input type="checkbox" id="updateIDD" checked="checked" />IDD
+                <input type="checkbox" id="updateSVG" checked="checked" />SVG
+                <input type="checkbox" id="updateIDDSVG" checked="checked" />IDDSVG
+            </div>
+        </div>
+    </div>
+    <div class="block">
+        <header>Messages</header>
+        <div class="blockContent" id="messages">Scripts are blocked. Unblock scripts to continue.</div>
+    </div>
+    <div class="block">
+        <header>Canvas Graph (context):</header>
+        <div class="blockContent">
+            <canvas id="graphCanvas" width="500" height="500" style="border:1px solid black"></canvas>
+        </div>
+        <footer id="canvasGraphFooter"></footer>
+    </div>
+    <div class="block">
+        <header>IDD Graph (context):</header>
+        <div class="blockContent">
+            <div id="iddchart" style="width: 500px; height: 500px; border: 1px solid black;"></div>
+        </div>
+        <footer id="iddGraphFooter"></footer>
+    </div>
+    <div class="block">
+        <header>SVG Graph:</header>
+        <div class="blockContent">
+            <div id="graphSvg" style="width: 500px; height: 500px; border: 1px solid black; overflow: hidden"></div>
+        </div>
+        <footer id="svgGraphFooter"></footer>
+    </div>
+    <div class="block">
+        <header>IDD SVG Graph:</header>
+        <div class="blockContent">
+            <div id="iddsvgchart" style="width: 500px; height: 500px; border: 1px solid black;"></div>
+        </div>
+        <footer id="iddsvgGraphFooter"></footer>
+    </div>
+    <div class="block">
+        <header>JSON Graph (context):</header>
+        <div class="blockContent">
+            <textarea class="graphJsonText" id="graphContextJsonTextOut"></textarea>
+        </div>
+    </div>
+    <div class="block">
+        <header>JSON Graph (SVG):</header>
+        <div class="blockContent">
+            <textarea class="graphJsonText" id="graphSVGJsonTextOut"></textarea>
+        </div>
+    </div>
+    <div class="block">
+        <header>DOM:</header>
+        <div class="blockContent">
+            <textarea class="graphJsonText" id="domText" style="height:470px"></textarea>
+            <button style="display: inline" onclick="index.onUpdateDOMTextClicked()">Update</button>
+        </div>
+    </div>
+</body>
+</html>

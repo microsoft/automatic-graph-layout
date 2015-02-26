@@ -1,0 +1,145 @@
+digraph Self { 
+graph [  fontname = "Verdana",
+                        fontsize = 10,
+                        size = "6,6" ];
+node [   shape = box,
+                        sides = 4,
+                        distortion = "0.0",
+                        orientation = "0.0",
+                        skew = "0.0",
+                        color = white,
+                        style = filled,
+                        fontname = "Verdana" ];
+
+  
+  "Projects" -> "XObjects"
+  "Projects" -> "XLinq"
+  "Projects" -> "Tools"
+  "Projects" -> "XSLT 2.0"
+  "Projects" -> "System.Xml"
+  "Projects" -> "MSXML"
+  
+  "System.Xml" -> "Perf"
+  "Perf" -> "IBM"
+  "System.Xml" -> "Indigo"
+  "Indigo" -> "eugeneos"
+ 
+  "Tools" -> "XML Editor"
+  "Tools" -> "XSL Debugger"
+  "Tools" -> "XSD Designer"
+  
+  "Community" -> "Books"
+  "Books" -> "Jim Holmes"
+  "Jim Holmes" -> "Tools"
+  
+  "Tools" -> "Dev Reog"
+  "Dev Reog" -> "Remy"
+  "Dev Reog" -> "David"
+  
+  "People" -> "Candidates"  
+  "People" -> "Reviews"
+  "Candidates" -> "Prasanna"
+  
+  "Tools" -> "Frameworks"
+  "Frameworks" -> "GLEE"
+  "Frameworks" -> "MDF"
+  "Frameworks" -> "Dundas"
+  "Frameworks" -> "Avalon"
+  "Frameworks" -> "Nautilus"
+
+  "XML Editor" -> "XAML"  
+  "XAML" -> "Chuck"
+  "XAML" -> "PDarragh"
+  "XAML" -> "Ford"
+  "Ford" -> "Standards"
+  
+  "XML Editor" -> "Partial Parsing"
+  "XML Editor" -> "Schema Locator"
+  "XML Editor" -> "XLinq"
+  "XML Editor" -> "Old XSD"
+  "XML Editor" -> "VS Proxy"
+  "XML Editor" -> "DCRs"
+  "XML Editor" -> "MPF"
+  "MPF" -> "Paolo"
+  
+  "Screencast" -> "XML Editor"   
+  "Community" -> "Screencast"
+  
+  "XSD Designer" -> "Test"
+  "Test" -> "Declarative"  
+  "Declarative"  -> "Cider"
+  "Test" -> "Model Based"
+  "Test" -> "Common Test Framework"
+  "Declarative" -> "ASML"  
+  "ASML" -> "MSR"
+  
+  "MSR" -> "Phil Fawcett"
+  "MSR" -> "Jim Larus"
+  "MSR" -> "Luca Cardelli"
+  
+  "People" -> "Partners"
+  
+  "GLEE" -> "Lev" 
+  "GLEE" -> "Eddie"
+
+  "XLinq" -> "UE"
+  
+  "XObjects" -> "Staffing"
+  "Staffing" -> "Huseyin"  
+  "Staffing" -> "Todd?"  
+  
+  "Reviews" -> "Manager Feedback"
+  "Reviews" -> "Follow up!"
+  "Reviews" -> "Callibration"
+  "Reviews" -> "Commitments"  
+  "Reviews" -> "myMicrosoft"  
+  "Callibration" -> "sqldevlt"    
+  
+  "Mapping" -> "Phil"
+  "Phil" -> "MSR"
+  "Mapping" -> "Semantic Web"
+  "Semantic Web" -> "Kirk Haselden"
+  
+  "Partners" -> "SSMS"
+  "Partners" -> "TSData"
+  "Partners" -> "VB"
+  "Partners" -> "CSD"
+  "Partners" -> "SDM"
+  "SDM" -> "Andrea"
+  "SSMS" -> "Dundas"
+  
+  "EDM" -> "EDM/XML"
+  "EDM/XML" -> "Mark Shields"
+  "EDM" -> "Tools"
+    
+  "Modeling" -> "EDM"
+  "Modeling" -> "Ultra"
+  "Modeling" -> "ERWin"
+  "ERWin" -> "TSData"
+  "Ultra" -> "CSD"
+  "CSD" -> "Eddie"
+  
+  "Process" -> "VSTS"
+  "Process" -> "SQL Project Tracking"
+  "Process" -> "Agile"
+  "Agile" -> "Holly"
+  
+  "SRI" -> "VSTS" 
+  "SRI" -> "Jessica"
+  "Jessica" -> "Sinan"
+  
+  "BFD" -> "Sergey"
+  "Sergey" -> "Sinan"
+  
+  "Community" -> "Conferences"
+  "Community" -> "Alex"
+  "Community" -> "Open Source"
+  "Open Source" -> "CodePlex"
+  
+  "XML Strategy" -> "JeanPa"
+  "XML Strategy" -> "Community"
+  "XML Strategy" -> "Branding"
+  "XML Strategy" -> "SOA"
+  "XML Strategy" -> "Britt"
+}
+

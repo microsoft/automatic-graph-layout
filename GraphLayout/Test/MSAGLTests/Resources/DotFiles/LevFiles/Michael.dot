@@ -1,0 +1,35 @@
+digraph G {
+"Chief Executive Officer"[Shape="Box"]
+"Vice Chair"[shape="Box"]
+"West Coast EVP or Executive Vice President"[shape="Box"]
+"Mid-west Coast EVP or Executive Vice President"[shape="Box"]
+"Regional managers (11)"[shape="Box"]
+"Washington State regional manager"[shape="Box"]
+"District managers (50)"[shape="Box"]
+"District manager of Bellevue metro"[shape="Box"]
+"District managers (3)"[shape="Box"]
+"Mountlake Terrace branch manager"[shape="Box"]
+"Branch managers (20)"[shape="Box"]
+"Administrative Assistant & District operational manager"[shape="Box"]
+"Customer service manager"[shape="Box"]
+"Personal Banker"[shape="Box"]
+"Vault teller"[shape="Box"]
+"teller (2)"[shape="Box"]
+
+
+"Chief Executive Officer"->"Vice Chair"
+"Vice Chair"->"West Coast EVP or Executive Vice President"
+"Vice Chair"->"Mid-west Coast EVP or Executive Vice President"
+"Mid-west Coast EVP or Executive Vice President"->"Regional managers (11)"
+"West Coast EVP or Executive Vice President"->"Washington State regional manager"
+"Regional managers (11)"-> "District managers (50)"
+"Washington State regional manager"->"District manager of Bellevue metro"
+"Washington State regional manager"->"District managers (3)"
+"District manager of Bellevue metro"->"Mountlake Terrace branch manager"
+"District manager of Bellevue metro"-> "Branch managers (20)"
+"District manager of Bellevue metro"->"Administrative Assistant & District operational manager"
+"Mountlake Terrace branch manager"->"Customer service manager"
+"Mountlake Terrace branch manager"->"Personal Banker"
+"Customer service manager"->"Vault teller"
+"Customer service manager"->"teller (2)"
+}

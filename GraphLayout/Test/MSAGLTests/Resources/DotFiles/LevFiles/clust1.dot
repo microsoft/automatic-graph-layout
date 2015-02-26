@@ -1,0 +1,13 @@
+digraph G {
+    compound=true
+	subgraph cluster_c0 {a0 -> a1 -> a2 -> a3;color=blue}
+	subgraph cluster_c1 {b0 -> b1 -> b2 -> b3;
+	style=filled;
+	color=lightgrey;}
+    a1->b1 [lhead=cluster_c1]
+	x -> a0;
+	x -> b0;
+	a1 -> a3;
+	a3 -> a0;
+    
+}

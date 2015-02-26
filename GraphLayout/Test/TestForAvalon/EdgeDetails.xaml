@@ -1,0 +1,23 @@
+﻿<Window x:Class="TestForAvalon.EdgeDetails"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="clr-namespace:TestForAvalon" 
+    xmlns:av="clr-namespace:Microsoft.Msagl.ControlForWpfObsolete;assembly=Microsoft.Msagl.ControlForWpf" 
+    Title="Edge Details Window"
+    >
+  <Window.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Styles.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Window.Resources>
+  <StackPanel Name="EdgeDetailsPanel">
+    <StackPanel Orientation="Horizontal">
+      <TextBlock Text="{Binding Source}"/>
+      <TextBlock Text=" -> "/>
+      <TextBlock Text="{Binding Target}"/>
+    </StackPanel>
+    <ListView ItemsSource="{Binding UserData.Label}"/>
+  </StackPanel>
+</Window>

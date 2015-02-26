@@ -1,0 +1,7 @@
+digraph G {
+  a [ shape = box ]
+  a -> b
+  a -> c
+  a -> d
+  a -> m  
+}

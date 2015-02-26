@@ -1,0 +1,16 @@
+digraph G {
+  ab [label="A, B"]
+  aa [label="A, A"]
+  bb [label="B, B"]
+  ba [label="B, A"]
+  ab -> ba [label="A(B, A)"]
+  ba -> ab [label="A(B, A)"]
+  ab -> bb [label="A(B, A)"]
+  bb -> ab [label="A(B, A)"]
+  ab -> aa [label="A(B, A)"]
+  aa -> ab [label="A(B, A)"]
+  bb -> aa [label="A(B, A)"]
+  aa -> bb [label="A(B, A)"]
+  
+ 
+}

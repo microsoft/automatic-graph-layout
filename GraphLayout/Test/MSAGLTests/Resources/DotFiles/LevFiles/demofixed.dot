@@ -1,0 +1,61 @@
+digraph abstract {
+
+graph [  fontname = "Helvetica-Oblique",
+                        fontsize = 36,
+                        size = "6,6" ];
+node [   shape = diamond,
+                        sides = 4,
+                        distortion = "0.0",
+                        orientation = "0.0",
+                        skew = "0.0",
+                        color = white,
+                        style = filled,
+                        fontname = "Helvetica-Outline" ];
+
+  DynamicRole [label="Dynamic\n  Role" fillcolor=Cyan]               
+  DataContext [label=" Data\n Context" fillcolor=Olive ]
+  RuleCondition [label="  Rule /\n Condition" fillcolor=Cyan]
+  Activity [ shape=Box  ]
+  KPI [ shape=Box fillcolor=Cyan ]
+  Role [ shape=Box fillcolor=Cyan  ]
+  Form [ shape=Box fillcolor=Cyan  ]
+  Task [ shape=Ellipse fillcolor=Cyan label="ttt\n ttt\n tttt" ]
+  Event [ shape=Box fillcolor=Cyan  ]
+  Entity [ shape=Box fillcolor=Cyan ]
+  Workflow [ shape=Box fillcolor=Cyan ]
+  Process [ shape=Box  fillcolor=Cyan ]
+  Pattern [ shape=Box fillcolor=Cyan ]
+  Action[shape=Box  fillcolor=Cyan ]
+  Activity -> Pattern [label ="uses"  fontsize=8 ]
+  Activity -> KPI [label ="has" fontsize=8 ]
+  Activity -> Role [label ="used" fontsize=8 ]
+  Activity -> Entity [label ="refers to"  fontsize=8 ]
+  Pattern -> Activity [label = "is exposed as"  fontsize=8 ]
+  Pattern -> Event [label = "produces"  fontsize=8 ]
+  Event -> Pattern [label = "consumes" fontsize=8  ]
+  Event -> Entity [label = "carries" fontsize=8  ]
+  Event -> Process [label = "initiates" fontsize=8 ]
+  Entity -> Action [label = "exposes" fontsize=8 ]
+  Entity -> Entity [label = "decomposes" fontsize=8]
+  Role -> Role [label = "decomposes" fontsize=8  ]
+  DynamicRole -> Role
+  DataContext -> DynamicRole [label = "scopes" fontsize=8 ]
+  DataContext -> Process [label = "scopes" fontsize=8 ]
+  DataContext -> Task [label = "scopes" fontsize=8 ]
+  DataContext -> RuleCondition [label = "scopes" fontsize=8 ]
+  DataContext -> Entity [label = "scopes" fontsize=8 ]
+  DataContext -> Event [label = "scopes" fontsize=8 ]
+  DataContext -> Form [label = "scopes" fontsize=8 ]
+  Action -> Entity [label = "returns" fontsize=8 ]
+  Action -> Role [label = "uses permissions" fontsize=8 ]
+  Process -> Workflow [label = "contains" fontsize=8 ]
+  Workflow -> Task [label = "contains" fontsize=8 ]
+  Workflow -> RuleCondition [label = "uses" fontsize=8 ]
+  Task -> Role [label = "uses" fontsize=8 ]
+  Task -> Form [label = "uses" fontsize=8 ]
+  }
+
+
+  
+
+  

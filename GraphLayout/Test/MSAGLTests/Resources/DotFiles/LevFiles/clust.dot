@@ -1,0 +1,15 @@
+digraph G {
+	subgraph cluster_0 {
+		label = "hello world";
+		a -> b;
+		a -> c;
+		color = pink;
+	}
+	subgraph cluster_1 {
+		label = "hello world";
+		c -> d;
+		color = pink;
+	}
+
+
+}

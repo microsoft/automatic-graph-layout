@@ -1,0 +1,459 @@
+﻿digraph G {
+"Microsoft.Msagl.Edge" [ label="Edge" ]
+"Microsoft.Msagl.GeometryGraph" [ label="GeometryGraph" ]
+"Microsoft.Msagl.Node" [ label="Node" ]
+"Microsoft.Msagl.Incremental.FastIncrementalLayoutSettings" [ label="FastIncrementalLayoutSettings" ]
+"Microsoft.Msagl.Splines.Curve" [ label="Curve" ]
+"Microsoft.Msagl.SmoothedPolyline" [ label="SmoothedPolyline" ]
+"Microsoft.Msagl.InteractiveEdgeRouter" [ label="InteractiveEdgeRouter" ]
+"Microsoft.Msagl.Incremental.RCHull" [ label="RCHull" ]
+"Microsoft.Msagl.OverlapRemoval.ConstraintGenerator" [ label="ConstraintGenerator" ]
+"Microsoft.Msagl.Splines.BSpline" [ label="BSpline" ]
+"Microsoft.Msagl.EdgeRestoreData" [ label="EdgeRestoreData" ]
+"Microsoft.Msagl.Splines.Ellipse" [ label="Ellipse" ]
+"Microsoft.Msagl.Splines.Polyline" [ label="Polyline" ]
+"Microsoft.Msagl.Splines.LineSegment" [ label="LineSegment" ]
+"Microsoft.Msagl.IntEdge" [ label="IntEdge" ]
+"Microsoft.Msagl.EdgeGeometry" [ label="EdgeGeometry" ]
+"Microsoft.Msagl.Splines.CubicBezierSegment" [ label="CubicBezierSegment" ]
+"Microsoft.Msagl.Splines.EllipseOffset" [ label="EllipseOffset" ]
+"Microsoft.Msagl.Incremental.ClusterConvexHull" [ label="ClusterConvexHull" ]
+"Microsoft.Msagl.Set`1" [ label="Set<T>" ]
+"Microsoft.Msagl.Incremental.QuickRoute.HullKDTree" [ label="HullKDTree" ]
+"Microsoft.Msagl.Incremental.Cluster" [ label="Cluster" ]
+"Microsoft.Msagl.Label" [ label="Label" ]
+"Microsoft.Msagl.Incremental.CvxHull" [ label="CvxHull" ]
+"Microsoft.Msagl.Incremental.AllPairsNonOverlappingBoundaries" [ label="AllPairsNonOverlappingBoundaries" ]
+"Microsoft.Msagl.Splines.ICurve" [ label="ICurve" ]
+"Microsoft.Msagl.Incremental.EdgeConstraintGenerator" [ label="EdgeConstraintGenerator" ]
+"Microsoft.Msagl.OverlapRemoval.Node" [ label="Node" ]
+"Microsoft.Msagl.Anchor" [ label="Anchor" ]
+"Microsoft.Msagl.ProjectionSolver.Solver" [ label="Solver" ]
+"Microsoft.Msagl.EdgeRouterHelper" [ label="EdgeRouterHelper" ]
+"Microsoft.Msagl.HierarchyCalculatorWithRectangularNodes" [ label="HierarchyCalculatorWithRectangularNodes" ]
+"Microsoft.Msagl.GeometryObject" [ label="GeometryObject" ]
+"Microsoft.Msagl.Incremental.FixedClusterBoundary" [ label="FixedClusterBoundary" ]
+"Microsoft.Msagl.Splines.PenetrationDepth" [ label="PenetrationDepth" ]
+"Microsoft.Msagl.Incremental.LockPosition" [ label="LockPosition" ]
+"Microsoft.Msagl.LayoutAlgorithmSettings" [ label="LayoutAlgorithmSettings" ]
+"Microsoft.Msagl.NodeRestoreData" [ label="NodeRestoreData" ]
+"Microsoft.Msagl.RectilinearEdgeRouter" [ label="RectilinearEdgeRouter" ]
+"Microsoft.Msagl.FloatingPort" [ label="FloatingPort" ]
+"Microsoft.Msagl.CurvePort" [ label="CurvePort" ]
+"Microsoft.Msagl.Incremental.ProcrustesCircleConstraint" [ label="ProcrustesCircleConstraint" ]
+"Microsoft.Msagl.Incremental.StaticLayout" [ label="StaticLayout" ]
+"Microsoft.Msagl.Incremental.RectHull" [ label="RectHull" ]
+"Microsoft.Msagl.RouterBetweenTwoNodes" [ label="RouterBetweenTwoNodes" ]
+"Microsoft.Msagl.Database" [ label="Database" ]
+"Microsoft.Msagl.RectangleNode`1" [ label="RectangleNode<TData>" ]
+"Microsoft.Msagl.Incremental.RectangularClusterBoundary" [ label="RectangularClusterBoundary" ]
+"Microsoft.Msagl.Incremental.CircleConstraint" [ label="CircleConstraint" ]
+"Microsoft.Msagl.OverlapRemoval.Cluster" [ label="Cluster" ]
+"Microsoft.Msagl.ShowDatabase" [ label="ShowDatabase" ]
+"Microsoft.Msagl.Incremental.MaxSeparationConstraint" [ label="MaxSeparationConstraint" ]
+"Microsoft.Msagl.Incremental.MinSeparationConstraint" [ label="MinSeparationConstraint" ]
+"Microsoft.Msagl.Incremental.StickConstraint" [ label="StickConstraint" ]
+"Microsoft.Msagl.Arrowheads" [ label="Arrowheads" ]
+"Microsoft.Msagl.OverlapRemoval.SimpleRectangles" [ label="SimpleRectangles" ]
+"Microsoft.Msagl.PhyloTree" [ label="PhyloTree" ]
+"Microsoft.Msagl.GeometryGraphWriter" [ label="GeometryGraphWriter" ]
+"Microsoft.Msagl.Mds.OverlapRemover" [ label="OverlapRemover" ]
+"Microsoft.Msagl.Incremental.IncrementalLayoutWorker" [ label="IncrementalLayoutWorker" ]
+"Microsoft.Msagl.Incremental.HorizontalSeparationConstraint" [ label="HorizontalSeparationConstraint" ]
+"Microsoft.Msagl.Incremental.Multipole.MinimumEnclosingDisc" [ label="MinimumEnclosingDisc" ]
+"Microsoft.Msagl.Incremental.Multipole.MoveToFront" [ label="MoveToFront" ]
+"Microsoft.Msagl.Splines.IntersectionInfo" [ label="IntersectionInfo" ]
+"Microsoft.Msagl.Port" [ label="Port" ]
+"Microsoft.Msagl.Splines.CurveFactory" [ label="CurveFactory" ]
+"Microsoft.Msagl.ProjectionSolver.Parameters" [ label="Parameters" ]
+"Microsoft.Msagl.Splines.ParallelogramNodeOverICurve" [ label="ParallelogramNodeOverICurve" ]
+"Microsoft.Msagl.LabelRestoreData" [ label="LabelRestoreData" ]
+"Microsoft.Msagl.HitTest`1" [ label="HitTest<TData>" ]
+"Microsoft.Msagl.ProjectionSolver.Solution" [ label="Solution" ]
+"Microsoft.Msagl.ProjectionSolver.Constraint" [ label="Constraint" ]
+"Microsoft.Msagl.InteractiveObstacleCalculator" [ label="InteractiveObstacleCalculator" ]
+"Microsoft.Msagl.Incremental.VerticalSeparationConstraint" [ label="VerticalSeparationConstraint" ]
+"Microsoft.Msagl.Incremental.WheelConstraint" [ label="WheelConstraint" ]
+"Microsoft.Msagl.Couple`2" [ label="Couple<TFirst,TSecond>" ]
+"Microsoft.Msagl.PhyloEdge" [ label="PhyloEdge" ]
+"Microsoft.Msagl.ConvexHull" [ label="ConvexHull" ]
+"Microsoft.Msagl.Splines.CurvatureDerivative" [ label="CurvatureDerivative" ]
+"Microsoft.Msagl.Incremental.AlignmentConstraint" [ label="AlignmentConstraint" ]
+"Microsoft.Msagl.GeometryGraphReader" [ label="GeometryGraphReader" ]
+"Microsoft.Msagl.Splines.RootFinder" [ label="RootFinder" ]
+"Microsoft.Msagl.Visibility.VisibilityGraph" [ label="VisibilityGraph" ]
+"Microsoft.Msagl.Incremental.Multipole.MultipoleCoefficients" [ label="MultipoleCoefficients" ]
+"Microsoft.Msagl.ProjectionSolver.AdvancedParameters" [ label="AdvancedParameters" ]
+"Microsoft.Msagl.Incremental.IHull" [ label="IHull" ]
+"Microsoft.Msagl.IntPair" [ label="IntPair" ]
+"Microsoft.Msagl.Incremental.Multipole.KDTree" [ label="KDTree" ]
+"Microsoft.Msagl.Mds.MdsLayoutSettings" [ label="MdsLayoutSettings" ]
+"Microsoft.Msagl.Incremental.Multipole.Particle" [ label="Particle" ]
+"Microsoft.Msagl.Show" [ label="Show" ]
+"Microsoft.Msagl.Splines.ParallelogramNode" [ label="ParallelogramNode" ]
+"Microsoft.Msagl.ShowWithColors" [ label="ShowWithColors" ]
+"Microsoft.Msagl.ILabeledObject" [ label="ILabeledObject" ]
+"Microsoft.Msagl.SugiyamaLayoutSettings" [ label="SugiyamaLayoutSettings" ]
+"Microsoft.Msagl.SolverShell" [ label="SolverShell" ]
+"Microsoft.Msagl.Site" [ label="Site" ]
+"Microsoft.Msagl.Incremental.IConstraint" [ label="IConstraint" ]
+"Microsoft.Msagl.Incremental.QuickRoute.Particle" [ label="Particle" ]
+"Microsoft.Msagl.Incremental.Circle" [ label="Circle" ]
+"Microsoft.Msagl.Point" [ label="Point" ]
+"Microsoft.Msagl.Rectangle" [ label="Rectangle" ]
+"Microsoft.Msagl.Splines.PlaneTransformation" [ label="PlaneTransformation" ]
+"Microsoft.Msagl.Splines.MinDistCurveCurve" [ label="MinDistCurveCurve" ]
+"Microsoft.Msagl.Splines.Parallelogram" [ label="Parallelogram" ]
+"Microsoft.Msagl.Mds.RankingLayoutSettings" [ label="RankingLayoutSettings" ]
+"Microsoft.Msagl.ProjectionSolver.Variable" [ label="Variable" ]
+"Microsoft.Msagl.Log" [ label="Log" ]
+"type parameter.TData" [ label="TData" ]
+"System.Collections.Generic.IEnumerable`1<Microsoft.Msagl.Point>" [ label="IEnumerable<Point>" ]
+"System.IComparable`1<Microsoft.Msagl.Point>" [ label="IComparable<Point>" ]
+"System.Collections.IEnumerable" [ label="IEnumerable" ]
+"System.ICloneable" [ label="ICloneable" ]
+"Microsoft.Msagl.NudgerTest" [ label="NudgerTest" ]
+"System.IComparable`1<Microsoft.Msagl.ProjectionSolver.Constraint>" [ label="IComparable<Constraint>" ]
+"System.Collections.Generic.ICollection`1<type parameter.T>" [ label="ICollection<T>" ]
+"Microsoft.Msagl.ISolverShell" [ label="ISolverShell" ]
+"type parameter.T" [ label="T" ]
+"System.Collections.Generic.IEnumerable`1<type parameter.T>" [ label="IEnumerable<T>" ]
+"Microsoft.Msagl.LayerEdge" [ label="LayerEdge" ]
+"Microsoft.Msagl.ProjectionSolver.GlobalConfiguration" [ label="GlobalConfiguration" ]
+"System.Xml.XmlReader" [ label="XmlReader" ]
+"type parameter.TData" [ label="TData" ]
+"System.IComparable`1<Microsoft.Msagl.ProjectionSolver.Variable>" [ label="IComparable<Variable>" ]
+"System.IDisposable" [ label="IDisposable" ]
+"Microsoft.Msagl.EdgeRoutingOptions" [ label="EdgeRoutingOptions" ]
+"Microsoft.Msagl.Visibility.ConeSpannerTest" [ label="ConeSpannerTest" ]
+"System.ComponentModel.BackgroundWorker" [ label="BackgroundWorker" ]
+"Microsoft.Msagl.Cancel" [ label="Cancel" ]
+"System.IComparable`1<Microsoft.Msagl.OverlapRemoval.Node>" [ label="IComparable<Node>" ]
+"Microsoft.Msagl.ObstacleCalculator" [ label="ObstacleCalculator" ]
+"Microsoft.Msagl.OverlapRemoval.Cluster+BorderInfo" [ label="BorderInfo" ]
+"System.IComparable" [ label="IComparable" ]
+"System.Xml.XmlWriter" [ label="XmlWriter" ]
+"System.Collections.Generic.IEnumerable`1<System.Int32>" [ label="IEnumerable<Int32>" ]
+"Microsoft.Msagl.IEdge" [ label="IEdge" ]
+"Microsoft.Msagl.RestoreData" [ label="RestoreData" ]
+"Microsoft.Msagl.Mds.MultidimensionalScaling" [ label="MultidimensionalScaling" ]
+"Microsoft.Msagl.LayoutChangeEventArgs" [ label="LayoutChangeEventArgs" ]
+"Microsoft.Msagl.Incremental.FastIncrementalLayout" [ label="FastIncrementalLayout" ]
+"type parameter.TSecond" [ label="TSecond" ]
+"type parameter.TFirst" [ label="TFirst" ]
+"Microsoft.Msagl.OverlapRemoval.GlobalConfiguration" [ label="GlobalConfiguration" ]
+"type parameter.TData" [ label="TData" ]
+"type parameter.TData" [ label="TData" ]
+"type parameter.TData" [ label="TData" ]
+"Microsoft.Msagl.Splines.IFunction" [ label="IFunction" ]
+"Microsoft.Msagl.Splines.Ellipse" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Splines.Curve" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Splines.LineSegment" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Rectangle" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Set`1" -> "type parameter.T"
+"Microsoft.Msagl.Splines.Curve" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.Splines.CubicBezierSegment" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Splines.EllipseOffset" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Node" -> "Microsoft.Msagl.Edge"
+"Microsoft.Msagl.RectangleNode`1" -> "type parameter.TData"
+"Microsoft.Msagl.Splines.BSpline" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.EdgeRestoreData" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Incremental.Circle" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Splines.ICurve" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.RectilinearEdgeRouter" -> "Microsoft.Msagl.Port"
+"Microsoft.Msagl.Incremental.RectangularClusterBoundary" -> "Microsoft.Msagl.OverlapRemoval.Cluster+BorderInfo"
+"Microsoft.Msagl.Splines.Polyline" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Anchor" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Incremental.HorizontalSeparationConstraint" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Incremental.VerticalSeparationConstraint" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Edge" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.OverlapRemoval.ConstraintGenerator" -> "Microsoft.Msagl.OverlapRemoval.Cluster"
+"Microsoft.Msagl.ProjectionSolver.Solver" -> "Microsoft.Msagl.ProjectionSolver.Variable"
+"Microsoft.Msagl.Label" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Incremental.Multipole.MultipoleCoefficients" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.OverlapRemoval.Cluster" -> "Microsoft.Msagl.OverlapRemoval.Cluster+BorderInfo"
+"Microsoft.Msagl.Splines.CurveFactory" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.Splines.BSpline" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.Splines.LineSegment" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.Incremental.Cluster" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Splines.Ellipse" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.Splines.EllipseOffset" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.Splines.CubicBezierSegment" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.GeometryGraph" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Splines.CurveFactory" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.EdgeGeometry" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.FloatingPort" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Site" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Splines.PlaneTransformation" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Edge" -> "Microsoft.Msagl.Port"
+"Microsoft.Msagl.Edge" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Incremental.CvxHull" -> "Microsoft.Msagl.Incremental.IHull"
+"Microsoft.Msagl.Splines.Parallelogram" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.CurvePort" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.SmoothedPolyline" -> "Microsoft.Msagl.Site"
+"Microsoft.Msagl.RectangleNode`1" -> "Microsoft.Msagl.Rectangle"
+"Microsoft.Msagl.FloatingPort" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.RouterBetweenTwoNodes" -> "Microsoft.Msagl.Port"
+"Microsoft.Msagl.InteractiveEdgeRouter" -> "Microsoft.Msagl.Port"
+"Microsoft.Msagl.GeometryGraph" -> "Microsoft.Msagl.Edge"
+"Microsoft.Msagl.OverlapRemoval.ConstraintGenerator" -> "Microsoft.Msagl.OverlapRemoval.Cluster+BorderInfo"
+"Microsoft.Msagl.LabelRestoreData" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Incremental.CircleConstraint" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Incremental.ProcrustesCircleConstraint" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Incremental.RectHull" -> "Microsoft.Msagl.Incremental.IHull"
+"Microsoft.Msagl.Node" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.ProjectionSolver.Solver" -> "Microsoft.Msagl.ProjectionSolver.Constraint"
+"Microsoft.Msagl.ProjectionSolver.Constraint" -> "Microsoft.Msagl.ProjectionSolver.Variable"
+"Microsoft.Msagl.Splines.Curve" -> "Microsoft.Msagl.Splines.IntersectionInfo"
+"Microsoft.Msagl.Splines.IntersectionInfo" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.Couple`2" -> "type parameter.TFirst"
+"Microsoft.Msagl.Incremental.Cluster" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Couple`2" -> "type parameter.TSecond"
+"Microsoft.Msagl.GeometryGraph" -> "Microsoft.Msagl.Splines.PlaneTransformation"
+"Microsoft.Msagl.GeometryGraphWriter" -> "Microsoft.Msagl.GeometryGraph"
+"Microsoft.Msagl.Incremental.StickConstraint" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Incremental.CvxHull" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Incremental.RCHull" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Edge" -> "Microsoft.Msagl.Rectangle"
+"Microsoft.Msagl.Incremental.RectHull" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Incremental.FastIncrementalLayoutSettings" -> "Microsoft.Msagl.Incremental.Cluster"
+"Microsoft.Msagl.Edge" -> "Microsoft.Msagl.Label"
+"Microsoft.Msagl.Incremental.FastIncrementalLayoutSettings" -> "Microsoft.Msagl.GeometryGraph"
+"Microsoft.Msagl.GeometryGraph" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Edge" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.Incremental.FastIncrementalLayoutSettings" -> "Microsoft.Msagl.Incremental.LockPosition"
+"Microsoft.Msagl.GeometryGraph" -> "Microsoft.Msagl.Rectangle"
+"Microsoft.Msagl.GeometryGraph" -> "Microsoft.Msagl.LayoutAlgorithmSettings"
+"Microsoft.Msagl.OverlapRemoval.Node" -> "Microsoft.Msagl.ProjectionSolver.Variable"
+"Microsoft.Msagl.Incremental.ClusterConvexHull" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Edge" -> "Microsoft.Msagl.EdgeGeometry"
+"Microsoft.Msagl.GeometryGraph" -> "Microsoft.Msagl.Cancel"
+"Microsoft.Msagl.Edge" -> "Microsoft.Msagl.SmoothedPolyline"
+"Microsoft.Msagl.Incremental.StickConstraint" -> "Microsoft.Msagl.Incremental.IConstraint"
+"Microsoft.Msagl.InteractiveEdgeRouter" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.Splines.IntersectionInfo" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.InteractiveEdgeRouter" -> "Microsoft.Msagl.Splines.Polyline"
+"Microsoft.Msagl.Arrowheads" -> "Microsoft.Msagl.EdgeGeometry"
+"Microsoft.Msagl.Incremental.LockPosition" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Incremental.WheelConstraint" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.RectilinearEdgeRouter" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.NodeRestoreData" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.Incremental.IHull" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.InteractiveObstacleCalculator" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.Incremental.AlignmentConstraint" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Database" -> "Microsoft.Msagl.Anchor"
+"Microsoft.Msagl.EdgeRestoreData" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.EdgeRestoreData" -> "Microsoft.Msagl.Site"
+"Microsoft.Msagl.NodeRestoreData" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Incremental.FastIncrementalLayoutSettings" -> "Microsoft.Msagl.Incremental.IConstraint"
+"Microsoft.Msagl.EdgeRestoreData" -> "Microsoft.Msagl.SmoothedPolyline"
+"Microsoft.Msagl.Node" -> "Microsoft.Msagl.Rectangle"
+"Microsoft.Msagl.CurvePort" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Node" -> "Microsoft.Msagl.Label"
+"Microsoft.Msagl.Splines.Polyline" -> "Microsoft.Msagl.Rectangle"
+"Microsoft.Msagl.Node" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Port" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Port" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.ILabeledObject" -> "Microsoft.Msagl.Label"
+"Microsoft.Msagl.EdgeGeometry" -> "Microsoft.Msagl.SmoothedPolyline"
+"Microsoft.Msagl.Splines.ParallelogramNode" -> "Microsoft.Msagl.Splines.Parallelogram"
+"Microsoft.Msagl.OverlapRemoval.ConstraintGenerator" -> "Microsoft.Msagl.ProjectionSolver.Solver"
+"Microsoft.Msagl.IntEdge" -> "Microsoft.Msagl.LayerEdge"
+"Microsoft.Msagl.Incremental.QuickRoute.HullKDTree" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Splines.PenetrationDepth" -> "Microsoft.Msagl.Splines.Polyline"
+"Microsoft.Msagl.IntEdge" -> "Microsoft.Msagl.Edge"
+"Microsoft.Msagl.Splines.PenetrationDepth" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.Incremental.Cluster" -> "Microsoft.Msagl.Incremental.RectangularClusterBoundary"
+"Microsoft.Msagl.LayoutAlgorithmSettings" -> "Microsoft.Msagl.ShowDatabase"
+"Microsoft.Msagl.GeometryObject" -> "Microsoft.Msagl.Rectangle"
+"Microsoft.Msagl.Label" -> "Microsoft.Msagl.Rectangle"
+"Microsoft.Msagl.LayoutAlgorithmSettings" -> "Microsoft.Msagl.ShowWithColors"
+"Microsoft.Msagl.EdgeGeometry" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.LayoutAlgorithmSettings" -> "Microsoft.Msagl.Show"
+"Microsoft.Msagl.SmoothedPolyline" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Splines.Polyline" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.Incremental.StaticLayout" -> "Microsoft.Msagl.GeometryGraph"
+"Microsoft.Msagl.Incremental.RectangularClusterBoundary" -> "Microsoft.Msagl.Rectangle"
+"Microsoft.Msagl.Arrowheads" -> "Microsoft.Msagl.Port"
+"Microsoft.Msagl.Mds.MdsLayoutSettings" -> "Microsoft.Msagl.LayoutAlgorithmSettings"
+"Microsoft.Msagl.ProjectionSolver.Solver" -> "Microsoft.Msagl.ProjectionSolver.Solution"
+"Microsoft.Msagl.Database" -> "Microsoft.Msagl.IntPair"
+"Microsoft.Msagl.Database" -> "Microsoft.Msagl.IntEdge"
+"Microsoft.Msagl.HitTest`1" -> "type parameter.TData"
+"Microsoft.Msagl.Incremental.ProcrustesCircleConstraint" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Splines.EllipseOffset" -> "Microsoft.Msagl.Splines.ParallelogramNodeOverICurve"
+"Microsoft.Msagl.Incremental.IConstraint" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Incremental.RCHull" -> "Microsoft.Msagl.Incremental.IHull"
+"Microsoft.Msagl.GeometryGraphWriter" -> "System.Xml.XmlWriter"
+"Microsoft.Msagl.Incremental.CvxHull" -> "Microsoft.Msagl.Incremental.ClusterConvexHull"
+"Microsoft.Msagl.HitTest`1" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Mds.OverlapRemover" -> "Microsoft.Msagl.GeometryGraph"
+"Microsoft.Msagl.EdgeGeometry" -> "Microsoft.Msagl.Rectangle"
+"Microsoft.Msagl.Anchor" -> "Microsoft.Msagl.Splines.Polyline"
+"Microsoft.Msagl.Splines.Ellipse" -> "Microsoft.Msagl.Rectangle"
+"Microsoft.Msagl.InteractiveEdgeRouter" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Splines.Ellipse" -> "Microsoft.Msagl.Splines.ParallelogramNodeOverICurve"
+"Microsoft.Msagl.EdgeRouterHelper" -> "Microsoft.Msagl.Port"
+"Microsoft.Msagl.PhyloEdge" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.InteractiveEdgeRouter" -> "Microsoft.Msagl.EdgeGeometry"
+"Microsoft.Msagl.ProjectionSolver.Solution" -> "Microsoft.Msagl.ProjectionSolver.Constraint"
+"Microsoft.Msagl.Incremental.Multipole.MinimumEnclosingDisc" -> "Microsoft.Msagl.Incremental.Circle"
+"Microsoft.Msagl.Incremental.Multipole.MinimumEnclosingDisc" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Incremental.Cluster" -> "Microsoft.Msagl.Splines.Polyline"
+"Microsoft.Msagl.InteractiveEdgeRouter" -> "Microsoft.Msagl.SmoothedPolyline"
+"Microsoft.Msagl.ProjectionSolver.Parameters" -> "Microsoft.Msagl.ProjectionSolver.AdvancedParameters"
+"Microsoft.Msagl.Anchor" -> "Microsoft.Msagl.GeometryGraph"
+"Microsoft.Msagl.Incremental.MinSeparationConstraint" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Splines.CubicBezierSegment" -> "Microsoft.Msagl.Splines.ParallelogramNodeOverICurve"
+"Microsoft.Msagl.Incremental.LockPosition" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Splines.CubicBezierSegment" -> "Microsoft.Msagl.Rectangle"
+"Microsoft.Msagl.ConvexHull" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Incremental.FixedClusterBoundary" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Splines.Curve" -> "Microsoft.Msagl.Splines.ParallelogramNodeOverICurve"
+"Microsoft.Msagl.Splines.Curve" -> "Microsoft.Msagl.Rectangle"
+"Microsoft.Msagl.Incremental.MaxSeparationConstraint" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Splines.Curve" -> "Microsoft.Msagl.Edge"
+"Microsoft.Msagl.Incremental.FastIncrementalLayoutSettings" -> "Microsoft.Msagl.LayoutAlgorithmSettings"
+"Microsoft.Msagl.Splines.ICurve" -> "Microsoft.Msagl.Rectangle"
+"Microsoft.Msagl.Splines.BSpline" -> "Microsoft.Msagl.Splines.ParallelogramNodeOverICurve"
+"Microsoft.Msagl.Splines.PenetrationDepth" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Incremental.EdgeConstraintGenerator" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.GeometryGraph" -> "Microsoft.Msagl.GeometryObject"
+"Microsoft.Msagl.Incremental.FastIncrementalLayoutSettings" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Incremental.FastIncrementalLayoutSettings" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Splines.BSpline" -> "Microsoft.Msagl.Rectangle"
+"Microsoft.Msagl.Splines.ICurve" -> "Microsoft.Msagl.Splines.ParallelogramNodeOverICurve"
+"Microsoft.Msagl.HierarchyCalculatorWithRectangularNodes" -> "type parameter.TData"
+"Microsoft.Msagl.PhyloTree" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Mds.RankingLayoutSettings" -> "Microsoft.Msagl.LayoutAlgorithmSettings"
+"Microsoft.Msagl.Incremental.AllPairsNonOverlappingBoundaries" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.OverlapRemoval.Node" -> "System.IComparable"
+"Microsoft.Msagl.OverlapRemoval.Node" -> "System.IComparable`1<Microsoft.Msagl.OverlapRemoval.Node>"
+"Microsoft.Msagl.Splines.LineSegment" -> "Microsoft.Msagl.Splines.ParallelogramNodeOverICurve"
+"Microsoft.Msagl.Splines.LineSegment" -> "Microsoft.Msagl.Rectangle"
+"Microsoft.Msagl.HierarchyCalculatorWithRectangularNodes" -> "type parameter.TData"
+"Microsoft.Msagl.Label" -> "Microsoft.Msagl.GeometryObject"
+"Microsoft.Msagl.HierarchyCalculatorWithRectangularNodes" -> "type parameter.TData"
+"Microsoft.Msagl.OverlapRemoval.ConstraintGenerator" -> "Microsoft.Msagl.OverlapRemoval.Node"
+"Microsoft.Msagl.ShowWithColors" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.Edge" -> "Microsoft.Msagl.GeometryObject"
+"Microsoft.Msagl.SugiyamaLayoutSettings" -> "Microsoft.Msagl.LayoutAlgorithmSettings"
+"Microsoft.Msagl.Incremental.ClusterConvexHull" -> "Microsoft.Msagl.Incremental.IHull"
+"Microsoft.Msagl.Splines.EllipseOffset" -> "Microsoft.Msagl.Rectangle"
+"Microsoft.Msagl.ShowDatabase" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.ShowDatabase" -> "Microsoft.Msagl.Database"
+"Microsoft.Msagl.Incremental.ClusterConvexHull" -> "Microsoft.Msagl.Incremental.CvxHull"
+"Microsoft.Msagl.Show" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.Splines.MinDistCurveCurve" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.Edge" -> "Microsoft.Msagl.ILabeledObject"
+"Microsoft.Msagl.Incremental.EdgeConstraintGenerator" -> "Microsoft.Msagl.Incremental.IConstraint"
+"Microsoft.Msagl.OverlapRemoval.ConstraintGenerator" -> "Microsoft.Msagl.ProjectionSolver.Parameters"
+"Microsoft.Msagl.OverlapRemoval.ConstraintGenerator" -> "Microsoft.Msagl.ProjectionSolver.Solution"
+"Microsoft.Msagl.GeometryObject" -> "Microsoft.Msagl.LayoutChangeEventArgs"
+"Microsoft.Msagl.Set`1" -> "System.Collections.Generic.ICollection`1<type parameter.T>"
+"Microsoft.Msagl.Incremental.RCHull" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Incremental.Multipole.MoveToFront" -> "Microsoft.Msagl.Incremental.Circle"
+"Microsoft.Msagl.ProjectionSolver.AdvancedParameters" -> "System.ICloneable"
+"Microsoft.Msagl.Incremental.QuickRoute.HullKDTree" -> "Microsoft.Msagl.GeometryGraph"
+"Microsoft.Msagl.Incremental.QuickRoute.HullKDTree" -> "Microsoft.Msagl.Splines.Polyline"
+"Microsoft.Msagl.Incremental.QuickRoute.HullKDTree" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.Incremental.FastIncrementalLayoutSettings" -> "Microsoft.Msagl.Rectangle"
+"Microsoft.Msagl.Splines.RootFinder" -> "Microsoft.Msagl.Splines.IFunction"
+"Microsoft.Msagl.Splines.ICurve" -> "Microsoft.Msagl.Splines.PlaneTransformation"
+"Microsoft.Msagl.ProjectionSolver.Parameters" -> "System.ICloneable"
+"Microsoft.Msagl.EdgeRouterHelper" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.EdgeRouterHelper" -> "Microsoft.Msagl.EdgeGeometry"
+"Microsoft.Msagl.Set`1" -> "System.Collections.Generic.IEnumerable`1<type parameter.T>"
+"Microsoft.Msagl.Incremental.Multipole.Particle" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Incremental.Multipole.KDTree" -> "Microsoft.Msagl.Incremental.Multipole.Particle"
+"Microsoft.Msagl.Incremental.ClusterConvexHull" -> "Microsoft.Msagl.Incremental.Cluster"
+"Microsoft.Msagl.Incremental.AllPairsNonOverlappingBoundaries" -> "Microsoft.Msagl.Incremental.IConstraint"
+"Microsoft.Msagl.Incremental.ClusterConvexHull" -> "Microsoft.Msagl.Splines.Polyline"
+"Microsoft.Msagl.Node" -> "Microsoft.Msagl.RestoreData"
+"Microsoft.Msagl.Incremental.RectHull" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Incremental.RCHull" -> "Microsoft.Msagl.Incremental.CvxHull"
+"Microsoft.Msagl.Incremental.RCHull" -> "Microsoft.Msagl.Splines.Polyline"
+"Microsoft.Msagl.Incremental.RCHull" -> "Microsoft.Msagl.Incremental.ClusterConvexHull"
+"Microsoft.Msagl.RectangleNode`1" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Splines.EllipseOffset" -> "Microsoft.Msagl.Splines.PlaneTransformation"
+"Microsoft.Msagl.Incremental.CvxHull" -> "Microsoft.Msagl.Splines.Polyline"
+"Microsoft.Msagl.Incremental.QuickRoute.Particle" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Incremental.StaticLayout" -> "Microsoft.Msagl.Incremental.FastIncrementalLayoutSettings"
+"Microsoft.Msagl.Anchor" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.LabelRestoreData" -> "Microsoft.Msagl.RestoreData"
+"Microsoft.Msagl.Set`1" -> "System.Collections.IEnumerable"
+"Microsoft.Msagl.Visibility.VisibilityGraph" -> "Microsoft.Msagl.Splines.Polyline"
+"Microsoft.Msagl.Incremental.AllPairsNonOverlappingBoundaries" -> "Microsoft.Msagl.Incremental.FastIncrementalLayoutSettings"
+"Microsoft.Msagl.ProjectionSolver.Constraint" -> "System.IComparable`1<Microsoft.Msagl.ProjectionSolver.Constraint>"
+"Microsoft.Msagl.Incremental.AllPairsNonOverlappingBoundaries" -> "Microsoft.Msagl.Incremental.Cluster"
+"Microsoft.Msagl.ProjectionSolver.Solver" -> "Microsoft.Msagl.ProjectionSolver.Parameters"
+"Microsoft.Msagl.Node" -> "Microsoft.Msagl.ILabeledObject"
+"Microsoft.Msagl.Node" -> "Microsoft.Msagl.GeometryObject"
+"Microsoft.Msagl.Incremental.StaticLayout" -> "Microsoft.Msagl.Incremental.Cluster"
+"Microsoft.Msagl.Incremental.ProcrustesCircleConstraint" -> "Microsoft.Msagl.Incremental.IConstraint"
+"Microsoft.Msagl.ProjectionSolver.Variable" -> "System.IComparable`1<Microsoft.Msagl.ProjectionSolver.Variable>"
+"Microsoft.Msagl.Incremental.CircleConstraint" -> "Microsoft.Msagl.Incremental.IConstraint"
+"Microsoft.Msagl.Splines.ParallelogramNodeOverICurve" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.GeometryGraphReader" -> "System.Xml.XmlReader"
+"Microsoft.Msagl.GeometryGraphReader" -> "Microsoft.Msagl.GeometryGraph"
+"Microsoft.Msagl.GeometryObject" -> "Microsoft.Msagl.RestoreData"
+"Microsoft.Msagl.EdgeRestoreData" -> "Microsoft.Msagl.RestoreData"
+"Microsoft.Msagl.SmoothedPolyline" -> "Microsoft.Msagl.Splines.Curve"
+"Microsoft.Msagl.CurvePort" -> "Microsoft.Msagl.Port"
+"Microsoft.Msagl.OverlapRemoval.SimpleRectangles" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.SmoothedPolyline" -> "Microsoft.Msagl.Splines.LineSegment"
+"Microsoft.Msagl.Mds.OverlapRemover" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.Splines.ParallelogramNodeOverICurve" -> "Microsoft.Msagl.Splines.ParallelogramNode"
+"Microsoft.Msagl.EdgeGeometry" -> "Microsoft.Msagl.Node"
+"Microsoft.Msagl.FloatingPort" -> "Microsoft.Msagl.Port"
+"Microsoft.Msagl.Incremental.EdgeConstraintGenerator" -> "Microsoft.Msagl.Edge"
+"Microsoft.Msagl.IntEdge" -> "System.Collections.IEnumerable"
+"Microsoft.Msagl.IntEdge" -> "Microsoft.Msagl.IEdge"
+"Microsoft.Msagl.GeometryGraph" -> "Microsoft.Msagl.RestoreData"
+"Microsoft.Msagl.IntEdge" -> "System.Collections.Generic.IEnumerable`1<System.Int32>"
+"Microsoft.Msagl.Incremental.IncrementalLayoutWorker" -> "Microsoft.Msagl.GeometryGraph"
+"Microsoft.Msagl.Edge" -> "Microsoft.Msagl.RestoreData"
+"Microsoft.Msagl.Log" -> "System.IDisposable"
+"Microsoft.Msagl.Incremental.IncrementalLayoutWorker" -> "System.ComponentModel.BackgroundWorker"
+"Microsoft.Msagl.Splines.BSpline" -> "Microsoft.Msagl.Splines.Curve"
+"Microsoft.Msagl.Splines.LineSegment" -> "Microsoft.Msagl.Splines.PlaneTransformation"
+"Microsoft.Msagl.Incremental.EdgeConstraintGenerator" -> "Microsoft.Msagl.Incremental.VerticalSeparationConstraint"
+"Microsoft.Msagl.Splines.BSpline" -> "Microsoft.Msagl.Splines.PlaneTransformation"
+"Microsoft.Msagl.Label" -> "Microsoft.Msagl.RestoreData"
+"Microsoft.Msagl.PhyloTree" -> "Microsoft.Msagl.GeometryGraph"
+"Microsoft.Msagl.OverlapRemoval.Cluster" -> "Microsoft.Msagl.OverlapRemoval.Node"
+"Microsoft.Msagl.OverlapRemoval.Node" -> "Microsoft.Msagl.ProjectionSolver.Solver"
+"Microsoft.Msagl.Splines.Ellipse" -> "Microsoft.Msagl.Splines.PlaneTransformation"
+"Microsoft.Msagl.Splines.Curve" -> "Microsoft.Msagl.Splines.PlaneTransformation"
+"Microsoft.Msagl.NodeRestoreData" -> "Microsoft.Msagl.RestoreData"
+"Microsoft.Msagl.PhyloEdge" -> "Microsoft.Msagl.Edge"
+"Microsoft.Msagl.Incremental.AlignmentConstraint" -> "Microsoft.Msagl.Incremental.IConstraint"
+"Microsoft.Msagl.Incremental.FixedClusterBoundary" -> "Microsoft.Msagl.Incremental.Cluster"
+"Microsoft.Msagl.Splines.Curve" -> "Microsoft.Msagl.Splines.LineSegment"
+"Microsoft.Msagl.Incremental.WheelConstraint" -> "Microsoft.Msagl.Incremental.IConstraint"
+"Microsoft.Msagl.Point" -> "System.IComparable`1<Microsoft.Msagl.Point>"
+"Microsoft.Msagl.ProjectionSolver.Solution" -> "System.ICloneable"
+"Microsoft.Msagl.ConvexHull" -> "System.IDisposable"
+"Microsoft.Msagl.Incremental.Multipole.MoveToFront" -> "Microsoft.Msagl.Point"
+"Microsoft.Msagl.Splines.CurvatureDerivative" -> "Microsoft.Msagl.Splines.ICurve"
+"Microsoft.Msagl.Splines.CurvatureDerivative" -> "Microsoft.Msagl.Splines.IFunction"
+"Microsoft.Msagl.InteractiveObstacleCalculator" -> "Microsoft.Msagl.Splines.Polyline"
+"Microsoft.Msagl.RectilinearEdgeRouter" -> "Microsoft.Msagl.EdgeGeometry"
+"Microsoft.Msagl.Incremental.FixedClusterBoundary" -> "Microsoft.Msagl.Incremental.IConstraint"
+"Microsoft.Msagl.IntPair" -> "Microsoft.Msagl.IEdge"
+"Microsoft.Msagl.SmoothedPolyline" -> "System.Collections.Generic.IEnumerable`1<Microsoft.Msagl.Point>"
+"Microsoft.Msagl.Incremental.RectangularClusterBoundary" -> "Microsoft.Msagl.Splines.Polyline"
+"Microsoft.Msagl.SolverShell" -> "Microsoft.Msagl.ISolverShell"
+"Microsoft.Msagl.Splines.Polyline" -> "System.Collections.Generic.IEnumerable`1<Microsoft.Msagl.Point>"
+"Microsoft.Msagl.OverlapRemoval.SimpleRectangles" -> "Microsoft.Msagl.Rectangle"
+"Microsoft.Msagl.SmoothedPolyline" -> "System.Collections.IEnumerable"
+"Microsoft.Msagl.Splines.Polyline" -> "System.Collections.IEnumerable"
+"Microsoft.Msagl.Incremental.MaxSeparationConstraint" -> "Microsoft.Msagl.Incremental.StickConstraint"
+"Microsoft.Msagl.Incremental.MinSeparationConstraint" -> "Microsoft.Msagl.Incremental.StickConstraint"
+"Microsoft.Msagl.Incremental.VerticalSeparationConstraint" -> "Microsoft.Msagl.Incremental.IConstraint"
+"Microsoft.Msagl.Incremental.HorizontalSeparationConstraint" -> "Microsoft.Msagl.Incremental.IConstraint"
+"Microsoft.Msagl.RouterBetweenTwoNodes" -> "Microsoft.Msagl.GeometryGraph"
+"Microsoft.Msagl.RouterBetweenTwoNodes" -> "Microsoft.Msagl.Edge"
+"Microsoft.Msagl.Splines.CubicBezierSegment" -> "Microsoft.Msagl.Splines.PlaneTransformation"
+"Microsoft.Msagl.Incremental.LockPosition" -> "Microsoft.Msagl.Incremental.IConstraint"
+}

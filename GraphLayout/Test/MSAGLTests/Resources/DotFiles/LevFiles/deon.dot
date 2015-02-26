@@ -1,0 +1,233 @@
+﻿digraph G {
+    rankdir=LR
+"GraphDocumentWindowPane" [ label="GraphDocumentWindowPane" ]
+"BrowserToolWindowPane" [ label="BrowserToolWindowPane" ]
+"Commands" [ label="Commands" ]
+"GraphControlAutomationObject" [ label="GraphControlAutomationObject" ]
+"ProgressionPackage" [ label="ProgressionPackage" ]
+"GraphDocument" [ label="GraphDocument" ]
+"QueryExecution" [ label="QueryExecution" ]
+"ErrorProvider" [ label="ErrorProvider" ]
+"Action" [ label="Action" ]
+"UnusedReferenceDetector" [ label="UnusedReferenceDetector" ]
+"EditorFactory" [ label="EditorFactory" ]
+"DynamicProperties" [ label="DynamicProperties" ]
+"LinkCategories" [ label="LinkCategories" ]
+"NodeContainerFinder" [ label="NodeContainerFinder" ]
+"SelectionTracker" [ label="SelectionTracker" ]
+"UnreferencedNodeDetector" [ label="UnreferencedNodeDetector" ]
+"CircularReferenceDetector" [ label="CircularReferenceDetector" ]
+"Analyzer" [ label="Analyzer" ]
+"ExecuteActionCompletedEventArgs" [ label="ExecuteActionCompletedEventArgs" ]
+"NodeCategories" [ label="NodeCategories" ]
+"Microsoft.Internal.Performance.CodeMarkers" [ label="CodeMarkers" ]
+"GraphCategoryDescriptor" [ label="GraphCategoryDescriptor" ]
+"Microsoft.VisualStudio.Shell.ProvideXmlViewAttribute" [ label="ProvideXmlViewAttribute" ]
+"BrowserGroup" [ label="BrowserGroup" ]
+"ChangesetSubmissionEventArgs" [ label="ChangesetSubmissionEventArgs" ]
+"PropertyBag" [ label="PropertyBag" ]
+"ConnectionPointCookie" [ label="ConnectionPointCookie" ]
+"[Interfaces]Action" [ label="Action" ]
+"WpfDispatcher" [ label="WpfDispatcher" ]
+"[CascadeBrowser]CascadeBrowser" [ label="CascadeBrowser" ]
+"[DataManager]TickCompleteEventArgs" [ label="TickCompleteEventArgs" ]
+"[DataManager]DataManager" [ label="DataManager" ]
+"[Interfaces]ActionFlags" [ label="ActionFlags" ]
+"[Interfaces]ITranslator" [ label="ITranslator" ]
+"[Interfaces]BrowserGroup" [ label="BrowserGroup" ]
+"VsShell" [ label="VsShell" ]
+"<>f__AnonymousType0`2" [ label="<>f__AnonymousType0`2" ]
+"VisibilityEventArgs" [ label="VisibilityEventArgs" ]
+"[Interfaces]QueryCompleteHandler" [ label="QueryCompleteHandler" ]
+"SearchFilterEventArgs" [ label="SearchFilterEventArgs" ]
+"SurrogateFlags" [ label="SurrogateFlags" ]
+"[Interfaces]ProviderAttribute" [ label="ProviderAttribute" ]
+"[Interfaces]QueryCompleteEventArgs" [ label="QueryCompleteEventArgs" ]
+"Resources" [ label="Resources" ]
+"[Interfaces]ChangesetSubmissionEventArgs" [ label="ChangesetSubmissionEventArgs" ]
+"[Interfaces]LinkCategories" [ label="LinkCategories" ]
+"[Interfaces]CommandHandler" [ label="CommandHandler" ]
+"[Interfaces]IPendingActionIterator" [ label="IPendingActionIterator" ]
+"[Interfaces]IVsProgression" [ label="IVsProgression" ]
+"[Interfaces]IPendingAction" [ label="IPendingAction" ]
+"[Interfaces]IProgressionBrowser" [ label="IProgressionBrowser" ]
+"[Interfaces]IVSGraphControl" [ label="IVSGraphControl" ]
+"[Interfaces]IPropertyBag" [ label="IPropertyBag" ]
+"[Interfaces]IQueryManager" [ label="IQueryManager" ]
+"[Interfaces]IGraphError" [ label="IGraphError" ]
+"[Interfaces]IQueryExecutor" [ label="IQueryExecutor" ]
+"[Interfaces]DgmlProperties" [ label="DgmlProperties" ]
+"[Interfaces]NodeCategories" [ label="NodeCategories" ]
+"[Interfaces]DataDrivenActionNavigationType" [ label="DataDrivenActionNavigationType" ]
+"[Interfaces]ExecuteActionCompletedEventArgs" [ label="ExecuteActionCompletedEventArgs" ]
+"[Interfaces]DataDrivenActionLinkDirection" [ label="DataDrivenActionLinkDirection" ]
+"[Interfaces]ExecuteActionCompletedEventHandler" [ label="ExecuteActionCompletedEventHandler" ]
+"[Interfaces]ProgressionProperty" [ label="ProgressionProperty" ]
+"[Interfaces]IChangeset" [ label="IChangeset" ]
+"[Interfaces]IDataManager" [ label="IDataManager" ]
+"[Interfaces]IEditingContext" [ label="IEditingContext" ]
+"[Interfaces]ICommandService" [ label="ICommandService" ]
+"QueryCompleteHandler" [ label="QueryCompleteHandler" ]
+"ErrorTaskProvider" [ label="ErrorTaskProvider" ]
+"QueryCompleteEventArgs" [ label="QueryCompleteEventArgs" ]
+"DgmlProperties" [ label="DgmlProperties" ]
+"ExecuteActionCompletedEventHandler" [ label="ExecuteActionCompletedEventHandler" ]
+"DataDrivenActionNavigationType" [ label="DataDrivenActionNavigationType" ]
+"GraphControlTask" [ label="GraphControlTask" ]
+"ICommandService" [ label="ICommandService" ]
+"GraphControlTaskProvider" [ label="GraphControlTaskProvider" ]
+"IChangeset" [ label="IChangeset" ]
+"DataDrivenActionLinkDirection" [ label="DataDrivenActionLinkDirection" ]
+"GraphPropertyDescriptor" [ label="GraphPropertyDescriptor" ]
+"ActionId" [ label="ActionId" ]
+"ContentHolder" [ label="ContentHolder" ]
+"ActionFlags" [ label="ActionFlags" ]
+"ActionToDgqlTranslator" [ label="ActionToDgqlTranslator" ]
+"Microsoft.Internal.Performance.CodeMarkerEvent" [ label="CodeMarkerEvent" ]
+"AutoCompressStates" [ label="AutoCompressStates" ]
+"CommandHandler" [ label="CommandHandler" ]
+"CascadeBrowserResources" [ label="CascadeBrowserResources" ]
+"ChangesetSubmittedEventHandler" [ label="ChangesetSubmittedEventHandler" ]
+"IDataManager" [ label="IDataManager" ]
+"CategoryInitialization" [ label="CategoryInitialization" ]
+"IEditingContext" [ label="IEditingContext" ]
+"LayoutStyle" [ label="LayoutStyle" ]
+"IEventSource" [ label="IEventSource" ]
+"ItemClickedEventArgs" [ label="ItemClickedEventArgs" ]
+"[Interfaces]SurrogateFlags" [ label="SurrogateFlags" ]
+"InvokeEventHandler" [ label="InvokeEventHandler" ]
+"NavigationPath" [ label="NavigationPath" ]
+"ProviderAttribute" [ label="ProviderAttribute" ]
+"NodeContainer" [ label="NodeContainer" ]
+"ProgressionProperty" [ label="ProgressionProperty" ]
+"InvokeEventArgs" [ label="InvokeEventArgs" ]
+"ProgressionErrorTask" [ label="ProgressionErrorTask" ]
+"IPendingActionIterator" [ label="IPendingActionIterator" ]
+"IVsProgression" [ label="IVsProgression" ]
+"IPendingAction" [ label="IPendingAction" ]
+"IProgressionBrowser" [ label="IProgressionBrowser" ]
+"IGraphError" [ label="IGraphError" ]
+"IPropertyBag" [ label="IPropertyBag" ]
+"IVSGraphControl" [ label="IVSGraphControl" ]
+"IQueryExecutor" [ label="IQueryExecutor" ]
+"ITranslator" [ label="ITranslator" ]
+"<PrivateImplementationDetails>{2EEF1922-2CC4-4FAC-B420-B6E9AFE4B053}" [ label="<PrivateImplementationDetails>{2EEF1922-2CC4-4FAC-B420-B6E9AFE4B053}" ]
+"IQueryManager" [ label="IQueryManager" ]
+"GraphDocumentWindowPane" -> "Resources"
+"GraphDocumentWindowPane" -> "SelectionTracker"
+"GraphDocumentWindowPane" -> "VsShell"
+"GraphDocumentWindowPane" -> "PropertyBag"
+"GraphDocumentWindowPane" -> "GraphDocument"
+"GraphDocumentWindowPane" -> "LayoutStyle"
+"GraphDocumentWindowPane" -> "ProgressionPackage"
+"GraphDocumentWindowPane" -> "[Interfaces]IDataManager"
+"LinkCategories" -> "CategoryInitialization"
+"LinkCategories" -> "DgmlProperties"
+"GraphDocumentWindowPane" -> "[Interfaces]ICommandService"
+"GraphDocumentWindowPane" -> "WpfDispatcher"
+"GraphDocumentWindowPane" -> "[Interfaces]CommandHandler"
+"GraphDocumentWindowPane" -> "[Interfaces]DgmlProperties"
+"GraphDocumentWindowPane" -> "GraphControlAutomationObject"
+"GraphControlAutomationObject" -> "[Interfaces]QueryCompleteHandler"
+"GraphDocument" -> "ConnectionPointCookie"
+"GraphDocument" -> "ProgressionPackage"
+"GraphControlAutomationObject" -> "[Interfaces]IProgressionBrowser"
+"GraphControlAutomationObject" -> "[Interfaces]IChangeset"
+"GraphControlAutomationObject" -> "[Interfaces]IDataManager"
+"GraphControlAutomationObject" -> "[Interfaces]IEditingContext"
+"GraphDocumentWindowPane" -> "Commands"
+"GraphDocumentWindowPane" -> "ContentHolder"
+"GraphDocumentWindowPane" -> "ErrorProvider"
+"GraphDocumentWindowPane" -> "BrowserToolWindowPane"
+"GraphDocument" -> "Resources"
+"GraphDocument" -> "VsShell"
+"GraphDocument" -> "[Interfaces]DgmlProperties"
+"QueryExecution" -> "[Interfaces]QueryCompleteHandler"
+"SelectionTracker" -> "DynamicProperties"
+"SelectionTracker" -> "VsShell"
+"QueryExecution" -> "[Interfaces]QueryCompleteEventArgs"
+"QueryExecution" -> "Microsoft.Internal.Performance.CodeMarkers"
+"QueryExecution" -> "[Interfaces]IDataManager"
+"QueryExecution" -> "[Interfaces]IQueryManager"
+"UnusedReferenceDetector" -> "NodeContainerFinder"
+"UnusedReferenceDetector" -> "Resources"
+"Microsoft.VisualStudio.Shell.ProvideXmlViewAttribute" -> "Resources"
+"UnusedReferenceDetector" -> "NodeContainer"
+"UnreferencedNodeDetector" -> "Analyzer"
+"UnreferencedNodeDetector" -> "Resources"
+"UnusedReferenceDetector" -> "Analyzer"
+"PropertyBag" -> "[Interfaces]ProgressionProperty"
+"ProgressionPackage" -> "BrowserToolWindowPane"
+"ProgressionPackage" -> "Commands"
+"ProgressionPackage" -> "EditorFactory"
+"ProgressionPackage" -> "Microsoft.Internal.Performance.CodeMarkers"
+"NodeCategories" -> "CategoryInitialization"
+"NodeContainerFinder" -> "NodeContainer"
+"NodeContainerFinder" -> "[Interfaces]DgmlProperties"
+"ProgressionPackage" -> "[DataManager]DataManager"
+"ProgressionPackage" -> "[Interfaces]CommandHandler"
+"ProgressionPackage" -> "[Interfaces]IDataManager"
+"ProgressionPackage" -> "VsShell"
+"ProgressionPackage" -> "ErrorProvider"
+"ProgressionPackage" -> "GraphControlAutomationObject"
+"ProgressionPackage" -> "PropertyBag"
+"GraphControlAutomationObject" -> "[Interfaces]ExecuteActionCompletedEventHandler"
+"BrowserToolWindowPane" -> "[DataManager]DataManager"
+"BrowserToolWindowPane" -> "[Interfaces]CommandHandler"
+"BrowserToolWindowPane" -> "[Interfaces]ICommandService"
+"BrowserToolWindowPane" -> "[CascadeBrowser]CascadeBrowser"
+"BrowserToolWindowPane" -> "SelectionTracker"
+"BrowserToolWindowPane" -> "VsShell"
+"BrowserToolWindowPane" -> "WpfDispatcher"
+"Commands" -> "BrowserToolWindowPane"
+"Commands" -> "GraphControlAutomationObject"
+"Commands" -> "GraphDocumentWindowPane"
+"CircularReferenceDetector" -> "Resources"
+"BrowserToolWindowPane" -> "[Interfaces]IEditingContext"
+"ChangesetSubmissionEventArgs" -> "IChangeset"
+"CircularReferenceDetector" -> "Analyzer"
+"BrowserToolWindowPane" -> "Resources"
+"Action" -> "DataDrivenActionNavigationType"
+"Action" -> "DgmlProperties"
+"Analyzer" -> "[Interfaces]IEditingContext"
+"Action" -> "DataDrivenActionLinkDirection"
+"Microsoft.Internal.Performance.CodeMarkers" -> "Microsoft.Internal.Performance.CodeMarkerEvent"
+"Action" -> "ActionFlags"
+"Action" -> "ActionToDgqlTranslator"
+"BrowserToolWindowPane" -> "GraphControlAutomationObject"
+"BrowserToolWindowPane" -> "GraphDocumentWindowPane"
+"BrowserToolWindowPane" -> "ProgressionPackage"
+"BrowserToolWindowPane" -> "ErrorProvider"
+"Analyzer" -> "[Interfaces]IGraphError"
+"BrowserGroup" -> "DgmlProperties"
+"BrowserToolWindowPane" -> "ContentHolder"
+"ErrorProvider" -> "ProgressionErrorTask"
+"ErrorProvider" -> "Resources"
+"ExecuteActionCompletedEventArgs" -> "IChangeset"
+"ErrorProvider" -> "GraphControlTaskProvider"
+"EditorFactory" -> "ProgressionPackage"
+"ErrorProvider" -> "ErrorTaskProvider"
+"ErrorProvider" -> "GraphControlTask"
+"GraphControlAutomationObject" -> "WpfDispatcher"
+"GraphControlAutomationObject" -> "[DataManager]DataManager"
+"GraphControlAutomationObject" -> "[Interfaces]ExecuteActionCompletedEventArgs"
+"GraphControlAutomationObject" -> "QueryExecution"
+"GraphCategoryDescriptor" -> "Resources"
+"GraphControlAutomationObject" -> "GraphDocumentWindowPane"
+"GraphControlAutomationObject" -> "ProgressionPackage"
+"EditorFactory" -> "GraphDocumentWindowPane"
+"Commands" -> "[Interfaces]ICommandService"
+"Commands" -> "[Interfaces]IEditingContext"
+"Commands" -> "[Interfaces]IVsProgression"
+"Commands" -> "[DataManager]DataManager"
+"Commands" -> "ProgressionPackage"
+"Commands" -> "Resources"
+"Commands" -> "VsShell"
+"DynamicProperties" -> "GraphPropertyDescriptor"
+"DynamicProperties" -> "Resources"
+"EditorFactory" -> "GraphDocument"
+"DynamicProperties" -> "GraphCategoryDescriptor"
+"Commands" -> "[Interfaces]QueryCompleteEventArgs"
+"Commands" -> "[Interfaces]QueryCompleteHandler"
+"ConnectionPointCookie" -> "Resources"
+}

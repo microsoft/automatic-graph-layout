@@ -1,0 +1,127 @@
+digraph "G"{
+compound=true;
+concentrate=true;
+splines=true;
+subgraph "cluster5661" {
+label="SelectATool";
+c5661e0[label="DrawingEditor", color="red"]
+c5661e1[label="Command", color="red"]
+}
+;
+subgraph "cluster5662" {
+label="EditAnExistingFigure";
+c5662e0[label="DrawApplication", color="red"]
+c5662e1[label="Drawing", color="red"]
+c5662e2[label="DrawingView", color="red"]
+c5662e3[label="Command", color="red"]
+c5662e2 -> c5662e1 [label=" ", decorate=true];
+c5662e0 -> c5662e1 [label=" ", decorate=true];
+c5662e3 -> c5662e2 [label=" ", decorate=true];
+c5662e0 -> c5662e2 [label=" ", decorate=true];
+}
+;
+subgraph "cluster5664" {
+label="DeleteAnExistingFigure";
+c5664e0[label="Drawing", color="red"]
+c5664e1[label="DrawingView", color="red"]
+c5664e1 -> c5664e0 [label=" ", decorate=true];
+}
+;
+subgraph "cluster5663" {
+label="AddANewFigure";
+c5663e0[label="Drawing", color="red"]
+c5663e1[label="DrawingView", color="red"]
+c5663e1 -> c5663e0 [label=" ", decorate=true];
+}
+;
+subgraph "cluster5666" {
+label="AnimateTheDrawing";
+c5666e0[label="Animation", color="red"]
+c5666e1[label="DrawingView", color="red"]
+c5666e0 -> c5666e1 [label=" ", decorate=true];
+}
+;
+subgraph "cluster5665" {
+label="LoadOrSaveADrawing";
+c5665e0[label="DrawingEditor", color="red"]
+c5665e1[label="Connector", color="red"]
+c5665e2[label="Drawing", color="red"]
+c5665e3[label="DrawingView", color="red"]
+c5665e3 -> c5665e2 [label=" ", decorate=true];
+c5665e3 -> c5665e0 [label=" ", decorate=true];
+}
+;
+subgraph "cluster5667" {
+label="PrintTheDrawing";
+c5667e0[label="DrawingEditor", color="red"]
+c5667e1[label="Drawing", color="red"]
+c5667e2[label="DrawingView", color="red"]
+c5667e2 -> c5667e1 [label=" ", decorate=true];
+c5667e2 -> c5667e0 [label=" ", decorate=true];
+}
+;
+subgraph "cluster5668" {
+label="SelectAnExistingFigure";
+c5668e0[label="Drawing", color="red"]
+c5668e1[label="DrawingView", color="red"]
+c5668e1 -> c5668e0 [label=" ", decorate=true];
+}
+;
+c5665e0 -> c5666e0 [label=" ", ltail=cluster5665, lhead=cluster5666, decorate=true];
+c5666e0 -> c5665e0 [label=" ", ltail=cluster5666, lhead=cluster5665, decorate=true];
+c5665e0 -> c5664e0 [label=" ", ltail=cluster5665, lhead=cluster5664, decorate=true];
+c5664e0 -> c5665e0 [label=" ", ltail=cluster5664, lhead=cluster5665, decorate=true];
+c5663e0 -> c5667e0 [label=" ", ltail=cluster5663, lhead=cluster5667, decorate=true];
+c5667e0 -> c5663e0 [label=" ", ltail=cluster5667, lhead=cluster5663, decorate=true];
+c5664e0 -> c5661e0 [label=" ", ltail=cluster5664, lhead=cluster5661, decorate=true];
+c5661e0 -> c5664e0 [label=" ", ltail=cluster5661, lhead=cluster5664, decorate=true];
+c5661e0 -> c5665e0 [label=" ", ltail=cluster5661, lhead=cluster5665, decorate=true];
+c5665e0 -> c5661e0 [label=" ", ltail=cluster5665, lhead=cluster5661, decorate=true];
+c5668e0 -> c5667e0 [label=" ", ltail=cluster5668, lhead=cluster5667, decorate=true];
+c5667e0 -> c5668e0 [label=" ", ltail=cluster5667, lhead=cluster5668, decorate=true];
+c5661e0 -> c5668e0 [label=" ", ltail=cluster5661, lhead=cluster5668, decorate=true];
+c5668e0 -> c5661e0 [label=" ", ltail=cluster5668, lhead=cluster5661, decorate=true];
+c5663e0 -> c5665e0 [label=" ", ltail=cluster5663, lhead=cluster5665, decorate=true];
+c5665e0 -> c5663e0 [label=" ", ltail=cluster5665, lhead=cluster5663, decorate=true];
+c5661e0 -> c5663e0 [label=" ", ltail=cluster5661, lhead=cluster5663, decorate=true];
+c5663e0 -> c5661e0 [label=" ", ltail=cluster5663, lhead=cluster5661, decorate=true];
+c5667e0 -> c5664e0 [label=" ", ltail=cluster5667, lhead=cluster5664, decorate=true];
+c5664e0 -> c5667e0 [label=" ", ltail=cluster5664, lhead=cluster5667, decorate=true];
+c5666e0 -> c5667e0 [label=" ", ltail=cluster5666, lhead=cluster5667, decorate=true];
+c5667e0 -> c5666e0 [label=" ", ltail=cluster5667, lhead=cluster5666, decorate=true];
+c5666e0 -> c5664e0 [label=" ", ltail=cluster5666, lhead=cluster5664, decorate=true];
+c5664e0 -> c5666e0 [label=" ", ltail=cluster5664, lhead=cluster5666, decorate=true];
+c5661e0 -> c5662e0 [label=" ", ltail=cluster5661, lhead=cluster5662, decorate=true];
+c5662e0 -> c5661e0 [label=" ", ltail=cluster5662, lhead=cluster5661, decorate=true];
+c5664e0 -> c5662e0 [label=" ", ltail=cluster5664, lhead=cluster5662, decorate=true];
+c5662e0 -> c5664e0 [label=" ", ltail=cluster5662, lhead=cluster5664, decorate=true];
+c5666e0 -> c5668e0 [label=" ", ltail=cluster5666, lhead=cluster5668, decorate=true];
+c5668e0 -> c5666e0 [label=" ", ltail=cluster5668, lhead=cluster5666, decorate=true];
+c5666e0 -> c5661e0 [label=" ", ltail=cluster5666, lhead=cluster5661, decorate=true];
+c5661e0 -> c5666e0 [label=" ", ltail=cluster5661, lhead=cluster5666, decorate=true];
+c5664e0 -> c5663e0 [label=" ", ltail=cluster5664, lhead=cluster5663, decorate=true];
+c5663e0 -> c5664e0 [label=" ", ltail=cluster5663, lhead=cluster5664, decorate=true];
+c5662e0 -> c5667e0 [label=" ", ltail=cluster5662, lhead=cluster5667, decorate=true];
+c5667e0 -> c5662e0 [label=" ", ltail=cluster5667, lhead=cluster5662, decorate=true];
+c5666e0 -> c5662e0 [label=" ", ltail=cluster5666, lhead=cluster5662, decorate=true];
+c5662e0 -> c5666e0 [label=" ", ltail=cluster5662, lhead=cluster5666, decorate=true];
+c5668e0 -> c5663e0 [label=" ", ltail=cluster5668, lhead=cluster5663, decorate=true];
+c5663e0 -> c5668e0 [label=" ", ltail=cluster5663, lhead=cluster5668, decorate=true];
+c5665e0 -> c5668e0 [label=" ", ltail=cluster5665, lhead=cluster5668, decorate=true];
+c5668e0 -> c5665e0 [label=" ", ltail=cluster5668, lhead=cluster5665, decorate=true];
+c5662e0 -> c5668e0 [label=" ", ltail=cluster5662, lhead=cluster5668, decorate=true];
+c5668e0 -> c5662e0 [label=" ", ltail=cluster5668, lhead=cluster5662, decorate=true];
+c5663e0 -> c5666e0 [label=" ", ltail=cluster5663, lhead=cluster5666, decorate=true];
+c5666e0 -> c5663e0 [label=" ", ltail=cluster5666, lhead=cluster5663, decorate=true];
+c5661e0 -> c5667e0 [label=" ", ltail=cluster5661, lhead=cluster5667, decorate=true];
+c5667e0 -> c5661e0 [label=" ", ltail=cluster5667, lhead=cluster5661, decorate=true];
+c5662e0 -> c5665e0 [label=" ", ltail=cluster5662, lhead=cluster5665, decorate=true];
+c5665e0 -> c5662e0 [label=" ", ltail=cluster5665, lhead=cluster5662, decorate=true];
+c5662e0 -> c5663e0 [label=" ", ltail=cluster5662, lhead=cluster5663, decorate=true];
+c5663e0 -> c5662e0 [label=" ", ltail=cluster5663, lhead=cluster5662, decorate=true];
+c5665e0 -> c5667e0 [label=" ", ltail=cluster5665, lhead=cluster5667, decorate=true];
+c5667e0 -> c5665e0 [label=" ", ltail=cluster5667, lhead=cluster5665, decorate=true];
+c5668e0 -> c5664e0 [label=" ", ltail=cluster5668, lhead=cluster5664, decorate=true];
+c5664e0 -> c5668e0 [label=" ", ltail=cluster5664, lhead=cluster5668, decorate=true];
+
+}

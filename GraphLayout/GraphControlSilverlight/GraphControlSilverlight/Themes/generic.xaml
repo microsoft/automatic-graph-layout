@@ -1,0 +1,43 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Microsoft.Msagl.GraphControlSilverlight">
+
+    <Style TargetType="local:DNode">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:DNode">
+                    <Canvas>
+                        <Path Data="{TemplateBinding BoundaryPath}" StrokeThickness="{TemplateBinding BoundaryThickness}" Stroke="{TemplateBinding BoundaryBrush}"/>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:DEdge">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:DEdge">
+                    <Canvas>
+                        <Path Data="{TemplateBinding EdgePath}" StrokeThickness="{TemplateBinding EdgeThickness}" Stroke="{TemplateBinding EdgeBrush}"/>
+                        <Path Data="{TemplateBinding SourceArrowPath}" StrokeThickness="{TemplateBinding EdgeThickness}" Stroke="{TemplateBinding EdgeBrush}" Fill="{TemplateBinding EdgeBrush}" />
+                        <Path Data="{TemplateBinding TargetArrowPath}" StrokeThickness="{TemplateBinding EdgeThickness}" Stroke="{TemplateBinding EdgeBrush}" Fill="{TemplateBinding EdgeBrush}"/>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:DLabel">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:DLabel">
+                    <Canvas>
+                        <ContentControl Content="{TemplateBinding Content}"/>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

@@ -1,0 +1,5 @@
+digraph inheritance
+{
+  Node3031 [shape="box",label="tt_core_ns::DownloadControlBlock",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",style="filled" fontcolor="white"];
+ 
+}

@@ -1,0 +1,7 @@
+
+digraph G {
+	u -> a[label="22"]
+	a -> u[label="ssssssssssssssssssssssssssssssssssssssssssssssssssssssssss"]
+
+}
+

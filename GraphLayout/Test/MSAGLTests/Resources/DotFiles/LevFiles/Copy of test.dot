@@ -1,0 +1,29 @@
+
+digraph g {
+	compound = true;
+	nodesep = 1.0;
+	rankdir = "LR";
+	ranksep = 1.0;
+	graph [
+		fontsize = "9"
+		fontname = "Verdana"
+		fontcolor = "black"
+		color = "black"
+	]
+	node [
+		fontsize = "9"
+		fontname = "Verdana"
+		fontcolor = "black"
+		shape = "box"
+	]
+	edge [
+		fontsize = "18"
+		fontname = "Verdana"
+		fontcolor = "black"
+		style = "solid"
+	]
+a [fontsize = "18"]
+a -> b
+b -> c
+
+}

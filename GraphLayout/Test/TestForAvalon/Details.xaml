@@ -1,0 +1,86 @@
+﻿<Window x:Class="TestForAvalon.Details"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
+    xmlns:ui="clr-namespace:TestForAvalon" 
+    xmlns:av="clr-namespace:Microsoft.Msagl.ControlForWpfObsolete;assembly=Microsoft.Msagl.ControlForWpf" 
+    Title="Details Window"
+    >
+  <Window.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Styles.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>    
+  </Window.Resources>  
+  <!--<DockPanel Name="DetailPanel">
+    <TextBlock DockPanel.Dock="Top" Text="{Binding Node.Attr.Label}"/>
+    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+      <TextBlock Text="{Binding Node.UserData.OutEdgeCount}"/>
+      <TextBlock Text=" Out/"/>
+      <TextBlock Text="{Binding Node.UserData.InEdgeCount}"/>
+      <TextBlock Text=" In"/>
+    </StackPanel>
+    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+      <TextBlock Text="{Binding Node.UserData.InstanceCount}"/>
+      <TextBlock Text=" Member(s)"/>
+    </StackPanel>
+    <ListView ItemsSource="{Binding Node.UserData.Contents.Members}"/>
+  </DockPanel> -->
+
+  <DockPanel Name="dockPanel"  Background="Gray" Initialized="DockPanelInitialized">
+    <ToolBarTray DockPanel.Dock="Top" IsLocked="False">
+      <ToolBar Band="0" Background="AliceBlue">
+        <Menu IsMainMenu="True">
+          <MenuItem >
+            <MenuItem.Header>_File</MenuItem.Header>
+            <MenuItem Command="ui:Window1.SaveAsFileCommand" Header="_Save as..." InputGestureText="Ctrl+A" />
+          </MenuItem>
+          <MenuItem >
+              <MenuItem.Header>_Layout</MenuItem.Header>
+              <MenuItem Name="TB" Click="TopToBottom" Header="_Top to bottom" IsChecked="True"/>
+              <MenuItem Name="BT" Click="BottomToTop" Header="_Bottom to top"/>
+              <MenuItem Name="LR" Click="LeftToRight" Header="_Left to right"/>
+              <MenuItem Name="RL" Click="RightToLeft" Header="_Right to left"/>            
+          </MenuItem>
+          <MenuItem >
+            <MenuItem.Header>_Edit</MenuItem.Header>
+            <MenuItem Click="Cut" Header="_Cut"/>
+            <MenuItem Click="Copy" Header="_Copy"/>
+            <MenuItem Click="Paste" Header="_Paste"/>
+          </MenuItem>
+        </Menu>
+      </ToolBar>
+      <ToolBar Band="0" Background="AliceBlue">
+        <Slider Name="zoomSlider"  Width="150" BorderThickness="0"  DockPanel.Dock="Right"
+                ToolTip="Zoom Level" ></Slider>
+        <Button Name="backwardButton" Width="30">
+          <Image Source="data\back.bmp"></Image>
+        </Button>
+        <Button Name="forwardButton" Width="30">
+          <Image Source="data\forward.bmp"></Image>
+        </Button>
+        <RadioButton Name="windowZoomButton" Width="30" Click="windowZoomButton_Click">
+          <Image Source="data\zoomWindow.bmp" ></Image>
+        </RadioButton>
+        <RadioButton Name="panButton" Width="30">
+          <Image Source="data\hand.bmp"></Image>
+        </RadioButton>
+        <RadioButton Name="dragButton" Content="Drag nodes">
+
+        </RadioButton>
+
+        <Button DockPanel.Dock="Left"  Name="demoButton"  Content ="Demo" />
+        <Slider Name="brandesThresholdSlider"  Width="150" BorderThickness="0"  DockPanel.Dock="Right"
+                ToolTip="Brandes Threshold" ></Slider>
+
+        <Slider Name="aspectRatioSlider"  Width="150" BorderThickness="0"  DockPanel.Dock="Right"
+                ToolTip="aspect ratio = 0" ></Slider>
+
+
+      </ToolBar>
+    </ToolBarTray>
+    <TextBlock Name="toolStripStatusLabel" Height="20" DockPanel.Dock="Bottom" Background="CornflowerBlue"/>
+    <DockPanel Name="holder"/>
+  </DockPanel>  
+  
+</Window>

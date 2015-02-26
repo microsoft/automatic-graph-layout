@@ -1,0 +1,735 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{415D3E3F-7105-46C1-84D2-7ECB34213D92}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Msagl</RootNamespace>
+    <AssemblyName>Microsoft.Msagl</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;PARALLEL35;PERSISTENCE;PHYLOTREE;REPORTING;PROPERTY_GRID_SUPPORT;VERIFY;NET4;TEST_MSAGL;PARALLEL_SUPPORTED;USE_PHYLOTREE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Debug\Microsoft.Msagl.XML</DocumentationFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;PARALLEL35;CODE_ANALYSIS;PERSISTENCE;REPORTING;NET4;PARALLEL_SUPPORTED;PPC</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugSymbols>true</DebugSymbols>
+    <DocumentationFile>bin\Release\Microsoft.Msagl.XML</DocumentationFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugDevTrace|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\DebugDevTrace\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;PARALLEL35;PERSISTENCE;PHYLOTREE;REPORTING;PROPERTY_GRID_SUPPORT;PPC_;VERIFY;NET4;TEST_MSAGL;DEVTRACE;PARALLEL_SUPPORTED;PPC</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DocumentationFile>bin\DebugDevTrace\Microsoft.Msagl.XML</DocumentationFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>msaglSigningKey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;PARALLEL35;PERSISTENCE;PHYLOTREE;PROPERTY_GRID_SUPPORT;VERIFY;NET4;TEST_MSAGL;PARALLEL_SUPPORTED;PPC;REPORTING</DefineConstants>
+    <DocumentationFile>bin\Debug\Microsoft.Msagl.XML</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\Microsoft.Msagl.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;PARALLEL35;CODE_ANALYSIS;PERSISTENCE;REPORTING;NET4;PARALLEL_SUPPORTED;PPC</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Release\Microsoft.Msagl.XML</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\Microsoft.Msagl.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugDevTrace|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\DebugDevTrace\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;PARALLEL35;PERSISTENCE;PHYLOTREE;REPORTING;PROPERTY_GRID_SUPPORT;PPC_;VERIFY;NET4;TEST_MSAGL;DEVTRACE;PARALLEL_SUPPORTED;PPC</DefineConstants>
+    <DocumentationFile>bin\DebugDevTrace\Microsoft.Msagl.XML</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\DebugDevTrace\Microsoft.Msagl.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;PARALLEL35;PERSISTENCE;PHYLOTREE;REPORTING;PROPERTY_GRID_SUPPORT;VERIFY;NET4;TEST_MSAGL;PARALLEL_SUPPORTED;USE_PHYLOTREE</DefineConstants>
+    <DocumentationFile>bin\Debug\Microsoft.Msagl.XML</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>
+    </NoWarn>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;PARALLEL35;CODE_ANALYSIS;PERSISTENCE;REPORTING;NET4;PARALLEL_SUPPORTED;PPC</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Release\Microsoft.Msagl.XML</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>
+    </NoWarn>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugDevTrace|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\DebugDevTrace\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;PARALLEL35;PERSISTENCE;PHYLOTREE;REPORTING;PROPERTY_GRID_SUPPORT;PPC_;VERIFY;NET4;TEST_MSAGL;DEVTRACE;PARALLEL_SUPPORTED;PPC</DefineConstants>
+    <DocumentationFile>bin\DebugDevTrace\Microsoft.Msagl.XML</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>
+    </NoWarn>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\AlgorithmBase.cs" />
+    <Compile Include="Core\DataStructures\CollectionUtilities.cs" />
+    <Compile Include="Core\DataStructures\GenericBinaryHeapPriorityQueueWithTimestamp.cs" />
+    <Compile Include="Core\DataStructures\GenericHeapElementWithTimestamp.cs" />
+    <Compile Include="Core\DataStructures\Size.cs" />
+    <Compile Include="Core\Geometry\ApproximateComparer.cs" />
+    <Compile Include="Core\Geometry\ConvexHull\ConvexHull.cs" />
+    <Compile Include="Core\Geometry\ConvexHull\HullPoint.cs" />
+    <Compile Include="Core\Geometry\ConvexHull\HullPointComparer.cs" />
+    <Compile Include="Core\Geometry\ConvexHull\HullStack.cs" />
+    <Compile Include="Core\Geometry\Curves\RoundedRect.cs" />
+    <Compile Include="Core\Geometry\RectanglePacking\ColumnPacking.cs" />
+    <Compile Include="Core\Geometry\RectanglePacking\OptimalColumnPacking.cs" />
+    <Compile Include="Core\Geometry\RectanglePacking\OptimalPacking.cs" />
+    <Compile Include="Core\Geometry\RectanglePacking\OptimalRectanglePacking.cs" />
+    <Compile Include="Core\Geometry\OverlapRemoval\BorderInfo.cs" />
+    <Compile Include="Core\Geometry\PointNodesList.cs" />
+    <Compile Include="Core\Geometry\PointPair.cs" />
+    <Compile Include="Core\Geometry\RectanglePacking\Packing.cs" />
+    <Compile Include="Core\Geometry\RectanglePacking\PackingConstants.cs" />
+    <Compile Include="Core\Geometry\RectanglePacking\RectangleToPack.cs" />
+    <Compile Include="Core\Geometry\RectanglePacking\RectanglePacking.cs" />
+    <Compile Include="Core\Geometry\RTree\IntervalNode.cs" />
+    <Compile Include="Core\Geometry\RTree\IntervalNodeUtils.cs" />
+    <Compile Include="Core\Geometry\RTree\IntervalRTree.cs" />
+    <Compile Include="Core\Geometry\RTree\RectangleNodeUtils.cs" />
+    <Compile Include="Core\Geometry\Site.cs" />
+    <Compile Include="Core\GraphAlgorithms\MinimumSpanningTreeByPrim.cs" />
+    <Compile Include="Core\Layout\Arrowhead.cs" />
+    <Compile Include="Core\Layout\Arrowheads.cs" />
+    <Compile Include="Core\Layout\CurvePort.cs" />
+    <Compile Include="Core\Layout\EdgeCollection.cs" />
+    <Compile Include="Core\Layout\EdgeLabelPlacement.cs" />
+    <Compile Include="Core\Layout\HookUpAnywhereFromInsidePort.cs" />
+    <Compile Include="Core\Layout\IdealEdgeLengthSettings.cs" />
+    <Compile Include="Core\Layout\IObstacle.cs" />
+    <Compile Include="Core\Layout\IsOpenChangeEventArgs.cs" />
+    <Compile Include="Core\Layout\LabelPlacementResult.cs" />
+    <Compile Include="Core\Layout\LgInfoBase.cs" />
+    <Compile Include="Core\Layout\LgNodeInfo.cs" />
+    <Compile Include="Core\Layout\LayoutAlgorithmHelpers.cs" />
+    <Compile Include="Core\Layout\LayoutChangeEventArgs.cs" />
+    <Compile Include="Core\Layout\LgNodeInfoKind.cs" />
+    <Compile Include="Core\Layout\NodeCollection.cs" />
+    <Compile Include="Core\Layout\PackingMethod.cs" />
+    <Compile Include="Core\Layout\PortObstacle.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\ConjugateGradient\SparseMatrix.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\ConjugateGradient\LinearSystemSolver.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\ConjugateGradient\Vector.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\InitialScaling.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\IOverlapRemoval.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\MST\MstLineSweeper.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\OverlapRemovalSettings.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\ProximityOverlapRemoval.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\MST\MstOnDelaunayTriangulation.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\StressEnergy\ExampleStressMajorization.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\StressEnergy\MaxIterationMethod.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\StressEnergy\NodeVoting.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\StressEnergy\StressMajorizationSettings.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\StressEnergy\SolvingMethod.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\StressEnergy\StressMajorization.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\StressEnergy\UpdateMethod.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\StressEnergy\Vote.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\StressEnergy\VoteBlock.cs" />
+    <Compile Include="Core\Layout\RectangleObstacle.cs" />
+    <Compile Include="Core\Layout\SimpleIntEdge.cs" />
+    <Compile Include="Core\ProjectionSolver\SolverAlgorithm.cs" />
+    <Compile Include="Core\ParallelUtilities.cs" />
+    <Compile Include="Core\Routing\BundlingSettings.cs" />
+    <Compile Include="DebugHelpers\Persistence\CharStreamElement.cs" />
+    <Compile Include="DebugHelpers\Persistence\GeometryGraphReader.cs" />
+    <Compile Include="DebugHelpers\Persistence\GeometryGraphWriter.cs" />
+    <Compile Include="DebugHelpers\Persistence\CurveStream.cs" />
+    <Compile Include="DebugHelpers\Persistence\CurveStreamElement.cs" />
+    <Compile Include="DebugHelpers\Persistence\DoubleStreamElement.cs" />
+    <Compile Include="Layout\Incremental\Relayout.cs" />
+    <Compile Include="Layout\Initial\InitialLayoutByCluster.cs" />
+    <Compile Include="Layout\Initial\InitialLayoutHelpers.cs" />
+    <Compile Include="Layout\LargeGraphLayout\DeviceIndependedZoomCalculatorForNodes.cs" />
+    <Compile Include="Layout\LargeGraphLayout\EdgePicker.cs" />
+    <Compile Include="Layout\LargeGraphLayout\IZoomLevelCalculator.cs" />
+    <Compile Include="Layout\LargeGraphLayout\LgData.cs" />
+    <Compile Include="Layout\LargeGraphLayout\LgEdgeInfo.cs" />
+    <Compile Include="Layout\LargeGraphLayout\LgInteractor.cs" />
+    <Compile Include="Layout\LargeGraphLayout\LgLayoutSettings.cs" />
+    <Compile Include="Layout\LargeGraphLayout\LevelCalculator.cs" />
+    <Compile Include="Layout\LargeGraphLayout\LgLevel.cs" />
+    <Compile Include="Layout\LargeGraphLayout\LgNodeCollection.cs" />
+    <Compile Include="Layout\LargeGraphLayout\Rail.cs" />
+    <Compile Include="Layout\LargeGraphLayout\RailGraph.cs" />
+    <Compile Include="Layout\LargeGraphLayout\Interval.cs" />
+    <Compile Include="Layout\LargeGraphLayout\ShortestPartRouterForLg.cs" />
+    <Compile Include="Layout\LargeGraphLayout\ShortestPathToAllOthers.cs" />
+    <Compile Include="Layout\LargeGraphLayout\SimpleEdgeCollection.cs" />
+    <Compile Include="Layout\LargeGraphLayout\SimpleNodeCollection.cs" />
+    <Compile Include="Layout\Layered\LayeredLayoutEngine.cs" />
+    <Compile Include="Layout\Layered\RecoveryLayerCalculator.cs" />
+    <Compile Include="Layout\Layered\RecoveryLayeredLayoutEngine.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\MST\OverlapRemoval.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\OverlapRemovalMethod.cs" />
+    <Compile Include="Miscellaneous\Constraints\AlignmentConstraint.cs" />
+    <Compile Include="Miscellaneous\LayoutEditing\BumperPusher.cs" />
+    <Compile Include="Miscellaneous\LayoutEditing\IncrementalDragger.cs" />
+    <Compile Include="Miscellaneous\LayoutEditing\LabelFixture.cs" />
+    <Compile Include="Miscellaneous\LayoutHelpers.cs" />
+    <Compile Include="Miscellaneous\LayoutEditing\EdgeRestoreData.cs" />
+    <Compile Include="Miscellaneous\LayoutEditing\GraphRestoreData.cs" />
+    <Compile Include="Miscellaneous\LayoutEditing\LabelRestoreData.cs" />
+    <Compile Include="Miscellaneous\LayoutEditing\NodeRestoreData.cs" />
+    <Compile Include="Miscellaneous\LayoutEditing\ObstacleCalculator.cs" />
+    <Compile Include="Miscellaneous\LayoutEditing\RestoreData.cs" />
+    <Compile Include="Miscellaneous\LayoutEditing\RestoreHelper.cs" />
+    <Compile Include="Miscellaneous\LayoutEditing\RouterBetweenTwoNodes.cs" />
+    <Compile Include="Miscellaneous\LayoutEditing\WeightedEdge.cs" />
+    <Compile Include="Miscellaneous\MultiScale\MultiScaleLayout.cs" />
+    <Compile Include="Miscellaneous\NonOverlappingBoundaries\AllPairsNonOverlappingBoundaries.cs" />
+    <Compile Include="Miscellaneous\NonOverlappingBoundaries\ProximityQuery.cs" />
+    <Compile Include="Miscellaneous\Phylo\PhyloEdge.cs" />
+    <Compile Include="Miscellaneous\Phylo\PhyloTree.cs" />
+    <Compile Include="Miscellaneous\Phylo\PhyloTreeLayoutCalclulation.cs" />
+    <Compile Include="Miscellaneous\Ranking\Centrality.cs" />
+    <Compile Include="Miscellaneous\Ranking\RankingLayout.cs" />
+    <Compile Include="Miscellaneous\Ranking\RankingLayoutSettings.cs" />
+    <Compile Include="Routing\ClusterBoundaryPort.cs" />
+    <Compile Include="Routing\ConstrainedDelaunayTriangulation\CdtEdge.cs" />
+    <Compile Include="Routing\ConstrainedDelaunayTriangulation\CdtFront.cs" />
+    <Compile Include="Routing\ConstrainedDelaunayTriangulation\CdtFrontElement.cs" />
+    <Compile Include="Routing\ConstrainedDelaunayTriangulation\CdtSite.cs" />
+    <Compile Include="Routing\ConstrainedDelaunayTriangulation\CdtSweeper.cs" />
+    <Compile Include="Routing\ConstrainedDelaunayTriangulation\Cdt.cs" />
+    <Compile Include="Routing\ConstrainedDelaunayTriangulation\CdtTriangle.cs" />
+    <Compile Include="Routing\ConstrainedDelaunayTriangulation\EdgeInserter.cs" />
+    <Compile Include="Routing\ConstrainedDelaunayTriangulation\EdgeTracer.cs" />
+    <Compile Include="Routing\ConstrainedDelaunayTriangulation\PerimeterEdge.cs" />
+    <Compile Include="Routing\ConstrainedDelaunayTriangulation\ThreeArray.cs" />
+    <Compile Include="Routing\Corner.cs" />
+    <Compile Include="Routing\MultiEdgeRouter.cs" />
+    <Compile Include="Routing\MultipleSourceMultipleTargetsShortestPathOnVisibilityGraph.cs" />
+    <Compile Include="Routing\PreGraph.cs" />
+    <Compile Include="Routing\Rectilinear\AxisCoordinateEvent.cs" />
+    <Compile Include="Routing\Rectilinear\Clump.cs" />
+    <Compile Include="Routing\Rectilinear\EnumeratorWrapper.cs" />
+    <Compile Include="Routing\Rectilinear\FullVisibilityGraphGenerator.cs" />
+    <Compile Include="Routing\Rectilinear\NeighborSides.cs" />
+    <Compile Include="Routing\Rectilinear\OverlapConvexHull.cs" />
+    <Compile Include="Routing\Rectilinear\ScanSegmentVectorItem.cs" />
+    <Compile Include="Routing\Rectilinear\ScanSegmentVector.cs" />
+    <Compile Include="Routing\Rectilinear\SparseVisibilityGraphGenerator.cs" />
+    <Compile Include="Routing\Rectilinear\VertexEntry.cs" />
+    <Compile Include="Routing\Rectilinear\VisibilityVertexRectilinear.cs" />
+    <Compile Include="Routing\ShapeCreator.cs" />
+    <Compile Include="Routing\ShapeCreatorForRoutingToParents.cs" />
+    <Compile Include="Routing\ShapeObstacleCalculator.cs" />
+    <Compile Include="Routing\Spline\Bundling\CdtThreader.cs" />
+    <Compile Include="Routing\Spline\Bundling\SdBoneEdge.cs" />
+    <Compile Include="Routing\Spline\Bundling\SdVertex.cs" />
+    <Compile Include="Routing\Spline\Bundling\SdShortestPath.cs" />
+    <Compile Include="Routing\SingleSourceMultipleTargetsShortestPathOnVisibilityGraph.cs" />
+    <Compile Include="Routing\Spline\Bundling\BundleBase.cs" />
+    <Compile Include="Routing\Spline\Bundling\BundleBasesCalculator.cs" />
+    <Compile Include="Routing\Spline\Bundling\BundleInfo.cs" />
+    <Compile Include="Routing\Spline\Bundling\BundleRouter.cs" />
+    <Compile Include="Routing\Spline\Bundling\BundlingStatus.cs" />
+    <Compile Include="Routing\Spline\Bundling\CdtGeneralPolylineTracer.cs" />
+    <Compile Include="Routing\Spline\Bundling\CdtIntersections.cs" />
+    <Compile Include="Routing\Spline\Bundling\ChannelFlag.cs" />
+    <Compile Include="Routing\Spline\Bundling\EdgeNudger.cs" />
+    <Compile Include="Routing\Spline\Bundling\FlipCollapser.cs" />
+    <Compile Include="Routing\Spline\Bundling\FlipSwitcher.cs" />
+    <Compile Include="Routing\Spline\Bundling\GeneralMetroMapOrdering.cs" />
+    <Compile Include="Routing\Spline\Bundling\HubDebugger.cs" />
+    <Compile Include="Routing\Spline\Bundling\HubRadiiCalculator.cs" />
+    <Compile Include="Routing\Spline\Bundling\IMetroMapOrderingAlgorithm.cs" />
+    <Compile Include="Routing\Spline\Bundling\CostCalculator.cs" />
+    <Compile Include="Routing\Spline\Bundling\IntersectionCache.cs" />
+    <Compile Include="Routing\Spline\Bundling\Intersections.cs" />
+    <Compile Include="Routing\Spline\Bundling\LinearMetroMapOrdering.cs" />
+    <Compile Include="Routing\Spline\Bundling\MetroGraphData.cs" />
+    <Compile Include="Routing\Spline\Bundling\Metroline.cs" />
+    <Compile Include="Routing\Spline\Bundling\MetroNodeInfo.cs" />
+    <Compile Include="Routing\Spline\Bundling\NodePositionsAdjuster.cs" />
+    <Compile Include="Routing\Spline\Bundling\OrientedHubSegment.cs" />
+    <Compile Include="Routing\Spline\Bundling\PathFixer.cs" />
+    <Compile Include="Routing\Spline\Bundling\PointPairOrder.cs" />
+    <Compile Include="Routing\Spline\Bundling\SimulatedAnnealing.cs" />
+    <Compile Include="Routing\Spline\Bundling\Station.cs" />
+    <Compile Include="Routing\Spline\Bundling\StationEdgeInfo.cs" />
+    <Compile Include="Routing\Spline\Bundling\TimeMeasurer.cs" />
+    <Compile Include="Routing\TightLooseCouple.cs" />
+    <Compile Include="Routing\StraightLineEdges.cs" />
+    <Compile Include="Core\GraphAlgorithms\CycleRemoval\ConnectedComponentCalculator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\GraphAlgorithms\CycleRemoval\CycleRemoval.cs" />
+    <Compile Include="Core\GraphAlgorithms\CycleRemoval\CycleRemovalWithConstraints.cs" />
+    <Compile Include="Core\GraphAlgorithms\CycleRemoval\GraphForCycleRemoval.cs" />
+    <Compile Include="Core\GraphAlgorithms\CycleRemoval\NodeInfo.cs" />
+    <Compile Include="Layout\Layered\LayeredLayout.cs" />
+    <Compile Include="Layout\MDS\AllPairsDistances.cs" />
+    <Compile Include="Layout\MDS\PivotDistances.cs" />
+    <Compile Include="Layout\Incremental\AxisSolver.cs" />
+    <Compile Include="Core\Geometry\MinEnclosingDisc\Disc.cs" />
+    <Compile Include="Layout\MDS\PivotMDS.cs" />
+    <Compile Include="Core\Layout\Cluster.cs" />
+    <Compile Include="Layout\Incremental\Feasibility.cs" />
+    <Compile Include="Layout\Incremental\EdgeConstraintGenerator.cs" />
+    <Compile Include="Layout\Incremental\FastIncrementalLayout.cs" />
+    <Compile Include="Layout\Incremental\FiEdge.cs" />
+    <Compile Include="Layout\Incremental\FiNode.cs" />
+    <Compile Include="Layout\Incremental\HorizontalSeparationConstraint.cs" />
+    <Compile Include="Layout\Incremental\IConstraint.cs" />
+    <Compile Include="Layout\Incremental\LockPosition.cs" />
+    <Compile Include="Layout\Incremental\MaxSeparationConstraint.cs" />
+    <Compile Include="Layout\Incremental\MinSeparationConstraint.cs" />
+    <Compile Include="Layout\Incremental\Multipole\KDTree.cs" />
+    <Compile Include="Layout\Incremental\FastIncrementalLayoutSettings.cs" />
+    <Compile Include="Core\Geometry\MinEnclosingDisc\MinimumEnclosingDisc.cs" />
+    <Compile Include="Layout\Incremental\Multipole\MultipoleCoefficients.cs" />
+    <Compile Include="Layout\Incremental\ProcrustesCircleConstraint.cs" />
+    <Compile Include="Core\Geometry\OverlapRemoval\RectangularClusterBoundary.cs" />
+    <Compile Include="Layout\Initial\InitialLayout.cs" />
+    <Compile Include="Layout\Incremental\StickConstraint.cs" />
+    <Compile Include="Layout\Incremental\VerticalSeparationConstraint.cs" />
+    <Compile Include="Core\DataStructures\BinaryHeapPriorityQueue.cs" />
+    <Compile Include="Core\DataStructures\BinaryHeapWithComparer.cs" />
+    <Compile Include="Core\Layout\GraphConnectedComponents.cs" />
+    <Compile Include="Core\Layout\PortEntryOnCurve.cs" />
+    <Compile Include="Core\ProgressChangedEventArgs.cs" />
+    <Compile Include="Core\Routing\EdgeRoutingSettings.cs" />
+    <Compile Include="Core\Geometry\RTree\RTree.cs" />
+    <Compile Include="Core\CancelToken.cs" />
+    <Compile Include="DebugHelpers\DebugCurve.cs" />
+    <Compile Include="DebugHelpers\DebugCurveCollection.cs" />
+    <Compile Include="DebugHelpers\DebugGraphics.cs" />
+    <Compile Include="Core\Routing\EdgeRoutingMode.cs" />
+    <Compile Include="DebugHelpers\IDebugGraphics.cs" />
+    <Compile Include="DebugHelpers\DebugRectangle.cs" />
+    <Compile Include="DebugHelpers\DebugShape.cs" />
+    <Compile Include="DebugHelpers\DebugEllipse.cs" />
+    <Compile Include="Core\Layout\EdgeGeometry.cs" />
+    <Compile Include="Core\Layout\FloatingPort.cs" />
+    <Compile Include="Core\Layout\GeometryGraph.cs" />
+    <Compile Include="Core\Layout\GeometryObject.cs" />
+    <Compile Include="Core\DataStructures\GenericHeapElement.cs" />
+    <Compile Include="Core\DataStructures\HeapElement.cs" />
+    <Compile Include="Layout\Layered\HorizontalConstraintsForSugiyama.cs" />
+    <Compile Include="Core\GraphAlgorithms\IEdge.cs" />
+    <Compile Include="Core\Layout\ILabeledObject.cs" />
+    <Compile Include="Core\DataStructures\GenericBinaryHeapPriorityQueue.cs" />
+    <Compile Include="Core\Layout\Label.cs" />
+    <Compile Include="Core\Layout\MultiLocationFloatingPort.cs" />
+    <Compile Include="Layout\Layered\NetworkEdge.cs" />
+    <Compile Include="Layout\Layered\NetworkSimplexForGeneralGraph.cs" />
+    <Compile Include="Core\Geometry\Point.cs" />
+    <Compile Include="Core\Layout\Port.cs" />
+    <Compile Include="Core\Layout\PortEntry.cs" />
+    <Compile Include="Core\DataStructures\RBTree\DefaultComperer.cs" />
+    <Compile Include="Core\DataStructures\RBTree\RBColor.cs" />
+    <Compile Include="Core\DataStructures\RBTree\RBNode.cs" />
+    <Compile Include="Core\DataStructures\RBTree\RBTree.cs" />
+    <Compile Include="Core\DataStructures\RBTree\RBTreeEnumerator.cs" />
+    <Compile Include="Core\DataStructures\RealNumberSpan.cs" />
+    <Compile Include="Core\Layout\RelativeFloatingPort.cs" />
+    <Compile Include="DebugHelpers\Show.cs" />
+    <Compile Include="DebugHelpers\ShowDatabase.cs" />
+    <Compile Include="DebugHelpers\ShowDebugCurves.cs" />
+    <Compile Include="DebugHelpers\ShowDebugCurvesEnumeration.cs" />
+    <Compile Include="Core\Geometry\SmoothedPolyline.cs" />
+    <Compile Include="Core\Geometry\TriangleOrientation.cs" />
+    <Compile Include="Layout\Layered\VerticalConstraintsForSugiyama.cs" />
+    <Compile Include="Layout\MDS\MDSLayoutSettings.cs" />
+    <Compile Include="Core\Geometry\MultidimensionalScaling.cs" />
+    <Compile Include="Layout\MDS\SingleSourceDistances.cs" />
+    <Compile Include="Layout\MDS\MDSGraphLayout.cs" />
+    <Compile Include="Layout\MDS\Transform.cs" />
+    <Compile Include="Layout\Layered\Ordering\AdjacentSwapsWithConstraints.cs" />
+    <Compile Include="Layout\Layered\Ordering\ConstrainedOrdering.cs" />
+    <Compile Include="Layout\Layered\Ordering\ConstrainedOrderMeasure.cs" />
+    <Compile Include="Layout\Layered\Ordering\MetroMapOrdering.cs" />
+    <Compile Include="Layout\Layered\Ordering\EdgeComparerBySource.cs" />
+    <Compile Include="Layout\Layered\Ordering\EdgeComparerByTarget.cs" />
+    <Compile Include="Core\ProjectionSolver\ISolverShell.cs" />
+    <Compile Include="Layout\Layered\Ordering\LayerInfo.cs" />
+    <Compile Include="Core\ProjectionSolver\SolverShell.cs" />
+    <Compile Include="Layout\Layered\Ordering\SweepMode.cs" />
+    <Compile Include="Core\Geometry\OverlapRemoval\OverlapRemovalCluster.cs" />
+    <Compile Include="Core\Geometry\OverlapRemoval\OverlapRemovalGlobalConfiguration.cs" />
+    <Compile Include="Core\Geometry\OverlapRemoval\OverlapRemovalParameters.cs" />
+    <Compile Include="DebugHelpers\Persistence\ClusterWithChildLists.cs" />
+    <Compile Include="DebugHelpers\Persistence\GeometryToken.cs" />
+    <Compile Include="Layout\Layered\ProperLayeredGraph.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Layout\Layered\LayerCalculator.cs" />
+    <Compile Include="Core\GraphAlgorithms\TopologicalSort.cs" />
+    <Compile Include="Layout\Layered\Layering\LongestPathLayering.cs" />
+    <Compile Include="Layout\Layered\Layering\NetworkSimplex.cs" />
+    <Compile Include="Layout\Layered\Ordering\AdjacentSwaps.cs" />
+    <Compile Include="Layout\Layered\EdgePathsInserter.cs" />
+    <Compile Include="Layout\Layered\SugiyamaLayoutLogger.cs" />
+    <Compile Include="Layout\Layered\LayerInserter.cs" />
+    <Compile Include="Layout\Layered\Balancing.cs" />
+    <Compile Include="Core\GraphAlgorithms\BasicGraph.cs" />
+    <Compile Include="Layout\Layered\DataBase.cs" />
+    <Compile Include="Core\Layout\Edge.cs" />
+    <Compile Include="DebugHelpers\Timer.cs" />
+    <Compile Include="Layout\Layered\IntEdge.cs" />
+    <Compile Include="Core\GraphAlgorithms\IntPair.cs" />
+    <Compile Include="Layout\Layered\LayerArrays.cs" />
+    <Compile Include="Layout\Layered\SugiyamaLayoutSettings.cs" />
+    <Compile Include="Core\Layout\LayoutAlgorithmSettings.cs" />
+    <Compile Include="Core\Layout\Node.cs" />
+    <Compile Include="Layout\Layered\Anchor.cs" />
+    <Compile Include="Core\DataStructures\Set.cs" />
+    <Compile Include="Layout\Layered\LayerEdge.cs" />
+    <Compile Include="Layout\Layered\VertexEnumerators.cs" />
+    <Compile Include="Layout\Layered\XLayoutGraph.cs" />
+    <Compile Include="Layout\Layered\Ordering\Ordering.cs" />
+    <Compile Include="Layout\Layered\Ordering\OrderingMeasure.cs" />
+    <Compile Include="Core\ProjectionSolver\Block.cs" />
+    <Compile Include="Core\ProjectionSolver\BlockVector.cs" />
+    <Compile Include="Core\ProjectionSolver\Constraint.cs" />
+    <Compile Include="Core\ProjectionSolver\ConstraintVector.cs" />
+    <Compile Include="Core\ProjectionSolver\DfDvNode.cs" />
+    <Compile Include="Core\ProjectionSolver\GlobalConfiguration.cs" />
+    <Compile Include="Core\ProjectionSolver\Parameters.cs" />
+    <Compile Include="Core\ProjectionSolver\QPSC.cs" />
+    <Compile Include="Core\ProjectionSolver\SimpleStopwatch.cs" />
+    <Compile Include="Core\ProjectionSolver\Solution.cs" />
+    <Compile Include="Core\ProjectionSolver\Solver.cs" />
+    <Compile Include="Core\ProjectionSolver\Variable.cs" />
+    <Compile Include="Core\ProjectionSolver\ViolationCache.cs" />
+    <Compile Include="Core\Geometry\OverlapRemoval\ConstraintGenerator.cs" />
+    <Compile Include="Core\Geometry\OverlapRemoval\OverlapRemovalClusterEvent.cs" />
+    <Compile Include="Core\Geometry\OverlapRemoval\OverlapRemovalNode.cs" />
+    <Compile Include="Core\Geometry\OverlapRemoval\OverlapRemovalClusterScanLine.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Routing\Rectilinear\Nudging\SegWithIndex.cs" />
+    <Compile Include="Routing\Rectilinear\Nudging\StaircaseRemover.cs" />
+    <Compile Include="Routing\Rectilinear\GroupBoundaryCrossing.cs" />
+    <Compile Include="Routing\Rectilinear\GroupBoundaryCrossingMap.cs" />
+    <Compile Include="Routing\Rectilinear\PointAndCrossings.cs" />
+    <Compile Include="Routing\Rectilinear\PointAndCrossingsList.cs" />
+    <Compile Include="Routing\Rectilinear\ObstacleTree.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\ConeSpannerForPortLocations.cs" />
+    <Compile Include="Layout\Layered\FlatEdgeRouter.cs" />
+    <Compile Include="Core\Geometry\RTree\HitTestBehavior.cs" />
+    <Compile Include="Routing\InteractiveEdgeRouter.cs" />
+    <Compile Include="Routing\InteractiveObstacleCalculator.cs" />
+    <Compile Include="Routing\Rectilinear\Nudging\AxisEdge.cs" />
+    <Compile Include="Routing\Rectilinear\Nudging\AxisEdgesContainer.cs" />
+    <Compile Include="Routing\Rectilinear\Nudging\CombinatorialNudger.cs" />
+    <Compile Include="Routing\Rectilinear\Nudging\AxisEdgeHighPointEvent.cs" />
+    <Compile Include="Routing\Rectilinear\Nudging\AxisEdgeLowPointEvent.cs" />
+    <Compile Include="Core\DataStructures\RBTree\ComparerOnDelegate.cs" />
+    <Compile Include="Routing\Rectilinear\Nudging\FreeSpaceFinder.cs" />
+    <Compile Include="Routing\Rectilinear\Nudging\LinkedPointSplitter.cs" />
+    <Compile Include="Routing\Rectilinear\Nudging\Nudger.cs" />
+    <Compile Include="Routing\Rectilinear\Nudging\PointProjection.cs" />
+    <Compile Include="Core\ProjectionSolver\UniformOneDimensionalSolver.cs" />
+    <Compile Include="Routing\Rectilinear\Nudging\LinkedPoint.cs" />
+    <Compile Include="Routing\Rectilinear\Nudging\PathRefiner.cs" />
+    <Compile Include="Routing\Rectilinear\Nudging\PointByDelegateComparer.cs" />
+    <Compile Include="Core\ProjectionSolver\UniformSolverVar.cs" />
+    <Compile Include="Routing\Rectilinear\Nudging\SpaceCalculationEvent.cs" />
+    <Compile Include="Routing\Rectilinear\Nudging\PathEdge.cs" />
+    <Compile Include="Routing\Rectilinear\Nudging\LongestNudgedSegment.cs" />
+    <Compile Include="Routing\Rectilinear\Nudging\Path.cs" />
+    <Compile Include="Core\Geometry\RTree\RectangleNode.cs" />
+    <Compile Include="Routing\Rectilinear\BasicObstacleSide.cs" />
+    <Compile Include="Routing\Rectilinear\BasicReflectionEvent.cs" />
+    <Compile Include="Routing\Rectilinear\BasicVertexEvent.cs" />
+    <Compile Include="Routing\Rectilinear\OpenVertexEvent.cs" />
+    <Compile Include="Core\Geometry\Direction.cs" />
+    <Compile Include="Core\Geometry\CompassVector.cs" />
+    <Compile Include="Routing\Rectilinear\HighBendVertexEvent.cs" />
+    <Compile Include="Routing\Rectilinear\LowBendVertexEvent.cs" />
+    <Compile Include="Routing\Rectilinear\ScanSegmentTree.cs" />
+    <Compile Include="Routing\Rectilinear\StaticGraphUtility.cs" />
+    <Compile Include="Routing\Rectilinear\CloseVertexEvent.cs" />
+    <Compile Include="Routing\Rectilinear\TransientGraphUtility.cs" />
+    <Compile Include="Routing\Visibility\PortObstacleEvent.cs" />
+    <Compile Include="Routing\Visibility\TollFreeVisibilityEdge.cs" />
+    <Compile Include="Routing\Rectilinear\EventQueue.cs" />
+    <Compile Include="Routing\Rectilinear\FreePoint.cs" />
+    <Compile Include="Routing\Rectilinear\HighObstacleSide.cs" />
+    <Compile Include="Routing\Rectilinear\LowReflectionEvent.cs" />
+    <Compile Include="Routing\Rectilinear\LookaheadScan.cs" />
+    <Compile Include="Routing\Rectilinear\LowObstacleSide.cs" />
+    <Compile Include="Routing\Rectilinear\MsmtRectilinearPath.cs" />
+    <Compile Include="Routing\Rectilinear\Obstacle.cs" />
+    <Compile Include="Routing\Rectilinear\ObstaclePort.cs" />
+    <Compile Include="Routing\Rectilinear\ObstaclePortEntrance.cs" />
+    <Compile Include="Routing\Rectilinear\PortManager.cs" />
+    <Compile Include="Routing\Rectilinear\RectilinearInteractiveEditor.cs" />
+    <Compile Include="Routing\RelativeShape.cs" />
+    <Compile Include="Routing\Shape.cs" />
+    <Compile Include="Routing\Rectilinear\Nudging\PathMerger.cs" />
+    <Compile Include="Routing\Rectilinear\SpliceUtility.cs" />
+    <Compile Include="Routing\Rectilinear\VisibilityGraphGenerator.cs" />
+    <Compile Include="Routing\Rectilinear\SsstRectilinearPath.cs" />
+    <Compile Include="Routing\Rectilinear\RectilinearEdgeRouter.cs" />
+    <Compile Include="Routing\Rectilinear\HighReflectionEvent.cs" />
+    <Compile Include="Routing\Rectilinear\ScanDirection.cs" />
+    <Compile Include="Routing\Rectilinear\RectilinearScanLine.cs" />
+    <Compile Include="Routing\Rectilinear\ScanSegment.cs" />
+    <Compile Include="Routing\Rectilinear\SegmentIntersector.cs" />
+    <Compile Include="Routing\Rectilinear\WaypointPort.cs" />
+    <Compile Include="Routing\RelaxedPolylinePoint.cs" />
+    <Compile Include="Layout\Layered\HierarchyCalculator.cs" />
+    <Compile Include="Routing\NodeKind.cs" />
+    <Compile Include="Layout\Layered\RefinerBetweenTwoLayers.cs" />
+    <Compile Include="Layout\Layered\Routing.cs" />
+    <Compile Include="Routing\SplineRouter.cs" />
+    <Compile Include="Routing\SingleSourceSingleTargetShortestPathOnVisibilityGraph.cs" />
+    <Compile Include="Layout\Layered\SmoothedPolylineCalculator.cs" />
+    <Compile Include="Layout\Layered\TwoLayerFlatEdgeRouter.cs" />
+    <Compile Include="DebugHelpers\DevTrace.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\Cone.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\ConeClosureEvent.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\ConeLeftSide.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\ConeRightSide.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\ConeSpanner.cs" />
+    <Compile Include="Core\Geometry\Curves\ClosestPointOnCurve.cs" />
+    <Compile Include="Core\Geometry\Curves\CubicBezierSegment.cs" />
+    <Compile Include="Core\Geometry\Curves\CurvatureDerivative.cs" />
+    <Compile Include="Core\Geometry\Curves\Curve.cs" />
+    <Compile Include="Core\Geometry\Curves\CurveFactory.cs" />
+    <Compile Include="Core\Geometry\Curves\CurveLengthAndParams.cs" />
+    <Compile Include="DebugHelpers\CurveSerializer.cs" />
+    <Compile Include="Core\Geometry\Curves\CurveTangent.cs" />
+    <Compile Include="Core\Geometry\Curves\Ellipse.cs" />
+    <Compile Include="Core\Geometry\Curves\ICurve.cs" />
+    <Compile Include="Core\Geometry\Curves\IFunction.cs" />
+    <Compile Include="Core\Geometry\Curves\IntersectionInfo.cs" />
+    <Compile Include="Core\Geometry\Curves\LinearSystem2.cs" />
+    <Compile Include="Core\Geometry\Curves\LineSegment.cs" />
+    <Compile Include="Core\Geometry\Curves\MinDistCurveCurve.cs" />
+    <Compile Include="Core\Geometry\Curves\Parallelogram.cs" />
+    <Compile Include="Core\Geometry\Curves\ParallelogramBinaryTreeNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Geometry\Curves\ParallelogramInternalTreeNode.cs" />
+    <Compile Include="Core\Geometry\Curves\ParallelogramLeaf.cs" />
+    <Compile Include="Core\Geometry\Curves\ParallelogramNode.cs" />
+    <Compile Include="Core\Geometry\Curves\ParallelogramNodeOverICurve.cs" />
+    <Compile Include="Core\Geometry\Curves\PenetrationDepth.cs" />
+    <Compile Include="Core\Geometry\Curves\PlaneTransformation.cs" />
+    <Compile Include="Core\Geometry\Curves\PolylinePoint.cs" />
+    <Compile Include="Core\Geometry\Curves\PointLocation.cs" />
+    <Compile Include="Core\Geometry\Curves\Polyline.cs" />
+    <Compile Include="Core\Geometry\Curves\PolylineIterator.cs" />
+    <Compile Include="Core\Geometry\Rectangle.cs" />
+    <Compile Include="Core\Geometry\Curves\RootFinder.cs" />
+    <Compile Include="Routing\Visibility\ActiveDiagonalComparerWithRay.cs" />
+    <Compile Include="Routing\Visibility\ActiveEdgeComparerWithRay.cs" />
+    <Compile Include="Routing\Visibility\BimodalSequence.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\IConeSweeper.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\LeftIntersectionEvent.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\LeftObstacleSide.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\LineSweeperForPortLocations.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\PortLocationEvent.cs" />
+    <Compile Include="Routing\Visibility\LineSweeperBase.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\LowestVertexEvent.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\ObstacleSide.cs" />
+    <Compile Include="Routing\Visibility\ObstacleSideComparer.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\RightIntersectionEvent.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\LeftVertexEvent.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\LineSweeper.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\SweepEvent.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\BrokenConeSide.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\RightObstacleSide.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\RightVertexEvent.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\ConeSide.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\ConeSideComparer.cs" />
+    <Compile Include="Routing\Spline\ConeSpanner\VertexEvent.cs" />
+    <Compile Include="Routing\Visibility\Diagonal.cs" />
+    <Compile Include="Routing\Visibility\InteractiveTangentVisibilityGraphCalculator.cs" />
+    <Compile Include="Routing\Rectilinear\PointComparer.cs" />
+    <Compile Include="Routing\Visibility\PointVisibilityCalculator.cs" />
+    <Compile Include="Routing\Visibility\Polygon.cs" />
+    <Compile Include="Routing\Visibility\SegmentBase.cs" />
+    <Compile Include="Routing\Visibility\StemStartPointComparer.cs" />
+    <Compile Include="Routing\Visibility\UnimodalSequence.cs" />
+    <Compile Include="Routing\Visibility\VisibilityKind.cs" />
+    <Compile Include="Routing\Visibility\VisibilityEdge.cs" />
+    <Compile Include="Routing\Visibility\VisibilityGraph.cs" />
+    <Compile Include="Routing\Visibility\VisibilityVertex.cs" />
+    <Compile Include="Routing\Visibility\Stem.cs" />
+    <Compile Include="Routing\Visibility\Tangent.cs" />
+    <Compile Include="Routing\Visibility\TangentPair.cs" />
+    <Compile Include="Routing\Visibility\TangentVisibilityGraphCalculator.cs" />
+    <Compile Include="Layout\Layered\XCoordsWithAlignment.cs" />
+    <Compile Include="Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ValidateArg.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Core\Layout\Ports and Port Accesses.doc" />
+    <None Include="msaglSigningKey.snk" />
+    <None Include="packages.config" />
+    <None Include="Papers\DrawingGraphsWithGlee.pdf" />
+    <None Include="Papers\Fast and Simple Horizontal Coordinate Assignment.pdf" />
+    <None Include="Papers\Optimal Scheduling of Two-Processor Systems.pdf" />
+    <None Include="Papers\ranking.pdf" />
+    <None Include="Papers\1-layer.pdf" />
+    <None Include="Papers\An E log E log line crossing algorithm for levelled Graphs.pdf" />
+    <None Include="Papers\gansner93technique.pdf" />
+    <None Include="Papers\Simple and Efficient Bilayer Cross Counting.ps" />
+    <None Include="Papers\Computing the extreme distances between two convex polygons.pdf" />
+    <None Include="Papers\IntersectConvexObjects2-3Dim.pdf" />
+    <None Include="Papers\Orthogonal Connector Routing.pdf" />
+    <None Include="Papers\Shortest paths in the plane with convex polygonal obstacles.pdf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Miscellaneous\LabelPlacement\" />
+  </ItemGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

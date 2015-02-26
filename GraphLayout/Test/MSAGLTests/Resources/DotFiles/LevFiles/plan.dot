@@ -1,0 +1,18 @@
+digraph G {
+  
+  10 [label = "Saving to an image with\n high resolution " shape=box]
+  1	[label = "Not f(x) splines" shape=box]
+  2	[label = "Ports"  shape=box] 
+  3	[label = "   Inserting knots\n using least square procedure" shape=box]
+4	[label = "Interactive layout" shape=box]
+5	[label = "Cluster support" shape=box]
+6	[label = "Symmetry in x placement - ???" shape=box]
+7	[label = "Layout directions" shape=box]
+8	[label = "Same rank functionality" shape=box]
+9	[label = "Bug with unnecessary crossings" shape=box]
+1 -> 8
+3 -> 1
+1 -> 9
+1 -> 4
+1 -> 2
+}

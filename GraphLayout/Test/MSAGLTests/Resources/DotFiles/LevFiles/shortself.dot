@@ -1,0 +1,9 @@
+digraph finite_state_machine {
+
+	node [shape = doublecircle]; 
+	node [shape = circle];
+	rankdir=LR;
+	LR_5 -> LR_7 ;
+	LR_5 -> LR_5 ;
+
+}

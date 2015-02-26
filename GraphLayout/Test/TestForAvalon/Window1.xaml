@@ -1,0 +1,113 @@
+﻿<Window x:Class="TestForAvalon.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
+    xmlns:ui="clr-namespace:TestForAvalon" Title="TestForAvalon"
+        Icon="data\icon.ico"
+    >
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Key="O" Modifiers="Control" Command="ui:Window1.OpenFileCommand"/>
+        <KeyBinding Key="N" Modifiers="Control" Command="ui:Window1.NewFileCommand"/>
+        <KeyBinding Key="A" Modifiers="Control" Command="ui:Window1.SaveAsFileCommand"/>
+        <KeyBinding Key="F4" Modifiers="Alt" Command="ui:Window1.ExitCommand"/>
+        <KeyBinding Key="F5" Command="ui:Window1.ReloadFileCommand"/>
+    </Window.InputBindings>
+    <Window.CommandBindings>
+        <CommandBinding Command="ui:Window1.OpenFileCommand" Executed="OpenFile"/>
+        <CommandBinding Command="ui:Window1.NewFileCommand" Executed="NewFile"/>
+        <CommandBinding Command="ui:Window1.ReloadFileCommand" Executed="ReloadFile"/>
+        <CommandBinding Command="ui:Window1.SaveAsFileCommand" Executed="SaveFile"/>
+        <CommandBinding Command="ui:Window1.ExitCommand" Executed="Exit"/>
+    </Window.CommandBindings>
+    <DockPanel  Name="dockPanel"  Background="Gray" Initialized="DockPanelInitialized">
+        <ToolBarTray DockPanel.Dock="Top" IsLocked="False">
+            <ToolBar Band="0" Background="AliceBlue">
+                <Menu IsMainMenu="True">
+                    <MenuItem >
+                        <MenuItem.Header>_File</MenuItem.Header>
+                        <MenuItem Command="ui:Window1.NewFileCommand" Header="_New" InputGestureText="Ctrl+N" />
+                        <MenuItem Command="ui:Window1.OpenFileCommand" Header="_Open..." InputGestureText="Ctrl+O" />
+                        <MenuItem Command="ui:Window1.ReloadFileCommand" Header="_Reload" InputGestureText="F5" />
+                        <MenuItem Command="ui:Window1.SaveAsFileCommand" Header="_Save as..." InputGestureText="Ctrl+A" />
+                        <Separator/>
+                        <MenuItem Command="ui:Window1.ExitCommand" Header="_Exit" InputGestureText="Alt+F4" />
+                    </MenuItem>
+                    <MenuItem >
+                        <MenuItem.Header>_View</MenuItem.Header>
+                        <MenuItem Name="ShowTypesMenu" Click="ShowTypes" Header="_Types" IsChecked="True"/>
+                        <MenuItem Name="ShowImportsMenu" Click="ShowImports" Header="_Imports" />
+                        <MenuItem>
+                            <MenuItem.Header>_Layout</MenuItem.Header>
+                            <MenuItem Name="TB" Click="TopToBottom" Header="_Top to bottom" IsChecked="True"/>
+                            <MenuItem Name="BT" Click="BottomToTop" Header="_Bottom to top"/>
+                            <MenuItem Name="LR" Click="LeftToRight" Header="_Left to right"/>
+                            <MenuItem Name="RL" Click="RightToLeft" Header="_Right to left"/>
+                            <MenuItem Name="MDS" Click="LayoutWithMds" Header="_MDS"/>
+
+                        </MenuItem>
+                    </MenuItem>
+                    <MenuItem>
+                        <MenuItem.Header>_Edit</MenuItem.Header>
+                        <RadioButton GroupName="route" Name="rectRoutingButton" IsChecked="True" Click="RoutingChangedClick">Rectilinear
+                        </RadioButton>
+                        <RadioButton GroupName="route" Name="rectToCenterButton" Click="RoutingChangedClick">Rectilinear to Center
+                        </RadioButton>
+                        <RadioButton GroupName="route" Name="splineRoutingButton" Click="RoutingChangedClick">Splines
+                        </RadioButton>
+                        <RadioButton GroupName="route" Name="bundleRoutingButton" Click="RoutingChangedClick">Bundles
+                        </RadioButton>
+                        <MenuItem Click="FitTheBoundingBox" Header="Fit Bounding Box"/>
+                        <MenuItem Click="RoutingChangedClick" Header="Reroute"/>
+
+                    </MenuItem>
+                </Menu>
+            </ToolBar>
+            <ToolBar Band="0" Background="AliceBlue">
+                <Slider x:Name="zoomSlider"  Width="150" BorderThickness="0"  DockPanel.Dock="Right"
+					ToolTip="Zoom Level" />
+                <Button x:Name="backwardButton" Width="30" ToolTip="Navigates backwards">
+                    <Image Source="data\back.bmp"/>
+                </Button>
+
+                <Button x:Name="forwardButton" Width="30" ToolTip="Navigates forward">
+                    <Image Source="data\forward.bmp"/>
+                </Button>
+                <ToggleButton x:Name="windowZoomButton" Width="30" Click="WindowZoomButtonClick" IsChecked="False" Checked="WindowZoomButtonChecked" Unchecked="WindowZoomButtonUnchecked">
+                </ToggleButton>
+                <ToggleButton x:Name="panButton" Width="30" Click="PanButtonClick" IsChecked="False" Checked="PanButtonChecked" Unchecked="PanButtonUnchecked">
+                </ToggleButton>
+                <Button x:Name="undoButton" Width="30" Click="UndoButtonClick" ToolTip="Undoes the last editing" />
+                <Button x:Name="redoButton" Width="30" Click="RedoButtonClick" ToolTip="Redoes the last undone action" />
+                <ToggleButton  Content="Animate"  x:Name="animationButton"   ToolTip="Toggle animation" Click="AnimateButtonClick"/>
+                <ToggleButton  Content="Edit routes"  x:Name="editRoutesButton" Click="EditRoutesClick"  ToolTip="Show/hide the routes control" />
+                <ToggleButton  Content="Enter polygons"  x:Name="enterPolylineButton"  Click="EnterPolygonsClick" ToolTip="Toggles polyline input mode" />
+
+                <DockPanel HorizontalAlignment="Left" VerticalAlignment="Center" ></DockPanel>
+            </ToolBar>
+        </ToolBarTray>
+        <TextBlock Name="toolStripStatusLabel" Height="20" DockPanel.Dock="Bottom" Background="CornflowerBlue"/>
+        <DockPanel Name="holder" >
+            <GroupBox x:Name="routeDialogBox" Background="White" Visibility="Collapsed"> 
+<!--                //add visibility = collapsed-->                 
+                <StackPanel>
+                    <Label Content="Edge separation"/>
+                    <Slider x:Name="edgeSeparationSlider" Maximum="2" Minimum="0.1" Width="100" Value="0.5" ValueChanged="EdgeSeparationSliderChanged" AutoToolTipPrecision="2" AutoToolTipPlacement="BottomRight"  />
+                    <Label Content="Ink coefficient"/>
+                    <Slider x:Name="inkCoeffSlider" Maximum="0.1" Minimum="0"  Width="100" Value ="0.01" ValueChanged="InkSliderChanged" AutoToolTipPrecision="4" AutoToolTipPlacement="BottomRight"/>
+                    <Label Content="Path length coefficient"/>
+                    <Slider x:Name="pathLenghtCoeffSlider" Maximum="1000" Minimum="0"  Width="100" Value="500" ValueChanged="PathLengthCoeffSliderChanged" AutoToolTipPrecision="0" AutoToolTipPlacement="BottomRight"/>
+                    <Label Content="Capacity coefficient"/>
+                    <Slider x:Name="capacityCoeffSlider" Minimum="0" Maximum="20000" Width="100" ValueChanged="CapacityCoeffSliderChanged" Value="0" AutoToolTipPrecision="2" AutoToolTipPlacement="BottomRight" />
+                </StackPanel>
+            </GroupBox>
+        </DockPanel>
+    </DockPanel>
+</Window>
+
+    

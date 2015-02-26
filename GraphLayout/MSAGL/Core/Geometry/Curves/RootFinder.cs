@@ -1,0 +1,102 @@
+/*
+Microsoft Automatic Graph Layout,MSAGL 
+
+Copyright (c) Microsoft Corporation
+
+All rights reserved. 
+
+MIT License 
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+""Software""), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+using System;
+
+namespace Microsoft.Msagl.Core.Geometry.Curves {
+    /// <summary>
+    /// looking for a root of a function on a given segment
+    /// </summary>
+    static public class RootFinder {
+
+
+        /// <summary>
+        /// implements the Newton method
+        /// </summary>
+        /// <param name="f"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="guess"></param>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704")]
+        public static bool TryToFindRoot(IFunction f, double start, double end, double guess, out double x) {
+            ValidateArg.IsNotNull(f, "f");
+            System.Diagnostics.Debug.Assert(start >= f.ParStart && end <= f.ParEnd);
+            System.Diagnostics.Debug.Assert(start <= guess && end >= guess);
+            int numberOfBoundaryCrossings = 0;
+            const int maxNumberOfBoundaryCrossings = 10;
+            int numberOfTotalReps = 0;
+            const int maxNumberOfTotalReps = 100;
+            x = guess;
+
+            double dx;
+            bool abort = false;
+            do {
+
+                var fp = f.Derivative(x);
+                if (Math.Abs(fp) < ApproximateComparer.Tolerance) {
+                    abort = true;
+                    break;
+                }
+
+                dx = -f[x] / fp;
+                x += dx;
+                if (x < start - ApproximateComparer.DistanceEpsilon) {
+                    x = start;
+                    numberOfBoundaryCrossings++;
+                } else if (x > end + ApproximateComparer.DistanceEpsilon) {
+                    x = end;
+                    numberOfBoundaryCrossings++;
+                }
+
+                numberOfTotalReps++;
+
+                abort = numberOfBoundaryCrossings >= maxNumberOfBoundaryCrossings ||
+                  numberOfTotalReps >= maxNumberOfTotalReps || dx == 0;
+
+            } while (Math.Abs(dx) >= ApproximateComparer.Tolerance && !abort);
+
+            if (abort) {
+                //may be the initial guess was just OK
+                if (Math.Abs(f[guess]) < ApproximateComparer.DistanceEpsilon) {
+                    x = guess;
+                    return true;
+                }
+                return false;
+            } 
+            if (x < start) 
+                x = start;
+            else if (x > end )
+                x = end;
+            
+            return true;
+
+        }
+    }
+}

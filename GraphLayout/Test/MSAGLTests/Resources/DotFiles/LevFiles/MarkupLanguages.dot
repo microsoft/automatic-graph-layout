@@ -1,0 +1,53 @@
+digraph Self { 
+graph [  fontname = "Verdana",
+                        fontsize = 10,
+                        size = "6,6" ];
+node [   shape = box,
+                        sides = 4,
+                        distortion = "0.0",
+                        orientation = "0.0",
+                        skew = "0.0",
+                        color = white,
+                        style = filled,
+                        fontname = "Verdana" ];
+
+    "Government" -> "SGML" [label="use"]    
+    "Boeing" -> "SGML" [label="use"]    
+    "Nasa" -> "SGML" [label="use"]    
+    "IBM" -> "SGML" [label="use"]    
+    
+    "SGML" -> "HTML" [ label="defines" ]
+    "SGML" -> "XML" [ label="spawns" ]
+    
+    "w3c" -> "XML" [ label="owns" ]
+    "w3c" -> "HTML" [ label="owns" ]
+    "w3c" -> "XSLT" [ label="owns" ]
+
+    "HTTP" -> "www" [label="delivers"]
+    "HTML" -> "www" [label="creates"]
+    "image" -> "www" [label="wow"]
+    
+    "www" -> "HTML" [label="content"]
+    "www" -> "image" 
+    "www" -> "video"
+    "www" -> "sound"
+    "www" -> "XML" [label="data"]
+    
+    "IE5" -> "XML" [label="Supports"]    
+    "FireFox" -> "IE5" [label="copy"]    
+    "Opera" -> "IE5" [label="copy"]  
+    
+    "IE5" -> "www" [label="browse"]    
+    "FireFox" -> "www" 
+    "Opera" -> "www" 
+    
+	"IE5" -> "XML Mime Viewer" [label="includes"]
+	"XML Mime Viewer" -> "XSLT" [label="uses"]
+	"XSLT" -> "XML" [label="renders"]    
+	"XML" -> "XSLT" [label="defines"]    
+	
+	"DSSSL" -> "SGML" [label="renders"]
+	"DSSSL" -> "XSLT" [label="spawns"]
+
+}
+

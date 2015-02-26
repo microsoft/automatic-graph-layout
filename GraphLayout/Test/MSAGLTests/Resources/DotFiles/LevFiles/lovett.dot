@@ -1,0 +1,62 @@
+digraph lovett {
+
+chris [ label="Chris Lovett"]
+sanj [label="San Jose"]
+os2 [label="OS/2"]
+sysxml [label="System XML"]
+xmled [label="XML Editor"]
+vs [label="Visual Studio"]
+wb [label="Web Browser"]
+net [label=".NET"]
+
+
+
+Australia -> Springwood
+Springwood -> Sydney
+Australia -> Sydney
+Springwood-> chris
+chris -> UNSW
+chris -> Logica
+chris -> IBM
+chris -> Taligent
+chris -> Walkabout
+chris -> Microsoft
+Sydney -> Logica
+Sydney -> UNSW
+USA -> California
+USA -> Washington
+California-> sanj
+sanj -> IBM
+Washington -> Seattle
+Seattle -> Microsoft
+Logica->os2
+Logica -> IBM
+IBM -> Taligent
+Taligent -> OS
+Taligent -> Walkabout
+Walkabout -> wb
+Walkabout-> Microsoft
+Microsoft ->vs
+vs -> Progression
+Progression -> Complexity
+vs -> xmled
+xmled -> MLSF
+Microsoft ->  IE
+Microsoft -> net
+
+
+xsharp [label="X#"]
+
+net -> xsharp
+net -> sysxml
+IE -> MSXML
+MSXML -> XPATH
+MSXML -> XSD
+MSXML -> XML
+MSXML -> XSL
+sysxml -> XML
+sysxml -> XSL
+sysxml ->XSD
+sysxml ->XPATH
+xsharp->Linq
+}

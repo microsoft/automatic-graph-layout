@@ -1,0 +1,360 @@
+﻿digraph G {
+"file:///D:/hdc/src/progression/src/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/GraphControlHost/MainWindow.csproj" [ label="MainWindow.csproj" ]
+"file:///D:/hdc/src/progression/src/VsPackage/VsPackage.csproj" [ label="VsPackage.csproj" ]
+"file:///D:/hdc/src/progression/src/HostControlTest/HostControlTest.csproj" [ label="HostControlTest.csproj" ]
+"file:///D:/hdc/src/progression/src/GraphControlTestHost/GraphControlTestHost.csproj" [ label="GraphControlTestHost.csproj" ]
+"file:///D:/hdc/src/progression/src/HostControl/HostControl.csproj" [ label="HostControl.csproj" ]
+"file:///D:/hdc/src/progression/src/DslProvider/UnitTests/DslProvider.csproj" [ label="DslProvider.csproj" ]
+"file:///D:/hdc/src/progression/src/PerfTests/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/TfsProvider/UnitTests/TfsProvider.csproj" [ label="TfsProvider.csproj" ]
+"file:///D:/hdc/src/progression/src/GraphControl/UnitTests/GraphControl.csproj" [ label="GraphControl.csproj" ]
+"file:///D:/hdc/src/progression/src/DataManager/UnitTests/DataManager.csproj" [ label="DataManager.csproj" ]
+"file:///D:/hdc/src/progression/src/ProgressionBrowser/ProgressionBrowser.csproj" [ label="ProgressionBrowser.csproj" ]
+"file:///D:/hdc/src/progression/src/VsProvider/UnitTests/VsProvider.csproj" [ label="VsProvider.csproj" ]
+"file:///d:/hdc/src/tools/Microsoft.DevDiv.targets" [ label="Microsoft.DevDiv.targets" ]
+"file:///D:/hdc/src/progression/src/PerfTests/VSProviderTest/VSProviderTest.csproj" [ label="VSProviderTest.csproj" ]
+"file:///D:/hdc/src/progression/src/PerfTests/TFSProviderTest/TFSProviderTest.csproj" [ label="TFSProviderTest.csproj" ]
+"file:///D:/hdc/src/progression/src/GraphControl/GraphControl.csproj" [ label="GraphControl.csproj" ]
+"file:///D:/hdc/src/progression/src/Errors/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/PhoenixProvider/PhoenixProvider.csproj" [ label="PhoenixProvider.csproj" ]
+"file:///D:/hdc/src/progression/src/GraphControl/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/PerfTests/PhoenixProviderTest/PhoenixProviderTest.csproj" [ label="PhoenixProviderTest.csproj" ]
+"file:///D:/hdc/src/progression/src/CascadeBrowserTestHost/CascadeBrowserTestHost.csproj" [ label="CascadeBrowserTestHost.csproj" ]
+"file:///D:/hdc/src/progression/src/Interfaces/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/ScenarioTests/TestHelpers2/TestHelpers2.csproj" [ label="TestHelpers2.csproj" ]
+"file:///D:/hdc/src/progression/src/MetricsProvider/MetricsProvider.csproj" [ label="MetricsProvider.csproj" ]
+"file:///D:/hdc/src/progression/src/PerfTests/DSLSyncTest/DSLSyncTest.csproj" [ label="DSLSyncTest.csproj" ]
+"file:///D:/hdc/src/progression/src/PerfTests/BrowseSolution/BrowseSolution.csproj" [ label="BrowseSolution.csproj" ]
+"file:///D:/hdc/src/progression/src/VsProvider/VsProvider.csproj" [ label="VsProvider.csproj" ]
+"file:///D:/hdc/src/progression/src/TfsProvider/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/DataManager/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/DataManager/DataManager.csproj" [ label="DataManager.csproj" ]
+"file:///D:/hdc/src/progression/src/VsPackage/UnitTests/VsPackage.csproj" [ label="VsPackage.csproj" ]
+"file:///D:/hdc/src/progression/src/VsPackage/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/TfsProvider/TfsProvider.csproj" [ label="TfsProvider.csproj" ]
+"file:///D:/hdc/src/progression/src/VsProvider/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/SampleProvider/SampleProgressionProvider.csproj" [ label="SampleProgressionProvider.csproj" ]
+"file:///D:/hdc/src/progression/src/Common/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/Common/UnitTests/Common.csproj" [ label="Common.csproj" ]
+"file:///D:/hdc/src/progression/src/DslProvider/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/DslProvider/DslProvider.csproj" [ label="DslProvider.csproj" ]
+"file:///D:/hdc/src/progression/src/Interfaces/UnitTests/Interfaces.csproj" [ label="Interfaces.csproj" ]
+"file:///D:/hdc/src/progression/src/HostControlTest/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/PhoenixProvider/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/SampleProvider/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/SetupTests/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/MetricsProvider/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/ProgressionBrowser/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/Common/Common.csproj" [ label="Common.csproj" ]
+"file:///D:/hdc/src/progression/src/CascadeBrowser/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/Errors/UnitTests/Errors.csproj" [ label="Errors.csproj" ]
+"file:///D:/hdc/src/progression/src/GraphControlHost/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/CascadeBrowserTestHost/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/HostControl/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/GraphControlTestHost/dirs.proj" [ label="dirs.proj" ]
+"file:///D:/hdc/src/progression/src/SetupTests/Install/Install.csproj" [ label="Install.csproj" ]
+"file:///D:/hdc/src/progression/src/Errors/Errors.csproj" [ label="Errors.csproj" ]
+"file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj" [ label="Interfaces.csproj" ]
+"file:///d:/hdc/src/tools/x86/managed/WinFx/v3.5/Microsoft.Common.Targets" [ label="Microsoft.Common.Targets" ]
+"file:///D:/hdc/src/progression/src/CascadeBrowser/CascadeBrowser.csproj" [ label="CascadeBrowser.csproj" ]
+"file:///d:/hdc/src/progression/tools/vssdk/Microsoft.VSSDK.targets" [ label="Microsoft.VSSDK.targets" ]
+"file:///d:/hdc/src/tools/Microsoft.DevDiv.VisualBasic.targets" [ label="Microsoft.DevDiv.VisualBasic.targets" ]
+"file:///d:/hdc/src/tools/x86/managed/WinFx/v3.5/Microsoft.VisualBasic.Targets" [ label="Microsoft.VisualBasic.Targets" ]
+"file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets" [ label="Microsoft.DevDiv.Settings.targets" ]
+"file:///d:/hdc/src/tools/x86/managed/WinFx/v3.5/Microsoft.CSHARP.Targets" [ label="Microsoft.CSHARP.Targets" ]
+"file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets" [ label="Microsoft.devdiv.traversal.targets" ]
+"file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets" [ label="Microsoft.Progression.Targets" ]
+"file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets" [ label="Microsoft.Progression.Settings.targets" ]
+"file:///C:/Windows/Microsoft.NET/Framework/v2.0.50727//Microsoft.CSHARP.Targets" [ label="Microsoft.CSHARP.Targets" ]
+"file:///d:/hdc/src/tools/Microsoft.DevDiv.CSHARP.Targets" [ label="Microsoft.DevDiv.CSHARP.Targets" ]
+"file:///C:/Windows/Microsoft.NET/Framework/v2.0.50727//Microsoft.Common.targets" [ label="Microsoft.Common.targets" ]
+"file:///d:/hdc/src/progression/tools/vssdk/Microsoft.VSSDK.CSharp.targets" [ label="Microsoft.VSSDK.CSharp.targets" ]
+"file:///C:/Program%20Files/MSBuild/Microsoft/VisualStudio/v9.0/TeamTest/Microsoft.TeamTest.targets" [ label="Microsoft.TeamTest.targets" ]
+"file:///d:/hdc/src/tools/Microsoft.DevDiv.Native.Settings.targets" [ label="Microsoft.DevDiv.Native.Settings.targets" ]
+"file:///d:/hdc/src/tools/Microsoft.DevDiv.Common.targets" [ label="Microsoft.DevDiv.Common.targets" ]
+"file:///d:/hdc/src/tools/x86/managed/WinFx/v3.5/Microsoft.WinFX.targets" [ label="Microsoft.WinFX.targets" ]
+"file:///D:/hdc/src/progression/src/HostControl/HostControl.csproj" -> "file:///D:/hdc/src/progression/src/GraphControl/GraphControl.csproj"
+"file:///D:/hdc/src/progression/src/MetricsProvider/MetricsProvider.csproj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.targets"
+"file:///D:/hdc/src/progression/src/MetricsProvider/MetricsProvider.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/MetricsProvider/MetricsProvider.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/MetricsProvider/dirs.proj" -> "file:///D:/hdc/src/progression/src/MetricsProvider/MetricsProvider.csproj"
+"file:///D:/hdc/src/progression/src/PerfTests/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/PerfTests/dirs.proj" -> "file:///D:/hdc/src/progression/src/PerfTests/BrowseSolution/BrowseSolution.csproj"
+"file:///D:/hdc/src/progression/src/MetricsProvider/MetricsProvider.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/PerfTests/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/Interfaces/dirs.proj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/Interfaces/dirs.proj" -> "file:///D:/hdc/src/progression/src/Interfaces/UnitTests/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/Interfaces/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/Interfaces/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/Interfaces/UnitTests/Interfaces.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/MetricsProvider/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/MetricsProvider/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/Interfaces/UnitTests/Interfaces.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/Interfaces/UnitTests/Interfaces.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/PerfTests/DSLSyncTest/DSLSyncTest.csproj" -> "file:///D:/hdc/src/progression/src/ScenarioTests/TestHelpers2/TestHelpers2.csproj"
+"file:///D:/hdc/src/progression/src/PerfTests/PhoenixProviderTest/PhoenixProviderTest.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/PerfTests/DSLSyncTest/DSLSyncTest.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/PerfTests/DSLSyncTest/DSLSyncTest.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/PerfTests/PhoenixProviderTest/PhoenixProviderTest.csproj" -> "file:///D:/hdc/src/progression/src/ScenarioTests/TestHelpers2/TestHelpers2.csproj"
+"file:///D:/hdc/src/progression/src/PerfTests/TFSProviderTest/TFSProviderTest.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/PerfTests/PhoenixProviderTest/PhoenixProviderTest.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/PerfTests/PhoenixProviderTest/PhoenixProviderTest.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/PerfTests/DSLSyncTest/DSLSyncTest.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/PerfTests/dirs.proj" -> "file:///D:/hdc/src/progression/src/PerfTests/TFSProviderTest/TFSProviderTest.csproj"
+"file:///D:/hdc/src/progression/src/PerfTests/dirs.proj" -> "file:///D:/hdc/src/progression/src/PerfTests/VSProviderTest/VSProviderTest.csproj"
+"file:///D:/hdc/src/progression/src/PerfTests/dirs.proj" -> "file:///D:/hdc/src/progression/src/PerfTests/DSLSyncTest/DSLSyncTest.csproj"
+"file:///D:/hdc/src/progression/src/PerfTests/dirs.proj" -> "file:///D:/hdc/src/progression/src/PerfTests/PhoenixProviderTest/PhoenixProviderTest.csproj"
+"file:///D:/hdc/src/progression/src/PerfTests/BrowseSolution/BrowseSolution.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/PerfTests/BrowseSolution/BrowseSolution.csproj" -> "file:///D:/hdc/src/progression/src/ScenarioTests/TestHelpers2/TestHelpers2.csproj"
+"file:///D:/hdc/src/progression/src/PerfTests/BrowseSolution/BrowseSolution.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/PerfTests/BrowseSolution/BrowseSolution.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/HostControlTest/HostControlTest.csproj" -> "file:///D:/hdc/src/progression/src/VsProvider/VsProvider.csproj"
+"file:///D:/hdc/src/progression/src/GraphControlTestHost/GraphControlTestHost.csproj" -> "file:///D:/hdc/src/progression/src/DataManager/DataManager.csproj"
+"file:///D:/hdc/src/progression/src/GraphControlTestHost/GraphControlTestHost.csproj" -> "file:///D:/hdc/src/progression/src/GraphControl/GraphControl.csproj"
+"file:///D:/hdc/src/progression/src/GraphControlTestHost/GraphControlTestHost.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/GraphControlTestHost/GraphControlTestHost.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/GraphControlTestHost/GraphControlTestHost.csproj" -> "file:///D:/hdc/src/progression/src/VsProvider/VsProvider.csproj"
+"file:///D:/hdc/src/progression/src/ScenarioTests/TestHelpers2/TestHelpers2.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/GraphControlTestHost/GraphControlTestHost.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/GraphControlTestHost/GraphControlTestHost.csproj" -> "file:///D:/hdc/src/progression/src/ScenarioTests/TestHelpers2/TestHelpers2.csproj"
+"file:///D:/hdc/src/progression/src/GraphControlTestHost/GraphControlTestHost.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/CascadeBrowserTestHost/CascadeBrowserTestHost.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/CascadeBrowserTestHost/CascadeBrowserTestHost.csproj" -> "file:///D:/hdc/src/progression/src/CascadeBrowser/CascadeBrowser.csproj"
+"file:///D:/hdc/src/progression/src/CascadeBrowserTestHost/dirs.proj" -> "file:///D:/hdc/src/progression/src/CascadeBrowserTestHost/CascadeBrowserTestHost.csproj"
+"file:///D:/hdc/src/progression/src/CascadeBrowserTestHost/CascadeBrowserTestHost.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/GraphControlTestHost/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/GraphControlTestHost/dirs.proj" -> "file:///D:/hdc/src/progression/src/GraphControlTestHost/GraphControlTestHost.csproj"
+"file:///D:/hdc/src/progression/src/CascadeBrowserTestHost/CascadeBrowserTestHost.csproj" -> "file:///D:/hdc/src/progression/src/GraphControl/GraphControl.csproj"
+"file:///D:/hdc/src/progression/src/GraphControlTestHost/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/HostControlTest/HostControlTest.csproj" -> "file:///D:/hdc/src/progression/src/CascadeBrowser/CascadeBrowser.csproj"
+"file:///D:/hdc/src/progression/src/HostControlTest/HostControlTest.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/HostControlTest/HostControlTest.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/HostControlTest/HostControlTest.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/HostControlTest/HostControlTest.csproj" -> "file:///D:/hdc/src/progression/src/GraphControl/GraphControl.csproj"
+"file:///D:/hdc/src/progression/src/HostControlTest/HostControlTest.csproj" -> "file:///D:/hdc/src/progression/src/HostControl/HostControl.csproj"
+"file:///D:/hdc/src/progression/src/HostControlTest/HostControlTest.csproj" -> "file:///D:/hdc/src/progression/src/DataManager/DataManager.csproj"
+"file:///D:/hdc/src/progression/src/HostControlTest/HostControlTest.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/HostControlTest/dirs.proj" -> "file:///D:/hdc/src/progression/src/HostControlTest/HostControlTest.csproj"
+"file:///D:/hdc/src/progression/src/ScenarioTests/TestHelpers2/TestHelpers2.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/HostControl/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/ScenarioTests/TestHelpers2/TestHelpers2.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/ScenarioTests/TestHelpers2/TestHelpers2.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/HostControlTest/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/HostControlTest/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/HostControl/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/HostControl/dirs.proj" -> "file:///D:/hdc/src/progression/src/HostControl/HostControl.csproj"
+"file:///D:/hdc/src/progression/src/PerfTests/TFSProviderTest/TFSProviderTest.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/VsPackage/VsPackage.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/VsPackage/VsPackage.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/VsPackage/dirs.proj" -> "file:///D:/hdc/src/progression/src/VsPackage/VsPackage.csproj"
+"file:///D:/hdc/src/progression/src/VsPackage/dirs.proj" -> "file:///D:/hdc/src/progression/src/VsPackage/UnitTests/VsPackage.csproj"
+"file:///D:/hdc/src/progression/src/VsPackage/VsPackage.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/VsPackage/VsPackage.csproj" -> "file:///D:/hdc/src/progression/src/DataManager/DataManager.csproj"
+"file:///D:/hdc/src/progression/src/VsPackage/VsPackage.csproj" -> "file:///d:/hdc/src/progression/tools/vssdk/Microsoft.VSSDK.targets"
+"file:///D:/hdc/src/progression/src/VsPackage/VsPackage.csproj" -> "file:///D:/hdc/src/progression/src/CascadeBrowser/CascadeBrowser.csproj"
+"file:///D:/hdc/src/progression/src/VsPackage/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/TfsProvider/UnitTests/TfsProvider.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/TfsProvider/UnitTests/TfsProvider.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/TfsProvider/TfsProvider.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/TfsProvider/UnitTests/TfsProvider.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/TfsProvider/UnitTests/TfsProvider.csproj" -> "file:///D:/hdc/src/progression/src/TfsProvider/TfsProvider.csproj"
+"file:///D:/hdc/src/progression/src/VsPackage/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/TfsProvider/UnitTests/TfsProvider.csproj" -> "file:///D:/hdc/src/progression/src/DataManager/DataManager.csproj"
+"file:///D:/hdc/src/progression/src/TfsProvider/UnitTests/TfsProvider.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/VsPackage/VsPackage.csproj" -> "file:///D:/hdc/src/progression/src/GraphControl/GraphControl.csproj"
+"file:///D:/hdc/src/progression/src/VsProvider/dirs.proj" -> "file:///D:/hdc/src/progression/src/VsProvider/UnitTests/VsProvider.csproj"
+"file:///D:/hdc/src/progression/src/VsProvider/UnitTests/VsProvider.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/VsProvider/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/VsProvider/dirs.proj" -> "file:///D:/hdc/src/progression/src/VsProvider/VsProvider.csproj"
+"file:///D:/hdc/src/progression/src/VsProvider/UnitTests/VsProvider.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/VsProvider/UnitTests/VsProvider.csproj" -> "file:///D:/hdc/src/progression/src/VsProvider/VsProvider.csproj"
+"file:///D:/hdc/src/progression/src/VsProvider/UnitTests/VsProvider.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/VsProvider/UnitTests/VsProvider.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/VsProvider/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/VsPackage/VsPackage.csproj" -> "file:///D:/hdc/src/progression/src/ProgressionBrowser/ProgressionBrowser.csproj"
+"file:///d:/hdc/src/progression/tools/vssdk/Microsoft.VSSDK.targets" -> "file:///d:/hdc/src/progression/tools/vssdk/Microsoft.VSSDK.CSharp.targets"
+"file:///D:/hdc/src/progression/src/VsPackage/VsPackage.csproj" -> "file:///D:/hdc/src/progression/src/HostControl/HostControl.csproj"
+"file:///D:/hdc/src/progression/src/VsPackage/VsPackage.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/VsPackage/UnitTests/VsPackage.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/VsPackage/UnitTests/VsPackage.csproj" -> "file:///D:/hdc/src/progression/src/VsPackage/VsPackage.csproj"
+"file:///D:/hdc/src/progression/src/VsPackage/UnitTests/VsPackage.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/VsPackage/UnitTests/VsPackage.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/PhoenixProvider/PhoenixProvider.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/PhoenixProvider/PhoenixProvider.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/PhoenixProvider/PhoenixProvider.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/PhoenixProvider/PhoenixProvider.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/ProgressionBrowser/dirs.proj" -> "file:///D:/hdc/src/progression/src/ProgressionBrowser/ProgressionBrowser.csproj"
+"file:///D:/hdc/src/progression/src/SampleProvider/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/ProgressionBrowser/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/ProgressionBrowser/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/PhoenixProvider/dirs.proj" -> "file:///D:/hdc/src/progression/src/PhoenixProvider/PhoenixProvider.csproj"
+"file:///D:/hdc/src/progression/src/PerfTests/VSProviderTest/VSProviderTest.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/PerfTests/VSProviderTest/VSProviderTest.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/PerfTests/TFSProviderTest/TFSProviderTest.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/PerfTests/TFSProviderTest/TFSProviderTest.csproj" -> "file:///D:/hdc/src/progression/src/ScenarioTests/TestHelpers2/TestHelpers2.csproj"
+"file:///D:/hdc/src/progression/src/PhoenixProvider/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/PhoenixProvider/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/PerfTests/VSProviderTest/VSProviderTest.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/PerfTests/VSProviderTest/VSProviderTest.csproj" -> "file:///D:/hdc/src/progression/src/ScenarioTests/TestHelpers2/TestHelpers2.csproj"
+"file:///D:/hdc/src/progression/src/SampleProvider/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/TfsProvider/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/TfsProvider/dirs.proj" -> "file:///D:/hdc/src/progression/src/TfsProvider/TfsProvider.csproj"
+"file:///D:/hdc/src/progression/src/SetupTests/Install/Install.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/TfsProvider/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/TfsProvider/TfsProvider.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/TfsProvider/TfsProvider.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/TfsProvider/dirs.proj" -> "file:///D:/hdc/src/progression/src/TfsProvider/UnitTests/TfsProvider.csproj"
+"file:///D:/hdc/src/progression/src/TfsProvider/TfsProvider.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/SetupTests/Install/Install.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/SampleProvider/SampleProgressionProvider.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/SampleProvider/SampleProgressionProvider.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/SampleProvider/dirs.proj" -> "file:///D:/hdc/src/progression/src/SampleProvider/SampleProgressionProvider.csproj"
+"file:///D:/hdc/src/progression/src/SampleProvider/SampleProgressionProvider.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/SetupTests/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/SetupTests/dirs.proj" -> "file:///D:/hdc/src/progression/src/SetupTests/Install/Install.csproj"
+"file:///D:/hdc/src/progression/src/SampleProvider/SampleProgressionProvider.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/SetupTests/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/CascadeBrowserTestHost/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///d:/hdc/src/tools/x86/managed/WinFx/v3.5/Microsoft.VisualBasic.Targets" -> "file:///d:/hdc/src/tools/x86/managed/WinFx/v3.5/Microsoft.Common.Targets"
+"file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///d:/hdc/src/tools/x86/managed/WinFx/v3.5/Microsoft.CSHARP.Targets" -> "file:///d:/hdc/src/tools/x86/managed/WinFx/v3.5/Microsoft.Common.Targets"
+"file:///d:/hdc/src/tools/Microsoft.DevDiv.VisualBasic.targets" -> "file:///d:/hdc/src/tools/x86/managed/WinFx/v3.5/Microsoft.VisualBasic.Targets"
+"file:///D:/hdc/src/progression/src/Common/UnitTests/Common.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/Common/UnitTests/Common.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/Common/UnitTests/Common.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///d:/hdc/src/tools/Microsoft.DevDiv.CSHARP.Targets" -> "file:///d:/hdc/src/tools/x86/managed/WinFx/v3.5/Microsoft.CSHARP.Targets"
+"file:///d:/hdc/src/tools/Microsoft.DevDiv.targets" -> "file:///d:/hdc/src/tools/x86/managed/WinFx/v3.5/Microsoft.Common.Targets"
+"file:///d:/hdc/src/tools/Microsoft.DevDiv.targets" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.CSHARP.Targets"
+"file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.targets"
+"file:///d:/hdc/src/tools/x86/managed/WinFx/v3.5/Microsoft.Common.Targets" -> "file:///d:/hdc/src/tools/x86/managed/WinFx/v3.5/Microsoft.WinFX.targets"
+"file:///d:/hdc/src/tools/x86/managed/WinFx/v3.5/Microsoft.Common.Targets" -> "file:///C:/Program%20Files/MSBuild/Microsoft/VisualStudio/v9.0/TeamTest/Microsoft.TeamTest.targets"
+"file:///d:/hdc/src/tools/Microsoft.DevDiv.targets" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.VisualBasic.targets"
+"file:///d:/hdc/src/tools/Microsoft.DevDiv.targets" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Common.targets"
+"file:///D:/hdc/src/progression/src/Common/UnitTests/Common.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/DataManager/UnitTests/DataManager.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/DataManager/UnitTests/DataManager.csproj" -> "file:///D:/hdc/src/progression/src/DataManager/DataManager.csproj"
+"file:///D:/hdc/src/progression/src/DataManager/UnitTests/DataManager.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/DataManager/UnitTests/DataManager.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/DslProvider/dirs.proj" -> "file:///D:/hdc/src/progression/src/DslProvider/DslProvider.csproj"
+"file:///D:/hdc/src/progression/src/DslProvider/dirs.proj" -> "file:///D:/hdc/src/progression/src/DslProvider/UnitTests/DslProvider.csproj"
+"file:///D:/hdc/src/progression/src/DslProvider/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/DslProvider/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/DataManager/UnitTests/DataManager.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/DataManager/dirs.proj" -> "file:///D:/hdc/src/progression/src/DataManager/DataManager.csproj"
+"file:///D:/hdc/src/progression/src/DataManager/dirs.proj" -> "file:///D:/hdc/src/progression/src/DataManager/UnitTests/DataManager.csproj"
+"file:///D:/hdc/src/progression/src/DataManager/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/DataManager/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/DataManager/DataManager.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/DataManager/DataManager.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/DataManager/DataManager.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/DataManager/DataManager.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/GraphControl/dirs.proj"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/GraphControlHost/dirs.proj"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/DslProvider/dirs.proj"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/Errors/dirs.proj"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/GraphControlTestHost/dirs.proj"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/HostControl/dirs.proj"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/CascadeBrowser/dirs.proj"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/CascadeBrowserTestHost/dirs.proj"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/DataManager/dirs.proj"
+"file:///D:/hdc/src/progression/dirs.proj" -> "file:///D:/hdc/src/progression/src/dirs.proj"
+"file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Native.Settings.targets"
+"file:///D:/hdc/src/progression/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/Common/dirs.proj"
+"file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Common.targets"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/HostControlTest/dirs.proj"
+"file:///D:/hdc/src/progression/src/Common/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/Common/dirs.proj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/VsProvider/dirs.proj"
+"file:///D:/hdc/src/progression/src/Common/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/Common/Common.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/Common/Common.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/Common/dirs.proj" -> "file:///D:/hdc/src/progression/src/Common/UnitTests/Common.csproj"
+"file:///D:/hdc/src/progression/src/Common/Common.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/VsPackage/dirs.proj"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/PerfTests/dirs.proj"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/PhoenixProvider/dirs.proj"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/Interfaces/dirs.proj"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/MetricsProvider/dirs.proj"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/SetupTests/dirs.proj"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/TfsProvider/dirs.proj"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/ProgressionBrowser/dirs.proj"
+"file:///D:/hdc/src/progression/src/dirs.proj" -> "file:///D:/hdc/src/progression/src/SampleProvider/dirs.proj"
+"file:///D:/hdc/src/progression/src/GraphControlHost/MainWindow.csproj" -> "file:///D:/hdc/src/progression/src/ProgressionBrowser/ProgressionBrowser.csproj"
+"file:///D:/hdc/src/progression/src/GraphControlHost/MainWindow.csproj" -> "file:///D:/hdc/src/progression/src/VsProvider/VsProvider.csproj"
+"file:///D:/hdc/src/progression/src/GraphControlHost/MainWindow.csproj" -> "file:///D:/hdc/src/progression/src/HostControl/HostControl.csproj"
+"file:///D:/hdc/src/progression/src/GraphControlHost/MainWindow.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/HostControl/HostControl.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/HostControl/HostControl.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/CascadeBrowser/CascadeBrowser.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/CascadeBrowser/CascadeBrowser.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/GraphControlHost/MainWindow.csproj" -> "file:///D:/hdc/src/progression/src/GraphControl/GraphControl.csproj"
+"file:///D:/hdc/src/progression/src/GraphControlHost/dirs.proj" -> "file:///D:/hdc/src/progression/src/GraphControlHost/MainWindow.csproj"
+"file:///D:/hdc/src/progression/src/GraphControlHost/MainWindow.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/GraphControlHost/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/GraphControlHost/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/GraphControlHost/MainWindow.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/GraphControlHost/MainWindow.csproj" -> "file:///D:/hdc/src/progression/src/DataManager/DataManager.csproj"
+"file:///D:/hdc/src/progression/src/GraphControlHost/MainWindow.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/GraphControlHost/MainWindow.csproj" -> "file:///D:/hdc/src/progression/src/CascadeBrowser/CascadeBrowser.csproj"
+"file:///D:/hdc/src/progression/src/HostControl/HostControl.csproj" -> "file:///D:/hdc/src/progression/src/CascadeBrowser/CascadeBrowser.csproj"
+"file:///D:/hdc/src/progression/src/VsProvider/VsProvider.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/VsProvider/VsProvider.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/VsProvider/VsProvider.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/VsProvider/VsProvider.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/CascadeBrowser/dirs.proj" -> "file:///D:/hdc/src/progression/src/CascadeBrowser/CascadeBrowser.csproj"
+"file:///D:/hdc/src/progression/src/CascadeBrowserTestHost/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/CascadeBrowser/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/CascadeBrowser/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/ProgressionBrowser/ProgressionBrowser.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/HostControl/HostControl.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/HostControl/HostControl.csproj" -> "file:///D:/hdc/src/progression/src/ProgressionBrowser/ProgressionBrowser.csproj"
+"file:///D:/hdc/src/progression/src/HostControl/HostControl.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/HostControl/HostControl.csproj" -> "file:///D:/hdc/src/progression/src/DataManager/DataManager.csproj"
+"file:///D:/hdc/src/progression/src/ProgressionBrowser/ProgressionBrowser.csproj" -> "file:///D:/hdc/src/progression/src/CascadeBrowser/CascadeBrowser.csproj"
+"file:///D:/hdc/src/progression/src/ProgressionBrowser/ProgressionBrowser.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/ProgressionBrowser/ProgressionBrowser.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/ProgressionBrowser/ProgressionBrowser.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///C:/Windows/Microsoft.NET/Framework/v2.0.50727//Microsoft.CSHARP.Targets" -> "file:///C:/Windows/Microsoft.NET/Framework/v2.0.50727//Microsoft.Common.targets"
+"file:///D:/hdc/src/progression/src/Errors/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/DslProvider/UnitTests/DslProvider.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/DslProvider/UnitTests/DslProvider.csproj" -> "file:///D:/hdc/src/progression/src/DslProvider/DslProvider.csproj"
+"file:///D:/hdc/src/progression/src/Errors/dirs.proj" -> "file:///D:/hdc/src/progression/src/Errors/UnitTests/Errors.csproj"
+"file:///D:/hdc/src/progression/src/Errors/Errors.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/Errors/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/Errors/dirs.proj" -> "file:///D:/hdc/src/progression/src/Errors/Errors.csproj"
+"file:///D:/hdc/src/progression/src/DslProvider/UnitTests/DslProvider.csproj" -> "file:///D:/hdc/src/progression/src/DataManager/DataManager.csproj"
+"file:///D:/hdc/src/progression/src/DslProvider/DslProvider.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/DslProvider/DslProvider.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/DslProvider/DslProvider.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/DslProvider/DslProvider.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/DslProvider/UnitTests/DslProvider.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/DslProvider/UnitTests/DslProvider.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/DslProvider/UnitTests/DslProvider.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/DslProvider/UnitTests/DslProvider.csproj" -> "file:///C:/Windows/Microsoft.NET/Framework/v2.0.50727//Microsoft.CSHARP.Targets"
+"file:///D:/hdc/src/progression/src/Errors/Errors.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/GraphControl/UnitTests/GraphControl.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/GraphControl/UnitTests/GraphControl.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/GraphControl/GraphControl.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/GraphControl/GraphControl.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/GraphControl/UnitTests/GraphControl.csproj" -> "file:///D:/hdc/src/progression/src/Interfaces/Interfaces.csproj"
+"file:///D:/hdc/src/progression/src/GraphControl/UnitTests/GraphControl.csproj" -> "file:///D:/hdc/src/progression/src/GraphControl/GraphControl.csproj"
+"file:///D:/hdc/src/progression/src/GraphControl/UnitTests/GraphControl.csproj" -> "file:///D:/hdc/src/progression/src/Common/Common.csproj"
+"file:///D:/hdc/src/progression/src/GraphControl/UnitTests/GraphControl.csproj" -> "file:///D:/hdc/src/progression/src/DataManager/DataManager.csproj"
+"file:///D:/hdc/src/progression/src/GraphControl/GraphControl.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/Errors/UnitTests/Errors.csproj" -> "file:///D:/hdc/src/progression/src/Errors/Errors.csproj"
+"file:///D:/hdc/src/progression/src/GraphControl/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.DevDiv.Settings.targets"
+"file:///D:/hdc/src/progression/src/Errors/UnitTests/Errors.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/Errors/UnitTests/Errors.csproj" -> "file:///d:/hdc/src/Progression/tools/build/Microsoft.Progression.Targets"
+"file:///D:/hdc/src/progression/src/GraphControl/dirs.proj" -> "file:///D:/hdc/src/progression/src/GraphControl/UnitTests/GraphControl.csproj"
+"file:///D:/hdc/src/progression/src/GraphControl/GraphControl.csproj" -> "file:///d:/hdc/src/progression/tools/build/Microsoft.Progression.Settings.targets"
+"file:///D:/hdc/src/progression/src/GraphControl/dirs.proj" -> "file:///d:/hdc/src/tools/Microsoft.devdiv.traversal.targets"
+"file:///D:/hdc/src/progression/src/GraphControl/dirs.proj" -> "file:///D:/hdc/src/progression/src/GraphControl/GraphControl.csproj"
+}

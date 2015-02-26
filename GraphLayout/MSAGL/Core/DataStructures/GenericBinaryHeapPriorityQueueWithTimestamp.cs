@@ -1,0 +1,316 @@
+/*
+Microsoft Automatic Graph Layout,MSAGL 
+
+Copyright (c) Microsoft Corporation
+
+All rights reserved. 
+
+MIT License 
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+""Software""), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Microsoft.Msagl.Core.DataStructures {
+
+    // TODO: Move and expand the commented tests below into PriorityQueueTests unit tests for all 3 PQ classes.
+    // TODO: Reduce duplication with GenericBinaryHeapPriorityQueue by breaking most functionality out into a 
+    //      GenericBinaryHeapPriorityQueue<T, THeapElement> class and using THeapElement.ComparePriority, keeping only Enqueue
+    //      and DecreasePriority in the derived classes as these must know about timestamp.
+
+    /// <summary>
+    /// A generic version priority queue based on the binary heap algorithm where
+    /// the priority of each element is passed as a parameter and priority ties are broken by timestamp.
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix")]
+    public class GenericBinaryHeapPriorityQueueWithTimestamp<T> : IEnumerable<T> {
+
+        const int InitialHeapCapacity = 16;
+
+
+        //indexing for A starts from 1
+
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        //internal void Clear()
+        //{
+        //    if(heapSize>0)
+        //    {
+        //        for(int i=0;i<cache.Length;i++)
+        //            this.cache[i]=null;
+
+        //        heapSize=0; 
+        //    }
+        //}
+
+
+        // ReSharper disable InconsistentNaming
+        GenericHeapElementWithTimestamp<T>[] A;//array of heap elements
+        // ReSharper restore InconsistentNaming
+
+        private UInt64 timestamp;
+        private UInt64 NextTimestamp { get { return ++this.timestamp; } }
+
+        /// <summary>
+        /// it is a mapping from queue elements and their correspondent HeapElements
+        /// </summary>
+        readonly Dictionary<T, GenericHeapElementWithTimestamp<T>> cache;
+        internal int Count { get { return heapSize; } }
+        int heapSize;
+
+        internal bool ContainsElement(T key) {
+            return cache.ContainsKey(key);
+        }
+
+
+        internal GenericBinaryHeapPriorityQueueWithTimestamp() {
+            cache = new Dictionary<T, GenericHeapElementWithTimestamp<T>>();
+            A = new GenericHeapElementWithTimestamp<T>[InitialHeapCapacity + 1];
+        }
+
+
+        void SwapWithParent(int i) {
+            var parent = A[i >> 1];
+
+            PutAtI(i >> 1, A[i]);
+            PutAtI(i, parent);
+        }
+
+        internal void Enqueue(T element, double priority) {
+            if (heapSize == A.Length - 1) {
+                var newA = new GenericHeapElementWithTimestamp<T>[A.Length * 2];
+                Array.Copy(A, 1, newA, 1, heapSize);
+                A = newA;
+            }
+
+            heapSize++;
+            int i = heapSize;
+            GenericHeapElementWithTimestamp<T> h;
+
+            A[i] = cache[element] = h = new GenericHeapElementWithTimestamp<T>(i, priority, element, this.NextTimestamp);
+            while (i > 1 && A[i >> 1].ComparePriority(A[i]) > 0) {
+                SwapWithParent(i);
+                i >>= 1;
+            }
+            System.Diagnostics.Debug.Assert(A[i] == h);
+            A[i] = h;
+
+        }
+
+        internal bool IsEmpty() {
+            return heapSize == 0;
+        }
+
+        void PutAtI(int i, GenericHeapElementWithTimestamp<T> h) {
+            A[i] = h;
+            h.indexToA = i;
+        }
+
+#if TEST_MSAGL
+        /// <summary>
+        /// Gets the next element to be dequeued, without dequeueing it.
+        /// </summary>
+        internal T Peek() {
+            if (heapSize == 0) {
+                throw new InvalidOperationException();
+            }
+            return A[1].v;
+        }
+
+        /// <summary>
+        /// Gets the timestamp of the next element to be dequeued, without dequeueing it.
+        /// </summary>
+        internal UInt64 PeekTimestamp() {
+            if (heapSize == 0) {
+                throw new InvalidOperationException();
+            }
+            return A[1].Timestamp;
+        }
+#endif // TEST_MSAGL
+
+        internal T Dequeue() {
+            if (heapSize == 0)
+                throw new InvalidOperationException();
+
+            var ret = A[1].v;
+
+            MoveQueueOneStepForward(ret);
+
+            return ret;
+
+        }
+
+        internal T Dequeue(out double priority) {
+            if (heapSize == 0) throw new InvalidOperationException();
+
+            var ret = A[1].v;
+            priority = A[1].priority;
+            MoveQueueOneStepForward(ret);
+            return ret;
+        }
+
+        void MoveQueueOneStepForward(T ret) {
+            cache.Remove(ret);
+            PutAtI(1, A[heapSize]);
+            int i = 1;
+            while (true) {
+                int smallest = i;
+                int l = i << 1;
+
+                if (l <= heapSize && A[l].ComparePriority(A[i]) < 0)
+                    smallest = l;
+
+                int r = l + 1;
+
+                if (r <= heapSize && A[r].ComparePriority(A[smallest]) < 0)
+                    smallest = r;
+
+                if (smallest != i)
+                    SwapWithParent(smallest);
+                else
+                    break;
+
+                i = smallest;
+
+            }
+
+            heapSize--;
+        }
+
+        /// <summary>
+        /// sets the object priority to c
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        internal void DecreasePriority(T element, double newPriority)
+        {
+            GenericHeapElementWithTimestamp<T> h;
+            //ignore the element if it is not in the queue
+            if (!cache.TryGetValue(element, out h)) return;
+                
+            //var h = cache[element];
+            h.priority = newPriority;
+            int i = h.indexToA;
+            while (i > 1) {
+                if (A[i].ComparePriority(A[i >> 1]) < 0)
+                    SwapWithParent(i);
+                else
+                    break;
+                i >>= 1;
+            }
+        }
+
+        ///<summary>
+        ///</summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        //        public static void Test() {
+        //            Timer nm = new Timer();
+        //            var bound = 1000000;
+        //            nm.Start();
+        //            {
+        //                var q = new BinaryHeapPriorityQueue(bound + 1);
+        //                Random random = new Random();
+        //                for (int i = 0; i < bound; i++) {
+        //                    q.Enqueue(i, random.NextDouble());
+        //                }
+        //                for (int i = 0; i < bound; i++) {
+        //                    q.DecreasePriority(i, -random.NextDouble());
+        //                }
+        //
+        //                while (q.IsEmpty() == false) {
+        //                    q.Dequeue();
+        //                }
+        //
+        //            }
+        //            nm.Stop();
+        //            Console.WriteLine(nm.Duration);
+        //            nm.Start();
+        //            {
+        //                var q = new GenericBinaryHeapPriorityQueue<int>();
+        //                Random random = new Random();
+        //                for (int i = 0; i < bound; i++) {
+        //                    q.Enqueue(i, random.NextDouble());
+        //                }
+        //                for (int i = 0; i < bound; i++) {
+        //                    q.DecreasePriority(i, -random.NextDouble());
+        //                }
+        //
+        //                while (q.IsEmpty() == false) {
+        //                    q.Dequeue();
+        //                }
+        //
+        //            }
+        //            nm.Stop();
+        //            Console.WriteLine(nm.Duration);
+        //}
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static void Test() {
+            var q = new GenericBinaryHeapPriorityQueue<int>();
+            q.Enqueue(2, 2);
+            q.Enqueue(1, 1);
+            q.Enqueue(9, 9);
+            q.Enqueue(8, 8);
+            q.Enqueue(5, 5);
+            q.Enqueue(3, 3);
+            q.Enqueue(4, 4);
+            q.Enqueue(7, 7);
+            q.Enqueue(6, 6);
+            q.Enqueue(0, 0);
+
+            q.DecreasePriority(4, 2.5);
+
+            while (q.IsEmpty() == false)
+                Console.WriteLine(q.Dequeue());
+
+
+        }
+        /// <summary>
+        /// enumerator
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator<T> GetEnumerator() {
+            for (int i = 1; i <= heapSize; i++)
+                yield return A[i].v;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() {
+            for (int i = 1; i <= heapSize; i++)
+                yield return A[i].v;
+        }
+#if TEST_MSAGL
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() {
+            var sb=new StringBuilder();
+            foreach (var i in this)
+                sb.Append(i + ",");
+            return sb.ToString();
+        }
+  
+#endif
+    }
+}
+
+
+
