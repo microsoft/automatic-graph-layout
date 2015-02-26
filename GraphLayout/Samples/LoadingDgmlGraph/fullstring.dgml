@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph xsd="http://www.w3.org/2001/XMLSchema" xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+    <Node Id="0" Background="#FFFF0000" Bounds="1083.63173044904,342.887885158245,136.6,25" Group="Collapsed" Label="ReconnectOnError" />
+    <Node Id="1" Background="#FFFFFFFF" Bounds="666.68819711571,287.887885158245,155.096666666667,25" Group="Collapsed" Label="GetClusterGroupState" />
+    <Node Id="10" Background="#FFFFFFFF" Bounds="263.45799711571,342.887885158245,162.673333333333,25" Group="Collapsed" Label="OpenClusterGroupImpl" />
+    <Node Id="100" Background="#FFFFFFFF" Group="Collapsed" Label="OpenCryptProviderMSRsaFullCurrentNode" />
+    <Node Id="102" Background="#FFFFFFFF" Group="Collapsed" Label="OpenCryptProviderMSRsaFullDifferentNode" />
+    <Node Id="104" Background="#FFFFFFFF" Group="Collapsed" Label="ReEvaluatePlacement_MovePool" />
+    <Node Id="106" Background="#FFFFFFFF" Group="Collapsed" Label="ReEvaluatePlacement_MoveSpaces" />
+    <Node Id="12" Background="#FFFFFFFF" Bounds="77.5345637823759,323.887885158245,155.923333333333,44" Group="Expanded" Label="CreateClusterGroupEx" UseManualLocation="True" />
+    <Node Id="14" Background="#FFFFFFFF" Bounds="77.5345637823761,268.887885158245,173.8,25" Group="Collapsed" Label="SetClusterGroupNodeList" />
+    <Node Id="16" Background="#FFFFFFFF" Bounds="906.614963782377,342.887885158245,147.016666666667,25" Group="Collapsed" Label="OpenClusterRelative" />
+    <Node Id="17" Background="#FFFFFFFF" Bounds="727.185588141968,397.887885158245,119.566666666667,25" Group="Collapsed" Label="StringCchCatW" />
+    <Node Id="18" Background="#FFFFFFFF" Bounds="700.808197115709,342.887885158245,175.806666666667,25" Group="Collapsed" Label="GetFriendlyNameFromSid" />
+    <Node Id="2" Background="#FFFFFFFF" Bounds="650.798855443069,177.887885158245,133.63,25" Group="Collapsed" Label="OfflineCoreGroup" />
+    <Node Id="20" Background="#FFFFFFFF" Bounds="-102.588869550958,287.887885158245,150.123333333333,25" Group="Collapsed" Label="ClusterRegCreateKey" />
+    <Node Id="22" Background="#FFFFFFFF" Bounds="491.728097115709,287.887885158245,144.96,25" Group="Collapsed" Label="ClusterRegOpenKey" />
+    <Node Id="24" Background="#FFFFFFFF" Bounds="1.69878812129787,158.887885158245,177.076666666667,25" Group="Collapsed" Label="AsyncNotificationCallback" />
+    <Node Id="26" Background="#FFFFFFFF" Bounds="281.334663782376,287.887885158245,180.393333333333,25" Group="Collapsed" Label="ConstructReconnectPacket" />
+    <Node Id="28" Background="#FFFFFFFF" Bounds="-132.089725441518,103.887885158245,295.703333333333,25" Group="Collapsed" Label="MIDLAllocateUnusedStringPacketValuesToEmpty" />
+    <Node Id="30" Background="#FFFFFFFF" Bounds="77.5345637823759,213.887885158245,109.243333333333,25" Group="Collapsed" Label="NotifyThread" />
+    <Node Id="32" Background="#FFFFFFFF" Bounds="-478.235736217623,287.887885158245,156.903333333333,25" Group="Collapsed" Label="RundownNotifyEvents" />
+    <Node Id="34" Background="#FFFFFFFF" Bounds="-127.018869550957,342.887885158245,174.553333333333,25" Group="Collapsed" Label="OpenClusterNetworkImpl" />
+    <Node Id="36" Background="#FFFFFFFF" Bounds="-351.915636217624,342.887885158245,194.896666666667,25" Group="Collapsed" Label="OpenClusterNetInterfaceImpl" />
+    <Node Id="38" Background="#FFFFFFFF" Bounds="-532.022402884291,342.887885158245,150.106666666667,25" Group="Collapsed" Label="GetNodeInformation" />
+    <Node Id="4" Background="#FFFFFFFF" Bounds="329.428097115709,232.887885158245,111.066666666667,25" Group="Collapsed" Label="CreateCluster" />
+    <Node Id="40" Background="#FFFFFFFF" Bounds="-233.145636217624,232.887885158245,125.53,25" Group="Collapsed" Label="WaitForNodeUp" />
+    <Node Id="42" Background="#FFFFFFFF" Bounds="-474.318078545369,177.887885158245,204.723333333333,25" Group="Collapsed" Label="ClusterSetCsvHwSnapshotState" />
+    <Node Id="44" Background="#FFFFFFFF" Bounds="-972.63260288429,287.887885158245,279.663333333333,25" Group="Collapsed" Label="ClusterSetCsvSnapshotPrepareForFreezeState" />
+    <Node Id="46" Background="#FFFFFFFF" Bounds="-1160.12603621762,332.33853427637,157.493333333333,25" Group="Collapsed" Label="GetClusterInformation" />
+    <Node Id="48" Background="#FFFFFFFF" Bounds="-77.6155362176241,232.887885158245,125.15,25" Group="Collapsed" Label="SetClusterName" />
+    <Node Id="5" Background="#FFFFFFFF" Bounds="456.131430449043,342.887885158245,214.676666666667,25" Group="Collapsed" Label="CreateClusterNameCOIfNotExists" />
+    <Node Id="50" Background="#FFFFFFFF" Bounds="-291.332302884291,287.887885158245,158.743333333333,25" Group="Collapsed" Label="OpenClusterNodeImpl" />
+    <Node Id="52" Background="#FFFFFFFF" Bounds="-906.649269550958,342.887885158245,141.996666666667,25" Group="Collapsed" Label="EvictClusterNodeEx" />
+    <Node Id="54" Background="#FFFFFFFF" Bounds="-734.652502884291,342.887885158245,172.63,25" Group="Collapsed" Label="GetReconnectCandidates" />
+    <Node Id="56" Background="#FFFFFFFF" Bounds="-404.849069550958,232.887885158245,141.703333333333,25" Group="Collapsed" Label="InitClusterResource" />
+    <Node Id="58" Background="#FFFFFFFF" Bounds="-662.969169550958,287.887885158245,154.733333333333,25" Group="Collapsed" Label="ClusterResourceEnum" />
+    <Node Id="6" Background="#FFFFFFFF" Bounds="851.784963782376,287.887885158245,151.186666666666,25" Group="Collapsed" Label="CreateNetworkName" />
+    <Node Id="60" Background="#FFFFFFFF" Bounds="193.613707891815,103.887885158245,179.496666666667,25" Group="Collapsed" Label="ClusterResourceTypeEnum" />
+    <Node Id="62" Background="#FFFFFFFF" Bounds="208.775554787965,158.887885158245,265.61,25" Group="Collapsed" Label="GetClusterResourceDependencyExpression" />
+    <Node Id="64" Background="#FFFFFFFF" Bounds="95.1213826240002,48.8878851582447,220.18,25" Group="Collapsed" Label="GetClusterResourceNetworkName" />
+    <Node Id="66" Background="#FFFFFFFF" Bounds="-104.705384042666,48.8878851582447,169.826666666667,25" Group="Collapsed" Label="GetClusterResourceState" />
+    <Node Id="68" Background="#FFFFFFFF" Bounds="-239.594645212035,177.887885158245,211.293333333333,25" Group="Collapsed" Label="ClRtlAreClaimsEnabledInDomain" />
+    <Node Id="70" Background="#FFFFFFFF" Bounds="-320.298817376,48.8878851582447,185.593333333333,25" Group="Collapsed" Label="ClRtlIsComputerObjectInDS" />
+    <Node Id="72" Background="#FFFFFFFF" Bounds="216.777997115709,213.887885158245,82.6500000000001,25" Group="Collapsed" Label="newdup" />
+    <Node Id="74" Background="#FFFFFFFF" Bounds="-489.049825441518,122.887885158245,326.96,25" Group="Collapsed" Label="ClusterInternalGetVolumeNameForVolumeMountPoint" />
+    <Node Id="76" Background="#FFFFFFFF" Bounds="-676.102502884291,232.887885158245,241.253333333333,25" Group="Collapsed" Label="ClusterInternalIsPathOnSharedVolume" />
+    <Node Id="78" Background="#FFFFFFFF" Bounds="1159.66882957789,397.887885158245,124.003333333333,25" Group="Collapsed" Label="StringCbCopyW" />
+    <Node Id="79" Background="#FFFFFFFF" Bounds="1493.84859711571,342.887885158245,117.733333333334,25" Group="Collapsed" Label="ClRtlDupString" />
+    <Node Id="8" Background="#FFFF0000" Bounds="572.749348893087,452.887885158245,147.876666666667,25" Group="Collapsed" Label="StringCopyWorkerW" />
+    <Node Id="81" Background="#FFFFFFFF" Bounds="1641.58203044904,342.887885158245,164.253333333333,25" Group="Collapsed" Label="CreatePropertyListEntry" />
+    <Node Id="83" Background="#FFFFFFFF" Bounds="928.288520935916,397.887885158245,140.86,25" Group="Collapsed" Label="StringCchCopyExW" />
+    <Node Id="84" Background="#FFFFFFFF" Bounds="1250.23183044904,342.887885158245,213.616666666667,25" Group="Collapsed" Label="ClRtlObtainDefaultContainerPath" />
+    <Node Id="86" Background="#FFFFFFFF" Bounds="702.0047302429,232.887885158245,117.596666666666,25" Group="Collapsed" Label="DestroyCluster" />
+    <Node Id="88" Background="#FFFFFFFF" Group="Collapsed" Label="WrapGetClusterGroupState" />
+    <Node Id="9" Background="#FFFFFFFF" Bounds="-77.5209606358124,397.887885158245,129.283333333333,25" Group="Collapsed" Label="StringCchCopyW" />
+    <Node Id="90" Background="#FFFFFFFF" Group="Collapsed" Label="ScWaitForGroupState" />
+    <Node Id="92" Background="#FFFFFFFF" Group="Collapsed" Label="ScWrapMoveClusterGroup" />
+    <Node Id="94" Background="#FFFFFFFF" Bounds="1032.97173044904,260.37731958825,139.846666666667,25" Group="Collapsed" Label="MoveClusterGroup" />
+    <Node Id="95" Background="#FFFFFFFF" Group="Collapsed" Label="ScWrapMoveClusterGroup" />
+    <Node Id="97" Background="#FFFFFFFF" Group="Collapsed" Label="ScWrapMoveClusterGroup" />
+    <Node Id="99" Background="#FFFFFFFF" Bounds="1202.81849711571,287.887885158245,151.423333333333,25" Group="Collapsed" Label="MoveClusterGroupEx" />
+    <Node Id="CLUSAPI.DLL" Background="#FF0000FF" Bounds="-1180.12603621762,8.88788515824466,3005.9614,489" Group="Expanded" Label="CLUSAPI.DLL" UseManualLocation="True" />
+    <Node Id="cluscrypt.tests.dll" Background="#FF0000FF" Bounds="399.322520760724,-46.1121148417554,129.653333333333,25" Group="Collapsed" Label="cluscrypt.tests.dll" />
+    <Node Id="clusres.dll" Background="#FF0000FF" Bounds="558.975954094057,-46.1121148417553,91.3566666666666,25" Group="Collapsed" Label="clusres.dll" />
+    <Node Id="cluster.exe" Background="#FF0000FF" Bounds="6.1355540940574,-46.1121148417553,95.51,25" Group="Collapsed" Label="cluster.exe" />
+    <Node Id="cluswmi.dll" Background="#FF0000FF" Bounds="131.645654094057,-46.1121148417553,97.73,25" Group="Collapsed" Label="cluswmi.dll" />
+    <Node Id="cluswmiv2.dll" Background="#FF0000FF" Bounds="259.375754094057,-46.1121148417554,109.946666666667,25" Group="Collapsed" Label="cluswmiv2.dll" />
+  </Nodes>
+  <Links>
+    <Link Source="1" Target="0" Bounds="820.898576778541,310.729955774044,254.10286405913,34.2796714880435" Label="" LabelBounds="987.870968567091,313.265827544556,0,15.96" />
+    <Link Source="1" Target="9" Bounds="60.6488380432129,310.746276855469,606.936977386475,90.3626098632813" Label="" LabelBounds="572.184925410927,326.555169111889,0,15.96" />
+    <Link Source="10" Target="9" Bounds="60.0712375076709,367.443237525758,206.325506395114,31.7269474218043" Label="" LabelBounds="163.487960582558,387.30698432743,0.0999999999999943,15.96" />
+    <Link Source="100" Target="99" Label="" />
+    <Link Source="102" Target="99" Label="" />
+    <Link Source="104" Target="99" Label="" />
+    <Link Source="106" Target="99" Label="" />
+    <Link Source="12" Target="9" Bounds="28.1560696724051,367.887885158245,69.9097493471777,26.7804887228957" Label="" LabelBounds="63.7763912964615,385.287507678466,0,15.96" />
+    <Link Source="14" Target="9" Bounds="22.5294303894043,293.887878417969,104.429569244385,100.208557128906" Label="" LabelBounds="68.6973787781664,323.925459970144,0,15.96" />
+    <Link Source="16" Target="17" Bounds="839.523568471215,367.887885158245,96.7010069080384,27.5352570311096" Label="" LabelBounds="888.371792584988,385.658553015792,0,15.96" />
+    <Link Source="16" Target="9" Bounds="60.7528953552246,367.887878417969,851.791660308838,39.1184692382813" Label="" LabelBounds="802.785056878048,376.930499930635,0,15.96" />
+    <Link Source="17" Target="8" Bounds="686.948789524838,422.887885158245,68.1380321211727,26.714846452245" Label="" LabelBounds="721.697839707147,440.25553584136,0,15.96" />
+    <Link Source="18" Target="17" Bounds="787.649980144812,367.887885158245,0.665502810198177,21.004513985901" Label="" LabelBounds="791.982732053277,370.473477967968,0,15.96" />
+    <Link Source="18" Target="9" Bounds="60.7472496032715,367.887878417969,658.566287994385,38.2263793945313" Label="" LabelBounds="634.486121295106,376.815507617129,0,15.96" />
+    <Link Source="2" Target="1" Bounds="693.902160644531,202.887878417969,18.2120971679688,80.70751953125" Label="" LabelBounds="699.383332312752,237.129408011235,0,15.96" />
+    <Link Source="20" Target="9" Bounds="19.5232315063477,312.887878417969,38.1454124450684,81.2114868164063" Label="" LabelBounds="61.668645724928,339.9957708045,0,15.96" />
+    <Link Source="22" Target="9" Bounds="60.6488380432129,310.196960449219,431.644374847412,90.9119262695313" Label="" LabelBounds="399.123298344655,326.49766483661,0,15.96" />
+    <Link Source="24" Target="9" Bounds="22.4970664978027,183.887878417969,58.9202766418457,210.1396484375" Label="" LabelBounds="58.7048349382152,277.955584234103,0,15.96" />
+    <Link Source="26" Target="9" Bounds="60.6488380432129,312.887878417969,265.229579925537,88.2210083007813" Label="" LabelBounds="239.402365409548,371.161225407834,0.0999999999999943,15.96" />
+    <Link Source="28" Target="9" Bounds="-8.43539428710938,128.887878417969,66.1040382385254,265.148254394531" Label="" LabelBounds="40.8831666132926,199.734276680865,0,15.96" />
+    <Link Source="30" Target="9" Bounds="22.5131874084473,238.887878417969,84.6336936950684,155.173797607422" Label="" LabelBounds="66.5345357988214,310.570535181109,0.0999999999999943,15.96" />
+    <Link Source="32" Target="9" Bounds="-321.97802734375,310.345428466797,252.393836975098,85.2728881835938" Label="" LabelBounds="-177.717837251765,313.436589960246,0.0999999999999943,15.96" />
+    <Link Source="34" Target="9" Bounds="-33.6369963126665,367.887885158245,10.702687959781,21.9130340517996" Label="" LabelBounds="-30.1827558768204,379.722137253504,0,15.96" />
+    <Link Source="36" Target="9" Bounds="-199.560937221757,367.887885158245,122.999817513015,28.0021760748562" Label="" LabelBounds="-137.667067592995,361.927696449014,0.0999999999999943,15.96" />
+    <Link Source="38" Target="9" Bounds="-382.234170132721,364.643715159325,295.806779517906,36.6353241350129" Label="" LabelBounds="-234.626599956165,386.961493083358,0,15.96" />
+    <Link Source="4" Target="1" Bounds="440.396512417808,253.874221974468,219.468892756771,33.597622272243" Label="" LabelBounds="550.383605092042,250.712764800308,0,15.96" />
+    <Link Source="4" Target="5" Bounds="418.523376464844,257.887878417969,104.961730957031,81.6752624511719" Label="" LabelBounds="479.647763749568,286.957713251625,0,15.96" />
+    <Link Source="4" Target="9" Bounds="60.6488380432129,257.887878417969,280.376979827881,143.221008300781" Label="" LabelBounds="259.5535976647,327.586854757487,0,15.96" />
+    <Link Source="40" Target="9" Bounds="-151.871200561523,257.887878417969,82.2874908447266,137.728607177734" Label="" LabelBounds="-127.436833969989,331.338892875491,0.0999999999999943,15.96" />
+    <Link Source="42" Target="9" Bounds="-326.018737792969,202.887878417969,256.435028076172,192.728607177734" Label="" LabelBounds="-235.629267755533,242.206213823332,0,15.96" />
+    <Link Source="44" Target="9" Bounds="-694.197692871094,311.170440673828,607.715148925781,92.3948974609375" Label="" LabelBounds="-596.744118210958,322.684635416657,0,15.96" />
+    <Link Source="46" Target="9" Bounds="-1019.37725830078,357.338531494141,932.862060546875,50.4126892089844" Label="" LabelBounds="-918.226751735184,352.008522059425,0,15.96" />
+    <Link Source="48" Target="9" Bounds="13.0404710769653,257.887878417969,44.6281728744507,136.182678222656" Label="" LabelBounds="53.5686457249279,317.122652828103,0,15.96" />
+    <Link Source="5" Target="8" Bounds="572.926345423745,367.887885158245,58.8748218983432,77.8225474742245" Label="" LabelBounds="603.958745823089,389.632507059143,0,15.96" />
+    <Link Source="5" Target="9" Bounds="60.7216709710472,365.557306916076,396.181971938535,37.8069646571949" Label="" LabelBounds="354.902971699343,379.304456082044,0,15.96" />
+    <Link Source="50" Target="9" Bounds="-186.827697753906,312.887878417969,117.243507385254,82.7304382324219" Label="" LabelBounds="-136.629477764531,351.408694201346,0.0999999999999943,15.96" />
+    <Link Source="52" Target="9" Bounds="-773.903015136719,367.887878417969,687.396057128906,38.3882141113281" Label="" LabelBounds="-685.454862545135,376.836369161224,0,15.96" />
+    <Link Source="54" Target="9" Bounds="-584.2109375,367.887878417969,497.714775085449,37.0238342285156" Label="" LabelBounds="-456.0922218193,381.433103106263,0,15.96" />
+    <Link Source="56" Target="9" Bounds="-328.759552001953,257.887878417969,259.175361633301,137.730438232422" Label="" LabelBounds="-276.76174180158,326.612249499005,0.0999999999999659,15.96" />
+    <Link Source="58" Target="9" Bounds="-510.136138916016,311.811126708984,423.653594970703,91.7542114257813" Label="" LabelBounds="-393.175258163645,313.32786892826,0,15.96" />
+    <Link Source="6" Target="5" Bounds="655.075186148178,311.568606992983,198.32565488594,29.9743205217321" Label="" LabelBounds="779.27759992823,326.809232240938,0,15.96" />
+    <Link Source="60" Target="9" Bounds="22.4970664978027,128.887878417969,228.145008087158,265.1396484375" Label="" LabelBounds="171.225459956062,195.23586567952,0.0999999999999943,15.96" />
+    <Link Source="62" Target="9" Bounds="60.6488380432129,183.887878417969,274.095027923584,217.221008300781" Label="" LabelBounds="289.865463442144,271.199767272462,0,15.96" />
+    <Link Source="64" Target="9" Bounds="22.4970664978027,73.8878860473633,174.321262359619,320.139640808105" Label="" LabelBounds="179.707045142721,187.929056044032,0.0999999999999943,15.96" />
+    <Link Source="66" Target="9" Bounds="-142.223907470703,73.8878860473633,199.892551422119,320.148246765137" Label="" LabelBounds="-132.889907659567,114.128458693405,0.0999999999999943,15.96" />
+    <Link Source="68" Target="9" Bounds="-130.817672729492,202.887878417969,61.233154296875,192.731719970703" Label="" LabelBounds="-114.319669983045,296.834115855949,0.0999999999999943,15.96" />
+    <Link Source="70" Target="9" Bounds="-213.771362304688,73.8878860473633,271.440006256104,320.148246765137" Label="" LabelBounds="-140.335837269775,111.638827702451,0.0999999999999943,15.96" />
+    <Link Source="72" Target="9" Bounds="22.5131874084473,235.696731567383,194.603481292725,158.364944458008" Label="" LabelBounds="85.486570673373,241.379003303511,0.0999999999999943,15.96" />
+    <Link Source="74" Target="9" Bounds="-300.037780761719,147.887878417969,230.454071044922,247.728607177734" Label="" LabelBounds="-235.87839815204,240.678613869941,0.0999999999999943,15.96" />
+    <Link Source="76" Target="9" Bounds="-457.374908447266,257.887878417969,387.790718078613,137.730438232422" Label="" LabelBounds="-328.54442731902,258.212317132268,0,15.96" />
+    <Link Source="78" Target="8" Bounds="729.585121494803,416.31865662398,430.083708083087,41.1396712525458" Label="" LabelBounds="1048.92831438174,430.925019599219,0.0999999999999091,15.96" />
+    <Link Source="79" Target="78" Bounds="1291.77637569841,365.083643944321,202.580156930518,33.6568033201297" Label="" LabelBounds="1393.34424237782,385.912416309417,0.0999999999999091,15.96" />
+    <Link Source="81" Target="78" Bounds="1292.62548828125,365.024932861328,349.436279296875,38.1106262207031" Label="" LabelBounds="1544.78184221353,380.412818794871,0.0999999999999091,15.96" />
+    <Link Source="83" Target="8" Bounds="727.789032799139,421.196163157003,201.750448702077,31.5207460780764" Label="" LabelBounds="828.922984507707,440.956827005425,0,15.96" />
+    <Link Source="84" Target="83" Bounds="1076.93517077265,367.887885158245,198.668255999166,30.4942620634172" Label="" LabelBounds="1157.89758286638,389.994124402701,0.0999999999999091,15.96" />
+    <Link Source="86" Target="1" Bounds="750.597344851972,257.887885158245,6.4405975589907,21.3824378960187" Label="" LabelBounds="757.821415225195,262.221361165108,0,15.96" />
+    <Link Source="88" Target="1" Label="" />
+    <Link Source="9" Target="8" Bounds="51.7623726975209,415.778227299347,512.018104993634,42.6961882432089" Label="" LabelBounds="183.88323964141,406.825814321781,0.0999999999999943,15.96" />
+    <Link Source="90" Target="1" Label="" />
+    <Link Source="92" Target="1" Label="" />
+    <Link Source="94" Target="0" Bounds="1110.32391036825,285.37731958825,29.5809347871445,49.7737677800919" Label="" LabelBounds="1126.83366615958,293.282417098791,0.0999999999999091,15.96" />
+    <Link Source="95" Target="94" Label="" />
+    <Link Source="97" Target="94" Label="" />
+    <Link Source="99" Target="0" Bounds="1188.95875221371,312.887885158245,60.7990403565411,26.4138120161816" Label="" LabelBounds="1223.95514307734,326.27829470478,0.0999999999999091,15.96" />
+    <Link Source="CLUSAPI.DLL" Target="0" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="1" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="10" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="12" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="14" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="16" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="17" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="18" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="2" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="20" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="22" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="24" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="26" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="28" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="30" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="32" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="34" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="36" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="38" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="4" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="40" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="42" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="44" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="46" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="48" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="5" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="50" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="52" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="54" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="56" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="58" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="6" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="60" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="62" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="64" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="66" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="68" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="70" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="72" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="74" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="76" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="78" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="79" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="8" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="81" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="83" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="84" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="86" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="9" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="94" Category="Contains" Label="" />
+    <Link Source="CLUSAPI.DLL" Target="99" Category="Contains" Label="" />
+    <Link Source="cluscrypt.tests.dll" Target="100" Category="Contains" Label="" />
+    <Link Source="cluscrypt.tests.dll" Target="102" Category="Contains" Label="" />
+    <Link Source="clusres.dll" Target="104" Category="Contains" Label="" />
+    <Link Source="clusres.dll" Target="106" Category="Contains" Label="" />
+    <Link Source="cluster.exe" Target="88" Category="Contains" Label="" />
+    <Link Source="cluster.exe" Target="90" Category="Contains" Label="" />
+    <Link Source="cluster.exe" Target="92" Category="Contains" Label="" />
+    <Link Source="cluswmi.dll" Target="95" Category="Contains" Label="" />
+    <Link Source="cluswmiv2.dll" Target="97" Category="Contains" Label="" />
+  </Links>
+  <Categories>
+    <Category Id="Contains" Label="Contains" Description="Whether the source of the link contains the target object" CanBeDataDriven="False" CanLinkedNodesBeDataDriven="True" IncomingActionLabel="Contained By" IsContainment="True" OutgoingActionLabel="Contains" />
+  </Categories>
+  <Properties>
+    <Property Id="Background" Label="Background" Description="The background color" DataType="System.Windows.Media.Brush" />
+    <Property Id="Bounds" DataType="System.Windows.Rect" />
+    <Property Id="CanBeDataDriven" Label="CanBeDataDriven" Description="CanBeDataDriven" DataType="System.Boolean" />
+    <Property Id="CanLinkedNodesBeDataDriven" Label="CanLinkedNodesBeDataDriven" Description="CanLinkedNodesBeDataDriven" DataType="System.Boolean" />
+    <Property Id="Group" Label="Group" Description="Display the node as a group" DataType="Microsoft.VisualStudio.GraphModel.GraphGroupStyle" />
+    <Property Id="IncomingActionLabel" Label="IncomingActionLabel" Description="IncomingActionLabel" DataType="System.String" />
+    <Property Id="IsContainment" DataType="System.Boolean" />
+    <Property Id="Label" Label="Label" Description="Displayable label of an Annotatable object" DataType="System.String" />
+    <Property Id="LabelBounds" DataType="System.Windows.Rect" />
+    <Property Id="OutgoingActionLabel" Label="OutgoingActionLabel" Description="OutgoingActionLabel" DataType="System.String" />
+    <Property Id="UseManualLocation" DataType="System.Boolean" />
+    <Property Id="xsd" DataType="System.String" />
+    <Property Id="xsi" DataType="System.String" />
+  </Properties>
+</DirectedGraph>
