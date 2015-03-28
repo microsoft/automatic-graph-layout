@@ -287,7 +287,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// This function marks edges to resolve conflicts with only one inner segment.  
         /// An inner segment is a segment between two dummy nodes.
         /// We mark edges that later will not participate in the alignment. 
-        /// Inner segments are preferred to other ones. So, in a conflict whith one inner and one 
+        /// Inner segments are preferred to other ones. So, in a conflict with one inner and one
         /// non-inner edges we leave the inner edge to participate in the alignment. 
         /// At the moment we mark as not participating both of the two intersecting inner segments
         /// </summary>
@@ -299,7 +299,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /*
          * Type 0 conflicts are those where inner edges do not participate. 
          * They are resolved not by marking but just when we calculate the alignment in CreateBlocks.
-         * A quote frome "Fast and ..." with some typo corrections:
+         * A quote from "Fast and ..." with some typo corrections:
          * Type 0 conflicts are resolved greedily in a leftmost fashion, 
          * i.e. in every layer we process the vertices from left to right and 
          * for each vertex we consider its median upper neighbor (its left and right 

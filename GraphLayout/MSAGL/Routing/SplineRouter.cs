@@ -383,7 +383,7 @@ namespace Microsoft.Msagl.Routing {
         void RouteMultiEdges(List<Edge[]> multiEdges, InteractiveEdgeRouter interactiveEdgeRouter, Set<Shape> parents) {
             var mer = new MultiEdgeRouter(multiEdges, interactiveEdgeRouter, parents.SelectMany(p => p.Children).Select(s => s.BoundaryCurve), 
                  new BundlingSettings { InkImportance = 0.00001, EdgeSeparation = MultiEdgesSeparation}, MakeTransparentShapesOfEdgeGeometryAndGetTheShapes);
-            //giving more importance to ink might produce wierd routings with huge detours, maybe 0 is the best value here
+            //giving more importance to ink might produce weird routings with huge detours, maybe 0 is the best value here
             mer.Run();
            
         }

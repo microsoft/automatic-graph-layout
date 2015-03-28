@@ -140,7 +140,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.StressEnergy {
         ///  To get the next node coordinates the following system has to be solved:
         ///  Lw*x=Lx*z(i), where x is the (unknown) node position vector, Lw and Lx are two known matrices (see Graph Drawing by Stress Majorization by Gansner et. al.) 
         ///  and z(i) is the vector of current node positions in dimension i. 
-        ///  Each dimension has to be solved seperately.
+        ///  Each dimension has to be solved separately.
         /// </summary>
         /// <returns></returns>
         private List<Point> IterateSingleConjugateGradient() {
@@ -154,7 +154,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.StressEnergy {
 
             double[] bX = Lx*zX;
             double[] bY = Lx*zY;
-            //solve each dimension seperately
+            //solve each dimension separately
             double[] resX=null, resY=null;
 
 

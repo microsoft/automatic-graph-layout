@@ -525,7 +525,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             Point lowP1 = (1 - SqueezeBound) * seg.Start + SqueezeBound * seg.B(1);
             Point lowP2 = (1 - SqueezeBound) * seg.End + SqueezeBound * seg.B(2);
             Point highP1 = 2 * seg.B(1) - seg.Start;
-            //originaly the tangents were 0.25 of the length of seg[1]-seg[0] - so were are safe to lengthen two times
+            //originally the tangents were 0.25 of the length of seg[1]-seg[0] - so were are safe to lengthen two times
             Point highP2 = 2 * seg.B(2) - seg.End;
             PullControlPointToTheCircle(seg.Start, ref highP1, center, radius);
             int r = NicelyAligned(seg, del0, del1, midPointOfShorter, minDelLength, maxDel);

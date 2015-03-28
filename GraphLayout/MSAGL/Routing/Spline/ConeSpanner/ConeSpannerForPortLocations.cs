@@ -70,7 +70,7 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner
         }
 
         protected override void RunInternal() {
-            //we need to run the full circle of directions since we do not eminate cones from
+            //we need to run the full circle of directions since we do not emanate cones from
             //obstacle vertices here
             for (int i = 0; i<GetTotalSteps(coneAngle); i++) {
                 var angle = coneAngle*i;
