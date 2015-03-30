@@ -100,7 +100,7 @@ namespace Microsoft.Msagl.Drawing {
         }
 
         /// <summary>
-        /// Attribute controling the node drawing.
+        /// Attribute controlling the node drawing.
         /// </summary>
         NodeAttr attr;
 /// <summary>

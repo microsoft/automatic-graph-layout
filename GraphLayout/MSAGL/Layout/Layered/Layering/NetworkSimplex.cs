@@ -99,7 +99,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                 if (inTree[e.Source])
                     slack = -slack;
 
-                //shift the tree rigidly up or down and make e tight ; since the slack is the minumum of slacks 
+                //shift the tree rigidly up or down and make e tight ; since the slack is the minimum of slacks
                 //the layering will still remain feasible
                 foreach (int i in treeVertices)
                     layers[i] += slack;

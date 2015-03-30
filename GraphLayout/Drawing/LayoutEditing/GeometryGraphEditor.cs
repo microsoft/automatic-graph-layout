@@ -250,11 +250,11 @@ namespace Microsoft.Msagl.Drawing {
                 UpdateGraphBoundingBoxWithCheck(geomObj);
             }
 
-            PropogateChangesToClusterParents();
+            PropagateChangesToClusterParents();
             DragEdgesAsStraighLines(delta);
         }
 
-        void PropogateChangesToClusterParents() {
+        void PropagateChangesToClusterParents() {
             var touchedClusters = new Set<Cluster>();
             foreach (var n in objectsToDrag) {
                 var node = n as GeomNode;
