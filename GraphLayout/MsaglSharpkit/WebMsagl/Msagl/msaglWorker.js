@@ -83,7 +83,8 @@ define(["require", "exports", 'ggraph'], function (require, exports, G) {
             var target = nodeMap[gedge.target].mnode;
             var edge = new Microsoft.Msagl.Core.Layout.Edge.ctor$$Node$$Node(source, target);
             var curve = this.getMsaglCurve(gedge.curve);
-            edge.set_Curve(curve);
+            if (curve != null)
+                edge.set_Curve(curve);
             if (gedge.label != null) {
                 var label = new Microsoft.Msagl.Core.Layout.Label.ctor$$Double$$Double$$GeometryObject(gedge.label.bounds.width, gedge.label.bounds.height, edge);
                 label.set_GeometryParent(edge);

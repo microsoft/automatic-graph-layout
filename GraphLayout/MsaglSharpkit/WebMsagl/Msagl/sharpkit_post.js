@@ -131,10 +131,6 @@ sktype_Int32Array.definition.CopyTo = function (dest, idx) {
         dest[i + idx] = this[i];
 }
 
-// Prevents crashes when attempting to use a seeded constructor. Does not actually use the seed.
-// Note: this method is implemented in jsclr.js, but it throws.
-System$Random.definition.ctor$$Int32 = System$Random.definition.ctor
-
 // This prevents crashes when attempting to use the Dictionary constructor that takes a size. It doesn't actually do anything with that size.
 if (typeof System$Collections$Generic$Dictionary$2.definition.ctor$$Int32 !== "undefined")
     throw new Error();
@@ -146,20 +142,6 @@ System$Collections$Generic$Dictionary$2.definition.get_Count = function () {
     return this.get_Keys().get_Count();
 }
 
-// This changes the jsclr version of the method in order to better emulate the .NET behaviour.
-// Note: this method is implemented in jsclr, but it throws if the key is not present. The .NET version just returns false.
-System$Collections$Generic$Dictionary$2.definition.Remove = function (key) {
-    if (key == null)
-        throw $CreateException(new System.ArgumentNullException.ctor$$String("key"), new Error());
-    if (!this.ContainsKey(key))
-        return false;
-    var hashKey = this.GetHashKey(key);
-    delete this._table[hashKey];
-    delete this._keys[hashKey];
-    this._version++;
-    return true;
-}
-
 // This changes the jsclr version of the method so that the value is not changed if it is not in the table.
 System$Collections$Generic$Dictionary$2.definition.TryGetValue = function (key, value) {
     var hashKey = this.GetHashKey(key);
@@ -168,11 +150,6 @@ System$Collections$Generic$Dictionary$2.definition.TryGetValue = function (key, 
         value.Value = v;
     return typeof (v) != "undefined";
 }
-
-// Prevents crashes when attempting to call the constructor with size. Does not actually use the size.
-if (typeof System$Collections$Generic$List$1.definition.ctor$$Int32 !== "undefined")
-    throw new Error();
-System$Collections$Generic$List$1.definition.ctor$$Int32 = System$Collections$Generic$List$1.definition.ctor;
 
 // Prevents crashes when attempting to reason on the list capacity. Returns the list size.
 if (typeof System$Collections$Generic$List$1.definition.get_Capacity !== "undefined")
@@ -184,7 +161,7 @@ if (typeof System$Collections$Generic$List$1.definition.set_Capacity !== "undefi
     throw new Error();
 System$Collections$Generic$List$1.definition.set_Capacity = function (c) { }
 
-// Implementation of List.CopyTo
+// Implementation of List.CopyTo (the jsclr implementation throws)
 System$Collections$Generic$List$1.definition.CopyTo = function (array, arrayIndex) {
     for (var i = 0; i < this._list.length; i++)
         array[i + arrayIndex] = this._list[i];
@@ -464,6 +441,7 @@ System$Collections$Generic$HashSet$1.definition.ctor$$IEnumerable$1 = function (
     }
 }
 
+// Implementation of System.Linq.Enumerable.Range
 if (typeof System$Linq$Enumerable.staticDefinition.Range !== "undefined")
     throw new Error();
 System$Linq$Enumerable.staticDefinition.Range = function (start, count) {
@@ -472,6 +450,25 @@ System$Linq$Enumerable.staticDefinition.Range = function (start, count) {
         ret[i] = i + start;
     return ret;
 }
+
+// Fix for Random.NextInt (make it return an actual int instead of a float).
+System$Random.definition.Next$$Int32$$Int32 = function (minValue, maxValue) {
+    if (minValue > maxValue) {
+        throw $CreateException(new System.ArgumentOutOfRangeException.ctor$$String$$String("minValue", "Argument_MinMaxValue"), new Error());
+    }
+    var num = maxValue - minValue;
+    if (num <= 2147483647) {
+        return (this.Sample() * num) + minValue;
+    }
+    return Math.floor(((this.GetSampleForLargeRange() * num) + minValue));
+};
+
+System$Random.definition.Next$$Int32 = function (maxValue) {
+    if (maxValue < 0) {
+        throw $CreateException(new System.ArgumentOutOfRangeException.ctor$$String$$String("maxValue", "ArgumentOutOfRange_MustBePositive"), new Error());
+    }
+    return Math.floor((this.Sample() * maxValue));
+};
 
 /***********************
 * ADDITIONAL CLR TYPES *
@@ -862,6 +859,22 @@ var System$Console = {
     }
 };
 JsTypes.push(System$Console);
+
+var System$Diagnostics$Debug = {
+    fullname: "System.Diagnostics.Debug",
+    baseTypeName: "System.Object",
+    staticDefinition: {
+        Assert$$Boolean$$String: function (b, s) { },
+        Assert$$Boolean: function (b) { }
+    },
+    Kind: "Class",
+    definition: {
+        ctor: function () {
+            System.Object.ctor.call(this);
+        }
+    }
+};
+JsTypes.push(System$Diagnostics$Debug);
 
 /**********************
 * MSAGL TYPES CHANGES *

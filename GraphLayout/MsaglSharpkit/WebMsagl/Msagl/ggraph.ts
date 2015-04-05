@@ -7,8 +7,8 @@ export interface IPoint {
 export class GPoint implements IPoint {
     x: number;
     y: number;
-        constructor(p: any)
-        constructor(p: IPoint) {
+    constructor(p: any)
+    constructor(p: IPoint) {
         this.x = p.x === undefined ? 0 : p.x;
         this.y = p.y === undefined ? 0 : p.y;
     }
@@ -39,8 +39,8 @@ export class GRect implements IRect {
     y: number;
     width: number;
     height: number;
-        constructor(r: any)
-        constructor(r: IRect) {
+    constructor(r: any)
+    constructor(r: IRect) {
         this.x = r.x === undefined ? 0 : r.x;
         this.y = r.y === undefined ? 0 : r.y;
         this.width = r.width === undefined ? 0 : r.width;
@@ -85,13 +85,13 @@ export class GCurve implements ICurve {
         this.type = type;
     }
     getCenter(): GPoint {
-            return GPoint.origin
-        }
+        return GPoint.origin
+    }
     static ofCurve(curve: ICurve): GCurve {
-        var ret: GCurve;
         if (curve == null || curve === undefined)
-            ret = null;
-        else if (curve.type == "Ellipse")
+            return null;
+        var ret: GCurve;
+        if (curve.type == "Ellipse")
             ret = new GEllipse(<IEllipse><any>curve);
         else if (curve.type == "Line")
             ret = new GLine(<ILine><any>curve);
@@ -121,8 +121,8 @@ export class GEllipse extends GCurve implements IEllipse {
     axisB: GPoint;
     parStart: number;
     parEnd: number;
-        constructor(ellipse: any)
-        constructor(ellipse: IEllipse) {
+    constructor(ellipse: any)
+    constructor(ellipse: IEllipse) {
         super("Ellipse");
         this.center = ellipse.center === undefined ? GPoint.origin : new GPoint(ellipse.center);
         this.axisA = ellipse.axisA === undefined ? GPoint.origin : new GPoint(ellipse.axisA);
@@ -146,8 +146,8 @@ export interface ILine {
 export class GLine extends GCurve implements ILine {
     start: GPoint;
     end: GPoint;
-        constructor(line: any)
-        constructor(line: ILine) {
+    constructor(line: any)
+    constructor(line: ILine) {
         super("Line");
         this.start = line.start === undefined ? GPoint.origin : new GPoint(line.start);
         this.end = line.end === undefined ? GPoint.origin : new GPoint(line.end);
@@ -167,8 +167,8 @@ export class GPolyline extends GCurve implements ICurve {
     start: GPoint;
     points: GPoint[];
     closed: boolean;
-        constructor(polyline: any)
-        constructor(polyline: IPolyline) {
+    constructor(polyline: any)
+    constructor(polyline: IPolyline) {
         super("Polyline");
         this.start = polyline.start === undefined ? GPoint.origin : new GPoint(polyline.start);
         this.points = [];
@@ -195,8 +195,8 @@ export class GRoundedRect extends GCurve implements IRoundedRect {
     bounds: GRect;
     radiusX: number;
     radiusY: number;
-        constructor(roundedRect: any)
-        constructor(roundedRect: IRoundedRect) {
+    constructor(roundedRect: any)
+    constructor(roundedRect: IRoundedRect) {
         super("RoundedRect");
         this.bounds = roundedRect.bounds === undefined ? GRect.zero : new GRect(roundedRect.bounds);
         this.radiusX = roundedRect.radiusX === undefined ? 0 : roundedRect.radiusX;
@@ -234,8 +234,8 @@ export class GBezier extends GCurve implements ICurve {
     p1: GPoint;
     p2: GPoint;
     p3: GPoint;
-        constructor(bezier: any)
-        constructor(bezier: IBezier) {
+    constructor(bezier: any)
+    constructor(bezier: IBezier) {
         super("Bezier");
         this.start = bezier.start === undefined ? GPoint.origin : new GPoint(bezier.start);
         this.p1 = bezier.p1 === undefined ? GPoint.origin : new GPoint(bezier.p1);
@@ -258,8 +258,8 @@ export interface ISegmentedCurve {
 
 export class GSegmentedCurve extends GCurve implements ICurve {
     segments: ICurve[];
-        constructor(segmentedCurve: any)
-        constructor(segmentedCurve: ISegmentedCurve) {
+    constructor(segmentedCurve: any)
+    constructor(segmentedCurve: ISegmentedCurve) {
         super("SegmentedCurve");
         this.segments = [];
         for (var i = 0; i < segmentedCurve.segments.length; i++)
@@ -274,6 +274,10 @@ export class GSegmentedCurve extends GCurve implements ICurve {
     }
 }
 
+export interface IElement {
+    tooltip: string;
+}
+
 export interface ILabel {
     bounds: IRect;
     content: string;
@@ -284,41 +288,82 @@ export class GLabel {
     bounds: IRect;
     content: string;
     fill: string;
-        constructor(label: any)
-        constructor(label: ILabel) {
-        this.bounds = label.bounds === undefined ? GRect.zero : new GRect(label.bounds);
-        this.content = label.content;
-        this.fill = label.fill === undefined ? "Black" : label.fill;
+    constructor(label: any)
+    constructor(label: ILabel) {
+        if (typeof (label) == "string")
+            this.content = <string><any>label;
+        else {
+            this.bounds = label.bounds == undefined || label.bounds == GRect.zero ? GRect.zero : new GRect(label.bounds);
+            this.content = label.content;
+            this.fill = label.fill === undefined ? "Black" : label.fill;
+        }
     }
 }
 
-export interface INode {
+export class GShape {
+    static GetRect(): GShape {
+        var ret = new GShape();
+        ret.shape = "rect";
+        return ret;
+    }
+    static GetRoundedRect(radiusX?: number, radiusY?: number): GShape {
+        var ret = new GShape();
+        ret.shape = "rect";
+        ret.radiusX = radiusX === undefined ? 5 : radiusX;
+        ret.radiusY = radiusY === undefined ? 5 : radiusY;
+        return ret;
+    }
+    static RectShape = "rect";
+    static FromString(shape: string) {
+        if (shape == "rect")
+            return GShape.GetRect();
+        else if (shape == "roundedrect")
+            return GShape.GetRoundedRect();
+        return null;
+    }
+    constructor() {
+        this.radiusX = 0;
+        this.radiusY = 0;
+        this.multi = 0;
+    }
+    shape: string;
+    radiusX: number;
+    radiusY: number;
+    multi: number;
+}
+
+export interface INode extends IElement {
     id: string;
     label: ILabel;
     labelMargin: number;
-    shape: string;
+    shape: GShape;
     boundaryCurve: ICurve;
+    thickness: number;
     fill: string;
     stroke: string;
 }
 
 export class GNode implements INode {
     id: string;
+    tooltip: string;
     label: GLabel;
     labelMargin: number;
-    shape: string;
+    shape: GShape;
     boundaryCurve: GCurve;
+    thickness: number;
     fill: string;
     stroke: string;
-        constructor(node: any)
-        constructor(node: INode) {
-        if (node.id === "undefined")
+    constructor(node: any)
+    constructor(node: INode) {
+        if (node.id === undefined)
             throw new Error("Undefined node id");
         this.id = node.id;
-        this.shape = node.shape === undefined ? null : node.shape;
+        this.tooltip = node.tooltip === undefined ? null : node.tooltip;
+        this.shape = node.shape === undefined ? null : typeof (node.shape) == "string" ? GShape.FromString(<string><any>node.shape) : node.shape;
         this.boundaryCurve = GCurve.ofCurve(node.boundaryCurve);
         this.label = node.label === undefined ? null : node.label == null ? null : typeof (node.label) == "string" ? new GLabel({ content: node.label }) : new GLabel(node.label);
         this.labelMargin = node.labelMargin === undefined ? 5 : node.labelMargin;
+        this.thickness = node.thickness == undefined ? 1 : node.thickness;
         this.fill = node.fill === undefined ? "" : node.fill;
         this.stroke = node.stroke === undefined ? "Black" : node.stroke;
     }
@@ -333,8 +378,8 @@ export interface ICluster extends INode {
 
 export class GCluster extends GNode implements ICluster {
     children: GNode[];
-        constructor(cluster: any)
-        constructor(cluster: ICluster) {
+    constructor(cluster: any)
+    constructor(cluster: ICluster) {
         super(cluster);
         this.children = [];
         for (var i = 0; i < cluster.children.length; i++)
@@ -357,8 +402,8 @@ export class GArrowHead implements IArrowHead {
     end: IPoint;
     closed: boolean;
     fill: boolean;
-        constructor(arrowHead: any)
-        constructor(arrowHead: IArrowHead) {
+    constructor(arrowHead: any)
+    constructor(arrowHead: IArrowHead) {
         this.start = arrowHead.start === undefined ? GPoint.origin : arrowHead.start;
         this.end = arrowHead.end === undefined ? GPoint.origin : arrowHead.end;
         this.closed = arrowHead.closed === undefined ? false : arrowHead.closed;
@@ -369,28 +414,31 @@ export class GArrowHead implements IArrowHead {
     static filled: GArrowHead = new GArrowHead({ start: GPoint.origin, end: GPoint.origin, closed: true, fill: true });
 }
 
-export interface IEdge {
+export interface IEdge extends IElement {
     id: string;
     source: string;
     target: string;
     label: ILabel;
     arrowHeadAtTarget: GArrowHead;
     arrowHeadAtSource: GArrowHead;
+    thickness: number;
     curve: ICurve;
     stroke: string;
 }
 
 export class GEdge implements IEdge {
     id: string;
+    tooltip: string;
     source: string;
     target: string;
     label: GLabel;
     arrowHeadAtTarget: GArrowHead;
     arrowHeadAtSource: GArrowHead;
+    thickness: number;
     curve: GCurve;
     stroke: string;
-        constructor(edge: any)
-        constructor(edge: IEdge) {
+    constructor(edge: any)
+    constructor(edge: IEdge) {
         if (edge.id === undefined)
             throw new Error("Undefined edge id");
         if (edge.source === undefined)
@@ -398,11 +446,13 @@ export class GEdge implements IEdge {
         if (edge.target === undefined)
             throw new Error("Undefined edge target");
         this.id = edge.id;
+        this.tooltip = edge.tooltip === undefined ? null : edge.tooltip;
         this.source = edge.source;
         this.target = edge.target;
         this.label = edge.label === undefined || edge.label == null ? null : typeof (edge.label) == "string" ? new GLabel({ content: edge.label }) : new GLabel(edge.label);
         this.arrowHeadAtTarget = edge.arrowHeadAtTarget === undefined ? GArrowHead.standard : edge.arrowHeadAtTarget == null ? null : new GArrowHead(edge.arrowHeadAtTarget);
         this.arrowHeadAtSource = edge.arrowHeadAtSource === undefined || edge.arrowHeadAtSource == null ? null : new GArrowHead(edge.arrowHeadAtSource);
+        this.thickness = edge.thickness == undefined ? 1 : edge.thickness;
         this.curve = edge.curve === undefined ? null : GCurve.ofCurve(edge.curve);
         this.stroke = edge.stroke === undefined ? "Black" : edge.stroke;
     }
@@ -424,8 +474,8 @@ export class GPlaneTransformation implements IPlaneTransformation {
     m10: number;
     m11: number;
     m12: number;
-        constructor(transformation: any)
-        constructor(transformation: IPlaneTransformation) {
+    constructor(transformation: any)
+    constructor(transformation: IPlaneTransformation) {
         if ((<any>transformation).rotation !== undefined) {
             var angle = (<any>transformation).rotation;
             var cos = Math.cos(angle);
@@ -457,8 +507,8 @@ export class ISettings {
 export class GSettings {
     transformation: GPlaneTransformation;
     routing: string;
-        constructor(settings: any)
-        constructor(settings: ISettings) {
+    constructor(settings: any)
+    constructor(settings: ISettings) {
         this.transformation = settings.transformation === undefined ? GPlaneTransformation.defaultTransformation : settings.transformation;
         this.routing = settings.routing === undefined ? GSettings.sugiyamaSplinesRouting : settings.routing;
     }
@@ -473,9 +523,16 @@ export class IGraph {
     settings: ISettings;
 }
 
+class GNodeInternal {
+    node: GNode;
+    outEdges: string[];
+    inEdges: string[];
+    selfEdges: string[];
+}
+
 export class GGraph implements IGraph {
-    private nodesMap: Object;
-    private edgesMap: Object;
+    private nodesMap: Object; // id -> GNodeInternal
+    private edgesMap: Object; // id -> GEdge
     nodes: GNode[];
     edges: GEdge[];
     boundingBox: GRect;
@@ -491,17 +548,43 @@ export class GGraph implements IGraph {
     }
 
     addNode(node: GNode): void {
-        this.nodesMap[node.id] = node;
+        this.nodesMap[node.id] = <GNodeInternal>{ node: node, outEdges: [], inEdges: [], selfEdges: [] };
         this.nodes.push(node);
     }
 
     getNode(id: string): GNode {
-        return this.nodesMap[id];
+        var nodeInternal = <GNodeInternal>this.nodesMap[id];
+        return nodeInternal == null ? null : nodeInternal.node;
+    }
+
+    getInEdges(id: string): string[] {
+        var nodeInternal = <GNodeInternal>this.nodesMap[id];
+        return nodeInternal == null ? null : nodeInternal.inEdges;
+    }
+
+    getOutEdges(id: string): string[] {
+        var nodeInternal = <GNodeInternal>this.nodesMap[id];
+        return nodeInternal == null ? null : nodeInternal.outEdges;
+    }
+
+    getSelfEdges(id: string): string[] {
+        var nodeInternal = <GNodeInternal>this.nodesMap[id];
+        return nodeInternal == null ? null : nodeInternal.selfEdges;
     }
 
     addEdge(edge: GEdge): void {
+        if (this.nodesMap[edge.source] == null)
+            throw new Error("Undefined node " + edge.source);
+        if (this.nodesMap[edge.target] == null)
+            throw new Error("Undefined node " + edge.target);
         this.edgesMap[edge.id] = edge;
         this.edges.push(edge);
+        if (edge.source == edge.target)
+            (<GNodeInternal>this.nodesMap[edge.source]).selfEdges.push(edge.id);
+        else {
+            (<GNodeInternal>this.nodesMap[edge.source]).outEdges.push(edge.id);
+            (<GNodeInternal>this.nodesMap[edge.target]).inEdges.push(edge.id);
+        }
     }
 
     getEdge(id: string): GEdge {
@@ -541,10 +624,10 @@ export class GGraph implements IGraph {
         return ret;
     }
 
-    private createNodeBoundariesRec(node: GNode, sizer?: (text: string) => IPoint) {
+    private createNodeBoundariesRec(node: GNode, sizer?: (label: GLabel) => IPoint) {
         if (node.boundaryCurve == null) {
             if (node.label != null && node.label.bounds == GRect.zero && sizer !== undefined) {
-                var labelSize = sizer(node.label.content);
+                var labelSize = sizer(node.label);
                 node.label.bounds = new GRect({ x: 0, y: 0, width: labelSize.x, height: labelSize.y });
             }
             var labelWidth = node.label == null ? 0 : node.label.bounds.width;
@@ -552,13 +635,9 @@ export class GGraph implements IGraph {
             labelWidth += 2 * node.labelMargin;
             labelHeight += 2 * node.labelMargin;
             var boundary: GCurve;
-            if (node.shape == "roundedrect")
+            if (node.shape != null && node.shape.shape == GShape.RectShape)
                 boundary = new GRoundedRect({
-                    bounds: new GRect({ x: 0, y: 0, width: labelWidth, height: labelHeight }), radiusX: 5, radiusY: 5
-                });
-            else if (node.shape == "rect")
-                boundary = new GRoundedRect({
-                    bounds: new GRect({ x: 0, y: 0, width: labelWidth, height: labelHeight }), radiusX: 0, radiusY: 0
+                    bounds: new GRect({ x: 0, y: 0, width: labelWidth, height: labelHeight }), radiusX: node.shape.radiusX, radiusY: node.shape.radiusY
                 });
             else
                 boundary = GEllipse.make(labelWidth * Math.sqrt(2), labelHeight * Math.sqrt(2));
@@ -573,7 +652,7 @@ export class GGraph implements IGraph {
 
     // Creates the node boundaries for nodes that don't have one. If the node has a label, it will first
     // compute the label's size based on the provided size function, and then create an appropriate boundary.
-    createNodeBoundaries(sizer?: (text: string) => IPoint) {
+    createNodeBoundaries(sizer?: (label: GLabel) => IPoint) {
         for (var i = 0; i < this.nodes.length; i++)
             this.createNodeBoundariesRec(this.nodes[i], sizer);
 
@@ -582,12 +661,16 @@ export class GGraph implements IGraph {
             for (var i = 0; i < this.edges.length; i++) {
                 var edge = this.edges[i];
                 if (edge.label != null && edge.label.bounds == GRect.zero) {
-                    var labelSize = sizer(edge.label.content);
+                    var labelSize = sizer(edge.label);
                     edge.label.bounds.width = labelSize.x;
                     edge.label.bounds.height = labelSize.y;
                 }
             }
         }
+    }
+
+    static contextSizer(context: CanvasRenderingContext2D, label: GLabel): IPoint {
+        return { x: context.measureText(label.content).width, y: parseInt(context.font) };
     }
 
     createNodeBoundariesFromContext(context?: CanvasRenderingContext2D) {
@@ -598,12 +681,15 @@ export class GGraph implements IGraph {
             context = canvas.getContext("2d");
         }
 
-        this.createNodeBoundaries(function (text) {
-            return { x: context.measureText(text).width, y: parseInt(context.font) };
-        });
+        this.createNodeBoundaries(function (label) { return GGraph.contextSizer(context, label); });
 
         if (selfMadeContext)
             document.body.removeChild(canvas);
+    }
+
+    static divSizer(div: HTMLDivElement, label: GLabel): IPoint {
+        div.innerText = label.content;
+        return { x: div.clientWidth, y: div.clientHeight };
     }
 
     createNodeBoundariesFromDiv(div?: HTMLDivElement) {
@@ -613,12 +699,21 @@ export class GGraph implements IGraph {
             div.setAttribute('style', 'float:left');
             document.body.appendChild(div);
         }
-        this.createNodeBoundaries(function (text) {
-            div.innerText = text;
-            return { x: div.clientWidth, y: div.clientHeight };
-        });
+        this.createNodeBoundaries(function (label) { return GGraph.divSizer(div, label); });
         if (selfMadeDiv)
             document.body.removeChild(div);
+    }
+
+    static SVGSizer(svg: Element, label: GLabel): IPoint {
+        var element = <any>document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        element.setAttribute('fill', 'black');
+        var textNode = document.createTextNode(label.content);
+        element.appendChild(textNode);
+        svg.appendChild(element);
+        var bbox = element.getBBox();
+        var ret = { x: bbox.width, y: bbox.height };
+        svg.removeChild(element);
+        return ret;
     }
 
     createNodeBoundariesFromSVG(svg?: Element, style?: CSSStyleDeclaration) {
@@ -638,35 +733,27 @@ export class GGraph implements IGraph {
             }
             document.body.appendChild(svg);
         }
-        this.createNodeBoundaries(function (text) {
-            var element = <any>document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            element.setAttribute('fill', 'black');
-            var textNode = document.createTextNode(text);
-            element.appendChild(textNode);
-            svg.appendChild(element);
-            var bbox = element.getBBox();
-            var ret = { x: bbox.width, y: bbox.height };
-            svg.removeChild(element);
-            return ret;
-        });
+        this.createNodeBoundaries(function (label) { return GGraph.SVGSizer(svg, label); });
         if (selfMadeSvg)
             document.body.removeChild(svg);
+    }
+
+    static SVGInContainerSizer(container: HTMLElement, svg: Element, label: GLabel) {
+        var element = <any>document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        element.setAttribute('fill', 'black');
+        var textNode = document.createTextNode(label.content);
+        element.appendChild(textNode);
+        svg.appendChild(element);
+        var bbox = element.getBBox();
+        var ret = { x: bbox.width, y: bbox.height };
+        svg.removeChild(element);
+        return ret;
     }
 
     createNodeBoundariesForSVGInContainer(container: HTMLElement) {
         var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         container.appendChild(svg);
-        this.createNodeBoundaries(function (text) {
-            var element = <any>document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            element.setAttribute('fill', 'black');
-            var textNode = document.createTextNode(text);
-            element.appendChild(textNode);
-            svg.appendChild(element);
-            var bbox = element.getBBox();
-            var ret = { x: bbox.width, y: bbox.height };
-            svg.removeChild(element);
-            return ret;
-        });
+        this.createNodeBoundaries(function (label) { return GGraph.SVGInContainerSizer(container, svg, label); });
         container.removeChild(svg);
     }
 
@@ -674,7 +761,9 @@ export class GGraph implements IGraph {
         var self = this;
         var workerCallback = function (gstr) {
             var gs: GGraph = GGraph.ofJSON(gstr.data);
-            self.boundingBox = gs.boundingBox;
+            self.boundingBox = new GRect({
+                x: gs.boundingBox.x - 10, y: gs.boundingBox.y - 10, width: gs.boundingBox.width + 20, height: gs.boundingBox.height + 20
+            });
             for (var i = 0; i < gs.nodes.length; i++) {
                 var workerNode = gs.nodes[i];
                 var myNode = self.getNode(workerNode.id);
@@ -698,7 +787,7 @@ export class GGraph implements IGraph {
         }
 
         var serialisedGraph = this.getJSON();
-        var worker = new Worker('MSAGL/workerBoot.js');
+        var worker = new Worker('/MSAGL/workerBoot.js');
         worker.addEventListener('message', workerCallback);
         worker.postMessage(serialisedGraph);
     }
