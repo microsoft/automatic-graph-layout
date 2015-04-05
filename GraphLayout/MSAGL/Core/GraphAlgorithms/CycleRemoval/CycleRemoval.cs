@@ -95,7 +95,10 @@ namespace Microsoft.Msagl.Core.GraphAlgorithms {
             if (graph != null && graph.NodeCount > 0 && graph.Edges.Count > 0) {
                 Set<IEdge> feedbackSet = new Set<IEdge>();
                 VertStatus[] status = new VertStatus[graph.NodeCount]; //will be Unvisited at the beginning
-
+#if SHARPKIT //http://code.google.com/p/sharpkit/issues/detail?id=367 arrays are not default initialised
+                for (int i = 0; i < status.Length; i++)
+                    status[i] = VertStatus.NotVisited;
+#endif
                 for (int vertex = 0; vertex < graph.NodeCount; vertex++) {
                     if (status[vertex] == VertStatus.Visited)
                         continue;

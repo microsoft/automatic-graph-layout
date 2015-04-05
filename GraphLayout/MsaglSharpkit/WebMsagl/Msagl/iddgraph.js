@@ -50,9 +50,6 @@ define(["require", "exports", './contextgraph'], function (require, exports, CoG
             this.aspectRatio = 1.0;
             var _graph;
             this.renderCore = function (plotRect, screenSize) {
-                // var t = this.getTransform();
-                // var dataToScreenX = t.dataToScreenX;
-                // var dataToScreenY = t.dataToScreenY;
                 if (_graph && plotRect.width > 0 && plotRect.height > 0) {
                     var bbox = _graph.graph.boundingBox;
                     var context = this.getContext(true);
