@@ -238,7 +238,7 @@ namespace Microsoft.Msagl.Routing {
             }
 
             foreach (var rootShape in rootShapes) {
-                foreach(var sh in rootShape.Descendands)
+                foreach(var sh in rootShape.Descendants)
                     foreach (var port in sh.Ports) {
                         var enterableSet = portsToEnterableShapes[port];
                         enterableSet.InsertRange(sh.Ancestors.Where(s => s.BoundaryCurve != null));
@@ -318,7 +318,7 @@ namespace Microsoft.Msagl.Routing {
 
 
         void RouteOnVisGraph() {
-            ancestorSets = GetAncestorSetsMap(root.Descendands);
+            ancestorSets = GetAncestorSetsMap(root.Descendants);
             if (BundlingSettings == null) {
                 foreach (var edgeGroup in _edges.GroupBy(EdgePassport)) {
                     var passport = edgeGroup.Key;
@@ -661,7 +661,7 @@ namespace Microsoft.Msagl.Routing {
             
         void CalculatePortsToShapes() {
             portsToShapes = new Dictionary<Port, Shape>();
-            foreach (var shape in root.Descendands)
+            foreach (var shape in root.Descendants)
                 foreach (var port in shape.Ports)
                     portsToShapes[port] = shape;
             //assign all orphan ports to the root 

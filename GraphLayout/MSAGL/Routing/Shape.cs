@@ -113,7 +113,7 @@ namespace Microsoft.Msagl.Routing {
 
         internal bool IsTransparent { get; set; }
 
-        internal IEnumerable<Shape> Descendands {
+        internal IEnumerable<Shape> Descendants {
             get {
                 var q = new Queue<Shape>();
                 foreach (var shape in Children)
