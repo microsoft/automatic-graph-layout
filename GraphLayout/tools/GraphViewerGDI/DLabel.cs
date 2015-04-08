@@ -48,7 +48,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             parent = parentPar;
             DrawingLabel = label;
             ((IHavingDLabel) parent).Label = this;
-            Font = new Font(DrawingLabel.FontName, (int)DrawingLabel.FontSize);
+            Font = new Font(DrawingLabel.FontName, (int)DrawingLabel.FontSize, (System.Drawing.FontStyle)(int)label.FontStyle);
         }
 
         /// <summary>

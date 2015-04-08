@@ -138,6 +138,22 @@ namespace Microsoft.Msagl.Drawing {
             }
         }
 
+        FontStyle fontStyle = FontStyle.Regular;
+
+        ///<summary>
+        ///Label font style.
+        ///</summary>
+        [Description("type face style")]
+        public FontStyle FontStyle
+        {
+            get { return fontStyle; }
+            set
+            {
+                fontStyle = value;
+            }
+        }
+
+
         ///<summary>
         ///Type face font.
         ///</summary>
@@ -161,6 +177,7 @@ namespace Microsoft.Msagl.Drawing {
 
         }
 
+        
 
 
         string text;

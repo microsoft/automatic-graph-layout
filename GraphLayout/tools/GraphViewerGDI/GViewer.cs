@@ -1001,7 +1001,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         void CreateNodeGeometry(DrawingNode node, Point center)
         {
             double width, height;
-            StringMeasure.MeasureWithFont(node.Label.Text, new Font(node.Label.FontName, (float)node.Label.FontSize), out width,
+            StringMeasure.MeasureWithFont(node.Label.Text, new Font(node.Label.FontName, (float)node.Label.FontSize, (System.Drawing.FontStyle)(int)node.Label.FontStyle), out width,
                                           out height);
 
             if (node.Label != null)
@@ -2281,7 +2281,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             double height = 0;
             string label = node.Label.Text;
             if (String.IsNullOrEmpty(label) == false) {
-                var f = new Font(node.Label.FontName, (int)node.Label.FontSize);
+                var f = new Font(node.Label.FontName, (int)node.Label.FontSize, (System.Drawing.FontStyle)(int)node.Label.FontStyle);
                 StringMeasure.MeasureWithFont(label, f, out width, out height);
             }
             node.Label.Size = new Size((float) width, (float) height);

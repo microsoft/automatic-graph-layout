@@ -529,7 +529,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
 
         internal static void CreateDLabel(DObject parent, Drawing.Label label, out double width, out double height,
                                           GViewer viewer){
-            var dLabel = new DLabel(parent, label, viewer){Font = new Font(label.FontName, (int)label.FontSize)};
+            var dLabel = new DLabel(parent, label, viewer){Font = new Font(label.FontName, (int)label.FontSize, (System.Drawing.FontStyle)(int)label.FontStyle)};
             StringMeasure.MeasureWithFont(label.Text, dLabel.Font, out width, out height);
 
             if (width <= 0)
