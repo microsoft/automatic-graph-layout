@@ -76,9 +76,9 @@ namespace Microsoft.Msagl.Core.Routing {
         ///<summary>
         ///the default path lenght importance coefficient
         ///</summary>
-        static public double DefaultPathLenghtImportance = 500;
+        static public double DefaultPathLengthImportance = 500;
 
-        double pathLengthImportance = DefaultPathLenghtImportance;
+        double pathLengthImportance = DefaultPathLengthImportance;
 
         /// <summary>
         /// the importance of path lengths coefficient

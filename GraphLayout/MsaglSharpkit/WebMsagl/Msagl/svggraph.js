@@ -102,8 +102,8 @@ define(["require", "exports", './ggraph'], function (require, exports, G) {
             else if (curve.type === "RoundedRect")
                 return this.pathRoundedRect(curve, continuous);
         };
-        SVGGraph.prototype.drawLabel = function (parent, label) {
-            if (this.customDrawLabel != null && this.customDrawLabel(this.svg, parent, label))
+        SVGGraph.prototype.drawLabel = function (parent, label, owner) {
+            if (this.customDrawLabel != null && this.customDrawLabel(this.svg, parent, label, owner))
                 return;
             var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
             text.setAttribute("x", label.bounds.x.toString());
@@ -125,12 +125,24 @@ define(["require", "exports", './ggraph'], function (require, exports, G) {
             };
             var curve = node.boundaryCurve;
             var pathString = this.pathCurve(curve, false);
+            if (node.shape != null && node.shape.multi > 0) {
+                var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                path.setAttribute("d", pathString);
+                path.setAttribute("transform", "translate(5,5)");
+                path.setAttribute("style", "stroke: " + node.stroke + "; fill: " + (node.fill == "" ? "none" : node.fill) + "; stroke-width: " + node.thickness);
+                g.appendChild(path);
+            }
             var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
             path.setAttribute("d", pathString);
-            path.setAttribute("style", "stroke: " + node.stroke + "; fill: " + (node.fill == "" ? "none" : node.fill) + "; strokeWidth: 1");
+            path.setAttribute("style", "stroke: " + node.stroke + "; fill: " + (node.fill == "" ? "none" : node.fill) + "; stroke-width: " + node.thickness);
             g.appendChild(path);
             if (node.label !== null)
-                this.drawLabel(g, node.label);
+                this.drawLabel(g, node.label, node);
+            if (node.tooltip != null) {
+                var title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+                title.textContent = node.tooltip;
+                g.appendChild(title);
+            }
             parent.appendChild(g);
         };
         SVGGraph.prototype.drawArrow = function (parent, arrowHead, style) {
@@ -165,14 +177,19 @@ define(["require", "exports", './ggraph'], function (require, exports, G) {
             var pathString = this.pathCurve(curve, false);
             var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
             path.setAttribute("d", pathString);
-            path.setAttribute("style", "stroke: " + edge.stroke + "; strokeWidth: 1; fill: none");
+            path.setAttribute("style", "stroke: " + edge.stroke + "; stroke-width: " + edge.thickness + "; fill: none");
             g.appendChild(path);
             if (edge.arrowHeadAtTarget != null)
-                this.drawArrow(g, edge.arrowHeadAtTarget, "stroke: " + edge.stroke + "; strokeWidth: 1; fill: " + (edge.arrowHeadAtTarget.fill ? edge.stroke : "none"));
+                this.drawArrow(g, edge.arrowHeadAtTarget, "stroke: " + edge.stroke + "; stroke-width: " + edge.thickness + "; fill: " + (edge.arrowHeadAtTarget.fill ? edge.stroke : "none"));
             if (edge.arrowHeadAtSource != null)
-                this.drawArrow(g, edge.arrowHeadAtSource, "stroke: " + edge.stroke + "; strokeWidth: 1; fill: " + (edge.arrowHeadAtSource.fill ? edge.stroke : "none"));
+                this.drawArrow(g, edge.arrowHeadAtSource, "stroke: " + edge.stroke + "; stroke-width: " + edge.thickness + "; fill: " + (edge.arrowHeadAtSource.fill ? edge.stroke : "none"));
             if (edge.label != null)
-                this.drawLabel(g, edge.label);
+                this.drawLabel(g, edge.label, edge);
+            if (edge.tooltip != null) {
+                var title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+                title.textContent = edge.tooltip;
+                g.appendChild(title);
+            }
             parent.appendChild(g);
         };
         SVGGraph.prototype.drawGrid = function (parent) {
@@ -182,13 +199,27 @@ define(["require", "exports", './ggraph'], function (require, exports, G) {
                     circle.setAttribute("r", "1");
                     circle.setAttribute("x", (x * 100).toString());
                     circle.setAttribute("y", (y * 100).toString());
-                    circle.setAttribute("style", "fill: black; stroke: black; strokeWidth: 1");
+                    circle.setAttribute("style", "fill: black; stroke: black; stroke-width: 1");
                     parent.appendChild(circle);
                 }
+        };
+        SVGGraph.prototype.populateGraph = function () {
+            if (this.style != null) {
+                var style = document.createElementNS("http://www.w3.org/2000/svg", "style");
+                var styleText = document.createTextNode(this.style);
+                style.appendChild(styleText);
+                this.svg.appendChild(style);
+            }
+            for (var i = 0; i < this.graph.nodes.length; i++)
+                this.drawNode(this.svg, this.graph.nodes[i]);
+            for (var i = 0; i < this.graph.edges.length; i++)
+                this.drawEdge(this.svg, this.graph.edges[i]);
         };
         SVGGraph.prototype.drawGraph = function () {
             if (this.grid)
                 this.drawGrid(this.svg);
+            if (this.graph == null)
+                return;
             var bbox = this.graph.boundingBox;
             var offsetX = bbox.x;
             var offsetY = bbox.y;
@@ -198,10 +229,7 @@ define(["require", "exports", './ggraph'], function (require, exports, G) {
             //this.svg.setAttribute("style", "width: 100%; height: 100%");
             var viewBox = "" + offsetX + " " + offsetY + " " + bbox.width + " " + bbox.height;
             this.svg.setAttribute("viewBox", viewBox);
-            for (var i = 0; i < this.graph.nodes.length; i++)
-                this.drawNode(this.svg, this.graph.nodes[i]);
-            for (var i = 0; i < this.graph.edges.length; i++)
-                this.drawEdge(this.svg, this.graph.edges[i]);
+            this.populateGraph();
         };
         return SVGGraph;
     })();

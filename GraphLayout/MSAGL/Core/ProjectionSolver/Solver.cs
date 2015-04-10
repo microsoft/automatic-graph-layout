@@ -47,6 +47,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Microsoft.Msagl.Core.Geometry;
 
 #if SILVERLIGHT
 using Stopwatch = Microsoft.Msagl.Core.ProjectionSolver.SimpleStopwatch;
@@ -1262,9 +1263,9 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                             double violation = (constraint.Left.ActualPos * constraint.Left.Scale)
                                                 + constraint.Gap
                                                 - (constraint.Right.ActualPos * constraint.Right.Scale);
-                            Debug.Assert(constraint.Violation == violation, "LeftConstraints: constraint.Violation must == violation");
+                            Debug.Assert(ApproximateComparer.Close(constraint.Violation, violation), "LeftConstraints: constraint.Violation must == violation");
 #endif // Inline_Violation
-                            if (violation > maxViolation)
+                            if (ApproximateComparer.Greater(violation, maxViolation))
                             {
                                 // Cache the previous high violation.  Pass the violation as a tiny perf optimization
                                 // to save re-doing the double operations in this inner loop.
@@ -1288,9 +1289,12 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                             double violation = (constraint.Left.ActualPos * constraint.Left.Scale)
                                                 + constraint.Gap
                                                 - (constraint.Right.ActualPos * constraint.Right.Scale);
-                            Debug.Assert(constraint.Violation == violation, "RightConstraints: constraint.Violation must == violation");
+                            //Debug.Assert(constraint.Violation == violation, "LeftConstraints: constraint.Violation must == violation");
+                            Debug.Assert(ApproximateComparer.Close(constraint.Violation, violation), "LeftConstraints: constraint.Violation must == violation");
+
 #endif // Inline_Violation
-                            if (violation > maxViolation)
+                            //if (violation > maxViolation)
+                            if (ApproximateComparer.Greater(violation, maxViolation))
                             {
                                 if ((null != maxViolatedConstraint) && (maxViolation > this.violationCache.LowViolation))
                                 {
@@ -1348,11 +1352,11 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 double violation = (constraint.Left.ActualPos * constraint.Left.Scale)
                                     + constraint.Gap
                                     - (constraint.Right.ActualPos * constraint.Right.Scale);
-                Debug.Assert(constraint.Violation == violation, "constraint.Violation must == violation");
+                Debug.Assert(ApproximateComparer.Close(constraint.Violation, violation), "constraint.Violation must == violation");
 #endif // Inline_Violation
                 Constraint cacheInsertConstraint = null;
                 double cacheInsertViolation = 0.0;
-                if (violation > maxViolation)
+                if (ApproximateComparer.Greater(violation, maxViolation))
                 {
                     if (maxViolation > this.violationCache.LowViolation)
                     {

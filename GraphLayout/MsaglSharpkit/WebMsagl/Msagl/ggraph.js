@@ -70,10 +70,10 @@ define(["require", "exports"], function (require, exports) {
             return GPoint.origin;
         };
         GCurve.ofCurve = function (curve) {
-            var ret;
             if (curve == null || curve === undefined)
-                ret = null;
-            else if (curve.type == "Ellipse")
+                return null;
+            var ret;
+            if (curve.type == "Ellipse")
                 ret = new GEllipse(curve);
             else if (curve.type == "Line")
                 ret = new GLine(curve);
@@ -211,22 +211,57 @@ define(["require", "exports"], function (require, exports) {
     exports.GSegmentedCurve = GSegmentedCurve;
     var GLabel = (function () {
         function GLabel(label) {
-            this.bounds = label.bounds === undefined ? GRect.zero : new GRect(label.bounds);
-            this.content = label.content;
-            this.fill = label.fill === undefined ? "Black" : label.fill;
+            if (typeof (label) == "string")
+                this.content = label;
+            else {
+                this.bounds = label.bounds == undefined || label.bounds == GRect.zero ? GRect.zero : new GRect(label.bounds);
+                this.content = label.content;
+                this.fill = label.fill === undefined ? "Black" : label.fill;
+            }
         }
         return GLabel;
     })();
     exports.GLabel = GLabel;
+    var GShape = (function () {
+        function GShape() {
+            this.radiusX = 0;
+            this.radiusY = 0;
+            this.multi = 0;
+        }
+        GShape.GetRect = function () {
+            var ret = new GShape();
+            ret.shape = "rect";
+            return ret;
+        };
+        GShape.GetRoundedRect = function (radiusX, radiusY) {
+            var ret = new GShape();
+            ret.shape = "rect";
+            ret.radiusX = radiusX === undefined ? 5 : radiusX;
+            ret.radiusY = radiusY === undefined ? 5 : radiusY;
+            return ret;
+        };
+        GShape.FromString = function (shape) {
+            if (shape == "rect")
+                return GShape.GetRect();
+            else if (shape == "roundedrect")
+                return GShape.GetRoundedRect();
+            return null;
+        };
+        GShape.RectShape = "rect";
+        return GShape;
+    })();
+    exports.GShape = GShape;
     var GNode = (function () {
         function GNode(node) {
-            if (node.id === "undefined")
+            if (node.id === undefined)
                 throw new Error("Undefined node id");
             this.id = node.id;
-            this.shape = node.shape === undefined ? null : node.shape;
+            this.tooltip = node.tooltip === undefined ? null : node.tooltip;
+            this.shape = node.shape === undefined ? null : typeof (node.shape) == "string" ? GShape.FromString(node.shape) : node.shape;
             this.boundaryCurve = GCurve.ofCurve(node.boundaryCurve);
             this.label = node.label === undefined ? null : node.label == null ? null : typeof (node.label) == "string" ? new GLabel({ content: node.label }) : new GLabel(node.label);
             this.labelMargin = node.labelMargin === undefined ? 5 : node.labelMargin;
+            this.thickness = node.thickness == undefined ? 1 : node.thickness;
             this.fill = node.fill === undefined ? "" : node.fill;
             this.stroke = node.stroke === undefined ? "Black" : node.stroke;
         }
@@ -272,11 +307,13 @@ define(["require", "exports"], function (require, exports) {
             if (edge.target === undefined)
                 throw new Error("Undefined edge target");
             this.id = edge.id;
+            this.tooltip = edge.tooltip === undefined ? null : edge.tooltip;
             this.source = edge.source;
             this.target = edge.target;
             this.label = edge.label === undefined || edge.label == null ? null : typeof (edge.label) == "string" ? new GLabel({ content: edge.label }) : new GLabel(edge.label);
             this.arrowHeadAtTarget = edge.arrowHeadAtTarget === undefined ? GArrowHead.standard : edge.arrowHeadAtTarget == null ? null : new GArrowHead(edge.arrowHeadAtTarget);
             this.arrowHeadAtSource = edge.arrowHeadAtSource === undefined || edge.arrowHeadAtSource == null ? null : new GArrowHead(edge.arrowHeadAtSource);
+            this.thickness = edge.thickness == undefined ? 1 : edge.thickness;
             this.curve = edge.curve === undefined ? null : GCurve.ofCurve(edge.curve);
             this.stroke = edge.stroke === undefined ? "Black" : edge.stroke;
         }
@@ -331,6 +368,11 @@ define(["require", "exports"], function (require, exports) {
         return IGraph;
     })();
     exports.IGraph = IGraph;
+    var GNodeInternal = (function () {
+        function GNodeInternal() {
+        }
+        return GNodeInternal;
+    })();
     var GGraph = (function () {
         function GGraph() {
             this.nodesMap = new Object();
@@ -341,15 +383,38 @@ define(["require", "exports"], function (require, exports) {
             this.settings = new GSettings({ transformation: { m00: -1, m01: 0, m02: 0, m10: 0, m11: -1, m12: 0 } });
         }
         GGraph.prototype.addNode = function (node) {
-            this.nodesMap[node.id] = node;
+            this.nodesMap[node.id] = { node: node, outEdges: [], inEdges: [], selfEdges: [] };
             this.nodes.push(node);
         };
         GGraph.prototype.getNode = function (id) {
-            return this.nodesMap[id];
+            var nodeInternal = this.nodesMap[id];
+            return nodeInternal == null ? null : nodeInternal.node;
+        };
+        GGraph.prototype.getInEdges = function (id) {
+            var nodeInternal = this.nodesMap[id];
+            return nodeInternal == null ? null : nodeInternal.inEdges;
+        };
+        GGraph.prototype.getOutEdges = function (id) {
+            var nodeInternal = this.nodesMap[id];
+            return nodeInternal == null ? null : nodeInternal.outEdges;
+        };
+        GGraph.prototype.getSelfEdges = function (id) {
+            var nodeInternal = this.nodesMap[id];
+            return nodeInternal == null ? null : nodeInternal.selfEdges;
         };
         GGraph.prototype.addEdge = function (edge) {
+            if (this.nodesMap[edge.source] == null)
+                throw new Error("Undefined node " + edge.source);
+            if (this.nodesMap[edge.target] == null)
+                throw new Error("Undefined node " + edge.target);
             this.edgesMap[edge.id] = edge;
             this.edges.push(edge);
+            if (edge.source == edge.target)
+                this.nodesMap[edge.source].selfEdges.push(edge.id);
+            else {
+                this.nodesMap[edge.source].outEdges.push(edge.id);
+                this.nodesMap[edge.target].inEdges.push(edge.id);
+            }
         };
         GGraph.prototype.getEdge = function (id) {
             return this.edgesMap[id];
@@ -387,7 +452,7 @@ define(["require", "exports"], function (require, exports) {
         GGraph.prototype.createNodeBoundariesRec = function (node, sizer) {
             if (node.boundaryCurve == null) {
                 if (node.label != null && node.label.bounds == GRect.zero && sizer !== undefined) {
-                    var labelSize = sizer(node.label.content);
+                    var labelSize = sizer(node.label);
                     node.label.bounds = new GRect({ x: 0, y: 0, width: labelSize.x, height: labelSize.y });
                 }
                 var labelWidth = node.label == null ? 0 : node.label.bounds.width;
@@ -395,17 +460,11 @@ define(["require", "exports"], function (require, exports) {
                 labelWidth += 2 * node.labelMargin;
                 labelHeight += 2 * node.labelMargin;
                 var boundary;
-                if (node.shape == "roundedrect")
+                if (node.shape != null && node.shape.shape == GShape.RectShape)
                     boundary = new GRoundedRect({
                         bounds: new GRect({ x: 0, y: 0, width: labelWidth, height: labelHeight }),
-                        radiusX: 5,
-                        radiusY: 5
-                    });
-                else if (node.shape == "rect")
-                    boundary = new GRoundedRect({
-                        bounds: new GRect({ x: 0, y: 0, width: labelWidth, height: labelHeight }),
-                        radiusX: 0,
-                        radiusY: 0
+                        radiusX: node.shape.radiusX,
+                        radiusY: node.shape.radiusY
                     });
                 else
                     boundary = GEllipse.make(labelWidth * Math.sqrt(2), labelHeight * Math.sqrt(2));
@@ -426,12 +485,15 @@ define(["require", "exports"], function (require, exports) {
                 for (var i = 0; i < this.edges.length; i++) {
                     var edge = this.edges[i];
                     if (edge.label != null && edge.label.bounds == GRect.zero) {
-                        var labelSize = sizer(edge.label.content);
+                        var labelSize = sizer(edge.label);
                         edge.label.bounds.width = labelSize.x;
                         edge.label.bounds.height = labelSize.y;
                     }
                 }
             }
+        };
+        GGraph.contextSizer = function (context, label) {
+            return { x: context.measureText(label.content).width, y: parseInt(context.font) };
         };
         GGraph.prototype.createNodeBoundariesFromContext = function (context) {
             var selfMadeContext = (context === undefined);
@@ -440,11 +502,15 @@ define(["require", "exports"], function (require, exports) {
                 document.body.appendChild(canvas);
                 context = canvas.getContext("2d");
             }
-            this.createNodeBoundaries(function (text) {
-                return { x: context.measureText(text).width, y: parseInt(context.font) };
+            this.createNodeBoundaries(function (label) {
+                return GGraph.contextSizer(context, label);
             });
             if (selfMadeContext)
                 document.body.removeChild(canvas);
+        };
+        GGraph.divSizer = function (div, label) {
+            div.innerText = label.content;
+            return { x: div.clientWidth, y: div.clientHeight };
         };
         GGraph.prototype.createNodeBoundariesFromDiv = function (div) {
             var selfMadeDiv = (div === undefined);
@@ -453,12 +519,22 @@ define(["require", "exports"], function (require, exports) {
                 div.setAttribute('style', 'float:left');
                 document.body.appendChild(div);
             }
-            this.createNodeBoundaries(function (text) {
-                div.innerText = text;
-                return { x: div.clientWidth, y: div.clientHeight };
+            this.createNodeBoundaries(function (label) {
+                return GGraph.divSizer(div, label);
             });
             if (selfMadeDiv)
                 document.body.removeChild(div);
+        };
+        GGraph.SVGSizer = function (svg, label) {
+            var element = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            element.setAttribute('fill', 'black');
+            var textNode = document.createTextNode(label.content);
+            element.appendChild(textNode);
+            svg.appendChild(element);
+            var bbox = element.getBBox();
+            var ret = { x: bbox.width, y: bbox.height };
+            svg.removeChild(element);
+            return ret;
         };
         GGraph.prototype.createNodeBoundariesFromSVG = function (svg, style) {
             var selfMadeSvg = (svg === undefined);
@@ -477,33 +553,28 @@ define(["require", "exports"], function (require, exports) {
                 }
                 document.body.appendChild(svg);
             }
-            this.createNodeBoundaries(function (text) {
-                var element = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                element.setAttribute('fill', 'black');
-                var textNode = document.createTextNode(text);
-                element.appendChild(textNode);
-                svg.appendChild(element);
-                var bbox = element.getBBox();
-                var ret = { x: bbox.width, y: bbox.height };
-                svg.removeChild(element);
-                return ret;
+            this.createNodeBoundaries(function (label) {
+                return GGraph.SVGSizer(svg, label);
             });
             if (selfMadeSvg)
                 document.body.removeChild(svg);
         };
+        GGraph.SVGInContainerSizer = function (container, svg, label) {
+            var element = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            element.setAttribute('fill', 'black');
+            var textNode = document.createTextNode(label.content);
+            element.appendChild(textNode);
+            svg.appendChild(element);
+            var bbox = element.getBBox();
+            var ret = { x: bbox.width, y: bbox.height };
+            svg.removeChild(element);
+            return ret;
+        };
         GGraph.prototype.createNodeBoundariesForSVGInContainer = function (container) {
             var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             container.appendChild(svg);
-            this.createNodeBoundaries(function (text) {
-                var element = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                element.setAttribute('fill', 'black');
-                var textNode = document.createTextNode(text);
-                element.appendChild(textNode);
-                svg.appendChild(element);
-                var bbox = element.getBBox();
-                var ret = { x: bbox.width, y: bbox.height };
-                svg.removeChild(element);
-                return ret;
+            this.createNodeBoundaries(function (label) {
+                return GGraph.SVGInContainerSizer(container, svg, label);
             });
             container.removeChild(svg);
         };
@@ -512,7 +583,12 @@ define(["require", "exports"], function (require, exports) {
             var self = this;
             var workerCallback = function (gstr) {
                 var gs = GGraph.ofJSON(gstr.data);
-                self.boundingBox = gs.boundingBox;
+                self.boundingBox = new GRect({
+                    x: gs.boundingBox.x - 10,
+                    y: gs.boundingBox.y - 10,
+                    width: gs.boundingBox.width + 20,
+                    height: gs.boundingBox.height + 20
+                });
                 for (var i = 0; i < gs.nodes.length; i++) {
                     var workerNode = gs.nodes[i];
                     var myNode = self.getNode(workerNode.id);
@@ -535,7 +611,7 @@ define(["require", "exports"], function (require, exports) {
                     callback();
             };
             var serialisedGraph = this.getJSON();
-            var worker = new Worker('MSAGL/workerBoot.js');
+            var worker = new Worker('/MSAGL/workerBoot.js');
             worker.addEventListener('message', workerCallback);
             worker.postMessage(serialisedGraph);
         };
