@@ -50,7 +50,9 @@ namespace LoadingDgmlGraph {
             viewer.Dock = System.Windows.Forms.DockStyle.Fill;
             form.Controls.Add(viewer);
             form.ResumeLayout();
-            //create a graph object
+					//create a graph object
+﻿#if GraphModel
+
             Graph graph = DgmlParser.DgmlParser.Parse("fullstring.dgml");
 
             SugiyamaLayoutSettings ss = graph.LayoutAlgorithmSettings as SugiyamaLayoutSettings;
@@ -67,6 +69,7 @@ namespace LoadingDgmlGraph {
             
             viewer.Graph = graph;
             form.ShowDialog();
-        }
+#endif
+				}
     }
 }
