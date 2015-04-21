@@ -60,6 +60,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>Bin\Debug\MsaglSilverlight.XML</DocumentationFile>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -72,6 +73,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>Bin\Release\MsaglSilverlight.XML</DocumentationFile>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\msagl\Core\AlgorithmBase.cs">

@@ -101,8 +101,8 @@ namespace Microsoft.Msagl.GraphControlSilverlight
             Edges = new List<DEdge>();
             NodeMap = new Dictionary<IComparable, DNode>();
 
-            DrawingLayoutEditor = new DrawingLayoutEditor(this);
-            DrawingLayoutEditor.ChangeInUndoRedoList += (sender, args) =>
+            LayoutEditor = new LayoutEditor(this);
+            LayoutEditor.ChangeInUndoRedoList += (sender, args) =>
             {
                 if (PropertyChanged != null)
                 {
@@ -116,13 +116,13 @@ namespace Microsoft.Msagl.GraphControlSilverlight
             // predicate, I affect selection of entities while dragging a selection window, NOT selection by simple click. So, this ensures that
             // the user cannot draw a selection window (which doesn't make sense in editing mode), but he can still select single entities by
             // clicking on them.
-            var defaultToggleEntityPredicate = DrawingLayoutEditor.ToggleEntityPredicate;
-            DrawingLayoutEditor.ToggleEntityPredicate = (modKeys, mButtons, dragPar) => defaultToggleEntityPredicate(modKeys, mButtons, dragPar) && MouseMode != DraggingMode.ComboInsertion && MouseMode != DraggingMode.EdgeInsertion;
+            var defaultToggleEntityPredicate = LayoutEditor.ToggleEntityPredicate;
+            LayoutEditor.ToggleEntityPredicate = (modKeys, mButtons, dragPar) => defaultToggleEntityPredicate(modKeys, mButtons, dragPar) && MouseMode != DraggingMode.ComboInsertion && MouseMode != DraggingMode.EdgeInsertion;
 
             // These decorators are exactly the same as the default ones, but they use my LineWidth fix (see DNode.cs).
             // Once the LineWidth bug in MSAGL is fixed, we should remove these.
-            DrawingLayoutEditor.DecorateObjectForDragging = DecorateObjectForDragging;
-            DrawingLayoutEditor.RemoveObjDraggingDecorations = RemoveObjDraggingDecorations;
+            LayoutEditor.DecorateObjectForDragging = DecorateObjectForDragging;
+            LayoutEditor.RemoveObjDraggingDecorations = RemoveObjDraggingDecorations;
 
             EdgeRoutingMode = EdgeRoutingMode.Spline;
 
@@ -491,10 +491,10 @@ namespace Microsoft.Msagl.GraphControlSilverlight
         /// </summary>
         public void FitGraphBoundingBox()
         {
-            if (DrawingLayoutEditor != null)
+            if (LayoutEditor != null)
             {
                 if (Graph != null)
-                    DrawingLayoutEditor.FitGraphBoundingBox(this);
+                    LayoutEditor.FitGraphBoundingBox(this);
                 Invalidate();
             }
         }
@@ -548,12 +548,12 @@ namespace Microsoft.Msagl.GraphControlSilverlight
 
             if (registerForUndo)
             {
-                DrawingLayoutEditor.RegisterNodeAdditionForUndo(dNode);
+                LayoutEditor.RegisterNodeAdditionForUndo(dNode);
                 var bounds = Graph.GeometryGraph.BoundingBox;
                 bounds.Add(node.BoundingBox.LeftTop);
                 bounds.Add(node.BoundingBox.RightBottom);
                 Graph.GeometryGraph.BoundingBox = bounds;
-                DrawingLayoutEditor.CurrentUndoAction.GraphBoundingBoxAfter = Graph.BoundingBox;
+                LayoutEditor.CurrentUndoAction.GraphBoundingBoxAfter = Graph.BoundingBox;
             }
 
             if (UpdateGraphBoundingBoxPreservingCenter())
@@ -655,15 +655,15 @@ namespace Microsoft.Msagl.GraphControlSilverlight
                 bool isInserting = _MouseMode == DraggingMode.ComboInsertion || _MouseMode == DraggingMode.EdgeInsertion;
                 if (!wasInserting && isInserting)
                 {
-                    DrawingLayoutEditor.InsertingEdge = true;
-                    DrawingLayoutEditor.PrepareForEdgeDragging();
+                    LayoutEditor.InsertingEdge = true;
+                    LayoutEditor.PrepareForEdgeDragging();
                 }
                 else if (wasInserting && !isInserting)
                 {
-                    DrawingLayoutEditor.InsertingEdge = false;
-                    DrawingLayoutEditor.ForgetEdgeDragging();
+                    LayoutEditor.InsertingEdge = false;
+                    LayoutEditor.ForgetEdgeDragging();
                 }
-                DrawingLayoutEditor.Clear();
+                LayoutEditor.Clear();
                 if (m_LabelEditor != null)
                 {
                     m_EditingLabel = false;
@@ -742,10 +742,10 @@ namespace Microsoft.Msagl.GraphControlSilverlight
 
             if (MouseMode == DraggingMode.ComboInsertion && ObjectUnderMouseCursor == null && !finishingEdgeDrawing && MouseDownPosition.HasValue && Distance(MouseDownPosition.Value, pos) < 5.0)
             {
-                DrawingLayoutEditor.ForgetEdgeDragging();
+                LayoutEditor.ForgetEdgeDragging();
                 DNode newNode = AddNodeAtLocation(graphPos, true);
                 BeginContentEdit(newNode);
-                DrawingLayoutEditor.PrepareForEdgeDragging();
+                LayoutEditor.PrepareForEdgeDragging();
             }
 
             MouseDownPosition = null;
@@ -939,7 +939,7 @@ namespace Microsoft.Msagl.GraphControlSilverlight
         {
             if (MouseMode == DraggingMode.Pan)
                 PanningStartOffset = new WinPoint() { X = MainScrollViewer.HorizontalOffset, Y = MainScrollViewer.VerticalOffset };
-            else if (MouseMode == DraggingMode.WindowZoom || (LayoutEditingEnabled && ObjectUnderMouseCursor == null && DrawingLayoutEditor.SelectedEdge == null))
+            else if (MouseMode == DraggingMode.WindowZoom || (LayoutEditingEnabled && ObjectUnderMouseCursor == null && LayoutEditor.SelectedEdge == null))
                 DragWindowStart = gp;
         }
 
@@ -1319,7 +1319,7 @@ namespace Microsoft.Msagl.GraphControlSilverlight
         {
             if (Working)
                 throw new InvalidOperationException("Layout already in progress - abort layout first");
-            DrawingLayoutEditor.Clear();
+            LayoutEditor.Clear();
             if (Entities.Any())
             {
                 Working = true;
@@ -1372,19 +1372,19 @@ namespace Microsoft.Msagl.GraphControlSilverlight
             }
         }
 
-        public bool CanUndo { get { return DrawingLayoutEditor.CanUndo; } }
-        public bool CanRedo { get { return DrawingLayoutEditor.CanRedo; } }
+        public bool CanUndo { get { return LayoutEditor.CanUndo; } }
+        public bool CanRedo { get { return LayoutEditor.CanRedo; } }
 
         public void Undo()
         {
-            if (DrawingLayoutEditor.CanUndo)
-                DrawingLayoutEditor.Undo();
+            if (LayoutEditor.CanUndo)
+                LayoutEditor.Undo();
         }
 
         public void Redo()
         {
-            if (DrawingLayoutEditor.CanRedo)
-                DrawingLayoutEditor.Redo();
+            if (LayoutEditor.CanRedo)
+                LayoutEditor.Redo();
         }
 
         public event EventHandler GraphSaving;
@@ -1418,12 +1418,12 @@ namespace Microsoft.Msagl.GraphControlSilverlight
 
         #region IViewer Members
 
-        private DrawingLayoutEditor DrawingLayoutEditor { get; set; }
+        private LayoutEditor LayoutEditor { get; set; }
 
         public void AddEdge(IViewerEdge edge, bool registerForUndo)
         {
             if (registerForUndo)
-                DrawingLayoutEditor.RegisterEdgeAdditionForUndo(edge);
+                LayoutEditor.RegisterEdgeAdditionForUndo(edge);
 
             DEdge dEdge = edge as DEdge;
             DrawingEdge drawingEdge = dEdge.DrawingEdge;
@@ -1475,7 +1475,7 @@ namespace Microsoft.Msagl.GraphControlSilverlight
             }
 
             if (registerForUndo)
-                DrawingLayoutEditor.CurrentUndoAction.GraphBoundingBoxAfter = Graph.BoundingBox;
+                LayoutEditor.CurrentUndoAction.GraphBoundingBoxAfter = Graph.BoundingBox;
 
             if (registerForUndo)
                 BeginContentEdit(dEdge);
@@ -1867,7 +1867,7 @@ namespace Microsoft.Msagl.GraphControlSilverlight
             var de = edge as DEdge;
 
             if (registerForUndo)
-                DrawingLayoutEditor.RegisterEdgeRemovalForUndo(edge);
+                LayoutEditor.RegisterEdgeRemovalForUndo(edge);
 
             Graph.RemoveEdge(de.DrawingEdge);
 
@@ -1893,7 +1893,7 @@ namespace Microsoft.Msagl.GraphControlSilverlight
             var drawingNode = dNode.DrawingNode;
 
             if (registerForUndo)
-                DrawingLayoutEditor.RegisterNodeForRemoval(node);
+                LayoutEditor.RegisterNodeForRemoval(node);
 
             NodeMap.Remove(drawingNode.Id);
             Graph.NodeMap.Remove(drawingNode.Id);

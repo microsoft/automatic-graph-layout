@@ -103,7 +103,7 @@ internal class SortedDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, T
         return tree.TreeMinimum().Item;
     }
 
-    internal IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() {
+    public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() {
         return tree.GetEnumerator();
     }
 

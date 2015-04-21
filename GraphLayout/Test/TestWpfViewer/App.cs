@@ -31,7 +31,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Timers;
+﻿using System.Runtime.InteropServices;
+﻿using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -51,7 +52,8 @@ using Microsoft.Msagl.Layout.MDS;
 using Microsoft.Msagl.Miscellaneous.LayoutEditing;
 using Microsoft.Msagl.Routing;
 using Microsoft.Msagl.WpfGraphControl;
-using Application = System.Windows.Application;
+﻿using Microsoft.SqlServer.Server;
+﻿using Application = System.Windows.Application;
 using Menu = System.Windows.Controls.Menu;
 using MenuItem = System.Windows.Controls.MenuItem;
 using MessageBox = System.Windows.MessageBox;
@@ -507,6 +509,8 @@ namespace TestWpfViewer {
                 if (fileList != null)
                     ProcessFileList(fileList);
             }
+            if (argsParser.OptionIsUsed("-tic"))
+                ProcessTic();
         }
 
         void ProcessFileList(string fileList) {
@@ -556,6 +560,7 @@ namespace TestWpfViewer {
 
         static ArgsParser.ArgsParser SetArgsParser(string [] args) {
             argsParser = new ArgsParser.ArgsParser(args);
+            argsParser.AddAllowedOption("-tic");
             argsParser.AddAllowedOptionWithHelpString(OneTimeRunOption, "loads only one graph");
             argsParser.AddAllowedOptionWithHelpString(SequentialRunOption, "no threads");
             argsParser.AddAllowedOptionWithHelpString(StraightLineEdgesOption,"route straight line edges");
@@ -926,6 +931,64 @@ namespace TestWpfViewer {
             }
             else
                 MessageBox.Show("cannot load " + fileName);
+        }
+        void ProcessTic() {
+            Graph gwgraph = ParserTic();
+            gwgraph.Attr.LayerDirection=LayerDirection.LR;
+            
+            TestGraph(gwgraph);
+            if (gwgraph != null) {
+                GiveGraphToControl(gwgraph);
+            }
+            SvgGraphWriter swGraphWriter = new SvgGraphWriter(File.Create(@"c:\tmp\tic.svg"), gwgraph);
+            swGraphWriter.Write();
+        }
+
+        Graph ParserTic() {
+
+            var nodes = ParseTicNodes();
+            List<Tuple<int, int>> edges = ParseTicEdges();
+            Graph g=new Graph();
+            foreach (var e in edges) g.AddEdge(nodes[e.Item1-1], nodes[e.Item2-1]);
+            return g;
+        }
+
+        List<Tuple<int, int>> ParseTicEdges() {
+            List<Tuple<int, int>> ret=new List<Tuple<int, int>>();
+            
+            using (var f = new StreamReader(@"C:\Users\levnach\Documents\edges.txt")) {
+                do {
+                    var l = f.ReadLine();
+                    if (l == null) break;
+                    ret.Add(ParsetTicEdgeLine(l));
+                } while (true);
+            }
+            return ret;
+        }
+
+        Tuple<int, int> ParsetTicEdgeLine(string s) {
+            var t = s.Split(new[] {'(', ',', ')'});
+            int x;
+            if(!int.TryParse(t[1], out x))
+                throw new Exception(String.Format("cannot parse edge {0}",s));
+            int y;
+            if (!int.TryParse(t[2], out y))
+                throw new Exception(String.Format("cannot parse edge {0}", s));
+            return new Tuple<int, int>(x, y);
+        }
+
+        List< string> ParseTicNodes() {
+            var d = new List<string>();
+           using(var f=new StreamReader(@"C:\Users\levnach\Documents\nodes.txt")) {
+               do {
+                   string l=f.ReadLine();
+                   if(l==null)break;
+                   d.Add(l);
+
+               } while (true);
+
+           }
+            return d;
         }
 
         void ProcessDot(string fileName) {

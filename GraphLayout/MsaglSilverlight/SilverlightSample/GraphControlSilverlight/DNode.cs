@@ -75,6 +75,8 @@ namespace Microsoft.Msagl.GraphControlSilverlight
         public IEnumerable<IViewerEdge> OutEdges { get { foreach (DEdge e in _OutEdges) yield return e; } }
         public IEnumerable<IViewerEdge> InEdges { get { foreach (DEdge e in _InEdges) yield return e; } }
         public IEnumerable<IViewerEdge> SelfEdges { get { foreach (DEdge e in _SelfEdges) yield return e; } }
+        public event Action<IViewerNode> IsCollapsedChanged;
+
         public IEnumerable<DEdge> Edges
         {
             get

@@ -58,7 +58,6 @@ namespace Microsoft.Msagl.Miscellaneous
         /// <summary>
         /// Calculates the graph layout
         /// </summary>
-        /// <exception cref="CancelException">Thrown when the layout is canceled.</exception>
 #else
         /// <summary>
         /// Calculates the graph layout
