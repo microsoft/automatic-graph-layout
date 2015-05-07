@@ -82,6 +82,8 @@
     <TypeScriptCompile Include="MSAGL\msaglWorker.ts" />
     <TypeScriptCompile Include="MSAGL\svggraph.ts" />
     <TypeScriptCompile Include="samples.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\requirejs\require.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="MSAGL\Microsoft.Msagl.min.js.map">

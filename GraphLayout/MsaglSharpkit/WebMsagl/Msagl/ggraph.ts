@@ -13,10 +13,10 @@ export class GPoint implements IPoint {
         this.y = p.y === undefined ? 0 : p.y;
     }
     static origin = new GPoint({ x: 0, y: 0 });
-    add(other: GPoint) {
+    add(other: IPoint) {
         return new GPoint({ x: this.x + other.x, y: this.y + other.y });
     }
-    sub(other: GPoint) {
+    sub(other: IPoint) {
         return new GPoint({ x: this.x - other.x, y: this.y - other.y });
     }
     div(op: number) {
@@ -63,6 +63,8 @@ export class GRect implements IRect {
         return new GPoint({ x: this.x + this.width / 2, y: this.y + this.height / 2 });
     }
     extend(other: GRect) {
+        if (other == null)
+            return this;
         return new GRect({
             x: Math.min(this.x, other.x),
             y: Math.min(this.y, other.y),
@@ -70,11 +72,15 @@ export class GRect implements IRect {
             height: Math.max(this.getBottom(), other.getBottom()) - Math.min(this.y, other.y)
         });
     }
+    extendP(point: GPoint) {
+        return this.extend(new GRect({ x: point.x, y: point.y, width: 0, height: 0 }));
+    }
 }
 
 export interface ICurve {
     type: string;
     getCenter(): GPoint;
+    getBoundingBox(): GRect;
 }
 
 export class GCurve implements ICurve {
@@ -86,6 +92,9 @@ export class GCurve implements ICurve {
     }
     getCenter(): GPoint {
         return GPoint.origin
+    }
+    getBoundingBox(): GRect {
+        return GRect.zero;
     }
     static ofCurve(curve: ICurve): GCurve {
         if (curve == null || curve === undefined)
@@ -133,6 +142,12 @@ export class GEllipse extends GCurve implements IEllipse {
     getCenter(): GPoint {
         return this.center;
     }
+    getBoundingBox(): GRect {
+        var width = 2 * Math.max(Math.abs(this.axisA.x), Math.abs(this.axisB.x));
+        var height = 2 * Math.max(Math.abs(this.axisA.y), Math.abs(this.axisB.y));
+        var p = this.center.sub({ x: width / 2, y: height / 2 });
+        return new GRect({ x: p.x, y: p.y, width: width, height: height });
+    }
     static make(width: number, height: number): GEllipse {
         return new GEllipse({ center: GPoint.origin, axisA: new GPoint({ x: width / 2, y: 0 }), axisB: new GPoint({ x: 0, y: height / 2 }), parStart: 0, parEnd: Math.PI * 2 });
     }
@@ -154,6 +169,11 @@ export class GLine extends GCurve implements ILine {
     }
     getCenter(): GPoint {
         return this.start.add(this.end).div(2);
+    }
+    getBoundingBox(): GRect {
+        var ret = new GRect({ x: this.start.x, y: this.start.y, width: 0, height: 0 });
+        ret = ret.extendP(this.end);
+        return ret;
     }
 }
 
@@ -183,6 +203,12 @@ export class GPolyline extends GCurve implements ICurve {
         ret = ret.div(1 + this.points.length);
         return ret;
     }
+    getBoundingBox(): GRect {
+        var ret = new GRect({ x: this.points[0].x, y: this.points[0].y, height: 0, width: 0 });
+        for (var i = 1; i < this.points.length; i++)
+            ret = ret.extendP(this.points[i]);
+        return ret;
+    }
 }
 
 export interface IRoundedRect {
@@ -204,6 +230,9 @@ export class GRoundedRect extends GCurve implements IRoundedRect {
     }
     getCenter(): GPoint {
         return this.bounds.getCenter();
+    }
+    getBoundingBox(): GRect {
+        return this.bounds;
     }
     getCurve(): GSegmentedCurve {
         var segments: GCurve[] = [];
@@ -250,6 +279,13 @@ export class GBezier extends GCurve implements ICurve {
         ret = ret.div(4);
         return ret;
     }
+    getBoundingBox(): GRect {
+        var ret = new GRect({ x: this.start.x, y: this.start.y, width: 0, height: 0 });
+        ret = ret.extendP(this.p1);
+        ret = ret.extendP(this.p2);
+        ret = ret.extendP(this.p3);
+        return ret;
+    }
 }
 
 export interface ISegmentedCurve {
@@ -270,6 +306,12 @@ export class GSegmentedCurve extends GCurve implements ICurve {
         for (var i = 0; i < this.segments.length; i++)
             ret = ret.add(this.segments[i].getCenter());
         ret = ret.div(this.segments.length);
+        return ret;
+    }
+    getBoundingBox(): GRect {
+        var ret = this.segments[0].getBoundingBox();
+        for (var i = 1; i < this.segments.length; i++)
+            ret = ret.extend(this.segments[i].getBoundingBox());
         return ret;
     }
 }
@@ -313,12 +355,21 @@ export class GShape {
         ret.radiusY = radiusY === undefined ? 5 : radiusY;
         return ret;
     }
+    static GetMaxRoundedRect(): GShape {
+        var ret = new GShape();
+        ret.shape = "rect";
+        ret.radiusX = null;
+        ret.radiusY = null;
+        return ret;
+    }
     static RectShape = "rect";
     static FromString(shape: string) {
         if (shape == "rect")
             return GShape.GetRect();
         else if (shape == "roundedrect")
             return GShape.GetRoundedRect();
+        else if (shape == "maxroundedrect")
+            return GShape.GetMaxRoundedRect();
         return null;
     }
     constructor() {
@@ -624,10 +675,10 @@ export class GGraph implements IGraph {
         return ret;
     }
 
-    private createNodeBoundariesRec(node: GNode, sizer?: (label: GLabel) => IPoint) {
+    private createNodeBoundariesRec(node: GNode, sizer?: (label: GLabel, owner: IElement) => IPoint) {
         if (node.boundaryCurve == null) {
             if (node.label != null && node.label.bounds == GRect.zero && sizer !== undefined) {
-                var labelSize = sizer(node.label);
+                var labelSize = sizer(node.label, node);
                 node.label.bounds = new GRect({ x: 0, y: 0, width: labelSize.x, height: labelSize.y });
             }
             var labelWidth = node.label == null ? 0 : node.label.bounds.width;
@@ -635,10 +686,17 @@ export class GGraph implements IGraph {
             labelWidth += 2 * node.labelMargin;
             labelHeight += 2 * node.labelMargin;
             var boundary: GCurve;
-            if (node.shape != null && node.shape.shape == GShape.RectShape)
+            if (node.shape != null && node.shape.shape == GShape.RectShape) {
+                var radiusX = node.shape.radiusX;
+                var radiusY = node.shape.radiusY;
+                if (radiusX == null && radiusY == null) {
+                    var k = Math.min(labelWidth, labelHeight);
+                    radiusX = radiusY = k / 2;
+                }
                 boundary = new GRoundedRect({
-                    bounds: new GRect({ x: 0, y: 0, width: labelWidth, height: labelHeight }), radiusX: node.shape.radiusX, radiusY: node.shape.radiusY
+                    bounds: new GRect({ x: 0, y: 0, width: labelWidth, height: labelHeight }), radiusX: radiusX, radiusY: radiusY
                 });
+            }
             else
                 boundary = GEllipse.make(labelWidth * Math.sqrt(2), labelHeight * Math.sqrt(2));
             node.boundaryCurve = boundary;
@@ -652,7 +710,7 @@ export class GGraph implements IGraph {
 
     // Creates the node boundaries for nodes that don't have one. If the node has a label, it will first
     // compute the label's size based on the provided size function, and then create an appropriate boundary.
-    createNodeBoundaries(sizer?: (label: GLabel) => IPoint) {
+    createNodeBoundaries(sizer?: (label: GLabel, owner: IElement) => IPoint) {
         for (var i = 0; i < this.nodes.length; i++)
             this.createNodeBoundariesRec(this.nodes[i], sizer);
 
@@ -661,7 +719,7 @@ export class GGraph implements IGraph {
             for (var i = 0; i < this.edges.length; i++) {
                 var edge = this.edges[i];
                 if (edge.label != null && edge.label.bounds == GRect.zero) {
-                    var labelSize = sizer(edge.label);
+                    var labelSize = sizer(edge.label, edge);
                     edge.label.bounds.width = labelSize.x;
                     edge.label.bounds.height = labelSize.y;
                 }

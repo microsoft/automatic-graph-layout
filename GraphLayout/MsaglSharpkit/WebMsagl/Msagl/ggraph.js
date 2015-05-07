@@ -49,12 +49,17 @@ define(["require", "exports"], function (require, exports) {
             return new GPoint({ x: this.x + this.width / 2, y: this.y + this.height / 2 });
         };
         GRect.prototype.extend = function (other) {
+            if (other == null)
+                return this;
             return new GRect({
                 x: Math.min(this.x, other.x),
                 y: Math.min(this.y, other.y),
                 width: Math.max(this.getRight(), other.getRight()) - Math.min(this.x, other.x),
                 height: Math.max(this.getBottom(), other.getBottom()) - Math.min(this.y, other.y)
             });
+        };
+        GRect.prototype.extendP = function (point) {
+            return this.extend(new GRect({ x: point.x, y: point.y, width: 0, height: 0 }));
         };
         GRect.zero = new GRect({ x: 0, y: 0, width: 0, height: 0 });
         return GRect;
@@ -68,6 +73,9 @@ define(["require", "exports"], function (require, exports) {
         }
         GCurve.prototype.getCenter = function () {
             return GPoint.origin;
+        };
+        GCurve.prototype.getBoundingBox = function () {
+            return GRect.zero;
         };
         GCurve.ofCurve = function (curve) {
             if (curve == null || curve === undefined)
@@ -103,6 +111,12 @@ define(["require", "exports"], function (require, exports) {
         GEllipse.prototype.getCenter = function () {
             return this.center;
         };
+        GEllipse.prototype.getBoundingBox = function () {
+            var width = 2 * Math.max(Math.abs(this.axisA.x), Math.abs(this.axisB.x));
+            var height = 2 * Math.max(Math.abs(this.axisA.y), Math.abs(this.axisB.y));
+            var p = this.center.sub({ x: width / 2, y: height / 2 });
+            return new GRect({ x: p.x, y: p.y, width: width, height: height });
+        };
         GEllipse.make = function (width, height) {
             return new GEllipse({ center: GPoint.origin, axisA: new GPoint({ x: width / 2, y: 0 }), axisB: new GPoint({ x: 0, y: height / 2 }), parStart: 0, parEnd: Math.PI * 2 });
         };
@@ -118,6 +132,11 @@ define(["require", "exports"], function (require, exports) {
         }
         GLine.prototype.getCenter = function () {
             return this.start.add(this.end).div(2);
+        };
+        GLine.prototype.getBoundingBox = function () {
+            var ret = new GRect({ x: this.start.x, y: this.start.y, width: 0, height: 0 });
+            ret = ret.extendP(this.end);
+            return ret;
         };
         return GLine;
     })(GCurve);
@@ -139,6 +158,12 @@ define(["require", "exports"], function (require, exports) {
             ret = ret.div(1 + this.points.length);
             return ret;
         };
+        GPolyline.prototype.getBoundingBox = function () {
+            var ret = new GRect({ x: this.points[0].x, y: this.points[0].y, height: 0, width: 0 });
+            for (var i = 1; i < this.points.length; i++)
+                ret = ret.extendP(this.points[i]);
+            return ret;
+        };
         return GPolyline;
     })(GCurve);
     exports.GPolyline = GPolyline;
@@ -152,6 +177,9 @@ define(["require", "exports"], function (require, exports) {
         }
         GRoundedRect.prototype.getCenter = function () {
             return this.bounds.getCenter();
+        };
+        GRoundedRect.prototype.getBoundingBox = function () {
+            return this.bounds;
         };
         GRoundedRect.prototype.getCurve = function () {
             var segments = [];
@@ -188,6 +216,13 @@ define(["require", "exports"], function (require, exports) {
             ret = ret.div(4);
             return ret;
         };
+        GBezier.prototype.getBoundingBox = function () {
+            var ret = new GRect({ x: this.start.x, y: this.start.y, width: 0, height: 0 });
+            ret = ret.extendP(this.p1);
+            ret = ret.extendP(this.p2);
+            ret = ret.extendP(this.p3);
+            return ret;
+        };
         return GBezier;
     })(GCurve);
     exports.GBezier = GBezier;
@@ -204,6 +239,12 @@ define(["require", "exports"], function (require, exports) {
             for (var i = 0; i < this.segments.length; i++)
                 ret = ret.add(this.segments[i].getCenter());
             ret = ret.div(this.segments.length);
+            return ret;
+        };
+        GSegmentedCurve.prototype.getBoundingBox = function () {
+            var ret = this.segments[0].getBoundingBox();
+            for (var i = 1; i < this.segments.length; i++)
+                ret = ret.extend(this.segments[i].getBoundingBox());
             return ret;
         };
         return GSegmentedCurve;
@@ -240,11 +281,20 @@ define(["require", "exports"], function (require, exports) {
             ret.radiusY = radiusY === undefined ? 5 : radiusY;
             return ret;
         };
+        GShape.GetMaxRoundedRect = function () {
+            var ret = new GShape();
+            ret.shape = "rect";
+            ret.radiusX = null;
+            ret.radiusY = null;
+            return ret;
+        };
         GShape.FromString = function (shape) {
             if (shape == "rect")
                 return GShape.GetRect();
             else if (shape == "roundedrect")
                 return GShape.GetRoundedRect();
+            else if (shape == "maxroundedrect")
+                return GShape.GetMaxRoundedRect();
             return null;
         };
         GShape.RectShape = "rect";
@@ -452,7 +502,7 @@ define(["require", "exports"], function (require, exports) {
         GGraph.prototype.createNodeBoundariesRec = function (node, sizer) {
             if (node.boundaryCurve == null) {
                 if (node.label != null && node.label.bounds == GRect.zero && sizer !== undefined) {
-                    var labelSize = sizer(node.label);
+                    var labelSize = sizer(node.label, node);
                     node.label.bounds = new GRect({ x: 0, y: 0, width: labelSize.x, height: labelSize.y });
                 }
                 var labelWidth = node.label == null ? 0 : node.label.bounds.width;
@@ -460,12 +510,19 @@ define(["require", "exports"], function (require, exports) {
                 labelWidth += 2 * node.labelMargin;
                 labelHeight += 2 * node.labelMargin;
                 var boundary;
-                if (node.shape != null && node.shape.shape == GShape.RectShape)
+                if (node.shape != null && node.shape.shape == GShape.RectShape) {
+                    var radiusX = node.shape.radiusX;
+                    var radiusY = node.shape.radiusY;
+                    if (radiusX == null && radiusY == null) {
+                        var k = Math.min(labelWidth, labelHeight);
+                        radiusX = radiusY = k / 2;
+                    }
                     boundary = new GRoundedRect({
                         bounds: new GRect({ x: 0, y: 0, width: labelWidth, height: labelHeight }),
-                        radiusX: node.shape.radiusX,
-                        radiusY: node.shape.radiusY
+                        radiusX: radiusX,
+                        radiusY: radiusY
                     });
+                }
                 else
                     boundary = GEllipse.make(labelWidth * Math.sqrt(2), labelHeight * Math.sqrt(2));
                 node.boundaryCurve = boundary;
@@ -485,7 +542,7 @@ define(["require", "exports"], function (require, exports) {
                 for (var i = 0; i < this.edges.length; i++) {
                     var edge = this.edges[i];
                     if (edge.label != null && edge.label.bounds == GRect.zero) {
-                        var labelSize = sizer(edge.label);
+                        var labelSize = sizer(edge.label, edge);
                         edge.label.bounds.width = labelSize.x;
                         edge.label.bounds.height = labelSize.y;
                     }
