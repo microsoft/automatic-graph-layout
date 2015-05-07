@@ -1,0 +1,1 @@
+This directory is missing a file jsclr.js. This file needs to be downloaded from https://github.com/SharpKit/SharpKit-SDK.git and copied to the directory.
