@@ -19,9 +19,14 @@ namespace Microsoft.Msagl.Core.DataStructures {
         /// </returns>
         /// <filterpriority>2</filterpriority>
         public override int GetHashCode() {
+
+#if !SHARPKIT
             unchecked {
+#endif
                 return A.GetHashCode() ^ B.GetHashCode(); // we need a symmetric hash code
+#if !SHARPKIT
             }
+#endif
         }
 
         public T A { get; private set; }

@@ -140,33 +140,33 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
 
 
-/*
-        void RemoveRailsOfPassingEdgesFromLowerLevelsAndReduceHighlights(List<Edge> passingEdges) {
-            var dimmedRails = new Set<Rail>();
-            foreach (var edge in passingEdges) {
-                for (int i = levels.Count - 1; i >= 0; i--) {
-                    var level = levels[i];                    
-                    DiminishHighlightAndCollectDimmedRailOnLevel(edge, level, dimmedRails);
-                }
-            }
-      
-            RemoveDimmedRailsFromLowerLevels(dimmedRails);
-            foreach (var edge in passingEdges) {
-                var ei = GeometryEdgesToLgEdgeInfos[edge];
-                for (int i = 0; i<levels.Count; i++) {
-                    var level = levels[i];
-                    if (ei.ZoomLevel > level.ZoomLevel) {
-                        Set<Rail> railsOfEdgeOnLevel;
-                        if (level._railsOfEdges.TryGetValue(edge, out railsOfEdgeOnLevel))
-                            if (railsOfEdgeOnLevel.Any(dimmedRails.Contains))
-                                level._railsOfEdges.Remove(edge);
+        /*
+                void RemoveRailsOfPassingEdgesFromLowerLevelsAndReduceHighlights(List<Edge> passingEdges) {
+                    var dimmedRails = new Set<Rail>();
+                    foreach (var edge in passingEdges) {
+                        for (int i = levels.Count - 1; i >= 0; i--) {
+                            var level = levels[i];                    
+                            DiminishHighlightAndCollectDimmedRailOnLevel(edge, level, dimmedRails);
+                        }
                     }
-                    else break;
+      
+                    RemoveDimmedRailsFromLowerLevels(dimmedRails);
+                    foreach (var edge in passingEdges) {
+                        var ei = GeometryEdgesToLgEdgeInfos[edge];
+                        for (int i = 0; i<levels.Count; i++) {
+                            var level = levels[i];
+                            if (ei.ZoomLevel > level.ZoomLevel) {
+                                Set<Rail> railsOfEdgeOnLevel;
+                                if (level._railsOfEdges.TryGetValue(edge, out railsOfEdgeOnLevel))
+                                    if (railsOfEdgeOnLevel.Any(dimmedRails.Contains))
+                                        level._railsOfEdges.Remove(edge);
+                            }
+                            else break;
+                        }
+                    }
                 }
-            }
-        }
-*/
-#if DEBUG && !SILVERLIGHT
+        */
+#if DEBUG && !SILVERLIGHT && !SHARPKIT
         static void ShowDimmedRails(Set<Rail> dimmedRails) {
             var l = new List<DebugHelpers.DebugCurve>();
             foreach (var r in dimmedRails) {
@@ -179,7 +179,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(l);
         }
 #endif
-//        void RemoveDimmedRailsFromLowerLevels(Set<Rail> dimmedRails) {
+        //        void RemoveDimmedRailsFromLowerLevels(Set<Rail> dimmedRails) {
 //            foreach(var rail in dimmedRails)
 //                RemoveDimmedRailFromLowerLevels(rail);
 //        }

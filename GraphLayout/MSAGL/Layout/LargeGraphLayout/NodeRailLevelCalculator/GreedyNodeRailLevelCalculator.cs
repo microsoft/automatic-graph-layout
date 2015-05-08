@@ -208,7 +208,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout.NodeRailLevelCalculator {
         
         private void ShowDebugInsertedSegments(GridTraversal grid, int zoomLevel, LgNodeInfo nodeToAdd, IEnumerable<SymmetricSegment> newToAdd, IEnumerable<SymmetricSegment> allOnNewEdges)
         {
-#if DEBUG
+#if DEBUG && !SILVERLIGHT && !SHARPKIT
 
             var edges = _pathRouter.GetAllEdgesVisibilityEdges();
             var ll = new List<DebugCurve>();
@@ -294,7 +294,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout.NodeRailLevelCalculator {
                 i++;
             }
             str += "</group>";
+#if !SILVERLIGHT && !SHARPKIT
             System.Windows.Clipboard.SetText(str);
+#endif
         }
 
         bool TryAddingSegmentsUpdateTiles(IEnumerable<SymmetricSegment> segments, GridTraversal grid,

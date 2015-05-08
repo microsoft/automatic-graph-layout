@@ -382,9 +382,7 @@
     <Compile Include="Routing\Spline\Bundling\TimeMeasurer.cs" />
     <Compile Include="Routing\TightLooseCouple.cs" />
     <Compile Include="Routing\StraightLineEdges.cs" />
-    <Compile Include="Core\GraphAlgorithms\CycleRemoval\ConnectedComponentCalculator.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Core\GraphAlgorithms\CycleRemoval\ConnectedComponentCalculator.cs" />
     <Compile Include="Core\GraphAlgorithms\CycleRemoval\CycleRemoval.cs" />
     <Compile Include="Core\GraphAlgorithms\CycleRemoval\CycleRemovalWithConstraints.cs" />
     <Compile Include="Core\GraphAlgorithms\CycleRemoval\GraphForCycleRemoval.cs" />
@@ -630,9 +628,7 @@
     <Compile Include="Core\Geometry\Curves\LineSegment.cs" />
     <Compile Include="Core\Geometry\Curves\MinDistCurveCurve.cs" />
     <Compile Include="Core\Geometry\Curves\Parallelogram.cs" />
-    <Compile Include="Core\Geometry\Curves\ParallelogramBinaryTreeNode.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Core\Geometry\Curves\ParallelogramBinaryTreeNode.cs" />
     <Compile Include="Core\Geometry\Curves\ParallelogramInternalTreeNode.cs" />
     <Compile Include="Core\Geometry\Curves\ParallelogramLeaf.cs" />
     <Compile Include="Core\Geometry\Curves\ParallelogramNode.cs" />
@@ -684,12 +680,12 @@
     <Compile Include="Routing\Visibility\TangentPair.cs" />
     <Compile Include="Routing\Visibility\TangentVisibilityGraphCalculator.cs" />
     <Compile Include="Layout\Layered\XCoordsWithAlignment.cs" />
+    <Compile Include="ValidateArg.cs" />
     <Compile Include="Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="ValidateArg.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
