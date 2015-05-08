@@ -45,13 +45,9 @@
     <Reference Include="SharpKit.jQuery" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\MSAGL\Layout\LargeGraphLayout\LgLevel.cs">
-      <Link>LgLevel.cs</Link>
-    </Compile>
     <Compile Include="ExtensionsForSharpKit.cs" />
     <Compile Include="GlobalSharpKit.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="..\..\msagl\Core\AlgorithmBase.cs">
+        <Compile Include="..\..\msagl\Core\AlgorithmBase.cs">
       <Link>AlgorithmBase.cs</Link>
     </Compile>
     <Compile Include="..\..\msagl\Core\DataStructures\CollectionUtilities.cs">
@@ -65,6 +61,9 @@
     </Compile>
     <Compile Include="..\..\msagl\Core\DataStructures\Size.cs">
       <Link>Size.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\DataStructures\SymmetricTuple.cs">
+      <Link>SymmetricTuple.cs</Link>
     </Compile>
     <Compile Include="..\..\msagl\Core\Geometry\ApproximateComparer.cs">
       <Link>ApproximateComparer.cs</Link>
@@ -294,6 +293,12 @@
     <Compile Include="..\..\msagl\Layout\LargeGraphLayout\IZoomLevelCalculator.cs">
       <Link>IZoomLevelCalculator.cs</Link>
     </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LayerInfo.cs">
+      <Link>LayerInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LgCellInfo.cs">
+      <Link>LgCellInfo.cs</Link>
+    </Compile>
     <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LgData.cs">
       <Link>LgData.cs</Link>
     </Compile>
@@ -309,8 +314,20 @@
     <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LevelCalculator.cs">
       <Link>LevelCalculator.cs</Link>
     </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LgLevel.cs">
+      <Link>LgLevel.cs</Link>
+    </Compile>
     <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LgNodeCollection.cs">
       <Link>LgNodeCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LgSkeletonLevel.cs">
+      <Link>LgSkeletonLevel.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\NodeMagnifier.cs">
+      <Link>NodeMagnifier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\NodeRailLevelCalculator\GreedyNodeRailLevelCalculator.cs">
+      <Link>GreedyNodeRailLevelCalculator.cs</Link>
     </Compile>
     <Compile Include="..\..\msagl\Layout\LargeGraphLayout\Rail.cs">
       <Link>Rail.cs</Link>
@@ -321,11 +338,11 @@
     <Compile Include="..\..\msagl\Layout\LargeGraphLayout\Interval.cs">
       <Link>Interval.cs</Link>
     </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\RouteSimplifier.cs">
+      <Link>RouteSimplifier.cs</Link>
+    </Compile>
     <Compile Include="..\..\msagl\Layout\LargeGraphLayout\ShortestPartRouterForLg.cs">
       <Link>ShortestPartRouterForLg.cs</Link>
-    </Compile>
-    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\ShortestPathToAllOthers.cs">
-      <Link>ShortestPathToAllOthers.cs</Link>
     </Compile>
     <Compile Include="..\..\msagl\Layout\LargeGraphLayout\SimpleEdgeCollection.cs">
       <Link>SimpleEdgeCollection.cs</Link>
@@ -347,6 +364,24 @@
     </Compile>
     <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\OverlapRemovalMethod.cs">
       <Link>OverlapRemovalMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\OverlapRemovalFixedSegments\FakeBitmap.cs">
+      <Link>FakeBitmap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\OverlapRemovalFixedSegments\OverlapRemovalFixedSegmentsBitmap.cs">
+      <Link>OverlapRemovalFixedSegmentsBitmap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\OverlapRemovalFixedSegments\OverlapRemovalFixedSegmentsMst.cs">
+      <Link>OverlapRemovalFixedSegmentsMst.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\OverlapRemovalFixedSegments\PixelPoint.cs">
+      <Link>PixelPoint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\OverlapRemovalFixedSegments\RectSegIntersection.cs">
+      <Link>RectSegIntersection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\ConstrainedSkeleton\SteinerCdt.cs">
+      <Link>SteinerCdt.cs</Link>
     </Compile>
     <Compile Include="..\..\msagl\Miscellaneous\Constraints\AlignmentConstraint.cs">
       <Link>AlignmentConstraint.cs</Link>
@@ -416,6 +451,15 @@
     </Compile>
     <Compile Include="..\..\msagl\Miscellaneous\Ranking\RankingLayoutSettings.cs">
       <Link>RankingLayoutSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\RegularGrid\GridTraversal.cs">
+      <Link>GridTraversal.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LgPathRouter.cs">
+      <Link>LgPathRouter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\Routing\ShortestPathTree.cs">
+      <Link>ShortestPathTree.cs</Link>
     </Compile>
     <Compile Include="..\..\msagl\Routing\ClusterBoundaryPort.cs">
       <Link>ClusterBoundaryPort.cs</Link>

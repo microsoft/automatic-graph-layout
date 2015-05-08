@@ -116,7 +116,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             FillGeometryNodeToLgInfosTables();
             LevelCalculator.RankGraph(_lgData, _mainGeometryGraph);
             LayoutTheWholeGraph();
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !SHARPKIT
             var timer = new Timer();
             timer.Start();
 #endif
@@ -126,10 +126,11 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             _railGraph = new RailGraph();
             LayoutAndRouteByLayers(_lgLayoutSettings.MaxNumberOfNodesPerTile, _lgLayoutSettings.MaxNumberOfRailsPerTile,
                 _lgLayoutSettings.IncreaseNodeQuota);
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !SHARPKIT
             timer.Stop();
-#endif
+
             Console.WriteLine("levels calculated for {0}", timer.Duration);
+#endif
             if (_lgLayoutSettings.ExitAfterInit)
                 Environment.Exit(0);
         }
@@ -996,7 +997,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
         static void ShowNodesAndSegmentsForOverlapRemoval(IEnumerable<LgNodeInfo> fixedNodes,
             IEnumerable<LgNodeInfo> moveableNodes, SymmetricSegment[] fixedSegments) {
-#if DEBUG
+#if DEBUG && !SILVERLIGHT && !SHARPKIT
             var l = new List<DebugCurve>();
             if (fixedNodes != null && fixedNodes.Any()) {
                 foreach (var node in fixedNodes) {
@@ -1098,7 +1099,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 
 
-#if DEBUG
+#if DEBUG && !SILVERLIGHT && !SHARPKIT
         static void ShowOldNewIntersected(Set<Rail> oldIntersected, Set<Rail> newIntersected, Point a, Point shortcutted,
             Point b, LgSkeletonLevel skeletonLevel) {
             var ll = new List<DebugCurve>();
@@ -1122,7 +1123,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 #endif
 
-#if DEBUG
+#if DEBUG && !SILVERLIGHT && !SHARPKIT
         private static void ShowOldTrajectories(LgSkeletonLevel skeletonLevel)
         {
             if (skeletonLevel.ZoomLevel <= 1.0) return;
