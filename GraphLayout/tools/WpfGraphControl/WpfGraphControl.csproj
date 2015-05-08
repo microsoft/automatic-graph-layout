@@ -106,7 +106,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="RailSliding.cs" />
     <Compile Include="VEdge.cs" />
     <Compile Include="VLabel.cs" />
     <Compile Include="VNode.cs" />

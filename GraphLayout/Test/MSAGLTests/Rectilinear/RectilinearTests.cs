@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RectilinearTests.cs" company="Microsoft">
 //   (c) Microsoft Corporation.  All rights reserved.
@@ -6555,8 +6527,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         public void RemoveCloseVerticesFromPolyline() 
         {
             // Make an octagon so we have enough room for a midpoint.
-            var octagon = (Curve)CurveFactory.CreateOctagon(100, 100, new Point(200, 200));
-            var origPoly = new Polyline(octagon.Segments.Select(seg => seg.Start)) { Closed = true };
+            var origPoly = CurveFactory.CreateOctagon(100, 100, new Point(200, 200));
             Validate.AreEqual(8, origPoly.PolylinePoints.Count(), "Did not get 8 points in original octagon Polyline");
 
             var offset = new Point(ApproximateComparer.IntersectionEpsilon / 2, ApproximateComparer.IntersectionEpsilon / 2);
@@ -6619,8 +6590,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         public void RemoveCollinearVerticesFromPolyline()
         {
             // Make an octagon so we have enough room for a midpoint.
-            var octagon = (Curve)CurveFactory.CreateOctagon(100, 100, new Point(200, 200));
-            var origPoly = new Polyline(octagon.Segments.Select(seg => seg.Start)) { Closed = true };
+            var origPoly = CurveFactory.CreateOctagon(100, 100, new Point(200, 200));
             Validate.AreEqual(8, origPoly.PolylinePoints.Count(), "Did not get 8 points in original octagon Polyline");
 
             VerifyCollinearIndividualPolylinePoints(origPoly);

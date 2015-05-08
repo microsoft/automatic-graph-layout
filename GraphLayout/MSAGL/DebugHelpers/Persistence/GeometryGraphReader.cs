@@ -1,32 +1,5 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 ﻿using Microsoft.Msagl.Layout.LargeGraphLayout;
+using Microsoft.Msagl.Prototype.Ranking;
 #if PERSISTENCE
 using System;
 using System.Collections.Generic;
@@ -45,59 +18,65 @@ using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Layout.Incremental;
 using Microsoft.Msagl.Layout.Layered;
 using Microsoft.Msagl.Layout.MDS;
+using SymmetricSegment = Microsoft.Msagl.Core.DataStructures.SymmetricTuple<Microsoft.Msagl.Core.Geometry.Point>;
 
 namespace Microsoft.Msagl.DebugHelpers.Persistence {
 
 #if SILVERLIGHT
     public class InvalidDataException : Exception
     {
-        public InvalidDataException(string s = null)
+        public InvalidDataException(string s)
             : base(s)
         {
         }
     }
 #endif
+
     /// <summary>
     /// reads the GeometryGraph from a file
     /// </summary>
-    public class GeometryGraphReader: IDisposable {
+    public class GeometryGraphReader : IDisposable {
         /// <summary>
         /// the list of edges, needed to match it with GraphReader edges
         /// </summary>
         public IList<Edge> EdgeList = new List<Edge>();
 
-        readonly Dictionary<string, Edge>  idToEdges = new Dictionary<string, Edge>();
+        readonly Dictionary<string, Edge> idToEdges = new Dictionary<string, Edge>();
         readonly Dictionary<string, Rail> idToRails = new Dictionary<string, Rail>();
-        readonly Dictionary<string, LgEdgeInfo> railIdsToTopRankedEdgeInfo=new Dictionary<string, LgEdgeInfo>();
-        
-        readonly GeometryGraph graph = new GeometryGraph();
+        readonly Dictionary<string, LgEdgeInfo> railIdsToTopRankedEdgeInfo = new Dictionary<string, LgEdgeInfo>();
+
+        readonly GeometryGraph _graph = new GeometryGraph();
 
         /// <summary>
         /// The deserialized settings.
         /// </summary>
-        public LayoutAlgorithmSettings Settings { get; private set; }
+        public LayoutAlgorithmSettings Settings { get; set; }
 
-        readonly Dictionary<string, ClusterWithChildLists> stringToClusters = new Dictionary<string, ClusterWithChildLists>();
+        readonly Dictionary<string, ClusterWithChildLists> stringToClusters =
+            new Dictionary<string, ClusterWithChildLists>();
+
         readonly Dictionary<string, Node> nodeIdToNodes = new Dictionary<string, Node>();
 #if !SILVERLIGHT
         readonly XmlTextReader xmlTextReader;
 #endif
+
         /// <summary>
         /// an empty constructor
         /// </summary>
-        public GeometryGraphReader() { }
+        public GeometryGraphReader() {
+        }
 
         /// <summary>
         /// constructor witha given stream
         /// </summary>
         /// <param name="streamP"></param>
         public GeometryGraphReader(Stream streamP) {
-            var settings = new XmlReaderSettings { IgnoreComments = false, IgnoreWhitespace = true };
+            var settings = new XmlReaderSettings {IgnoreComments = false, IgnoreWhitespace = true};
 #if !SILVERLIGHT
             xmlTextReader = new XmlTextReader(streamP);
             XmlReader = XmlReader.Create(xmlTextReader, settings);
 #else
-            XmlReader.Create(streamP, settings);
+            XmlReader.Create(stream, settings);
 #endif
         }
 
@@ -118,8 +97,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Node FindNodeById(string id)
-        {
+        public Node FindNodeById(string id) {
             Node node;
             if (nodeIdToNodes.TryGetValue(id, out node))
                 return node;
@@ -174,16 +152,18 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             try {
                 ReadGraph();
-                return graph;
-            } finally {
+                return _graph;
+            }
+            finally {
                 Thread.CurrentThread.CurrentCulture = currentCulture;
             }
         }
+
         /// <summary>
         /// reads the layout algorithm settings
         /// </summary>
         LayoutAlgorithmSettings ReadLayoutAlgorithmSettings(XmlReader reader) {
-            LayoutAlgorithmSettings layoutSettings=null;
+            LayoutAlgorithmSettings layoutSettings = null;
             CheckToken(GeometryToken.LayoutAlgorithmSettings);
             if (reader.IsEmptyElement) {
                 reader.Read();
@@ -191,24 +171,27 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             }
             //reader.Read();
 
-            var edgeRoutingMode = (EdgeRoutingMode) GetIntAttributeOrDefault(GeometryToken.EdgeRoutingMode, (int)EdgeRoutingMode.Spline );
+            var edgeRoutingMode =
+                (EdgeRoutingMode) GetIntAttributeOrDefault(GeometryToken.EdgeRoutingMode, (int) EdgeRoutingMode.Spline);
             var str = GetAttribute(GeometryToken.LayoutAlgorithmType);
             if (XmlReader.NodeType == XmlNodeType.EndElement) {
                 //todo - support fastincremental settings
                 layoutSettings = new FastIncrementalLayoutSettings();
                 EdgeRoutingSettings routingSettings = layoutSettings.EdgeRoutingSettings;
                 routingSettings.EdgeRoutingMode = edgeRoutingMode;
-            } else {                
+            }
+            else {
                 if (str != null) {
                     var token =
                         (GeometryToken) Enum.Parse(typeof (GeometryToken), str, false);
                     if (token == GeometryToken.SugiyamaLayoutSettings) {
                         layoutSettings = ReadSugiyamaLayoutSettings(edgeRoutingMode);
-                    } else if (token == GeometryToken.MdsLayoutSettings) {
+                    }
+                    else if (token == GeometryToken.MdsLayoutSettings) {
                         var mds = new MdsLayoutSettings();
                         EdgeRoutingSettings routingSettings = mds.EdgeRoutingSettings;
                         routingSettings.EdgeRoutingMode = edgeRoutingMode;
-                   
+
                         layoutSettings = mds;
                         if (XmlReader.IsStartElement(GeometryToken.Reporting.ToString())) {
 #if REPORTING
@@ -222,7 +205,8 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
                         mds.RotationAngle = ReadDoubleElement(reader);
                         mds.ScaleX = ReadDoubleElement(reader);
                         mds.ScaleY = ReadDoubleElement(reader);
-                    } else //todo - write a reader and a writer for FastIncrementalLayoutSettings 
+                    }
+                    else //todo - write a reader and a writer for FastIncrementalLayoutSettings 
                         throw new NotImplementedException();
                 }
             }
@@ -231,12 +215,11 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             return layoutSettings;
         }
 
-        LayoutAlgorithmSettings ReadSugiyamaLayoutSettings(EdgeRoutingMode edgeRoutingMode)
-        {
+        LayoutAlgorithmSettings ReadSugiyamaLayoutSettings(EdgeRoutingMode edgeRoutingMode) {
             var sugiyama = new SugiyamaLayoutSettings();
             EdgeRoutingSettings routingSettings = sugiyama.EdgeRoutingSettings;
             routingSettings.EdgeRoutingMode = edgeRoutingMode;
-            
+
             LayoutAlgorithmSettings layoutSettings = sugiyama;
 
             sugiyama.MinNodeWidth = GetDoubleAttributeOrDefault(GeometryToken.MinNodeWidth, sugiyama.MinNodeWidth);
@@ -244,43 +227,44 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             sugiyama.AspectRatio = GetDoubleAttributeOrDefault(GeometryToken.AspectRatio, sugiyama.AspectRatio);
             sugiyama.NodeSeparation = GetDoubleAttributeOrDefault(GeometryToken.NodeSeparation, sugiyama.NodeSeparation);
             sugiyama.ClusterMargin = sugiyama.NodeSeparation;
-            
+
 #if REPORTING
             sugiyama.Reporting = GetBoolAttributeOrDefault(GeometryToken.Reporting, false);
 #endif
 
-            sugiyama.RandomSeedForOrdering = GetIntAttributeOrDefault(GeometryToken.RandomSeedForOrdering, sugiyama.RandomSeedForOrdering);
-            sugiyama.NoGainAdjacentSwapStepsBound = GetIntAttributeOrDefault(GeometryToken.NoGainStepsBound, sugiyama.NoGainAdjacentSwapStepsBound);
-            sugiyama.MaxNumberOfPassesInOrdering = GetIntAttributeOrDefault(GeometryToken.MaxNumberOfPassesInOrdering,sugiyama.MaxNumberOfPassesInOrdering);
+            sugiyama.RandomSeedForOrdering = GetIntAttributeOrDefault(GeometryToken.RandomSeedForOrdering,
+                sugiyama.RandomSeedForOrdering);
+            sugiyama.NoGainAdjacentSwapStepsBound = GetIntAttributeOrDefault(GeometryToken.NoGainStepsBound,
+                sugiyama.NoGainAdjacentSwapStepsBound);
+            sugiyama.MaxNumberOfPassesInOrdering = GetIntAttributeOrDefault(GeometryToken.MaxNumberOfPassesInOrdering,
+                sugiyama.MaxNumberOfPassesInOrdering);
             sugiyama.RepetitionCoefficientForOrdering = GetIntAttributeOrDefault(GeometryToken.
-                                                                           RepetitionCoefficientForOrdering, sugiyama.RepetitionCoefficientForOrdering);
+                RepetitionCoefficientForOrdering, sugiyama.RepetitionCoefficientForOrdering);
             sugiyama.GroupSplit = GetIntAttributeOrDefault(GeometryToken.GroupSplit, sugiyama.GroupSplit);
             sugiyama.LabelCornersPreserveCoefficient = GetDoubleAttribute(GeometryToken.LabelCornersPreserveCoefficient);
-            sugiyama.BrandesThreshold = GetIntAttributeOrDefault(GeometryToken.BrandesThreshold,sugiyama.BrandesThreshold);
-            sugiyama.LayerSeparation = GetDoubleAttributeOrDefault(GeometryToken.LayerSeparation, sugiyama.LayerSeparation);
+            sugiyama.BrandesThreshold = GetIntAttributeOrDefault(GeometryToken.BrandesThreshold,
+                sugiyama.BrandesThreshold);
+            sugiyama.LayerSeparation = GetDoubleAttributeOrDefault(GeometryToken.LayerSeparation,
+                sugiyama.LayerSeparation);
             var transform = new PlaneTransformation();
             ReadTransform(transform);
             return layoutSettings;
         }
 
 
-        void ReadTransform(PlaneTransformation transform)
-        {
+        void ReadTransform(PlaneTransformation transform) {
             XmlRead();
-            if (TokenIs(GeometryToken.Transform))
-            {
+            if (TokenIs(GeometryToken.Transform)) {
                 XmlRead();
                 for (int i = 0; i < 2; i++)
-                    for (int j = 0; j < 3; j++)
-                    {
+                    for (int j = 0; j < 3; j++) {
                         CheckToken(GeometryToken.TransformElement);
                         MoveToContent();
                         transform[i, j] = ReadElementContentAsDouble();
                     }
                 XmlRead();
             }
-            else
-            {
+            else {
                 //set the unit transform
                 transform[0, 0] = 1;
                 transform[0, 1] = 0;
@@ -297,8 +281,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
         /// <param name="tokens"></param>
         /// <returns></returns>
         [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "token")]
-        bool ReadBooleanElement(GeometryToken tokens)
-        {
+        bool ReadBooleanElement(GeometryToken tokens) {
             CheckToken(tokens);
             return ReadElementContentAsBoolean();
         }
@@ -307,20 +290,17 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
         /// 
         /// </summary>
         /// <returns></returns>
-        bool ReadElementContentAsBoolean()
-        {
+        bool ReadElementContentAsBoolean() {
             return XmlReader.ReadElementContentAsBoolean();
         }
 
-        int ReadIntElement(GeometryToken token)
-        {
+        int ReadIntElement(GeometryToken token) {
             CheckToken(token);
             return ReadElementContentAsInt();
         }
 
 
-        static double ReadDoubleElement(XmlReader r)
-        {
+        static double ReadDoubleElement(XmlReader r) {
             return r.ReadElementContentAsDouble();
         }
 
@@ -328,6 +308,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
          SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
         void ReadGraph() {
             MoveToContent();
+            _graph.Margins = GetDoubleAttributeOrDefault(GeometryToken.Margins, 10);
             if (XmlReader.Name.ToLower() != GeometryToken.Graph.ToString().ToLower())
                 Error("expecting element \"graph\"");
             bool done = false;
@@ -347,6 +328,9 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
                         break;
                     case GeometryToken.LgLevels:
                         ReadLgLevels();
+                        break;
+                    case GeometryToken.LgSkeletonLevels:
+                        ReadLgSkeletonLevels();
                         break;
                     case GeometryToken.End:
                     case GeometryToken.Graph:
@@ -370,29 +354,36 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
                         //                        ReadEdges();
                 }
             } while (!done);
-            graph.BoundingBox = graph.PumpTheBoxToTheGraphWithMargins();
+            _graph.BoundingBox = _graph.PumpTheBoxToTheGraphWithMargins();
         }
 
         void ReadLgLevels() {
-            LgData lgData = new LgData(graph);
-            graph.LgData = lgData;
+            LgData lgData = new LgData(_graph);
+            _graph.LgData = lgData;
             FillLgData(lgData);
             ReadEndElement();
         }
 
+        void ReadLgSkeletonLevels() {
+            XmlRead();
+            ReadSkeletonLevels(_graph.LgData);
+            ReadEndElement();
+        }
+
         void FillLgData(LgData lgData) {
+
             XmlRead();
             if (TokenIs(GeometryToken.LgEdgeInfos))
                 ReadLgEdgeInfos(lgData);
             if (TokenIs(GeometryToken.LgNodeInfos)) {
                 ReadLgNodeInfos(lgData);
-            } 
+            }
             ReadLevels(lgData);
         }
 
         void ReadLgEdgeInfos(LgData lgData) {
             XmlRead();
-            while(TokenIs(GeometryToken.LgEdgeInfo))
+            while (TokenIs(GeometryToken.LgEdgeInfo))
                 ReadLgEdgeInfo(lgData);
             ReadEndElement();
         }
@@ -409,10 +400,20 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
 
         void ReadLevels(LgData lgData) {
             int zoomLevel = 1;
-            while (GetElementTag() == GeometryToken.Level)
-            {
-                ReadLevel(lgData, zoomLevel);
-                zoomLevel *= 2;
+            while (GetElementTag() == GeometryToken.Level) {
+                var dZoomLevel = GetDoubleAttributeOrDefault(GeometryToken.Zoomlevel, zoomLevel);
+                ReadLevel(lgData, (int) dZoomLevel);
+                zoomLevel = 2*(int) dZoomLevel;
+
+            }
+        }
+
+        void ReadSkeletonLevels(LgData lgData) {
+            int zoomLevel = 1;
+            while (GetElementTag() == GeometryToken.SkeletonLevel) {
+                var dZoomLevel = GetDoubleAttributeOrDefault(GeometryToken.Zoomlevel, zoomLevel);
+                ReadSkeletonLevel(lgData, (int) dZoomLevel);
+                zoomLevel = 2*(int) dZoomLevel;
             }
         }
 
@@ -422,18 +423,40 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
                 lgData.LevelNodeCounts = new List<int>();
             }
             lgData.LevelNodeCounts.Add(levelNodeCount);
-            LgLevel level = new LgLevel(zoomLevel, graph);
+            LgLevel level = new LgLevel(zoomLevel, _graph);
             lgData.Levels.Add(level);
             XmlRead();
             Dictionary<string, Set<string>> edgeIdToEdgeRailsSet = new Dictionary<string, Set<string>>();
             ReadRailIdsPerEdgeIds(lgData, edgeIdToEdgeRailsSet);
             ReadRails(level);
             ReadEndElement();
-            ReadEndElement();
-            level.CreateRailTree();
+            FillRailsOfEdges(level, edgeIdToEdgeRailsSet);
         }
 
-        
+        void ReadSkeletonLevel(LgData lgData, int zoomLevel) {
+            LgSkeletonLevel level = new LgSkeletonLevel() {ZoomLevel = zoomLevel};
+            lgData.SkeletonLevels.Add(level);
+
+            if (XmlReader.IsEmptyElement) {
+                XmlRead();
+                return;
+            }
+
+            XmlRead();
+            //ReadSkeletonRails(level);            
+            ReadEndElement();
+            //level.CreateRailTree();
+        }
+
+        void FillRailsOfEdges(LgLevel level, Dictionary<string, Set<string>> edgeIdToEdgeRailsSet) {
+            foreach (var edgeRails in edgeIdToEdgeRailsSet) {
+                var edge = idToEdges[edgeRails.Key];
+                var railSet = new Set<Rail>(edgeRails.Value.Where(s => s != "").Select(r => idToRails[r]));
+                level._railsOfEdges[edge] = railSet;
+            }
+        }
+
+
         void ReadRailIdsPerEdgeIds(LgData lgData, Dictionary<string, Set<string>> edgeIdToEdgeRailsSet) {
             XmlRead();
             while (TokenIs(GeometryToken.EdgeRails))
@@ -465,20 +488,52 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
         }
 
         void ReadRails(LgLevel level) {
+            //CheckToken(GeometryToken.Rails);
+            //XmlRead();
+            //while (TokenIs(GeometryToken.Rail)) {
+            //    ReadRail(level);
+            //}
+
             CheckToken(GeometryToken.Rails);
+            if (XmlReader.IsEmptyElement) {
+                XmlRead();
+                return;
+            }
             XmlRead();
             while (TokenIs(GeometryToken.Rail)) {
                 ReadRail(level);
             }
+            ReadEndElement();
+        }
+
+        void ReadSkeletonRails(LgSkeletonLevel level) {
+            CheckToken(GeometryToken.Rails);
+            if (XmlReader.IsEmptyElement) {
+                XmlRead();
+                return;
+            }
+            XmlRead();
+            while (TokenIs(GeometryToken.Rail)) {
+                ReadSkeletonRail(level);
+            }
+            ReadEndElement();
         }
 
         void ReadRail(LgLevel level) {
             string railId = GetAttribute(GeometryToken.Id);
-            int zoomLevel = (int)GetDoubleAttribute(GeometryToken.Zoomlevel);
+            int zoomLevel = (int) GetDoubleAttribute(GeometryToken.Zoomlevel);
+            double minPassigEdgeZoomLevel =
+                (double) GetDoubleAttributeOrDefault(GeometryToken.MinPassingEdgeZoomLevel, zoomLevel);
             var topRankedEdgoInfo = GetTopRankedEdgeInfoOfRail(railId);
             Rail rail = ContinueReadingRail(topRankedEdgoInfo, zoomLevel, level);
-            idToRails[railId] = rail;      
-            
+            rail.MinPassingEdgeZoomLevel = minPassigEdgeZoomLevel;
+            idToRails[railId] = rail;
+
+        }
+
+        void ReadSkeletonRail(LgSkeletonLevel level) {
+            // do not save rails in skeleton level;
+            return;
         }
 
         Rail ContinueReadingRail(LgEdgeInfo topRankedEdgoInfo, int zoomLevel, LgLevel level) {
@@ -494,7 +549,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
                 XmlRead();
                 ReadEndElement();
                 var rail = new Rail(ah, attachmentPoint, topRankedEdgoInfo, zoomLevel);
-                var tuple = new Tuple<Point, Point>(arrowheadPosition, attachmentPoint);
+                var tuple = new SymmetricSegment(arrowheadPosition, attachmentPoint);
                 level._railDictionary[tuple] = rail;
                 return rail;
             }
@@ -502,25 +557,25 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             if (TokenIs(GeometryToken.LineSegment)) {
                 pointString = GetAttribute(GeometryToken.Points);
                 var linePoints = ParsePoints(pointString);
-                Debug.Assert(linePoints.Length==2);
+                Debug.Assert(linePoints.Length == 2);
                 LineSegment ls = new LineSegment(linePoints[0], linePoints[1]);
                 XmlRead();
                 ReadEndElement();
-                var rail= new Rail(ls,topRankedEdgoInfo,zoomLevel);
-                var tuple = new Tuple<Point, Point>(ls.Start, ls.End);
+                var rail = new Rail(ls, topRankedEdgoInfo, zoomLevel);
+                var tuple = new SymmetricSegment(ls.Start, ls.End);
                 level._railDictionary[tuple] = rail;
+                level._railTree.Add(ls.BoundingBox, rail);
                 return rail;
             }
-            if (TokenIs(GeometryToken.CubicBezierSegment))
-            {
+            if (TokenIs(GeometryToken.CubicBezierSegment)) {
                 pointString = GetAttribute(GeometryToken.Points);
                 var controlPoints = ParsePoints(pointString);
                 Debug.Assert(controlPoints.Length == 4);
                 var bs = new CubicBezierSegment(controlPoints[0], controlPoints[1], controlPoints[2], controlPoints[3]);
                 XmlRead();
                 ReadEndElement();
-                var rail= new Rail(bs, topRankedEdgoInfo, zoomLevel);
-                var tuple = new Tuple<Point, Point>(bs.Start, bs.End);
+                var rail = new Rail(bs, topRankedEdgoInfo, zoomLevel);
+                var tuple = new SymmetricSegment(bs.Start, bs.End);
                 level._railDictionary[tuple] = rail;
                 return rail;
             }
@@ -528,7 +583,15 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
         }
 
         LgEdgeInfo GetTopRankedEdgeInfoOfRail(string railId) {
+            if (!railIdsToTopRankedEdgeInfo.ContainsKey(railId))
+                return null;
             return railIdsToTopRankedEdgeInfo[railId];
+        }
+
+        LgEdgeInfo GetTopRankedEdgeInfoOfSkeletonRail(string railId) {
+            if (railIdsToTopRankedEdgeInfo.ContainsKey(railId))
+                return railIdsToTopRankedEdgeInfo[railId];
+            return null;
         }
 
         void ReadLgNodeInfos(LgData lgData) {
@@ -541,18 +604,21 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             ReadEndElement();
         }
 
-        void ReadLgNodeInfo(LgData lgData) {            
+        void ReadLgNodeInfo(LgData lgData) {
             var nodeId = GetAttribute(GeometryToken.Id);
             var nodeInfo = new LgNodeInfo(nodeIdToNodes[nodeId]) {
                 Rank = GetDoubleAttribute(GeometryToken.Rank),
-                ZoomLevel = GetDoubleAttribute(GeometryToken.Zoomlevel)
+                ZoomLevel = GetDoubleAttribute(GeometryToken.Zoomlevel),
+                LabelVisibleFromScale = GetDoubleAttributeOrDefault(GeometryToken.LabelVisibleFromScale, 1.0),
+                LabelWidthToHeightRatio = GetDoubleAttributeOrDefault(GeometryToken.LabelWidthToHeightRatio, 1.0),
+                LabelOffset = TryGetPointAttribute(GeometryToken.LabelOffset)
             };
             lgData.SortedLgNodeInfos.Add(nodeInfo);
             lgData.GeometryNodesToLgNodeInfos[nodeIdToNodes[nodeId]] = nodeInfo;
             XmlRead();
         }
 
-        GeometryToken GetElementTag() {            
+        GeometryToken GetElementTag() {
             if (XmlReader.NodeType == XmlNodeType.EndElement &&
                 XmlReader.Name == "graph")
                 return GeometryToken.End;
@@ -561,7 +627,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
                 return GeometryToken.Graph;
             if (Enum.TryParse(XmlReader.Name, true, out token))
                 return token;
-            throw new InvalidOperationException();
+            return GeometryToken.Unknown;
         }
 
         void ReadClusters() {
@@ -576,9 +642,9 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
                     rootClusterSet.Insert(cluster);
 
             if (rootClusterSet.Count == 1)
-                graph.RootCluster = rootClusterSet.First();
+                _graph.RootCluster = rootClusterSet.First();
             else {
-                graph.RootCluster.AddRangeOfCluster(rootClusterSet);
+                _graph.RootCluster.AddRangeOfCluster(rootClusterSet);
             }
 
             if (!XmlReader.IsStartElement())
@@ -596,9 +662,9 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1304:SpecifyCultureInfo", MessageId = "System.String.ToLower")]
-        void ReadCluster()
-        {
-            var cluster = new Cluster { RectangularBoundary = new RectangularClusterBoundary() }; var clusterWithChildLists = new ClusterWithChildLists(cluster);
+        void ReadCluster() {
+            var cluster = new Cluster {RectangularBoundary = new RectangularClusterBoundary()};
+            var clusterWithChildLists = new ClusterWithChildLists(cluster);
             cluster.Barycenter = TryGetPointAttribute(GeometryToken.Barycenter);
             var clusterId = GetAttribute(GeometryToken.Id);
             stringToClusters[clusterId] = clusterWithChildLists;
@@ -620,13 +686,13 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             }
 
             if (XmlReader.NodeType != XmlNodeType.EndElement)
-                cluster.RectangularBoundary = ReadClusterRectBoundary(); 
-            
+                cluster.RectangularBoundary = ReadClusterRectBoundary();
+
             ReadEndElement();
         }
 
         RectangularClusterBoundary ReadClusterRectBoundary() {
-            RectangularClusterBoundary recClBnd=new RectangularClusterBoundary {
+            RectangularClusterBoundary recClBnd = new RectangularClusterBoundary {
                 LeftMargin = GetDoubleAttribute(GeometryToken.LeftMargin),
                 RightMargin = GetDoubleAttribute(GeometryToken.RightMargin),
                 TopMargin = GetDoubleAttribute(GeometryToken.TopMargin),
@@ -642,7 +708,8 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             }
 
             recClBnd.GenerateFixedConstraints = GetBoolAttributeOrDefault(GeometryToken.GenerateFixedConstraints, false);
-            recClBnd.GenerateFixedConstraintsDefault = GetBoolAttributeOrDefault(GeometryToken.GenerateFixedConstraintsDefault, false);
+            recClBnd.GenerateFixedConstraintsDefault =
+                GetBoolAttributeOrDefault(GeometryToken.GenerateFixedConstraintsDefault, false);
 
             recClBnd.MinHeight = GetDoubleAttribute(GeometryToken.MinNodeHeight);
             recClBnd.MinWidth = GetDoubleAttribute(GeometryToken.MinNodeWidth);
@@ -656,22 +723,22 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
 
             XmlRead();
             ReadRectParams(out left, out bottom, out w, out h, out rx, out ry);
-            recClBnd.Rect=new Rectangle(left, bottom, new Point(w,h));
+            recClBnd.Rect = new Rectangle(left, bottom, new Point(w, h));
             recClBnd.RadiusX = rx;
-            recClBnd.RadiusY=ry;
+            recClBnd.RadiusY = ry;
 
 
-            recClBnd.RightBorderInfo=ReadBorderInfo(GeometryToken.RightBorderInfo);
-            recClBnd.LeftBorderInfo= ReadBorderInfo(GeometryToken.LeftBorderInfo);
-            recClBnd.TopBorderInfo= ReadBorderInfo(GeometryToken.TopBorderInfo);
-            recClBnd.BottomBorderInfo= ReadBorderInfo(GeometryToken.BottomBorderInfo);
+            recClBnd.RightBorderInfo = ReadBorderInfo(GeometryToken.RightBorderInfo);
+            recClBnd.LeftBorderInfo = ReadBorderInfo(GeometryToken.LeftBorderInfo);
+            recClBnd.TopBorderInfo = ReadBorderInfo(GeometryToken.TopBorderInfo);
+            recClBnd.BottomBorderInfo = ReadBorderInfo(GeometryToken.BottomBorderInfo);
             XmlRead();
             ReadEndElement();
             return recClBnd;
         }
 
         BorderInfo ReadBorderInfo(GeometryToken token) {
-            XmlRead();            
+            XmlRead();
             CheckToken(token);
             var bi = new BorderInfo {
                 InnerMargin = GetDoubleAttribute(GeometryToken.InnerMargin),
@@ -690,7 +757,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
         void ReadChildNodes(List<string> childNodes) {
             var nodeIds = GetAttribute(GeometryToken.ChildNodes);
             if (string.IsNullOrEmpty(nodeIds)) return;
-            childNodes.AddRange(nodeIds.Split(' '));            
+            childNodes.AddRange(nodeIds.Split(' '));
         }
 
         void ReadEdges() {
@@ -706,9 +773,9 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             Node s = ReadSourceNode();
             Node t = ReadTargetNode();
             var edge = new Edge(s, t) {
-                Separation = (int)GetDoubleAttributeOrDefault(GeometryToken.Separation, 1),
+                Separation = (int) GetDoubleAttributeOrDefault(GeometryToken.Separation, 1),
                 LineWidth = GetDoubleAttributeOrDefault(GeometryToken.LineWidth, 1),
-                Weight = (int)GetDoubleAttributeOrDefault(GeometryToken.Weight, 1),
+                Weight = (int) GetDoubleAttributeOrDefault(GeometryToken.Weight, 1),
 
             };
             string id = GetAttribute(GeometryToken.Id);
@@ -724,9 +791,9 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             ReadArrowheadAtSource(edge);
             ReadArrowheadAtTarget(edge);
             ReadLabelFromAttribute(edge);
-            bool breakTheLoop=false;
+            bool breakTheLoop = false;
             //edge.UnderlyingPolyline = ReadUnderlyingPolyline();
-            graph.Edges.Add(edge);
+            _graph.Edges.Add(edge);
             if (XmlReader.IsEmptyElement) {
                 XmlReader.Skip();
                 return;
@@ -736,7 +803,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
                 GeometryToken token = GetElementTag();
                 switch (token) {
                     case GeometryToken.Curve:
-                        edge.Curve = ReadICurve();                       
+                        edge.Curve = ReadICurve();
                         break;
                     case GeometryToken.LineSegment:
                         edge.Curve = ReadLineSeg();
@@ -746,7 +813,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
                         breakTheLoop = true;
                         break;
                     case GeometryToken.Polyline:
-                        
+
                         break;
                     default:
                         breakTheLoop = true;
@@ -776,7 +843,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
         Point ParsePoint(string str) {
             var xy = str.Split(' ').ToArray();
             Debug.Assert(xy.Length == 2);
-            double x,y;
+            double x, y;
             if (double.TryParse(xy[0], out x) && double.TryParse(xy[1], out y))
                 return new Point(x, y);
             Error("invalid point format" + str);
@@ -788,7 +855,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             Debug.Assert(tokens.Length%2 == 0);
             Point[] ret = new Point[tokens.Length/2];
             for (int i = 0; i < tokens.Length - 1; i += 2) {
-                double x,y;
+                double x, y;
                 if (double.TryParse(tokens[i], out x) && double.TryParse(tokens[i + 1], out y))
                     ret[i/2] = new Point(x, y);
                 else
@@ -799,7 +866,8 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
 
         void ReadArrowheadAtTarget(Edge edge) {
             var str = GetAttribute(GeometryToken.At);
-            var arrowhead=edge.EdgeGeometry.TargetArrowhead = str != null ? new Arrowhead { TipPosition = ParsePoint(str) } : null;
+            var arrowhead =
+                edge.EdgeGeometry.TargetArrowhead = str != null ? new Arrowhead {TipPosition = ParsePoint(str)} : null;
             if (arrowhead != null)
                 arrowhead.Length = GetDoubleAttributeOrDefault(GeometryToken.Atl, Arrowhead.DefaultArrowheadLength);
             else {
@@ -825,14 +893,14 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
                 edge.Label = label;
             }
         }
-    
+
 
         void ParseLabel(string str, out Point center, out double width, out double height) {
             var ss = str.Split(' ');
             Debug.Assert(ss.Length == 4);
-            
+
             center = new Point(ParseDouble(ss[0]), ParseDouble(ss[1]));
-            width=ParseDouble(ss[2]);
+            width = ParseDouble(ss[2]);
             height = ParseDouble(ss[3]);
         }
 
@@ -896,8 +964,8 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             if (nodeIdToNodes.TryGetValue(id, out ret))
                 return ret;
 
-             return stringToClusters[id].Cluster;
-           
+            return stringToClusters[id].Cluster;
+
         }
 
         void ReadNodes() {
@@ -914,10 +982,10 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             string nodeId = GetMustAttribute(GeometryToken.Id);
             double nodePadding = GetDoubleAttributeOrDefault(GeometryToken.Padding, NodeDefaultPadding);
             XmlRead();
-            var node = new Node(ReadICurve()) { Padding = nodePadding, UserData = nodeId };
+            var node = new Node(ReadICurve()) {Padding = nodePadding, UserData = nodeId};
             if (node.BoundaryCurve == null)
                 throw new InvalidOperationException();
-            graph.Nodes.Add(node);
+            _graph.Nodes.Add(node);
             XmlReader.Skip();
             ReadEndElement();
             nodeIdToNodes[nodeId] = node;
@@ -940,9 +1008,9 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             return null;
         }
 
-        [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
-        int GetIntAttribute(GeometryToken token)
-        {
+        [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider",
+            MessageId = "System.String.Format(System.String,System.Object)")]
+        int GetIntAttribute(GeometryToken token) {
             var val = GetAttribute(token);
             if (val == null)
                 Error(String.Format("attribute {0} not found", token));
@@ -953,7 +1021,8 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             return 0;
         }
 
-        [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
+        [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider",
+            MessageId = "System.String.Format(System.String,System.Object)")]
         double GetDoubleAttribute(GeometryToken token) {
             var val = GetAttribute(token);
             if (val == null)
@@ -964,6 +1033,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             Error("cannot parse an int value " + val);
             return 0;
         }
+
         double GetDoubleAttributeOrDefault(GeometryToken token, double defaultVal) {
             string val = GetAttribute(token);
             if (val == null)
@@ -998,8 +1068,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
         }
 
 
-        Point TryGetPointAttribute(GeometryToken token)
-        {
+        Point TryGetPointAttribute(GeometryToken token) {
             string val = GetAttribute(token);
             return val == null ? new Point() : ParsePoint(val);
         }
@@ -1038,11 +1107,11 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
         ICurve ReadPolygon() {
             var pointString = GetMustAttribute(GeometryToken.Points);
             var t = pointString.Split(' ');
-            if(t.Length==0 || t.Length%2!=0)
+            if (t.Length == 0 || t.Length%2 != 0)
                 Error("invalid input for the polygon");
             var poly = new Polyline {Closed = true};
-            for(int i=0;i<t.Length;i+=2)
-                poly.AddPoint(new Point(ParseDouble(t[i]), ParseDouble(t[i+1])));
+            for (int i = 0; i < t.Length; i += 2)
+                poly.AddPoint(new Point(ParseDouble(t[i]), ParseDouble(t[i + 1])));
             return poly;
         }
 
@@ -1058,7 +1127,8 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             return new RoundedRect(box, rx, ry);
         }
 
-        void ReadRectParams(out double x, out double y, out double width, out double height, out double rx, out double ry) {
+        void ReadRectParams(out double x, out double y, out double width, out double height, out double rx,
+            out double ry) {
             x = GetDoubleAttributeOrDefault(GeometryToken.X, 0);
             y = GetDoubleAttributeOrDefault(GeometryToken.Y, 0);
             width = ParseDouble(GetMustAttribute(GeometryToken.Width));
@@ -1089,9 +1159,9 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
         }
 
         ICurve ParseCurve(string curveData) {
-            var curve=new Curve();
+            var curve = new Curve();
             var curveStream = new CurveStream(curveData);
-            var currentPoint=new Point();
+            var currentPoint = new Point();
             do {
                 var curveStreamElement = curveStream.GetNextCurveStreamElement();
                 if (curveStreamElement == null)
@@ -1106,10 +1176,8 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
         }
 
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
-        void AddCurveSegment(CurveStream curveStream, char c, Curve curve, ref Point currentPoint)
-        {
-            switch (c)
-            {
+        void AddCurveSegment(CurveStream curveStream, char c, Curve curve, ref Point currentPoint) {
+            switch (c) {
                 case 'M': //moveto
                     currentPoint = GetNextPointFromCurveData(curveStream);
                     break;
@@ -1135,7 +1203,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
                 case 'v': //lineto vertical relative
                     throw new NotImplementedException();
                 case 'C': //cubic Bezier
-                    ProceedWithCubicBeziers(curve,curveStream, ref currentPoint);
+                    ProceedWithCubicBeziers(curve, curveStream, ref currentPoint);
                     break;
                 case 'c': //cubic Bezier relative
                     throw new NotImplementedException();
@@ -1164,9 +1232,9 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
 
         void ProceedWithCubicBeziers(Curve curve, CurveStream curveStream, ref Point currentPoint) {
             do {
-                curve.AddSegment(new CubicBezierSegment(currentPoint, GetNextPointFromCurveData(curveStream), GetNextPointFromCurveData(curveStream),currentPoint=GetNextPointFromCurveData(curveStream)));
-            }
-            while (curveStream.PickNextCurveStreamElement() is DoubleStreamElement);
+                curve.AddSegment(new CubicBezierSegment(currentPoint, GetNextPointFromCurveData(curveStream),
+                    GetNextPointFromCurveData(curveStream), currentPoint = GetNextPointFromCurveData(curveStream)));
+            } while (curveStream.PickNextCurveStreamElement() is DoubleStreamElement);
         }
 
         void ReadEllepticalArc(Curve curve, CurveStream curveStream, ref Point currentPoint) {
@@ -1199,58 +1267,60 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             var scaleMatrix = new PlaneTransformation(1, 0, 0, 0, yScale, 0);
             var transform = scaleMatrix*rotationMatrix;
             var start = transform*currentPoint;
-            currentPoint=endPoint;
+            currentPoint = endPoint;
             var end = transform*endPoint;
             Point center;
             double startAngle;
             double endAngle;
             Point axisY;
             GetArcCenterAndAngles(rx, largeArcFlag, sweepFlag, start, end, out center, out startAngle, out endAngle,
-                                  out axisY);
+                out axisY);
             var inverted = transform.Inverse;
             center = inverted*center;
             var rotation = PlaneTransformation.Rotation(xAxisRotation);
             var axisX = rotation*new Point(rx, 0);
-            axisY = rotation * (axisY / yScale);
-            var ret=new Ellipse(startAngle, endAngle, axisX, axisY, center);
+            axisY = rotation*(axisY/yScale);
+            var ret = new Ellipse(startAngle, endAngle, axisX, axisY, center);
 
             Debug.Assert(ApproximateComparer.Close(ret.End, endPoint));
             return ret;
         }
 
-        void GetArcCenterAndAngles(double r, int largeArcFlag, int sweepFlag, Point start, Point end, out Point center, out double startAngle, out double endAngle,  out Point axisY) {
+        void GetArcCenterAndAngles(double r, int largeArcFlag, int sweepFlag, Point start, Point end, out Point center,
+            out double startAngle, out double endAngle, out Point axisY) {
             var d = end - start;
-            var dLenSquared=d.LengthSquared;//use it to get more precision
-            var dLen=d.Length;
+            var dLenSquared = d.LengthSquared; //use it to get more precision
+            var dLen = d.Length;
 //            if(dLen<r-ApproximateComparer.DistanceEpsilon)
 //                Error("arc radius is too small");
 
-            var middle = (start + end) / 2;
+            var middle = (start + end)/2;
 
             //the circle center belongs to the perpendicular to d passing through 'middle'
             d /= dLen;
-            var perp = new Point(d.Y, -d.X) * Math.Sqrt(r * r - dLenSquared / 4);
-            center = sweepFlag == 1 && largeArcFlag == 0 || sweepFlag == 0 && largeArcFlag == 1 ? middle - perp : middle + perp;
-            var axisX=new Point(r,0);
+            var perp = new Point(d.Y, -d.X)*Math.Sqrt(r*r - dLenSquared/4);
+            center = sweepFlag == 1 && largeArcFlag == 0 || sweepFlag == 0 && largeArcFlag == 1
+                ? middle - perp
+                : middle + perp;
+            var axisX = new Point(r, 0);
             axisY = sweepFlag == 1 ? new Point(0, r) : new Point(0, -r);
             startAngle = Point.Angle(axisX, start - center);
-            if(sweepFlag==0)
-                startAngle=2*Math.PI-startAngle;
+            if (sweepFlag == 0)
+                startAngle = 2*Math.PI - startAngle;
 
             endAngle = Point.Angle(axisX, end - center);
             if (sweepFlag == 0)
-                endAngle = 2 * Math.PI - endAngle;
-            if(ApproximateComparer.Close(endAngle,startAngle) && largeArcFlag==1)
-                endAngle+=2*Math.PI;
-            else if (endAngle<startAngle)
-                endAngle += 2 * Math.PI;
+                endAngle = 2*Math.PI - endAngle;
+            if (ApproximateComparer.Close(endAngle, startAngle) && largeArcFlag == 1)
+                endAngle += 2*Math.PI;
+            else if (endAngle < startAngle)
+                endAngle += 2*Math.PI;
         }
 
         void ProceedWithLines(Curve curve, CurveStream curveStream, ref Point currentPoint) {
             do {
                 curve.AddSegment(new LineSegment(currentPoint, currentPoint = GetNextPointFromCurveData(curveStream)));
-            }
-            while (curveStream.PickNextCurveStreamElement() is DoubleStreamElement);
+            } while (curveStream.PickNextCurveStreamElement() is DoubleStreamElement);
         }
 
         Point GetNextPointFromCurveData(CurveStream curveStream) {
@@ -1263,7 +1333,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
                 Error("cannot parse curveData");
 
             var d = a as DoubleStreamElement;
-            if(d==null)
+            if (d == null)
                 Error("cannot parse curveData");
 // ReSharper disable PossibleNullReferenceException
             return d.Double;
@@ -1293,8 +1363,8 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             var ss = str.Split(' ');
             if (ss.Length != 4)
                 Error("wrong number of points in LineSegment");
-            var ds=ss.Select(ParseDouble).ToArray();
-            return new LineSegment(new Point(ds[0], ds[1]), new Point(ds[2],ds[3]));
+            var ds = ss.Select(ParseDouble).ToArray();
+            return new LineSegment(new Point(ds[0], ds[1]), new Point(ds[2], ds[3]));
         }
 
         ICurve ReadEllipse() {
@@ -1307,7 +1377,8 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
 
 
         bool TokenIs(GeometryToken t) {
-            return XmlReader.IsStartElement(GeometryGraphWriter.FirstCharToLower(t)) || XmlReader.IsStartElement(t.ToString());
+            return XmlReader.IsStartElement(GeometryGraphWriter.FirstCharToLower(t)) ||
+                   XmlReader.IsStartElement(t.ToString());
         }
 
 
@@ -1448,11 +1519,12 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
         ///<param name="token">the token that should be here</param>
         ///</summary>
         void CheckToken(GeometryToken token) {
-            if (!XmlReader.IsStartElement(GeometryGraphWriter.FirstCharToLower(token)) && !XmlReader.IsStartElement(token.ToString())) {
+            if (!XmlReader.IsStartElement(GeometryGraphWriter.FirstCharToLower(token)) &&
+                !XmlReader.IsStartElement(token.ToString())) {
                 string positionInfo = GetPositionInfo();
                 throw new InvalidDataException(
                     String.Format(CultureInfo.InvariantCulture,
-                                  "expected {0}, {1}", token, positionInfo));
+                        "expected {0}, {1}", token, positionInfo));
             }
         }
 
@@ -1463,7 +1535,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
 #else
             if (xmlTextReader != null)
                 return String.Format(CultureInfo.InvariantCulture, "line {0} col {1}", xmlTextReader.LineNumber,
-                                     xmlTextReader.LinePosition);
+                    xmlTextReader.LinePosition);
             return String.Empty;
 #endif
         }
@@ -1506,6 +1578,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
         int ReadElementContentAsInt() {
             return XmlReader.ReadElementContentAsInt();
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -1516,6 +1589,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
                 xmlTextReader.Close();
 #endif
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -1523,7 +1597,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-    }    
+    }
 }
 
 #endif

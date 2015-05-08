@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Msagl.Core;
@@ -38,30 +10,42 @@ namespace Microsoft.Msagl.Routing.Visibility {
 
         // This member is accessed a lot.  Using a field instead of a property for performance.
         readonly internal Point Point;
-
-        readonly List<VisibilityEdge> inEdges=new List<VisibilityEdge>();
+        bool _isTerminal;
+        bool _isShortestPathTerminal;
+        readonly List<VisibilityEdge> _inEdges=new List<VisibilityEdge>();
 
         internal List<VisibilityEdge> InEdges {
-            get { return inEdges; }
+            get { return _inEdges; }
         }
 
-        readonly RbTree<VisibilityEdge> outEdges;
+        readonly RbTree<VisibilityEdge> _outEdges;
        /* VisibilityEdge prev; */
 
         /// <summary>
         /// this collection is sorted by the target point, in the lexicographical order
         /// </summary>
         internal RbTree<VisibilityEdge> OutEdges {
-            get { return outEdges; }
+            get { return _outEdges; }
         }
 
         internal int Degree {
-            get { return InEdges.Count+OutEdges.Count; }            
+            get { return InEdges.Count + OutEdges.Count; }
         }
         /// <summary>
         /// needed for shortest path calculations
         /// </summary>
         internal double Distance { get;set;}
+
+        internal bool IsTerminal {
+            get { return _isTerminal; }
+            set { _isTerminal = value; }
+        }
+
+        internal bool IsShortestPathTerminal {
+            get { return _isShortestPathTerminal; }
+            set { _isShortestPathTerminal = value; }
+        }
+
 
 /*
         /// <summary>
@@ -81,7 +65,7 @@ namespace Microsoft.Msagl.Routing.Visibility {
         }
         */
         internal VisibilityVertex(Point point) {
-            outEdges = new RbTree<VisibilityEdge>(this);
+            _outEdges = new RbTree<VisibilityEdge>(this);
             Point = point;
         }
 
@@ -154,11 +138,13 @@ namespace Microsoft.Msagl.Routing.Visibility {
 
         #region IComparer<VisibilityEdge>
         public int Compare(VisibilityEdge a, VisibilityEdge b) {
-            ValidateArg.IsNotNull(a, "a");
-            ValidateArg.IsNotNull(b, "b");
             return a.TargetPoint.CompareTo(b.TargetPoint);
         }
         #endregion // IComparer<VisibilityEdge>
 
+        public void ClearEdges() {
+            _outEdges.Clear();
+            _inEdges.Clear();
+        }
     }
 }

@@ -1,33 +1,6 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.Msagl.Core;
 using Microsoft.Msagl.Core.DataStructures;
@@ -58,6 +31,7 @@ namespace Microsoft.Msagl.Miscellaneous
         /// <summary>
         /// Calculates the graph layout
         /// </summary>
+        /// <exception cref="CancelException">Thrown when the layout is canceled.</exception>
 #else
         /// <summary>
         /// Calculates the graph layout
@@ -92,22 +66,24 @@ namespace Microsoft.Msagl.Miscellaneous
                 var sugiyamaLayoutSettings = settings as SugiyamaLayoutSettings;
                 if (sugiyamaLayoutSettings != null)
                     ProcessSugiamaLayout(geometryGraph, sugiyamaLayoutSettings, cancelToken);
-                else
-                    InitLargeLayout(geometryGraph, settings, cancelToken);
+                else {
+                    Debug.Assert(settings is LgLayoutSettings);
+                    LayoutLargeGraphWithLayers(geometryGraph, settings, cancelToken);
+                }
             }
         }
 
         /// <summary>
-        /// initializes large layout algorithm
+        /// calculates all data necessery for large graph browsing
         /// </summary>
         /// <param name="geometryGraph"></param>
         /// <param name="settings"></param>
         /// <param name="cancelToken"></param>
-        static public void InitLargeLayout(GeometryGraph geometryGraph, LayoutAlgorithmSettings settings, CancelToken cancelToken) {
+        static public void LayoutLargeGraphWithLayers(GeometryGraph geometryGraph, LayoutAlgorithmSettings settings, CancelToken cancelToken) {
             var largeGraphLayoutSettings = (LgLayoutSettings) settings;
             var largeGraphLayout = new LgInteractor(geometryGraph, largeGraphLayoutSettings, cancelToken);
-            largeGraphLayoutSettings.Algorithm = largeGraphLayout;
-            largeGraphLayout.Initialize();
+            largeGraphLayoutSettings.Interactor = largeGraphLayout;
+            largeGraphLayout.Run();
         }
 
         static void ProcessSugiamaLayout(GeometryGraph geometryGraph, SugiyamaLayoutSettings sugiyamaLayoutSettings, CancelToken cancelToken) {
@@ -156,10 +132,9 @@ namespace Microsoft.Msagl.Miscellaneous
 
         static void PrepareGraphForInitialLayoutByCluster(GeometryGraph geometryGraph,
             SugiyamaLayoutSettings sugiyamaLayoutSettings) {
-            foreach (var cluster in geometryGraph.RootCluster.AllClustersDepthFirst())
-            {
-                if (cluster.RectangularBoundary == null)
-                    cluster.RectangularBoundary = new RectangularClusterBoundary() {TopMargin = 10};
+            foreach (var cluster in geometryGraph.RootCluster.AllClustersDepthFirst()) {
+                if (cluster.RectangularBoundary == null) {}
+                cluster.RectangularBoundary = new RectangularClusterBoundary() {TopMargin = 10};
 
                 if (cluster.BoundaryCurve == null) {
                     cluster.BoundaryCurve = new RoundedRect(new Rectangle(0, 0, 10, 10), 3, 3);

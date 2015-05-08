@@ -1,46 +1,26 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Microsoft.Msagl.Core.DataStructures;
+using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Routing.Visibility;
 
 namespace Microsoft.Msagl.Routing {
     internal class SingleSourceSingleTargetShortestPathOnVisibilityGraph {
-        readonly VisibilityVertex source;
-        readonly VisibilityVertex target;
+        readonly VisibilityVertex _source;
+        readonly VisibilityVertex _target;
         VisibilityGraph _visGraph;
+        double _lengthMultiplier = 1;
+        public double LengthMultiplier {
+            get { return _lengthMultiplier; }
+            set { _lengthMultiplier = value; }
+        }
+
         internal SingleSourceSingleTargetShortestPathOnVisibilityGraph(VisibilityGraph visGraph, VisibilityVertex sourceVisVertex, VisibilityVertex targetVisVertex) {
             _visGraph = visGraph;
-            source = sourceVisVertex;
-            target = targetVisVertex;
-            source.Distance = 0;
+            _source = sourceVisVertex;
+            _target = targetVisVertex;
+            _source.Distance = 0;
         }
 
 
@@ -50,13 +30,13 @@ namespace Microsoft.Msagl.Routing {
         /// <returns>a path or null if the target is not reachable from the source</returns>
         internal IEnumerable<VisibilityVertex> GetPath(bool shrinkEdgeLength) {
             var pq = new GenericBinaryHeapPriorityQueue<VisibilityVertex>();
-            source.Distance = 0;
-            target.Distance = double.PositiveInfinity;
-            pq.Enqueue(source, H(source));
+            _source.Distance = 0;
+            _target.Distance = double.PositiveInfinity;
+            pq.Enqueue(_source, H(_source));
             while (!pq.IsEmpty()) {
                 double hu;
                 var u = pq.Dequeue(out hu);
-                if (hu >= target.Distance)
+                if (hu >= _target.Distance)
                     break;
 
                 foreach (var e in u.OutEdges) {
@@ -74,15 +54,15 @@ namespace Microsoft.Msagl.Routing {
                 }
 
             }
-            return _visGraph.PreviosVertex(target) == null ? null : CalculatePath(shrinkEdgeLength);
+            return _visGraph.PreviosVertex(_target) == null ? null : CalculatePath(shrinkEdgeLength);
         }
 
         bool PassableOutEdge(VisibilityEdge e) {
-            return e.Source == source || e.Target == target || !IsForbidden(e);
+            return e.Source == _source || e.Target == _target || !IsForbidden(e);
         }
 
         bool PassableInEdge(VisibilityEdge e) {
-            return e.Source == target || e.Target == source || !IsForbidden(e);
+            return e.Source == _target || e.Target == _source || !IsForbidden(e);
         }
 
         internal static bool IsForbidden(VisibilityEdge e) {
@@ -93,11 +73,12 @@ namespace Microsoft.Msagl.Routing {
             var len = l.Length;
             var c = u.Distance + len;
 
-            if (v != source && _visGraph.PreviosVertex(v) == null) {
+            if (v != _source && _visGraph.PreviosVertex(v) == null) {
                 v.Distance = c;
                 _visGraph.SetPreviousEdge(v, l);
-                if (v != target)
+                if (v != _target) {
                     pq.Enqueue(v, H(v));
+                }
             } else if (c < v.Distance) { //This condition should never hold for the dequeued nodes.
                 //However because of a very rare case of an epsilon error it might!
                 //In this case DecreasePriority will fail to find "v" and the algorithm will continue working.
@@ -106,26 +87,28 @@ namespace Microsoft.Msagl.Routing {
                 //smaller distance.
                 v.Distance = c;
                 _visGraph.SetPreviousEdge(v, l);
-                if (v != target)
+                if (v != _target)
                     pq.DecreasePriority(v, H(v));
             }
         }
 
         double H(VisibilityVertex visibilityVertex) {
-            return visibilityVertex.Distance + (visibilityVertex.Point - target.Point).Length;
+            return visibilityVertex.Distance + (visibilityVertex.Point - _target.Point).Length*LengthMultiplier;
         }
+
+
 
         IEnumerable<VisibilityVertex> CalculatePath(bool shrinkEdgeLength) {
             var ret = new List<VisibilityVertex>();
-            var v = target;
+            var v = _target;
             do {
                 ret.Add(v);
                 if (shrinkEdgeLength)
-                    _visGraph.ShrinkLengthOfPrevEdge(v);
+                    _visGraph.ShrinkLengthOfPrevEdge(v, LengthMultiplier);
 
                 v = _visGraph.PreviosVertex(v);
-            } while (v != source);
-            ret.Add(source);
+            } while (v != _source);
+            ret.Add(_source);
 
             for (int i = ret.Count - 1; i >= 0; i--)
                 yield return ret[i];

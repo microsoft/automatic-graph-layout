@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 using System;
 
 namespace Microsoft.Msagl.Core.Geometry {
@@ -40,7 +12,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// the coeffiecient used to calculate the first and the second control points of the 
         /// Bezier segment for the fillet at the site
         /// </summary>
-        private double previouisBezierCoefficient = 0.5;
+         double previouisBezierCoefficient = 0.5;
         /// <summary>
         /// used to calculate the first control points: the formula is kPrev * a + (1 - kPrev) * b
         /// </summary>
@@ -52,7 +24,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// the coeffiecient used to calculate the third and the fourth control points of the 
         /// Bezier segment for the fillet at the site
         /// </summary>
-        private double nextBezierCoefficient = 0.5;
+         double nextBezierCoefficient = 0.5;
         /// <summary>
         /// the coefficient tells how tight the segment fits to the segment after the site; the formula is kNext * c + (1 - kNext) * b
         /// </summary>
@@ -82,7 +54,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         }
 
         //   internal double par;
-        private Point point;
+         Point point;
 
         /// <summary>
         /// gets the site point
@@ -92,7 +64,7 @@ namespace Microsoft.Msagl.Core.Geometry {
             set { point = value; }
         }
 
-        private Site prev;
+         Site prev;
 /// <summary>
 /// gets the previous site
 /// </summary>
@@ -102,7 +74,7 @@ namespace Microsoft.Msagl.Core.Geometry {
             set { prev = value; }
         }
 
-        private Site next;
+         Site next;
 /// <summary>
 /// gets the next site
 /// </summary>

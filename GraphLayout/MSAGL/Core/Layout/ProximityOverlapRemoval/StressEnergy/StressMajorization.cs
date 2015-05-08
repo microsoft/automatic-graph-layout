@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -116,7 +88,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.StressEnergy {
         /// <summary>
         /// Sets the maximal number of iterations for the solver. Only relevant if conjugate gradient method is used.
         /// </summary>
-        private void initMaxIterationsSolver() {
+         void initMaxIterationsSolver() {
             if (Positions == null) return;
             int problemSize = Positions.Count;
             int maxIterat = Settings.MaxSolverIterations;
@@ -140,10 +112,10 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.StressEnergy {
         ///  To get the next node coordinates the following system has to be solved:
         ///  Lw*x=Lx*z(i), where x is the (unknown) node position vector, Lw and Lx are two known matrices (see Graph Drawing by Stress Majorization by Gansner et. al.) 
         ///  and z(i) is the vector of current node positions in dimension i. 
-        ///  Each dimension has to be solved separately.
+        ///  Each dimension has to be solved seperately.
         /// </summary>
         /// <returns></returns>
-        private List<Point> IterateSingleConjugateGradient() {
+         List<Point> IterateSingleConjugateGradient() {
 #if !SILVERLIGHT
             SparseMatrix Lw;
             SparseMatrix Lx;
@@ -154,7 +126,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.StressEnergy {
 
             double[] bX = Lx*zX;
             double[] bY = Lx*zY;
-            //solve each dimension separately
+            //solve each dimension seperately
             double[] resX=null, resY=null;
 
 
@@ -196,7 +168,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.StressEnergy {
         /// </summary>
         /// <param name="nodeVoting"></param>
         /// <returns></returns>
-        private Point LocalizedOptimization(NodeVoting nodeVoting) {
+         Point LocalizedOptimization(NodeVoting nodeVoting) {
             Point currentPosition = Positions[nodeVoting.VotedNodeIndex];
             double nextX = 0;
             double nextY = 0;
@@ -239,7 +211,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.StressEnergy {
         ///     Clears the votings for a given node representative, but leaves the index references.
         /// </summary>
         /// <param name="nodeVoting"></param>
-        private void ClearVoting(NodeVoting nodeVoting) {
+         void ClearVoting(NodeVoting nodeVoting) {
             foreach (VoteBlock block in nodeVoting.VotingBlocks) {
                 block.Votings.Clear();
             }
@@ -315,7 +287,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.StressEnergy {
         }
 #endif
 
-        private void ConstructLinearSystemFromMajorization(out SparseMatrix Lw, out SparseMatrix Lx) {
+         void ConstructLinearSystemFromMajorization(out SparseMatrix Lw, out SparseMatrix Lx) {
             int numEdges = GetNumberOfEdges(NodeVotings);
 
 #if SHARPKIT //SharpKit/Colin: multidimensional arrays not supported in JavaScript - https://code.google.com/p/sharpkit/issues/detail?id=340
@@ -422,7 +394,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.StressEnergy {
             }
         }
 
-        private int GetNumberOfEdges(List<NodeVoting> nodeVotings) {
+         int GetNumberOfEdges(List<NodeVoting> nodeVotings) {
             int i = 0;
             foreach (NodeVoting nodeVoting in nodeVotings) {
                 int targetId = nodeVoting.VotedNodeIndex;

@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -90,7 +62,6 @@ namespace Microsoft.Msagl.Core.Geometry {
         }
 
         internal void Add(RectangleNode<TData> node) {
-
             if (rootNode == null)
                 rootNode = node;
             else if (Count <= 2)
@@ -167,11 +138,24 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// </summary>
         /// <param name="queryRegion"></param>
         /// <returns></returns>
-        public IEnumerable<TData> GetAllIntersecting(Rectangle queryRegion)
+        public TData[] GetAllIntersecting(Rectangle queryRegion)
         {
-            return rootNode == null || Count == 0 ? new TData[0] : rootNode.GetNodeItemsIntersectingRectangle(queryRegion);
+            return rootNode == null || Count == 0 ? new TData[0] : rootNode.GetNodeItemsIntersectingRectangle(queryRegion).ToArray();
         }
 
+        public bool OneIntersecting(Rectangle queryRegion, out TData intersectedLeaf) {
+            if (rootNode == null || Count == 0) {
+                intersectedLeaf = default(TData);
+                return false;
+            }
+            RectangleNode<TData> ret = rootNode.FirstIntersectedNode(queryRegion);
+            if (ret == null) {
+                intersectedLeaf = default(TData);
+                return false;
+            }
+            intersectedLeaf = ret.UserData;
+            return true;
+        }
 
         /// <summary>
         /// Get all leaf nodes with rectangles intersecting the specified rectangular region
@@ -242,19 +226,19 @@ namespace Microsoft.Msagl.Core.Geometry {
                     UpdateParent(parent);
                 }
             }
-           Debug.Assert(TreeIsCorrect(RootNode));
+        //   Debug.Assert(TreeIsCorrect(RootNode));
         }
 
-        static bool TreeIsCorrect(RectangleNode<TData> node)
-        {
-            if (node == null)
-                return true;
-            bool ret= node.Left != null && node.Right != null  ||
-                   node.Left == null && node.Right == null;
-            if (!ret)
-                return false;
-            return TreeIsCorrect(node.Left) && TreeIsCorrect(node.Right);
-        }
+//        static bool TreeIsCorrect(RectangleNode<TData> node)
+//        {
+//            if (node == null)
+//                return true;
+//            bool ret= node.Left != null && node.Right != null  ||
+//                   node.Left == null && node.Right == null;
+//            if (!ret)
+//                return false;
+//            return TreeIsCorrect(node.Left) && TreeIsCorrect(node.Right);
+//        }
 
         static void UpdateParent(RectangleNode<TData> parent) {
             for(var node=parent.Parent; node!=null; node=node.Parent) {
@@ -298,7 +282,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// <summary>
         /// Removes everything from the tree
         /// </summary>
-        public void Clean()
+        public void Clear()
         {
             RootNode = null;
         }

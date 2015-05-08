@@ -481,7 +481,6 @@
     <Compile Include="test.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestFriends.cs" />
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

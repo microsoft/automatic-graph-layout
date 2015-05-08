@@ -261,10 +261,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
             return pathGeometry;
         }
 
-        double Scale() {
-            return LgNodeInfo == null ? 1 : LgNodeInfo.Scale;
-        }
-
         void GeometryNodeBeforeLayoutChangeEvent(object sender, LayoutChangeEventArgs e) {
             var newBoundaryCurve = e.DataAfterChange as ICurve;
             if (newBoundaryCurve != null) {
@@ -316,18 +312,8 @@ namespace Microsoft.Msagl.WpfGraphControl {
             }
         }
 
-        byte GetTransparency(byte t)
-        {
-            if (LgNodeInfo == null)
-            {
-                return t;
-            }
-            if (LgNodeInfo.Kind == LgNodeInfoKind.FullyVisible)
-            {
-                return t;
-            }
-            
-            return (byte)(t * LgNodeInfo.Scale);
+        byte GetTransparency(byte t) {
+            return t;
         }
 
         void SetFillAndStroke() {
