@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -123,19 +124,16 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
         WpfRectangle _rectToFillCanvas;
 
-        //needed for LgLayout
         readonly Dictionary<Rail, FrameworkElement> _visibleRailsToFrameworkElems =
             new Dictionary<Rail, FrameworkElement>();
 
-        List<Dictionary<Tuple<int, int>, Image>> _backgroundTiles = new List<Dictionary<Tuple<int, int>, Image>>();
-
-        Dictionary<Tuple<int, int, int>, FrameworkElement> _visibleBackgroundTiles =
-            new Dictionary<Tuple<int, int, int>, FrameworkElement>();
-
-        readonly Set<Tuple<int, int, int>> _setOfNotEmptyTiles = new Set<Tuple<int, int, int>>();
+        
+        readonly Dictionary<Triple, TileType> _tileDictionary = new Dictionary<Triple, TileType>();
 
         GeometryGraph GeomGraph {
-            get { return _drawingGraph.GeometryGraph; }
+            get {
+                return _drawingGraph == null ? null : _drawingGraph.GeometryGraph;
+            }
         }
 
         /// <summary>
@@ -153,13 +151,10 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             _graphCanvas.MouseRightButtonDown += GraphCanvasRightMouseDown;
             _graphCanvas.MouseMove += GraphCanvasMouseMove;
 
-            // roman: KeyDown event 
             _graphCanvas.Focusable = true;
             _graphCanvas.FocusVisualStyle = null;
             _graphCanvas.KeyDown += GraphCanvasKeyDown;
-            //GraphCanvasKeyUp
-            //Keyboard.Focus(_graphCanvas);
-
+        
             _graphCanvas.MouseLeftButtonUp += GraphCanvasMouseLeftButtonUp;
             _graphCanvas.MouseWheel += GraphCanvasMouseWheel;
             _graphCanvas.MouseRightButtonUp += GraphCanvasRightMouseUp;
@@ -220,11 +215,9 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         }
 
         void HandleDoubleClickForRail(Rail rail) {
-            LgLayoutSettings settings;
-            if (!getLgSettings(out settings)) return;
-
+            
             if (SelectedNodeInfos.Any()) {
-                settings.Interactor.SelectTopEdgePassingThroughRailWithEndpoint(rail, SelectedNodeInfos);
+                _lgLayoutSettings.Interactor.SelectTopEdgePassingThroughRailWithEndpoint(rail, SelectedNodeInfos);
             }
             else if (rail.IsHighlighted) {}
                 //PutOffEdgesPassingThroughTheRail(rail);
@@ -234,7 +227,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 //SelectAllRailsOfEdgesPassingThroughRail(rail, true);
             {
                 if (rail.TopRankedEdgeInfoOfTheRail != null) {
-                    settings.Interactor.SelectEdge(rail.TopRankedEdgeInfoOfTheRail);
+                    _lgLayoutSettings.Interactor.SelectEdge(rail.TopRankedEdgeInfoOfTheRail);
                 }
             }
 
@@ -286,14 +279,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             var nodeInfo = _lgLayoutSettings.GeometryNodesToLgNodeInfos[vnode.Node.GeometryNode];
             if (nodeInfo == null) return false;
             return nodeInfo.Selected;
-        }
-
-        void ToggleNodeEdgesSlidingZoom(GraphmapsNode vnode) {
-            var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
-            if (lgSettings != null)
-                foreach (var ei in vnode.Node.GeometryNode.Edges.Select(e => lgSettings.GeometryEdgesToLgEdgeInfos[e]))
-                    ei.SlidingZoomLevel = ei.SlidingZoomLevel <= 1 ? double.PositiveInfinity : 1;
-            ViewChangeEvent(null, null);
         }
 
 
@@ -476,20 +461,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         }
 
 
-
-        bool SetCtrlPointSelection(Ellipse el, RailControlPointTag tag, bool selected) {
-            if (tag.selected == selected) return false;
-            tag.selected = selected;
-            if (selected) {
-                _selectedCtrlPoints.Insert(el);
-            }
-            else {
-                _selectedCtrlPoints.Remove(el);
-            }
-            SetCtrlPointAppearance(el);
-            return true;
-        }
-
         void GraphCanvasMouseWheel(object sender, MouseWheelEventArgs e) {
             if (e.Delta != 0) {
                 const double zoomFractionLocal = 0.9;
@@ -524,10 +495,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 centerOfZoomOnScreen.Y + centerOfZoom.Y*scale);
         }
 
-        public LayoutEditor LayoutEditor {
-            get { return layoutEditor; }
-        }
-
         void GraphCanvasMouseLeftButtonDown(object sender, MouseEventArgs e) {
             clickCounter.AddMouseDown();
             if (MouseDown != null)
@@ -537,10 +504,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             _mouseDownPositionInGraph = Common.MsaglPoint(e.GetPosition(_graphCanvas));
 
             Keyboard.Focus(_graphCanvas);
-        }
-
-        double SelRectThickness() {
-            return UnderlyingPolylineCircleRadius/3.0;
         }
 
 
@@ -591,67 +554,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             return HitTestResultBehavior.Continue;
         }
 
-
-        void RemoveControlPointsPolyline(Rail rail) {
-            if (_ctrlPoints == null) return;
-            var toRemovePts = (from ctp in _ctrlPoints
-                where (ctp.Tag as RailControlPointTag != null) && (ctp.Tag as RailControlPointTag).rail == rail
-                select ctp).ToList();
-            foreach (Ellipse el in toRemovePts) {
-                SetCtrlPointSelection(el, (el.Tag as RailControlPointTag), false);
-                _graphCanvas.Children.Remove(el);
-            }
-            foreach (Ellipse el in toRemovePts) {
-                _ctrlPoints.Remove(el);
-            }
-
-            var toRemovePoly = (from pl in _ctrlPolylines
-                where (pl.Tag is RailControlPolylineTag) && ((RailControlPolylineTag) pl.Tag).rail == rail
-                select pl).ToList();
-            foreach (WPolyline pl in toRemovePoly) {
-                _graphCanvas.Children.Remove(pl);
-            }
-            foreach (WPolyline pl in toRemovePoly) {
-                _ctrlPolylines.Remove(pl);
-            }
-        }
-
-        void SetCtrlPointAppearance(Ellipse el) {
-            el.Width = el.Height = UnderlyingPolylineCircleRadius;
-            el.StrokeThickness = UnderlyingPolylineCircleRadius/5.0;
-            el.Stroke = Brushes.DarkGreen;
-
-            var tag = el.Tag as RailControlPointTag;
-            el.Fill = (tag != null && tag.selected ? Brushes.Gold : Brushes.DarkGreen);
-
-            // should change center too
-            if (tag != null) {
-                if (tag.rail.Geometry is CubicBezierSegment) {
-                    Common.PositionFrameworkElement(el, GetRailBezierCp(tag.rail, tag.cpIndex), 1);
-                }
-                else if (tag.rail.Geometry is LineSegment) {
-                    Common.PositionFrameworkElement(el, GetRailLineSegmentCp(tag.rail, tag.cpIndex), 1);
-                }
-                else if (tag.rail.Geometry is Arrowhead) {
-                    var arrow = tag.rail.Geometry as Arrowhead;
-                    var pt = tag.cpIndex == 0 ? tag.rail.CurveAttachmentPoint : arrow.TipPosition;
-                    Common.PositionFrameworkElement(el, pt, 1);
-                }
-            }
-        }
-
-
-        Point GetRailBezierCp(Rail rail, int i) {
-            var curve = rail.Geometry as ICurve;
-            var bs = curve as CubicBezierSegment;
-            return bs.B(i);
-        }
-
-        Point GetRailLineSegmentCp(Rail rail, int i) {
-            var curve = rail.Geometry as ICurve;
-            var bs = curve as LineSegment;
-            return bs[i];
-        }
 
         // Return the result of the hit test to the callback.
         HitTestResultBehavior MyHitTestResultCallbackWithNoCallbacksToTheUser(HitTestResult result) {
@@ -712,67 +614,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         //        [System.Runtime.InteropServices.DllImportAttribute("user32.dll", EntryPoint = "SetCursorPos")]
         //        [return: System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.Bool)]
         //        public static extern bool SetCursorPos(int X, int Y);   
-
-        static double UpdateBestRailAndDelAngle(Point curveDerivative, Point currentRailDerivativeAtStuckPoint,
-            double delAngle,
-            Rail rail, ref Rail bestRail) {
-            if (curveDerivative*currentRailDerivativeAtStuckPoint < 0) {
-                curveDerivative = -curveDerivative;
-            }
-            var angle = Point.Angle(curveDerivative, currentRailDerivativeAtStuckPoint);
-            if (angle > Math.PI) {
-                angle = 2*Math.PI - angle;
-            }
-            if (delAngle > angle) {
-                delAngle = angle;
-                bestRail = rail;
-            }
-            return delAngle;
-        }
-
-
-        //        WpfPoint ModifyDxDyForEdgeSliding(ref double dx, ref double dy, WpfPoint currentMousePositionOnScreen) {
-        //            var railCurve = _railUnderCursor.Geometry as ICurve;
-        //            if (railCurve == null)
-        //               return currentMousePositionOnScreen;
-        //            var mousePosInSource = Transform.Inverse* Common.MsaglPoint(currentMousePositionOnScreen);
-        //            var mouseProj = ProjectToCurve(railCurve, mousePosInSource);
-        //            var mouseDownInSource = ProjectToCurve(railCurve,Transform.Inverse*Common.MsaglPoint(_mouseDownPointOnScreen));
-        ///*
-        ////            var rad = (mouseProj-mouseDownInSource)*ZoomFactor;
-        //            
-        ////            var finishLineEllipse = new Core.Geometry.Curves.Ellipse(0, Math.PI,
-        ////                rad.Rotate90Cw(), rad, mouseDownInSource );
-        //
-        ////            LayoutAlgorithmSettings.ShowDebugCurves(
-        ////                new DebugCurve(railCurve),
-        ////                new DebugCurve("red", ToPoly(finishLineEllipse)),
-        ////                new DebugCurve("green",
-        ////                    new LineSegment(mouseProj, mouseDownInSource))
-        ////                );
-        //                 
-        //
-        //
-        //            var x = Curve.CurveCurveIntersectionOne(railCurve, finishLineEllipse, false);
-        //            if (x != null) {
-        ////                LayoutAlgorithmSettings.ShowDebugCurves(
-        ////                    new DebugCurve(railCurve), 
-        ////                    new DebugCurve("red", ToPoly(finishLineEllipse)),
-        ////                    new DebugCurve("green",
-        ////                        new LineSegment(mousePosInSource, mouseDownInSource)),
-        ////                        new DebugCurve("navy",
-        ////                        new LineSegment(mousePosInSource,x.IntersectionPoint))
-        ////                    );
-        //
-        //
-        //                var intersectionOnScreen = Transform*x.IntersectionPoint;
-        //                dx = currentMousePositionOnScreen.X - intersectionOnScreen.X;
-        //                dy = currentMousePositionOnScreen.Y - intersectionOnScreen.Y;
-        //                return Common.WpfPoint(intersectionOnScreen);
-        //            }
-        //            return currentMousePositionOnScreen;
-        //*/
-        //        }
 
 
         public double CurrentScale {
@@ -1056,9 +897,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
         const double DesiredPathThicknessInInches = 0.016;
 
-        readonly Dictionary<DrawingObject, Func<DrawingObject, FrameworkElement>> _registeredCreators =
-            new Dictionary<DrawingObject, Func<DrawingObject, FrameworkElement>>();
-
         readonly ClickCounter clickCounter;
         
         double GetBorderPathThickness() {
@@ -1088,17 +926,15 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                       CreateFrameworkElementsForLabelsOnly(); */
                 LayoutEditingEnabled = false;
                 var lgsettings = new LgLayoutSettings(
-                    //() => new Rectangle(0, 0, _graphCanvas.RenderSize.Width, _graphCanvas.RenderSize.Height),
-                    () => new Rectangle(0, 0, SystemParameters.WorkArea.Width, SystemParameters.WorkArea.Height),
+                    GetCanvasRenderViewport,
                     () => Transform, DpiX, DpiY, () => ArrowheadLength) {
-                        ScreenRectangle = new Rectangle(0, 0, SystemParameters.WorkArea.Width,
-                            SystemParameters.WorkArea.Height),
                         NeedToLayout = NeedToCalculateLayout,
                         MaxNumberOfNodesPerTile = DefaultLargeLayoutSettings.MaxNumberOfNodesPerTile,
                         MaxNumberOfRailsPerTile = DefaultLargeLayoutSettings.MaxNumberOfRailsPerTile,
                         ExitAfterInit = DefaultLargeLayoutSettings.ExitAfterInit,
                         SimplifyRoutes = DefaultLargeLayoutSettings.SimplifyRoutes,
-                        NodeLabelHeightInInches = DefaultLargeLayoutSettings.NodeLabelHeightInInches
+                        NodeLabelHeightInInches = DefaultLargeLayoutSettings.NodeLabelHeightInInches,
+                        ClientViewportMappedToGraph = ()=>GetVisibleRectangleInGraph()
                     };
 
                 _drawingGraph.LayoutAlgorithmSettings = lgsettings;
@@ -1122,6 +958,10 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             catch (Exception e) {
                 MessageBox.Show(e.ToString());
             }
+        }
+
+        internal Rectangle GetCanvasRenderViewport() {
+            return new Rectangle(0, 0, _graphCanvas.RenderSize.Width, _graphCanvas.RenderSize.Height);
         }
 
         void RunLayoutInUIThread() {
@@ -1216,45 +1056,91 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         //            SetupRoutingTimer();
         //        }
 
-
         /// <summary>
         /// oGraph has changed too
         /// </summary>
         void OGraphChanged() {
             if (UnderLayout) return;
-            var vDrawingEdges = new Set<DrawingEdge>();
-            var vDrawingNodes = new Set<Node>();
-            foreach (var dro in _drawingObjectsToIViewerObjects.Keys) {
-                var n = dro as Node;
-
-                if (n != null && dro.IsVisible) //added: visibility
-                    vDrawingNodes.Insert(n);
-                else {
-                    var edge = dro as DrawingEdge;
-                    if (edge != null && dro.IsVisible)
-                        vDrawingEdges.Insert((DrawingEdge) dro);
-                }
-            }
-            var oDrawgingEdges = new Set<DrawingEdge>();
-            var oDrawingNodes = new Set<Node>();
+            var existingEdges = new Set<DrawingEdge>();
+            var existindNodes = new Set<Node>();
+            FillExistingNodesEdges(existindNodes, existingEdges);
             
             var railGraph = _lgLayoutSettings.RailGraph;
             if (railGraph == null)
                 return;
-            foreach (var node in railGraph.Nodes)
-                oDrawingNodes.Insert((Node) node.UserData);
-            foreach (var rail in railGraph.Rails)
-                if (rail.TopRankedEdgeInfoOfTheRail != null) // skip for skeleton rails
-                    oDrawgingEdges.Insert((DrawingEdge) rail.TopRankedEdgeInfoOfTheRail.Edge.UserData);
-
-            ProcessRemovalsForLg(vDrawingNodes - oDrawingNodes, vDrawingEdges - oDrawgingEdges);
-            ProcessAdditionsForLg(oDrawingNodes - vDrawingNodes, oDrawgingEdges - vDrawingEdges);
+            var requiredNodes = new Set<Node>(railGraph.Nodes.Select(node=>(Node) node.UserData)) + NodesFromVectorTiles();
+            
+            ProcessNodesAddRemove(requiredNodes, existindNodes);
+            var requiredEdges =
+                new Set<DrawingEdge>(
+                    railGraph.Rails.Where(rail => rail.TopRankedEdgeInfoOfTheRail != null)
+                        .Select(rail => (DrawingEdge)rail.TopRankedEdgeInfoOfTheRail.Edge.UserData));
+            ProcessEdgesAddRemove(existingEdges, requiredEdges);
             RemoveNoLongerVisibleRails(railGraph);
 
             CreateOrInvalidateFrameworksElementForVisibleRails(railGraph);
             InvalidateNodesOfRailGraph();
             _tileFetcher.StartLoadindTiles();
         }
+
+        Set<Node> NodesFromVectorTiles() {
+            var ret = new Set<Node>();
+            foreach(var tile in VectorTiles())
+                ret.InsertRange(GetTileNodes(tile));
+            return ret;
+        }
+
+        IEnumerable<Node> GetTileNodes(Triple tile) {
+            return _lgLayoutSettings.Interactor.GetTileNodes(tile).Select(n=>(Node)n.UserData);
+        }
+
+        IEnumerable<Triple> VectorTiles() {
+            int iLevel = GetBackgroundTileLevel();
+            GridTraversal grid = new GridTraversal(GeomGraph.BoundingBox, iLevel);
+            var visibleRectangle = GetVisibleRectangleInGraph();
+
+            var t1 = grid.PointToTuple(visibleRectangle.LeftBottom);
+            var t2 = grid.PointToTuple(visibleRectangle.RightTop);
+
+            for (int ix = t1.Item1; ix <= t2.Item1; ix++)
+                for (int iy = t1.Item2; iy <= t2.Item2; iy++) {
+                    var t = new Triple(iLevel, ix, iy);
+                    TileType tileType;
+                    if (!_tileDictionary.TryGetValue(t, out tileType)) continue;
+                    if (tileType == TileType.Vector) 
+                        yield return t;
+                }
+        }
+
+
+        void FillExistingNodesEdges(Set<Node> existindNodes, Set<DrawingEdge> existingEdges) {
+            foreach (var dro in _drawingObjectsToIViewerObjects.Keys) {
+                var n = dro as Node;
+
+                if (n != null && dro.IsVisible) //added: visibility
+                    existindNodes.Insert(n);
+                else {
+                    var edge = dro as DrawingEdge;
+                    if (edge != null && dro.IsVisible)
+                        existingEdges.Insert((DrawingEdge) dro);
+                }
+            }
+        }
+
+        void ProcessEdgesAddRemove(Set<DrawingEdge> vDrawingEdges, Set<DrawingEdge> oDrawgingEdges) {
+            ProcessEdgeRemovals(vDrawingEdges - oDrawgingEdges);
+            ProcessEdgeAdditions(oDrawgingEdges - vDrawingEdges);
+        }
+
+        void ProcessNodesAddRemove(Set<Node> requiredNodes, Set<Node> existindNodes) {
+            lock (this) {
+                foreach (var node in existindNodes.Where(node => !requiredNodes.Contains(node)))
+                    HideVNode(node);
+                foreach (var node in requiredNodes.Where(node => !existindNodes.Contains(node)))
+                    UnhideVNode(node);
+            }
+        }
+
 
         void UpdateBackgroundTiles() {
             if (ThereAreNoTiles()) return;
@@ -1263,7 +1149,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
         
         bool ThereAreNoTiles() {
-            return _setOfNotEmptyTiles.Count == 0;
+            return _tileDictionary.Count == 0;
         }
 
 
@@ -1271,59 +1157,33 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             int iLevel = GetBackgroundTileLevel();
             GridTraversal grid = new GridTraversal(GeomGraph.BoundingBox, iLevel);
             var tiles = new Set<Triple>();
-            var visibleRectangle = _lgLayoutSettings.Interactor.GetVisibleRectangle();
+            var visibleRectangle = GetVisibleRectangleInGraph();
 
             var t1 = grid.PointToTuple(visibleRectangle.LeftBottom);
             var t2 = grid.PointToTuple(visibleRectangle.RightTop);
 
             for (int ix = t1.Item1; ix <= t2.Item1; ix++)
                 for (int iy = t1.Item2; iy <= t2.Item2; iy++) {
-                    var t = new Tuple<int, int, int>(iLevel, ix, iy);
-                    if (_setOfNotEmptyTiles.Contains(t))
-                        tiles.Insert(t);
+                    var t = new Triple(iLevel, ix, iy);
+
+                    TileType tileType;
+                    if (!_tileDictionary.TryGetValue(t, out tileType)) continue;
+                    if (tileType == TileType.Image) tiles.Insert(t);
                 }
 
             return tiles;
         }
 
-        void FetchAndAddBackgroundTiles(Set<Tuple<int, int, int>> tilesToAdd, GridTraversal grid) {
-            foreach (var triple in tilesToAdd) {
-                Console.WriteLine("Loading tile {0}-{1}-{2}", triple.Item1, triple.Item2, triple.Item3);
+        public Rectangle GetVisibleRectangleInGraph() {
+            var t = Transform.Inverse;
+            var p0 = new Point(0, 0);
+            var vp = GetCanvasRenderViewport();
+            var p1 = new Point(vp.Width, vp.Height);
+            var rect=new Rectangle(t*p0, t*p1);
+            if (GeomGraph == null)
+                return rect;
 
-                int ix = triple.Item2;
-                int iy = triple.Item3;
-                int iLevel = triple.Item1;
-                var fname = CreateTileFileName(ix, iy, grid);
-                if (!File.Exists(fname)) return;
-                Image image = new Image();
-                _visibleBackgroundTiles[new Tuple<int, int, int>(iLevel, ix, iy)] = image;                        
-                var backgroundWorker = new BackgroundWorker();
-                backgroundWorker.DoWork += (a, b) =>
-                    {
-                        Thread.CurrentThread.Priority = ThreadPriority.Lowest; 
-                        BitmapImage bmi = new BitmapImage();
-                        bmi.BeginInit();
-                        bmi.CacheOption = BitmapCacheOption.OnLoad;
-                        bmi.UriSource = new Uri(fname);
-                        bmi.EndInit();
-                        bmi.Freeze();
-                        _graphCanvas.Dispatcher.Invoke(() =>
-                        {
-                            image.Source = bmi; 
-                            Panel.SetZIndex(image, -1);
-                            SetBackgroundTilePositionAndSize(iLevel, ix, iy, grid);
-                            GraphCanvas.Children.Add(image);                            
-                        });
-                    };
-//                backgroundWorker.RunWorkerCompleted += (sender, args) =>
-//                    {
-//                       
-//                    };
-                backgroundWorker.RunWorkerAsync();
-            }
-
-            if (tilesToAdd.Count > 0)
-                Console.WriteLine("Loaded {0} tiles from disk", tilesToAdd.Count);
+            return rect.Intersection(GeomGraph.BoundingBox);
         }
 
         internal string CreateTileFileName(int ix, int iy, GridTraversal grid) {
@@ -1338,15 +1198,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             var zf = ZoomFactor;
             if (zf <= 1) return 0;
             return (int) Math.Log(zf, 2);
-        }
-
-        void RemoveBackgroundTiles(Set<Tuple<int, int, int>> tilesToRemove) {
-            foreach (var triple in tilesToRemove) {
-                FrameworkElement fe;
-                if (!_visibleBackgroundTiles.TryGetValue(triple, out fe)) continue;
-                GraphCanvas.Children.Remove(fe);
-                _visibleBackgroundTiles.Remove(triple);
-            }
         }
 
 
@@ -1564,36 +1415,22 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                     }
                 }
         */
-
-
-        void ProcessAdditionsForLg(Set<Node> nodesToAdd, Set<DrawingEdge> edgesToAdd) {
-            if (nodesToAdd != null)
-                ProcessNodeAdditions(nodesToAdd);
-            if (edgesToAdd != null)
-                ProcessEdgeAdditionsForLg(edgesToAdd);
-        }
-
-        void ProcessEdgeAdditionsForLg(Set<DrawingEdge> edgesToAdd) {
+        
+        void ProcessEdgeAdditions(Set<DrawingEdge> edgesToAdd) {
             foreach (var drawingEdge in edgesToAdd)
                 UnhideEdge(drawingEdge);
             //CreateEdge(drawingEdge, lgSettings);
         }
 
-        void ProcessNodeAdditions(Set<Node> nodesToAdd) {
-            foreach (var drawingNode in nodesToAdd)
-                UnhideVNode(drawingNode);
-            //CreateVNode(drawingNode);
+
+        void ProcessEdgeRemovals(Set<DrawingEdge> edgesToRemove) {
+            foreach (var edge in edgesToRemove)
+                HideVEdge(edge);
         }
 
-        void ProcessRemovalsForLg(Set<Node> nodesToRemove, Set<DrawingEdge> edgesToRemove) {
-            if (nodesToRemove != null)
-                foreach (var vNode in nodesToRemove)
-                    HideVNode(vNode);
-            //RemoveVNode(vNode);
-            if (edgesToRemove != null)
-                foreach (var edge in edgesToRemove)
-                    HideVEdge(edge);
-            //RemoveVEdge(edge);
+        void ProcessNodeRemovals(Set<Node> nodesToRemove) {
+            foreach (var vNode in nodesToRemove)
+                HideVNode(vNode);
         }
 
         void HideVNode(Node drawingNode) {
@@ -1632,7 +1469,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             ClearGraphCanvasChildren();
             _drawingObjectsToIViewerObjects.Clear();
             _visibleRailsToFrameworkElems.Clear();
-            _setOfNotEmptyTiles.Clear();
+            _tileDictionary.Clear();
             _tileFetcher.Clear();
             
         }
@@ -1709,72 +1546,79 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             SetScaleRangeForLgLayoutSettings();
         }
 
-
-        public void DrawImageOfTile(Rectangle tileBox, int ix, int iy, RenderTargetBitmap renderBitmap, int w, int h, double scale, GridTraversal grid) {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tileBox"></param>
+        /// <param name="ix"></param>
+        /// <param name="iy"></param>
+        /// <param name="renderBitmap"></param>
+        /// <param name="w"></param>
+        /// <param name="h"></param>
+        /// <param name="scale"></param>
+        /// <param name="grid"></param>
+        /// <returns>true if the tile is small, that is it intersects only a few nodes</returns>
+        public bool DrawImageOfTile(Rectangle tileBox, int ix, int iy, RenderTargetBitmap renderBitmap, int w, int h, double scale, GridTraversal grid) {
+            bool tileIsAlmostEmpty = _lgLayoutSettings.Interactor.NumberOfNodesOfLastLayerIntersectedRectIsLessThanBound(grid.ILevel, tileBox, 60); // test
+            if (tileIsAlmostEmpty)
+                return true;
             
             SetTransformOnViewportWithoutRaisingViewChangeEvent(scale, tileBox.Center, new Rectangle(0, 0, w, h));
-            // Measure and arrange the surface
+            RenderTile(renderBitmap, w, h);
+            SaveBitmapToFile(ix, iy, renderBitmap, grid);
+            WpfMemoryPressureHelper.ResetTimers();
+            return false; 
+        }
+
+        void SaveBitmapToFile(int ix, int iy, RenderTargetBitmap renderBitmap, GridTraversal grid) {
+            using (FileStream outStream = CreateTileFileStream(grid, ix, iy)) {
+                var encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+                encoder.Save(outStream);
+            }
+        }
+
+        void RenderTile(RenderTargetBitmap renderBitmap, int w, int h) {
+// Measure and arrange the surface
             // VERY IMPORTANT
             var size = new Size(w, h);
             _graphCanvas.Measure(size);
             _graphCanvas.Arrange(new Rect(size));
             renderBitmap.Clear();
             renderBitmap.Render(_graphCanvas);
-
-
-            // Create a file stream for saving image
-            using (FileStream outStream = CreateTileFileStream(grid, ix, iy)) {
-                // Use png encoder for our data
-                var encoder = new PngBitmapEncoder();
-                // push the rendered bitmap to it
-                encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
-                // save the data to the stream
-                encoder.Save(outStream);
-            }
-            WpfMemoryPressureHelper.ResetTimers();
-        }
-
-        FileStream CreateTileFileStream(GridTraversal grid, int ix, int iy) {
-            var splitName = grid.SplitTileNameOnDirectories(ix, iy);
-            string fname = TileDirectory;
-            for (int i = splitName.Count - 1; i >= 0; i--) {
-                fname = System.IO.Path.Combine(fname, splitName[i]);
-                if (i > 0) {
-                    if (!Directory.Exists(fname))
-                        Directory.CreateDirectory(fname);
-                }
-            }
-            return new FileStream(fname + ".png", FileMode.CreateNew);
         }
 
         bool RectIsEmptyAfterLevel(Rectangle tileBox, int iLevel) {
             return _lgLayoutSettings.Interactor.RectIsEmptyStartingFromLevel(tileBox, iLevel + 1);
         }
 
-        void InvalidateNodesForTiles(int iLevel) {
-            var levelScale = GetLevelScale(iLevel);
-
+        void InvalidateNodesForTilesOnLevel(int iLevel) {
             foreach (
                 var node in _drawingGraph.Nodes.Concat(_drawingGraph.RootSubgraph.AllSubgraphsDepthFirstExcludingSelf())) {
                 IViewerObject o;
                 if (!_drawingObjectsToIViewerObjects.TryGetValue(node, out o)) continue;
                 var vnode = ((GraphmapsNode) o);
-                var nodeDotWidth = _lgLayoutSettings.NodeDotWidthInInches*DpiX/levelScale;
-                var nodeMinWidth = _lgLayoutSettings.NodeDotWidthInInchesMinInImage * DpiX / levelScale;
-                if (vnode.LgNodeInfo.ZoomLevel > Math.Pow(2, iLevel))
-                    nodeDotWidth = Math.Max(nodeMinWidth,
-                        nodeDotWidth*(2*Math.Pow(2, iLevel)/vnode.LgNodeInfo.ZoomLevel));
-                else {
-                    HideVNode(node);
-                    continue;
-                }
-
-                vnode.Node.Attr.LineWidth = 0; //GetBorderPathThickness(tileScale);
-
-                vnode.InvalidateNodeDot(nodeDotWidth*0.8); // make them just a bit smaller
-                vnode.HideNodeLabel();
-                vnode.SetLowTransparency();
+                AdjustNodeVisualsForHighZoomLevel(iLevel, vnode, node);
             }
+        }
+
+        void AdjustNodeVisualsForHighZoomLevel(int iLevel, GraphmapsNode vnode, Node node) {
+            var levelScale = GetLevelScale(iLevel);
+            var nodeDotWidth = _lgLayoutSettings.NodeDotWidthInInches*DpiX/levelScale;
+            var nodeMinWidth = _lgLayoutSettings.NodeDotWidthInInchesMinInImage*DpiX/levelScale;
+            if (vnode.LgNodeInfo.ZoomLevel > Math.Pow(2, iLevel))
+                nodeDotWidth = Math.Max(nodeMinWidth,
+                    nodeDotWidth*(2*Math.Pow(2, iLevel)/vnode.LgNodeInfo.ZoomLevel));
+            else {
+                HideVNode(node);
+                return;
+            }
+
+            vnode.Node.Attr.LineWidth = 0; //GetBorderPathThickness(tileScale);
+
+            vnode.InvalidateNodeDot(nodeDotWidth*0.8); // make them just a bit smaller
+            vnode.HideNodeLabel();
+            vnode.SetLowTransparency();
         }
 
         double GetLevelScale(int iLevel) {
@@ -1992,7 +1836,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             }
         }
 
-        IViewerNode CreateVNode(Node node) {
+        GraphmapsNode CreateVNode(Node node) {
             lock (this) {
                 Debug.Assert(!_drawingObjectsToIViewerObjects.ContainsKey(node));
                 FrameworkElement feOfLabel = CreateAndRegisterFrameworkElementOfDrawingNode(node);
@@ -2051,28 +1895,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             foreach (DirectoryInfo dir in tileDirInfo.GetDirectories())
                 dir.Delete(true);
         }
-
-        internal void SetBackgroundTilePositionAndSize(int iLevel, int ix, int iy, GridTraversal grid) {
-            if (GeomGraph == null) return;
-            //            Canvas.SetLeft(_rectToFillGraphBackground, geomGraph.Left);
-            //            Canvas.SetTop(_rectToFillGraphBackground, geomGraph.Bottom);
-            
-            FrameworkElement fe;
-            if (
-                !_visibleBackgroundTiles.TryGetValue(
-                    new Tuple<int, int, int>(iLevel, ix, iy), out fe))
-                return;
-
-            //_backgroundTiles[iLevel][new Tuple<int, int>(ix, iy)];
-            fe.Width = grid.TileWidth;
-            fe.Height = grid.TileHeight;
-
-            var center = grid.GetTileRect(ix, iy).Center;
-            // Console.WriteLine("Positioning tile " + iLevel + "-" + ix + "-" + iy + " at " + center.X + ", " + center.Y);
-
-            Common.PositionFrameworkElement(fe, center, 1);
-        }
-
 
         void PopulateGeometryOfGeometryGraph() {
             geometryGraphUnderLayout = _drawingGraph.GeometryGraph;
@@ -2193,33 +2015,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             textBoxForApproxNodeBoundaries.Height = textBoxForApproxNodeBoundaries.DesiredSize.Height;
         }
 
-        FrameworkElement CreateTextBlockForDrawingObj(DrawingObject drawingObj) {
-            Func<DrawingObject, FrameworkElement> registeredCreator;
-            if (_registeredCreators.TryGetValue(drawingObj, out registeredCreator))
-                return registeredCreator(drawingObj);
-            if (drawingObj is Subgraph)
-                return null; //todo: add Label support later
-            var labeledObj = drawingObj as Drawing.ILabeledObject;
-            if (labeledObj == null)
-                return null;
-
-            var drawingLabel = labeledObj.Label;
-            if (drawingLabel == null)
-                return null;
-
-            TextBlock textBlock = null;
-            if (_graphCanvas.Dispatcher.CheckAccess())
-                textBlock = CreateTextBlock(drawingLabel);
-            else
-                _graphCanvas.Dispatcher.Invoke(() => textBlock = CreateTextBlock(drawingLabel));
-
-            return textBlock;
-        }
-
         FrameworkElement CreateViewboxForDrawingObj(DrawingObject drawingObj) {
-            Func<DrawingObject, FrameworkElement> registeredCreator;
-            if (_registeredCreators.TryGetValue(drawingObj, out registeredCreator))
-                return registeredCreator(drawingObj);
             if (drawingObj is Subgraph)
                 return null; //todo: add Label support later
             var labeledObj = drawingObj as Drawing.ILabeledObject;
@@ -2274,13 +2070,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             return viewBox;
         }
 
-
-        FrameworkElement CreateDefaultFrameworkElementForDrawingObject(DrawingObject drawingObject) {
-            lock (this) {
-                var textBlock = CreateTextBlockForDrawingObj(drawingObject);
-                return textBlock;
-            }
-        }
 
         public void DrawRubberLine(MsaglMouseEventArgs args) {
             DrawRubberLine(ScreenToSource(args));
@@ -2517,17 +2306,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             throw new NotImplementedException();
         }
 
-        public class RailControlPointTag {
-            public Rail rail;
-            public int cpIndex; // Bezier control point index
-            public bool selected = false;
-            public WPolyline ControlPolyline;
-        }
-
-        public class RailControlPolylineTag {
-            public Rail rail;
-        }
-
         public void SelectAllNodesOnVisibleLevels() {
             List<LgNodeInfo> nodesToSelect = _lgLayoutSettings.Interactor.GetAllNodesOnVisibleLayers();
             ClearNodesSelection();
@@ -2561,16 +2339,16 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 var renderBitmap = new RenderTargetBitmap((int)w, (int)h, 96, 96, PixelFormats.Pbgra32);
                 var tileList=new List<Tuple<int, int>> {new Tuple<int, int>(0, 0)};
                 var nextLevelTileList = new List<Tuple<int, int>>();
-                for (int iLevel = 0; iLevel < _lgLayoutSettings.Interactor.GetNumberOfLevels() - 1;) {
+                for (int iLevel = 0; iLevel < _lgLayoutSettings.Interactor.GetNumberOfLevels() - 1 && tileList.Count>0;) {
                     GridTraversal grid = new GridTraversal(GeomGraph.BoundingBox, iLevel);
-                    Console.WriteLine("Drawing tiles on level " + iLevel);
-                    DrawTileList(tileList, grid, renderBitmap, w, h, fitFactor*Math.Pow(2, iLevel), iLevel,
+                    Console.WriteLine("Drawing tiles on level {0} ...", iLevel);
+                    DrawTilesOnLevel(tileList, grid, renderBitmap, w, h, fitFactor*Math.Pow(2, iLevel), iLevel,
                         nextLevelTileList);
                     iLevel++;
                     if (iLevel == _lgLayoutSettings.Interactor.GetNumberOfLevels() - 1) break;
                     tileList = SwapTileLists(tileList, ref nextLevelTileList);
                 }
-                Console.WriteLine("Done generating tiles");
+                Console.WriteLine("Done");
                 normalFlow = true;
             }
             catch (Exception e) {
@@ -2594,7 +2372,30 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             timer.Stop();
             Console.WriteLine("tiles for {0}", timer.Duration);            
         }
-
+        FileStream CreateTileFileStream(GridTraversal grid, int ix, int iy) {
+            var splitName = grid.SplitTileNameOnDirectories(ix, iy);
+            string fname = TileDirectory;
+            for (int i = splitName.Count - 1; i >= 0; i--) {
+                fname = System.IO.Path.Combine(fname, splitName[i]);
+                if (i > 0) {
+                    if (!Directory.Exists(fname))
+                        Directory.CreateDirectory(fname);
+                }
+            }
+            return new FileStream(fname + ".png", FileMode.CreateNew);
+        }
+        StreamWriter CreateTileStreamWriter(GridTraversal grid, int ix, int iy) {
+            var splitName = grid.SplitTileNameOnDirectories(ix, iy);
+            string fname = TileDirectory;
+            for (int i = splitName.Count - 1; i >= 0; i--) {
+                fname = System.IO.Path.Combine(fname, splitName[i]);
+                if (i > 0) {
+                    if (!Directory.Exists(fname))
+                        Directory.CreateDirectory(fname);
+                }
+            }
+            return new StreamWriter(fname + ".list");
+        }
         static List<Tuple<int, int>> SwapTileLists(List<Tuple<int, int>> tileList, ref List<Tuple<int, int>> nextLevelTileList) {
             tileList.Clear();
             var ttt = tileList;
@@ -2603,15 +2404,15 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             return tileList;
         }
 
-        void DrawTileList(List<Tuple<int, int>> tileList, GridTraversal grid, RenderTargetBitmap renderBitmap, double w, double h, double scale,
+        void DrawTilesOnLevel(List<Tuple<int, int>> tileList, GridTraversal grid, RenderTargetBitmap renderBitmap, double w, double h, double scale,
             int iLevel, List<Tuple<int, int>> nextLevelTileList) {
-            InvalidateNodesForTiles(iLevel);
+            InvalidateNodesForTilesOnLevel(iLevel);
             foreach (var tile in tileList) {
                 int i = tile.Item1;
                 int j = tile.Item2;
                 var rect = grid.GetTileRect(i, j);
-                DrawImageOfTile(rect, i, j, renderBitmap, (int) w, (int) h, scale, grid);
-
+                bool tileIsAlmostEmpty = DrawImageOfTile(rect, i, j, renderBitmap, (int) w, (int) h, scale, grid);
+                if (tileIsAlmostEmpty) continue;
                 if (iLevel < _lgLayoutSettings.Interactor.GetNumberOfLevels() - 1)
                     AddTileChildren(i, j, nextLevelTileList, grid, iLevel);
             }
@@ -2638,27 +2439,39 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 nextLevelTileList.Add(new Tuple<int, int>(i + 1, j + 1));
         }
 
-        void InitTilesRecursively(int iLevel, int ix, int iy, List<GridTraversal> grids) {
+        void InitTilesRecursively(int iLevel, int ix, int iy, List<GridTraversal> grids, TileType tileType) {
             if (grids.Count == 0) return;
             var fname = CreateTileFileName(ix, iy, grids[iLevel]);
-            if (!File.Exists(fname)) return;
-            _setOfNotEmptyTiles.Insert(new Tuple<int, int, int>(iLevel, ix, iy));
+            if (tileType == TileType.Image && File.Exists(fname)) {
+                _tileDictionary[new Triple(iLevel, ix, iy)] = TileType.Image;
+            }
+            else {
+                if (TileIsEmpty(grids[iLevel].GetTileRect(ix, iy)))
+                    return;
+                _tileDictionary[new Triple(iLevel, ix, iy)] = TileType.Vector;
+                tileType = TileType.Vector;
+            }
             if (iLevel == grids.Count - 1)
                 return;
             iLevel++;
             ix *= 2;
             iy *= 2;
-            InitTilesRecursively(iLevel, ix, iy, grids);
-            InitTilesRecursively(iLevel, ix + 1, iy, grids);
-            InitTilesRecursively(iLevel, ix, iy + 1, grids);
-            InitTilesRecursively(iLevel, ix + 1, iy + 1, grids);
+            InitTilesRecursively(iLevel, ix, iy, grids, tileType);
+            InitTilesRecursively(iLevel, ix + 1, iy, grids, tileType);
+            InitTilesRecursively(iLevel, ix, iy + 1, grids, tileType);
+            InitTilesRecursively(iLevel, ix + 1, iy + 1, grids, tileType);
+
+        }
+
+        bool TileIsEmpty(Rectangle getTileRect) {
+            return _lgLayoutSettings.Interactor.TileIsEmpty(getTileRect);
         }
 
         public void InitTiles() {
             Console.Write("loading tile images...");          
-            _setOfNotEmptyTiles.Clear();
+            _tileDictionary.Clear();
             var grids = GetTileGridsForAllLevelsExceptLast();
-            InitTilesRecursively(0, 0, 0, grids);
+            InitTilesRecursively(0, 0, 0, grids, TileType.Image);
             Console.WriteLine("done");                      
             UpdateBackgroundTiles();
         }
@@ -2693,5 +2506,13 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 }
             }
         }
+    }
+
+    internal enum TileType {
+        // Tile represented by an Image 
+        Image, 
+        // if a tile intersects only a few nodes we draw them FrameworkElements
+        Vector,
+        
     }
 }

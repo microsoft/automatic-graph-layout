@@ -41,7 +41,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             };
             _timer.Tick += (s, e) =>
                 {
-                    var desiredActiveSet = _desiredActiveSetFunc();
                     if (ChangeInTransform()) {
                         _cancellationTokenSource.Cancel(); // just in case the thread is running
                         _cancellationTokenSource = new CancellationTokenSource();
@@ -82,11 +81,13 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         internal void UpdateTiles() {
             lock (this) {
                 var grid = new GridTraversal(_graphViewer.Graph.BoundingBox, _graphViewer.GetBackgroundTileLevel());
-                var desiredActiveSet = _desiredActiveSetFunc();
-                Set<Triple> toRemove = new Set<Triple>(_activeImages.Keys) - desiredActiveSet;
+                Set<Triple> desiredActiveSetOfImages = _desiredActiveSetFunc();
+//                Set<Triple> setOfNotImageTiles = null;
+//                Console.WriteLine(setOfNotImageTiles);
+                Set<Triple> toRemove = new Set<Triple>(_activeImages.Keys) - desiredActiveSetOfImages;
                 Task.Factory.StartNew(() =>
                     {
-                        foreach (var visibleTileKey in desiredActiveSet)
+                        foreach (var visibleTileKey in desiredActiveSetOfImages)
                             CreateAndCacheBitmapIfNeeded(visibleTileKey, grid);
                     },
                     _cancellationTokenSource.Token,
@@ -94,7 +95,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                     TaskScheduler.Default).
                     ContinueWith(t =>
                         {
-                            foreach (var visibleTileKey in desiredActiveSet)
+                            foreach (var visibleTileKey in desiredActiveSetOfImages)
                                 DisplayBitmap(visibleTileKey, grid);
 
                             _graphViewer.GraphCanvas.Dispatcher.Invoke(() => RemoveTiles(toRemove));
@@ -118,7 +119,9 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             _graphViewer.GraphCanvas.Dispatcher.Invoke(() => {
                 lock (_cacheLock) {
                     if (_activeImages.ContainsKey(triple)) return;
-                    var image = new Image {Source = _cachedImages[triple], Tag = triple};
+                    BitmapImage sourceBitmapImage;
+                    if (!_cachedImages.TryGetValue(triple, out sourceBitmapImage)) return;
+                    var image = new Image {Source = sourceBitmapImage, Tag = triple};
                     _activeImages[triple] = image;
                     _graphViewer.GraphCanvas.Children.Add(image);
 
@@ -133,6 +136,8 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         void CreateAndCacheBitmapIfNeeded(Triple triple, GridTraversal grid) {
             if (_activeImages.ContainsKey(triple)) return;
             if (_cachedImages.ContainsKey(triple)) return;
+            var fname = _graphViewer.CreateTileFileName(triple.Item2, triple.Item3, grid);
+            if (!File.Exists(fname)) return;
             WpfMemoryPressureHelper.ResetTimers();
             BitmapImage bitmapImage = new BitmapImage();
             bitmapImage.BeginInit();

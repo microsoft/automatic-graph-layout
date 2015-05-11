@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Microsoft.Msagl.Core.Layout;
 
 namespace Microsoft.Msagl.Core.Geometry {
     /// <summary>
@@ -14,11 +15,11 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// </summary>
         public RectangleNode<TData> RootNode
         {
-            get { return rootNode; }
-            set { rootNode=value; }
+            get { return _rootNode; }
+            set { _rootNode=value; }
         }
 
-        RectangleNode<TData> rootNode;
+        RectangleNode<TData> _rootNode;
        
 
         /// <summary>
@@ -27,7 +28,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// <param name="rectsAndData"></param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public RTree(IEnumerable<KeyValuePair<Rectangle, TData>> rectsAndData) {
-            rootNode = RectangleNode<TData>.CreateRectangleNodeOnEnumeration(GetNodeRects(rectsAndData));
+            _rootNode = RectangleNode<TData>.CreateRectangleNodeOnEnumeration(GetNodeRects(rectsAndData));
         }
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// </summary>
         /// <param name="rootNode"></param>
         public RTree(RectangleNode<TData> rootNode) {
-            this.rootNode = rootNode;
+            this._rootNode = rootNode;
         }
 
         ///<summary>
@@ -48,7 +49,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// The number of data elements in the tree (number of leaf nodes)
         /// </summary>
         public int Count {
-            get { return rootNode == null ? 0 : rootNode.Count; }
+            get { return _rootNode == null ? 0 : _rootNode.Count; }
         }
 
      
@@ -62,18 +63,18 @@ namespace Microsoft.Msagl.Core.Geometry {
         }
 
         internal void Add(RectangleNode<TData> node) {
-            if (rootNode == null)
-                rootNode = node;
+            if (_rootNode == null)
+                _rootNode = node;
             else if (Count <= 2)
-                rootNode = RectangleNode<TData>.CreateRectangleNodeOnEnumeration(rootNode.GetAllLeafNodes().Concat(new[] {node}));
+                _rootNode = RectangleNode<TData>.CreateRectangleNodeOnEnumeration(_rootNode.GetAllLeafNodes().Concat(new[] {node}));
             else
-                AddNodeToTreeRecursive(node, rootNode);
+                AddNodeToTreeRecursive(node, _rootNode);
         }
         /// <summary>
         /// rebuild the whole tree
         /// </summary>
         public void Rebuild() {
-            rootNode = RectangleNode<TData>.CreateRectangleNodeOnEnumeration(rootNode.GetAllLeafNodes());
+            _rootNode = RectangleNode<TData>.CreateRectangleNodeOnEnumeration(_rootNode.GetAllLeafNodes());
         }
 
         static IEnumerable<RectangleNode<TData>> GetNodeRects(IEnumerable<KeyValuePair<Rectangle, TData>> nodes) {
@@ -130,7 +131,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         public IEnumerable<TData> GetAllLeaves() {
-            return rootNode!=null && Count>0 ? rootNode.GetAllLeaves():new TData[0];
+            return _rootNode!=null && Count>0 ? _rootNode.GetAllLeaves():new TData[0];
         }
 
         /// <summary>
@@ -140,15 +141,15 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// <returns></returns>
         public TData[] GetAllIntersecting(Rectangle queryRegion)
         {
-            return rootNode == null || Count == 0 ? new TData[0] : rootNode.GetNodeItemsIntersectingRectangle(queryRegion).ToArray();
+            return _rootNode == null || Count == 0 ? new TData[0] : _rootNode.GetNodeItemsIntersectingRectangle(queryRegion).ToArray();
         }
 
         public bool OneIntersecting(Rectangle queryRegion, out TData intersectedLeaf) {
-            if (rootNode == null || Count == 0) {
+            if (_rootNode == null || Count == 0) {
                 intersectedLeaf = default(TData);
                 return false;
             }
-            RectangleNode<TData> ret = rootNode.FirstIntersectedNode(queryRegion);
+            RectangleNode<TData> ret = _rootNode.FirstIntersectedNode(queryRegion);
             if (ret == null) {
                 intersectedLeaf = default(TData);
                 return false;
@@ -163,7 +164,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// <param name="queryRegion"></param>
         /// <returns></returns>
         internal IEnumerable<RectangleNode<TData>> GetAllLeavesIntersectingRectangle(Rectangle queryRegion) {
-            return rootNode == null || Count == 0 ? new RectangleNode<TData>[0] : rootNode.GetLeafRectangleNodesIntersectingRectangle(queryRegion);
+            return _rootNode == null || Count == 0 ? new RectangleNode<TData>[0] : _rootNode.GetLeafRectangleNodesIntersectingRectangle(queryRegion);
         }
 
         /// <summary>
@@ -182,9 +183,9 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// <param name="userData"></param>
         /// <returns></returns>
         public bool Contains(Rectangle rectangle, TData userData) {
-            if (rootNode == null) return false;
+            if (_rootNode == null) return false;
             return
-                rootNode.GetLeafRectangleNodesIntersectingRectangle(rectangle)
+                _rootNode.GetLeafRectangleNodesIntersectingRectangle(rectangle)
                         .Any(node => node.UserData.Equals(userData));
         }
 
@@ -194,11 +195,11 @@ namespace Microsoft.Msagl.Core.Geometry {
         ///<param name="userData"></param>
         ///<returns></returns>
         public TData Remove(Rectangle rectangle, TData userData) {
-            if (rootNode==null)
+            if (_rootNode==null)
             {
                 return default(TData);
             }
-            var ret = rootNode.GetLeafRectangleNodesIntersectingRectangle(rectangle).FirstOrDefault(node => node.UserData.Equals(userData));
+            var ret = _rootNode.GetLeafRectangleNodesIntersectingRectangle(rectangle).FirstOrDefault(node => node.UserData.Equals(userData));
             if (ret == null)
                 return default(TData);
             if (RootNode.Count == 1)
@@ -219,8 +220,8 @@ namespace Microsoft.Msagl.Core.Geometry {
                 //replace the parent with the sibling and update bounding boxes and counts
                 var parent = leaf.Parent;
                 if (parent == null) {
-                    Debug.Assert(rootNode == leaf);
-                    rootNode = new RectangleNode<TData>();
+                    Debug.Assert(_rootNode == leaf);
+                    _rootNode = new RectangleNode<TData>();
                 } else {
                     TransferFromSibling(parent, leaf.IsLeftChild ? parent.Right : parent.Left);
                     UpdateParent(parent);
@@ -279,12 +280,30 @@ namespace Microsoft.Msagl.Core.Geometry {
             return 2*rectangleNode.Left.Count >= rectangleNode.Right.Count &&
                    2*rectangleNode.Right.Count >= rectangleNode.Left.Count;
         }
+
         /// <summary>
         /// Removes everything from the tree
         /// </summary>
-        public void Clear()
-        {
+        public void Clear() {
             RootNode = null;
+        }
+
+        public bool NumberOfIntersectedIsLessThanBound(Rectangle rect, int bound, Func<TData, bool> conditionFunc ) {
+            return NumberOfIntersectedIsLessThanBoundOnNode(_rootNode, rect, ref bound, conditionFunc);
+        }
+
+        static bool NumberOfIntersectedIsLessThanBoundOnNode(RectangleNode<TData> node, Rectangle rect, ref int bound, Func<TData, bool> conditionFunc) {
+            Debug.Assert(bound > 0);
+            if (!node.Rectangle.Intersects(rect)) return true;
+            if (node.IsLeaf) {
+                if (conditionFunc(node.UserData))
+                    return (--bound) != 0;
+                return true;
+            }
+
+            return NumberOfIntersectedIsLessThanBoundOnNode(node.Left, rect, ref bound, conditionFunc) &&
+                   NumberOfIntersectedIsLessThanBoundOnNode(node.Right, rect, ref bound, conditionFunc);
+
         }
     }
 

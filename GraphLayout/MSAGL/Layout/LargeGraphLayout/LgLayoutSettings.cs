@@ -95,16 +95,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             EdgeRoutingSettings.PolylinePadding = NodeSeparation/6;
         }
 
-        internal Rectangle ClientViewportMappedToGraph {
-            get {
-                var t = TransformFromGraphToScreen().Inverse;
-                var p0 = new Point(0, 0);
-                var vp = ClientViewportFunc();
-                var p1 = new Point(vp.Width, vp.Height);
-                return new Rectangle(t*p0, t*p1);
-            }
-        }
-
+        public Func<Rectangle> ClientViewportMappedToGraph { get; set; }            
 
 
         Dictionary<Node, LgNodeInfo> geometryNodesToLgNodeInfos = new Dictionary<Node, LgNodeInfo>();
@@ -129,7 +120,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         /// <summary>
         /// 
         /// </summary>
-        public Rectangle ScreenRectangle { get; set; }
         Interval _scaleInterval = new Interval(0.00001, 100000000.0);
         bool needToLayout = true;
         int maxNumberOfNodesPerTile = 20;

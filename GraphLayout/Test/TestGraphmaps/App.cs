@@ -610,16 +610,7 @@ namespace TestGraphmaps {
 
 
             //test
-            var binding = new CommandBinding(AppCommands.ExitCommand, ExitApp, CanAlways);
-            CommandManager.RegisterClassCommandBinding(typeof (Window), binding);
-
-            binding = new CommandBinding(AppCommands.UpdateViewCommand, UpdateView, CanAlways);
-            CommandManager.RegisterClassCommandBinding(typeof (Window), binding);
-
-            CommandManager.RegisterClassCommandBinding(typeof (Window), binding);
-
-            CommandManager.RegisterClassCommandBinding(typeof (Window), binding);
-
+            
             _appWindow.CommandBindings.Add(
                 new CommandBinding(AppCommands.RouteEdgesOnSkeletonTryKeepingOldTrajectoriesCommand,
                     RouteEdgesOnSkeletonTryKeepingOldTrajectories));
@@ -713,28 +704,7 @@ namespace TestGraphmaps {
         }
 
 
-        void CanAlways(object sender, CanExecuteRoutedEventArgs e) {
-            e.CanExecute = true;
-        }
-
-        void ExitApp(object sender, ExecutedRoutedEventArgs e) {
-            Environment.Exit(0);
-        }
-
-        void UpdateView(object sender, ExecutedRoutedEventArgs e) {
-            var lgSettings = _graphViewer.Graph.LayoutAlgorithmSettings as LgLayoutSettings;
-            if (lgSettings == null) {
-                return;
-            }
-            lgSettings.Interactor.RunOnViewChange();
-            /*
-            if (!ViewModel.AlwaysRedrawHelpers) {
-                _graphViewer.UpdateHelperShapes();
-            }
-            _graphViewer.InvalidateAllViewerObjects();
-             */
-        }
-
+        
         void SaveMsagl(object sender, ExecutedRoutedEventArgs e) {
             var dlg = new SaveFileDialog
             {
@@ -900,12 +870,14 @@ namespace TestGraphmaps {
         }
 
         void ProcessDgml(string fileName) {
+#if GRAPH_MODEL
             Graph gwgraph = DgmlParser.DgmlParser.Parse(fileName);
             if (gwgraph != null) {
                 SetLayoutSettings(gwgraph);
                 _graphViewer.Graph = gwgraph;
             }
             else
+#endif
                 MessageBox.Show("cannot load " + fileName);
         }
 

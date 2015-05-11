@@ -13,8 +13,6 @@ namespace Microsoft.Msagl.Miscellaneous.RegularGrid
     {
         readonly Rectangle _boundingBox;
         readonly int _iLevel;
-        double _tileWidth;
-        double _tileHeight;
         readonly ulong _numberOfTilesOnSide;
 
         public GridTraversal(Rectangle boundingBox, int iLevel)
@@ -22,34 +20,16 @@ namespace Microsoft.Msagl.Miscellaneous.RegularGrid
             _boundingBox = boundingBox;
             _iLevel = iLevel;
             _numberOfTilesOnSide = (ulong)Math.Pow(2, iLevel);
-            _tileWidth = boundingBox.Width / _numberOfTilesOnSide;
-            _tileHeight = boundingBox.Height / _numberOfTilesOnSide;
+            TileWidth = boundingBox.Width / _numberOfTilesOnSide;
+            TileHeight = boundingBox.Height / _numberOfTilesOnSide;
         }
 
-        public List<Rectangle> GetTileRectangles()
-        {
-            int n = (int)Math.Pow(2, _iLevel);
-            var rects = new List<Rectangle>();
-            for (int ix = 0; ix < n; ix++)
-            {
-                for (int iy = 0; iy < n; iy++)
-                {
-                    rects.Add(GetTileRect(ix, iy));
-                }
-            }
-            return rects;
-        }
+        public double TileWidth { get; private set; }
 
-        public double TileWidth
-        {
-            get { return _tileWidth; }
-            set { _tileWidth = value; }
-        }
+        public double TileHeight{ get; private set; }
 
-        public double TileHeight
-        {
-            get { return _tileHeight; }
-            set { _tileHeight = value; }
+        public int ILevel {
+            get { return _iLevel; }
         }
 
         public Tuple<int, int> PointToTuple(Point point)
@@ -87,7 +67,7 @@ namespace Microsoft.Msagl.Miscellaneous.RegularGrid
         {
             Debug.Assert(PointToTuple(p1).Equals(leftTile));
             var rightTile = PointToTuple(p2);
-            if (rightTile.Equals(leftTile) || ApproximateComparer.Close(p1, p2, ((double)_tileWidth) / 10))
+            if (rightTile.Equals(leftTile) || ApproximateComparer.Close(p1, p2, ((double)TileWidth) / 10))
                 return;
             tiles.Add(rightTile);
             var midPoint = (p1 + p2) / 2;
@@ -98,7 +78,7 @@ namespace Microsoft.Msagl.Miscellaneous.RegularGrid
         void InsertTilesRightHalf(Point p1, Point p2, Tuple<int, int> rightTile, List<Tuple<int, int>> tiles)
         {
             var leftTile = PointToTuple(p1);
-            if (leftTile.Equals(rightTile) || ApproximateComparer.Close(p1, p2, ((double)_tileWidth) / 10))
+            if (leftTile.Equals(rightTile) || ApproximateComparer.Close(p1, p2, ((double)TileWidth) / 10))
                 return;
             tiles.Add(leftTile);
             var midPoint = (p1 + p2) / 2;
@@ -127,7 +107,7 @@ namespace Microsoft.Msagl.Miscellaneous.RegularGrid
                 tileIndex = k;
             } while (true);
 
-            ret.Add(_iLevel.ToString());
+            ret.Add(ILevel.ToString());
             return ret;
         }
 

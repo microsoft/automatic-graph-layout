@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.Msagl.Core;
 using Microsoft.Msagl.Core.DataStructures;
@@ -388,18 +389,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             return ei.ZoomLevel <= curLevel;
         }
 
-/*
-        void FindVisibleRails() {
-            railGraph.Rails.Clear();
-            railGraph.Rails.InsertRange(lgData.GetSetOfVisibleRails(visibleRectangle, CurrentZoomLevel));
-            railGraph.VisibleEdges.Clear();
-            railGraph.VisibleEdges.InsertRange(railGraph.Rails.Select(r => r.TopRankedEdgeInfoOfTheRail.Edge).Where(IsEdgeVisibleAtCurrentLevel));
-
-            // roman: add loose rails
-            railGraph.Rails.InsertRange(_looseRailsRTree.GetAllIntersecting(visibleRectangle));
-        }
-*/
-
         void AddHighlightedEdgesAndNodesToRailGraph() {
             _railGraph.Edges.InsertRange(_lgData.SelectedEdges);
             _railGraph.Nodes.InsertRange(_lgData.SelectedNodeInfos.Select(n => n.GeometryNode));
@@ -414,20 +403,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             _railGraph.Edges.InsertRange(
                 _railGraph.Rails.Select(r => r.TopRankedEdgeInfoOfTheRail.Edge).Where(IsEdgeVisibleAtCurrentLevel));
             AddHighlightedEdgesAndNodesToRailGraph();
-
-            //// roman: add loose rails
-            //if (ViewModel != null && ViewModel.IsLooseLayerVisible())
-            //    railGraph.Rails.InsertRange(_looseRailsRTree.GetAllIntersecting(visibleRectangle));
-//
-//            // add rails of skeletons
-//            if (ViewModel != null) {
-//                List<int> si = ViewModel.GetVisibleSkeletonLevelIndices();
-//                foreach (int i in si) {
-//                    var skRailsVis = _lgData.SkeletonLevels[i].GetAllRailsIntersecting(_visibleRectangle);
-//                    if (skRailsVis != null)
-//                        _railGraph.Rails.InsertRange(skRailsVis);
-//                }
-//            }
         }
 
         internal static GeometryGraph CreateClusteredSubgraphFromFlatGraph(GeometryGraph subgraph,
@@ -512,67 +487,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             return onodesToNewNodes;
         }
 
-        /*
-        void AdjustNodeBoundariesAccordingToRanks(Node[] nodeArray, double[] ranks) {
-            Array.Sort(ranks, nodeArray);
-            Array.Reverse(nodeArray);
-            Array.Reverse(ranks);
-            double sum=0.0;
-            double middle = 0.5;
-            int i = 0;
-            for (; i < ranks.Length; i++)
-                sum += ranks[i];
-
-            var halfSum = 0.5*sum;
-            sum = 0;
-            for(i=0;i<ranks.Length;i++){
-               sum += ranks[i];
-                if(sum>=halfSum){
-                    middle = ranks[i];
-                    break;
-                }
-            }
-            
-            
-            //linear mapping from ranks; all before index i are enlarlged
-            //all after i are shrinked
-//enlarging from 1 to 2
-            //middle->1
-            //ranks[0]->2
-
-            double k = 1/(ranks[0] - middle);
-            double b = 1 - k*middle;
-            int j;
-            for (j = 0; j <= i; j++) {
-                var scale = k*ranks[j] + b;
-                var node = nodeArray[j];
-                node.BoundaryCurve =
-                    node.BoundaryCurve.Transform(PlaneTransformation.ScaleAroundCenterTransformation(scale,
-                                                                                                     node.Center));                
-            }
-
-            //ranks[j+1]->1
-            //ranks[last]->0.3
-            const double lowScale = 0.3;
-            k = (1-lowScale) / (ranks[j] - ranks[ranks.Length-1]);
-            b = 1 - k * ranks[j];
-            for (; j < ranks.Length; j++)
-            {
-                var scale = k * ranks[j] + b;
-                var node = nodeArray[j];
-                node.BoundaryCurve =
-                    node.BoundaryCurve.Transform(PlaneTransformation.ScaleAroundCenterTransformation(scale,
-                                                                                                     node.Center));                
-            }
-
-        }
-*/
 
 
         /// <summary>
         /// </summary>
         public void RunOnViewChange() {
-            _visibleRectangle = _lgLayoutSettings.ClientViewportMappedToGraph;
+            _visibleRectangle = _lgLayoutSettings.ClientViewportMappedToGraph();
             //Rectangle.Intersect(lgLayoutSettings.ClientViewportMappedToGraph, mainGeometryGraph.BoundingBox);
 
             //            if (MainGeometryGraph.Edges.Count == 33) {
@@ -585,10 +505,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
             CurrentZoomLevel = GetZoomFactorToTheGraph();
             FillRailGraph();
-
-            //            if (MainGeometryGraph.Edges.Count == 33) 
-            //                LayoutAlgorithmSettings.ShowGraph(clusterOGraph);
-
             _lgLayoutSettings.OnViewerChangeTransformAndInvalidateGraph();
         }
 
@@ -1700,11 +1616,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             mds.Run();
         }
 
-        public Rectangle GetVisibleRectangle() {
-            return _lgLayoutSettings.ClientViewportMappedToGraph;
-        }
-
-
         public void SelectTopEdgePassingThroughRailWithEndpoint(Rail rail, Set<LgNodeInfo> selectedVnodes) {
             List<Edge> edges =
                 GetEdgesPassingThroughRail(rail)
@@ -1871,6 +1782,30 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             _lgData.SelectedNodeInfos.Insert(closest);
             _railGraph.Nodes.Insert(closest.GeometryNode);
             RunOnViewChange();            
+        }
+
+        
+        
+        public bool NumberOfNodesOfLastLayerIntersectedRectIsLessThanBound(int iLevel, Rectangle rect, int bound) {
+            int lastLevel = GetNumberOfLevels() - 1;
+            var level = _lgData.Levels[lastLevel];
+            var zoom = Math.Pow(2, iLevel);
+            return level.NodeInfoTree.NumberOfIntersectedIsLessThanBound(rect, bound, node=>node.ZoomLevel>zoom);
+        }
+
+        public bool TileIsEmpty(Rectangle rectangle) {
+            int lastLevel = GetNumberOfLevels() - 1;
+            var level = _lgData.Levels[lastLevel];
+            LgNodeInfo t;
+            return !level.NodeInfoTree.OneIntersecting(rectangle, out t);
+        }
+
+        public IEnumerable<Node> GetTileNodes(Tuple<int, int, int> tile) {
+            var grid = new GridTraversal(this._mainGeometryGraph.BoundingBox, tile.Item1);
+            var rect = grid.GetTileRect(tile.Item2, tile.Item3);
+            return
+                _lgData.Levels[GetNumberOfLevels() - 1].NodeInfoTree.GetAllIntersecting(rect)
+                    .Select(nodeInfo =>  nodeInfo.GeometryNode);
         }
     }
 }
