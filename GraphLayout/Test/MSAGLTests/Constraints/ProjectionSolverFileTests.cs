@@ -64,7 +64,7 @@ namespace Microsoft.Msagl.UnitTests.Constraints
         }
 
         [TestMethod]
-        [Timeout(5000)]
+        [Timeout(6000)]
         [Description("Test with Neighbors with weights between 1 and 100, and variable weights at 90% 1.0, 10% 1e6.")]
         [TestCategory("LayoutPerfTest")]
         [TestCategory("NonRollingBuildTest")]
