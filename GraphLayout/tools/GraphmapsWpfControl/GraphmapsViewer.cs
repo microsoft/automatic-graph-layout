@@ -1068,8 +1068,12 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             var railGraph = _lgLayoutSettings.RailGraph;
             if (railGraph == null)
                 return;
-            var requiredNodes = new Set<Node>(railGraph.Nodes.Select(node=>(Node) node.UserData)) + NodesFromVectorTiles();
-            
+
+            var nodesFromVectorTiles = NodesFromVectorTiles();
+            var railGraphNodes = new Set<Node>(railGraph.Nodes.Select(node => (Node)node.UserData));
+            var requiredNodes = railGraphNodes + NodesFromVectorTiles();
+            var fakeTileNodes = nodesFromVectorTiles - railGraphNodes;
+             
             ProcessNodesAddRemove(requiredNodes, existindNodes);
             var requiredEdges =
                 new Set<DrawingEdge>(
@@ -1080,6 +1084,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
             CreateOrInvalidateFrameworksElementForVisibleRails(railGraph);
             InvalidateNodesOfRailGraph();
+            InvalidateFakeTileNodes(fakeTileNodes);
             _tileFetcher.StartLoadindTiles();
         }
 
@@ -1263,6 +1268,17 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                         vNode.HideNodeLabel();
                     }
                 }
+            }
+        }
+
+        private void InvalidateFakeTileNodes(Set<Node> fakeTileNodes) {
+            foreach (var node in fakeTileNodes) {
+                IViewerObject o;
+                if (!_drawingObjectsToIViewerObjects.TryGetValue(node, out o)) continue;
+                var vnode = ((GraphmapsNode)o);
+
+                vnode.Node.Attr.LineWidth = 0;
+                vnode.SetLowTransparency();
             }
         }
 
