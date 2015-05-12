@@ -720,8 +720,7 @@ export class GGraph implements IGraph {
                 var edge = this.edges[i];
                 if (edge.label != null && edge.label.bounds == GRect.zero) {
                     var labelSize = sizer(edge.label, edge);
-                    edge.label.bounds.width = labelSize.x;
-                    edge.label.bounds.height = labelSize.y;
+                    edge.label.bounds = new GRect({ width: labelSize.x, height: labelSize.y });
                 }
             }
         }
