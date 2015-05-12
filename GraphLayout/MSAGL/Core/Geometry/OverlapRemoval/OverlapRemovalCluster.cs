@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="OverlapRemovalCluster.cs" company="Microsoft">
 //   (c) Microsoft Corporation.  All rights reserved.
@@ -96,10 +68,10 @@ namespace Microsoft.Msagl.Core.Geometry
     public partial class OverlapRemovalCluster : OverlapRemovalNode
     {
         // Our internal Node list - some of which may be Clusters.
-        private readonly List<OverlapRemovalNode> nodeList = new List<OverlapRemovalNode>();
+         readonly List<OverlapRemovalNode> nodeList = new List<OverlapRemovalNode>();
 
         // Our internal child Cluster list - duplicated from nodeList for iterative recursion perf.
-        private readonly List<OverlapRemovalCluster> clusterList = new List<OverlapRemovalCluster>();
+         readonly List<OverlapRemovalCluster> clusterList = new List<OverlapRemovalCluster>();
 
         /// <summary>
         /// Empty clusters are ignored on positioning.
@@ -129,7 +101,7 @@ namespace Microsoft.Msagl.Core.Geometry
         public OverlapRemovalNode RightBorderNode { get; private set; }
 
         // Indicates if the cluster's GenerateWorker placed anything into the solver.
-        private bool IsInSolver { get; set; }
+         bool IsInSolver { get; set; }
 
         /// <summary>
         /// Opening margin of this cluster (additional space inside the cluster border)
@@ -186,7 +158,7 @@ namespace Microsoft.Msagl.Core.Geometry
         public double ClusterPaddingP { get; set; }
 
 #if VERBOSE
-        private string Name {
+         string Name {
             get { return "Clus_" + (this.IsRootCluster ? "Root" : (this.LeftBorderNode.UserData + "-" + this.RightBorderNode.UserData)); }
         }
 #endif // VERBOSE
@@ -245,7 +217,7 @@ namespace Microsoft.Msagl.Core.Geometry
             CreateBorderNodes();
         }
 
-        private void CreateBorderNodes()
+         void CreateBorderNodes()
         {
             if (!this.IsRootCluster)
             {
@@ -293,14 +265,14 @@ namespace Microsoft.Msagl.Core.Geometry
         }
 
         // Adds an open/close event pair for the node. paddingP is either cluster or node padding.
-        private void AddEvents(OverlapRemovalNode node, List<Event> events)
+         void AddEvents(OverlapRemovalNode node, List<Event> events)
         {
             // Add/subtract only half the padding so they meet in the middle of the padding.
             events.Add(new Event(true /* fForOpen */, node, node.OpenP - (NodePaddingP / 2)));
             events.Add(new Event(false /* fForOpen */, node, node.CloseP + (NodePaddingP / 2)));
         }
 
-        // This is internal rather than private so Test_OverlapRemoval can see it.
+        // This is internal rather than  so Test_OverlapRemoval can see it.
         internal static double CalcBorderWidth(double margin)
         {
             // Margin applies only to the inside edge.
@@ -312,7 +284,7 @@ namespace Microsoft.Msagl.Core.Geometry
         }
 
         // For iterative recursion (though we do not expect deeply nested clusters).
-        private class ClusterItem
+         class ClusterItem
         {
             internal readonly OverlapRemovalCluster Cluster;
             internal bool ChildrenHaveBeenPushed;
@@ -324,7 +296,7 @@ namespace Microsoft.Msagl.Core.Geometry
 
         internal delegate void ClusterDelegate(OverlapRemovalCluster cluster);
 
-        private static void ProcessClusterHierarchy(OverlapRemovalCluster root, ClusterDelegate worker)
+         static void ProcessClusterHierarchy(OverlapRemovalCluster root, ClusterDelegate worker)
         {
             var stack = new Stack<ClusterItem>();
             stack.Push(new ClusterItem(root));
@@ -364,7 +336,7 @@ namespace Microsoft.Msagl.Core.Geometry
         /// If a border is not fixed swap its position with the opposite border to ensure
         /// cluster is tight to its contents.
         /// </summary>
-        private void SqueezeNonFixedBorderPositions()
+         void SqueezeNonFixedBorderPositions()
         {
             // Here's an example of why this is necessary:  If we base the initial border position
             // on a child cluster's border and that child cluster is initially sparse, then its
@@ -391,7 +363,7 @@ namespace Microsoft.Msagl.Core.Geometry
 
         // Returns false if the cluster is empty; this handles nested clusters of empty clusters.
         // TODOunit: several of the test files cover this but add a specific test for it.
-        private bool GenerateWorker(Solver solver, OverlapRemovalParameters parameters,
+         bool GenerateWorker(Solver solver, OverlapRemovalParameters parameters,
                              bool isHorizontal)
         {
             // @@DCR "Precalculate Cluster Sizes": if we are solving per-cluster to calculate best sizes before
@@ -461,7 +433,7 @@ namespace Microsoft.Msagl.Core.Geometry
             return true;
         }
 
-        private List<Event> CreateEvents(Solver solver, ref Rectangle boundaryRect)
+         List<Event> CreateEvents(Solver solver, ref Rectangle boundaryRect)
         {
             var events = new List<Event>();
             int cNodes = this.nodeList.Count; // cache for perf
@@ -545,7 +517,7 @@ namespace Microsoft.Msagl.Core.Geometry
             return events;
         }
 
-        private void CalculateBorderWidths(Solver solver, List<Event> events, Rectangle boundaryRect,
+         void CalculateBorderWidths(Solver solver, List<Event> events, Rectangle boundaryRect,
                                             out double leftBorderWidth, out double rightBorderWidth)
         {
             // Cluster-level padding (the space around the borders) complicates this.  Margin
@@ -604,7 +576,7 @@ namespace Microsoft.Msagl.Core.Geometry
             AddEvents(this.RightBorderNode, events);
         }
 
-        private void AdjustFixedBorderPositions(Solver solver, double leftBorderWidth, double rightBorderWidth, bool isHorizontal)
+         void AdjustFixedBorderPositions(Solver solver, double leftBorderWidth, double rightBorderWidth, bool isHorizontal)
         {
             // Note:  Open == Left, Close == Right.
             if (this.OpenBorderInfo.IsFixedPosition && this.CloseBorderInfo.IsFixedPosition)
@@ -751,7 +723,7 @@ namespace Microsoft.Msagl.Core.Geometry
             return (null != cluster) ? cluster.LeftBorderNode : node;
         }
 
-        private void GenerateFromEvents(Solver solver, OverlapRemovalParameters parameters,
+         void GenerateFromEvents(Solver solver, OverlapRemovalParameters parameters,
                         List<Event> events, bool isHorizontal)
         {
             // First, sort the events on the perpendicular coordinate of the event
@@ -933,7 +905,7 @@ namespace Microsoft.Msagl.Core.Geometry
             } // endforeach Event
         }
 
-        private List<OverlapRemovalNode> GetLeftNeighbours(OverlapRemovalParameters parameters, ScanLine scanLine,
+         List<OverlapRemovalNode> GetLeftNeighbours(OverlapRemovalParameters parameters, ScanLine scanLine,
                                     OverlapRemovalNode currentNode, bool isHorizontal)
         {
             var lstNeighbours = new List<OverlapRemovalNode>();
@@ -953,7 +925,7 @@ namespace Microsoft.Msagl.Core.Geometry
             return lstNeighbours;
         } // end GetLeftNeighbours
 
-        private List<OverlapRemovalNode> GetRightNeighbours(OverlapRemovalParameters parameters, ScanLine scanLine,
+         List<OverlapRemovalNode> GetRightNeighbours(OverlapRemovalParameters parameters, ScanLine scanLine,
                                     OverlapRemovalNode currentNode, bool isHorizontal)
         {
             var lstNeighbours = new List<OverlapRemovalNode>();
@@ -973,7 +945,7 @@ namespace Microsoft.Msagl.Core.Geometry
             return lstNeighbours;
         } // end GetRightNeighbours
 
-        private bool AddNeighbour(OverlapRemovalParameters parameters, OverlapRemovalNode currentNode, OverlapRemovalNode nextNode,
+         bool AddNeighbour(OverlapRemovalParameters parameters, OverlapRemovalNode currentNode, OverlapRemovalNode nextNode,
                         List<OverlapRemovalNode> neighbors, bool isLeftNeighbor, bool isHorizontal)
         {
             // Sanity check to be sure that the borders are past all other nodes.
@@ -1085,7 +1057,7 @@ namespace Microsoft.Msagl.Core.Geometry
             ProcessClusterHierarchy(this, cluster => cluster.UpdateFromVariableWorker());
         }
 
-        private void UpdateFromVariableWorker()
+         void UpdateFromVariableWorker()
         {
             // The root cluster has no "position" and thus no border variables.
             if (!this.IsRootCluster)

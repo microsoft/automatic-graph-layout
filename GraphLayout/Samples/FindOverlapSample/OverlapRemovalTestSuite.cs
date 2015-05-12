@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 ﻿
 using System;
 using System.Collections.Generic;
@@ -43,7 +15,7 @@ using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval;
-using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MST;
+using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTree;
 using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.StressEnergy;
 using Microsoft.Msagl.DebugHelpers;
 using Microsoft.Msagl.Drawing;
@@ -52,6 +24,7 @@ using Microsoft.Msagl.Routing;
 using Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation;
 using Edge = Microsoft.Msagl.Core.Layout.Edge;
 using Node = Microsoft.Msagl.Core.Layout.Node;
+using Timer = Microsoft.Msagl.DebugHelpers.Timer;
 
 namespace FindOverlapSample {
     internal class OverlapRemovalTestSuite {
@@ -96,10 +69,10 @@ namespace FindOverlapSample {
             String overlapMethodName = overlapMethod.Item1;
             var overlapSettings = overlapMethod.Item2;
             
-            IOverlapRemoval overlapRemover = GetOverlapRemover(overlapSettings);
+            IOverlapRemoval overlapRemover = GetOverlapRemover(overlapSettings, geomGraph);
             
             
-            overlapRemover.RemoveOverlap(geomGraph);
+            overlapRemover.RemoveOverlaps();
             
             RefreshAndCleanGraph(parentGraph);
          
@@ -140,8 +113,8 @@ namespace FindOverlapSample {
             WriteLine(line);
         }
 
-        private IOverlapRemoval GetOverlapRemover(OverlapRemovalSettings settings) {
-            if (settings.Method == OverlapRemovalMethod.Pmst) return new OverlapRemoval(settings);
+        private IOverlapRemoval GetOverlapRemover(OverlapRemovalSettings settings, GeometryGraph geomGraph) {
+            if (settings.Method == OverlapRemovalMethod.MinimalSpanningTree) return new OverlapRemoval(settings, geomGraph.Nodes.ToArray());
             else if (settings.Method==OverlapRemovalMethod.Prism) return new ProximityOverlapRemoval(settings);
             return null;
         }
@@ -330,9 +303,12 @@ namespace FindOverlapSample {
                                        HashSet<Tuple<int, int, int>> proximityTriangles, List<Tuple<string, double>> statistics, OverlapRemovalSettings settings) {
             ProximityOverlapRemoval prism = new ProximityOverlapRemoval(graphCopy);
             prism.Settings = settings;
-            TimeSpan cpuTimeSpan = prism.RemoveOverlap();
-
-            var statCPUTime = Tuple.Create("CPUTime", cpuTimeSpan.TotalSeconds);
+            Timer timer = new Timer();
+            timer.Start();
+            prism.RemoveOverlaps();
+            timer.Stop();
+            var cpuTimeSpan = TimeSpan.FromSeconds(timer.Duration);
+            var statCpuTime = Tuple.Create("CPUTime", cpuTimeSpan.TotalSeconds);
             var statIterations = Tuple.Create("Iterations", (double)prism.LastRunIterations);
 
             var statEdgeLength = Statistics.Statistics.EdgeLengthDeviation(graphOriginal, graphCopy, proximityEdges);
@@ -343,7 +319,7 @@ namespace FindOverlapSample {
             var statArea = Statistics.Statistics.Area(graphCopy);
 
 
-            statistics.Add(statCPUTime);
+            statistics.Add(statCpuTime);
             statistics.Add(statIterations);
             statistics.Add(statEdgeLength);
             statistics.Add(statProcrustes);
@@ -541,7 +517,7 @@ namespace FindOverlapSample {
             testList.Add(Tuple.Create("PRISM-LM",settings));
 
             settings = settings.Clone();
-            settings.Method=OverlapRemovalMethod.Pmst;
+            settings.Method=OverlapRemovalMethod.MinimalSpanningTree;
             testList.Add(Tuple.Create("MST", settings));
 
             return testList;

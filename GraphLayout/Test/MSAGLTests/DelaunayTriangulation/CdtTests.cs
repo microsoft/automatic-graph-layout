@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
@@ -142,31 +114,31 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
 #if DEBUG&& TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
 #endif
-            var cdt = new Cdt(Points(), null, new []{new Tuple<Point, Point>(new Point(109,202),new Point(506,135) ),
-            new Tuple<Point, Point>(new Point(139,96),new Point(452,96) )});
+            var cdt = new Cdt(Points(), null, new []{new SymmetricTuple<Point>(new Point(109,202),new Point(506,135) ),
+            new SymmetricTuple<Point>(new Point(139,96),new Point(452,96) )}.ToList());
             cdt.Run();
         }
 
         static IEnumerable<Point> Points() {
             foreach (var segment in Segments()) {
-                yield return segment.Item1;
-                yield return segment.Item2;
+                yield return segment.A;
+                yield return segment.B;
             }
             yield return new Point(157,198);
         }
 
-        static IEnumerable<Tuple<Point, Point>> Segments() {
-            yield return new Tuple<Point, Point>(new Point(181, 186), new Point(242, 73));
-            yield return new Tuple<Point, Point>(new Point(236, 122), new Point(268, 202));
-            yield return new Tuple<Point, Point>(new Point(274, 167), new Point(343, 76));
-            yield return new Tuple<Point, Point>(new Point(352, 131), new Point(361, 201));
-            yield return new Tuple<Point, Point>(new Point(200, 209), new Point(323, 237));
-            yield return new Tuple<Point, Point>(new Point(372, 253), new Point(451, 185));
-            yield return new Tuple<Point, Point>(new Point(448, 133), new Point(517, 272));
-            yield return new Tuple<Point, Point>(new Point(339, 327), new Point(327, 145));
-            yield return new Tuple<Point, Point>(new Point(185, 220), new Point(207, 172));
-            yield return new Tuple<Point, Point>(new Point(61, 226), new Point(257, 253));
-            yield return new Tuple<Point, Point>(new Point(515, 228), new Point(666, 258));
+        static IEnumerable<SymmetricTuple<Point>> Segments() {
+            yield return new SymmetricTuple<Point>(new Point(181, 186), new Point(242, 73));
+            yield return new SymmetricTuple<Point>(new Point(236, 122), new Point(268, 202));
+            yield return new SymmetricTuple<Point>(new Point(274, 167), new Point(343, 76));
+            yield return new SymmetricTuple<Point>(new Point(352, 131), new Point(361, 201));
+            yield return new SymmetricTuple<Point>(new Point(200, 209), new Point(323, 237));
+            yield return new SymmetricTuple<Point>(new Point(372, 253), new Point(451, 185));
+            yield return new SymmetricTuple<Point>(new Point(448, 133), new Point(517, 272));
+            yield return new SymmetricTuple<Point>(new Point(339, 327), new Point(327, 145));
+            yield return new SymmetricTuple<Point>(new Point(185, 220), new Point(207, 172));
+            yield return new SymmetricTuple<Point>(new Point(61, 226), new Point(257, 253));
+            yield return new SymmetricTuple<Point>(new Point(515, 228), new Point(666, 258));
         }
         [DeploymentItem(@"Resources\triangles")]
         [TestMethod]
@@ -219,19 +191,19 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
         void Triangulate(int n, double size) {
             var random = new Random(n);
             var w = n * size;
-            var cdt = new Cdt(PointsForCdt(random, n, w), null, SegmentsForCdt(w));
+            var cdt = new Cdt(PointsForCdt(random, n, w), null, SegmentsForCdt(w).ToList());
             cdt.Run();
 #if DEBUG&&TEST_MSAGL
             CdtSweeper.ShowFront(cdt.GetTriangles(), null, null,null);
 #endif
         }
 
-        IEnumerable<Tuple<Point, Point>> SegmentsForCdt(double size) {
+        IEnumerable<SymmetricTuple<Point>> SegmentsForCdt(double size) {
             var w = size / 2;
             var corners=new []{ new Point(0, 0), new Point(0, size), new Point(size,0), new Point(size,size)};
             var center=new Point(w,w);
             foreach (var corner in corners)
-                yield return new Tuple<Point, Point>(center, corner);
+                yield return new SymmetricTuple<Point>(center, corner);
         }
 
         static IEnumerable<Point> PointsForCdt(Random random, int n, double d) {

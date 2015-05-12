@@ -1,170 +1,138 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
+using Microsoft.Msagl.Core.GraphAlgorithms;
 using Microsoft.Msagl.Core.Layout;
-
+using Microsoft.Msagl.DebugHelpers;
+using SymmetricSegment = Microsoft.Msagl.Core.DataStructures.SymmetricTuple<Microsoft.Msagl.Core.Geometry.Point>;
 namespace Microsoft.Msagl.Layout.LargeGraphLayout {
     /// <summary>
     /// class keeping a level info
     /// </summary>
     public class LgLevel {
-        internal readonly Dictionary<Tuple<Point, Point>, Rail> _railDictionary =
-            new Dictionary<Tuple<Point, Point>, Rail>(new LgData.CurveRailComparer());
+        internal readonly Dictionary<SymmetricSegment, Rail> _railDictionary =
+            new Dictionary<SymmetricSegment, Rail>();
+
+        internal Dictionary<SymmetricSegment, Rail> RailDictionary {
+            get { return _railDictionary; }
+        }
 
         internal readonly Dictionary<Edge, Set<Rail>> _railsOfEdges = new Dictionary<Edge, Set<Rail>>();
-        internal Set<Rail> HighlightedRails=new Set<Rail>();
+        internal Set<Rail> HighlightedRails = new Set<Rail>();
         internal readonly int ZoomLevel;
         readonly GeometryGraph _geomGraph;
-            
-        internal LgLevel(int zoomLevel,
-            GeometryGraph geomGraph // needed for statistics only
-            ) {
+        internal RTree<Rail> _railTree = new RTree<Rail>();
+        internal RTree<Rail> RailTree {
+            get { return _railTree; }
+        }
+
+        RTree<LgNodeInfo> _nodeInfoTree = new RTree<LgNodeInfo>();
+
+        internal readonly Dictionary<Edge, List<Rail>> _orderedRailsOfEdges = new Dictionary<Edge, List<Rail>>();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="zoomLevel"></param>
+        /// <param name="geomGraph">needed only for statistics</param>
+        internal LgLevel(int zoomLevel, GeometryGraph geomGraph) {
             _geomGraph = geomGraph;
             ZoomLevel = zoomLevel;
         }
 
-        internal RTree<Rail> _railTree;
-
-        internal void CreateRailTree() {
-            _railTree =
-                new RTree<Rail>(
-                    _railDictionary.Values.Select(rail => new KeyValuePair<Rectangle, Rail>(rail.BoundingBox, rail)));
-
-            Console.WriteLine("edges = {0}, rails = {1}, edge segments = {2}", _railsOfEdges.Count, _railDictionary.Count,
-                _railsOfEdges.Values.Sum(s => s.Count));
-
+        internal RTree<LgNodeInfo> NodeInfoTree {
+            get { return _nodeInfoTree; }            
         }
+
+
+        internal void CreateEmptyRailTree() {
+            _railTree = new RTree<Rail>();
+        }
+
+        //public void CreateRailTree() {
+        //    RailTree = new RTree<Rail>(
+        //        RailDictionary.Values.Select(rail => new KeyValuePair<Rectangle, Rail>(rail.BoundingBox, rail)));
+        //}
+
         /// <summary>
-        /// records the fact that the edge passes through the rail
+        /// get endpoint tuples of all rails
         /// </summary>
-        /// <param name="edge"></param>
-        /// <param name="rail"></param>
-        public void AssociateEdgeAndRail(Edge edge, Rail rail) {
-            Set<Rail> railSet;
-            if (!_railsOfEdges.TryGetValue(edge, out railSet)) {
-                _railsOfEdges[edge] = railSet = new Set<Rail>();
-            }
-            railSet.Insert(rail);
-        }
-  
-
-        internal void FillRailDictionaryForEdge(Edge edge) {
-            var setOfRails = new Set<Rail>();
-            _railsOfEdges[edge] = setOfRails;
-            FillRailDictionaryForEdgeCurve(edge.Curve, setOfRails);
-            FillRailDictionaryForArrowSource(edge.EdgeGeometry.SourceArrowhead, edge.Curve, setOfRails);
-            FillRailDictionaryForArrowTarget(edge.EdgeGeometry.TargetArrowhead, edge.Curve, setOfRails);
-        }
-
-        void FillRailDictionaryForArrowSource(Arrowhead sourceArrowhead, ICurve curve, Set<Rail> railSet) {
-            if (sourceArrowhead == null)
-                return;
-            railSet.Insert(_railDictionary[new Tuple<Point, Point>(curve.Start, sourceArrowhead.TipPosition)]);
-        }
-
-        void FillRailDictionaryForArrowTarget(Arrowhead targetArrowhead, ICurve curve, Set<Rail> railSet) {
-            if (targetArrowhead == null)
-                return;
-            railSet.Insert(_railDictionary[new Tuple<Point, Point>(curve.End, targetArrowhead.TipPosition)]);
-        }
-
-        void FillRailDictionaryForEdgeCurve(ICurve curve, Set<Rail> railSet) {
-            var cc = curve as Curve;
-            if (cc != null)
-                foreach (var seg in cc.Segments)
-                    FillRailDictionaryForSeg(seg, railSet);
-            else
-                FillRailDictionaryForSeg(curve, railSet);
-        }
-
-        void FillRailDictionaryForSeg(ICurve seg, Set<Rail> railSet) {
-            var tuple = new Tuple<Point, Point>(seg.Start, seg.End);
-            railSet.Insert(_railDictionary[tuple]);
-        }
-
-        internal void RegisterRailsOfEdge(LgEdgeInfo edgeInfo) {
-            var curve = edgeInfo.Edge.Curve as Curve;
-            if (curve != null)
-                foreach (var seg in curve.Segments)
-                    RegisterElementaryRail(edgeInfo, seg);
-            else
-                RegisterElementaryRail(edgeInfo, edgeInfo.Edge.Curve);
-            RegisterRailsForArrowheads(edgeInfo);
-        }
-
-        void RegisterRailsForArrowheads(LgEdgeInfo edgeInfo) {
-            var edgeGeom = edgeInfo.Edge.EdgeGeometry;
-            if (edgeGeom.SourceArrowhead != null) {
-                var tuple = new Tuple<Point, Point>(edgeGeom.SourceArrowhead.TipPosition, edgeGeom.Curve.Start);
-                Rail rail;
-                if (_railDictionary.TryGetValue(tuple, out rail)) {
-                    if (rail.TopRankedEdgeInfoOfTheRail.Rank < edgeInfo.Rank) //the newcoming edgeInfo is more important
-                        rail.TopRankedEdgeInfoOfTheRail = edgeInfo;
+        /// <returns></returns>
+        public List<SymmetricSegment> GetAllRailsEndpoints() {
+            var endpts = new List<SymmetricSegment>();
+            Point p0, p1;
+            foreach (var rail in _railTree.GetAllLeaves()) {
+                if (rail.GetStartEnd(out p0, out p1)) {
+                    endpts.Add(new SymmetricSegment(p0, p1));
                 }
-                else
-                    _railDictionary[tuple] = new Rail(edgeGeom.SourceArrowhead, edgeGeom.Curve.Start, edgeInfo,
-                        ZoomLevel);
             }
-
-            if (edgeGeom.TargetArrowhead != null) {
-                var tuple = new Tuple<Point, Point>(edgeGeom.TargetArrowhead.TipPosition, edgeGeom.Curve.End);
-                Rail rail;
-                if (_railDictionary.TryGetValue(tuple, out rail)) {
-                    if (rail.TopRankedEdgeInfoOfTheRail.Rank < edgeInfo.Rank) //the newcoming edgeInfo is more important
-                        _railDictionary[tuple] = new Rail(edgeGeom.TargetArrowhead, edgeGeom.Curve.End, edgeInfo,
-                            ZoomLevel);
-                }
-                else
-                    _railDictionary[tuple] = new Rail(edgeGeom.TargetArrowhead, edgeGeom.Curve.End, edgeInfo,
-                        ZoomLevel);
-            }
-
+            return endpts;
         }
 
-        void RegisterElementaryRail(LgEdgeInfo edgeInfo, ICurve seg) {
+        public List<Rail> FetchOrCreateRailSequence(List<Point> path) {
+            List<Rail> rails = new List<Rail>();
+            for (int i = 0; i < path.Count - 1; i++) {
+                var rail = FindOrCreateRail(path[i], path[i + 1]);
+                if (rail == null)
+                    continue;
+
+                rails.Add(rail);
+            }
+            return rails;
+        }
+
+        public Rail FindOrCreateRail(Point s, Point t) {
+            var p0 = s;
+            var p1 = t;
+
+            var t1 = new SymmetricSegment(p0, p1);
             Rail rail;
-            var tuple = new Tuple<Point, Point>(seg.Start, seg.End);
-            //was the seg registered before?
-            if (_railDictionary.TryGetValue(tuple, out rail)) {
-                if (rail.TopRankedEdgeInfoOfTheRail.Rank < edgeInfo.Rank) //newcoming edgeInfo is more important
-                    rail.TopRankedEdgeInfoOfTheRail = edgeInfo;
+            if (RailDictionary.TryGetValue(t1, out rail)) return rail;
+            var t2 = new SymmetricSegment(p1, p0);
+            if (RailDictionary.TryGetValue(t2, out rail)) return rail;
+
+            // no rail exists // roman: please check that this code really can be commented out and does need to be fixed instead 
+            /*
+             * var q0 = VisGraph.GetPointOfVisGraphVertex(s);
+            var q1 = VisGraph.GetPointOfVisGraphVertex(t);
+            if (q0 == null || q1 == null)
+            {
+                //no visgraph vertex found
             }
             else
-                _railDictionary[tuple] = new Rail(seg, edgeInfo, ZoomLevel);
+            {
+                var edge = VisGraph.FindEdge(q0.Point, q1.Point);
+            }*/
+            return CreateRail(p0, p1);
         }
 
-        internal IEnumerable<Rail> GetRailsIntersectionVisRect(Rectangle visibleRectange) {
+        public Rail CreateRail(Point ep0, Point ep1) {
+            var st = new SymmetricSegment(ep0, ep1);
+            Rail rail;
+            if (RailDictionary.TryGetValue(st, out rail)) {
+                return rail;
+            }
+            var ls = new LineSegment(ep0, ep1);
+            rail = new Rail(ls, ZoomLevel);
+            RailTree.Add(rail.BoundingBox, rail);
+            RailDictionary.Add(st, rail);
+            return rail;
+        }
+
+        public Rail FindRail(Point s, Point t) {
+            var p0 = s;
+            var p1 = t;
+            var ss = new SymmetricSegment(p1, p0);
+            Rail rail;
+            RailDictionary.TryGetValue(ss, out rail);
+            return rail;
+        }
+        
+        internal IEnumerable<Rail> GetRailsIntersectingRect(Rectangle visibleRectange) {
             var ret = new Set<Rail>();
             foreach (var rail in _railTree.GetAllIntersecting(visibleRectange))
                 ret.Insert(rail);
@@ -175,10 +143,43 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             return (from kv in _railsOfEdges where kv.Value.Contains(rail) select kv.Key).ToList();
         }
 
+        public Rail RemoveRailFromRtree(Rail rail) {
+            return _railTree.Remove(rail.BoundingBox, rail);
+        }
+
+        /// <summary>
+        /// try adding single rail to dictionary
+        /// </summary>
+        /// <param name="rail"></param>
+        /// <returns>true iff the rail does not belong to _railDictionary</returns>
+        public bool AddRailToDictionary(Rail rail) {
+            Point p0, p1;
+            if (!rail.GetStartEnd(out p0, out p1)) return false;
+            var st = new SymmetricSegment(p0, p1);
+            if (!_railDictionary.ContainsKey(st)) {
+                _railDictionary.Add(st, rail);
+                return true;
+            }
+            return false;
+        }
+
+        public void AddRailToRtree(Rail rail) {
+            Point p0, p1;
+            if (!rail.GetStartEnd(out p0, out p1)) return;
+            if (_railTree.Contains(new Rectangle(p0, p1), rail))
+                return;
+            _railTree.Add(new Rectangle(p0, p1), rail);
+        }
+
+        public void RemoveRailFromDictionary(Rail rail) {
+            Point p0, p1;
+            if (!rail.GetStartEnd(out p0, out p1)) return;
+            _railDictionary.Remove(new SymmetricSegment(p0, p1));
+        }
+
         #region Statistics
 
-        internal void RunLevelStatistics(IEnumerable<Node> nodes)
-        {
+        internal void RunLevelStatistics(IEnumerable<Node> nodes) {
             Console.WriteLine("running stats");
 
             foreach (var rail in _railDictionary.Values)
@@ -186,7 +187,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
             RunStatisticsForNodes(nodes);
 
-            double numberOfTiles = (double)ZoomLevel * ZoomLevel;
+            double numberOfTiles = (double) ZoomLevel*ZoomLevel;
             double averageRailsForTile = 0;
             double averageVerticesForTile = 0;
 
@@ -194,10 +195,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             int maxRailsPerTile = 0;
             int maxTotalPerTile = 0;
 
-            foreach (var tileStatistic in tileTableForStatistic.Values)
-            {
-                averageVerticesForTile += tileStatistic.vertices / numberOfTiles;
-                averageRailsForTile += tileStatistic.rails / numberOfTiles;
+            foreach (var tileStatistic in tileTableForStatistic.Values) {
+                averageVerticesForTile += tileStatistic.vertices/numberOfTiles;
+                averageRailsForTile += tileStatistic.rails/numberOfTiles;
                 if (maxRailsPerTile < tileStatistic.rails)
                     maxRailsPerTile = tileStatistic.rails;
                 if (maxVerticesPerTile < tileStatistic.vertices)
@@ -217,21 +217,18 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             Console.WriteLine("done with stats");
         }
 
-        void RunStatisticsForNodes(IEnumerable<Node> nodes)
-        {
+        void RunStatisticsForNodes(IEnumerable<Node> nodes) {
             foreach (var node in nodes)
                 CreateStatisticsForNode(node);
         }
 
-        void CreateStatisticsForNode(Node node)
-        {
+        void CreateStatisticsForNode(Node node) {
             foreach (var tile in GetCurveTiles(node.BoundaryCurve))
                 tile.vertices++;
 
         }
 
-        void CreateStatisticsForRail(Rail rail)
-        {
+        void CreateStatisticsForRail(Rail rail) {
             var arrowhead = rail.Geometry as Arrowhead;
             if (arrowhead != null)
                 CreateStatisticsForArrowhead(arrowhead);
@@ -240,42 +237,37 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                     t.rails++;
         }
 
-        void CreateStatisticsForArrowhead(Arrowhead arrowhead)
-        {
+        void CreateStatisticsForArrowhead(Arrowhead arrowhead) {
             TileStatistic tile = GetOrCreateTileStatistic(arrowhead.TipPosition);
             tile.rails++;
         }
 
-        TileStatistic GetOrCreateTileStatistic(Point p)
-        {
+        TileStatistic GetOrCreateTileStatistic(Point p) {
             Tuple<int, int> t = DeviceIndependendZoomCalculatorForNodes.PointToTuple(_geomGraph.LeftBottom, p,
                 GetGridSize());
             TileStatistic ts;
             if (tileTableForStatistic.TryGetValue(t, out ts))
                 return ts;
 
-            tileTableForStatistic[t] = ts = new TileStatistic { rails = 0, vertices = 0 };
+            tileTableForStatistic[t] = ts = new TileStatistic {rails = 0, vertices = 0};
             return ts;
         }
 
-        IEnumerable<TileStatistic> GetCurveTiles(ICurve curve)
-        {
+        IEnumerable<TileStatistic> GetCurveTiles(ICurve curve) {
             var tiles = new Set<TileStatistic>();
             const int n = 64;
             var s = curve.ParStart;
             var e = curve.ParEnd;
-            var d = (e - s) / (n - 1);
-            for (int i = 0; i < 64; i++)
-            {
-                var t = s + i * d;
+            var d = (e - s)/(n - 1);
+            for (int i = 0; i < 64; i++) {
+                var t = s + i*d;
                 var ts = GetOrCreateTileStatistic(curve[t]);
                 tiles.Insert(ts);
             }
             return tiles;
         }
 
-        class TileStatistic
-        {
+        class TileStatistic {
             public int vertices;
             public int rails;
         }
@@ -283,11 +275,54 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         readonly Dictionary<Tuple<int, int>, TileStatistic> tileTableForStatistic =
             new Dictionary<Tuple<int, int>, TileStatistic>();
 
-        double GetGridSize()
-        {
-            return Math.Max(_geomGraph.Width, _geomGraph.Height) / ZoomLevel;
+        double GetGridSize() {
+            return Math.Max(_geomGraph.Width, _geomGraph.Height)/ZoomLevel;
         }
+
         #endregion
 
+
+        internal void AddRail(Rail rail) {
+            if (AddRailToDictionary(rail))
+                AddRailToRtree(rail);
+        }
+
+        public void ClearRailTree() {
+            _railTree.Clear();
+        }
+
+        public void CreateNodeTree(IEnumerable<LgNodeInfo> nodeInfos, double nodeDotWidth) {
+            foreach (var n in nodeInfos)
+                NodeInfoTree.Add(new RectangleNode<LgNodeInfo>(n,
+                    new Rectangle(new Size(nodeDotWidth, nodeDotWidth),n.Center)));
+        }
+
+        public IEnumerable<Node> GetNodesIntersectingRect(Rectangle visibleRectangle) {
+            return NodeInfoTree.GetAllIntersecting(visibleRectangle).Select(n => n.GeometryNode);
+        }
+
+        public bool RectIsEmptyOnLevel(Rectangle tileBox) {
+            LgNodeInfo lg;
+            return !NodeInfoTree.OneIntersecting(tileBox, out lg);
+        }
+
+        internal void RemoveFromRailEdges(List<SymmetricTuple<LgNodeInfo>> removeList) {
+            foreach (var symmetricTuple in removeList)
+                RemoveTupleFromRailEdges(symmetricTuple);
+        }
+
+        void RemoveTupleFromRailEdges(SymmetricTuple<LgNodeInfo> tuple) {
+            var a = tuple.A.GeometryNode;
+            var b = tuple.B.GeometryNode;
+            foreach (var edge in EdgesBetween(a, b))
+                _railsOfEdges.Remove(edge);
+        }
+
+        IEnumerable<Edge> EdgesBetween(Node a, Node b) {
+            foreach (var e in a.InEdges.Where(e => e.Source == b))
+                yield return e;
+            foreach (var e in a.OutEdges.Where(e => e.Target == b))
+                yield return e;
+        }
     }
 }

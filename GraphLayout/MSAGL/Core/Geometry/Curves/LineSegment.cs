@@ -1,33 +1,6 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Microsoft.Msagl.Core.Geometry.Curves {
     /// <summary>
@@ -144,7 +117,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         /// <param name="a">the first point</param>
         /// <param name="x">x-coordinate of the second point</param>
         /// <param name="y">y-coordinate of the second point</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "a"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "x"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "y")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "a"), SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "x"), SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "y")]
         public LineSegment(Point a, double x, double y) : this(a, new Point(x, y)) { }
 
         /// <summary>
@@ -154,7 +127,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         /// <param name="y0">y-coordinate of the first point</param>
         /// <param name="x1">x-coordinate of the second point</param>
         /// <param name="y1">y-coordinate of the second point</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "y"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "x")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "y"), SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "x")]
         public LineSegment(double x0, double y0, double x1, double y1) : this(new Point(x0, y0), new Point(x1, y1)) { }
 
         /// <summary>
@@ -406,7 +379,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         /// <param name="d"></param>
         /// <param name="x"></param>
         /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "x"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "c"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "a"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "x"), SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d"), SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "c"), SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b"), SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "a"), SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#")]
         public static bool Intersect(Point a, Point b, Point c, Point d, out Point x) {
             if (!Point.LineLineIntersection(a, b, c, d, out x))
                 return false;
@@ -447,6 +420,94 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         }
 
         #endregion
+
+        /// <summary>
+        /// [a,b] and [c,d] are the segments. u and v are the corresponding closest point params
+        /// see http://www.geometrictools.com/Documentation/DistanceLine3Line3.pdf
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        /// <param name="d"></param>
+        /// <param name="parab"></param>
+        /// <param name="parcd"></param>
+        internal static double MinDistBetweenLineSegments(Point a, Point b, Point c, Point d, out double parab, out double parcd) {
+            Point u = b - a;
+            Point v = d - c;
+            Point w = a - c;
+
+            double D = Point.CrossProduct(u, v);
+
+            double uu = u * u;        // always >= 0
+            double uv = u * v;
+            double vv = v * v;        // always >= 0
+            double uw = u * w;
+            double vw = v * w;
+            double sN, tN;
+            double absD = Math.Abs(D);
+            double sD = absD, tD = absD;
+
+            // compute the line parameters of the two closest points
+            if (absD < ApproximateComparer.Tolerance) { // the lines are almost parallel
+                sN = 0.0;        // force using point a on segment [a..b]
+                sD = 1.0;        // to prevent possible division by 0.0 later
+                tN = vw;
+                tD = vv;
+            }
+            else {                // get the closest points on the infinite lines
+                sN = Point.CrossProduct(v, w);
+                tN = Point.CrossProduct(u, w);
+                if (D < 0) {
+                    sN = -sN;
+                    tN = -tN;                  
+                }
+
+                if (sN < 0.0) {       // parab < 0 => the s=0 edge is visible
+                    sN = 0.0;
+                    tN = vw;
+                    tD = vv;
+                }
+                else if (sN > sD) {  // parab > 1 => the s=1 edge is visible
+                    sN = sD = 1;
+                    tN = vw + uv;
+                    tD = vv;
+                }
+            }
+
+            if (tN < 0.0) {           // tc < 0 => the t=0 edge is visible
+                tN = 0.0;
+                // recompute parab for this edge
+                if (-uw < 0.0)
+                    sN = 0.0;
+                else if (-uw > uu)
+                    sN = sD;
+                else {
+                    sN = -uw;
+                    sD = uu;
+                }
+            }
+            else if (tN > tD) {      // tc > 1 => the t=1 edge is visible
+                tN = tD = 1;
+                // recompute parab for this edge
+                if ((-uw + uv) < 0.0)
+                    sN = 0;
+                else if ((-uw + uv) > uu)
+                    sN = sD;
+                else {
+                    sN = (-uw + uv);
+                    sD = uu;
+                }
+            }
+
+            // finally do the division to get parameters
+            parab = (Math.Abs(sN) < ApproximateComparer.Tolerance ? 0.0 : sN / sD);
+            parcd = (Math.Abs(tN) < ApproximateComparer.Tolerance ? 0.0 : tN / tD);
+
+            // get the difference of the two closest points
+            Point dP = w + (parab * u) - (parcd * v);
+
+            return dP.Length;   // return the closest distance
+        }
     }
 }
 

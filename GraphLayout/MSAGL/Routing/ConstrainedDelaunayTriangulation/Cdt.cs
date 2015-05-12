@@ -1,32 +1,4 @@
 /*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-/*
 Following "Sweep-line algorithm for constrained Delaunay triangulation", by Domiter and Zalik
 */
 
@@ -38,16 +10,17 @@ using Microsoft.Msagl.Core;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
+using SymmetricSegment = Microsoft.Msagl.Core.DataStructures.SymmetricTuple<Microsoft.Msagl.Core.Geometry.Point>;
 
 namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
     ///<summary>
     ///triangulates the space between point, line segment and polygons in the Delaunay fashion
     ///</summary>
     public class Cdt : AlgorithmBase {
-        private readonly IEnumerable<Tuple<Point, object>> isolatedSitesWithObject; 
+         readonly IEnumerable<Tuple<Point, object>> isolatedSitesWithObject; 
         readonly IEnumerable<Point> isolatedSites;
         readonly IEnumerable<Polyline> obstacles;
-        readonly IEnumerable<Tuple<Point, Point>> isolatedSegments;
+        readonly List<SymmetricSegment> isolatedSegments;
         CdtSite P1;
         CdtSite P2;
         CdtSweeper sweeper;
@@ -60,7 +33,7 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
         ///<param name="isolatedSites"></param>
         ///<param name="obstacles"></param>
         ///<param name="isolatedSegments"></param>
-        public Cdt(IEnumerable<Point> isolatedSites, IEnumerable<Polyline> obstacles, IEnumerable<Tuple<Point, Point>> isolatedSegments) {
+        public Cdt(IEnumerable<Point> isolatedSites, IEnumerable<Polyline> obstacles, List<SymmetricSegment> isolatedSegments) {
             this.isolatedSites = isolatedSites;
             this.obstacles = obstacles;
             this.isolatedSegments = isolatedSegments;
@@ -91,7 +64,7 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
 
             if (isolatedSegments != null)
                 foreach (var isolatedSegment in isolatedSegments)
-                    AddConstrainedEdge(isolatedSegment.Item1, isolatedSegment.Item2, null);
+                    AddConstrainedEdge(isolatedSegment.A, isolatedSegment.B, null);
 
             AddP1AndP2();
 

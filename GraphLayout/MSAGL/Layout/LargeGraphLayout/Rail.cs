@@ -1,42 +1,18 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 ﻿using System;
 using System.Diagnostics;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
+using Microsoft.Msagl.Routing.Visibility;
 
 namespace Microsoft.Msagl.Layout.LargeGraphLayout {
+
+
     /// <summary>
     /// keeps a part of EdgeGeometry which is visible
     /// </summary>
     public class Rail {
+
 #if DEBUG
         static int railCount;
         int id;
@@ -55,12 +31,22 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         /// <summary>
         /// the point where the edge curve touches the arrowhead
         /// </summary>
-        public readonly Point CurveAttachmentPoint;
+        public Point CurveAttachmentPoint;
 
         /// <summary>
         /// the corresponding LgEdgeInfo
         /// </summary>
         public LgEdgeInfo TopRankedEdgeInfoOfTheRail;
+
+        bool _isUsedOnPreviousLevel;
+
+        public double MinPassingEdgeZoomLevel = Double.MaxValue;
+
+        public bool IsUsedOnPreviousLevel
+        {
+            get { return _isUsedOnPreviousLevel; }
+            set { _isUsedOnPreviousLevel = value; }
+        }
 
         internal int ZoomLevel;
 #if DEBUG
@@ -83,7 +69,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         /// </returns>
         /// <filterpriority>2</filterpriority>
         public override string ToString() {
-            return id.ToString();
+            return id + StartEndString();
+        }
+
+        string StartEndString() {
+            Point s, t;
+            return GetStartEnd(out s, out t) ? " " + new LineSegment(s, t) : "";
         }
 #endif
 
@@ -109,7 +100,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             ZoomLevel = zoomLevel;
         }
 
-        internal Rectangle BoundingBox {
+        public Rectangle BoundingBox {
             get {
                 var icurve = Geometry as ICurve;
                 if (icurve != null)
@@ -139,6 +130,46 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             return new Tuple<Point, Point>(arrowhead.TipPosition, CurveAttachmentPoint);
         }
 
+        
+        public Rail(ICurve curveSegment, int zoomLevel)
+        {
+            ZoomLevel = zoomLevel;
+#if DEBUG
+            railCount++;
+            id = railCount;
+#endif
+            Geometry = curveSegment;
+        }
 
+        public bool GetStartEnd(out Point p0, out Point p1) {
+            var curve = Geometry as ICurve;
+            if (curve != null) {
+                p0 = curve.Start;
+                p1 = curve.End;
+                return true;
+            }
+            var arrow = Geometry as Arrowhead;
+            if (arrow != null) {
+                p0 = CurveAttachmentPoint;
+                p1 = arrow.TipPosition;
+                return true;
+            }
+            p0 = new Point();
+            p1 = new Point();
+            return false;
+        }
+
+        public void UpdateTopEdgeInfo(LgEdgeInfo ei)
+        {
+            if (TopRankedEdgeInfoOfTheRail == null || TopRankedEdgeInfoOfTheRail.Rank < ei.Rank)
+                TopRankedEdgeInfoOfTheRail = ei;
+
+            MinPassingEdgeZoomLevel = Math.Min(MinPassingEdgeZoomLevel, ei.ZoomLevel);
+        }
+
+        public LgEdgeInfo GetTopEdgeInfo()
+        {
+            return TopRankedEdgeInfoOfTheRail;
+        }
     }
 }

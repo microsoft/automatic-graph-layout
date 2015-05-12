@@ -1,34 +1,6 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 using System.ComponentModel;
 using Microsoft.Msagl.Core.Layout;
-using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MST;
+using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTree;
 
 namespace Microsoft.Msagl.Layout.MDS
 {
@@ -40,8 +12,7 @@ namespace Microsoft.Msagl.Layout.MDS
     [Description("Setting for Multi Dimensional Scaling algorithm"),
     TypeConverterAttribute(typeof(ExpandableObjectConverter))]
 #endif
-    public class MdsLayoutSettings : LayoutAlgorithmSettings
-    {
+    public class MdsLayoutSettings : LayoutAlgorithmSettings {
 
         /// <summary>
         /// the setting of Multi-Dimensional Scaling layout
@@ -55,9 +26,10 @@ namespace Microsoft.Msagl.Layout.MDS
         private double exponent = -2;
         private double rotationAngle;
 
-        private bool removeOverlaps = true;
+        bool removeOverlaps = true;
 
-        private OverlapRemovalMethod overlapMethod=OverlapRemovalMethod.Pmst;
+        OverlapRemovalMethod overlapMethod = OverlapRemovalMethod.MinimalSpanningTree;
+
         /// <summary>
         /// 
         /// </summary>
@@ -66,14 +38,14 @@ namespace Microsoft.Msagl.Layout.MDS
 #else
         public bool RunInParallel = true;
 #endif
+        int _callIterationsWithMajorizationThreshold = 3000;
 
         /// remove overlaps between node boundaries
-        public bool RemoveOverlaps
-        {
+        public bool RemoveOverlaps {
             set { removeOverlaps = value; }
             get { return removeOverlaps; }
         }
-        
+
         /*
         /// <summary>
         /// Level of convergence accuracy (the closer to zero, the more accurate).
@@ -93,8 +65,7 @@ namespace Microsoft.Msagl.Layout.MDS
         [Description("Number of pivots in MDS")]
         [DefaultValue(50)]
 #endif
-        public int PivotNumber
-        {
+        public int PivotNumber {
             set { pivotNumber = value; }
             get { return pivotNumber; }
         }
@@ -103,14 +74,15 @@ namespace Microsoft.Msagl.Layout.MDS
         /// Number of iterations in distance scaling
         /// </summary>
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Majorization")]
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming",
+            "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Majorization")]
 #if PROPERTY_GRID_SUPPORT
         [DisplayName("Number of iterations with majorization")]
         [Description("If this number is positive then the majorization method will be used with the initial solution taken from the landmark method")]
         [DefaultValue(0)]
 #endif
-        public int IterationsWithMajorization
-        {
+            public int IterationsWithMajorization {
             set { iterationsWithMajorization = value; }
             get { return iterationsWithMajorization; }
         }
@@ -123,8 +95,7 @@ namespace Microsoft.Msagl.Layout.MDS
         [Description("The resulting layout will be scaled in the x-axis by this number")]
         [DefaultValue(200.0)]
 #endif
-        public double ScaleX
-        {
+        public double ScaleX {
             set { scaleX = value; }
             get { return scaleX; }
         }
@@ -137,8 +108,7 @@ namespace Microsoft.Msagl.Layout.MDS
         [Description("The resulting layout will be scaled by y-axis by this number")]
         [DefaultValue(200.0)]
 #endif
-        public double ScaleY
-        {
+        public double ScaleY {
             set { scaleY = value; }
             get { return scaleY; }
         }
@@ -150,8 +120,7 @@ namespace Microsoft.Msagl.Layout.MDS
         [Description("The power to raise the distances to in the majorization step")]
         [DefaultValue(-2.00)]
 #endif
-        public double Exponent
-        {
+        public double Exponent {
             set { exponent = value; }
             get { return exponent; }
         }
@@ -164,17 +133,16 @@ namespace Microsoft.Msagl.Layout.MDS
         [Description("The resulting layout will be rotated by this angle")]
         [DefaultValue(0.0)]
 #endif
-        public double RotationAngle
-        {
-            set { rotationAngle = value % 360; }
+        public double RotationAngle {
+            set { rotationAngle = value%360; }
             get { return rotationAngle; }
         }
+
         /// <summary>
         /// Clones the object
         /// </summary>
         /// <returns></returns>
-        public override LayoutAlgorithmSettings Clone()
-        {
+        public override LayoutAlgorithmSettings Clone() {
             return MemberwiseClone() as LayoutAlgorithmSettings;
         }
 
@@ -188,13 +156,25 @@ namespace Microsoft.Msagl.Layout.MDS
         /// </summary>
         public bool AdjustScale { get; set; }
 
-      
+
         /// <summary>
         /// The method which should be used to remove the overlaps.
         /// </summary>
         public OverlapRemovalMethod OverlapRemovalMethod {
-            get { return overlapMethod;} 
-            set { overlapMethod = value; } 
+            get { return overlapMethod; }
+            set { overlapMethod = value; }
+        }
+
+        public int GetNumberOfIterationsWithMajorization(int nodeCount) {
+            if (nodeCount > CallIterationsWithMajorizationThreshold) {
+                return 0;
+            }
+            return IterationsWithMajorization;
+        }
+
+        public int CallIterationsWithMajorizationThreshold {
+            get { return _callIterationsWithMajorizationThreshold; }
+            set { _callIterationsWithMajorizationThreshold = value; }
         }
     }
 }

@@ -1,0 +1,45 @@
+﻿<Window x:Class="TestGraphmaps.AppWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:TestGraphmaps"
+        Title="TestWpfViewer" WindowStartupLocation="Manual" WindowState="Normal" Left="0" Top="0">    
+    <DockPanel Name="dockPanel" LastChildFill="True">
+        <ToolBar DockPanel.Dock="Top">
+            <Menu IsMainMenu="True">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Open" Command ="local:AppCommands.OpenFileCommand"></MenuItem>
+                    <MenuItem Header="_Reload" Command ="local:AppCommands.ReloadCommand"></MenuItem>
+                    <MenuItem Header="_Cancel Layout" Command="local:AppCommands.CancelLayoutCommand"></MenuItem>
+                    <MenuItem Header="_Save MSAGL" Command="local:AppCommands.SaveMsaglCommand"></MenuItem>
+                    <MenuItem Header="_Exit" Command="local:AppCommands.ExitCommand"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="_View">
+                    <MenuItem Header="_Home" Command="local:AppCommands.HomeViewCommand"></MenuItem>
+                </MenuItem>                
+                <MenuItem Header="Tools">
+                    <MenuItem Header="Generate Tiles" Command="local:AppCommands.GenerateTilesCommand"/>
+                </MenuItem>                
+            </Menu>
+            <TextBox x:Name="_searchBox" Height="23" Margin="0" TextWrapping="Wrap" Text="Find" VerticalAlignment="Top"   KeyDown="OnKeyDownHandler" Width="156" FontFamily="Consolas" FontStyle="Italic" Focusable="true"/>
+        </ToolBar>
+        <StatusBar DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
+            <TextBox Name="statusTextBox"></TextBox>                
+        </StatusBar>
+        <DockPanel Name="graphViewerPanel" ClipToBounds="True" Background="Gray" >
+            
+            
+        </DockPanel>
+    </DockPanel>
+    <Window.InputBindings>
+        <KeyBinding Key="S" Modifiers="Alt" Command="local:AppCommands.SimplifyRoutesAndUpdateCommand"/>
+        <KeyBinding Key="OemPlus" Modifiers="Alt" Command="local:AppCommands.MagnifyNodesCommand"/>
+        <KeyBinding Key="OemMinus" Modifiers="Alt" Command="local:AppCommands.ScaleNodesBackCommand"/>
+        <KeyBinding Key="PageDown" Modifiers="Alt" Command="local:AppCommands.CopySkeletonToNextLevelCommand"/>
+        <KeyBinding Key="C" Modifiers="Alt" Command="local:AppCommands.CreateSkeletonFromSteinerCdtCommand"/>
+        <KeyBinding Key="OemMinus" Modifiers="Shift" Command="local:AppCommands.ShrinkNodesOfCurrentLevelCommand"/>
+        <KeyBinding Key="R" Modifiers="Alt" Command="local:AppCommands.CopySkeletonFromPreviousLevelCommand"/>
+        <KeyBinding Key="OemPlus" Modifiers="Control" Command="local:AppCommands.MagnifyNodesUniformlyLevelGeqCommand"/>
+        <KeyBinding Key="PrintScreen" Command="local:AppCommands.TakeScreenShotCommand"/>
+        <KeyBinding Key="S" Modifiers="Alt" Command="local:AppCommands.GenerateTilesCommand"/>
+    </Window.InputBindings>
+</Window>

@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Msagl.Core.DataStructures;
@@ -38,10 +10,17 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
     /// <summary>
     /// layout settings to handle a large graph
     /// </summary>
-    public class LgLayoutSettings : LayoutAlgorithmSettings {
+    public class  LgLayoutSettings : LayoutAlgorithmSettings {
         internal readonly Func<PlaneTransformation> TransformFromGraphToScreen;
         internal readonly double DpiX;
         internal readonly double DpiY;
+
+        /// <summary>
+        /// size of drawn node
+        /// </summary>
+        public double NodeDotWidthInInches = 0.1;
+        public double NodeDotWidthInInchesMinInImage = 0.06;
+        public double NodeLabelHeightInInches = 0.22;
 
         /// <summary>
         /// Func giving the maximal arrowhead length for the current viewport
@@ -63,8 +42,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="transformation"></param>
-        public void OnViewerChangeTransformAndInvalidateGraph(PlaneTransformation transformation) {
+        public void OnViewerChangeTransformAndInvalidateGraph() {
             if (ViewerChangeTransformAndInvalidateGraph != null)
                 ViewerChangeTransformAndInvalidateGraph();
         }
@@ -73,7 +51,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         /// this graph is shown in the viewer
         /// </summary>
         public RailGraph RailGraph {
-            get { return Algorithm != null ? Algorithm.RailGraph : null; }
+            get { return Interactor != null ? Interactor.RailGraph : null; }
         }
 
         /// <summary>
@@ -87,7 +65,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         /// <summary>
         /// the algorithm object
         /// </summary>
-        public LgInteractor Algorithm { get; set; }
+        public LgInteractor Interactor { get; set; }
 
 
         /// <summary>
@@ -117,16 +95,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             EdgeRoutingSettings.PolylinePadding = NodeSeparation/6;
         }
 
-        internal Rectangle ClientViewportMappedToGraph {
-            get {
-                var t = TransformFromGraphToScreen().Inverse;
-                var p0 = new Point(0, 0);
-                var vp = ClientViewportFunc();
-                var p1 = new Point(vp.Width, vp.Height);
-                return new Rectangle(t*p0, t*p1);
-            }
-        }
-
+        public Func<Rectangle> ClientViewportMappedToGraph { get; set; }            
 
 
         Dictionary<Node, LgNodeInfo> geometryNodesToLgNodeInfos = new Dictionary<Node, LgNodeInfo>();
@@ -143,70 +112,19 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         /// 
         /// </summary>
         public IDictionary<Edge, LgEdgeInfo> GeometryEdgesToLgEdgeInfos {
-            get { return Algorithm.GeometryEdgesToLgEdgeInfos; }
+            get { return Interactor.GeometryEdgesToLgEdgeInfos; }
         }
 
-
-        /// <summary>
-        /// defines when a satellite becomes visible by muliplying current zoom by SattelliteZoomFactorForNode and comparing it with this.ZoomFactor
-        /// </summary>
-        public double SattelliteZoomFactor = 10;
-
-
-        /// <summary>
-        /// return the current zoom factor
-        /// </summary>
-        public double ZoomFactor {
-            get { return Algorithm.GetZoomFactorToTheGraph(); }
-        }
 
 
         /// <summary>
         /// 
         /// </summary>
-        public Rectangle ScreenRectangle { get; set; }
-
-
-        /// <summary>
-        /// returns maximal edge zoom level range
-        /// </summary>
-        public Interval MaximalEdgeZoomLevelInterval {
-            get { return Algorithm.MaximalEdgeZoomLevelInterval; }
-        }
-
-        double clusterPadding = 5;
-        double reroutingDelayInSeconds = 1; //in seconds
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public double ClusterPadding {
-            get { return clusterPadding; }
-            set { clusterPadding = value; }
-        }
-
-        /// <summary>
-        /// the delay before firing the nice spline routing
-        /// </summary>
-        public double ReroutingDelayInSeconds {
-            get { return reroutingDelayInSeconds; }
-            set { reroutingDelayInSeconds = value; }
-        }
-
-
-
-
         Interval _scaleInterval = new Interval(0.00001, 100000000.0);
-        EdgeRoutingMode initialRouting = EdgeRoutingMode.StraightLine;
         bool needToLayout = true;
-        int maxNumberNodesPerTile = 20;
-        bool usePrecalculatedEdges = true;
+        int maxNumberOfNodesPerTile = 20;
         
-        /// <summary>
-        /// used to draw edges
-        /// </summary>
-        public byte EdgeTransparency = 100;
-
+        
         /// <summary>
         /// used for debugging mostly
         /// </summary>
@@ -219,16 +137,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             get { return _scaleInterval; }
             set { _scaleInterval = value; }
         }
-
-       
-        /// <summary>
-        /// controls the edge routing when loading the graph
-        /// </summary>
-        public EdgeRoutingMode InitialRouting {
-            get { return initialRouting; }
-            set { initialRouting = value; }
-        }
-
         /// <summary>
         /// set this property to true if the graph comes with a given layout
         /// </summary>
@@ -238,78 +146,56 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 
         /// <summary>
-        /// 
+        /// the node quota per tile
         /// </summary>
-        public int MaxNumberNodesPerTile {
-            get { return maxNumberNodesPerTile; }
-            set { maxNumberNodesPerTile = value; }
+        public int MaxNumberOfNodesPerTile {
+            get { return maxNumberOfNodesPerTile; }
+            set { maxNumberOfNodesPerTile = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool UsePrecalculatedEdges {
-            get { return usePrecalculatedEdges; }
-            set { usePrecalculatedEdges = value; }
+        private int increaseNodeQuota;
+
+        public int IncreaseNodeQuota
+        {
+            get { return increaseNodeQuota; }
+            set { increaseNodeQuota = value; }
+        }
+        
+        int maxNumberOfRailsPerTile = 300;
+        
+        public int MaxNumberOfRailsPerTile
+        {
+            get { return maxNumberOfRailsPerTile; }
+            set { maxNumberOfRailsPerTile = value; }
         }
 
-        public string BackgroundImage { get; set; }
-
-        internal const double PathNodesScale = 0.1;
-        /// <summary>
-        /// used for debugging purposes
-        /// </summary>
-        public bool DrawBackgroundImage;
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="rail"></param>
-        public void HighlightEdgesPassingThroughTheRail(Rail rail) {
-            Algorithm.HighlightEdgesPassingThroughTheRail(rail);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="edges"></param>
-        public void HighlightEdges(IEnumerable<Edge> edges) {
-            Algorithm.HighlightEdges(edges);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="rail"></param>
-        /// <returns></returns>
-        public bool TheRailLevelIsTooHigh(Rail rail) {
-            return Algorithm.TheRailLevelIsTooHigh(rail);
-        }
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public double GetMaximalZoomLevel() {
-            return Algorithm.GetMaximalZoomLevel();
+            return Interactor.GetMaximalZoomLevel();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="rail"></param>
-        public void PutOffEdgesPassingThroughTheRail(Rail rail) {
-            Algorithm.PutOffEdgesPassingThroughTheRail(rail);
+        bool _simplifyRoutes = true;
+        int _numberOfNodeShapeSegs = 16;
+
+        public bool SimplifyRoutes {
+            get { return _simplifyRoutes; }
+            set { _simplifyRoutes = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="edges"></param>
-        public void PutOffEdges(List<Edge> edges) {
-            Algorithm.PutOffEdges(edges);
+        public int NumberOfNodeShapeSegs {
+            get { return _numberOfNodeShapeSegs; }
+            set { _numberOfNodeShapeSegs = value; }
         }
 
-        public bool BackgroundImageIsHidden { get; set; }
+        public bool GenerateTiles {
+            get { return _generateTiles; }
+            set { _generateTiles = value; }
+        }
+
+        bool _generateTiles = true;
+
     }
 }

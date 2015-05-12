@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 //-----------------------------------------------------------------------
 // <copyright file="CurveTest.cs" company="Microsoft">
 //   (c) Microsoft Corporation.  All rights reserved.
@@ -204,23 +176,6 @@ namespace Microsoft.Msagl.UnitTests {
             
         }
 #endif
-#if GDI_DEBUG_VIEWER
-        [TestMethod]
-        [DeploymentItem(@"Resources\polygonBug")]
-        public void PolygonPolygonDistanceTest3() {
-            RunPolygonPolygonDistanceTest3("polygonBug");            
-        }
-#endif
-        public static void RunPolygonPolygonDistanceTest3(string fileName) {
-            //DisplayGeometryGraph.SetShowFunctions();
-            IFormatter formatter = new BinaryFormatter();
-            var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.None);
-            var a = (Polygon)formatter.Deserialize(stream);
-            var b = (Polygon)formatter.Deserialize(stream);
-            var d = Polygon.Distance(a, b);
-            var d0 = TestPolygonDistLocal(a, b);
-            Debug.Assert(ApproximateComparer.Close(d, d0));
-        }
 
         [TestMethod]
         public void TestLineSegmentLineSegmentMinDist() {
@@ -237,7 +192,7 @@ namespace Microsoft.Msagl.UnitTests {
             Point d = GeneratePointOnRandom(random);
             double parab;
             double parcd;
-            var dist=Point.MinDistBetweenLineSegments(a, b, c, d, out parab, out parcd);
+            var dist=LineSegment.MinDistBetweenLineSegments(a, b, c, d, out parab, out parcd);
             Assert.IsTrue(ApproximateComparer.Close(dist, (a+(b-a)*parab-(c+(d-c)*parcd)).Length));
             const int steps= 64;
             for(int j=0;j<=steps;j++) {
@@ -327,7 +282,7 @@ namespace Microsoft.Msagl.UnitTests {
             double ret = double.PositiveInfinity,u,v;
             for(int i = 0;i < a.Count;i++)
                 for(int j = 0;j < b.Count;j++)
-                    ret = Math.Min(ret,Point.MinDistBetweenLineSegments(a.Pnt(i),a.Pnt(i + 1),b.Pnt(j),
+                    ret = Math.Min(ret,LineSegment.MinDistBetweenLineSegments(a.Pnt(i),a.Pnt(i + 1),b.Pnt(j),
                                                                                 b.Pnt(j + 1),out u,out v));
 
             return ret;
@@ -337,7 +292,7 @@ namespace Microsoft.Msagl.UnitTests {
             double u, v;
             for (int i = 0; i < a.Count; i++)
                 for (int j = 0; j < b.Count; j++) {
-                    var d = Point.MinDistBetweenLineSegments(a.Pnt(i), a.Pnt(i + 1), b.Pnt(j),
+                    var d = LineSegment.MinDistBetweenLineSegments(a.Pnt(i), a.Pnt(i + 1), b.Pnt(j),
                                                                                 b.Pnt(j + 1), out u, out v);
                     Assert.IsTrue(d >= dist - 0.0000001);
                 }

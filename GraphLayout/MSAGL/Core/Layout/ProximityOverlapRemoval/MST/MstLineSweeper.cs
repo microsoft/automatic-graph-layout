@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -33,19 +5,21 @@ using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Layout.LargeGraphLayout;
 
-namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MST {
+namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTree {
     internal class MstLineSweeper {
         readonly List<Tuple<int, int, double, double, double>> _proximityEdges;
         readonly Size[] _nodeSizes;
         readonly Point[] _nodePositions;
+        readonly bool _forLayers;
         IntervalRTree<int> _intervalTree;
         BinaryHeapPriorityQueue _q;
         int _numberOfOverlaps = 0;
 
-        public MstLineSweeper(List<Tuple<int, int, double, double, double>> proximityEdges, Size[] nodeSizes, Point[] nodePositions) {
+        public MstLineSweeper(List<Tuple<int, int, double, double, double>> proximityEdges, Size[] nodeSizes, Point[] nodePositions, bool forLayers) {
             _proximityEdges = proximityEdges;
             _nodeSizes = nodeSizes;
             _nodePositions = nodePositions;
+            _forLayers = forLayers;
             Debug.Assert(nodePositions.Length==nodeSizes.Length);
             _q = new BinaryHeapPriorityQueue(nodeSizes.Length*2); 
         }
@@ -88,8 +62,8 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MST {
                 return;
             var interval = GetInterval(i);
             foreach (int j in _intervalTree.GetAllIntersecting(interval)) {
-                var tuple = OverlapRemoval.GetIdealEdgeLength(i, j, 
-                    _nodePositions[i], _nodePositions[j], _nodeSizes);
+                var tuple = OverlapRemoval.GetIdealEdgeLength(i, j,
+                    _nodePositions[i], _nodePositions[j], _nodeSizes, _forLayers);
 
                 if (!(tuple.Item3 > 1))
                     return;

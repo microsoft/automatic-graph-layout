@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 ﻿//-----------------------------------------------------------------------
 // <copyright file="AspectRatioTests.cs" company="Microsoft">
 //   (c) Microsoft Corporation.  All rights reserved.
@@ -93,7 +65,7 @@ namespace Microsoft.Msagl.UnitTests
             double ratioTolerance = aspectRatio * 0.05;
 
             // Verify the graph is the correct size
-            Assert.AreEqual(aspectRatio, graph.Width / graph.Height, ratioTolerance, "The graph does not conform to the aspect ratio.");
+            Assert.AreEqual(aspectRatio, (graph.Width-(graph.Margins*2)) / (graph.Height-(graph.Margins*2)), ratioTolerance, "The graph does not conform to the aspect ratio.");
 
             // Verify the nodes were spread apart to fill the space
             IEnumerable<Rectangle> nodeBoxes = graph.Nodes.Select(n => n.BoundingBox);
