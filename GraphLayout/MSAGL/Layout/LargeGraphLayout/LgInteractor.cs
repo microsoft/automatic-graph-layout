@@ -129,11 +129,10 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 _lgLayoutSettings.IncreaseNodeQuota);
 #if !SILVERLIGHT && !SHARPKIT
             timer.Stop();
-
             Console.WriteLine("levels calculated for {0}", timer.Duration);
-#endif
             if (_lgLayoutSettings.ExitAfterInit)
                 Environment.Exit(0);
+#endif
         }
 
 

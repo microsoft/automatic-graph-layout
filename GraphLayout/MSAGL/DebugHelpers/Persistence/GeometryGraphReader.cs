@@ -76,7 +76,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
             xmlTextReader = new XmlTextReader(streamP);
             XmlReader = XmlReader.Create(xmlTextReader, settings);
 #else
-            XmlReader.Create(stream, settings);
+            XmlReader.Create(streamP, settings);
 #endif
         }
 
@@ -579,7 +579,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
                 level._railDictionary[tuple] = rail;
                 return rail;
             }
-            throw new InvalidDataException();
+            throw new Exception();
         }
 
         LgEdgeInfo GetTopRankedEdgeInfoOfRail(string railId) {

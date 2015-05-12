@@ -269,7 +269,6 @@
     <Compile Include="Layout\LargeGraphLayout\LgLevel.cs" />
     <Compile Include="Layout\LargeGraphLayout\LgNodeCollection.cs" />
     <Compile Include="Layout\LargeGraphLayout\LgSkeletonLevel.cs" />
-    <Compile Include="Layout\LargeGraphLayout\NodeMagnifier.cs" />
     <Compile Include="Layout\LargeGraphLayout\NodeRailLevelCalculator\GreedyNodeRailLevelCalculator.cs" />
     <Compile Include="Layout\LargeGraphLayout\Rail.cs" />
     <Compile Include="Layout\LargeGraphLayout\RailGraph.cs" />
