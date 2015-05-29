@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -152,7 +124,7 @@ namespace Microsoft.Msagl.Core.Geometry {
             return 0;
         }
 
-        private static readonly double squareOfDistanceEpsilon = Math.Pow(10.0, -DistanceEpsilonPrecision * 2);
+         static readonly double squareOfDistanceEpsilon = Math.Pow(10.0, -DistanceEpsilonPrecision * 2);
 
         /// <summary>
         /// The distance for two points considered to be the same
@@ -173,7 +145,7 @@ namespace Microsoft.Msagl.Core.Geometry {
             get { return 6; }
         }
 
-        private static double distXEps = 0.0001;
+         static double distXEps = 0.0001;
 
         /// <summary>
         /// The distance for two intersection points considered to be the same
@@ -183,7 +155,7 @@ namespace Microsoft.Msagl.Core.Geometry {
             set { distXEps = value; }
         }
 
-        private static double tolerance = 1.0E-8;
+         static double tolerance = 1.0E-8;
 
         /// <summary>
         /// The distance where to real numbers are considered the same
@@ -193,7 +165,7 @@ namespace Microsoft.Msagl.Core.Geometry {
             set { tolerance = value; }
         }
 
-        private static double userDefinedTolerance = tolerance;
+         static double userDefinedTolerance = tolerance;
 
         /// <summary>
         /// A tolerance that is settable by users of MSAGL to adjust performance.

@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -287,6 +259,19 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             return t;*/
             var d = 1 - scale;
             return new PlaneTransformation(scale, 0, d * center.X, 0, scale, d * center.Y);
+        }
+
+        public static PlaneTransformation ScaleAroundCenterTransformation(double xScale, double yScale, Point center)
+        {
+            /*var toOrigin = new PlaneTransformation(1, 0, -center.X, 0, 1, -center.Y);
+            var scaleTr = new PlaneTransformation(scale, 0, 0,
+                                                  0, scale, 0);
+            var toCenter = new PlaneTransformation(1, 0, center.X, 0, 1, center.Y);
+            var t = toCenter*scaleTr*toOrigin;
+            return t;*/
+            var dX = 1 - xScale;
+            var dY = 1 - yScale;
+            return new PlaneTransformation(xScale, 0, dX * center.X, 0, yScale, dY * center.Y);
         }
     }
 }

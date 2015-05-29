@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 using System;
 using System.Collections.Generic;
 using Microsoft.Msagl.Core.Layout;
@@ -35,7 +7,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
     /// the helper class to create curves
     /// </summary>
     public sealed class CurveFactory {
-        private CurveFactory() { }
+         CurveFactory() { }
         /// <summary>
         /// Creates an ellipse by the length of axes and the center
         /// </summary>
@@ -266,7 +238,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         /// <param name="height">the inscribed rectangle height</param>
         /// <param name="center">the inscribed rectangle (and octagon) center</param>
         /// <returns></returns>
-        public static ICurve CreateOctagon(double width, double height, Point center) {
+        public static Polyline CreateOctagon(double width, double height, Point center) {
             double w = width / 2;
             double h = height / 2;
             Point[] ps = new Point[8];
@@ -286,14 +258,9 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             for (int i = 0; i < 8; i++) {
                 ps[i] += center;
             }
- 
-            Curve c = new Curve(8);
-            Curve.AddLineSegment(c, ps[0], ps[1]);
-            for (int i = 2; i < 8; i++)
-                Curve.ContinueWithLineSegment(c, ps[i]);
 
-            Curve.CloseCurve(c);
-            return c;
+            Polyline polyline = new Polyline(ps) {Closed = true};
+            return polyline;
         }
 
         /// <summary>
@@ -426,6 +393,14 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
                 yield return center + r * new Point(Math.Cos(ang+anghalf), Math.Sin(ang+anghalf));
                 ang += a;
             }
+        }
+
+        internal static Polyline CreateRegularPolygon(int n, Point center, double rad) {
+            var pt = new Point[n];
+            double a = 2*Math.PI/n;
+            for (int i = 0; i < n; i++)
+                pt[i] = rad * (new Point(Math.Cos(i*a), Math.Sin(i*a))) + center;
+            return new Polyline(pt) {Closed = true};
         }
     }
 }

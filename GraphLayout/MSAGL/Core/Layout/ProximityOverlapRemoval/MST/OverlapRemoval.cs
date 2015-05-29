@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -34,58 +6,70 @@ using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.DebugHelpers;
+using Microsoft.Msagl.Layout.LargeGraphLayout;
 using Microsoft.Msagl.Routing;
 using Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation;
 
-namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MST {
+namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTree {
     /// <summary>
     /// Overlap Removal using Minimum Spanning Tree on the delaunay triangulation. The edge weight corresponds to the amount of overlap between two nodes.
     /// </summary>
     public class OverlapRemoval : IOverlapRemoval {
-        OverlapRemovalSettings Settings { get; set; }
-
+        OverlapRemovalSettings _settings;
+        readonly Size[] _sizes;
+        bool _overlapForLayers;
         int lastRunNumberIterations;
+        Node[] _nodes;
 
         /// <summary>
         /// Settings to be used for the overlap removal, not all of them are used.
         /// </summary>
         /// <param name="settings"></param>
-        public OverlapRemoval(OverlapRemovalSettings settings) {
-            Settings = settings;
+        /// <param name="nodes">the array of nodes to remover overlaps on</param>
+        public OverlapRemoval(OverlapRemovalSettings settings, Node[]  nodes) {
+            _settings = settings;
+            _nodes = nodes;
+        }
+
+        OverlapRemoval(OverlapRemovalSettings settings, Node[] nodes, Size[] sizes) {
+            _overlapForLayers = true;
+            _settings = settings;
+            _sizes = sizes;
+            _nodes = nodes;
         }
 
         /// <summary>
-        /// Removes the overlap with default settings.
+        /// Removes the overlap by using the default settings.
         /// </summary>
-        /// <param name="graph"></param>
+        /// <param name="nodes"></param>
         /// <param name="nodeSeparation"></param>
-        public static void RemoveOverlaps(GeometryGraph graph, double nodeSeparation) {
+        public static void RemoveOverlaps(Node[] nodes, double nodeSeparation) {
             var settings = new OverlapRemovalSettings {
                 RandomizeAllPointsOnStart = true,
                 NodeSeparation = nodeSeparation
             };
-            var mst = new OverlapRemoval(settings);
-            mst.RemoveOverlap(graph);
-
+            var mst = new OverlapRemoval(settings, nodes);
+            mst.RemoveOverlaps();
         }
 
         /// <summary>
-        /// Removes the overlap for the given graph.
+        /// Removes the overlaps for the given graph.
         /// </summary>
-        /// <param name="graph"></param>
-        public void RemoveOverlap(GeometryGraph graph) {
-            if (graph.Nodes.Count < 3) {
-                RemoveOverlapsOnTinyGraph(graph);
+        public void RemoveOverlaps() {
+            if (_nodes.Length < 3) {
+                RemoveOverlapsOnTinyGraph();
                 return;
             }
 
             Point[] nodePositions;
             Size[] nodeSizes;
-            ProximityOverlapRemoval.InitNodePositionsAndBoxes(Settings,
-                graph, out nodePositions,
-                out nodeSizes);
-            if (Settings.InitialScaling != InitialScaling.None)
-                DoInitialScaling(graph, nodePositions, nodeSizes, InitialScaling.Inch72Pixel);
+            ProximityOverlapRemoval.InitNodePositionsAndBoxes(_settings, _nodes
+                , out nodePositions, out nodeSizes);
+            if (_overlapForLayers) {
+                nodeSizes = _sizes;
+            }
+            if (_settings.InitialScaling != InitialScaling.None)
+                DoInitialScaling(_nodes, nodePositions, nodeSizes, InitialScaling.Inch72Pixel);
 
             lastRunNumberIterations = 0;
             while (OneIteration(nodePositions, nodeSizes, false)) {
@@ -101,16 +85,16 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MST {
 
             Console.WriteLine();
 
-            for (int i = 0; i < graph.Nodes.Count; i++) {
-                graph.Nodes[i].Center = nodePositions[i];
+            for (int i = 0; i < _nodes.Length; i++) {
+                _nodes[i].Center = nodePositions[i];
             }
         }
 
-        void RemoveOverlapsOnTinyGraph(GeometryGraph graph) {
-            if (graph.Nodes.Count == 1)
+        void RemoveOverlapsOnTinyGraph() {
+            if (_nodes.Length == 1)
                 return;
-            if (graph.Nodes.Count == 2) {
-                var nodes = graph.Nodes.ToArray();
+            if (_nodes.Length == 2) {
+                var nodes = _nodes.ToArray();
                 var a = nodes[0];
                 var b = nodes[1];
 
@@ -133,8 +117,8 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MST {
         double GetIdealDistanceBetweenTwoNodes(Node a, Node b) {
             var abox = a.BoundingBox;
             var bbox = b.BoundingBox;
-            abox.Pad(Settings.NodeSeparation/2);
-            bbox.Pad(Settings.NodeSeparation/2);
+            abox.Pad(_settings.NodeSeparation/2);
+            bbox.Pad(_settings.NodeSeparation/2);
             var ac = abox.Center;
             var bc = bbox.Center;
 
@@ -169,10 +153,11 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MST {
 
 #endif
 
-        static double AvgEdgeLength(GeometryGraph graph) {
+        static double AvgEdgeLength(Node[] nodes) {
             int i = 0;
             double avgEdgeLength = 0;
-            foreach (Edge edge in graph.Edges) {
+
+            foreach (Edge edge in nodes.SelectMany(n=>n.OutEdges)) {
                 Point sPoint = edge.Source.Center;
                 Point tPoint = edge.Target.Center;
                 double euclid = (sPoint - tPoint).Length;
@@ -185,7 +170,8 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MST {
 
 
         /// <summary>
-        /// Does one iterations in which a miniminum spanning tree is determined on the delaunay triangulation and finally the tree is exanded to resolve the overlap.
+        /// Does one iterations in which a miniminum spanning tree is 
+        /// determined on the delaunay triangulation and finally the tree is exanded to resolve the overlaps.
         /// </summary>
         /// <param name="nodePositions"></param>
         /// <param name="nodeSizes"></param>
@@ -210,7 +196,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MST {
                     var nodeId2 = siteIndex[edge.lowerSite];
                     Debug.Assert(ApproximateComparer.Close(point1, nodePositions[nodeId1]));
                     Debug.Assert(ApproximateComparer.Close(point2, nodePositions[nodeId2]));
-                    var tuple = GetIdealEdgeLength(nodeId1, nodeId2, point1, point2, nodeSizes);
+                    var tuple = GetIdealEdgeLength(nodeId1, nodeId2, point1, point2, nodeSizes, _overlapForLayers);
                     proximityEdges.Add(tuple);
                     if (tuple.Item3 > 1) numCrossings++;
                 }
@@ -241,7 +227,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MST {
 
         int FindProximityEdgesWithSweepLine(List<Tuple<int, int, double, double, double>> proximityEdges,
             Size[] nodeSizes, Point[] nodePositions) {
-            MstLineSweeper mstLineSweeper = new MstLineSweeper(proximityEdges, nodeSizes, nodePositions);
+            MstLineSweeper mstLineSweeper = new MstLineSweeper(proximityEdges, nodeSizes, nodePositions, _overlapForLayers);
             return mstLineSweeper.Run();
         }
 
@@ -300,19 +286,27 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MST {
         /// <param name="point1"></param>
         /// <param name="point2"></param>
         /// <param name="nodeSizes"></param>
+        /// <param name="forLayers"></param>
         /// <returns></returns>
         internal static Tuple<int, int, double, double, double> GetIdealEdgeLength(int nodeId1, int nodeId2,
             Point point1,
             Point point2,
-            Size[] nodeSizes) {
+            Size[] nodeSizes, bool forLayers) {
             double t;
 
             double idealDist = GetIdealEdgeLength(nodeId1, nodeId2, point1, point2, nodeSizes, out t);
             double length = (point1 - point2).Length;
 
-            var box1 = new Rectangle(nodeSizes[nodeId1], point1);
-            var box2 = new Rectangle(nodeSizes[nodeId2], point2);
-
+            Rectangle box1, box2;
+            if (forLayers) {
+                int maxId = Math.Max(nodeId1, nodeId2);
+                box1 = new Rectangle(nodeSizes[maxId], point1);
+                box2 = new Rectangle(nodeSizes[maxId], point2);
+            }
+            else {
+                box1 = new Rectangle(nodeSizes[nodeId1], point1);
+                box2 = new Rectangle(nodeSizes[nodeId2], point2);
+            }
             var distBox = GetDistanceRects(box1, box2);
 
             double weight;
@@ -500,14 +494,14 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MST {
         /// <summary>
         /// Does the initial scaling of the layout, could also be avoided.
         /// </summary>
-        /// <param name="graph"></param>
+        /// <param name="nodes"></param>
         /// <param name="nodePositions"></param>
         /// <param name="nodeSizes"></param>
         /// <param name="scalingMethod"></param>
-        static void DoInitialScaling(GeometryGraph graph, Point[] nodePositions, Size[] nodeSizes,
+        static void DoInitialScaling(Node[] nodes, Point[] nodePositions, Size[] nodeSizes,
             InitialScaling scalingMethod) {
 
-            var avgEdgeLength = AvgEdgeLength(graph);
+            var avgEdgeLength = AvgEdgeLength(nodes);
             double goalLength;
             if (scalingMethod == InitialScaling.Inch72Pixel)
                 goalLength = 72;
@@ -525,7 +519,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MST {
         }
 
         void IOverlapRemoval.Settings(OverlapRemovalSettings settings) {
-            Settings = settings;
+            _settings = settings;
         }
 
         /// <summary>
@@ -536,5 +530,13 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MST {
             return lastRunNumberIterations;
         }
 
+        public static void RemoveOverlapsForLayers(Node[] nodes, Size[] sizesOnLayers) {
+            var settings = new OverlapRemovalSettings
+            {
+                RandomizeAllPointsOnStart = true,
+            };
+            var mst = new OverlapRemoval(settings, nodes, sizesOnLayers);
+            mst.RemoveOverlaps();
+        }
     }
 }

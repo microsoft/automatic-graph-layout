@@ -1,37 +1,10 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Timers;
+﻿using System.Runtime.InteropServices;
+﻿using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -42,7 +15,7 @@ using Dot2Graph;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval;
-using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MST;
+using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTree;
 using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.Layout.LargeGraphLayout;
@@ -51,7 +24,8 @@ using Microsoft.Msagl.Layout.MDS;
 using Microsoft.Msagl.Miscellaneous.LayoutEditing;
 using Microsoft.Msagl.Routing;
 using Microsoft.Msagl.WpfGraphControl;
-using Application = System.Windows.Application;
+﻿using Microsoft.SqlServer.Server;
+﻿using Application = System.Windows.Application;
 using Menu = System.Windows.Controls.Menu;
 using MenuItem = System.Windows.Controls.MenuItem;
 using MessageBox = System.Windows.MessageBox;
@@ -182,18 +156,6 @@ namespace TestWpfViewer {
             dockPanel.Loaded += GraphViewerLoaded;
             argsParser = SetArgsParser(Args);
             //graphViewer.MainPanel.MouseLeftButtonUp += TestApi;
-            TrySettingGraphViewerLargeLayoutThresholdAndSomeOtherLgSettings();
-            if (argsParser.OptionIsUsed(ExitAfterLgLayoutOption)) {
-                graphViewer.DefaultLargeLayoutSettings.ExitAfterInit = true;
-            }
-            if (argsParser.OptionIsUsed(BackgroundImageOption))
-            {
-                graphViewer.DefaultLargeLayoutSettings.BackgroundImage=argsParser.GetValueOfOptionWithAfterString(BackgroundImageOption);
-            }
-            if (argsParser.OptionIsUsed(DrawBackgrounImageOption))
-            {
-                graphViewer.DefaultLargeLayoutSettings.DrawBackgroundImage = true;
-            }
             graphViewer.ViewChangeEvent += GraphViewerViewChangeEvent;
             graphViewer.ObjectUnderMouseCursorChanged += GvObjectUnderMouseCursorChanged;
             graphViewer.MouseDown += GraphViewerMouseDown;
@@ -440,26 +402,6 @@ namespace TestWpfViewer {
             dockPanel.Children.Add(statusBar);
         }
 
-        void TrySettingGraphViewerLargeLayoutThresholdAndSomeOtherLgSettings() {
-            var val = argsParser.GetValueOfOptionWithAfterString(LargeLayoutThresholdOption);
-            if (val != null) {
-                int thresh;
-                if (int.TryParse(val, out thresh)) {
-                    graphViewer.LargeGraphCountThreshold = thresh;
-                }
-            }
-
-            val = argsParser.GetValueOfOptionWithAfterString(MaxNodesPerTileOption);
-            if (val != null)
-            {
-                int max;
-                if (int.TryParse(val, out max)) {
-                    graphViewer.DefaultLargeLayoutSettings.MaxNumberNodesPerTile = max;
-                }
-            }
-
-        }
-
 //        void TestApi(object o, MouseButtonEventArgs e) {
 //            var pt = e.GetPosition(graphViewer.MainPanel);
 //
@@ -506,7 +448,7 @@ namespace TestWpfViewer {
                 string fileList = argsParser.GetValueOfOptionWithAfterString(FileListOption);
                 if (fileList != null)
                     ProcessFileList(fileList);
-            }
+            }            
         }
 
         void ProcessFileList(string fileList) {
@@ -845,7 +787,7 @@ namespace TestWpfViewer {
                         n.Attr.XRadius = n.Attr.YRadius = 3;
 
                 if (argsParser.OptionIsUsed(RunRemoveOverlapsOption)) {
-                    OverlapRemoval.RemoveOverlaps(graph.GeometryGraph,
+                    OverlapRemoval.RemoveOverlaps(graph.GeometryGraph.Nodes.ToArray(),
                         graph.LayoutAlgorithmSettings.NodeSeparation);
                 }
             }
@@ -956,8 +898,8 @@ namespace TestWpfViewer {
                     case OverlapRemovalMethod.Prism:
                         ProximityOverlapRemoval.RemoveOverlaps(compGraph, gwgraph.LayoutAlgorithmSettings.NodeSeparation);
                         break;
-                    case OverlapRemovalMethod.Pmst:
-                        OverlapRemoval.RemoveOverlaps(compGraph, gwgraph.LayoutAlgorithmSettings.NodeSeparation);
+                    case OverlapRemovalMethod.MinimalSpanningTree:
+                        OverlapRemoval.RemoveOverlaps(compGraph.Nodes.ToArray(), gwgraph.LayoutAlgorithmSettings.NodeSeparation);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

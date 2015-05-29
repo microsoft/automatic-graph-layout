@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +5,7 @@ using Microsoft.Msagl.Core;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval;
-using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MST;
+using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTree;
 using System.Threading.Tasks;
 
 namespace Microsoft.Msagl.Layout.MDS {
@@ -101,7 +73,7 @@ namespace Microsoft.Msagl.Layout.MDS {
         //    SetGraphBoundingBox();
         //}
 
-        private void SetGraphBoundingBox() {
+         void SetGraphBoundingBox() {
             graph.BoundingBox = graph.PumpTheBoxToTheGraphWithMargins();
         }
 
@@ -113,7 +85,7 @@ namespace Microsoft.Msagl.Layout.MDS {
         /// <param name="g">A graph.</param>
         /// <param name="x">Coordinates.</param>
         /// <param name="y">Coordinates.</param>
-        private static void ScaleToAverageEdgeLength(GeometryGraph g, double[] x, double[] y) {
+         static void ScaleToAverageEdgeLength(GeometryGraph g, double[] x, double[] y) {
             var index = new Dictionary<Node, int>();
             int c=0;
             foreach(Node node in g.Nodes) {
@@ -154,7 +126,7 @@ namespace Microsoft.Msagl.Layout.MDS {
                 return;
             }
             int k = Math.Min(settings.PivotNumber, geometryGraph.Nodes.Count);
-            int iter = settings.IterationsWithMajorization;
+            int iter = settings.GetNumberOfIterationsWithMajorization(geometryGraph.Nodes.Count);
             double exponent = settings.Exponent;
 
             var pivotArray = new int[k];
@@ -175,7 +147,7 @@ namespace Microsoft.Msagl.Layout.MDS {
         }
 
 
-        //private class GeometryGraphComparer : IComparer<GeometryGraph> {
+        // class GeometryGraphComparer : IComparer<GeometryGraph> {
         //    public int Compare(GeometryGraph g1, GeometryGraph g2) {
         //        return g2.Nodes.Count.CompareTo(g1.Nodes.Count);
         //    }
@@ -247,8 +219,8 @@ namespace Microsoft.Msagl.Layout.MDS {
                     case OverlapRemovalMethod.Prism:
                         ProximityOverlapRemoval.RemoveOverlaps(compGraph, settings.NodeSeparation);
                         break;
-                    case OverlapRemovalMethod.Pmst:
-                        OverlapRemoval.RemoveOverlaps(compGraph, settings.NodeSeparation);
+                    case OverlapRemovalMethod.MinimalSpanningTree:
+                        OverlapRemoval.RemoveOverlaps(compGraph.Nodes.ToArray(), settings.NodeSeparation);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -355,13 +327,13 @@ namespace Microsoft.Msagl.Layout.MDS {
         /// <param name="settings">settings for packing method and desired aspect ratio</param>
         /// <returns>Bounding box of the packed components</returns>
         public static Rectangle PackGraphs(IEnumerable<GeometryGraph> components, LayoutAlgorithmSettings settings) {
-            ValidateArg.IsNotEmpty(components, "components");
             List<RectangleToPack<GeometryGraph>> rectangles =
                 (from c in components select new RectangleToPack<GeometryGraph>(c.BoundingBox, c)).ToList();
             if (rectangles.Count > 1) {
                 OptimalPacking<GeometryGraph> packing = settings.PackingMethod == PackingMethod.Compact
-                                                            ? new OptimalRectanglePacking<GeometryGraph>(rectangles, settings.PackingAspectRatio)
-                                                            : (OptimalPacking<GeometryGraph>)new OptimalColumnPacking<GeometryGraph>(rectangles, settings.PackingAspectRatio);
+                    ? new OptimalRectanglePacking<GeometryGraph>(rectangles, settings.PackingAspectRatio)
+                    : (OptimalPacking<GeometryGraph>)
+                        new OptimalColumnPacking<GeometryGraph>(rectangles, settings.PackingAspectRatio);
                 packing.Run();
                 foreach (var r in rectangles) {
                     GeometryGraph component = r.Data;
@@ -370,8 +342,9 @@ namespace Microsoft.Msagl.Layout.MDS {
                 }
                 return new Rectangle(0, 0, packing.PackedWidth, packing.PackedHeight);
             }
-
-            return rectangles[0].Rectangle;
+            if (rectangles.Count == 1)
+                return rectangles[0].Rectangle;
+            return Rectangle.CreateAnEmptyBox();
         }
     }
 }

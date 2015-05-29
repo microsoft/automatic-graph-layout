@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -46,7 +18,8 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
     /// <summary>
     ///  Proximity Stress Model as suggested by Gansner et. al, Fast Node Overlap Removal.
     /// </summary>
-    public class ProximityOverlapRemoval :IOverlapRemoval  {
+    public class ProximityOverlapRemoval :IOverlapRemoval {
+        Node[] _nodes;
 #if DEBUG
         /// <summary>
         /// 
@@ -121,15 +94,13 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             }
         }
 
-         GeometryGraph graph;
-
+         
         /// <summary>
         ///     Graph for Overlap Removal.
         /// </summary>
         public GeometryGraph Graph {
-            get { return graph; }
             set {
-                graph = value;
+                _nodes = value.Nodes.ToArray();
                 InitWithGraph();
             }
         }
@@ -167,13 +138,13 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
         ///     Inits the datastructures, later forces can be defined on the nodes.
         /// </summary>
         /// <param name="majorizer"></param>
-        /// <param name="graph"></param>
+        /// <param name="nodes"></param>
         /// <param name="nodePositions"></param>
-         static void InitStressWithGraph(StressMajorization majorizer, GeometryGraph graph, Point[] nodePositions) {
+         static void InitStressWithGraph(StressMajorization majorizer, Node[] nodes, Point[] nodePositions) {
             majorizer.Positions = new List<Point>(nodePositions);
-            majorizer.NodeVotings = new List<NodeVoting>(graph.Nodes.Count);
+            majorizer.NodeVotings = new List<NodeVoting>(nodes.Length);
 
-            for (int i = 0; i < graph.Nodes.Count; i++) {
+            for (int i = 0; i < nodes.Length; i++) {
                 var nodeVote = new NodeVoting(i);
                 //add second block for separate weighting of the overlap distances
                 var voteBlock = new VoteBlock(new List<Vote>(), 100);
@@ -191,7 +162,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
                 //possibly call destructor to free memory...
             }
 
-            if (Graph == null || Graph.Nodes.Count == 0) return;
+            if (_nodes == null || _nodes.Length == 0) return;
 
             if (StressSolver == null) {
                 StressSolver = new StressMajorization();
@@ -232,7 +203,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
         /// <param name="targetSizes"></param>
         /// <param name="desiredEdgeDistances"></param>
         /// <returns></returns>
-        public static int GetProximityEdgesWithDistance(GeometryGraph originalGraph, Cdt cdt,
+        public static int GetProximityEdgesWithDistance(Node[] originalGraph, Cdt cdt,
                                                         Size[] targetSizes,
                                                         out List<Tuple<int, int, double, double>> desiredEdgeDistances) {
             desiredEdgeDistances = new List<Tuple<int, int, double, double>>();
@@ -340,8 +311,8 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
         ///     Removes the overlap according to the defined settings.
         /// </summary>
         /// <returns></returns>
-        public TimeSpan RemoveOverlap() {
-            if (Graph == null || Graph.Nodes.Count == 0) return new TimeSpan();
+        public void RemoveOverlaps() {
+            if (_nodes == null || _nodes.Length == 0) return;
 #if DEBUG
 //            if (DebugMode) {
 //                Console.WriteLine("Showing graph on startup.");
@@ -349,14 +320,14 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
 //            }
 #endif
             // init some things
-            InitNodePositionsAndBoxes(Settings, Graph, out nodePositions, out nodeSizes);
+            InitNodePositionsAndBoxes(Settings, _nodes, out nodePositions, out nodeSizes);
 
             if (!(Settings.InitialScaling == InitialScaling.None))
                 DoInitialScaling();
-            InitStressWithGraph(StressSolver, Graph, nodePositions);
+            InitStressWithGraph(StressSolver, _nodes, nodePositions);
 #if DEBUG
             //debugging the node movements
-            trajectories = new List<Polyline>(Graph.Nodes.Count);
+            trajectories = new List<Polyline>(_nodes.Length);
             //add starting positions
             for (int i = 0; i < nodePositions.Length; i++) {
                 var poly = new Polyline();
@@ -383,7 +354,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             if (DebugMode) {
                 ShowTrajectoriesOfNodes(trajectories);
 
-                LayoutAlgorithmSettings.ShowGraph(Graph);
+                //LayoutAlgorithmSettings.ShowGraph(Graph);
             }
 #endif
 
@@ -401,15 +372,15 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
 //            nodeBoxes = null;
 #if DEBUG && !SILVERLIGHT && !SHARPKIT
             if (DebugMode) {
-                LayoutAlgorithmSettings.ShowGraph(Graph);
+                //LayoutAlgorithmSettings.ShowGraph(Graph);
             }
 #endif
 
 #if !SILVERLIGHT && !SHARPKIT
             lastCpuTime = stopWatch.Elapsed;
-            return stopWatch.Elapsed;
+            return;
 #else
-            return new TimeSpan(0);
+            return;// new TimeSpan(0);
 #endif
         }
 
@@ -428,7 +399,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             triangulation.Run();
 
             List<Tuple<int, int, double, double>> proximityEdgesWithDistance;
-            int numCrossings = GetProximityEdgesWithDistance(Graph, triangulation, nodeSizes,
+            int numCrossings = GetProximityEdgesWithDistance(_nodes, triangulation, nodeSizes,
                                                              out proximityEdgesWithDistance);
 
             if (scanlinePhase || numCrossings == 0) {
@@ -468,11 +439,11 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
          }
 
          void SetPositionsToGraph() {
-            for (int i = 0; i < Graph.Nodes.Count; i++) {
+            for (int i = 0; i < _nodes.Length; i++) {
                 if (Settings.WorkInInches)
-                    Graph.Nodes[i].Center = nodePositions[i]*72;
+                    _nodes[i].Center = nodePositions[i]*72;
                 else
-                    Graph.Nodes[i].Center = nodePositions[i];
+                    _nodes[i].Center = nodePositions[i];
             }
         }
 
@@ -602,9 +573,10 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
         /// Scale the graph, such that the average edge length corresponds to a predefined size.
         /// </summary>
          void DoInitialScaling() {
-            if (Graph.Edges.Count == 0) return;
+            var edges = _nodes.SelectMany(n => n.OutEdges).ToArray();
+            if (edges.Length == 0) return;
 
-            var avgEdgeLength = AvgEdgeLength();
+            var avgEdgeLength = AvgEdgeLength(edges);
 
             double goalLength;
             if (Settings.InitialScaling == InitialScaling.Inch72Pixel)
@@ -631,10 +603,11 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             }
         }
 
-         double AvgEdgeLength() {
+        double AvgEdgeLength(Edge[] edges) {
+            Debug.Assert(edges.Length > 0);
             int i = 0;
             double avgEdgeLength = 0;
-            foreach (Edge edge in Graph.Edges) {
+            foreach (Edge edge in edges) {
                 Point sPoint = edge.Source.Center;
                 Point tPoint = edge.Target.Center;
                 double euclid = (sPoint - tPoint).Length;
@@ -647,15 +620,14 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
 
 
         internal static Point[] InitNodePositionsAndBoxes(OverlapRemovalSettings overlapRemovalSettings,
-                                                          GeometryGraph geometryGraph, out Point[] nodePositions,
+                                                          Node[] nodes, out Point[] nodePositions,
                                                           out Size[] nodeSizes) {
-            nodePositions = geometryGraph.Nodes.Select(v => v.Center).ToArray();
+            nodePositions = nodes.Select(v => v.Center).ToArray();
             //make sure no two points are the same
             RandomizePoints(nodePositions, new Random(overlapRemovalSettings.RandomizationSeed),
                             overlapRemovalSettings.Epsilon,
                             overlapRemovalSettings.RandomizeAllPointsOnStart);
-            //TODO replace boxes with double[] for width and height.
-            nodeSizes = GetNodeSizesByPaddingWithHalfSeparation(geometryGraph, overlapRemovalSettings.NodeSeparation);
+            nodeSizes = GetNodeSizesByPaddingWithHalfSeparation(nodes, overlapRemovalSettings.NodeSeparation);
             return nodePositions;
         }
 
@@ -714,12 +686,12 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             return numCrossings;
         }
 
-         static Size[] GetNodeSizesByPaddingWithHalfSeparation(GeometryGraph geometryGraph, double nodeSeparation) {
-            if (geometryGraph == null) return null;
-            var nodeSizes = new Size[geometryGraph.Nodes.Count];
+         static Size[] GetNodeSizesByPaddingWithHalfSeparation(Node[] nodes, double nodeSeparation) {
+            if (nodes == null) return null;
+            var nodeSizes = new Size[nodes.Length];
              var halfSep = nodeSeparation/2;
-             for (int i = 0; i < geometryGraph.Nodes.Count; i++) {
-                 nodeSizes[i] = geometryGraph.Nodes[i].BoundingBox.Size;
+             for (int i = 0; i < nodes.Length; i++) {
+                 nodeSizes[i] = nodes[i].BoundingBox.Size;
                  nodeSizes[i].Pad(halfSep);
              }
              return nodeSizes;
@@ -774,7 +746,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
         /// <param name="nodeSeparation"></param>
         public static void RemoveOverlaps(GeometryGraph geometryGraph, double nodeSeparation) {
             var prism = new ProximityOverlapRemoval(geometryGraph) {Settings = {NodeSeparation = nodeSeparation}};
-            prism.RemoveOverlap();
+            prism.RemoveOverlaps();
             
         }
 
@@ -787,9 +759,9 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
         /// 
         /// </summary>
         /// <param name="graph"></param>
-        public void RemoveOverlap(GeometryGraph graph) {
+        public void RemoveOverlaps(GeometryGraph graph) {
             Graph = graph;
-            RemoveOverlap();
+            RemoveOverlaps();
         }
 
         /// <summary>

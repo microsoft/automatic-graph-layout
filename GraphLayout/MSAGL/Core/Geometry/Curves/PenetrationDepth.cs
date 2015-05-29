@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 using System;
 using System.Collections.Generic;
 
@@ -63,7 +35,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         }
 
       
-        private static IEnumerable<Point> PointsOnAroundPolyline(ICurve curve) {
+         static IEnumerable<Point> PointsOnAroundPolyline(ICurve curve) {
             bool firstSide = true;
             CurveTangent prevTangent = null;
             CurveTangent firstCurveTangent = null;
@@ -83,7 +55,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
 
       
         
-        private static IEnumerable<CurveTangent> TangentsAroundCurve(ICurve iCurve) {
+         static IEnumerable<CurveTangent> TangentsAroundCurve(ICurve iCurve) {
             Curve c = iCurve as Curve;
             if (c != null) {
                 foreach (ICurve seg in c.Segments)
@@ -109,18 +81,18 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             }
         }
 
-        private static IEnumerable<CurveTangent> TangentsOfBezier(CubicBezierSegment bez) {
+         static IEnumerable<CurveTangent> TangentsOfBezier(CubicBezierSegment bez) {
             const int numOfTangents = 8;
             double span = (bez.ParEnd - bez.ParStart) / numOfTangents;
             for (int i = 0; i < numOfTangents; i++)
                 yield return TangentOnICurve(span / 2 + bez.ParStart + span * i, bez);
         }
 
-        private static CurveTangent TangentOnICurve(double p, ICurve iCurve) {
+         static CurveTangent TangentOnICurve(double p, ICurve iCurve) {
             return new CurveTangent(iCurve[p], iCurve.Derivative(p));
         }
 
-        private static IEnumerable<CurveTangent> TangentsOfEllipse(Ellipse ellipse) {
+         static IEnumerable<CurveTangent> TangentsOfEllipse(Ellipse ellipse) {
             const double angle=Math.PI/3;
 #if SHARPKIT //https://github.com/SharpKit/SharpKit/issues/4 integer rounding issue
             int numOfTangents =((int) Math.Ceiling((ellipse.ParEnd - ellipse.ParStart) / angle)) + 1;
@@ -132,13 +104,13 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
                 yield return TangentOnICurve(span / 2 + ellipse.ParStart + span * i, ellipse);
         }
 
-        private static Point TangentIntersection(CurveTangent tangentA, CurveTangent tangentB) {
+         static Point TangentIntersection(CurveTangent tangentA, CurveTangent tangentB) {
             Point x;
             Point.LineLineIntersection(tangentA.touchPoint, tangentA.touchPoint+tangentA.direction, tangentB.touchPoint, tangentB.touchPoint+tangentB.direction, out x);
             return x;
         }
 
-        private static bool TangentsAreParallel(CurveTangent a, CurveTangent b) {
+         static bool TangentsAreParallel(CurveTangent a, CurveTangent b) {
             return Math.Abs(a.direction.X * b.direction.Y - a.direction.Y * b.direction.X) < ApproximateComparer.DistanceEpsilon;
         }
 
@@ -181,7 +153,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             return ret;
         }
 
-        private static Polyline Merge(PolylinePoint p0, PolylinePoint p1) {
+         static Polyline Merge(PolylinePoint p0, PolylinePoint p1) {
             PolylinePoint s0 = p0;
             PolylinePoint s1 = p1;
             
@@ -197,7 +169,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             return ret;
         }
 
-        private static void PickNextVertex(ref PolylinePoint p0, ref PolylinePoint p1) {
+         static void PickNextVertex(ref PolylinePoint p0, ref PolylinePoint p1) {
             Point d = p1.Point - p0.Point;
             TriangleOrientation orient = Point.GetTriangleOrientation(p1.Point, p1.Polyline.Next(p1).Point, p0.Polyline.Next(p0).Point + d);
             if (orient == TriangleOrientation.Counterclockwise)
@@ -206,7 +178,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
                 p1 = p1.Polyline.Next(p1);
         }
 
-        private static Polyline FlipPolyline(Polyline poly) {
+         static Polyline FlipPolyline(Polyline poly) {
             Polyline ret = new Polyline();
             for (PolylinePoint pp = poly.StartPoint; pp != null; pp = pp.Next)
                 ret.AddPoint( -pp.Point);
@@ -214,7 +186,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             return ret;
         }
 
-        private static PolylinePoint GetMostLeftLow(Polyline poly) {
+         static PolylinePoint GetMostLeftLow(Polyline poly) {
             PolylinePoint ret = poly.StartPoint;
             for (PolylinePoint p = ret.Next; p != null; p = p.Next)
                 if (p.Point.X < ret.Point.X)

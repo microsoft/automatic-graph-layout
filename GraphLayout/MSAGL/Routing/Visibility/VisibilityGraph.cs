@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -46,12 +18,8 @@ namespace Microsoft.Msagl.Routing.Visibility {
 
         internal void ClearPrevEdgesTable() { _prevEdgesDictionary.Clear(); }
 
-        internal void ShrinkLengthOfPrevEdge(VisibilityVertex v)
-        {
-            var prev = _prevEdgesDictionary[v];
-                
-            if (prev.LengthMultiplier == 1)
-                prev.LengthMultiplier = 0.5;
+        internal void ShrinkLengthOfPrevEdge(VisibilityVertex v, double lengthMultiplier) {
+             _prevEdgesDictionary[v].LengthMultiplier = lengthMultiplier;
         }
         /// <summary>
         /// needed for shortest path calculations
@@ -86,6 +54,7 @@ namespace Microsoft.Msagl.Routing.Visibility {
         readonly Dictionary<Point, VisibilityVertex> pointToVertexMap = 
             new Dictionary<Point, VisibilityVertex>();
 
+        
         /// <summary>
         /// 
         /// </summary>
@@ -210,13 +179,13 @@ namespace Microsoft.Msagl.Routing.Visibility {
 
         internal int VertexCount { get { return PointToVertexMap.Count; } }
 
+        
         internal VisibilityVertex AddVertex(PolylinePoint polylinePoint) {
             return AddVertex(polylinePoint.Point);
         }
 
 
-        internal VisibilityVertex AddVertex(Point point)
-        {
+        internal VisibilityVertex AddVertex(Point point) {
 #if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=370
             //SharpKit/Colin - http://code.google.com/p/sharpkit/issues/detail?id=277
             VisibilityVertex currentVertex;
@@ -249,9 +218,11 @@ namespace Microsoft.Msagl.Routing.Visibility {
             VisibilityEdge visEdge;
             if(source.TryGetEdge(target, out visEdge))
                 return visEdge;
+            if (source == target) {
+                Debug.Assert(false, "Self-edges are not allowed");
+                throw new InvalidOperationException("Self-edges are not allowed");
+            }
 
-            Debug.Assert(source != target, "Self-edges are not allowed");
-          
             var edge = new VisibilityEdge(source, target);
            
             source.OutEdges.Insert(edge);
@@ -348,26 +319,24 @@ namespace Microsoft.Msagl.Routing.Visibility {
             PointToVertexMap.Remove(vertex.Point);
         }
 
-        
         internal void RemoveEdge(VisibilityVertex v1, VisibilityVertex v2) {
-            RemoveEdge(v1.Point, v2.Point);
+            VisibilityEdge edge;
+            if (!v1.TryGetEdge(v2, out edge)) return;
+            edge.Source.RemoveOutEdge(edge);
+            edge.Target.RemoveInEdge(edge);
         }
 
-        internal void RemoveEdge(Point p1, Point p2)
-        {
+        internal void RemoveEdge(Point p1, Point p2) {
             // the order of p1 and p2 is not important.
             VisibilityEdge edge = FindEdge(p1, p2);
-            if (edge != null)
-            {
-                edge.Source.RemoveOutEdge(edge);
-                edge.Target.RemoveInEdge(edge);
-            }
+            if (edge == null) return;
+            edge.Source.RemoveOutEdge(edge);
+            edge.Target.RemoveInEdge(edge);
         }
 
         static internal VisibilityEdge FindEdge(VisibilityEdge edge) {
             if(edge.Source.TryGetEdge(edge.Target, out edge))
                 return edge;
-
             return null;
         }
 
@@ -391,12 +360,10 @@ namespace Microsoft.Msagl.Routing.Visibility {
             edge.Source.OutEdges.Remove(edge);//not efficient!
             edge.Target.InEdges.Remove(edge);//not efficient
         }
-        /// <summary>
-        /// the number of edges in the graph
-        /// </summary>
-        public int EdgeCount {
-            get {
-                return Vertices().Sum(v => v.InEdges.Count);
+
+        public void ClearEdges() {
+            foreach (var visibilityVertex in Vertices()) {
+                visibilityVertex.ClearEdges();
             }
         }
     }

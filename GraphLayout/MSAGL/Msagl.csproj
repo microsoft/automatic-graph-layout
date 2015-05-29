@@ -31,6 +31,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -44,6 +45,7 @@
     <DocumentationFile>bin\Release\Microsoft.Msagl.XML</DocumentationFile>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugDevTrace|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -57,6 +59,7 @@
     <DocumentationFile>bin\DebugDevTrace\Microsoft.Msagl.XML</DocumentationFile>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -82,6 +85,7 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -101,6 +105,7 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugDevTrace|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -117,6 +122,7 @@
     <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -128,8 +134,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <NoWarn>
-    </NoWarn>
+    <NoWarn>1591</NoWarn>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -144,8 +149,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <NoWarn>
-    </NoWarn>
+    <NoWarn>1591</NoWarn>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -158,8 +162,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <NoWarn>
-    </NoWarn>
+    <NoWarn>1591</NoWarn>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -179,6 +182,7 @@
     <Compile Include="Core\DataStructures\GenericBinaryHeapPriorityQueueWithTimestamp.cs" />
     <Compile Include="Core\DataStructures\GenericHeapElementWithTimestamp.cs" />
     <Compile Include="Core\DataStructures\Size.cs" />
+    <Compile Include="Core\DataStructures\SymmetricTuple.cs" />
     <Compile Include="Core\Geometry\ApproximateComparer.cs" />
     <Compile Include="Core\Geometry\ConvexHull\ConvexHull.cs" />
     <Compile Include="Core\Geometry\ConvexHull\HullPoint.cs" />
@@ -255,6 +259,8 @@
     <Compile Include="Layout\LargeGraphLayout\DeviceIndependedZoomCalculatorForNodes.cs" />
     <Compile Include="Layout\LargeGraphLayout\EdgePicker.cs" />
     <Compile Include="Layout\LargeGraphLayout\IZoomLevelCalculator.cs" />
+    <Compile Include="Layout\LargeGraphLayout\LayerInfo.cs" />
+    <Compile Include="Layout\LargeGraphLayout\LgCellInfo.cs" />
     <Compile Include="Layout\LargeGraphLayout\LgData.cs" />
     <Compile Include="Layout\LargeGraphLayout\LgEdgeInfo.cs" />
     <Compile Include="Layout\LargeGraphLayout\LgInteractor.cs" />
@@ -262,11 +268,13 @@
     <Compile Include="Layout\LargeGraphLayout\LevelCalculator.cs" />
     <Compile Include="Layout\LargeGraphLayout\LgLevel.cs" />
     <Compile Include="Layout\LargeGraphLayout\LgNodeCollection.cs" />
+    <Compile Include="Layout\LargeGraphLayout\LgSkeletonLevel.cs" />
+    <Compile Include="Layout\LargeGraphLayout\NodeRailLevelCalculator\GreedyNodeRailLevelCalculator.cs" />
     <Compile Include="Layout\LargeGraphLayout\Rail.cs" />
     <Compile Include="Layout\LargeGraphLayout\RailGraph.cs" />
     <Compile Include="Layout\LargeGraphLayout\Interval.cs" />
+    <Compile Include="Layout\LargeGraphLayout\RouteSimplifier.cs" />
     <Compile Include="Layout\LargeGraphLayout\ShortestPartRouterForLg.cs" />
-    <Compile Include="Layout\LargeGraphLayout\ShortestPathToAllOthers.cs" />
     <Compile Include="Layout\LargeGraphLayout\SimpleEdgeCollection.cs" />
     <Compile Include="Layout\LargeGraphLayout\SimpleNodeCollection.cs" />
     <Compile Include="Layout\Layered\LayeredLayoutEngine.cs" />
@@ -274,6 +282,12 @@
     <Compile Include="Layout\Layered\RecoveryLayeredLayoutEngine.cs" />
     <Compile Include="Core\Layout\ProximityOverlapRemoval\MST\OverlapRemoval.cs" />
     <Compile Include="Core\Layout\ProximityOverlapRemoval\OverlapRemovalMethod.cs" />
+    <Compile Include="Layout\OverlapRemovalFixedSegments\FakeBitmap.cs" />
+    <Compile Include="Layout\OverlapRemovalFixedSegments\OverlapRemovalFixedSegmentsBitmap.cs" />
+    <Compile Include="Layout\OverlapRemovalFixedSegments\OverlapRemovalFixedSegmentsMst.cs" />
+    <Compile Include="Layout\OverlapRemovalFixedSegments\PixelPoint.cs" />
+    <Compile Include="Layout\OverlapRemovalFixedSegments\RectSegIntersection.cs" />
+    <Compile Include="Miscellaneous\ConstrainedSkeleton\SteinerCdt.cs" />
     <Compile Include="Miscellaneous\Constraints\AlignmentConstraint.cs" />
     <Compile Include="Miscellaneous\LayoutEditing\BumperPusher.cs" />
     <Compile Include="Miscellaneous\LayoutEditing\IncrementalDragger.cs" />
@@ -297,6 +311,9 @@
     <Compile Include="Miscellaneous\Ranking\Centrality.cs" />
     <Compile Include="Miscellaneous\Ranking\RankingLayout.cs" />
     <Compile Include="Miscellaneous\Ranking\RankingLayoutSettings.cs" />
+    <Compile Include="Miscellaneous\RegularGrid\GridTraversal.cs" />
+    <Compile Include="Layout\LargeGraphLayout\LgPathRouter.cs" />
+    <Compile Include="Miscellaneous\Routing\ShortestPathTree.cs" />
     <Compile Include="Routing\ClusterBoundaryPort.cs" />
     <Compile Include="Routing\ConstrainedDelaunayTriangulation\CdtEdge.cs" />
     <Compile Include="Routing\ConstrainedDelaunayTriangulation\CdtFront.cs" />
@@ -364,9 +381,7 @@
     <Compile Include="Routing\Spline\Bundling\TimeMeasurer.cs" />
     <Compile Include="Routing\TightLooseCouple.cs" />
     <Compile Include="Routing\StraightLineEdges.cs" />
-    <Compile Include="Core\GraphAlgorithms\CycleRemoval\ConnectedComponentCalculator.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Core\GraphAlgorithms\CycleRemoval\ConnectedComponentCalculator.cs" />
     <Compile Include="Core\GraphAlgorithms\CycleRemoval\CycleRemoval.cs" />
     <Compile Include="Core\GraphAlgorithms\CycleRemoval\CycleRemovalWithConstraints.cs" />
     <Compile Include="Core\GraphAlgorithms\CycleRemoval\GraphForCycleRemoval.cs" />
@@ -612,9 +627,7 @@
     <Compile Include="Core\Geometry\Curves\LineSegment.cs" />
     <Compile Include="Core\Geometry\Curves\MinDistCurveCurve.cs" />
     <Compile Include="Core\Geometry\Curves\Parallelogram.cs" />
-    <Compile Include="Core\Geometry\Curves\ParallelogramBinaryTreeNode.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Core\Geometry\Curves\ParallelogramBinaryTreeNode.cs" />
     <Compile Include="Core\Geometry\Curves\ParallelogramInternalTreeNode.cs" />
     <Compile Include="Core\Geometry\Curves\ParallelogramLeaf.cs" />
     <Compile Include="Core\Geometry\Curves\ParallelogramNode.cs" />
@@ -666,31 +679,18 @@
     <Compile Include="Routing\Visibility\TangentPair.cs" />
     <Compile Include="Routing\Visibility\TangentVisibilityGraphCalculator.cs" />
     <Compile Include="Layout\Layered\XCoordsWithAlignment.cs" />
+    <Compile Include="ValidateArg.cs" />
     <Compile Include="Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="ValidateArg.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Core\Layout\Ports and Port Accesses.doc" />
     <None Include="msaglSigningKey.snk" />
-    <None Include="packages.config" />
-    <None Include="Papers\DrawingGraphsWithGlee.pdf" />
-    <None Include="Papers\Fast and Simple Horizontal Coordinate Assignment.pdf" />
-    <None Include="Papers\Optimal Scheduling of Two-Processor Systems.pdf" />
-    <None Include="Papers\ranking.pdf" />
-    <None Include="Papers\1-layer.pdf" />
-    <None Include="Papers\An E log E log line crossing algorithm for levelled Graphs.pdf" />
-    <None Include="Papers\gansner93technique.pdf" />
-    <None Include="Papers\Simple and Efficient Bilayer Cross Counting.ps" />
-    <None Include="Papers\Computing the extreme distances between two convex polygons.pdf" />
-    <None Include="Papers\IntersectConvexObjects2-3Dim.pdf" />
-    <None Include="Papers\Orthogonal Connector Routing.pdf" />
-    <None Include="Papers\Shortest paths in the plane with convex polygonal obstacles.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
