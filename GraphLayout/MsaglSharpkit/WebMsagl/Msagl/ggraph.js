@@ -337,14 +337,17 @@ define(["require", "exports"], function (require, exports) {
     exports.GCluster = GCluster;
     var GArrowHead = (function () {
         function GArrowHead(arrowHead) {
-            this.start = arrowHead.start === undefined ? GPoint.origin : arrowHead.start;
-            this.end = arrowHead.end === undefined ? GPoint.origin : arrowHead.end;
-            this.closed = arrowHead.closed === undefined ? false : arrowHead.closed;
-            this.fill = arrowHead.fill === undefined ? false : arrowHead.fill;
+            this.start = arrowHead.start == undefined ? null : arrowHead.start;
+            this.end = arrowHead.end == undefined ? null : arrowHead.end;
+            this.closed = arrowHead.closed == undefined ? false : arrowHead.closed;
+            this.fill = arrowHead.fill == undefined ? false : arrowHead.fill;
+            this.dash = arrowHead.dash == undefined ? null : arrowHead.dash;
+            this.style = arrowHead.style == undefined ? "standard" : arrowHead.style;
         }
-        GArrowHead.standard = new GArrowHead({ start: GPoint.origin, end: GPoint.origin, closed: false, fill: false });
-        GArrowHead.closed = new GArrowHead({ start: GPoint.origin, end: GPoint.origin, closed: true, fill: false });
-        GArrowHead.filled = new GArrowHead({ start: GPoint.origin, end: GPoint.origin, closed: true, fill: true });
+        GArrowHead.standard = new GArrowHead({});
+        GArrowHead.closed = new GArrowHead({ closed: true });
+        GArrowHead.filled = new GArrowHead({ closed: true, fill: true });
+        GArrowHead.tee = new GArrowHead({ style: "tee" });
         return GArrowHead;
     })();
     exports.GArrowHead = GArrowHead;
@@ -364,6 +367,7 @@ define(["require", "exports"], function (require, exports) {
             this.arrowHeadAtTarget = edge.arrowHeadAtTarget === undefined ? GArrowHead.standard : edge.arrowHeadAtTarget == null ? null : new GArrowHead(edge.arrowHeadAtTarget);
             this.arrowHeadAtSource = edge.arrowHeadAtSource === undefined || edge.arrowHeadAtSource == null ? null : new GArrowHead(edge.arrowHeadAtSource);
             this.thickness = edge.thickness == undefined ? 1 : edge.thickness;
+            this.dash = edge.dash == undefined ? null : edge.dash;
             this.curve = edge.curve === undefined ? null : GCurve.ofCurve(edge.curve);
             this.stroke = edge.stroke === undefined ? "Black" : edge.stroke;
         }
@@ -543,8 +547,7 @@ define(["require", "exports"], function (require, exports) {
                     var edge = this.edges[i];
                     if (edge.label != null && edge.label.bounds == GRect.zero) {
                         var labelSize = sizer(edge.label, edge);
-                        edge.label.bounds.width = labelSize.x;
-                        edge.label.bounds.height = labelSize.y;
+                        edge.label.bounds = new GRect({ width: labelSize.x, height: labelSize.y });
                     }
                 }
             }
@@ -591,6 +594,9 @@ define(["require", "exports"], function (require, exports) {
             var bbox = element.getBBox();
             var ret = { x: bbox.width, y: bbox.height };
             svg.removeChild(element);
+            ret.y -= 6; // Hack: offset miscalculated height.
+            if (label.content.length == 1)
+                ret.x = ret.y; // Hack: make single-letter nodes round.
             return ret;
         };
         GGraph.prototype.createNodeBoundariesFromSVG = function (svg, style) {

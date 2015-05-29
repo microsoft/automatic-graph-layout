@@ -165,17 +165,25 @@ export class SVGGraph {
         var offsetX = -dir.y * Math.tan(25 * 0.5 * (Math.PI / 180));
         var offsetY = dir.x * Math.tan(25 * 0.5 * (Math.PI / 180));
         var pathString = "";
-        pathString += " M" + (start.x + offsetX) + " " + (start.y + offsetY);
-        pathString += " L" + end.x + " " + end.y;
-        pathString += " L" + (start.x - offsetX) + " " + (start.y - offsetY);
-        if (arrowHead.closed)
-            pathString += " Z";
+        if (arrowHead.style == "tee") {
+            pathString += " M" + (start.x + offsetX) + " " + (start.y + offsetY);
+            pathString += " L" + (start.x - offsetX) + " " + (start.y - offsetY);
+        }
         else {
-            pathString += " M" + start.x + " " + start.y;
+            pathString += " M" + (start.x + offsetX) + " " + (start.y + offsetY);
             pathString += " L" + end.x + " " + end.y;
+            pathString += " L" + (start.x - offsetX) + " " + (start.y - offsetY);
+            if (arrowHead.closed)
+                pathString += " Z";
+            else {
+                pathString += " M" + start.x + " " + start.y;
+                pathString += " L" + end.x + " " + end.y;
+            }
         }
         var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
         path.setAttribute("d", pathString);
+        if (arrowHead.dash != null)
+            style += "; stroke-dasharray: " + arrowHead.dash;
         path.setAttribute("style", style);
         parent.appendChild(path);
     }
@@ -189,7 +197,10 @@ export class SVGGraph {
         var pathString = this.pathCurve(curve, false);
         var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
         path.setAttribute("d", pathString);
-        path.setAttribute("style", "stroke: " + edge.stroke + "; stroke-width: " + edge.thickness + "; fill: none");
+        var style = "stroke: " + edge.stroke + "; stroke-width: " + edge.thickness + "; fill: none"
+        if (edge.dash != null)
+            style += "; stroke-dasharray: " + edge.dash;
+        path.setAttribute("style", style);
         g.appendChild(path);
         if (edge.arrowHeadAtTarget != null)
             this.drawArrow(g, edge.arrowHeadAtTarget, "stroke: " + edge.stroke + "; stroke-width: " + edge.thickness + "; fill: " + (edge.arrowHeadAtTarget.fill ? edge.stroke : "none"));

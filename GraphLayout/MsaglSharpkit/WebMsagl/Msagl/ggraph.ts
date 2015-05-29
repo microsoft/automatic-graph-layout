@@ -446,6 +446,8 @@ export interface IArrowHead {
     end: IPoint;
     closed: boolean;
     fill: boolean;
+    dash: string;
+    style: string;
 }
 
 export class GArrowHead implements IArrowHead {
@@ -453,18 +455,23 @@ export class GArrowHead implements IArrowHead {
     end: IPoint;
     closed: boolean;
     fill: boolean;
+    dash: string;
+    style: string; // standard|tee
     constructor(arrowHead: any)
     constructor(arrowHead: IArrowHead) {
-        this.start = arrowHead.start === undefined ? GPoint.origin : arrowHead.start;
-        this.end = arrowHead.end === undefined ? GPoint.origin : arrowHead.end;
-        this.closed = arrowHead.closed === undefined ? false : arrowHead.closed;
-        this.fill = arrowHead.fill === undefined ? false : arrowHead.fill;
+        this.start = arrowHead.start == undefined ? null : arrowHead.start;
+        this.end = arrowHead.end == undefined ? null : arrowHead.end;
+        this.closed = arrowHead.closed == undefined ? false : arrowHead.closed;
+        this.fill = arrowHead.fill == undefined ? false : arrowHead.fill;
+        this.dash = arrowHead.dash == undefined ? null : arrowHead.dash;
+        this.style = arrowHead.style == undefined ? "standard" : arrowHead.style;
     }
-    static standard: GArrowHead = new GArrowHead({ start: GPoint.origin, end: GPoint.origin, closed: false, fill: false });
-    static closed: GArrowHead = new GArrowHead({ start: GPoint.origin, end: GPoint.origin, closed: true, fill: false });
-    static filled: GArrowHead = new GArrowHead({ start: GPoint.origin, end: GPoint.origin, closed: true, fill: true });
+    static standard: GArrowHead = new GArrowHead({ });
+    static closed: GArrowHead = new GArrowHead({ closed: true });
+    static filled: GArrowHead = new GArrowHead({ closed: true, fill: true });
+    static tee: GArrowHead = new GArrowHead({ style: "tee" });
 }
-
+   
 export interface IEdge extends IElement {
     id: string;
     source: string;
@@ -473,6 +480,7 @@ export interface IEdge extends IElement {
     arrowHeadAtTarget: GArrowHead;
     arrowHeadAtSource: GArrowHead;
     thickness: number;
+    dash: string;
     curve: ICurve;
     stroke: string;
 }
@@ -486,6 +494,7 @@ export class GEdge implements IEdge {
     arrowHeadAtTarget: GArrowHead;
     arrowHeadAtSource: GArrowHead;
     thickness: number;
+    dash: string;
     curve: GCurve;
     stroke: string;
     constructor(edge: any)
@@ -504,6 +513,7 @@ export class GEdge implements IEdge {
         this.arrowHeadAtTarget = edge.arrowHeadAtTarget === undefined ? GArrowHead.standard : edge.arrowHeadAtTarget == null ? null : new GArrowHead(edge.arrowHeadAtTarget);
         this.arrowHeadAtSource = edge.arrowHeadAtSource === undefined || edge.arrowHeadAtSource == null ? null : new GArrowHead(edge.arrowHeadAtSource);
         this.thickness = edge.thickness == undefined ? 1 : edge.thickness;
+        this.dash = edge.dash == undefined ? null : edge.dash;
         this.curve = edge.curve === undefined ? null : GCurve.ofCurve(edge.curve);
         this.stroke = edge.stroke === undefined ? "Black" : edge.stroke;
     }
