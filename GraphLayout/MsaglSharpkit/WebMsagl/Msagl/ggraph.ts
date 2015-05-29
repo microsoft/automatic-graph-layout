@@ -720,8 +720,7 @@ export class GGraph implements IGraph {
                 var edge = this.edges[i];
                 if (edge.label != null && edge.label.bounds == GRect.zero) {
                     var labelSize = sizer(edge.label, edge);
-                    edge.label.bounds.width = labelSize.x;
-                    edge.label.bounds.height = labelSize.y;
+                    edge.label.bounds = new GRect({ width: labelSize.x, height: labelSize.y });
                 }
             }
         }
@@ -771,6 +770,9 @@ export class GGraph implements IGraph {
         var bbox = element.getBBox();
         var ret = { x: bbox.width, y: bbox.height };
         svg.removeChild(element);
+        ret.y -= 6; // Hack: offset miscalculated height.
+        if (label.content.length == 1)
+            ret.x = ret.y; // Hack: make single-letter nodes round.
         return ret;
     }
 
