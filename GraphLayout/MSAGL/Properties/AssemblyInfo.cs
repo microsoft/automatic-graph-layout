@@ -33,7 +33,6 @@ using System;
 [assembly: InternalsVisibleTo("Test01, PublicKey = 0024000004800000940000000602000000240000525341310004000001000100e3b43db620ddf9733693e320dc708264d4c96bcfabe11cac54c7fb9579327d4e083627bcd9f248423cf3cdab5dfe9f563d0596007163020c349055ce964691463bc101260caa0350aa53bdc3990ea1c17dcedb89a97fddce92c108ba23bba69f31b23393ad7b0ecc55595425285adec585786f274d854f903445b9c0676892d1")]
 
 [assembly: System.Resources.NeutralResourcesLanguage("en-us")]
-[assembly: AssemblyVersion("1.0.0.0")]
 [assembly: CLSCompliant(true)]
 #endif
 
