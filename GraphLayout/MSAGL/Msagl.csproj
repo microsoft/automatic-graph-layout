@@ -177,9 +177,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\version.cs">
-      <Link>version.cs</Link>
-    </Compile>
     <Compile Include="Core\AlgorithmBase.cs" />
     <Compile Include="Core\DataStructures\CollectionUtilities.cs" />
     <Compile Include="Core\DataStructures\GenericBinaryHeapPriorityQueueWithTimestamp.cs" />
