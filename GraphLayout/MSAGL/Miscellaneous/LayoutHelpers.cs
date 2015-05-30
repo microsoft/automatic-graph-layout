@@ -86,6 +86,13 @@ namespace Microsoft.Msagl.Miscellaneous
             largeGraphLayout.Run();
         }
 
+        static public void ComputeNodeLabelsOfLargeGraphWithLayers(GeometryGraph geometryGraph, LayoutAlgorithmSettings settings, List<double> noldeLabelRatios, CancelToken cancelToken) {
+            var largeGraphLayoutSettings = (LgLayoutSettings)settings;
+            var largeGraphLayout = largeGraphLayoutSettings.Interactor;
+            largeGraphLayout.InitNodeLabelWidthToHeightRatios(noldeLabelRatios);
+            largeGraphLayout.LabelingOfOneRun();
+        }
+
         static void ProcessSugiamaLayout(GeometryGraph geometryGraph, SugiyamaLayoutSettings sugiyamaLayoutSettings, CancelToken cancelToken) {
             PlaneTransformation originalTransform;
             var transformIsNotIdentity = HandleTransformIsNotIdentity(geometryGraph, sugiyamaLayoutSettings, out originalTransform);

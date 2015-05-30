@@ -132,6 +132,22 @@ namespace TestGraphmaps {
             ReadNodeFeatures(node);
         }
 
+        private void SetLabelFromAttrValues(Node node, GexfNodeAttr gexfNodeAttr)
+        {
+            if (gexfNodeAttr.Attvalues.Count > 0)
+            {
+                var first = true;
+                String labelText = "";
+                foreach (var attVal in gexfNodeAttr.Attvalues.Values)
+                {
+                    if (!first) labelText += " ";
+                    labelText += attVal;
+                    first = false;
+                }
+                node.LabelText = labelText;
+            }
+        }
+
         void ReadNodeFeatures(Node node) {
             GexfNodeAttr gexfNodeAttr;
             idsToGexfNodeAttr[node.Id] = gexfNodeAttr = new GexfNodeAttr();
@@ -139,19 +155,52 @@ namespace TestGraphmaps {
                 switch (xmlReader.Name) {
                     case "viz:color":
                         ReadColor(node);
+                        xmlReader.Read();
+                        xmlReader.ReadEndElement();
                         break;
                     case "viz:position":
                         ReadPosition(gexfNodeAttr);
+                        xmlReader.Read();
+                        xmlReader.ReadEndElement();
                         break;
                     case "viz:size":
                         ReadSize(gexfNodeAttr);
+                        xmlReader.Read();
+                        xmlReader.ReadEndElement();
+                        break;
+                    case "attvalues":
+                        ReadAttvalues(gexfNodeAttr);
                         break;
                     default:
                         xmlReader.Skip();
                         break;
                 }
-                xmlReader.Read();
+                //xmlReader.Read();
             }
+
+            SetLabelFromAttrValues(node, gexfNodeAttr);
+        }
+
+        private void ReadAttvalues(GexfNodeAttr gexfNodeAttr)
+        {
+            xmlReader.Read();
+            while (IsStartElement() && Name == "attvalue")
+            {
+                ReadAttvalue(gexfNodeAttr);
+                if(!xmlReader.IsEmptyElement)
+                    xmlReader.Read();
+                xmlReader.ReadEndElement();
+            }
+            if(Name=="attvalues")
+                xmlReader.ReadEndElement();
+        }
+
+        private void ReadAttvalue(GexfNodeAttr gexfNodeAttr)
+        {
+            var attFor = xmlReader.GetAttribute("for");
+            var attVal = xmlReader.GetAttribute("value");
+            if (attFor != null && attVal != null)
+                gexfNodeAttr.Attvalues[attFor] = attVal;
         }
 
         void ReadSize(GexfNodeAttr gexfNodeAttr) {

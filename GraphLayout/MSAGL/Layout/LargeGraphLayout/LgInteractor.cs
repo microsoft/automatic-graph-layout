@@ -1196,14 +1196,14 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             FillLevelsWithNodesOnly(maxNodesPerTile);
             
             InitRailsOfEdgesEmpty();
-            InitNodeLabelWidthToHeightRatios();
+            //InitNodeLabelWidthToHeightRatios();
             AddSkeletonLevels();
             for (int i = 0; i < _lgData.Levels.Count; i++)
                 RemoveOverlapsAndRouteForLayer(maxNodesPerTile, maxSegmentsPerTile, increaseNodeQuota, i);
 
 
             _lgData.CreateLevelNodeTrees(NodeDotWidth(1));
-            LabelingOfOneRun();
+            //LabelingOfOneRun();
 #if DEBUG
             TestAllEdgesConsistency();
 #endif
@@ -1217,7 +1217,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             return bbox;
         }
 
-        void LabelingOfOneRun() {
+        public void LabelingOfOneRun() {
             foreach (LgNodeInfo node in _lgData.SortedLgNodeInfos) {
                 //if (node.ZoomLevel > 1.0)
                 //    node.LabelVisibleFromScale = node.ZoomLevel;
@@ -1369,9 +1369,15 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 #endif
         }
 
-        void InitNodeLabelWidthToHeightRatios() {
-            foreach (LgNodeInfo ni in _lgData.SortedLgNodeInfos) {
-                ni.LabelWidthToHeightRatio = ni.GeometryNode.BoundingBox.Width/ni.GeometryNode.BoundingBox.Height;
+        public void InitNodeLabelWidthToHeightRatios(List<double> noldeLabelRatios) {
+            for(int i = 0; i< _mainGeometryGraph.Nodes.Count; i++)
+            {
+                var n = _mainGeometryGraph.Nodes[i];
+                var ni = _lgData.GeometryNodesToLgNodeInfos[n];
+                if (ni != null)
+                {
+                    ni.LabelWidthToHeightRatio = noldeLabelRatios[i];
+                }
             }
         }
 

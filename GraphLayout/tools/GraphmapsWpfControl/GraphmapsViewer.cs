@@ -941,12 +941,20 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 //lgsettings.ViewModel = ViewModel;
                 lgsettings.ViewerChangeTransformAndInvalidateGraph +=
                     OGraphChanged;
-                if (NeedToCalculateLayout) {
+                if (NeedToCalculateLayout)
+                {
                     _drawingGraph.CreateGeometryGraph(); //forcing the layout recalculation
                     if (_graphCanvas.Dispatcher.CheckAccess())
                         PopulateGeometryOfGeometryGraph();
                     else
                         _graphCanvas.Dispatcher.Invoke(PopulateGeometryOfGeometryGraph);
+                }
+                else
+                {
+                    if (_graphCanvas.Dispatcher.CheckAccess())
+                        SetLabelWidthToHeightRatiosOfGeometryGraph();
+                    else
+                        _graphCanvas.Dispatcher.Invoke(SetLabelWidthToHeightRatiosOfGeometryGraph);
                 }
 
                 geometryGraphUnderLayout = _drawingGraph.GeometryGraph;
@@ -1019,8 +1027,22 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 LayoutHelpers.LayoutLargeGraphWithLayers(geometryGraphUnderLayout, _drawingGraph.LayoutAlgorithmSettings,
                     CancelToken);
 
-            //added            
             _lgLayoutSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
+
+            var noldeLabelRatios = new List<double>();
+            foreach (var n in geometryGraphUnderLayout.Nodes)
+            {
+                var node = (Drawing.Node) n.UserData;
+                noldeLabelRatios.Add(node == null ? 1 : node.Attr.LabelWidthToHeightRatio);
+            }
+
+
+            LayoutHelpers.ComputeNodeLabelsOfLargeGraphWithLayers(geometryGraphUnderLayout,
+                _drawingGraph.LayoutAlgorithmSettings,
+                noldeLabelRatios,
+                CancelToken);
+
+            //added            
         }
 
         void PostLayoutStep() {
@@ -1924,7 +1946,9 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                     var msagNodeInThread = msaglNode;
                     _graphCanvas.Dispatcher.Invoke(() => msagNodeInThread.BoundaryCurve = GetNodeBoundaryCurve(node));
                 }
-                //AssignLabelWidthHeight(msaglNode, msaglNode.UserData as DrawingObject);
+
+                node.Attr.LabelWidthToHeightRatio = node.BoundingBox.Width/node.BoundingBox.Height;
+                        //AssignLabelWidthHeight(msaglNode, msaglNode.UserData as DrawingObject);
             }
 
             foreach (
@@ -1944,6 +1968,23 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 //AssignLabelWidthHeight(msaglNode, msaglNode.UserData as DrawingObject);
             }
 
+        }
+
+        void SetLabelWidthToHeightRatiosOfGeometryGraph() {
+            geometryGraphUnderLayout = _drawingGraph.GeometryGraph;
+            foreach (
+                Core.Layout.Node msaglNode in
+                    geometryGraphUnderLayout.Nodes) {
+                var node = (Node)msaglNode.UserData;
+                if (_graphCanvas.Dispatcher.CheckAccess())
+                {
+                    node.Attr.LabelWidthToHeightRatio = GetLabelWidthToHeightRatioByMeasuringText(node);
+                }                        
+                else {
+                    var msagNodeInThread = msaglNode;
+                    _graphCanvas.Dispatcher.Invoke(() => node.Attr.LabelWidthToHeightRatio = GetLabelWidthToHeightRatioByMeasuringText(node));                          
+                }                
+            }
         }
 
         ICurve GetClusterCollapsedBoundary(Subgraph subgraph) {
@@ -2016,6 +2057,24 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                     height = _drawingGraph.Attr.MinNodeHeight;
             }
             return NodeBoundaryCurves.GetNodeBoundaryCurve(node, width, height);
+        }
+
+        double GetLabelWidthToHeightRatioByMeasuringText(Node node) {
+            double width, height;
+            if (String.IsNullOrEmpty(node.LabelText)) {
+                width = 10;
+                height = 10;
+            } else {
+                var size = MeasureText(node.LabelText, new FontFamily(node.Label.FontName), node.Label.FontSize);
+                width = size.Width;
+                height = size.Height;
+
+                if (width < _drawingGraph.Attr.MinNodeWidth)
+                    width = _drawingGraph.Attr.MinNodeWidth;
+                if (height < _drawingGraph.Attr.MinNodeHeight)
+                    height = _drawingGraph.Attr.MinNodeHeight;
+            }
+            return width/height;
         }
 
         void SetUpTextBoxForApproxNodeBoundaries() {
