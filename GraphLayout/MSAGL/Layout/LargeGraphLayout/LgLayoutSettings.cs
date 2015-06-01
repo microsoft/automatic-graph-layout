@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
@@ -93,6 +94,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             MaximalArrowheadLength = maximalArrowheadLength;
             EdgeRoutingSettings.Padding = NodeSeparation/4;
             EdgeRoutingSettings.PolylinePadding = NodeSeparation/6;
+            InitDefaultRailColors();
         }
 
         public Func<Rectangle> ClientViewportMappedToGraph { get; set; }            
@@ -196,6 +198,29 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 
         bool _generateTiles = true;
+
+        private String[] _railColors;
+
+        public String[] RailColors {
+            get { return _railColors; }
+            set { _railColors = value; }
+        }
+
+        private void InitDefaultRailColors()
+        {
+            _railColors = new String[3];
+            _railColors[0] = "#87CEFA";
+            _railColors[1] = "#FAFAD2";
+            _railColors[2] = "#F5F5F5";
+        }
+
+        public String GetColorForZoomLevel(double zoomLevel)
+        {
+            int logZoomLevel = (int)Math.Log(zoomLevel, 2.0);
+            logZoomLevel = Math.Min(logZoomLevel, RailColors.Count() - 1);
+            logZoomLevel = Math.Max(logZoomLevel, 0);
+            return RailColors[logZoomLevel];
+        }
 
     }
 }

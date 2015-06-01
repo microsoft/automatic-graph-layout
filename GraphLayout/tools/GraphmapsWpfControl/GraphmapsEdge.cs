@@ -368,10 +368,18 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             brush = rail.IsHighlighted ? Brushes.Red.Color : Brushes.SlateGray.Color;
             if (rail.TopRankedEdgeInfoOfTheRail == null) return new SolidColorBrush(brush);
 
-            if (rail.MinPassingEdgeZoomLevel <= 1) brush = Brushes.LightSkyBlue.Color;//Brushes.DimGray.Color;
-            else if (rail.MinPassingEdgeZoomLevel <= 2)
-                brush = Brushes.LightGoldenrodYellow.Color; //Brushes.SlateGray.Color;
-            else brush = Brushes.WhiteSmoke.Color;//Brushes.Gray.Color;
+            if (lgSettings != null)
+            {
+                var col = lgSettings.GetColorForZoomLevel(rail.MinPassingEdgeZoomLevel);
+                brush = ((SolidColorBrush)(new BrushConverter().ConvertFrom(col))).Color;
+            }
+            else
+            {
+                if (rail.MinPassingEdgeZoomLevel <= 1) brush = Brushes.LightSkyBlue.Color; //Brushes.DimGray.Color;
+                else if (rail.MinPassingEdgeZoomLevel <= 2)
+                    brush = Brushes.LightGoldenrodYellow.Color; //Brushes.SlateGray.Color;
+                else brush = Brushes.WhiteSmoke.Color; //Brushes.Gray.Color;
+            }
 
             if (rail.IsHighlighted)
             {

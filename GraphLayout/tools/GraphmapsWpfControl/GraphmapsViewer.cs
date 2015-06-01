@@ -931,6 +931,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                         NeedToLayout = NeedToCalculateLayout,
                         MaxNumberOfNodesPerTile = DefaultLargeLayoutSettings.MaxNumberOfNodesPerTile,
                         MaxNumberOfRailsPerTile = DefaultLargeLayoutSettings.MaxNumberOfRailsPerTile,
+                        RailColors = DefaultLargeLayoutSettings.RailColors,
                         ExitAfterInit = DefaultLargeLayoutSettings.ExitAfterInit,
                         SimplifyRoutes = DefaultLargeLayoutSettings.SimplifyRoutes,
                         NodeLabelHeightInInches = DefaultLargeLayoutSettings.NodeLabelHeightInInches,

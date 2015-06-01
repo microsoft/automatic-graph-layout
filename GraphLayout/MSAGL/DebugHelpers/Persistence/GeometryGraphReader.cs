@@ -382,6 +382,11 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
         }
 
         void ReadLgEdgeInfos(LgData lgData) {
+            if (XmlReader.IsEmptyElement) {
+                XmlRead();
+                return;
+            }
+
             XmlRead();
             while (TokenIs(GeometryToken.LgEdgeInfo))
                 ReadLgEdgeInfo(lgData);
@@ -458,6 +463,11 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
 
 
         void ReadRailIdsPerEdgeIds(LgData lgData, Dictionary<string, Set<string>> edgeIdToEdgeRailsSet) {
+            if (XmlReader.IsEmptyElement) {
+                XmlRead();
+                return;
+            }
+            
             XmlRead();
             while (TokenIs(GeometryToken.EdgeRails))
                 ReadEdgeRailIds(lgData, edgeIdToEdgeRailsSet);
@@ -762,6 +772,12 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
 
         void ReadEdges() {
             CheckToken(GeometryToken.Edges);
+
+            if (XmlReader.IsEmptyElement) {
+                XmlRead();
+                return;
+            }
+
             XmlRead();
             while (TokenIs(GeometryToken.Edge))
                 ReadEdge();
