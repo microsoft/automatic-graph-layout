@@ -287,6 +287,17 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 BoundaryPath.Fill = Brushes.Blue;
                 return;
             }
+
+            var colBlack = new Drawing.Color(0, 0, 0);
+
+            if (!Node.Attr.Color.Equals(colBlack))
+            {
+                BoundaryPath.Fill = LgNodeInfo.Selected
+                ? Brushes.Red
+                : Common.BrushFromMsaglColor(Node.Attr.Color);
+                return;
+            }
+
             BoundaryPath.Fill = LgNodeInfo.Selected
                 ? Brushes.Red
                 : (LgNodeInfo != null && LgNodeInfo.SlidingZoomLevel == 0

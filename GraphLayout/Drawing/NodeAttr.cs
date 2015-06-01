@@ -157,6 +157,12 @@ namespace Microsoft.Msagl.Drawing {
                 RaiseVisualsChangedEvent(this, null);
             }
         }
-        
+
+        private double labelWidthToHeightRatio = 1.0;
+
+        public double LabelWidthToHeightRatio {
+            get { return labelWidthToHeightRatio; }
+            set { labelWidthToHeightRatio = value; }
+        }
     }
 }

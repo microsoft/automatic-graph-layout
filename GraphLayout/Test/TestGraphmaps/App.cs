@@ -79,6 +79,8 @@ namespace TestGraphmaps {
         const string NoEdgeRoutingOption = "-nr";
         const string ExitAfterLgLayoutOption = "-lgexit";
         const string BackgroundImageOption = "-bgimage";
+        const string BackgroundColorOption = "-bgcolor";
+        const string RailColorsOption = "-railcolors";
 
         public static readonly RoutedUICommand OpenFileCommand = new RoutedUICommand("Open File...", "OpenFileCommand",
             typeof (App));
@@ -191,6 +193,12 @@ namespace TestGraphmaps {
             _graphViewer.BindToPanel(_graphViewerPanel);
             _dockPanel.Loaded += GraphViewerLoaded;
             _argsParser = SetArgsParser(Args);
+
+            if (_argsParser.OptionIsUsed(BackgroundColorOption)) {
+                var bc = _argsParser.GetValueOfOptionWithAfterString(BackgroundColorOption);
+                _graphViewerPanel.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom(bc));
+            }
+
             //graphViewer.MainPanel.MouseLeftButtonUp += TestApi;
             TrySettingGraphViewerLargeLayoutThresholdAndSomeOtherLgSettings();
             if (_argsParser.OptionIsUsed(ExitAfterLgLayoutOption)) {
@@ -361,6 +369,15 @@ namespace TestGraphmaps {
             }
             CheckNodeQuota();
             CheckRailQuota();
+            CheckRailColors();
+        }
+
+        void CheckRailColors() {
+            string railColors = _argsParser.GetValueOfOptionWithAfterString(RailColorsOption);
+            if (railColors != null)
+            {
+                _graphViewer.DefaultLargeLayoutSettings.RailColors = railColors.Split(',');
+            }
         }
 
         void CheckRailQuota() {
@@ -503,6 +520,10 @@ namespace TestGraphmaps {
             _argsParser.AddOptionWithAfterStringWithHelp(LargeLayoutThresholdOption, "sets the large layout threshold");
             _argsParser.AddOptionWithAfterStringWithHelp(BackgroundImageOption,
                 "sets the background image for the large layout");
+            _argsParser.AddOptionWithAfterStringWithHelp(BackgroundColorOption,
+    "sets the background color for the large layout viewer");
+            _argsParser.AddOptionWithAfterStringWithHelp(RailColorsOption,
+"sets the rail colors for the large layout viewer");
 
             _argsParser.AddOptionWithAfterStringWithHelp(MaxNodesPerTileOption,
                 "sets the max nodes per tile for large layout");
