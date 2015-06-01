@@ -62,15 +62,15 @@ namespace Microsoft.Msagl.Layout.Layered
 
         internal static void PreRunTransform(GeometryGraph geomGraph, PlaneTransformation matrix) {
             if (matrix.IsIdentity) return;
-            var m = matrix.Inverse;
+            var matrixInverse = matrix.Inverse;
             foreach (Node n in geomGraph.Nodes)
-                n.Transform(m);
+                n.Transform(matrixInverse);
             //calculate new label widths and heights
             foreach (Edge e in geomGraph.Edges) {
                 if (e.Label != null) {
                     e.OriginalLabelWidth = e.Label.Width;
                     e.OriginalLabelHeight = e.Label.Height;
-                    var r = new Rectangle(m*new Point(0, 0), m*new Point(e.Label.Width, e.Label.Height));
+                    var r = new Rectangle(matrixInverse*new Point(0, 0), matrixInverse*new Point(e.Label.Width, e.Label.Height));
                     e.Label.Width = r.Width;
                     e.Label.Height = r.Height;
                 }

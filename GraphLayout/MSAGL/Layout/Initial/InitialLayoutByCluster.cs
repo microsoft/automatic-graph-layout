@@ -147,7 +147,7 @@ namespace Microsoft.Msagl.Layout.Initial {
                 cluster.DeepTranslation(oldBounds.Center - newBounds.Center, true);
             }
 #if DEBUG
-                ValidateLayout(cluster);
+              //  ValidateLayout(cluster);
 #endif
         }
 
@@ -307,9 +307,9 @@ namespace Microsoft.Msagl.Layout.Initial {
 
             //currentComponentFraction = (1.0 / clusterCount) / components.Count;
 
-            if (runInParallel)
-                Parallel.ForEach(components, parallelOptions, comp => LayoutComponent(settings, comp));
-            else
+//            if (runInParallel)
+//                Parallel.ForEach(components, parallelOptions, comp => LayoutComponent(settings, comp));
+//            else // debug!!!!!!
                 components.ForEach(c => LayoutComponent(settings, c));
 
             var bounds = MdsGraphLayout.PackGraphs(components, settings);

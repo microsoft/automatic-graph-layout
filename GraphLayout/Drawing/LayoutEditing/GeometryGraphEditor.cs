@@ -114,7 +114,7 @@ namespace Microsoft.Msagl.Drawing {
             get { return UndoRedoActionsList.CurrentRedo != null; }
         }
 
-        
+
         /// <summary>
         /// indicates if the editor is under the undo mode
         /// </summary>
@@ -130,7 +130,7 @@ namespace Microsoft.Msagl.Drawing {
         /// </summary>
         public event EventHandler ChangeInUndoRedoList;
 
-   
+
         internal static void DragLabel(GeomLabel label, Point delta) {
             label.Center += delta;
             var edge = label.GeometryParent as GeomEdge;
@@ -138,9 +138,9 @@ namespace Microsoft.Msagl.Drawing {
                 CalculateAttachedSegmentEnd(label, edge);
                 if (!ApproximateComparer.Close(label.AttachmentSegmentEnd, label.Center)) {
                     IntersectionInfo x = Curve.CurveCurveIntersectionOne(label.BoundingBox.Perimeter(),
-                                                                         new LineSegment(
-                                                                             label.AttachmentSegmentEnd,
-                                                                             label.Center), false);
+                        new LineSegment(
+                            label.AttachmentSegmentEnd,
+                            label.Center), false);
 
                     label.AttachmentSegmentStart = x != null ? x.IntersectionPoint : label.Center;
                 }
@@ -181,12 +181,12 @@ namespace Microsoft.Msagl.Drawing {
                 node.Center += delta;
 
             RectilinearInteractiveEditor.CreatePortsAndRouteEdges(LayoutSettings.NodeSeparation/3, 1, graph.Nodes,
-                                                                  graph.Edges,
-                                                                  LayoutSettings.EdgeRoutingSettings.EdgeRoutingMode,
-                                                                  true,
-                                                                  LayoutSettings.EdgeRoutingSettings
-                                                                                .UseObstacleRectangles,
-                                                                  LayoutSettings.EdgeRoutingSettings.BendPenalty);
+                graph.Edges,
+                LayoutSettings.EdgeRoutingSettings.EdgeRoutingMode,
+                true,
+                LayoutSettings.EdgeRoutingSettings
+                    .UseObstacleRectangles,
+                LayoutSettings.EdgeRoutingSettings.BendPenalty);
             var labelPlacer = new EdgeLabelPlacement(graph);
             labelPlacer.Run();
 
@@ -205,14 +205,13 @@ namespace Microsoft.Msagl.Drawing {
                 DragWithStraightLines(delta);
         }
 
-        void DragWithStraightLines(Point delta) {            
+        void DragWithStraightLines(Point delta) {
             foreach (var geomObj in objectsToDrag) {
                 var node = geomObj as GeomNode;
                 if (node != null) {
                     node.Center += delta;
                     var cl = node as Cluster;
-                    if (cl != null)
-                    {
+                    if (cl != null) {
                         cl.DeepContentsTranslation(delta, translateEdges: false);
                         cl.RectangularBoundary.TranslateRectangle(delta);
                     }
@@ -263,12 +262,12 @@ namespace Microsoft.Msagl.Drawing {
             RunSplineRouterAndPutLabels();
         }
 
-        
+
         void RunSplineRouterAndPutLabels() {
             var router = new SplineRouter(graph, LayoutSettings.EdgeRoutingSettings.Padding,
-                                          LayoutSettings.EdgeRoutingSettings.PolylinePadding,
-                                          LayoutSettings.EdgeRoutingSettings.ConeAngle,
-                                          LayoutSettings.EdgeRoutingSettings.BundlingSettings);
+                LayoutSettings.EdgeRoutingSettings.PolylinePadding,
+                LayoutSettings.EdgeRoutingSettings.ConeAngle,
+                LayoutSettings.EdgeRoutingSettings.BundlingSettings);
             router.Run();
             var elp = new EdgeLabelPlacement(graph);
             elp.Run();
@@ -285,7 +284,7 @@ namespace Microsoft.Msagl.Drawing {
         }
 
         static void DragEdgeAsStraightLine(Point delta, GeomEdge edge) {
-            StraightLineEdges.CreateSimpleEdgeCurveWithUnderlyingPolyline(edge);          
+            StraightLineEdges.CreateSimpleEdgeCurveWithUnderlyingPolyline(edge);
         }
 
         void UpdateGraphBoundingBoxWithCheck() {
@@ -299,27 +298,28 @@ namespace Microsoft.Msagl.Drawing {
             Rectangle box = graph.BoundingBox;
             if (incrementalDragger == null)
                 InitIncrementalDragger();
-            incrementalDragger.Drag(delta);            
-            
+            incrementalDragger.Drag(delta);
+
             GraphBoundingBoxGetsExtended = box != graph.BoundingBox;
         }
 
-        
+
         Rectangle GetUpdatedRegionAndCleanUpAffectedObjects() {
-            
+
             Rectangle rect = Rectangle.CreateAnEmptyBox();
             var affectedObjectList = new List<IViewerObject>(CurrentUndoAction.AffectedObjects);
 
             foreach (var ivObj in affectedObjectList) {
                 var inode = ivObj as IViewerNode;
                 if (inode == null) continue;
-                var node =(GeomNode) inode.DrawingObject.GeometryObject;
-                NodeRestoreData nrd = (NodeRestoreData)CurrentUndoAction.GetRestoreData(node);
+                var node = (GeomNode) inode.DrawingObject.GeometryObject;
+                NodeRestoreData nrd = (NodeRestoreData) CurrentUndoAction.GetRestoreData(node);
                 var oldBoundingBox = nrd.BoundaryCurve.BoundingBox;
                 if (!oldBoundingBox.Equals(node.BoundingBox)) {
                     rect.Add(node.BoundingBox);
                     rect.Add(oldBoundingBox);
-                } else CurrentUndoAction.RemoveAffectedObject(ivObj);
+                }
+                else CurrentUndoAction.RemoveAffectedObject(ivObj);
             }
 
             foreach (var e in edgesDraggedWithSource.Concat(edgesDraggedWithTarget))
@@ -329,11 +329,11 @@ namespace Microsoft.Msagl.Drawing {
             return rect;
         }
 
-       
+
 
         internal static ICurve CreateBaseSegmentForDraggingEdgeWithTarget(Point delta, GeomEdge edge,
-                                                                          EdgeRestoreData edgeRestoreData,
-                                                                          Dictionary<GeomEdge, double> offsets) {
+            EdgeRestoreData edgeRestoreData,
+            Dictionary<GeomEdge, double> offsets) {
             double offset;
             ICurve seg;
             Point a = edgeRestoreData.UnderlyingPolyline.HeadSite.Point;
@@ -356,8 +356,8 @@ namespace Microsoft.Msagl.Drawing {
         }
 
         internal static ICurve CreateBaseSegmentForDraggingEdgeWithSource(Point delta, GeomEdge edge,
-                                                                          EdgeRestoreData edgeRestoreData,
-                                                                          Dictionary<GeomEdge, double> offsets) {
+            EdgeRestoreData edgeRestoreData,
+            Dictionary<GeomEdge, double> offsets) {
             double offset;
             ICurve seg;
             Point a = edgeRestoreData.UnderlyingPolyline.HeadSite.Point + delta;
@@ -384,7 +384,7 @@ namespace Microsoft.Msagl.Drawing {
 
 
         internal static void DragEdge(Point delta, GeomEdge e, EdgeRestoreData edgeRestoreData,
-                                      Set<GeometryObject> objectsMarkedToDrag) {
+            Set<GeometryObject> objectsMarkedToDrag) {
             Site site = null;
 
             if (objectsMarkedToDrag.Contains(e.Source)) {
@@ -407,7 +407,7 @@ namespace Microsoft.Msagl.Drawing {
         /// <param name="site"></param>
         internal static void DragEdgeWithSite(Point delta, GeomEdge e, Site site) {
             e.RaiseLayoutChangeEvent(delta);
-            site.Point +=delta;
+            site.Point += delta;
             CreateCurveOnChangedPolyline(e);
         }
 
@@ -415,8 +415,8 @@ namespace Microsoft.Msagl.Drawing {
             Curve curve = e.UnderlyingPolyline.CreateCurve();
             if (
                 !Arrowheads.TrimSplineAndCalculateArrowheads(e.EdgeGeometry, e.Source.BoundaryCurve,
-                                                             e.Target.BoundaryCurve, curve, false, false))
-                Arrowheads.CreateBigEnoughSpline(e);            
+                    e.Target.BoundaryCurve, curve, false, false))
+                Arrowheads.CreateBigEnoughSpline(e);
         }
 
 
@@ -465,8 +465,8 @@ namespace Microsoft.Msagl.Drawing {
             }
             if (e.UnderlyingPolyline != null)
                 for (Site s = e.UnderlyingPolyline.HeadSite, s0 = edgeRestoreData.UnderlyingPolyline.HeadSite;
-                     s != null;
-                     s = s.Next, s0 = s0.Next)
+                    s != null;
+                    s = s.Next, s0 = s0.Next)
                     s.Point = s0.Point + delta;
             if (e.EdgeGeometry.SourceArrowhead != null)
                 e.EdgeGeometry.SourceArrowhead.TipPosition = edgeRestoreData.ArrowheadAtSourcePosition + delta;
@@ -491,7 +491,8 @@ namespace Microsoft.Msagl.Drawing {
         }
 
         void InitIncrementalDragger() {
-            incrementalDragger = new IncrementalDragger(objectsToDrag.OfType<GeomNode>().ToArray(), graph, layoutSettings);
+            incrementalDragger = new IncrementalDragger(objectsToDrag.OfType<GeomNode>().ToArray(), graph,
+                layoutSettings);
         }
 
         void ClearDraggedSets() {
@@ -506,8 +507,7 @@ namespace Microsoft.Msagl.Drawing {
             foreach (GeometryObject geometryObject in markedObjects) {
                 objectsToDrag.Insert(geometryObject);
                 var edge = geometryObject as GeomEdge;
-                if (edge != null)
-                {
+                if (edge != null) {
                     objectsToDrag.Insert(edge.Source);
                     objectsToDrag.Insert(edge.Target);
                 }
@@ -554,13 +554,15 @@ namespace Microsoft.Msagl.Drawing {
             foreach (GeomEdge edge in node.SelfEdges)
                 objectsToDrag.Insert(edge);
             foreach (GeomEdge edge in node.InEdges)
-                if (objectsToDrag.Contains(edge.Source) || edge.Source.ClusterParents.Any(p=>objectsToDrag.Contains(p)))
+                if (objectsToDrag.Contains(edge.Source) ||
+                    edge.Source.ClusterParents.Any(p => objectsToDrag.Contains(p)))
                     objectsToDrag.Insert(edge);
                 else
                     edgesDraggedWithTarget.Insert(edge);
 
             foreach (GeomEdge edge in node.OutEdges)
-                if (objectsToDrag.Contains(edge.Target)||edge.Target.ClusterParents.Any(p=>objectsToDrag.Contains(p)))
+                if (objectsToDrag.Contains(edge.Target) ||
+                    edge.Target.ClusterParents.Any(p => objectsToDrag.Contains(p)))
                     objectsToDrag.Insert(edge);
                 else
                     edgesDraggedWithSource.Insert(edge);
@@ -580,8 +582,8 @@ namespace Microsoft.Msagl.Drawing {
         }
 
         static void CalculateMiddleOffsetsForMultiedge(List<GeomEdge> multiedge, GeomNode node,
-                                                       Dictionary<GeomEdge, double> offsetsInsideOfMultiedge,
-                                                       double nodeSeparation) {
+            Dictionary<GeomEdge, double> offsetsInsideOfMultiedge,
+            double nodeSeparation) {
             Dictionary<GeomEdge, double> middleAngles = GetMiddleAnglesOfMultiedge(multiedge, node);
             var angles = new double[middleAngles.Count];
             var edges = new GeomEdge[middleAngles.Count];
@@ -667,7 +669,7 @@ namespace Microsoft.Msagl.Drawing {
         }
 
         static List<GeomEdge> GetOrCreateListOfMultiedge(Dictionary<GeomNode, List<GeomEdge>> nodeToMultiEdge,
-                                                         GeomNode node) {
+            GeomNode node) {
             List<GeomEdge> list;
             if (nodeToMultiEdge.TryGetValue(node, out list))
                 return list;
@@ -710,8 +712,8 @@ namespace Microsoft.Msagl.Drawing {
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Polyline")]
         public UndoRedoAction PrepareForPolylineCornerRemoval(IViewerObject affectedEdge, Site site) {
             var action = new SiteRemoveUndoAction(EditedEdge) {
-                                                                  RemovedSite = site,
-                                                              };
+                RemovedSite = site,
+            };
             action.AddAffectedObject(affectedEdge);
             return InsertToListAndSetTheBoxBefore(action);
         }
@@ -724,8 +726,8 @@ namespace Microsoft.Msagl.Drawing {
         /// <returns></returns>
         internal UndoRedoAction PrepareForPolylineCornerInsertion(IViewerObject affectedObj, Site site) {
             var action = new SiteInsertUndoAction(EditedEdge) {
-                                                                  InsertedSite = site,
-                                                              };
+                InsertedSite = site,
+            };
             action.AddAffectedObject(affectedObj);
             return InsertToListAndSetTheBoxBefore(action);
         }
@@ -825,7 +827,7 @@ namespace Microsoft.Msagl.Drawing {
             site.Next.Previous = site.Previous;
             //just to recalc everything in a correct way
             DragEdgeWithSite(new Point(0, 0), edge,
-                             site.Previous);
+                site.Previous);
         }
 
         /// <summary>
@@ -858,19 +860,19 @@ namespace Microsoft.Msagl.Drawing {
         /// <param name="underlyingPolyline"></param>
         /// <param name="mousePoint"></param>
         /// <returns></returns>
-        [SuppressMessage("Microsoft.Naming","CA1704:IdentifiersShouldBeSpelledCorrectly",MessageId = "Polyline")]
-        static Site FindClosestCornerForEdit(SmoothedPolyline underlyingPolyline,Point mousePoint) {
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Polyline")]
+        static Site FindClosestCornerForEdit(SmoothedPolyline underlyingPolyline, Point mousePoint) {
             var site = underlyingPolyline.HeadSite.Next;
             var bestSite = site;
-            var dist = (bestSite.Point-mousePoint).LengthSquared; 
-            while(site.Next!=null) {
+            var dist = (bestSite.Point - mousePoint).LengthSquared;
+            while (site.Next != null) {
                 site = site.Next;
                 var d = (mousePoint - site.Point).LengthSquared;
-                if(d < dist) {
+                if (d < dist) {
                     bestSite = site;
                     dist = d;
                 }
-            } 
+            }
             return bestSite;
         }
 
@@ -912,14 +914,14 @@ namespace Microsoft.Msagl.Drawing {
         /// </summary>
         /// <param name="delta"></param>
         public void OnDragEnd(Point delta) {
-          
+
             if (CurrentUndoAction != null) {
                 var action = CurrentUndoAction;
                 action.GraphBoundingBoxAfter = action.Graph.BoundingBox;
             }
         }
 
-        
+
         /*
           void TestFixBrect() { //debug: todo , remove later
             if (brect == null)
@@ -944,18 +946,22 @@ namespace Microsoft.Msagl.Drawing {
             LgLayoutSettings.Interactor.RunOnViewChange();
         }
 
-         internal void ForgetDragging() {
-             incrementalDragger = null;
-         }
+        internal void ForgetDragging() {
+            incrementalDragger = null;
+        }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="changedCluster"></param>
-        public void PrepareForClusterCollapseChange(IEnumerable<IViewerNode> changedCluster) {
+        /// <param name="changedClusters"></param>
+        public void PrepareForClusterCollapseChange(IEnumerable<IViewerNode> changedClusters) {
             InsertToListAndSetTheBoxBefore(new ClustersCollapseExpandUndoRedoAction(graph));
+            foreach (var iCluster in changedClusters) {
+                CurrentUndoAction.AddAffectedObject(iCluster);
+            }
         }
     }
+
     /// <summary>
     /// 
     /// </summary>
@@ -965,7 +971,6 @@ namespace Microsoft.Msagl.Drawing {
         /// </summary>
         /// <param name="geometryGraph"></param>
         public ClustersCollapseExpandUndoRedoAction(GeometryGraph geometryGraph) : base(geometryGraph) {
-            
         }
     }
 }

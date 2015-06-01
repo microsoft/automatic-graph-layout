@@ -140,12 +140,10 @@ namespace Microsoft.Msagl.Miscellaneous
         static void PrepareGraphForInitialLayoutByCluster(GeometryGraph geometryGraph,
             SugiyamaLayoutSettings sugiyamaLayoutSettings) {
             foreach (var cluster in geometryGraph.RootCluster.AllClustersDepthFirst()) {
-                if (cluster.RectangularBoundary == null) {}
-                cluster.RectangularBoundary = new RectangularClusterBoundary() {TopMargin = 10};
+                cluster.RectangularBoundary = new RectangularClusterBoundary {TopMargin = 10};
 
-                if (cluster.BoundaryCurve == null) {
+                if (cluster.BoundaryCurve == null)
                     cluster.BoundaryCurve = new RoundedRect(new Rectangle(0, 0, 10, 10), 3, 3);
-                }
             }
 
             foreach (var edge in geometryGraph.Edges) {
@@ -261,7 +259,7 @@ namespace Microsoft.Msagl.Miscellaneous
             if (transform) {
                 foreach (Node n in geometryGraph.Nodes)
                     n.Transform(settings.Transformation);
-                foreach (var n in geometryGraph.RootCluster.Clusters) {
+                foreach (var n in geometryGraph.RootCluster.AllClustersDepthFirst()) {
                     n.Transform(settings.Transformation);
                     n.RectangularBoundary.Rect = n.BoundaryCurve.BoundingBox;
                 }
@@ -276,7 +274,6 @@ namespace Microsoft.Msagl.Miscellaneous
 
                 TransformCurves(geometryGraph, settings);
             }
-
             geometryGraph.UpdateBoundingBox();
         }
 
