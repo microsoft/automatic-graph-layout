@@ -163,7 +163,7 @@ namespace Microsoft.Msagl.Drawing {
 
         /// <summary>
         /// the label width to height ratio.
-        /// </value>
+        /// </summary>
         public double LabelWidthToHeightRatio {
             get { return labelWidthToHeightRatio; }
             set { labelWidthToHeightRatio = value; }
