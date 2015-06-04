@@ -138,6 +138,9 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 
+#LocalHistory VS plugin
+.localhistory/
+
 # =========================
 # Windows detritus
 # =========================
