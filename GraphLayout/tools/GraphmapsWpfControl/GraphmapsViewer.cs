@@ -250,12 +250,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         }
 
         void HandleClickForNode(GraphmapsNode vnode) {
-            if (clickCounter.DownCount == clickCounter.UpCount && clickCounter.UpCount == 1) {
-                //ToggleNodeSlidingZoom(vnode);
-                SelectUnselectNode(vnode.LgNodeInfo, !IsSelected(vnode));
-                _lgLayoutSettings.Interactor.RunOnViewChange();
-            }
-            else if (clickCounter.DownCount >= 2) {
+            if (clickCounter.DownCount == clickCounter.UpCount && clickCounter.UpCount == 1) {                
                 //SelectRailsOfIncidentEdgesOnActiveLayer(vnode, !isSelected(vnode));
                 SelectEdgesIncidentTo(vnode);
                 SelectUnselectNode(vnode.LgNodeInfo, !IsSelected(vnode));

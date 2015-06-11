@@ -1777,20 +1777,17 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         public void AnalyzeClick(Point mouseDownPositionInGraph, int downCount) {
             var closest = FindClosestNodeInfoForMouseClickBelowCurrentLevel(mouseDownPositionInGraph);
             if (closest == null) return;
-            if (downCount >= 2) {
-                SelectAllEdgesIncidentTo(closest);
-                var edges = closest.GeometryNode.Edges.ToList();
-                _railGraph.Edges.InsertRange(edges);
-
-            }
+            SelectAllEdgesIncidentTo(closest);
+            var edges = closest.GeometryNode.Edges.ToList();
+            _railGraph.Edges.InsertRange(edges);
             closest.Selected = true;
             _lgData.SelectedNodeInfos.Insert(closest);
             _railGraph.Nodes.Insert(closest.GeometryNode);
-            RunOnViewChange();            
+            RunOnViewChange();
         }
 
-        
-        
+
+
         public bool NumberOfNodesOfLastLayerIntersectedRectIsLessThanBound(int iLevel, Rectangle rect, int bound) {
             int lastLevel = GetNumberOfLevels() - 1;
             var level = _lgData.Levels[lastLevel];

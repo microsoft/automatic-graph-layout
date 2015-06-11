@@ -10,21 +10,21 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
         internal ClickCounter(Func<Point> mousePosition) {
             this.mousePosition = mousePosition;
-            clickTimer.Tick += TimeTick;
-            clickTimer.Interval = TimeSpan.FromMilliseconds(500);
+            _clickTimer.Tick += TimeTick;
+            _clickTimer.Interval = TimeSpan.FromMilliseconds(500);
 
         }
 
         internal int DownCount { get;  set; }
         internal int UpCount { get;  set; }
-        readonly System.Windows.Threading.DispatcherTimer clickTimer = new System.Windows.Threading.DispatcherTimer();
+        readonly System.Windows.Threading.DispatcherTimer _clickTimer = new System.Windows.Threading.DispatcherTimer();
         internal Point LastDownClickPosition;
 
         internal void AddMouseDown() {
             if (!IsRunning) {
                 DownCount = 0;
                 UpCount = 0;
-                clickTimer.Start();
+                _clickTimer.Start();
                 IsRunning = true;
 
             }
@@ -39,7 +39,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                     //it is not a click
                     UpCount = 0;
                     DownCount = 0;
-                    clickTimer.Stop();
+                    _clickTimer.Stop();
                     IsRunning = false;
                 }
                 else
@@ -49,7 +49,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
 
         void TimeTick(object sender, EventArgs e) {
-            clickTimer.Stop();
+            _clickTimer.Stop();
             IsRunning = false;
             OnElapsed();
         }
