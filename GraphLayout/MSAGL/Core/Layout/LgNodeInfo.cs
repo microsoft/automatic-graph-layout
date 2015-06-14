@@ -72,6 +72,20 @@ namespace Microsoft.Msagl.Core.Layout {
             Top, Bottom, Left, Right
         };
 
+        public static Point GetLabelOffset(LabelPlacement placement)
+        {
+            switch (placement) {
+                case LabelPlacement.Top:
+                    return new Point(0, 0.5);
+                case LabelPlacement.Bottom:
+                    return new Point(0, -0.5);
+                case LabelPlacement.Left:
+                    return new Point(-0.5, 0);
+                default:
+                    return new Point(0.5, 0);
+            }
+        }
+
         public Point LabelOffset
         {
             get
