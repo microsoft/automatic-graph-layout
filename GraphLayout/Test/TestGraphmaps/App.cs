@@ -81,6 +81,7 @@ namespace TestGraphmaps {
         const string BackgroundImageOption = "-bgimage";
         const string BackgroundColorOption = "-bgcolor";
         const string RailColorsOption = "-railcolors";
+        const string IncreaseNodeQuotaOption = "-inq";
 
         public static readonly RoutedUICommand OpenFileCommand = new RoutedUICommand("Open File...", "OpenFileCommand",
             typeof (App));
@@ -370,6 +371,7 @@ namespace TestGraphmaps {
             CheckNodeQuota();
             CheckRailQuota();
             CheckRailColors();
+            CheckIncreaseNodeQuota();
         }
 
         void CheckRailColors() {
@@ -400,6 +402,16 @@ namespace TestGraphmaps {
                     _graphViewer.DefaultLargeLayoutSettings.MaxNumberOfNodesPerTile = n;
                 else
                     Console.WriteLine("cannot parse {0}", nodeQuota);
+            }
+        }
+        void CheckIncreaseNodeQuota() {
+            string incrNodeQuota = _argsParser.GetValueOfOptionWithAfterString(IncreaseNodeQuotaOption);
+            if (incrNodeQuota != null) {
+                double inq;
+                if (Double.TryParse(incrNodeQuota, out inq))
+                    _graphViewer.DefaultLargeLayoutSettings.IncreaseNodeQuota = inq;
+                else
+                    Console.WriteLine("cannot parse {0}", incrNodeQuota);
             }
         }
 
@@ -511,6 +523,7 @@ namespace TestGraphmaps {
             _argsParser.AddAllowedOptionWithHelpString(PrintMaxNodeDegreeOption, "print max node degree and exit");
             _argsParser.AddOptionWithAfterStringWithHelp(NodeSeparationOption, "node separation");
             _argsParser.AddOptionWithAfterStringWithHelp(NodeQuotaOption, "max number of nodes per tile");
+            _argsParser.AddOptionWithAfterStringWithHelp(IncreaseNodeQuotaOption, "increase max number of nodes per tile for higher levels");
             _argsParser.AddOptionWithAfterStringWithHelp("-rt", "max number of rails per tile");
             _argsParser.AddAllowedOption(AllowOverlapsInMds);
             _argsParser.AddAllowedOption(RunRemoveOverlapsOption);

@@ -16,6 +16,12 @@ namespace Microsoft.Msagl.Routing {
             set { _lengthMultiplier = value; }
         }
 
+        double _lengthMultiplierForAStar = 1;
+        public double LengthMultiplierForAStar {
+            get { return _lengthMultiplierForAStar; }
+            set { _lengthMultiplierForAStar = value; }
+        }
+
         internal SingleSourceSingleTargetShortestPathOnVisibilityGraph(VisibilityGraph visGraph, VisibilityVertex sourceVisVertex, VisibilityVertex targetVisVertex) {
             _visGraph = visGraph;
             _source = sourceVisVertex;
@@ -30,9 +36,11 @@ namespace Microsoft.Msagl.Routing {
         /// <returns>a path or null if the target is not reachable from the source</returns>
         internal IEnumerable<VisibilityVertex> GetPath(bool shrinkEdgeLength) {
             var pq = new GenericBinaryHeapPriorityQueue<VisibilityVertex>();
+
             _source.Distance = 0;
             _target.Distance = double.PositiveInfinity;
             pq.Enqueue(_source, H(_source));
+
             while (!pq.IsEmpty()) {
                 double hu;
                 var u = pq.Dequeue(out hu);
@@ -54,7 +62,17 @@ namespace Microsoft.Msagl.Routing {
                 }
 
             }
-            return _visGraph.PreviosVertex(_target) == null ? null : CalculatePath(shrinkEdgeLength);
+            return _visGraph.PreviosVertex(_target) == null
+                ? null
+                : CalculatePath(shrinkEdgeLength);
+        }
+
+        internal void AssertEdgesPassable(List<VisibilityEdge> path)
+        {
+            foreach (var edge in path)
+            {
+                Debug.Assert(PassableOutEdge(edge) || PassableInEdge(edge));
+            }
         }
 
         bool PassableOutEdge(VisibilityEdge e) {
@@ -73,18 +91,21 @@ namespace Microsoft.Msagl.Routing {
             var len = l.Length;
             var c = u.Distance + len;
 
+            // (v != _source && _visGraph.PreviosVertex(v) == null)
+
             if (v != _source && _visGraph.PreviosVertex(v) == null) {
                 v.Distance = c;
                 _visGraph.SetPreviousEdge(v, l);
                 if (v != _target) {
                     pq.Enqueue(v, H(v));
                 }
-            } else if (c < v.Distance) { //This condition should never hold for the dequeued nodes.
+            } else if (v != _source && c < v.Distance) { //This condition should never hold for the dequeued nodes.
                 //However because of a very rare case of an epsilon error it might!
                 //In this case DecreasePriority will fail to find "v" and the algorithm will continue working.
                 //Since v is not in the queue changing its .Distance will not influence other nodes.
                 //Changing v.Prev is fine since we come up with the path with an insignificantly
                 //smaller distance.
+                var prevV = _visGraph.PreviosVertex(v);
                 v.Distance = c;
                 _visGraph.SetPreviousEdge(v, l);
                 if (v != _target)
@@ -93,7 +114,7 @@ namespace Microsoft.Msagl.Routing {
         }
 
         double H(VisibilityVertex visibilityVertex) {
-            return visibilityVertex.Distance + (visibilityVertex.Point - _target.Point).Length*LengthMultiplier;
+            return visibilityVertex.Distance + (visibilityVertex.Point - _target.Point).Length * LengthMultiplierForAStar;
         }
 
 

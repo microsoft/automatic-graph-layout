@@ -134,7 +134,7 @@ namespace TestGraphmaps {
 
         private void SetLabelFromAttrValues(Node node, GexfNodeAttr gexfNodeAttr)
         {
-            if (gexfNodeAttr.Attvalues.Count > 0)
+            if (gexfNodeAttr.Attvalues.Count > 10)
             {
                 var first = true;
                 String labelText = "";
