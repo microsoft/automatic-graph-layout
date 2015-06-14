@@ -46,6 +46,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         RailGraph _railGraph;
         Rectangle _visibleRectangle;
 
+        public Dictionary<LgNodeInfo, LgNodeInfo.LabelPlacement> SelectedNodeLabels = new Dictionary<LgNodeInfo, LgNodeInfo.LabelPlacement>();
+
         /// <summary>
         ///     constructor
         /// </summary>
@@ -394,6 +396,36 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             _railGraph.Nodes.InsertRange(_lgData.SelectedNodeInfos.Select(n => n.GeometryNode));
         }
 
+        public void AddLabelsOfHighlightedNodes(double scale)
+        {
+            SelectedNodeLabels.Clear();
+
+            var selNodesSet = new Set<LgNodeInfo>();
+            foreach (var edge in _lgData.SelectedEdges)
+            {
+                var ni = _lgData.GeometryNodesToLgNodeInfos[edge.Source];
+                if (_visibleRectangle.Intersects(GetNodeDotRect(ni, scale)))
+                {
+                    selNodesSet.Insert(ni);
+                }
+                ni = _lgData.GeometryNodesToLgNodeInfos[edge.Target];
+                if (_visibleRectangle.Intersects(GetNodeDotRect(ni, scale))) {
+                    selNodesSet.Insert(ni);
+                }
+            }
+            selNodesSet.InsertRange(_lgData.SelectedNodeInfos.Where(ni => _visibleRectangle.Intersects(GetNodeDotRect(ni, scale))));
+
+            if (!selNodesSet.Any())
+            {                
+                return;
+            }
+
+            var selNodes = selNodesSet.ToList();
+            selNodes = selNodes.OrderByDescending(ni => ni.Rank).ToList();
+
+            InsertCandidateLabelsGreedily(selNodes, scale);
+        }
+
         void AddVisibleRailsAndNodes() {
             _railGraph.Rails.Clear();
             var level = _lgData.GetCurrentLevelByScale(CurrentZoomLevel);
@@ -678,15 +710,26 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             int numRouted = 0;
 
             foreach (LgNodeInfo ni in GetNodeInfosOnLevelLeq(0))
-                foreach (LgNodeInfo t in GetNeighborsOnLevel(ni, 0)) {
+            {
+                skeletonLevel.PathRouter.SetAllEdgeLengthMultipliersMin(0.8);
+
+                DecreaseWeightsAlongOldTrajectoriesFromSource(0, skeletonLevel, ni);
+
+                var neighb = GetNeighborsOnLevel(ni,0);
+                foreach (LgNodeInfo t in neighb)
+                {
                     var path = _lgData.SkeletonLevels[0].HasSavedTrajectory(ni, t)
                         ? skeletonLevel.GetTrajectory(ni, t)
                         : skeletonLevel.PathRouter.GetPath(ni, t, ShrinkEdgeLengths);
                     skeletonLevel.SetTrajectoryAndAddEdgesToUsed(ni, t, path);
 
+                    // decrease weights
+                    skeletonLevel.PathRouter.DecreaseWeightOfEdgesAlongPath(path, 0.5);
+
                     if (numRouted++%100 == 0)
                         Console.Write(".");
                 }
+            }
         }
 
         bool EdgeIsNew(LgNodeInfo s, LgNodeInfo t, int i) {
@@ -717,8 +760,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
             Console.Write("\nRouting edges");
             Console.Write("\nUpdating old trajectories");
+
+            // reset multipliers
+            skeletonLevel.PathRouter.ResetAllEdgeLengthMultipliers();
+
             UpdatePrevLayerTrajectories(i, nodes, prevSkeletonLevel, skeletonLevel);
-            DecreaseWeightsAlongOldTrajectories(i, skeletonLevel);
+            //DecreaseWeightsAlongOldTrajectories(i, skeletonLevel);
 
             return skeletonLevel;
         }
@@ -761,22 +808,96 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 if (!EdgeIsNew(tuple.Key.A, tuple.Key.B, i)) {
                     List<Point> oldPath = tuple.Value;
                     double iEdgeLevel = Math.Log(Math.Max(tuple.Key.A.ZoomLevel, tuple.Key.B.ZoomLevel), 2);
-                    double newWeight = //(iEdgeLevel < 1 ? 0.3 : (iEdgeLevel < 2 ? 0.6 : 1));                    
-                        0.4 + iEdgeLevel/(Math.Max(i - 1.0, 1.0))*0.2;
-                    newWeight = Math.Max(0.4, newWeight);
+                    //double newWeight = //(iEdgeLevel < 1 ? 0.3 : (iEdgeLevel < 2 ? 0.6 : 1));                    
+                    //    0.4 + iEdgeLevel/(Math.Max(i - 1.0, 1.0))*0.2;
+                    //newWeight = Math.Max(0.4, newWeight);
+                    //newWeight = Math.Min(0.6, newWeight);
+
+                    double newWeight = (iEdgeLevel < 1 ? 0.1 : (iEdgeLevel < 2 ? 0.2 : 0.6));                    
+                    newWeight = Math.Max(0.1, newWeight);
                     newWeight = Math.Min(0.6, newWeight);
+
                     skeletonLevel.PathRouter.DecreaseWeightOfEdgesAlongPath(oldPath, newWeight);
                 }
+            }
+        }
+
+        void DecreaseWeightsAlongOldTrajectoriesFromSource(int i, LgSkeletonLevel skeletonLevel, LgNodeInfo s) {
+
+            IOrderedEnumerable<LgNodeInfo> neighb = GetNeighborsOnLevel(s, i).OrderBy(n => n.ZoomLevel);
+
+            foreach (var t in neighb)
+            {
+                var tuple = new SymmetricTuple<LgNodeInfo>(s, t);
+                List<Point> path;
+                skeletonLevel.EdgeTrajectories.TryGetValue(tuple, out path);
+                if (path != null)
+                {
+                    double iEdgeLevel = Math.Log(Math.Max(s.ZoomLevel, t.ZoomLevel), 2);
+
+                    double newWeight = (iEdgeLevel < 1 ? 0.4 : (iEdgeLevel < 2 ? 0.5 : 0.6));
+                    newWeight = Math.Max(0.4, newWeight);
+                    newWeight = Math.Min(0.6, newWeight);
+
+                    skeletonLevel.PathRouter.DecreaseWeightOfEdgesAlongPath(path, newWeight);
+//#if DEBUG
+//                    skeletonLevel.PathRouter.AssertEdgesPresentAndPassable(path);
+//#endif
+
+                }                
+
+            }
+        }
+
+        List<LineSegment> GetSegmentsOnOldTrajectoriesFromSource(int i, LgSkeletonLevel skeletonLevel, LgNodeInfo s) {
+            var pc = new List<LineSegment>();
+
+            IOrderedEnumerable<LgNodeInfo> neighb = GetNeighborsOnLevel(s, i).OrderBy(n => n.ZoomLevel);
+
+            foreach (var t in neighb) {
+                var tuple = new SymmetricTuple<LgNodeInfo>(s, t);
+                List<Point> path;
+                skeletonLevel.EdgeTrajectories.TryGetValue(tuple, out path);
+                if (path != null) {
+                    for (int j = 0; j < path.Count - 1; j++) {
+                        pc.Add(new LineSegment(path[j], path[j + 1]));
+                    }
+                }
+            }
+            return pc;
+        }
+
+        void SetWeightsAlongOldTrajectoriesFromSourceToMin(int i, LgSkeletonLevel skeletonLevel, LgNodeInfo s, double wmin) {
+
+            IOrderedEnumerable<LgNodeInfo> neighb = GetNeighborsOnLevel(s, i).OrderBy(n => n.ZoomLevel);
+
+            foreach (var t in neighb) {
+                var tuple = new SymmetricTuple<LgNodeInfo>(s, t);
+                List<Point> path;
+                skeletonLevel.EdgeTrajectories.TryGetValue(tuple, out path);
+                if (path != null) {
+                    skeletonLevel.PathRouter.SetWeightOfEdgesAlongPathToMin(path, wmin);
+                }
+
             }
         }
 
         void ComputeNewTrajectories(int i, IEnumerable<LgNodeInfo> nodes, LgSkeletonLevel skeletonLevel) {
             int numRouted = 0;
             Console.Write("\nComputing new trajectories");
+
+            // reset multipliers
+            skeletonLevel.PathRouter.SetAllEdgeLengthMultipliersMin(0.8);
+
             foreach (LgNodeInfo s in nodes) {
+
+                // decrease weights along old trajectories
+                DecreaseWeightsAlongOldTrajectoriesFromSource(i, skeletonLevel, s);
+
                 IOrderedEnumerable<LgNodeInfo> neighb = GetNeighborsOnLevel(s, i).OrderBy(n => n.ZoomLevel);
 
                 foreach (LgNodeInfo t in neighb) {
+
                     List<Point> path = skeletonLevel.GetTrajectory(s, t);
                     if (path == null) {
                         path = skeletonLevel.PathRouter.GetPath(s, t, ShrinkEdgeLengths);
@@ -785,7 +906,24 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                     numRouted++;
                     if (numRouted%100 == 1)
                         Console.Write(".");
+
+//#if DEBUG
+//                    List<LineSegment> pc = new List<LineSegment>();
+//                    List<LineSegment> pcold = GetSegmentsOnOldTrajectoriesFromSource(i, skeletonLevel, s);
+
+//                    for (int j = 0; j < path.Count - 1; j++)
+//                    {
+//                        pc.Add(new LineSegment(path[j],path[j+1]));
+//                    }
+//                    if ((int)s.GeometryNode.DebugId == 301 && (int)t.GeometryNode.DebugId == 81) {
+//                        SplineRouter.ShowVisGraph(skeletonLevel.PathRouter.VisGraph,
+//                            nodes.Select(n => n.BoundaryOnLayer), pcold, pc);
+//                    }
+//#endif
                 }
+
+                // reset multipliers
+                SetWeightsAlongOldTrajectoriesFromSourceToMin(i, skeletonLevel, s, 0.8);
             }
         }
 
@@ -1085,6 +1223,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 GeometryNodesToLgNodeInfos = _lgData.GeometryNodesToLgNodeInfos
             };
             calc.MaxAmountNodesPerTile = maxNodesPerTile;
+            calc.IncreaseNodeQuota = _lgLayoutSettings.IncreaseNodeQuota;
 
             var bbox = GetLargestTile();
 
@@ -1649,6 +1788,22 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             return new Rectangle(nodeInfo.Center + offset - d, nodeInfo.Center + offset + d);
         }
 
+        Rectangle GetLabelRectForScale(LgNodeInfo nodeInfo, LgNodeInfo.LabelPlacement placement, double scale) {
+            double labelHeight = _lgLayoutSettings.NodeLabelHeightInInches * _lgLayoutSettings.DpiX / scale /
+                                 FitFactor();
+            double labelWidth = labelHeight * nodeInfo.LabelWidthToHeightRatio;
+
+            double nodeDotWidth = GetNodeDotRect(nodeInfo, scale).Width;
+            //_lgLayoutSettings.NodeDotWidthInInches * _lgLayoutSettings.DpiX / currentScale;            
+
+            Point offset = Point.Scale(labelWidth + nodeDotWidth * 1.01, labelHeight + nodeDotWidth * 1.01,
+                LgNodeInfo.GetLabelOffset(placement));
+
+            var d = new Point(0.5 * labelWidth, 0.5 * labelHeight);
+
+            return new Rectangle(nodeInfo.Center + offset - d, nodeInfo.Center + offset + d);
+        }
+
         Rectangle GetNodeDotRect(LgNodeInfo node, double scale) {
             var rect = new Rectangle(node.Center);
             rect.Pad(NodeDotWidth(scale)/2);
@@ -1657,6 +1812,64 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
         double NodeDotWidth(double scale) {
             return _lgLayoutSettings.NodeDotWidthInInches*_lgLayoutSettings.DpiX/scale/FitFactor();
+        }
+
+        private void InsertCandidateLabelsGreedily(List<LgNodeInfo> candidates, double _scale)
+        {
+            var scale = CurrentZoomLevel;
+
+            var labelRTree = new RTree<LgNodeInfo>();
+
+            // insert all nodes inserted before
+            foreach (var node in _railGraph.Nodes)
+            {
+
+                var ni = _lgData.GeometryNodesToLgNodeInfos[node];
+
+                // add all node dots
+                labelRTree.Add(GetNodeDotRect(ni, scale), ni);
+
+                if (ni.LabelVisibleFromScale <= scale) {
+                    Rectangle labelRect = GetLabelRectForScale(ni, scale);
+                    labelRTree.Add(labelRect, ni);
+                }
+            }
+
+            foreach (LgNodeInfo node in candidates) {
+                if (node.LabelVisibleFromScale <= scale) {
+                    // already inserted before
+                    continue;
+                }
+
+                LgNodeInfo.LabelPlacement[] positions =
+                {
+                    LgNodeInfo.LabelPlacement.Bottom,
+                    LgNodeInfo.LabelPlacement.Right,
+                    LgNodeInfo.LabelPlacement.Left,
+                    LgNodeInfo.LabelPlacement.Top
+                };
+
+                bool couldPlace = false;
+                var labelRect = new Rectangle();
+
+                LgNodeInfo.LabelPlacement pl = LgNodeInfo.LabelPlacement.Bottom;
+
+                foreach (LgNodeInfo.LabelPlacement placement in positions) {
+                    pl = placement;
+                    labelRect = GetLabelRectForScale(node, pl, scale);
+                    if (!labelRTree.IsIntersecting(labelRect)) {
+                        couldPlace = true;
+                        break;
+                    }
+                }
+
+
+                if (couldPlace) {
+                    labelRTree.Add(labelRect, node);
+                    SelectedNodeLabels[node] = pl;
+                }
+            }
+
         }
 
         int InsertLabelsGreedily(double scale) {
