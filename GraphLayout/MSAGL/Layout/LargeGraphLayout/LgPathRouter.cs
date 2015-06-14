@@ -198,7 +198,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             _visGraph.ClearPrevEdgesTable();
             var router = new SingleSourceSingleTargetShortestPathOnVisibilityGraph(_visGraph, vs, vt)
             {
-                LengthMultiplier = 0.8
+                LengthMultiplier = 0.8,
+                LengthMultiplierForAStar = 0.3
             };
             var vpath = router.GetPath(shrinkDistances);
             if (vpath == null) {
@@ -252,7 +253,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         internal List<Point> GetPointsOfVerticesOverlappingSegment(Point p0, Point p1) {
             var v0 = VisGraph.FindVertex(p0);
             var v1 = VisGraph.FindVertex(p1);
-            return GetPath(v0, v1, true);
+            return GetPath(v0, v1, false); //don't shrink weights here!
         }
 
 
@@ -324,10 +325,50 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             }
         }
 
+        internal void AssertEdgesPresentAndPassable(List<Point> path) {
+            var vs = VisGraph.FindVertex(path[0]);
+            Debug.Assert(vs != null);
+            var vt = VisGraph.FindVertex(path[path.Count - 2]);
+            Debug.Assert(vt != null);
+
+            vs.IsShortestPathTerminal = vt.IsShortestPathTerminal = true;
+
+            var router = new SingleSourceSingleTargetShortestPathOnVisibilityGraph(_visGraph, vs, vt) {
+                LengthMultiplier = 0.8,
+                LengthMultiplierForAStar = 0.0
+            };
+
+            List<VisibilityEdge> pathEdges = new List<VisibilityEdge>();
+            for (int i = 0; i < path.Count - 1; i++)
+            {
+                var edge = FindEdge(path[i], path[i + 1]);
+                Debug.Assert(edge != null);
+                pathEdges.Add(edge);
+            }
+
+            router.AssertEdgesPassable(pathEdges);
+
+            vs.IsShortestPathTerminal = vt.IsShortestPathTerminal = false;
+        }
+
+        internal void SetWeightOfEdgesAlongPathToMin(List<Point> oldPath, double dmin) {
+            var edges = GetEdgesOfPath(oldPath);
+            foreach (var edge in edges) {
+                edge.LengthMultiplier = Math.Max(edge.LengthMultiplier, dmin);
+            }
+        }
+
         internal void ResetAllEdgeLengthMultipliers() {
             var edges = _visGraph.Edges;
             foreach (var edge in edges) {
                 edge.LengthMultiplier = 1;
+            }
+        }
+
+        internal void SetAllEdgeLengthMultipliersMin(double wmin) {
+            var edges = _visGraph.Edges;
+            foreach (var edge in edges) {
+                edge.LengthMultiplier = Math.Max(edge.LengthMultiplier, wmin);
             }
         }
 

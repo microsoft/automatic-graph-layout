@@ -155,9 +155,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             set { maxNumberOfNodesPerTile = value; }
         }
 
-        private int increaseNodeQuota;
+        private double increaseNodeQuota;
 
-        public int IncreaseNodeQuota
+        public double IncreaseNodeQuota
         {
             get { return increaseNodeQuota; }
             set { increaseNodeQuota = value; }
@@ -180,7 +180,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 
         bool _simplifyRoutes = true;
-        int _numberOfNodeShapeSegs = 16;
+        private int _numberOfNodeShapeSegs = 12; //16;
 
         public bool SimplifyRoutes {
             get { return _simplifyRoutes; }

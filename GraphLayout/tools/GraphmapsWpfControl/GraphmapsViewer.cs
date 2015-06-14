@@ -927,6 +927,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                         MaxNumberOfNodesPerTile = DefaultLargeLayoutSettings.MaxNumberOfNodesPerTile,
                         MaxNumberOfRailsPerTile = DefaultLargeLayoutSettings.MaxNumberOfRailsPerTile,
                         RailColors = DefaultLargeLayoutSettings.RailColors,
+                        IncreaseNodeQuota = DefaultLargeLayoutSettings.IncreaseNodeQuota,
                         ExitAfterInit = DefaultLargeLayoutSettings.ExitAfterInit,
                         SimplifyRoutes = DefaultLargeLayoutSettings.SimplifyRoutes,
                         NodeLabelHeightInInches = DefaultLargeLayoutSettings.NodeLabelHeightInInches,
@@ -1091,6 +1092,8 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             var railGraphNodes = new Set<Node>(railGraph.Nodes.Select(node => (Node)node.UserData));
             var requiredNodes = railGraphNodes + NodesFromVectorTiles();
             var fakeTileNodes = nodesFromVectorTiles - railGraphNodes;
+
+            fakeTileNodes = GetIntersectingVisibleRectangle(fakeTileNodes);
              
             ProcessNodesAddRemove(requiredNodes, existindNodes);
             var requiredEdges =
@@ -1102,7 +1105,34 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
             CreateOrInvalidateFrameworksElementForVisibleRails(railGraph);
             InvalidateNodesOfRailGraph(nodesFromVectorTiles);
+
+            _lgLayoutSettings.Interactor.AddLabelsOfHighlightedNodes(CurrentScale);
+
+            InvalidateNodesOfRailGraph(fakeTileNodes);
             _tileFetcher.StartLoadindTiles();
+        }
+
+        private Rectangle NodeDotRect(LgNodeInfo ni)
+        {
+            double w = NodeDotWidth;
+            return new Rectangle(ni.Center - 0.5 * new Point(w, w), ni.Center + 0.5 * new Point(w, w));
+        }
+
+        private Set<Node> GetIntersectingVisibleRectangle(Set<Node> fakeTileNodes)
+        {
+            var rect = GetVisibleRectangleInGraph();
+            var nodes = new Set<Node>();
+            foreach (var node in fakeTileNodes)
+            {
+                IViewerObject o;
+                if (!_drawingObjectsToIViewerObjects.TryGetValue(node, out o)) continue;
+                var vnode = ((GraphmapsNode)o);
+                if (NodeDotRect(vnode.LgNodeInfo).Intersects(rect))
+                {
+                    nodes.Insert(node);
+                }
+            }
+            return nodes;
         }
 
         Set<Node> NodesFromVectorTiles() {
@@ -1272,6 +1302,31 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                     ArrangeNodeLabel(vNode, zf);
                     if (nodesFromVectorTiles.Contains(vNode.Node))
                         SetupTileNode(vNode);
+                    vNode.Node.Attr.LineWidth = GetBorderPathThickness();
+
+                    if (vNode.LgNodeInfo == null) continue;
+                    
+                    double cs = CurrentScale;
+
+                    double nodeLabelHeight = _lgLayoutSettings.NodeLabelHeightInInches*DpiY/CurrentScale;
+                    double nodeLabelWidth = nodeLabelHeight*vNode.LgNodeInfo.LabelWidthToHeightRatio;
+
+                    if (vNode.LgNodeInfo.LabelVisibleFromScale >= 0 &&
+                        vNode.LgNodeInfo.LabelVisibleFromScale <= zf) {
+                        var offset = Point.Scale(nodeLabelWidth + NodeDotWidth*1.01, nodeLabelHeight + NodeDotWidth*1.01,
+                            vNode.LgNodeInfo.LabelOffset);
+                        vNode.InvalidateNodeLabel(nodeLabelHeight, nodeLabelWidth, offset);
+                    } 
+                    else if (_lgLayoutSettings.Interactor.SelectedNodeLabels.ContainsKey(vNode.LgNodeInfo))
+                    {
+                        var pos = _lgLayoutSettings.Interactor.SelectedNodeLabels[vNode.LgNodeInfo];
+                        var offset = Point.Scale(nodeLabelWidth + NodeDotWidth * 1.01, nodeLabelHeight + NodeDotWidth * 1.01,
+                            LgNodeInfo.GetLabelOffset(pos));
+                        vNode.InvalidateNodeLabel(nodeLabelHeight, nodeLabelWidth, offset);
+                    }
+                    else {
+                        vNode.HideNodeLabel();
+                    }
                 }
 
             }
