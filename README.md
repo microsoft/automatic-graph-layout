@@ -66,7 +66,7 @@ samples…](http://research.microsoft.com/en-us/projects/msagl/codesamples.aspx)
 
 #GraphMaps
 This functionality allows viewing a large graph in the
-online map fashion. Here is a ![video](http://1drv.ms/1IsBEVh) demoing
+online map fashion. Here is a [video](http://1drv.ms/1IsBEVh) demoing
 GraphMaps. To see the system in action please open Lg.sln, build it,
 and run TestGraphMaps. The configuration Release/x64 needs to be used
 to load a large graph.  The graph from the video can be found in
@@ -74,7 +74,7 @@ GraphLayout/graphs/composers.zip. Please load composers.msagl to avoid
 the preprocessing step.  If composers.dot is loaded then
 composers.msag and the tiles directory composers.msagl_tiles will be
 regenerated. GraphMaps ideas, design, and the mathematics are described in a
-![paper](https://arxiv.org/submit/1281429/view).
+[paper](https://arxiv.org/submit/1281429/view).
 
 #Layouts Created by MSAGL
 ![](http://research.microsoft.com/en-us/projects/msagl/195f1b23116b4f049b6e5dc815d96c89.png)
