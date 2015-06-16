@@ -3,7 +3,7 @@ A set of tools for graph layout and viewing
 
 The simplest way to start with MSAGL in C# is to open GraphLayout.sln in Visual Studio 2013, and have a look at Samples there.
 
-MSAGL is a .NET tool for graph layout and viewing. It was developed in Microsoft by Lev Nachmanson, Sergey Pupyrev, Tim Dwyer and Ted Hart. MSAGL is available as open source at https://github.com/Microsoft/automatic-graph-layout.git.
+MSAGL is a .NET tool for graph layout and viewing. It was developed in Microsoft by Lev Nachmanson, Sergey Pupyrev, Tim Dwyer, Ted Hart, and Roman Prutkin. MSAGL is available as open source at https://github.com/Microsoft/automatic-graph-layout.git.
 
 ## The Distribution Content and Important Features
 The package contains the following:
@@ -61,7 +61,20 @@ class ViewerSample {
 }
 ```
 
-[More code samples…](http://research.microsoft.com/en-us/projects/msagl/codesamples.aspx)
+[More code
+samples…](http://research.microsoft.com/en-us/projects/msagl/codesamples.aspx)
+
+#GraphMaps
+This functionality allows viewing a large graph in the
+online map fashion. Here is a ![video](http://1drv.ms/1IsBEVh) demoing
+GraphMaps. To see the system in action please open Lg.sln, build it,
+and run TestGraphMaps. The configuration Release/x64 needs to be used
+to load a large graph.  The graph from the video can be found in
+GraphLayout/graphs/composers.zip. Please load composers.msagl to avoid
+the preprocessing step.  If composers.dot is loaded then
+composers.msag and the tiles directory composers.msagl_tiles will be
+regenerated. GraphMaps ideas, design, and the mathematics are described in a
+![paper](https://arxiv.org/submit/1281429/view).
 
 #Layouts Created by MSAGL
 ![](http://research.microsoft.com/en-us/projects/msagl/195f1b23116b4f049b6e5dc815d96c89.png)
