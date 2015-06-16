@@ -72,7 +72,7 @@ and run TestGraphMaps. The configuration Release/x64 needs to be used
 to load a large graph.  The graph from the video can be found in
 GraphLayout/graphs/composers.zip. Please load composers.msagl to avoid
 the preprocessing step.  If composers.dot is loaded then
-composers.msag and the tiles directory composers.msagl_tiles will be
+composers.msagl and the tiles directory composers.msagl_tiles will be
 regenerated. GraphMaps ideas, design, and the mathematics are described in a
 [paper](https://arxiv.org/submit/1281429/view).
 
