@@ -57,6 +57,7 @@
     </Compile>
     <Compile Include="Network.cs" />
     <Compile Include="PointSet.cs" />
+    <Compile Include="PointToSegmentDistance.cs" />
     <Compile Include="PriorityQueue.cs" />
     <Compile Include="SteinerTree.cs" />
     <Compile Include="Tiling.cs" />

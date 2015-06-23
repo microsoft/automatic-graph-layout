@@ -12,23 +12,23 @@ namespace WindowsFormsApplication3
         public double Distance = 0;
         public bool pathExists = true;
  
-        public void selectShortestPath(vertex [] vList, edge [,] eList, int [] degList,  int source, int target,int N){
+        public void selectShortestPath(Vertex [] vList, Edge [,] eList, int [] degList,  int source, int target,int N){
 
 
-            PriorityQueue<double, vertex> Q = new PriorityQueue<double, vertex>(); ;
+            PriorityQueue<double, Vertex> Q = new PriorityQueue<double, Vertex>(); ;
             double temp;
             int neighbor;
-            vList[source].dist = 0;
-            Q.Enqueue(vList[source].dist, vList[source]);
+            vList[source].Dist = 0;
+            Q.Enqueue(vList[source].Dist, vList[source]);
             for (int i = 1; i < N; i++)
             {
-                if ( vList[i].ID != vList[source].ID)
+                if ( vList[i].Id != vList[source].Id)
                 {
-                    vList[i].dist = double.MaxValue;
-                    Q.Enqueue(vList[i].dist, vList[i]);
+                    vList[i].Dist = double.MaxValue;
+                    Q.Enqueue(vList[i].Dist, vList[i]);
                 }
-                vList[i].parent = null;
-                vList[i].visited = false;
+                vList[i].Parent = null;
+                vList[i].Visited = false;
             }
 
             edgelist.Clear();
@@ -36,55 +36,55 @@ namespace WindowsFormsApplication3
 
             while (Q.Count > 0)
             {
-                vertex u = (vertex)Q.Dequeue().Value;
-                if (u.visited == true) continue;
-                else u.visited = true;
-                for (int neighb = 1; neighb <= degList[u.ID]; neighb++)
+                Vertex u = (Vertex)Q.Dequeue().Value;
+                if (u.Visited == true) continue;
+                else u.Visited = true;
+                for (int neighb = 1; neighb <= degList[u.Id]; neighb++)
                 {
-                    neighbor = eList[u.ID,neighb].nodeId;
+                    neighbor = eList[u.Id,neighb].NodeId;
 
-                    if (eList[u.ID, neighb].selected == 0) continue;
+                    if (eList[u.Id, neighb].Selected == 0) continue;
                     //else encourangeReuse = 0;
 
-                    temp = u.dist + eList[u.ID, neighb].eDist;
-                    if (temp < vList[neighbor].dist)
+                    temp = u.Dist + eList[u.Id, neighb].EDist;
+                    if (temp < vList[neighbor].Dist)
                     {
-                        vList[neighbor].dist = temp;
-                        vList[neighbor].parent = u;
-                        Q.Enqueue(vList[neighbor].dist, vList[neighbor]);
+                        vList[neighbor].Dist = temp;
+                        vList[neighbor].Parent = u;
+                        Q.Enqueue(vList[neighbor].Dist, vList[neighbor]);
                     }
                 }
-                if (u.ID ==vList[target].ID) 
+                if (u.Id ==vList[target].Id) 
                     break;
             }
 
-            vertex route = vList[target];
+            Vertex route = vList[target];
             
-            while (route.parent != null)
+            while (route.Parent != null)
             {
-                for (int neighb = 1; neighb <= degList[route.ID]; neighb++) 
-                    if (eList[route.ID, neighb].nodeId == route.parent.ID){
+                for (int neighb = 1; neighb <= degList[route.Id]; neighb++) 
+                    if (eList[route.Id, neighb].NodeId == route.Parent.Id){
                         //eList[route.ID, neighb].selected = 1;
 
-                        edgelist.Add(new VertexNeighbor(route.ID, neighb));                        
-                        Distance += Math.Sqrt((route.x_loc - route.parent.x_loc) * (route.x_loc - route.parent.x_loc) + (route.y_loc - route.parent.y_loc) * (route.y_loc - route.parent.y_loc));  
+                        edgelist.Add(new VertexNeighbor(route.Id, neighb));                        
+                        Distance += Math.Sqrt((route.XLoc - route.Parent.XLoc) * (route.XLoc - route.Parent.XLoc) + (route.YLoc - route.Parent.YLoc) * (route.YLoc - route.Parent.YLoc));  
 
                         //encourage reusing of path by decreasing weight
                         //if (eList[route.ID, neighb].weight == 1) eList[route.ID, neighb].weight /= 2;
                         break;
                     }
-                for (int neighb = 1; neighb <= degList[route.parent.ID]; neighb++)
-                    if (eList[route.parent.ID, neighb].nodeId == route.ID)
+                for (int neighb = 1; neighb <= degList[route.Parent.Id]; neighb++)
+                    if (eList[route.Parent.Id, neighb].NodeId == route.Id)
                     {
                         //eList[route.parent.ID, neighb].selected = 1;
 
-                        edgelist.Add(new VertexNeighbor(route.parent.ID, neighb));
+                        edgelist.Add(new VertexNeighbor(route.Parent.Id, neighb));
 
                         //encourage reusing of path by decreasing weight
                         //if (eList[route.parent.ID, neighb].weight == 1) eList[route.parent.ID, neighb].weight /= 2;
                         break;
                     }
-                route = route.parent;
+                route = route.Parent;
             }
 
 
@@ -93,24 +93,24 @@ namespace WindowsFormsApplication3
 
 
 
-        public void selectShortestPathAvoidingNet(vertex[] vList, edge[,] eList, int[] degList, int source, int target, int N)
+        public void selectShortestPathAvoidingNet(Vertex[] vList, Edge[,] eList, int[] degList, int source, int target, int N)
         {
 
 
-            PriorityQueue<double, vertex> Q = new PriorityQueue<double, vertex>(); ;
+            PriorityQueue<double, Vertex> Q = new PriorityQueue<double, Vertex>(); ;
             double temp;
             int neighbor;
-            vList[source].dist = 0;
-            Q.Enqueue(vList[source].dist, vList[source]);
+            vList[source].Dist = 0;
+            Q.Enqueue(vList[source].Dist, vList[source]);
             for (int i = 1; i < N; i++)
             {
-                if (vList[i].ID != vList[source].ID)
+                if (vList[i].Id != vList[source].Id)
                 {
-                    vList[i].dist = double.MaxValue;
-                    Q.Enqueue(vList[i].dist, vList[i]);
+                    vList[i].Dist = double.MaxValue;
+                    Q.Enqueue(vList[i].Dist, vList[i]);
                 }
-                vList[i].parent = null;
-                vList[i].visited = false;
+                vList[i].Parent = null;
+                vList[i].Visited = false;
             }
 
             edgelist.Clear();
@@ -118,59 +118,59 @@ namespace WindowsFormsApplication3
 
             while (Q.Count > 0)
             {
-                vertex u = (vertex)Q.Dequeue().Value;
-                if (u.visited == true) continue;
-                else u.visited = true;
-                for (int neighb = 1; neighb <= degList[u.ID]; neighb++)
+                Vertex u = (Vertex)Q.Dequeue().Value;
+                if (u.Visited == true) continue;
+                else u.Visited = true;
+                for (int neighb = 1; neighb <= degList[u.Id]; neighb++)
                 {
-                    neighbor = eList[u.ID, neighb].nodeId;
+                    neighbor = eList[u.Id, neighb].NodeId;
 
-                    if (neighbor != source && neighbor != target && vList[neighbor].cID > 0) continue;
+                    if (neighbor != source && neighbor != target && vList[neighbor].CId > 0) continue;
                     //else encourangeReuse = 0;
 
-                    temp = u.dist + eList[u.ID, neighb].eDist;
-                    if (temp < vList[neighbor].dist)
+                    temp = u.Dist + eList[u.Id, neighb].EDist;
+                    if (temp < vList[neighbor].Dist)
                     {
-                        vList[neighbor].dist = temp;
-                        vList[neighbor].parent = u;
-                        Q.Enqueue(vList[neighbor].dist, vList[neighbor]);
+                        vList[neighbor].Dist = temp;
+                        vList[neighbor].Parent = u;
+                        Q.Enqueue(vList[neighbor].Dist, vList[neighbor]);
                     }
                 }
-                if (u.ID == vList[target].ID)
+                if (u.Id == vList[target].Id)
                     break;
             }
 
-            vertex route = vList[target];
+            Vertex route = vList[target];
 
-            if (route.parent == null) { pathExists = false; return; }
+            if (route.Parent == null) { pathExists = false; return; }
             else pathExists = true;
 
-            while (route.parent != null)
+            while (route.Parent != null)
             {
-                for (int neighb = 1; neighb <= degList[route.ID]; neighb++)
-                    if (eList[route.ID, neighb].nodeId == route.parent.ID)
+                for (int neighb = 1; neighb <= degList[route.Id]; neighb++)
+                    if (eList[route.Id, neighb].NodeId == route.Parent.Id)
                     {
                         //eList[route.ID, neighb].selected = 1;
 
-                        edgelist.Add(new VertexNeighbor(route.ID, neighb));
-                        Distance += Math.Sqrt((route.x_loc - route.parent.x_loc) * (route.x_loc - route.parent.x_loc) + (route.y_loc - route.parent.y_loc) * (route.y_loc - route.parent.y_loc));
+                        edgelist.Add(new VertexNeighbor(route.Id, neighb));
+                        Distance += Math.Sqrt((route.XLoc - route.Parent.XLoc) * (route.XLoc - route.Parent.XLoc) + (route.YLoc - route.Parent.YLoc) * (route.YLoc - route.Parent.YLoc));
 
                         //encourage reusing of path by decreasing weight
                         //if (eList[route.ID, neighb].weight == 1) eList[route.ID, neighb].weight /= 2;
                         break;
                     }
-                for (int neighb = 1; neighb <= degList[route.parent.ID]; neighb++)
-                    if (eList[route.parent.ID, neighb].nodeId == route.ID)
+                for (int neighb = 1; neighb <= degList[route.Parent.Id]; neighb++)
+                    if (eList[route.Parent.Id, neighb].NodeId == route.Id)
                     {
                         //eList[route.parent.ID, neighb].selected = 1;
 
-                        edgelist.Add(new VertexNeighbor(route.parent.ID, neighb));
+                        edgelist.Add(new VertexNeighbor(route.Parent.Id, neighb));
 
                         //encourage reusing of path by decreasing weight
                         //if (eList[route.parent.ID, neighb].weight == 1) eList[route.parent.ID, neighb].weight /= 2;
                         break;
                     }
-                route = route.parent;
+                route = route.Parent;
             }
 
 

@@ -1,34 +1,33 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Policy;
 
 namespace WindowsFormsApplication3
 {
     class SteinerTree
     {
         //public int [] ComponentVar;
-        public Stack<tuple> Edgelist = new Stack<tuple>();
-        public List<twin> SpanningTree = new List<twin>();
+        public Stack<Tuple> Edgelist = new Stack<Tuple>();
+        public List<Twin> SpanningTree = new List<Twin>();
         ComponentCollection _compCollection;
-         public Component ComputeTree(vertex[] vList, edge[,] eList, int[] degList,  int numOfv, Component givenComponent, int givenLevel )
+         public Component ComputeTree(Vertex[] vList, Edge[,] eList, int[] degList,  int numOfv, Component givenComponent, int givenLevel )
         {
             double edgeCost = 0;
-            vertex p,q;
+            Vertex p,q;
 
 
             _compCollection = new ComponentCollection(vList, numOfv, givenComponent, givenLevel);
 
-             
+            while(_compCollection.NumOfAliveComponents >1) 
             { 
                 for(int index = 1; index <=  _compCollection.NumOfComponents; index++)
                 {
                     
                     //some neighbor of some of the vertices in this Component  is outside of it them it is an active component
-                    if (isActive(_compCollection.C[index] , vList, eList, degList))
+                    if (IsActive(_compCollection.C[index] , vList, eList, degList))
                     {
                         //Console.WriteLine(compCollection.numOfAliveComponents);
-                        _compCollection.C[index].dist += 0.2;
+                        _compCollection.C[index].Dist += 0.2;
                     }
                 }
 
@@ -36,54 +35,54 @@ namespace WindowsFormsApplication3
                     for (int neighb = 1; neighb <= degList[i]; neighb++)
                     {
                         p = vList[i];
-                        q = vList[eList[vList[i].ID, neighb].nodeId];
-                        if(p.cID == 0 && q.cID == 0) continue;
-                        if (p.cID > 0 && q.cID > 0 && p.cID == q.cID) continue;
+                        q = vList[eList[vList[i].Id, neighb].NodeId];
+                        if(p.CId == 0 && q.CId == 0) continue;
+                        if (p.CId > 0 && q.CId > 0 && p.CId == q.CId) continue;
                         //now at least one of p and q is a point or both are points; if both are points, then they lie in diff components
 
  
                         //find the components for  vList[i]  and  vList[eList[vList[i], neighb].nodeID] and check whether it is tight
-                        if (p.cID > 0 && q.cID > 0)
-                            edgeCost = _compCollection.C[p.cID].dist + _compCollection.C[q.cID].dist;
-                        if (p.cID > 0 && q.cID == 0)
-                            edgeCost = _compCollection.C[p.cID].dist ;
-                        if (p.cID == 0 && q.cID > 0)
-                            edgeCost =   _compCollection.C[q.cID].dist;
+                        if (p.CId > 0 && q.CId > 0)
+                            edgeCost = _compCollection.C[p.CId].Dist + _compCollection.C[q.CId].Dist;
+                        if (p.CId > 0 && q.CId == 0)
+                            edgeCost = _compCollection.C[p.CId].Dist ;
+                        if (p.CId == 0 && q.CId > 0)
+                            edgeCost =   _compCollection.C[q.CId].Dist;
 
-                        if( edgeCost >= eList[vList[i].ID, neighb].weight ) {//this is a tight edge
+                        if( edgeCost >= eList[vList[i].Id, neighb].Weight ) {//this is a tight edge
 
                             
-                            Edgelist.Push(new tuple(p, q, selectEdge(eList, degList, p, q, givenLevel)));
+                            Edgelist.Push(new Tuple(p, q, SelectEdge(eList, degList, p, q, givenLevel)));
 
                             int tempID;
 
-                            if (p.cID == 0 && q.cID>0)
+                            if (p.CId == 0 && q.CId>0)
                             {//if p is a single vertex
-                                    p.cID = q.cID;
-                                    _compCollection.C[q.cID].v.Add(p);
+                                    p.CId = q.CId;
+                                    _compCollection.C[q.CId].V.Add(p);
                             }
-                            else if (q.cID == 0 && p.cID>0)
+                            else if (q.CId == 0 && p.CId>0)
                             {//if q is a single vertex
-                                    q.cID = p.cID;
-                                    _compCollection.C[p.cID].v.Add(q);
+                                    q.CId = p.CId;
+                                    _compCollection.C[p.CId].V.Add(q);
                             }
                             else{//p and q are components
                                     
                                     //Console.WriteLine(p.ID + ":" + q.ID);
 
-                                    tempID = q.cID;
+                                    tempID = q.CId;
                                     //merge q-component to p-component                                
-                                    foreach (vertex r in _compCollection.C[tempID].v)
+                                    foreach (Vertex r in _compCollection.C[tempID].V)
                                     {
-                                        r.cID = p.cID;
-                                        _compCollection.C[p.cID].v.Add(r);
+                                        r.CId = p.CId;
+                                        _compCollection.C[p.CId].V.Add(r);
                                     }
-                                    _compCollection.C[tempID].v.Clear();
-                                    _compCollection.C[tempID].dead = true;
-                                    _compCollection.numOfAliveComponents--;                                    
+                                    _compCollection.C[tempID].V.Clear();
+                                    _compCollection.C[tempID].Dead = true;
+                                    _compCollection.NumOfAliveComponents--;                                    
 
                                     //initialize the component variable
-                                    _compCollection.C[p.cID].dist = 0;                                
+                                    _compCollection.C[p.CId].Dist = 0;                                
                             }
                       
 
@@ -100,21 +99,17 @@ namespace WindowsFormsApplication3
             while (Edgelist.Count > 0)
             {
                 testConnected = false;
-                tuple e = (tuple)Edgelist.Pop();
+                Tuple e = Edgelist.Pop();
                 //Console.WriteLine(e.a.ID + " : " + e.b.ID);
 
-                deSelectEdge(eList, degList, e.a, e.b);
+                DeSelectEdge(eList, degList, e.A, e.B);
 
 
                 if (SpanningTree.Count > 0)
                 {
-                    foreach (twin t in SpanningTree)
-                    {//if it is already in the spanning tree then you have to test whether it is connected after deselecting it
-                        if (t.a == e.a.ID && t.b == e.b.ID)
-                        {
-                            testConnected = true;
-                            break;
-                        }
+                    if (SpanningTree.Any(t => t.A == e.A.Id && t.B == e.B.Id))
+                    {
+                        testConnected = true;
                     } 
           
                 }
@@ -122,15 +117,15 @@ namespace WindowsFormsApplication3
 
                 //if testconnected is false then that edge is not on the spanning tree and you know that it is connected
                 if (testConnected == false) continue;
-                if (isConnected(vList, eList, degList, numOfv, givenLevel)) continue;
-                else selectEdge(eList, degList,  e.a,  e.b, e.value);
+                if (IsConnected(vList, eList, degList, numOfv, givenLevel)) continue;
+                else SelectEdge(eList, degList,  e.A,  e.B, e.Value);
 
             }
 
             //build component
             
 
-            Component c = getTreeComponent(vList, eList, degList, numOfv, givenLevel);
+            Component c = GetTreeComponent(vList, eList, degList, numOfv, givenLevel);
             //if (givenComponent != null) givenComponent.v.Clear();
             //else givenComponent = new Component();
             //foreach (vertex w in c.v)
@@ -142,89 +137,82 @@ namespace WindowsFormsApplication3
 
             return c;
         }
-        public bool isConnected(vertex[] vList, edge[,] eList, int[] degList,  int numOfv, int givenLevel)
+        public bool IsConnected(Vertex[] vList, Edge[,] eList, int[] degList,  int numOfv, int givenLevel)
         {
-
-            vertex current_vertex;
-            int num_points = 0;
-            int num_visited = 0;
-            vertex a=null; //source
-            Queue<vertex> q = new Queue<vertex>();
+            int numPoints = 0;
+            int numVisited = 0;
+            Vertex a=null; //source
+            Queue<Vertex> q = new Queue<Vertex>();
 
             for (int index = 1; index <= numOfv; index++)
             {                
-                vList[index].visited = false;
-                if (vList[index].zoomLevel<= givenLevel &&  vList[index].weight > 0)
+                vList[index].Visited = false;
+                if (vList[index].ZoomLevel<= givenLevel &&  vList[index].Weight > 0)
                 {
-                    a = vList[index]; num_points++; 
+                    a = vList[index]; numPoints++; 
                 }
             }
 
             q.Enqueue(a);
-            a.visited = true;
+            a.Visited = true;
  
 
             while(q.Count>0){
                 
-                current_vertex = q.Dequeue();
-                if (current_vertex.zoomLevel <= givenLevel && current_vertex.weight > 0) num_visited++;
+                var currentVertex = q.Dequeue();
+                if (currentVertex.ZoomLevel <= givenLevel && currentVertex.Weight > 0) numVisited++;
                 //Console.Write(current_vertex.ID + ", ");
 
 
-                for (int neighb = 1; neighb <= degList[current_vertex.ID]; neighb++)
+                for (int neighb = 1; neighb <= degList[currentVertex.Id]; neighb++)
                 {
                     //Console.Write("[" + eList[current_vertex.ID, neighb].nodeId + "-"+ eList[current_vertex.ID, neighb].selected+" ]");
-                    if (eList[current_vertex.ID, neighb].selected >= 1 && vList[eList[current_vertex.ID, neighb].nodeId].visited== false ) 
+                    if (eList[currentVertex.Id, neighb].Selected >= 1 && vList[eList[currentVertex.Id, neighb].NodeId].Visited== false ) 
                     {                        
-                        vList[eList[current_vertex.ID, neighb].nodeId].visited = true;
-                        q.Enqueue(vList[eList[current_vertex.ID, neighb].nodeId]);
+                        vList[eList[currentVertex.Id, neighb].NodeId].Visited = true;
+                        q.Enqueue(vList[eList[currentVertex.Id, neighb].NodeId]);
                     }
                 }
             }
            // Console.WriteLine(num_visited + "=" + num_points);
 
-            if (num_points == num_visited) BuildSpanningTree(vList, eList, degList, a.ID, numOfv, givenLevel);
+            if (numPoints == numVisited) BuildSpanningTree(vList, eList, degList, a.Id, numOfv, givenLevel);
 
-            return  num_points ==  num_visited;
+            return  numPoints ==  numVisited;
         }
 
-        public Component getTreeComponent(vertex[] vList, edge[,] eList, int[] degList, int numOfv, int givenLevel){
+        public Component GetTreeComponent(Vertex[] vList, Edge[,] eList, int[] degList, int numOfv, int givenLevel){
             Component comp = new Component();
-            vertex current_vertex;
-            int num_points = 0;
-            int num_visited = 0;
-            vertex a = null; //source
-            Queue<vertex> q = new Queue<vertex>();
+            Vertex a = null; //source
+            Queue<Vertex> q = new Queue<Vertex>();
 
             for (int index = 1; index <= numOfv; index++)
             {
-                vList[index].visited = false;
-                if (vList[index].zoomLevel <= givenLevel && vList[index].weight > 0)
+                vList[index].Visited = false;
+                if (vList[index].ZoomLevel <= givenLevel && vList[index].Weight > 0)
                 {
                     a = vList[index];
-                    num_points++;
-                }
+                 }
             }
 
             q.Enqueue(a);
-            a.visited = true;
+            a.Visited = true;
 
 
             while (q.Count > 0)
             {
 
-                current_vertex = q.Dequeue();
-                if (current_vertex.zoomLevel <= givenLevel && current_vertex.weight > 0) num_visited++;
-                comp.v.Add(current_vertex);
+                var currentVertex = q.Dequeue();
+                 comp.V.Add(currentVertex);
                 //Console.Write(current_vertex.ID + ", ");
 
-                for (int neighb = 1; neighb <= degList[current_vertex.ID]; neighb++)
+                for (int neighb = 1; neighb <= degList[currentVertex.Id]; neighb++)
                 {
                     //Console.Write("[" + eList[current_vertex.ID, neighb].nodeId + "-"+ eList[current_vertex.ID, neighb].selected+" ]");
-                    if (eList[current_vertex.ID, neighb].selected >= 1 && vList[eList[current_vertex.ID, neighb].nodeId].visited == false)
+                    if (eList[currentVertex.Id, neighb].Selected >= 1 && vList[eList[currentVertex.Id, neighb].NodeId].Visited == false)
                     {
-                        vList[eList[current_vertex.ID, neighb].nodeId].visited = true;
-                        q.Enqueue(vList[eList[current_vertex.ID, neighb].nodeId]);
+                        vList[eList[currentVertex.Id, neighb].NodeId].Visited = true;
+                        q.Enqueue(vList[eList[currentVertex.Id, neighb].NodeId]);
                     }
                 }
             }
@@ -232,67 +220,67 @@ namespace WindowsFormsApplication3
 
             return  comp;
         }
-        public int selectEdge(edge[,] eList, int[] degList, vertex a, vertex b, int givenLevel)
+        public int SelectEdge(Edge[,] eList, int[] degList, Vertex a, Vertex b, int givenLevel)
         {
             int temp = givenLevel;
-            for (int neighb = 1; neighb <= degList[a.ID]; neighb++)
+            for (int neighb = 1; neighb <= degList[a.Id]; neighb++)
             {
-                if (eList[a.ID, neighb].nodeId == b.ID)
+                if (eList[a.Id, neighb].NodeId == b.Id)
                 {
-                    if (eList[a.ID, neighb].selected == 0)
+                    if (eList[a.Id, neighb].Selected == 0)
                     {
-                        eList[a.ID, neighb].selected = givenLevel;
+                        eList[a.Id, neighb].Selected = givenLevel;
                     }
-                    else temp = eList[a.ID, neighb].selected;
+                    else temp = eList[a.Id, neighb].Selected;
                     break;
                 }
             }
-            for (int neighb = 1; neighb <= degList[b.ID]; neighb++)
+            for (int neighb = 1; neighb <= degList[b.Id]; neighb++)
             {
-                if (eList[b.ID, neighb].nodeId == a.ID)
+                if (eList[b.Id, neighb].NodeId == a.Id)
                 {
-                    if (eList[b.ID, neighb].selected == 0)
+                    if (eList[b.Id, neighb].Selected == 0)
                     {
-                        eList[b.ID, neighb].selected = givenLevel;
+                        eList[b.Id, neighb].Selected = givenLevel;
                     }
-                    else temp = eList[b.ID, neighb].selected;
+                    else temp = eList[b.Id, neighb].Selected;
                     break;
                 }
             }
             return temp;
         }
 
-        public void deSelectEdge(edge[,] eList, int[] degList, vertex a, vertex b )
+        public void DeSelectEdge(Edge[,] eList, int[] degList, Vertex a, Vertex b )
         {
-            for (int neighb = 1; neighb <= degList[a.ID]; neighb++)
+            for (int neighb = 1; neighb <= degList[a.Id]; neighb++)
             {
-                if (eList[a.ID, neighb].nodeId == b.ID)
+                if (eList[a.Id, neighb].NodeId == b.Id)
                 {
-                    eList[a.ID, neighb].selected = 0;
+                    eList[a.Id, neighb].Selected = 0;
                     break;
                 }
             }
-            for (int neighb = 1; neighb <= degList[b.ID]; neighb++)
+            for (int neighb = 1; neighb <= degList[b.Id]; neighb++)
             {
-                if (eList[b.ID, neighb].nodeId == a.ID)
+                if (eList[b.Id, neighb].NodeId == a.Id)
                 {
-                    eList[b.ID, neighb].selected = 0;
+                    eList[b.Id, neighb].Selected = 0;
                     break;
                 }
             }
 
         }
-        public bool isActive(Component comp,vertex[] vList, edge[,] eList, int[] degList)
+        public bool IsActive(Component comp,Vertex[] vList, Edge[,] eList, int[] degList)
         {
-            if (comp.dead) return false;
+            if (comp.Dead) return false;
             //Console.WriteLine(compCollection.numOfAliveComponents);
 
-            foreach ( vertex w in comp.v){
+            foreach ( Vertex w in comp.V){
                 
                 //check if there is a neighbor of w outside of comp.v
-                for (int neighb = 1; neighb <= degList[w.ID]; neighb++ )
+                for (int neighb = 1; neighb <= degList[w.Id]; neighb++ )
                 {
-                    if (w.cID != vList[eList[w.ID, neighb].nodeId].cID ) return true;
+                    if (w.CId != vList[eList[w.Id, neighb].NodeId].CId ) return true;
                 }
             }
             return false;
@@ -301,64 +289,62 @@ namespace WindowsFormsApplication3
 
 
 
-        public void BuildSpanningTree(vertex[] vList, edge[,] eList, int[] degList, int source, int N, int givenLevel)
+        public void BuildSpanningTree(Vertex[] vList, Edge[,] eList, int[] degList, int source, int n, int givenLevel)
         {
             //Console.WriteLine("start");
 
-            PriorityQueue<double, vertex> Q = new PriorityQueue<double, vertex>(); ;
-            double temp;
-            int neighbor;
+            var q = new PriorityQueue<double, Vertex>();
 
             SpanningTree.Clear();
 
-            vList[source].dist = 0;
-            Q.Enqueue(vList[source].dist, vList[source]);
-            for (int i = 1; i <= N; i++)
+            vList[source].Dist = 0;
+            q.Enqueue(vList[source].Dist, vList[source]);
+            for (int i = 1; i <= n; i++)
             {
-                if (vList[i].ID != vList[source].ID)
+                if (vList[i].Id != vList[source].Id)
                 {
-                    vList[i].dist = double.MaxValue;
-                    Q.Enqueue(vList[i].dist, vList[i]);
+                    vList[i].Dist = double.MaxValue;
+                    q.Enqueue(vList[i].Dist, vList[i]);
                 }
-                vList[i].parent = null;
-                vList[i].visited = false;
+                vList[i].Parent = null;
+                vList[i].Visited = false;
             }
 
  
-            while (Q.Count > 0)
+            while (q.Count > 0)
             {
-                vertex u = Q.Dequeue().Value;
-                if (u.visited == true) continue;
-                else u.visited = true;
-                for (int neighb = 1; neighb <= degList[u.ID]; neighb++)
+                Vertex u = q.Dequeue().Value;
+                if (u.Visited == true) continue;
+                else u.Visited = true;
+                for (int neighb = 1; neighb <= degList[u.Id]; neighb++)
                 {
-                    neighbor = eList[u.ID, neighb].nodeId;
+                    var neighbor = eList[u.Id, neighb].NodeId;
 
-                    if (eList[u.ID, neighb].selected == 0) continue;
+                    if (eList[u.Id, neighb].Selected == 0) continue;
                     //else encourangeReuse = 0;
 
-                    temp = u.dist + eList[u.ID, neighb].eDist;
-                    if (temp < vList[neighbor].dist)
+                    var temp = u.Dist + eList[u.Id, neighb].EDist;
+                    if (temp < vList[neighbor].Dist)
                     {
-                        vList[neighbor].dist = temp;
-                        vList[neighbor].parent = u;
-                        Q.Enqueue(vList[neighbor].dist, vList[neighbor]);
+                        vList[neighbor].Dist = temp;
+                        vList[neighbor].Parent = u;
+                        q.Enqueue(vList[neighbor].Dist, vList[neighbor]);
                     }
                 }
             }
 
-            for (int i = 1; i <= N; i++)
+            for (int i = 1; i <= n; i++)
             {                
-                if (vList[i].weight > 0 && vList[i].zoomLevel <= givenLevel)
+                if (vList[i].Weight > 0 && vList[i].ZoomLevel <= givenLevel)
                 {
                     var w = vList[i];
                     //Console.WriteLine("***"+w.ID);
-                    while (w.parent != null)
+                    while (w.Parent != null)
                     {
                         //Console.WriteLine("" + w.ID + " " + w.parent.ID);
-                        SpanningTree.Add(new twin(w.ID, w.parent.ID));
-                        SpanningTree.Add(new twin( w.parent.ID, w.ID));
-                        w = w.parent;
+                        SpanningTree.Add(new Twin(w.Id, w.Parent.Id));
+                        SpanningTree.Add(new Twin( w.Parent.Id, w.Id));
+                        w = w.Parent;
 
                     }
                 }
@@ -371,27 +357,36 @@ namespace WindowsFormsApplication3
 
     public class Component
     {
-        public int cID = 0;
-        public double dist=0;
-        public bool dead = true;
-        public List<vertex> v = new List<vertex>();
-        public List<VertexNeighbor> segments= new List<VertexNeighbor>();
-    }
+        public int CId = 0;
+        public double Dist;
+        public bool Dead = true;
+        public List<Vertex> V = new List<Vertex>();
+        public List<VertexNeighbor> Segments= new List<VertexNeighbor>();
 
-    public class twin
-    {
-        public int a = 0;
-        public int b = 0;
-        public twin(int x, int y) { a = x; b = y; }
-
-    }
-    public class tuple{
-        public vertex a;
-        public vertex b;
-        public int value;
-        public tuple(vertex x, vertex y, int z)
+        public void AddVertex(Vertex w)
         {
-            a = x; b = y; value = z;
+            foreach (Vertex z in V)
+            {
+                if (w.Id == z.Id) return;
+            }
+            V.Add(w);
+        }
+    }
+
+    public class Twin
+    {
+        public int A ;
+        public int B ;
+        public Twin(int x, int y) { A = x; B = y; }
+
+    }
+    public class Tuple{
+        public Vertex A;
+        public Vertex B;
+        public int Value;
+        public Tuple(Vertex x, Vertex y, int z)
+        {
+            A = x; B = y; Value = z;
         }
     }
 }
