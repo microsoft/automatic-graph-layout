@@ -74,7 +74,7 @@ GraphLayout/graphs/composers.zip. Please load composers.msagl to avoid
 the preprocessing step.  If composers.dot is loaded then
 composers.msagl and the tiles directory composers.msagl_tiles will be
 regenerated. GraphMaps ideas, design, and the mathematics are described in a
-[paper](https://arxiv.org/submit/1285952/view).
+[paper](http://arxiv.org/pdf/1506.06745v1.pdf).
 
 #Layouts Created by MSAGL
 ![](http://research.microsoft.com/en-us/projects/msagl/195f1b23116b4f049b6e5dc815d96c89.png)
