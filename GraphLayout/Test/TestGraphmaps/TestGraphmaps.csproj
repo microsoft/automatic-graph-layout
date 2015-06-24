@@ -117,7 +117,6 @@
     <Compile Include="GraphmlEdge.cs" />
     <Compile Include="GraphmlNode.cs" />
     <Compile Include="GraphmlParser.cs" />
-    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="NetParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

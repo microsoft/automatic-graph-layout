@@ -259,7 +259,6 @@
     <Compile Include="Layout\LargeGraphLayout\DeviceIndependedZoomCalculatorForNodes.cs" />
     <Compile Include="Layout\LargeGraphLayout\EdgePicker.cs" />
     <Compile Include="Layout\LargeGraphLayout\IZoomLevelCalculator.cs" />
-    <Compile Include="Layout\LargeGraphLayout\LayerInfo.cs" />
     <Compile Include="Layout\LargeGraphLayout\LgCellInfo.cs" />
     <Compile Include="Layout\LargeGraphLayout\LgData.cs" />
     <Compile Include="Layout\LargeGraphLayout\LgEdgeInfo.cs" />

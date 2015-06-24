@@ -160,7 +160,6 @@
     <Compile Include= "..\msagl\Layout\LargeGraphLayout\DeviceIndependedZoomCalculatorForNodes.cs" ><Link>DeviceIndependedZoomCalculatorForNodes.cs</Link> </Compile>
     <Compile Include= "..\msagl\Layout\LargeGraphLayout\EdgePicker.cs" ><Link>EdgePicker.cs</Link> </Compile>
     <Compile Include= "..\msagl\Layout\LargeGraphLayout\IZoomLevelCalculator.cs" ><Link>IZoomLevelCalculator.cs</Link> </Compile>
-    <Compile Include= "..\msagl\Layout\LargeGraphLayout\LayerInfo.cs" ><Link>LayerInfo.cs</Link> </Compile>
     <Compile Include= "..\msagl\Layout\LargeGraphLayout\LgCellInfo.cs" ><Link>LgCellInfo.cs</Link> </Compile>
     <Compile Include= "..\msagl\Layout\LargeGraphLayout\LgData.cs" ><Link>LgData.cs</Link> </Compile>
     <Compile Include= "..\msagl\Layout\LargeGraphLayout\LgEdgeInfo.cs" ><Link>LgEdgeInfo.cs</Link> </Compile>

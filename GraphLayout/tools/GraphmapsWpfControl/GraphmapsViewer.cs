@@ -158,6 +158,8 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             _graphCanvas.MouseLeftButtonUp += GraphCanvasMouseLeftButtonUp;
             _graphCanvas.MouseWheel += GraphCanvasMouseWheel;
             _graphCanvas.MouseRightButtonUp += GraphCanvasRightMouseUp;
+            _graphCanvas.IsManipulationEnabled = true;
+            _graphCanvas.ManipulationDelta += GraphCanvas_ManipulationStarting;
             ViewChangeEvent += AdjustBtrectRenderTransform;
 
             LayoutEditingEnabled = true;
@@ -170,7 +172,17 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             _tileFetcher = new TileFetcher(this, GetVisibleTilesSet);
         }
 
+        void GraphCanvas_ManipulationStarting(object sender, ManipulationDeltaEventArgs e) {
+            Debug.Assert(_graphCanvas.Equals(e.Source));
+            //e.DeltaManipulation has the changes 
+            // Scale is a delta multiplier; 1.0 is last size,  (so 1.1 == scale 10%, 0.8 = shrink 20%) 
+            // Rotate = Rotation, in degrees
+            // Pan = Translation, == Translate offset, in Device Independent Pixels 
 
+            var dm = e.DeltaManipulation;
+            ZoomOnZoomIncrement((dm.Scale.X+dm.Scale.Y)/2, new WpfPoint(dm.Translation.X,dm.Translation.Y));
+            e.Handled = true;
+        }
 
         #region WPF stuff
 
@@ -457,15 +469,20 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
 
         void GraphCanvasMouseWheel(object sender, MouseWheelEventArgs e) {
-            if (e.Delta != 0) {
-                const double zoomFractionLocal = 0.9;
-                var zoomInc = e.Delta < 0 ? zoomFractionLocal : 1.0/zoomFractionLocal;
-                ZoomAbout(ZoomFactor*zoomInc, e.GetPosition(_graphCanvas));
-                e.Handled = true;
+            if (e.Delta == 0) return;
+            const double zoomFractionLocal = 0.9;
+            var zoomInc = e.Delta < 0 ? zoomFractionLocal : 1.0/zoomFractionLocal;
+            e.Handled = true;
+            var pos = e.GetPosition(_graphCanvas);
+            ZoomOnZoomIncrement(zoomInc, pos);
+        }
 
-                //_cursor.UpdateCursor(_currentMousePos, UnderlyingPolylineCircleRadius);
-                //InvalidateAllViewerObjects();
-            }
+        void ZoomOnZoomIncrement(double zoomInc, WpfPoint pos) {
+            ZoomAbout(ZoomFactor*zoomInc, pos);
+
+            //_cursor.UpdateCursor(_currentMousePos, UnderlyingPolylineCircleRadius);
+            //InvalidateAllViewerObjects();
+
 
             UpdateAllNodeBorders();
 
