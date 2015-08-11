@@ -429,6 +429,7 @@ define(["require", "exports"], function (require, exports) {
     })();
     var GGraph = (function () {
         function GGraph() {
+            this.worker = null;
             this.nodesMap = new Object();
             this.edgesMap = new Object();
             this.nodes = [];
@@ -641,12 +642,20 @@ define(["require", "exports"], function (require, exports) {
             });
             container.removeChild(svg);
         };
+        GGraph.prototype.stopLayoutGraph = function () {
+            if (this.worker != null) {
+                this.worker.terminate();
+                this.worker = null;
+            }
+        };
         GGraph.prototype.beginLayoutGraph = function (callback) {
             if (callback === void 0) { callback = null; }
-            var self = this;
+            this.stopLayoutGraph();
+            var that = this;
             var workerCallback = function (gstr) {
+                that.stopLayoutGraph();
                 var gs = GGraph.ofJSON(gstr.data);
-                self.boundingBox = new GRect({
+                that.boundingBox = new GRect({
                     x: gs.boundingBox.x - 10,
                     y: gs.boundingBox.y - 10,
                     width: gs.boundingBox.width + 20,
@@ -654,14 +663,14 @@ define(["require", "exports"], function (require, exports) {
                 });
                 for (var i = 0; i < gs.nodes.length; i++) {
                     var workerNode = gs.nodes[i];
-                    var myNode = self.getNode(workerNode.id);
+                    var myNode = that.getNode(workerNode.id);
                     myNode.boundaryCurve = workerNode.boundaryCurve;
                     if (myNode.label != null)
                         myNode.label.bounds = workerNode.label.bounds;
                 }
                 for (var i = 0; i < gs.edges.length; i++) {
                     var workerEdge = gs.edges[i];
-                    var myEdge = self.getEdge(workerEdge.id);
+                    var myEdge = that.getEdge(workerEdge.id);
                     myEdge.curve = workerEdge.curve;
                     if (myEdge.label != null)
                         myEdge.label.bounds = workerEdge.label.bounds;
@@ -674,9 +683,9 @@ define(["require", "exports"], function (require, exports) {
                     callback();
             };
             var serialisedGraph = this.getJSON();
-            var worker = new Worker('/MSAGL/workerBoot.js');
-            worker.addEventListener('message', workerCallback);
-            worker.postMessage(serialisedGraph);
+            this.worker = new Worker('/MSAGL/workerBoot.js');
+            this.worker.addEventListener('message', workerCallback);
+            this.worker.postMessage(serialisedGraph);
         };
         return GGraph;
     })();

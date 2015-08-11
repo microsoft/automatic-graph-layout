@@ -827,23 +827,34 @@ export class GGraph implements IGraph {
         container.removeChild(svg);
     }
 
+    private worker: Worker = null;
+
+    stopLayoutGraph(): void {
+        if (this.worker != null) {
+            this.worker.terminate();
+            this.worker = null;
+        }
+    }
+
     beginLayoutGraph(callback: () => void = null): void {
-        var self = this;
+        this.stopLayoutGraph();
+        var that = this;
         var workerCallback = function (gstr) {
+            that.stopLayoutGraph();
             var gs: GGraph = GGraph.ofJSON(gstr.data);
-            self.boundingBox = new GRect({
+            that.boundingBox = new GRect({
                 x: gs.boundingBox.x - 10, y: gs.boundingBox.y - 10, width: gs.boundingBox.width + 20, height: gs.boundingBox.height + 20
             });
             for (var i = 0; i < gs.nodes.length; i++) {
                 var workerNode = gs.nodes[i];
-                var myNode = self.getNode(workerNode.id);
+                var myNode = that.getNode(workerNode.id);
                 myNode.boundaryCurve = workerNode.boundaryCurve;
                 if (myNode.label != null)
                     myNode.label.bounds = workerNode.label.bounds;
             }
             for (var i = 0; i < gs.edges.length; i++) {
                 var workerEdge = gs.edges[i];
-                var myEdge = self.getEdge(workerEdge.id);
+                var myEdge = that.getEdge(workerEdge.id);
                 myEdge.curve = workerEdge.curve;
                 if (myEdge.label != null)
                     myEdge.label.bounds = workerEdge.label.bounds;
@@ -857,8 +868,8 @@ export class GGraph implements IGraph {
         }
 
         var serialisedGraph = this.getJSON();
-        var worker = new Worker('/MSAGL/workerBoot.js');
-        worker.addEventListener('message', workerCallback);
-        worker.postMessage(serialisedGraph);
+        this.worker = new Worker('/MSAGL/workerBoot.js');
+        this.worker.addEventListener('message', workerCallback);
+        this.worker.postMessage(serialisedGraph);
     }
 }

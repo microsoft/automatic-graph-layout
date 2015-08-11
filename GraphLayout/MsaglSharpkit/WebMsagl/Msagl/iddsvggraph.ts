@@ -13,14 +13,14 @@ export class IDDSVGGraph extends SVGG.SVGGraph {
         var that = this;
 
         var _svgCnt = undefined;
-        var _svg = undefined;
+        var _svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 
         Object.defineProperty(this, "svg", {
             get: function () {
                 return _svg;
             },
         });
-
+        
         this.computeLocalBounds = function (step, computedBounds) {
             if (graph.graph == null)
                 return undefined;
@@ -32,7 +32,7 @@ export class IDDSVGGraph extends SVGG.SVGGraph {
 
             if (_svgCnt === undefined) {
                 _svgCnt = $("<div></div>").css("overflow", "hidden").appendTo(that.host)[0];
-                _svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                //_svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
                 _svg.setAttribute("preserveAspectRatio", "xMinYMin slice"); //xMinYMin
                 _svgCnt.appendChild(_svg);
             }

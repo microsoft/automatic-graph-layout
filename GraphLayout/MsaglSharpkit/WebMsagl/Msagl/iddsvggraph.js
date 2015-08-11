@@ -95,7 +95,7 @@ define(["require", "exports", './ggraph', './svggraph'], function (require, expo
             this.base(jqDiv, master);
             var that = this;
             var _svgCnt = undefined;
-            var _svg = undefined;
+            var _svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
             Object.defineProperty(this, "svg", {
                 get: function () {
                     return _svg;
@@ -110,7 +110,7 @@ define(["require", "exports", './ggraph', './svggraph'], function (require, expo
                 InteractiveDataDisplay.CanvasPlot.prototype.arrange.call(this, finalRect);
                 if (_svgCnt === undefined) {
                     _svgCnt = $("<div></div>").css("overflow", "hidden").appendTo(that.host)[0];
-                    _svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                    //_svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
                     _svg.setAttribute("preserveAspectRatio", "xMinYMin slice"); //xMinYMin
                     _svgCnt.appendChild(_svg);
                 }
