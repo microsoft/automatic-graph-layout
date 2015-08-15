@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WindowsFormsApplication3
+namespace Microsoft.Msagl.GraphmapsWithMesh
 {
 
     public class Network
@@ -12,7 +12,12 @@ namespace WindowsFormsApplication3
         public int E;
         public int[,] M ;
 
-
+        public Network(int numV, int numE, bool Random) 
+        {
+            N = numV;
+            E = numE;
+            M = new int[numV + 1, numV + 1];
+        }
         public Network(int numV, int numE) 
         {
             N = numV;

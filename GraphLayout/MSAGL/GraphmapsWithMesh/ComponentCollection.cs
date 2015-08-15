@@ -1,6 +1,6 @@
 using System;
 
-namespace WindowsFormsApplication3
+namespace Microsoft.Msagl.GraphmapsWithMesh
 {
     public class ComponentCollection
     {
