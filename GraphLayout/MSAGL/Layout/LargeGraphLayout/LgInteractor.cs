@@ -617,10 +617,10 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
             _lgData.SortedLgNodeInfos = new List<LgNodeInfo>();
 
-            FillGeometryNodeToLgInfosTables();
+            //FillGeometryNodeToLgInfosTables();
+            //CreateConnectedGraphs();
+            //LevelCalculator.RankGraph(_lgData, _mainGeometryGraph);
 
-            CreateConnectedGraphs();
-            LevelCalculator.RankGraph(_lgData, _mainGeometryGraph);
             LevelCalculator.SetNodeZoomLevelsAndRouteEdgesOnLevels(_lgData, _mainGeometryGraph, _lgLayoutSettings);
 
             foreach (var node in _lgData.SortedLgNodeInfos)

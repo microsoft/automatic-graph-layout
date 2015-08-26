@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
@@ -436,9 +437,687 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             Console.WriteLine("Mesh Created");
         }
 
+        static Dictionary<double, List<OrthogonalEdge>> HVEdges = new Dictionary<double, List<OrthogonalEdge>>();
+        static Dictionary<double, List<OrthogonalEdge>> VHEdges = new Dictionary<double, List<OrthogonalEdge>>();
         public static void FastCompetitionMesh(Tiling g, Dictionary<int, Node> idToNode, int maxX, int maxY)
         {
+             
+
+            double[] Px = new double[g.N];
+            double[] Py = new double[g.N];
+            int[] Pid = new int[g.N];
+            double[] temp = new double[g.N];
+            for (int i = 0; i < g.N; i++)
+            {
+                Px[i] = g.VList[i].XLoc;
+                Py[i] = g.VList[i].YLoc;
+                Pid[i] = i;
+                temp[i] = g.VList[i].YLoc;
+            }
+
+
+
+
+            //sort the points by y coordinate
+            iterativeMergesort(temp, Px, Py, Pid);
+
+
+            //find the closest point in the Xth cone
+            Dictionary<int, int> Neighbors1 = ManhattanNearestNeighbor(Px, Py, Pid, 1, maxX, maxY);
+            Dictionary<int, int> Neighbors8 = ManhattanNearestNeighbor(Px, Py, Pid, 8, maxX, maxY);
+            Dictionary<int, int> Neighbors4 = ManhattanNearestNeighbor(Px, Py, Pid, 4, maxX, maxY);
+            Dictionary<int, int> Neighbors5 = ManhattanNearestNeighbor(Px, Py, Pid, 5, maxX, maxY);
+
+            //create the bounding box             
+            int a = g.InsertVertex(0, 0);
+            int b = g.InsertVertex(0, maxY);
+            int c = g.InsertVertex(maxX, maxY);
+            int d = g.InsertVertex(maxX, 0);
+            g.AddEdge(a, b);
+            g.AddEdge(b, c);
+            g.AddEdge(c, d);
+            g.AddEdge(d, a);
+
+
+            HVEdges[0] = new List<OrthogonalEdge>();
+            HVEdges[maxX] = new List<OrthogonalEdge>();
+            VHEdges[0] = new List<OrthogonalEdge>();
+            VHEdges[maxY] = new List<OrthogonalEdge>();
+
+            HVEdges[0].Add(new OrthogonalEdge(g.VList[a], g.VList[b]));
+            HVEdges[maxX].Add(new OrthogonalEdge(g.VList[c], g.VList[d]));
+            VHEdges[0].Add(new OrthogonalEdge(g.VList[a], g.VList[d]));
+            VHEdges[maxY].Add(new OrthogonalEdge(g.VList[b], g.VList[c]));
+
+            //create segments
             /*
+            LineSegment l = new LineSegment(0, 0, 0, maxY);
+            g.VList[a].topRay = new Ray(l) { dead = true };
+            g.VList[b].bottomRay = new Ray() { dead = true };
+            l = new LineSegment(0, maxY, maxX, maxY);
+            g.VList[b].rightRay = new Ray(l) { dead = true };
+            g.VList[c].leftRay = new Ray() { dead = true };
+            l = new LineSegment(maxX, maxY, maxX, 0);
+            g.VList[c].bottomRay = new Ray(l) { dead = true };
+            g.VList[d].topRay = new Ray() { dead = true };
+            l = new LineSegment(maxX, 0, 0, 0);
+            g.VList[d].leftRay = new Ray(l) { dead = true };
+            g.VList[a].rightRay = new Ray() { dead = true };
+            */
+
+            //Process each left ray
+            ProcessLeftRays(g, Neighbors4, Neighbors5, maxX, maxY);
+            //Process each Right ray
+            ProcessRightRays(g, Neighbors1, Neighbors8, maxX, maxY);
+            //Process each Upward ray
+            ProcessUpwardRays(g, maxX, maxY);
+            //Process each Downward ray
+            ProcessDownwardRays(g, maxX, maxY);
+
+            /*
+            int numOfVEdges = 0, numOfHEdges = 0;
+            foreach (var list in HVEdges.Keys)
+                numOfVEdges += HVEdges[list].Count;
+
+            foreach (var list in VHEdges.Keys)
+                numOfHEdges += VHEdges[list].Count;
+
+            Console.WriteLine("Number of Vertical Edges: " + numOfVEdges);
+            Console.WriteLine("Number of Horizontal Edges: " + numOfHEdges);
+            */
+        }
+
+
+        public static void ProcessLeftRays(Tiling g, Dictionary<int, int> Neighbors4, Dictionary<int, int> Neighbors5, int maxX, int maxY)
+        {
+            int a;
+            LineSegment l;
+            for (int i = 0; i < g.N; i++)
+            {
+                Vertex CurrentVertex = g.VList[i];
+                if (CurrentVertex.leftRay == null)
+                {
+                    Vertex Neighbor = null;
+                    Vertex Neighbor4 = null, Neighbor5 = null;
+                    //find the closest neighbor in C4
+                    double distance4 = double.MaxValue;
+                    if (Neighbors4.ContainsKey(g.VList[i].Id))
+                    {
+                        Neighbor4 = g.VList[Neighbors4[g.VList[i].Id]];
+                        distance4 = Math.Abs(Neighbor4.XLoc - CurrentVertex.XLoc) + Math.Abs(Neighbor4.YLoc - CurrentVertex.YLoc);
+                    }
+                    //find the closest neighbor in C5
+                    double distance5 = double.MaxValue;
+                    if (Neighbors5.ContainsKey(g.VList[i].Id))
+                    {
+                        Neighbor5 = g.VList[Neighbors5[g.VList[i].Id]];
+                        distance5 = Math.Abs(Neighbor5.XLoc - CurrentVertex.XLoc) + Math.Abs(Neighbor5.YLoc - CurrentVertex.YLoc);
+                    }
+
+                    //if (distance4 == double.MaxValue && distance5 == double.MaxValue)
+                    {
+                        //hit the boundary because if there were a vertex on the way - then we did not reach this case
+                        //a = g.InsertVertex(0, CurrentVertex.YLoc);
+                        //g.addEdge(CurrentVertex.Id, a);
+                        //there is no one that can stop the ray
+                        //l = new LineSegment(CurrentVertex.XLoc, CurrentVertex.YLoc, 0, CurrentVertex.YLoc);
+                        //CurrentVertex.leftRay = new Ray(l) { dead = true };
+                    }
+                    //else
+                    {   //there is a ray that can stop the left ray
+                        if (distance4 == double.MaxValue && distance5 == double.MaxValue)
+                            Neighbor = g.VList[g.N + 1];
+                        else if (distance4 < distance5) Neighbor = Neighbor4;
+                        else Neighbor = Neighbor5;
+
+
+                        //check if the neighbor is on the same y line of current vertex
+                        if (CurrentVertex.YLoc == Neighbor.YLoc)
+                        {
+
+
+                            //find the rightmost point of the neighbor
+                            Vertex rightNeighbor;
+
+                            do
+                            {
+                                rightNeighbor = Neighbor;
+                                for (int j = 0; j < g.DegList[Neighbor.Id]; j++)
+                                {
+                                    Vertex Candidate = g.VList[g.EList[Neighbor.Id, j].NodeId];
+                                    if (Candidate.YLoc > Neighbor.YLoc)
+                                    {
+                                        Neighbor = Candidate;
+                                        break;
+                                    }
+                                }
+                            } while (rightNeighbor.Id != rightNeighbor.Id);
+                            if (rightNeighbor.XLoc >= CurrentVertex.XLoc) continue;
+                            //dont need to find left neighbor since this is the first time ray is growing
+
+
+                            g.AddEdge(CurrentVertex.Id, rightNeighbor.Id);
+                            if (!VHEdges.ContainsKey(CurrentVertex.YLoc))
+                                VHEdges[CurrentVertex.YLoc] = new List<OrthogonalEdge>();
+                            VHEdges[CurrentVertex.YLoc].Add(new OrthogonalEdge(CurrentVertex, rightNeighbor));
+
+                        }
+                        else
+                        {
+                            /*
+                            if (Math.Abs(CurrentVertex.XLoc - 19) < 5 && Math.Abs(CurrentVertex.YLoc - 55) < 5)
+                                Console.WriteLine("");
+                            if (Math.Abs(CurrentVertex.XLoc - 18) < 5 && Math.Abs(CurrentVertex.YLoc - 44) < 3)
+                                Console.WriteLine("");
+                            if (Math.Abs(CurrentVertex.XLoc - 18) < 5 && Math.Abs(CurrentVertex.YLoc - 47) < 2)
+                                Console.WriteLine("");                             
+                             * */
+                            //check if the left ray already hits a vertical Edge r
+                            OrthogonalEdge r = null;
+                            Vertex ClosestVertex = Neighbor;
+                            if (HVEdges.ContainsKey(Neighbor.XLoc))
+                            {
+                                foreach (var vEdge in HVEdges[Neighbor.XLoc])
+                                {
+                                    if (vEdge.a.YLoc <= CurrentVertex.YLoc && vEdge.b.YLoc >= CurrentVertex.YLoc)
+                                    {
+                                        r = vEdge;
+                                        break;
+                                    }
+                                    //find the vertex on the line that is the closest one
+                                    if (Neighbor.YLoc > CurrentVertex.YLoc &&
+                                        Neighbor.YLoc >= vEdge.a.YLoc && vEdge.a.YLoc >= CurrentVertex.YLoc &&
+                                        Neighbor.YLoc >= vEdge.b.YLoc && vEdge.b.YLoc >= CurrentVertex.YLoc)
+                                    {
+                                        if (Math.Abs(vEdge.a.YLoc - CurrentVertex.YLoc) <
+                                            Math.Abs(ClosestVertex.YLoc - CurrentVertex.YLoc)) ClosestVertex = vEdge.a;
+                                        if (Math.Abs(vEdge.b.YLoc - CurrentVertex.YLoc) <
+                                            Math.Abs(ClosestVertex.YLoc - CurrentVertex.YLoc)) ClosestVertex = vEdge.b;
+                                    }
+                                    else if (Neighbor.YLoc < CurrentVertex.YLoc &&
+                                        Neighbor.YLoc <= vEdge.a.YLoc && vEdge.a.YLoc <= CurrentVertex.YLoc &&
+                                        Neighbor.YLoc <= vEdge.b.YLoc && vEdge.b.YLoc <= CurrentVertex.YLoc)
+                                    {
+                                        if (Math.Abs(vEdge.a.YLoc - CurrentVertex.YLoc) <
+                                            Math.Abs(ClosestVertex.YLoc - CurrentVertex.YLoc)) ClosestVertex = vEdge.a;
+                                        if (Math.Abs(vEdge.b.YLoc - CurrentVertex.YLoc) <
+                                            Math.Abs(ClosestVertex.YLoc - CurrentVertex.YLoc)) ClosestVertex = vEdge.b;
+                                    }
+                                }
+                            }
+                            if (r != null)
+                            {
+                                a = g.InsertVertex(Neighbor.XLoc, CurrentVertex.YLoc);
+                                g.RemoveEdge(r.a.Id, r.b.Id);
+                                g.AddEdge(r.a.Id, a);
+                                g.AddEdge(r.b.Id, a);
+                                g.AddEdge(CurrentVertex.Id, a);
+
+                                if (!HVEdges.ContainsKey(Neighbor.XLoc)) HVEdges[Neighbor.XLoc] = new List<OrthogonalEdge>();
+                                if (!VHEdges.ContainsKey(CurrentVertex.YLoc)) VHEdges[CurrentVertex.YLoc] = new List<OrthogonalEdge>();
+                                HVEdges[Neighbor.XLoc].Remove(r);
+                                HVEdges[Neighbor.XLoc].Add(new OrthogonalEdge(r.a, g.VList[a]));
+                                HVEdges[Neighbor.XLoc].Add(new OrthogonalEdge(r.b, g.VList[a]));
+                                VHEdges[CurrentVertex.YLoc].Add(new OrthogonalEdge(CurrentVertex, g.VList[a]));
+                            }
+                            else
+                            {
+                                a = g.InsertVertex(ClosestVertex.XLoc, CurrentVertex.YLoc);
+                                g.AddEdge(CurrentVertex.Id, a);
+                                g.AddEdge(ClosestVertex.Id, a);
+
+                                if (!HVEdges.ContainsKey(Neighbor.XLoc)) HVEdges[Neighbor.XLoc] = new List<OrthogonalEdge>();
+                                if (!VHEdges.ContainsKey(CurrentVertex.YLoc)) VHEdges[CurrentVertex.YLoc] = new List<OrthogonalEdge>();
+                                VHEdges[CurrentVertex.YLoc].Add(new OrthogonalEdge(CurrentVertex, g.VList[a]));
+                                HVEdges[ClosestVertex.XLoc].Add(new OrthogonalEdge(ClosestVertex, g.VList[a]));
+
+
+                                //l = new LineSegment(CurrentVertex.XLoc, CurrentVertex.YLoc, g.VList[a].XLoc,g.VList[a].YLoc);
+                                //CurrentVertex.leftRay = new Ray(l) {dead = true};
+                                //l = new LineSegment(Neighbor.XLoc, Neighbor.YLoc, g.VList[a].XLoc, g.VList[a].YLoc);
+                                //if (Neighbor.YLoc > g.VList[a].YLoc) Neighbor.bottomRay = new Ray(l) {dead = false};
+                                //else Neighbor.topRay = new Ray(l) {dead = false};
+                            }
+                        }
+
+                    }
+
+                }
+            }
+        }
+
+
+        public static void ProcessUpwardRays(Tiling g, int maxX, int maxY)
+        {
+            int a;
+            LineSegment l;
+
+            //sort all horizontal segments according to the y coordinates
+            List<double> Y = new List<double>();
+            List<OrthogonalEdge> E = new List<OrthogonalEdge>();
+
+            foreach (var hEdges in VHEdges.Values)
+            {
+                foreach (var edge in hEdges)
+                {
+                    E.Add(edge);
+                    Y.Add(edge.a.YLoc);
+                }
+            }
+            double[] ArrayOfY = Y.ToArray();
+            OrthogonalEdge[] SortedHorizontalEdges = E.ToArray();
+            Array.Sort(ArrayOfY, SortedHorizontalEdges);
+            //done sorting
+
+
+            //sort the points according to Y
+            double[] PointYArray = new double[g.N];
+            int[] PointIdArray = new int[g.N];
+            for (int i = 0; i < g.N; i++)
+            {
+                PointYArray[i] = g.VList[i].YLoc;
+                PointIdArray[i] = i;
+            }
+            Array.Sort(PointYArray, PointIdArray);
+            //done sorting
+
+
+            //keep the points in a RB tree - compared accorfing to y coordinates
+            RbTree<Vertex> PointTreeSortedByX = new RbTree<Vertex>(new xCoordinateComparator());
+
+
+
+            //for each horizontal edge check what are the points below it, and whether any of these can be extended
+            OrthogonalEdge CurrentEdge;
+            int index = 0;
+            //for each hEdge om sprted order
+            for (int i = 0; i < SortedHorizontalEdges.Length; i++)
+            {
+                CurrentEdge = SortedHorizontalEdges[i];
+                var CurrentY = CurrentEdge.a.YLoc;
+                var leftEnd = CurrentEdge.a.XLoc;
+                var rightEnd = CurrentEdge.b.XLoc;
+
+
+
+                //insert the points below CurrentY according to the y-coordinates 
+                while (index < PointIdArray.Length && g.VList[PointIdArray[index]].YLoc < CurrentY)
+                    PointTreeSortedByX.Insert(g.VList[PointIdArray[index++]]);
+
+                //do a search to find the intersecting points
+                var node1 = PointTreeSortedByX.FindLast(v => v.XLoc >= leftEnd);
+                var node2 = PointTreeSortedByX.FindFirst(v => v.XLoc <= rightEnd);
+                if (node1 != null && node1.Item.XLoc > rightEnd) node1 = null;
+                if (node2 != null && node2.Item.XLoc < leftEnd) node2 = null;
+                if (node1 == null || node2 == null) continue;
+
+
+                //collect all the candidate vertices
+                var node = node2;
+                List<Vertex> nodesToCheck = new List<Vertex>();
+
+                if (node1.Item.Id == node2.Item.Id) nodesToCheck.Add(node.Item);
+                else
+                {
+                    while (node.Item.Id != node1.Item.Id)
+                    {
+                        nodesToCheck.Add(node.Item);
+                        node = PointTreeSortedByX.Next(node);
+                    }
+                    nodesToCheck.Add(node.Item);
+                }
+
+
+                List<Vertex> addedVertices = new List<Vertex>();
+                List<Vertex> nodesToRemove = new List<Vertex>();
+                //filter out the nodes that must be connecte to the hEdge
+                foreach (var w in nodesToCheck)
+                {
+                    //find the topmost neighbor of w
+                    Vertex CurrentVertex = w;
+                    Vertex topNeighbor;
+                    do
+                    {
+                        topNeighbor = CurrentVertex;
+                        for (int j = 0; j < g.DegList[CurrentVertex.Id]; j++)
+                        {
+                            Vertex Candidate = g.VList[g.EList[CurrentVertex.Id, j].NodeId];
+                            if (Candidate.YLoc > CurrentVertex.YLoc)
+                            {
+                                CurrentVertex = Candidate;
+                                break;
+                            }
+                        }
+                    } while (topNeighbor.Id != CurrentVertex.Id);
+                    if (topNeighbor.YLoc >= CurrentY) continue;
+
+                    //add a subdivision
+                    a = g.InsertVertex(topNeighbor.XLoc, CurrentY);
+                    addedVertices.Add(g.VList[a]);
+
+                    g.AddEdge(topNeighbor.Id, a);
+                    if (!HVEdges.ContainsKey(topNeighbor.XLoc))
+                        HVEdges[topNeighbor.XLoc] = new List<OrthogonalEdge>();
+                    HVEdges[topNeighbor.XLoc].Add(new OrthogonalEdge(topNeighbor, g.VList[a]));
+
+                    nodesToRemove.Add(w);
+
+                }
+
+
+                foreach (var newnode in addedVertices)
+                {
+                    g.AddEdge(CurrentEdge.a.Id, newnode.Id);
+                    if (!VHEdges.ContainsKey(newnode.YLoc))
+                        VHEdges[newnode.YLoc] = new List<OrthogonalEdge>();
+                    VHEdges[newnode.YLoc].Add(new OrthogonalEdge(CurrentEdge.a, newnode));
+
+                    g.AddEdge(CurrentEdge.b.Id, newnode.Id);
+                    if (!VHEdges.ContainsKey(newnode.YLoc))
+                        VHEdges[newnode.YLoc] = new List<OrthogonalEdge>();
+                    VHEdges[newnode.YLoc].Add(new OrthogonalEdge(CurrentEdge.b, newnode));
+
+                    g.RemoveEdge(CurrentEdge.a.Id, CurrentEdge.b.Id);
+                    if (VHEdges.ContainsKey(CurrentEdge.b.YLoc))
+                        VHEdges[CurrentEdge.b.YLoc].Remove(CurrentEdge);
+
+                    CurrentEdge = new OrthogonalEdge(newnode, CurrentEdge.a);
+                }
+
+                foreach (var w in nodesToRemove)
+                    PointTreeSortedByX.Remove(w);
+
+            }
+        }
+
+
+        public static void ProcessDownwardRays(Tiling g, int maxX, int maxY)
+        {
+            int a;
+            LineSegment l;
+
+            //sort all horizontal segments according to the -y coordinates
+            List<double> Y = new List<double>();
+            List<OrthogonalEdge> E = new List<OrthogonalEdge>();
+
+            foreach (var hEdges in VHEdges.Values)
+            {
+                foreach (var edge in hEdges)
+                {
+                    E.Add(edge);
+                    Y.Add(-edge.a.YLoc);
+                }
+            }
+            double[] ArrayOfY = Y.ToArray();
+            OrthogonalEdge[] SortedHorizontalEdges = E.ToArray();
+            Array.Sort(ArrayOfY, SortedHorizontalEdges);
+            //done sorting
+
+
+            //sort the points according to -Y
+            double[] PointYArray = new double[g.N];
+            int[] PointIdArray = new int[g.N];
+            for (int i = 0; i < g.N; i++)
+            {
+                PointYArray[i] = -g.VList[i].YLoc;
+                PointIdArray[i] = i;
+            }
+            Array.Sort(PointYArray, PointIdArray);
+            //done sorting
+
+
+            //keep the points in a RB tree - compared accorfing to y coordinates
+            RbTree<Vertex> PointTreeSortedByX = new RbTree<Vertex>(new xCoordinateComparator());
+
+
+
+            //for each horizontal edge check what are the points below it, and whether any of these can be extended
+            OrthogonalEdge CurrentEdge;
+            int index = 0;
+            //for each hEdge on sorted top to bottom order
+            for (int i = 0; i < SortedHorizontalEdges.Length; i++)
+            {
+                CurrentEdge = SortedHorizontalEdges[i];
+                var CurrentY = CurrentEdge.a.YLoc;
+                var leftEnd = CurrentEdge.a.XLoc;
+                var rightEnd = CurrentEdge.b.XLoc;
+
+
+
+                //insert the points above CurrentY according to the -y coordinates 
+                while (index < PointIdArray.Length && g.VList[PointIdArray[index]].YLoc > CurrentY)
+                    PointTreeSortedByX.Insert(g.VList[PointIdArray[index++]]);
+
+                //do a search to find the intersecting points
+                var node1 = PointTreeSortedByX.FindLast(v => v.XLoc >= leftEnd);
+                var node2 = PointTreeSortedByX.FindFirst(v => v.XLoc <= rightEnd);
+                if (node1 != null && node1.Item.XLoc > rightEnd) node1 = null;
+                if (node2 != null && node2.Item.XLoc < leftEnd) node2 = null;
+                if (node1 == null || node2 == null) continue;
+
+
+                //collect all the candidate vertices
+                var node = node2;
+                List<Vertex> nodesToCheck = new List<Vertex>();
+
+                if (node1.Item.Id == node2.Item.Id) nodesToCheck.Add(node.Item);
+                else
+                {
+                    while (node.Item.Id != node1.Item.Id)
+                    {
+                        nodesToCheck.Add(node.Item);
+                        node = PointTreeSortedByX.Next(node);
+                    }
+                    nodesToCheck.Add(node.Item);
+                }
+
+
+                List<Vertex> addedVertices = new List<Vertex>();
+                List<Vertex> nodesToRemove = new List<Vertex>();
+                //filter out the nodes that must be connecte to the hEdge
+                foreach (var w in nodesToCheck)
+                {
+                    //find the bottommost neighbor of w
+                    Vertex CurrentVertex = w;
+                    Vertex bottomNeighbor;
+                    do
+                    {
+                        bottomNeighbor = CurrentVertex;
+                        for (int j = 0; j < g.DegList[CurrentVertex.Id]; j++)
+                        {
+                            Vertex Candidate = g.VList[g.EList[CurrentVertex.Id, j].NodeId];
+                            if (Candidate.YLoc < CurrentVertex.YLoc)
+                            {
+                                CurrentVertex = Candidate;
+                                break;
+                            }
+                        }
+                    } while (bottomNeighbor.Id != CurrentVertex.Id);
+                    if (bottomNeighbor.YLoc <= CurrentY) continue;
+
+                    //add a subdivision
+                    a = g.InsertVertex(bottomNeighbor.XLoc, CurrentY);
+                    addedVertices.Add(g.VList[a]);
+
+                    g.AddEdge(bottomNeighbor.Id, a);
+                    if (!HVEdges.ContainsKey(bottomNeighbor.XLoc))
+                        HVEdges[bottomNeighbor.XLoc] = new List<OrthogonalEdge>();
+                    HVEdges[bottomNeighbor.XLoc].Add(new OrthogonalEdge(bottomNeighbor, g.VList[a]));
+
+                    nodesToRemove.Add(w);
+
+                }
+
+
+                foreach (var newnode in addedVertices)
+                {
+                    g.AddEdge(CurrentEdge.a.Id, newnode.Id);
+                    if (!VHEdges.ContainsKey(newnode.YLoc))
+                        VHEdges[newnode.YLoc] = new List<OrthogonalEdge>();
+                    VHEdges[newnode.YLoc].Add(new OrthogonalEdge(CurrentEdge.a, newnode));
+
+                    g.AddEdge(CurrentEdge.b.Id, newnode.Id);
+                    if (!VHEdges.ContainsKey(newnode.YLoc))
+                        VHEdges[newnode.YLoc] = new List<OrthogonalEdge>();
+                    VHEdges[newnode.YLoc].Add(new OrthogonalEdge(CurrentEdge.b, newnode));
+
+                    g.RemoveEdge(CurrentEdge.a.Id, CurrentEdge.b.Id);
+                    if (VHEdges.ContainsKey(CurrentEdge.b.YLoc))
+                        VHEdges[CurrentEdge.b.YLoc].Remove(CurrentEdge);
+
+                    CurrentEdge = new OrthogonalEdge(newnode, CurrentEdge.a);
+                }
+
+                foreach (var w in nodesToRemove)
+                    PointTreeSortedByX.Remove(w);
+
+            }
+        }
+
+        public static void ProcessRightRays(Tiling g, Dictionary<int, int> Neighbors1, Dictionary<int, int> Neighbors8, int maxX, int maxY)
+        {
+            int a;
+            LineSegment l;
+            for (int i = 0; i < g.N; i++)
+            {
+                Vertex CurrentVertex = g.VList[i];
+                if (CurrentVertex.leftRay == null)
+                {
+                    Vertex Neighbor = null;
+                    Vertex Neighbor1 = null, Neighbor8 = null;
+                    //find the closest neighbor in C4
+                    double distance1 = double.MaxValue;
+                    if (Neighbors1.ContainsKey(g.VList[i].Id))
+                    {
+                        Neighbor1 = g.VList[Neighbors1[g.VList[i].Id]];
+                        distance1 = Math.Abs(Neighbor1.XLoc - CurrentVertex.XLoc) +
+                                    Math.Abs(Neighbor1.YLoc - CurrentVertex.YLoc);
+                    }
+                    //find the closest neighbor in C5
+                    double distance8 = double.MaxValue;
+                    if (Neighbors8.ContainsKey(g.VList[i].Id))
+                    {
+                        Neighbor8 = g.VList[Neighbors8[g.VList[i].Id]];
+                        distance8 = Math.Abs(Neighbor8.XLoc - CurrentVertex.XLoc) +
+                                    Math.Abs(Neighbor8.YLoc - CurrentVertex.YLoc);
+                    }
+
+
+                    //there is a ray that can stop the left ray
+                    if (distance1 == double.MaxValue && distance8 == double.MaxValue)
+                        Neighbor = g.VList[g.N + 2];
+                    else if (distance1 < distance8) Neighbor = Neighbor1;
+                    else Neighbor = Neighbor8;
+
+                    //check if the neighbor is on the same y line of current vertex
+                    if (CurrentVertex.YLoc == Neighbor.YLoc)
+                    {
+
+                        //find the left end vertex starting from the neighbor
+                        Vertex leftneighbor;
+                        do
+                        {
+                            leftneighbor = Neighbor;
+                            for (int j = 0; j < g.DegList[Neighbor.Id]; j++)
+                            {
+                                Vertex Candidate = g.VList[g.EList[Neighbor.Id, j].NodeId];
+                                if (Candidate.XLoc < Neighbor.XLoc)
+                                {
+                                    Neighbor = Candidate;
+                                    break;
+                                }
+                            }
+                        } while (leftneighbor.Id != Neighbor.Id);
+                        if (leftneighbor.XLoc <= CurrentVertex.XLoc) continue;
+                        //no need to find the right neighbor since this is the first time it is growing
+
+                        //add the edge 
+                        g.AddEdge(CurrentVertex.Id, Neighbor.Id);
+                        if (!VHEdges.ContainsKey(CurrentVertex.YLoc))
+                            VHEdges[CurrentVertex.YLoc] = new List<OrthogonalEdge>();
+                        VHEdges[CurrentVertex.YLoc].Add(new OrthogonalEdge(CurrentVertex, Neighbor));
+
+                    }
+                    else
+                    {
+                        //check if the right ray already hits a vertical Edge r
+                        OrthogonalEdge r = null;
+                        Vertex ClosestVertex = Neighbor;
+                        if (HVEdges.ContainsKey(Neighbor.XLoc))
+                        {
+                            foreach (var vEdge in HVEdges[Neighbor.XLoc])
+                            {
+                                //check if there is an edge already that is blocking, in that case it must be the ray from the neighbor
+                                if (vEdge.a.YLoc <= CurrentVertex.YLoc && vEdge.b.YLoc >= CurrentVertex.YLoc)
+                                {
+                                    r = vEdge;
+                                    break;
+                                }
+                                //otherwise find the vertex on the line that is the closest one and between the neighbor and current vertex
+                                if (Neighbor.YLoc > CurrentVertex.YLoc &&
+                                    Neighbor.YLoc >= vEdge.a.YLoc && vEdge.a.YLoc >= CurrentVertex.YLoc &&
+                                    Neighbor.YLoc >= vEdge.b.YLoc && vEdge.b.YLoc >= CurrentVertex.YLoc)
+                                {
+                                    if (Math.Abs(vEdge.a.YLoc - CurrentVertex.YLoc) <
+                                        Math.Abs(ClosestVertex.YLoc - CurrentVertex.YLoc)) ClosestVertex = vEdge.a;
+                                    if (Math.Abs(vEdge.b.YLoc - CurrentVertex.YLoc) <
+                                        Math.Abs(ClosestVertex.YLoc - CurrentVertex.YLoc)) ClosestVertex = vEdge.b;
+                                }
+                                else if (Neighbor.YLoc < CurrentVertex.YLoc &&
+                                         Neighbor.YLoc <= vEdge.a.YLoc && vEdge.a.YLoc <= CurrentVertex.YLoc &&
+                                         Neighbor.YLoc <= vEdge.b.YLoc && vEdge.b.YLoc <= CurrentVertex.YLoc)
+                                {
+                                    if (Math.Abs(vEdge.a.YLoc - CurrentVertex.YLoc) <
+                                        Math.Abs(ClosestVertex.YLoc - CurrentVertex.YLoc)) ClosestVertex = vEdge.a;
+                                    if (Math.Abs(vEdge.b.YLoc - CurrentVertex.YLoc) <
+                                        Math.Abs(ClosestVertex.YLoc - CurrentVertex.YLoc)) ClosestVertex = vEdge.b;
+                                }
+                            }
+                        }
+                        if (r != null)
+                        {
+                            a = g.InsertVertex(Neighbor.XLoc, CurrentVertex.YLoc);
+                            g.RemoveEdge(r.a.Id, r.b.Id);
+                            g.AddEdge(r.a.Id, a);
+                            g.AddEdge(r.b.Id, a);
+                            g.AddEdge(CurrentVertex.Id, a);
+
+                            if (!HVEdges.ContainsKey(Neighbor.XLoc))
+                                HVEdges[Neighbor.XLoc] = new List<OrthogonalEdge>();
+                            if (!VHEdges.ContainsKey(CurrentVertex.YLoc))
+                                VHEdges[CurrentVertex.YLoc] = new List<OrthogonalEdge>();
+                            HVEdges[Neighbor.XLoc].Remove(r);
+                            HVEdges[Neighbor.XLoc].Add(new OrthogonalEdge(r.a, g.VList[a]));
+                            HVEdges[Neighbor.XLoc].Add(new OrthogonalEdge(r.b, g.VList[a]));
+                            VHEdges[CurrentVertex.YLoc].Add(new OrthogonalEdge(CurrentVertex, g.VList[a]));
+                        }
+                        else
+                        {
+                            a = g.InsertVertex(ClosestVertex.XLoc, CurrentVertex.YLoc);
+                            g.AddEdge(CurrentVertex.Id, a);
+                            g.AddEdge(ClosestVertex.Id, a);
+
+                            if (!HVEdges.ContainsKey(Neighbor.XLoc))
+                                HVEdges[Neighbor.XLoc] = new List<OrthogonalEdge>();
+                            if (!VHEdges.ContainsKey(CurrentVertex.YLoc))
+                                VHEdges[CurrentVertex.YLoc] = new List<OrthogonalEdge>();
+                            VHEdges[CurrentVertex.YLoc].Add(new OrthogonalEdge(CurrentVertex, g.VList[a]));
+                            HVEdges[ClosestVertex.XLoc].Add(new OrthogonalEdge(ClosestVertex, g.VList[a]));
+
+                        }
+                    }
+
+
+
+                }
+            }
+        }
+
+
+        /*
+        public static void FastCompetitionMesh(Tiling g, Dictionary<int, Node> idToNode, int maxX, int maxY)
+        {
+
             // for testing purpose
             g.N = 10;
             g.VList[0].XLoc = 5; g.VList[0].YLoc = 1;
@@ -451,8 +1130,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             g.VList[7].XLoc = 9; g.VList[7].YLoc = 8;
             g.VList[8].XLoc = 8; g.VList[8].YLoc = 0;
             g.VList[9].XLoc = 0; g.VList[9].YLoc = 0;
-            */
-
+    
             double[] Px = new double[g.N];
             double[] Py = new double[g.N];
             int[] Pid = new int[g.N];
@@ -497,17 +1175,11 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             l = new LineSegment(maxX, 0, 0, 0);
             g.VList[d].leftRay = new Ray(l);
 
-            /*//Process each top ray
-            for (int i = 0; i < g.N; i++)
-            {
-                if (g.VList[i].topRay == null)
-                {
-
-                }
-            }*/
+             
 
 
         }
+*/
         public static Dictionary<int, int> ManhattanNearestNeighbor(double[] X, double[] Y, int[] ID, int ConeId, double maxX, double maxY)
         {
             double[] a = new double[ID.Length];
@@ -970,5 +1642,62 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         }
 
 
+    }
+
+    public class OrthogonalEdge
+    {
+        public Vertex a;
+        public Vertex b;
+
+        public OrthogonalEdge(Vertex p, Vertex q)
+        {
+            if (p.XLoc == q.XLoc)
+            {
+                if (p.YLoc < q.YLoc)
+                {
+                    a = p;
+                    b = q;
+                }
+                else
+                {
+                    a = q;
+                    b = p;
+                }
+            }
+            if (p.YLoc == q.YLoc)
+            {
+                if (p.XLoc < q.XLoc)
+                {
+                    a = p;
+                    b = q;
+                }
+                else
+                {
+                    a = q;
+                    b = p;
+                }
+            }
+        }
+
+    }
+    internal class yCoordinateComparator : IComparer<Vertex>
+    {
+
+        public int Compare(Vertex a, Vertex b)
+        {
+            if (a.YLoc < b.YLoc) return 1;
+            if (a.YLoc == b.YLoc) return 0;
+            return -1;
+        }
+    }
+    internal class xCoordinateComparator : IComparer<Vertex>
+    {
+
+        public int Compare(Vertex a, Vertex b)
+        {
+            if (a.XLoc < b.XLoc) return 1;
+            if (a.XLoc == b.XLoc) return 0;
+            return -1;
+        }
     }
 }
