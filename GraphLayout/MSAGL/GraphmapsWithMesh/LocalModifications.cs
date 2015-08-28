@@ -7,7 +7,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
     class LocalModifications
     {
 
-        public static void MsaglMoveToMedian(Tiling g, Dictionary<int, Node> idToNodes)
+        public static void MsaglMoveToMedian(MeshGraph g, Dictionary<int, Node> idToNodes)
         {
             int[,] listNeighbors = new int[20, 3];
             double[] d = new double[10];
@@ -140,7 +140,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         }
 
 
-        public static void MsaglStretchAccordingToZoomLevel(Tiling g, Dictionary<int, Node> idToNodes)
+        public static void MsaglStretchAccordingToZoomLevel(MeshGraph g, Dictionary<int, Node> idToNodes)
         {
             int[,] listNeighbors = new int[20, 3];
             double[] d = new double[10];

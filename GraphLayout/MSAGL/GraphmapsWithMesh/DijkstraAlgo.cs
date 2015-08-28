@@ -1,9 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Msagl.Core.DataStructures;
 
 namespace Microsoft.Msagl.GraphmapsWithMesh
 {
+
+
+    /*
+     * The only function we now use is MsaglAstarShortestPath - which I am trying to 
+     * replace with the shortest path function available in the visibilityGraph context
+     */
     class DijkstraAlgo
     {
         public List<VertexNeighbor> Edgelist = new List<VertexNeighbor>();
@@ -11,41 +18,141 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         public double Distance;
         public bool PathExists = true;
 
+        public List<int> MsaglAstarShortestPath(Vertex[] vList, Edge[,] eList, int[] degList, int source, int target, int n)
+        {
 
-        public Vertex getMin(List<Vertex> q)
+            var q = new BinaryHeapPriorityQueue(n);
+
+
+            vList[source].Dist = 0;
+            vList[source].Weight = vList[source].Dist +
+                                   MsaglUtilities.EucledianDistance(
+                                   vList[source].XLoc, vList[source].YLoc,
+                                   vList[target].XLoc, vList[target].YLoc);
+            q.Enqueue(source, vList[source].Weight);
+
+            for (int i = 0; i < n; i++)
+            {
+                if (vList[i].Id != source)
+                {
+                    vList[i].Dist = double.MaxValue;
+                    vList[i].Weight = double.MaxValue;
+                    q.Enqueue(i, vList[i].Weight);
+                }
+                vList[i].Parent = null;
+                vList[i].Visited = false;
+            }
+
+            Edgelist.Clear();
+            ShortestPath.Clear();
+            Distance = 0;
+
+            while (q.Count > 0)
+            {
+                Vertex u = vList[q.Dequeue()];
+                u.Visited = true;
+                if (u.Invalid) return new List<int>();
+                for (int neighb = 0; neighb < degList[u.Id]; neighb++)
+                {
+                    var neighborId = eList[u.Id, neighb].NodeId;
+                    int discourage = 0;
+                    if (eList[u.Id, neighb].Selected == 1) discourage = 1000;//continue;
+                    if (eList[u.Id, neighb].NodeId == source || eList[u.Id, neighb].NodeId == target) discourage = 0;
+                    if (u.Id == source || u.Id == target) discourage = 0;
+
+                    Vertex neighbor = vList[neighborId];
+                    double edist = MsaglUtilities.EucledianDistance(u.XLoc, u.YLoc, neighbor.XLoc, neighbor.YLoc);
+                    var tempDist = u.Dist + edist + discourage;
+                    if (tempDist >= neighbor.Dist) continue;
+
+                    neighbor.Dist = tempDist;
+                    var tempWeight = neighbor.Dist + MsaglUtilities.EucledianDistance(vList[target].XLoc, vList[target].YLoc, neighbor.XLoc, neighbor.YLoc);
+                    neighbor.Weight = tempWeight;
+                    neighbor.Parent = u;
+                    if (neighbor.Visited)
+                    {
+                        neighbor.Visited = false;
+                        q.Enqueue(neighbor.Id, neighbor.Weight);
+                    }
+                    else q.DecreasePriority(neighbor.Id, neighbor.Weight);
+                }
+                if (u.Id == target)
+                    break;
+            }
+
+            Vertex route = vList[target];
+            int zoomlevel = Math.Max(vList[source].ZoomLevel, vList[target].ZoomLevel);
+            while (route.Parent != null)
+            {
+                ShortestPath.Add(route.Id);
+                for (int neighb = 0; neighb < degList[route.Id]; neighb++)
+                    if (eList[route.Id, neighb].NodeId == route.Parent.Id)
+                    {
+                        SetUsed(vList, eList, degList, route.Id, eList[route.Id, neighb].NodeId, zoomlevel);
+                        Edgelist.Add(new VertexNeighbor(route.Id, neighb));
+
+                        Distance += Math.Sqrt((route.XLoc - route.Parent.XLoc) * (route.XLoc - route.Parent.XLoc) + (route.YLoc - route.Parent.YLoc) * (route.YLoc - route.Parent.YLoc));
+
+                        break;
+                    }
+
+                route = route.Parent;
+            }
+            ShortestPath.Add(route.Id);
+            if (route.Id != source) Console.WriteLine("path not found");
+            return ShortestPath;
+        }
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public Vertex GetMin(List<Vertex> q)
         {
             double m = double.MaxValue;
-            Vertex temp_vertex = null;
+            Vertex tempVertex = null;
             foreach (Vertex w in q)
             {
                 if (m > w.Dist)
                 {
                     m = w.Dist;
-                    temp_vertex = w;
+                    tempVertex = w;
                 }
             }
-            if (temp_vertex == null)
+            if (tempVertex == null)
             {
                 Console.WriteLine("Graph is disconnected");
                 return null;
             }
-            foreach (Vertex w in q)
+            if (q.Any(w => w.Id == tempVertex.Id))
             {
-                if (w.Id == temp_vertex.Id)
-                {
-                    q.Remove(temp_vertex);
-                    break;
-                }
+                q.Remove(tempVertex);
             }
 
-            return temp_vertex;
+            return tempVertex;
         }
 
         public void SelectShortestPath(Vertex[] vList, Edge[,] eList, int[] degList, int source, int target, int n)
         {
 
 
-            List<Vertex> q = new List<Vertex>();
+            var q = new List<Vertex>();
             vList[source].Dist = 0;
             q.Add(vList[source]);
             for (int i = 1; i <= n; i++)
@@ -64,9 +171,9 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
             while (q.Count > 0)
             {
-                Vertex u = getMin(q);
+                Vertex u = GetMin(q);
                 if (u.Visited) continue;
-                else u.Visited = true;
+                u.Visited = true;
                 for (int neighb = 1; neighb <= degList[u.Id]; neighb++)
                 {
                     var neighbor = eList[u.Id, neighb].NodeId;
@@ -123,96 +230,11 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         }
 
 
-        public List<int> MSAGLAstarShortestPath(Vertex[] vList, Edge[,] eList, int[] degList, int source, int target, int n)
+
+        public void MsaglSelectShortestPath(Vertex[] vList, Edge[,] eList, int[] degList, int source, int target, int n)
         {
 
-            BinaryHeapPriorityQueue q = new BinaryHeapPriorityQueue(n);
-            
- 
-            vList[source].Dist = 0;
-            vList[source].Weight = vList[source].Dist +
-                                   MsaglUtilities.EucledianDistance(
-                                   vList[source].XLoc, vList[source].YLoc, 
-                                   vList[target].XLoc,vList[target].YLoc);
-            q.Enqueue(source, vList[source].Weight);
-
-            for (int i = 0; i < n; i++)
-            {
-                if (vList[i].Id != source)
-                {
-                    vList[i].Dist = double.MaxValue;
-                    vList[i].Weight = double.MaxValue;
-                    q.Enqueue(i, vList[i].Weight);
-                }
-                vList[i].Parent = null;
-                vList[i].Visited = false;
-            }
-             
-            Edgelist.Clear();
-            ShortestPath.Clear();
-            Distance = 0;
-
-            while (q.Count > 0)
-            {                
-                Vertex u = vList[q.Dequeue()];
-                u.Visited = true;
-                if (u == null || u.Invalid) return new List<int>();                
-                for (int neighb = 0; neighb < degList[u.Id]; neighb++)
-                {
-                    var neighborId = eList[u.Id, neighb].NodeId;
-                    int discourage = 0;
-                    if (eList[u.Id, neighb].Selected == 1) discourage = 1000;//continue;
-                    if (eList[u.Id, neighb].NodeId == source || eList[u.Id, neighb].NodeId == target) discourage = 0;
-                    if (u.Id == source || u.Id == target) discourage = 0;
-
-                    Vertex neighbor = vList[neighborId];
-                    double edist = MsaglUtilities.EucledianDistance(u.XLoc, u.YLoc, neighbor.XLoc, neighbor.YLoc);
-                    var tempDist = u.Dist + edist + discourage;
-                    if (tempDist >= neighbor.Dist) continue;
-                     
-                    neighbor.Dist = tempDist;
-                    var tempWeight = neighbor.Dist + MsaglUtilities.EucledianDistance(vList[target].XLoc, vList[target].YLoc, neighbor.XLoc, neighbor.YLoc); 
-                    neighbor.Weight = tempWeight;
-                    neighbor.Parent = u;
-                    if (neighbor.Visited)
-                    {
-                        neighbor.Visited = false;
-                        q.Enqueue(neighbor.Id, neighbor.Weight);                    
-                    }
-                    else q.DecreasePriority(neighbor.Id,neighbor.Weight);                    
-                }
-                if (u.Id == target)
-                    break;
-            }
-
-            Vertex route = vList[target];
-            int zoomlevel = Math.Max(vList[source].ZoomLevel, vList[target].ZoomLevel);
-            while (route.Parent != null)
-            {
-                ShortestPath.Add(route.Id);
-                 for (int neighb = 0; neighb < degList[route.Id]; neighb++)
-                    if (eList[route.Id, neighb].NodeId == route.Parent.Id)
-                    {
-                        SetUsed(vList, eList, degList, route.Id, eList[route.Id, neighb].NodeId, zoomlevel);
-                        Edgelist.Add(new VertexNeighbor(route.Id, neighb));
-
-                        Distance += Math.Sqrt((route.XLoc - route.Parent.XLoc) * (route.XLoc - route.Parent.XLoc) + (route.YLoc - route.Parent.YLoc) * (route.YLoc - route.Parent.YLoc));
-
-                        break;
-                    }
-         
-                route = route.Parent;
-            }
-            ShortestPath.Add(route.Id);
-            if (route.Id != source) Console.WriteLine("path not found");
-            return ShortestPath;
-        }
-         
-
-        public void MSAGLSelectShortestPath(Vertex[] vList, Edge[,] eList, int[] degList, int source, int target, int n)
-        {
-
-            List<Vertex> q = new List<Vertex>();
+            var q = new List<Vertex>();
             vList[source].Dist = 0;
             q.Add(vList[source]);
             for (int i = 0; i <  n; i++)
@@ -231,10 +253,10 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
             while (q.Count > 0)
             {
-                Vertex u = getMin(q);
+                Vertex u = GetMin(q);
                 if (u == null) return;
                 if (u.Visited) continue;
-                else u.Visited = true;
+                u.Visited = true;
                 for (int neighb = 0; neighb < degList[u.Id]; neighb++)
                 {
                     var neighbor = eList[u.Id, neighb].NodeId;
@@ -260,8 +282,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
             Vertex route = vList[target];
 
-            //Console.WriteLine();
-            //Console.WriteLine("Source,Target" + source + " " + target);
+             
             while (route.Parent != null)
             {
                 //Console.Write(route.Id+" ");
@@ -275,19 +296,10 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
                         break;
                     }
-                /*
-                for (int neighb = 0; neighb <  degList[route.Parent.Id]; neighb++)
-                    if (eList[route.Parent.Id, neighb].NodeId == route.Id)
-                    {
-                        SetUsed(vList, eList, degList, route.Parent.Id, eList[route.Parent.Id, neighb].NodeId);
-                        Edgelist.Add(new VertexNeighbor(route.Parent.Id, neighb));
-
-                        break;
-                    }
-                 * */
+                
                 route = route.Parent;
             }
-            //Console.Write(route.Id + " ");
+            
             if (route.Id !=  source ) Console.WriteLine("path not found");
 
         }
@@ -299,7 +311,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 if ( eList[a, index].NodeId == b)
                 {
                     if (eList[a, index].Used > 0) return;
-                    else eList[a, index].Used = zoomlevel;
+                    eList[a, index].Used = zoomlevel;
                 }
             }
             for (int index = 0; index <  degList[b]; index++)
@@ -307,7 +319,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 if (eList[b, index].NodeId == a)
                 {
                     if (eList[b, index].Used > 0) return;
-                    else eList[b, index].Used = zoomlevel;
+                    eList[b, index].Used = zoomlevel;
                 }
             }
         }
@@ -393,14 +405,13 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
              }
 
-     */
 
 
         public void SelectShortestPathAvoidingNet(Vertex[] vList, Edge[,] eList, int[] degList, int source, int target, int n)
         {
 
 
-            PriorityQueue<double, Vertex> q = new PriorityQueue<double, Vertex>();
+            var q = new PriorityQueue<double, Vertex>();
             vList[source].Dist = 0;
             q.Enqueue(vList[source].Dist, vList[source]);
             for (int i = 1; i < n; i++)
@@ -421,7 +432,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             {
                 Vertex u = q.Dequeue().Value;
                 if (u.Visited) continue;
-                else u.Visited = true;
+                u.Visited = true;
                 for (int neighb = 1; neighb <= degList[u.Id]; neighb++)
                 {
                     var neighbor = eList[u.Id, neighb].NodeId;
@@ -444,7 +455,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             Vertex route = vList[target];
 
             if (route.Parent == null) { PathExists = false; return; }
-            else PathExists = true;
+            PathExists = true;
 
             while (route.Parent != null)
             {
@@ -476,6 +487,8 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
 
         }
+         * 
+     */
     }
     public class VertexNeighbor{
         public int A;

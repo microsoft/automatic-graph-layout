@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -23,7 +22,6 @@ using Microsoft.Msagl.Layout.OverlapRemovalFixedSegments;
 using Microsoft.Msagl.Miscellaneous;
 using Microsoft.Msagl.Miscellaneous.ConstrainedSkeleton;
 using Microsoft.Msagl.Miscellaneous.RegularGrid;
-using Microsoft.Msagl.Miscellaneous.Routing;
 using Microsoft.Msagl.Routing.Visibility;
 using Edge = Microsoft.Msagl.Core.Layout.Edge;
 using Point = Microsoft.Msagl.Core.Geometry.Point;
@@ -56,10 +54,11 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         /// <param name="geometryGraph"></param>
         /// <param name="lgLayoutSettings"></param>
         /// <param name="cancelToken"></param>
-        public LgInteractor(GeometryGraph geometryGraph, LgLayoutSettings lgLayoutSettings, CancelToken cancelToken) {
+        public LgInteractor(GeometryGraph geometryGraph, LgLayoutSettings lgLayoutSettings, CancelToken cancelToken){//}, GreedyNodeRailLevelCalculator calc) {
             _mainGeometryGraph = geometryGraph;
             _lgLayoutSettings = lgLayoutSettings;
             _cancelToken = cancelToken;
+            //this._calc = calc;
             if (geometryGraph.LgData == null) {
                 _lgData = new LgData(geometryGraph)
                 {
@@ -102,218 +101,63 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             }
         }
 
-        public Tiling[] calculateGraphsForEachZoomLevel(Tiling g, Dictionary<Node, int> nodeToId)
+        public MeshGraph[] CalculateGraphsForEachZoomLevel(MeshGraph g, Dictionary<Node, int> nodeToId)
         {
             Console.WriteLine("Calculating Graphs For Each ZoomLevel");
-            List<Tiling> graphs = new List<Tiling>();
-            Tiling OldGraphHolder = null;
-            DijkstraAlgo dijkstra = new DijkstraAlgo();
-            for (int i = 1; i <= g.maxTheoreticalZoomLevel; i *= 2)
+            var graphs = new List<MeshGraph>();
+            MeshGraph oldGraphHolder = null;
+            var dijkstra = new DijkstraAlgo();
+
+            //for each zoom level compute the induced subgraph and the shortest paths          
+            for (int zoomLevelCounter = 1; zoomLevelCounter <= g.MaxTheoreticalZoomLevel; zoomLevelCounter *= 2)
             {
-                Tiling graph = new Tiling(g.NumOfnodes, true);
-                graph.N = g.N;
-                for (int j = 0; j < g.NumOfnodes; j++)
-                {
-                    graph.VList[j] = new Vertex(g.VList[j].XLoc, g.VList[j].YLoc) { Id = g.VList[j].Id, ZoomLevel = g.VList[j].ZoomLevel };
-                    graph.VList[j].TargetX = graph.VList[j].PreciseX = graph.VList[j].XLoc;
-                    graph.VList[j].TargetY = graph.VList[j].PreciseY = graph.VList[j].YLoc;
-                }
-                 
-                if (OldGraphHolder != null)
-                {
-                    for (int j = 0; j < OldGraphHolder.NumOfnodes; j++)
-                    {
-                        for (int k = 0; k < OldGraphHolder.DegList[j]; k++)
-                        {
-                            graph.AddEdge(j, OldGraphHolder.EList[j, k].NodeId, OldGraphHolder.EList[j, k].Selected, OldGraphHolder.EList[j, k].Used);
-                        }
-                    }                
-                } 
-
-                foreach (Edge edge in _mainGeometryGraph.Edges)
-                {
-                    int sourceZoomLevel = g.VList[nodeToId[edge.Source]].ZoomLevel;
-                    int targetZoomLevel = g.VList[nodeToId[edge.Target]].ZoomLevel;
-                    if (sourceZoomLevel <= i && targetZoomLevel <= i)
-                    {
-
-                        if (sourceZoomLevel < i && targetZoomLevel < i)
-                        {
-                            //dijkstra.MSAGLAstarShortestPath(g.VList, g.EList, g.DegList, nodeToId[edge.Source], nodeToId[edge.Target], g.NumOfnodes);
-                            //foreach (VertexNeighbor vn in dijkstra.Edgelist)
-                                //graph.AddEdge(vn.A, g.EList[vn.A, vn.Neighbor].NodeId, g.EList[vn.A, vn.Neighbor].Selected, g.EList[vn.A, vn.Neighbor].Used);
-                            int[] p = OldGraphHolder.pathList[edge].ToArray();
-                            for (int pindex = 0; pindex < p.Length - 1; pindex++)
-                            {
-                                int dindex = 0;
-                                for (dindex = 0; dindex < g.DegList[p[pindex]] ; dindex++)
-                                    if (g.EList[p[pindex], dindex].NodeId == p[pindex + 1]) break;
-                                graph.AddEdge(p[pindex], p[pindex + 1], g.EList[p[pindex], dindex].Selected, g.EList[p[pindex], dindex].Used);
-                            }
-                            graph.pathList[edge] = OldGraphHolder.pathList[edge];
-                            continue;
-                        }
-                        else graph.pathList[edge] = new List<int>();
-                        
-                        List<int> pathvertices = dijkstra.MSAGLAstarShortestPath(g.VList, g.EList, g.DegList, nodeToId[edge.Source], nodeToId[edge.Target], g.NumOfnodes);
-                        
-                        foreach (int vertexId in pathvertices)
-                        {
-                            graph.pathList[edge].Add(vertexId);
-                            //if (!graph.JunctionToEdgeList.ContainsKey(vertexId))
-                                //graph.JunctionToEdgeList[vertexId] = new List<Microsoft.Msagl.Core.Layout.Edge>();
-                            //graph.JunctionToEdgeList[vertexId].Add(edge);
-                        }
-                        foreach (VertexNeighbor vn in dijkstra.Edgelist)
-                            graph.AddEdge(vn.A, g.EList[vn.A, vn.Neighbor].NodeId, g.EList[vn.A, vn.Neighbor].Selected, g.EList[vn.A, vn.Neighbor].Used);
-                    }
-                }
-                OldGraphHolder= graph;
+                var graph = ConstructGraphForThisZoomLevel(g, oldGraphHolder);
+                oldGraphHolder = ComputeShortestPathsInThisGraph(g, nodeToId, zoomLevelCounter, oldGraphHolder, graph, dijkstra);
                 graphs.Add(graph);
             }
-            //return graphs.ToArray();
-
+ 
+            //simplify the degree two paths - make it somewhat straight
             Console.WriteLine("Simplifying POlygonal Paths");
-
-            foreach (Tiling graph in graphs)
+            foreach (MeshGraph graph in graphs)
             {
                 //find all degree two vertices.
-                List<int> Deg2Vertices = new List<int>();
+                var deg2Vertices = new List<int>();
                 for(int j=graph.N; j <graph.NumOfnodes;j++){
-                    if (graph.DegList[j] == 2) Deg2Vertices.Add(j);
+                    if (graph.DegList[j] == 2) deg2Vertices.Add(j);
                     graph.VList[j].Visited = false;
                 }
-                foreach(int w in Deg2Vertices){
-                    if(graph.VList[w].Visited)continue;
-                    //find the one end of the path
-                    int currentVertexId = w;
-                    int oldVertexId = -1;
-                    while (graph.DegList[currentVertexId] == 2 && currentVertexId >= g.N)
-                    {
-                        int neighbor1 = graph.EList[currentVertexId,0].NodeId; ;
-                        int neighbor2 = graph.EList[currentVertexId,1].NodeId; ;                        
-                        if(oldVertexId != neighbor1){oldVertexId = currentVertexId;currentVertexId = neighbor1; }
-                        else if(oldVertexId != neighbor2){oldVertexId = currentVertexId;currentVertexId = neighbor2; }                        
-                    }
-                    
-                    //find the path from this end 
-                    var tempId =oldVertexId;
-                    oldVertexId = currentVertexId;
-                    currentVertexId=tempId;
-                    
-                    List<int> path = new List<int>();
-                    path.Add(oldVertexId);
-                    path.Add(currentVertexId);
-                    graph.VList[oldVertexId].Visited = true;
-                    graph.VList[currentVertexId].Visited=true;
 
-                    //find the path and add it into a list
-                    while (graph.DegList[currentVertexId] == 2 && currentVertexId>=g.N)
-                    {
-                        int neighbor1 = graph.EList[currentVertexId,0].NodeId; ;
-                        int neighbor2 = graph.EList[currentVertexId,1].NodeId; ;                        
-                        if(oldVertexId != neighbor1){oldVertexId = currentVertexId;currentVertexId = neighbor1; }
-                        else if(oldVertexId != neighbor2){oldVertexId = currentVertexId;currentVertexId = neighbor2; }
-                        path.Add(currentVertexId);
-                        graph.VList[currentVertexId].Visited=true;
-                    }
+
+                foreach(int degreeTwoVertex in deg2Vertices){
+                    if(graph.VList[degreeTwoVertex].Visited)continue;
+                    //find the corresponding path
+                    var path = FindTheCorrespondingPath(g, degreeTwoVertex, graph);
 
                     int [] pathVertices = path.ToArray();
-                    Point [] PointList  = new Point[path.Count];
+                    var PointList  = new Point[path.Count];
                     int q=0;
                     foreach (int vertex in path) { 
                         PointList[q++] = new Point(graph.VList[vertex].XLoc, graph.VList[vertex].YLoc);
                         if (MsaglUtilities.EucledianDistance(99, 60, graph.VList[vertex].XLoc, graph.VList[vertex].YLoc) < 2)
                             Console.WriteLine();
                     }
+                    //perform path simplification
                     LocalModifications.PolygonalChainSimplification(PointList,0,PointList.Length -1,10);
 
                     //Modify graph according to the simplified path
-                    for(int currentPoint = 0; currentPoint< PointList.Length-1;){
-                        int nextPoint = currentPoint+1;
-                        for(; nextPoint < PointList.Length; nextPoint++){
-                            if(PointList[nextPoint].X==-1){
-                                //////graph.RemoveEdge(pathVertices[nextPoint], pathVertices[nextPoint-1]);
-                                continue;
-                            }
-                            else {
-                                //////graph.RemoveEdge(pathVertices[nextPoint], pathVertices[nextPoint - 1]);
-                                break;
-                            }
-                        }
-                        if(nextPoint < PointList.Length){
-                            //////graph.AddEdge(pathVertices[nextPoint], pathVertices[currentPoint]);
-                            int left = currentPoint;
-                            int right = nextPoint;
-                            while (graph.noCrossings(pathVertices, pathVertices[left], pathVertices[right]) == false && left < right) {
-                                left++; right--;
-                            }
-                            if(left<right){
-                                //connect each path vertrex in between to this path
-                                for (int index = left + 1; index < right; index++)
-                                {
-                                    Vertex intermediateVertex = graph.VList[pathVertices[index]];
-                                    Vertex leftVertex = graph.VList[pathVertices[left]];
-                                    Vertex rightVertex = graph.VList[pathVertices[right]];
-                                    Microsoft.Msagl.Core.Geometry.Point p = PointToSegmentDistance.getClosestPoint
-                                                                            (leftVertex, rightVertex, intermediateVertex);
-                                    intermediateVertex.PreciseX =  p.X;
-                                    intermediateVertex.PreciseY = p.Y;
-
-                                    intermediateVertex.LeftX = leftVertex.XLoc;
-                                    intermediateVertex.LeftY = leftVertex.YLoc;
-                                    intermediateVertex.RightX = rightVertex.XLoc;
-                                    intermediateVertex.RightY = rightVertex.YLoc;
-
-                                    //foreach (Edge edge in graph.JunctionToEdgeList[intermediateVertex.Id])
-                                    //{
-                                    //graph.pathList[edge].Remove(intermediateVertex.Id);
-                                    //}
-                                }
-                            }
-                            currentPoint = nextPoint;
-                        }
-                    }
+                    AddTheSimplificationInformationToTheGraph(PointList, graph, pathVertices);
                 }
              }
              
-            Tiling[] allGraphs = graphs.ToArray();
-            
+            var allGraphs = UpdateGraphsForAnimation(graphs);
 
-            /*
-            int gIndex = 0;
-            for (int i = 1; i <= g.maxTheoreticalZoomLevel; i *= 2)
-            {
-                Tiling graph = allGraphs[gIndex];
+            return allGraphs;
+        }
 
-                foreach (Edge edge in _mainGeometryGraph.Edges)
-                {
-                    int sourceZoomLevel = g.VList[nodeToId[edge.Source]].ZoomLevel;
-                    int targetZoomLevel = g.VList[nodeToId[edge.Target]].ZoomLevel;
-                    if (sourceZoomLevel <= i && targetZoomLevel <= i)
-                    {
+        private static MeshGraph[] UpdateGraphsForAnimation(List<MeshGraph> graphs)
+        {
+            MeshGraph[] allGraphs = graphs.ToArray();
 
-                        //graph.pathList[edge].Clear();
-                        if (sourceZoomLevel < i && targetZoomLevel < i)
-                        {
-                            graph.pathList[edge] = allGraphs[gIndex - 1].pathList[edge];
-                            continue;
-                        }
-                        else graph.pathList[edge].Clear();
- 
-                        List<int> pathvertices = dijkstra.MSAGLAstarShortestPath(g.VList, g.EList, g.DegList, nodeToId[edge.Source], nodeToId[edge.Target], g.NumOfnodes);
-
-                        foreach (int vertexId in pathvertices)                        
-                            graph.pathList[edge].Add(vertexId); 
-                        
-                        //foreach (VertexNeighbor vn in dijkstra.Edgelist)
-                            //graph.AddEdge(vn.A, g.EList[vn.A, vn.Neighbor].NodeId, g.EList[vn.A, vn.Neighbor].Selected, g.EList[vn.A, vn.Neighbor].Used);
-                    }
-                }
-                gIndex++;
-            }
-             * */
- 
             for (int index = 0; index < allGraphs.Length; index++)
             {
                 for (int nodeindex = allGraphs[index].N; nodeindex < allGraphs[index].NumOfnodes; nodeindex++)
@@ -330,32 +174,201 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                     }
                 }
             }
-
             return allGraphs;
         }
-        public void RunForMsaglFiles()
+
+        private static void AddTheSimplificationInformationToTheGraph(Point[] PointList, MeshGraph graph, int[] pathVertices)
         {
-            Dictionary<Node, int> nodeToId;
+            for (int currentPoint = 0; currentPoint < PointList.Length - 1;)
+            {
+                int nextPoint = currentPoint + 1;
+                for (; nextPoint < PointList.Length; nextPoint++)
+                {
+                    if (PointList[nextPoint].X != -1)
+                    {
+                        break;
+                    }
+                }
+                if (nextPoint < PointList.Length)
+                {
+                    //////graph.AddEdge(pathVertices[nextPoint], pathVertices[currentPoint]);
+                    int left = currentPoint;
+                    int right = nextPoint;
+                    while (graph.NoCrossings(pathVertices, pathVertices[left], pathVertices[right]) == false && left < right)
+                    {
+                        left++;
+                        right--;
+                    }
+                    if (left < right)
+                    {
+                        //connect each path vertrex in between to this path
+                        for (int index = left + 1; index < right; index++)
+                        {
+                            Vertex intermediateVertex = graph.VList[pathVertices[index]];
+                            Vertex leftVertex = graph.VList[pathVertices[left]];
+                            Vertex rightVertex = graph.VList[pathVertices[right]];
+                            Microsoft.Msagl.Core.Geometry.Point p = PointToSegmentDistance.GetClosestPoint
+                                (leftVertex, rightVertex, intermediateVertex);
+                            intermediateVertex.PreciseX = p.X;
+                            intermediateVertex.PreciseY = p.Y;
 
-            var g = TryCompetitionMeshApproach(out nodeToId);
+                            intermediateVertex.LeftX = leftVertex.XLoc;
+                            intermediateVertex.LeftY = leftVertex.YLoc;
+                            intermediateVertex.RightX = rightVertex.XLoc;
+                            intermediateVertex.RightY = rightVertex.YLoc;
+                        }
+                    }
+                    currentPoint = nextPoint;
+                }
+            }
+        }
+
+        private static List<int> FindTheCorrespondingPath(MeshGraph g, int w, MeshGraph graph)
+        {
+//find the one end of the path
+            int currentVertexId = w;
+            int oldVertexId = -1;
+            while (graph.DegList[currentVertexId] == 2 && currentVertexId >= g.N)
+            {
+                int neighbor1 = graph.EList[currentVertexId, 0].NodeId;
+                int neighbor2 = graph.EList[currentVertexId, 1].NodeId;
+                if (oldVertexId != neighbor1)
+                {
+                    oldVertexId = currentVertexId;
+                    currentVertexId = neighbor1;
+                }
+                else if (oldVertexId != neighbor2)
+                {
+                    oldVertexId = currentVertexId;
+                    currentVertexId = neighbor2;
+                }
+            }
+
+            //find the path from this end 
+            var tempId = oldVertexId;
+            oldVertexId = currentVertexId;
+            currentVertexId = tempId;
+
+            var path = new List<int> {oldVertexId, currentVertexId};
+            graph.VList[oldVertexId].Visited = true;
+            graph.VList[currentVertexId].Visited = true;
+
+            //find the path and add it into a list
+            while (graph.DegList[currentVertexId] == 2 && currentVertexId >= g.N)
+            {
+                int neighbor1 = graph.EList[currentVertexId, 0].NodeId;
+                int neighbor2 = graph.EList[currentVertexId, 1].NodeId;
+                if (oldVertexId != neighbor1)
+                {
+                    oldVertexId = currentVertexId;
+                    currentVertexId = neighbor1;
+                }
+                else if (oldVertexId != neighbor2)
+                {
+                    oldVertexId = currentVertexId;
+                    currentVertexId = neighbor2;
+                }
+                path.Add(currentVertexId);
+                graph.VList[currentVertexId].Visited = true;
+            }
+            return path;
+        }
+
+        private MeshGraph ComputeShortestPathsInThisGraph(MeshGraph g, Dictionary<Node, int> nodeToId, int i, MeshGraph oldGraphHolder,
+            MeshGraph graph, DijkstraAlgo dijkstra)
+        {
+            foreach (Edge edge in _mainGeometryGraph.Edges)
+            {
+                int sourceZoomLevel = g.VList[nodeToId[edge.Source]].ZoomLevel;
+                int targetZoomLevel = g.VList[nodeToId[edge.Target]].ZoomLevel;
+                if (sourceZoomLevel <= i && targetZoomLevel <= i)
+                {
+                    if (sourceZoomLevel < i && targetZoomLevel < i)
+                    {
+                        if (oldGraphHolder != null)
+                        {
+                            int[] p = oldGraphHolder.PathList[edge].ToArray();
+                            for (int pindex = 0; pindex < p.Length - 1; pindex++)
+                            {
+                                int dindex;
+                                for (dindex = 0; dindex < g.DegList[p[pindex]]; dindex++)
+                                    if (g.EList[p[pindex], dindex].NodeId == p[pindex + 1]) break;
+                                graph.AddEdge(p[pindex], p[pindex + 1], g.EList[p[pindex], dindex].Selected,
+                                    g.EList[p[pindex], dindex].Used);
+                            }
+                        }
+                        if (oldGraphHolder != null) graph.PathList[edge] = oldGraphHolder.PathList[edge];
+                        continue;
+                    }
+                    graph.PathList[edge] = new List<int>();
+
+                    List<int> pathvertices = dijkstra.MsaglAstarShortestPath(g.VList, g.EList, g.DegList, nodeToId[edge.Source],
+                        nodeToId[edge.Target], g.NumOfnodes);
+
+                    foreach (int vertexId in pathvertices)
+                    {
+                        graph.PathList[edge].Add(vertexId);
+                    }
+                    foreach (VertexNeighbor vn in dijkstra.Edgelist)
+                        graph.AddEdge(vn.A, g.EList[vn.A, vn.Neighbor].NodeId, g.EList[vn.A, vn.Neighbor].Selected,
+                            g.EList[vn.A, vn.Neighbor].Used);
+                }
+            }
+            oldGraphHolder = graph;
+            return oldGraphHolder;
+        }
+
+        private static MeshGraph ConstructGraphForThisZoomLevel(MeshGraph g, MeshGraph oldGraphHolder)
+        {
+            var graph = new MeshGraph(g.NumOfnodes, true) {N = g.N};
+            for (int j = 0; j < g.NumOfnodes; j++)
+            {
+                graph.VList[j] = new Vertex(g.VList[j].XLoc, g.VList[j].YLoc)
+                {
+                    Id = g.VList[j].Id,
+                    ZoomLevel = g.VList[j].ZoomLevel
+                };
+                graph.VList[j].TargetX = graph.VList[j].PreciseX = graph.VList[j].XLoc;
+                graph.VList[j].TargetY = graph.VList[j].PreciseY = graph.VList[j].YLoc;
+            }
+
+            if (oldGraphHolder != null)
+            {
+                for (int j = 0; j < oldGraphHolder.NumOfnodes; j++)
+                {
+                    for (int k = 0; k < oldGraphHolder.DegList[j]; k++)
+                    {
+                        graph.AddEdge(j, oldGraphHolder.EList[j, k].NodeId, oldGraphHolder.EList[j, k].Selected,
+                            oldGraphHolder.EList[j, k].Used);
+                    }
+                }
+            }
+            return graph;
+        }
+
+        public void EntranceOfGraphVisualizationUsingCompetitionMesh()
+        {
+            Dictionary<Node, int> FromNodeToId;
+
+            //read the graph, build the competition mesh, route the edges 
+            var g = TryCompetitionMeshApproach(out FromNodeToId);            
             
+            //compute the graph at each zoom level, because you need to do local 
+            //path simplification and animation between zoomlevels
+            MeshGraph[] graphs = CalculateGraphsForEachZoomLevel(g, FromNodeToId);            
 
-            Tiling[] graphs = calculateGraphsForEachZoomLevel(g, nodeToId);            
-            RenderGraphForEachZoomLevel(graphs,  nodeToId);
-
-            //g = graphs[0];
-            //RenderGraph( g,   nodeToId);
-
+            //fill the rails of each zoomlevel
+            RenderGraphForEachZoomLevel(graphs,  FromNodeToId);             
         }
 
 
-        public void RenderGraphForEachZoomLevel(Tiling[] g, Dictionary<Node, int> nodeToId)
+        public void RenderGraphForEachZoomLevel(MeshGraph[] g, Dictionary<Node, int> nodeToId)
         {
        
             //until all edges are added create a layer and add vertices one after another
             int layer = 0;
             int plottedNodeCount = 0;
-            List<Node> nodes = new List<Node>();
+            var nodes = new List<Node>();
             var level = CreateLevel(layer);
 
             foreach (var node in _mainGeometryGraph.Nodes)
@@ -373,7 +386,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 if (layer >= g.Length)  graphLayer = g.Length - 1;
                 double nodeOnlyZoomLevel = Math.Log(g[graphLayer].VList[nodeToId[node.GeometryNode]].ZoomLevel,2);
 
-                //Console.WriteLine("vertex level " + node.GeometryNode + " : " + layer + " " + nodeOnlyZoomLevel+" " +g[graphLayer].VList[nodeToId[node.GeometryNode]].ZoomLevel);
+                //Console.WriteLine("vertex level " + node.GeometryNode + " : " + layer + " " + nodeOnlyZoomLevel+" " +g[graphLayer].VList[fromNodeToId[node.GeometryNode]].ZoomLevel);
 
                 while (nodeOnlyZoomLevel > layer || MsaglNodeSuccessfullyPlotted(g[graphLayer], level, plottedNodeCount, nodes, nodeToId) == false)
                 {
@@ -406,13 +419,13 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 
 
-        public void RenderGraph(Tiling g, Dictionary<Node, int> nodeToId)
+        public void RenderGraph(MeshGraph g, Dictionary<Node, int> nodeToId)
         {
         
             //until all edges are added create a layer and add vertices one after another
             int layer = 0;
             int plottedNodeCount = 0;
-            List<Node> nodes = new List<Node>();
+            var nodes = new List<Node>();
             var level = CreateLevel(layer);
 
             foreach (var node in _mainGeometryGraph.Nodes)
@@ -448,153 +461,116 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             Console.WriteLine("Total Ink " + ink);
              
         }
-        private Tiling TryCompetitionMeshApproach(out Dictionary<Node, int> nodeToId)
+        private MeshGraph TryCompetitionMeshApproach(out Dictionary<Node, int> fromNodeToId)
         {
+            var fromIdToNode = new Dictionary<int, Node>();
+            fromNodeToId = new Dictionary<Node, int>();
             Console.WriteLine("Nodes = " + _mainGeometryGraph.Nodes.Count + "Edges = " + _mainGeometryGraph.Edges.Count);
 
             //create a set of nodes and empty edges 
-            Tiling g = new Tiling(_mainGeometryGraph.Nodes.Count, true);
+            var meshGraph = new MeshGraph(_mainGeometryGraph.Nodes.Count, true);
 
-            Dictionary<int, Node> idToNode = new Dictionary<int, Node>();
-            nodeToId = new Dictionary<Node, int>();
 
-            //this._lgLayoutSettings.MaxNumberOfNodesPerTile = 5;
-            //this._lgLayoutSettings.MaxNumberOfRailsPerTile = 10;
 
+            //create connected graph method is very slow, but without it we have exception :(
             CreateConnectedGraphs();
             FillGeometryNodeToLgInfosTables();
             LevelCalculator.RankGraph(_lgData, _mainGeometryGraph);
             LayoutTheWholeGraph(); 
 
-            int maxY;
-            var maxX = CreateNodePositions(g, nodeToId, idToNode, out maxY);
+            //collect the node positions after multidimensional scaling 
+            int maxYofThePoints, maxXofThePoints;
+            CreateNodePositions(meshGraph, fromNodeToId, fromIdToNode, out maxYofThePoints, out maxXofThePoints);
 
-            //create competitionMesh of G //less than a minute for 1500 vertices and 5000 edges
-            /*
-            * CCM:CCMWLP
-            * 
-            seed   Spanning R      Avg Spanning R
-            1     1.67:1.45 		1.238:1.225
-            2     1.61:1.41 		1.232:1.212
-            3     1.80:1.71		1.240:1.228
-            4     1.78:1.49		1.241:1.225
+            
+            /*we can use any of the following three technique for mesh creation
+            * the first and second ones are sow
             */
-            //MeshCreator.CreateMeshByLayers(g, idToNode, maxX, maxY);
+
             //MeshCreator.CreateCompetitionMesh(g, idToNode, maxX, maxY);
-            MeshCreator.FastCompetitionMesh(g, idToNode, maxX, maxY);
             //MeshCreator.CreateCompetitionMeshWithLeftPriority(g, idToNode, maxX, maxY);
 
-            //Compute Spanning ratio
-            //ComputeSpanningRatio(g);
+            //create a competition mesh - fast enough to handle large graphs
+            MeshCreator.FastCompetitionMesh(meshGraph, fromIdToNode, maxXofThePoints, maxXofThePoints);
 
-
-            //Create Detour //less than a minute for 1500 vertices and 5000 edges
+              
+            //Create polygon around each vertex so that routing can find detour
             Console.WriteLine("Computing Detour Around Vertex");
-            g.MsaglDetour(idToNode);
+            meshGraph.MsaglPolygonAroundVertices(fromIdToNode);
 
-
-            //Compute the EdgeList for each vertex
-            var AdjacencyList = BuildAdjacencyListFromEdgeList();
-
+             
+            //this is a local refinement loop that at each iteration improves the quality of the mesh
+            //you can comment out the functionalities RemoveLongEdgesFromThinFaces MsaglMoveToMedian
+            //MsaglRemoveDeg2 for improving performance           
             for (int iteration = 1; iteration <= 2; iteration++)
             {
-                //UPDATE ACCORDING TO DIJKSTRA            
                 Console.WriteLine("Computing Edge Routes");
-                var g1 = ComputeEdgeRoutes(g, nodeToId, AdjacencyList);
-                PlanarGraphUtilities.TransformToGeometricPlanarGraph(g1);
-                PlanarGraphUtilities.RemoveLongEdgesFromThinFaces(g1);
-                g = g1;
+                var tempMeshGraph = ComputeEdgeRoutes(meshGraph, fromNodeToId);
+
+                
+                //removing thin faces in the mesh this is slow, needs improvement for large graph
+                PlanarGraphUtilities.TransformToGeometricPlanarGraph(tempMeshGraph);
+                PlanarGraphUtilities.RemoveLongEdgesFromThinFaces(tempMeshGraph);
 
 
-                //Move the points towards median
-                Console.WriteLine("Moving junctions to minimize ink");
-                //LocalModifications.MsaglStretchAccordingToZoomLevel(g, idToNode);
-                LocalModifications.MsaglMoveToMedian(g, idToNode);
+                meshGraph = tempMeshGraph;
 
 
-                //Remove Deg 2 Nodes when possible //less than a minute for 1500 vertices and 5000 edges
+                //Move the points towards median to minimize the ink ; this is slow for checking edge crossing
+                Console.WriteLine("Moving junctions to minimize ink");                
+                LocalModifications.MsaglMoveToMedian(meshGraph, fromIdToNode);
+
+
+                //Remove Deg 2 Nodes when possible this is fast - but let see if we can improve when we check edge crossing
                 Console.WriteLine("Removing Deg 2 junctions");
-                g.MsaglRemoveDeg2(idToNode);
+                meshGraph.MsaglRemoveDeg2(fromIdToNode);
             }
                          
-            return g;
+            return meshGraph;
         }
+         
 
-        private Dictionary<Node, List<Edge>> BuildAdjacencyListFromEdgeList()
+        private void CreateNodePositions(MeshGraph g, Dictionary<Node, int> nodeToId, Dictionary<int, Node> idToNode, out int maxY, out int maxX)
         {
-            Dictionary<Node, List<Edge>> AdjacencyList = new Dictionary<Node, List<Edge>>();
-            foreach (Node node in _mainGeometryGraph.Nodes)
-            {
-                List<Edge> EdgeList = new List<Edge>();
-                foreach (Edge edge in _mainGeometryGraph.Edges)
-                {
-                    if (edge.Source.ToString().Equals(node.ToString()) || edge.Target.ToString().Equals(node.ToString()))
-                    {
-                        if (_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel <=
-                            _lgData.GeometryNodesToLgNodeInfos[node].ZoomLevel &&
-                            _lgData.GeometryNodesToLgNodeInfos[edge.Target].ZoomLevel <=
-                            _lgData.GeometryNodesToLgNodeInfos[node].ZoomLevel)
-                            EdgeList.Add(edge);
-                    }
-                }
-                AdjacencyList.Add(node, EdgeList);
-            }
-            return AdjacencyList;
-        }
-
-        private int CreateNodePositions(Tiling g, Dictionary<Node, int> nodeToId, Dictionary<int, Node> idToNode, out int maxY)
-        {
-            PointSet ps = new PointSet(_mainGeometryGraph.Nodes.Count);
+            
             //find maxX and maxY
-            int maxX = 0;
+            maxX = 0;
             maxY = 0;
-
-            /*
-            int nodeIndex = 0;
-            foreach (Node node in _mainGeometryGraph.Nodes)
-            {
-                node.Center = new Point((int) ps.Pt[nodeIndex].X, (int) ps.Pt[nodeIndex].Y);                
-                g.VList[nodeIndex] = new Vertex((int) ps.Pt[nodeIndex].X, (int) ps.Pt[nodeIndex].Y) {Id = nodeIndex};
-                nodeToId.Add(node, nodeIndex);
-                idToNode.Add(nodeIndex, node);
-                if (node.Center.X > maxX) maxX = ps.Pt[nodeIndex].X + 5; //(int)node.Center.X+10;
-                if (node.Center.Y > maxY) maxY = ps.Pt[nodeIndex].Y + 5; //(int)node.Center.Y+10;
-                nodeIndex++;
-            }
-            */
-
+ 
             //check if negative coordinate
-            double minX = 0;
-            double minY = 0; 
-            foreach (Node node in _mainGeometryGraph.Nodes)
-            { 
-                if (node.Center.X < minX) minX =  node.Center.X ;
-                if (node.Center.Y < minY) minY =  node.Center.Y ;
-            }
-
-            //shift to positive coordinate
-            int nodeIndex = 0;
-            foreach (Node node in _mainGeometryGraph.Nodes)
-            {
-                nodeToId.Add(node, nodeIndex);
-                idToNode.Add(nodeIndex, node);
-                node.Center  = new Point((int)(node.Center.X-minX+5), (int)(node.Center.Y-minY+5));
-                if (node.Center.X > maxX) maxX = (int)node.Center.X;
-                if (node.Center.Y > maxY) maxY = (int)node.Center.Y;
-                nodeIndex++;
-            }
+            MovePointSetSoThatAllPointsHavePositiveCoordinates(nodeToId, idToNode, ref maxY, ref maxX);
 
             //bound the graph inside a 100 by 100 box
-            foreach (Node node in _mainGeometryGraph.Nodes)
-            {
-                var x = (node.Center.X / maxX) * 100;
-                var y = (node.Center.Y / maxY) * 100;
-                node.Center = new Point((int)x, (int)y);
-                g.VList[nodeToId[node]] = new Vertex((int)node.Center.X, (int)node.Center.Y) { Id = nodeToId[node] };
-            }
+            ScaleDownAllThePointsInSmallBox(g, nodeToId, maxY, maxX);
 
             //make sure that no two nodes are on the same position
-            for (int i = 0; i < g.NumOfnodes;i++ )
+            MakeSureThatNoTwoPointsAreOnSamePosition(g, idToNode, ref maxY, ref maxX);
+
+            //Assign to each node a zoom level based on node quota
+            AssignInitialZoomLevelToEachNodeBasedOnQuota(g, nodeToId);
+        }
+
+        private void AssignInitialZoomLevelToEachNodeBasedOnQuota(MeshGraph g, Dictionary<Node, int> nodeToId)
+        {
+            _lgData.SortedLgNodeInfos = new List<LgNodeInfo>();
+
+            LevelCalculator.SetNodeZoomLevelsAndRouteEdgesOnLevels(_lgData, _mainGeometryGraph, _lgLayoutSettings);
+            foreach (var node in _lgData.SortedLgNodeInfos)
+            {
+                var l = (int) node.ZoomLevel;
+                g.VList[nodeToId[node.GeometryNode]].ZoomLevel = l;
+                if (g.MaxTheoreticalZoomLevel < l) g.MaxTheoreticalZoomLevel = l;
+            }
+            _lgData.Levels.Clear();
+
+
+            _mainGeometryGraph.UpdateBoundingBox();
+        }
+
+        private static void MakeSureThatNoTwoPointsAreOnSamePosition(MeshGraph g, Dictionary<int, Node> idToNode, ref int maxY,
+            ref int maxX)
+        {
+            for (int i = 0; i < g.NumOfnodes; i++)
             {
                 while (g.GetNodeOtherthanThis(i, g.VList[i].XLoc, g.VList[i].YLoc) >= 0)
                 {
@@ -613,107 +589,146 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 if (g.VList[i].XLoc > maxX) maxX = g.VList[i].XLoc;
                 if (g.VList[i].YLoc > maxY) maxY = g.VList[i].YLoc;
             }
-
-
-            _lgData.SortedLgNodeInfos = new List<LgNodeInfo>();
-
-            //FillGeometryNodeToLgInfosTables();
-            //CreateConnectedGraphs();
-            //LevelCalculator.RankGraph(_lgData, _mainGeometryGraph);
-
-            LevelCalculator.SetNodeZoomLevelsAndRouteEdgesOnLevels(_lgData, _mainGeometryGraph, _lgLayoutSettings);
-
-            foreach (var node in _lgData.SortedLgNodeInfos)
-            {
-                int l = (int) node.ZoomLevel;
-                g.VList[nodeToId[node.GeometryNode]].ZoomLevel = l;
-                if (g.maxTheoreticalZoomLevel < l) g.maxTheoreticalZoomLevel =l ;
-            }
-            _lgData.Levels.Clear();
-
-             
-            _mainGeometryGraph.UpdateBoundingBox();
-            return maxX;
         }
 
-        private static void ComputeSpanningRatio(Tiling g)
+        private void ScaleDownAllThePointsInSmallBox(MeshGraph g, Dictionary<Node, int> nodeToId, int maxY, int maxX)
         {
-            double spanningratio = 0;
-            double averageratio = 0;
-            for (int i = 0; i < g.N; i++)
+            foreach (Node node in _mainGeometryGraph.Nodes)
             {
-                for (int j = i + 1; j < g.N; j++)
+                var x = (node.Center.X/maxX)*100;
+                var y = (node.Center.Y/maxY)*100;
+                node.Center = new Point((int) x, (int) y);
+                g.VList[nodeToId[node]] = new Vertex((int) node.Center.X, (int) node.Center.Y) {Id = nodeToId[node]};
+            }
+        }
+
+        private void MovePointSetSoThatAllPointsHavePositiveCoordinates(Dictionary<Node, int> nodeToId, Dictionary<int, Node> idToNode, ref int maxY,
+            ref int maxX)
+        {
+            double minX = 0;
+            double minY = 0;
+            foreach (Node node in _mainGeometryGraph.Nodes)
+            {
+                if (node.Center.X < minX) minX = node.Center.X;
+                if (node.Center.Y < minY) minY = node.Center.Y;
+            }
+
+            //shift to positive coordinate
+            int nodeIndex = 0;
+            foreach (Node node in _mainGeometryGraph.Nodes)
+            {
+                nodeToId.Add(node, nodeIndex);
+                idToNode.Add(nodeIndex, node);
+                node.Center = new Point((int) (node.Center.X - minX + 5), (int) (node.Center.Y - minY + 5));
+                if (node.Center.X > maxX) maxX = (int) node.Center.X;
+                if (node.Center.Y > maxY) maxY = (int) node.Center.Y;
+                nodeIndex++;
+            }
+        }
+        /*
+                 private MeshGraph ComputeEdgeRoutes(MeshGraph g, Dictionary<Node, int> nodeId,  Dictionary<Node, List<Edge>> adjacencyList)
                 {
-                    DijkstraAlgo dijkstra = new DijkstraAlgo();
-                    dijkstra.MSAGLSelectShortestPath(g.VList, g.EList, g.DegList, i, j, g.NumOfnodes);
-                    double baseDistance = g.GetEucledianDist(i, j);
-                    if (dijkstra.Distance/baseDistance > spanningratio) spanningratio = dijkstra.Distance/baseDistance;
-                    averageratio += dijkstra.Distance/baseDistance;
-                }
-            }
-            Console.WriteLine("Spanning Ratio = " + spanningratio);
-            Console.WriteLine("Average Spanning Ratio = " + (averageratio/(g.N*(g.N+1)/2)));
-        }
+                    var g1 = new MeshGraph(g.NumOfnodes, true)
+                    {
+                        N = g.N,
+                        IsPlanar = g.IsPlanar,
+                        NumOfnodesBeforeDetour = g.NumOfnodesBeforeDetour,
+                        NodeTree = g.NodeTree,
+                        MaxTheoreticalZoomLevel = g.MaxTheoreticalZoomLevel
+                    };
+                    for (int i = 0; i < g.NumOfnodes; i++)
+                        g1.VList[i] = new Vertex(g.VList[i].XLoc, g.VList[i].YLoc) { Id = g.VList[i].Id, ZoomLevel = g.VList[i].ZoomLevel };
 
-        private Tiling ComputeEdgeRoutes(Tiling g, Dictionary<Node, int> nodeId,  Dictionary<Node, List<Edge>> AdjacencyList)
+
+            
+                    var processedEdges = new List<Edge>();
+                    var dijkstra = new DijkstraAlgo();
+
+    
+                    foreach (var node in _lgData.SortedLgNodeInfos)
+                    {
+                        foreach (var edge in adjacencyList[node.GeometryNode])
+                        {
+                            if (processedEdges.Contains(edge)) continue;
+                            processedEdges.Add(edge);
+
+                            dijkstra.MsaglAstarShortestPath(g.VList, g.EList, g.DegList, nodeId[edge.Source],
+                                nodeId[edge.Target],
+                                g.NumOfnodes);
+                            foreach (VertexNeighbor vn in dijkstra.Edgelist)                    
+                                g1.AddEdge(vn.A, g.EList[vn.A, vn.Neighbor].NodeId, g.EList[vn.A, vn.Neighbor].Selected, g.EList[vn.A, vn.Neighbor].Used);
+                    
+                        }
+                    }
+
+                    for (int i = 0; i < g1.NumOfnodes; i++)
+                        if (g1.DegList[i] == 0) g1.VList[i].Invalid = true;
+                        
+
+                    return g1;
+                }
+
+         */
+
+
+
+        private MeshGraph ComputeEdgeRoutes(MeshGraph g, Dictionary<Node, int> nodeId)
         {
-            Tiling g1 = new Tiling(g.NumOfnodes, true);
-            g1.N = g.N;
-            g1.isPlanar = g.isPlanar;
-            g1.NumOfnodesBeforeDetour = g.NumOfnodesBeforeDetour;
-            g1.nodeTree = g.nodeTree;
-            g1.maxTheoreticalZoomLevel = g.maxTheoreticalZoomLevel;
+            var g1 = new MeshGraph(g.NumOfnodes, true)
+            {
+                N = g.N,
+                IsPlanar = g.IsPlanar,
+                NumOfnodesBeforeDetour = g.NumOfnodesBeforeDetour,
+                NodeTree = g.NodeTree,
+                MaxTheoreticalZoomLevel = g.MaxTheoreticalZoomLevel
+            };
             for (int i = 0; i < g.NumOfnodes; i++)
                 g1.VList[i] = new Vertex(g.VList[i].XLoc, g.VList[i].YLoc) { Id = g.VList[i].Id, ZoomLevel = g.VList[i].ZoomLevel };
 
 
-            
-            List<Edge> processedEdges = new List<Edge>();
-            DijkstraAlgo dijkstra = new DijkstraAlgo();
 
-    
-            foreach (var node in _lgData.SortedLgNodeInfos)
+            //List<Edge> processedEdges = new List<Edge>();
+            var dijkstra = new DijkstraAlgo();
+
+           
+            var processedEdges = new Dictionary<Edge, bool>();
+            foreach (var edge in _mainGeometryGraph.Edges)
             {
-                foreach (var edge in AdjacencyList[node.GeometryNode])
-                {
-                    if (processedEdges.Contains(edge)) continue;
-                    else processedEdges.Add(edge);
+                if (processedEdges.ContainsKey(edge)) continue;
+                processedEdges.Add(edge, true);
 
-                    dijkstra.MSAGLAstarShortestPath(g.VList, g.EList, g.DegList, nodeId[edge.Source],
-                        nodeId[edge.Target],
-                        g.NumOfnodes);
-                    foreach (VertexNeighbor vn in dijkstra.Edgelist)                    
-                        g1.AddEdge(vn.A, g.EList[vn.A, vn.Neighbor].NodeId, g.EList[vn.A, vn.Neighbor].Selected, g.EList[vn.A, vn.Neighbor].Used);
-                    
-                }
+                dijkstra.MsaglAstarShortestPath(g.VList, g.EList, g.DegList, nodeId[edge.Source],
+                    nodeId[edge.Target],
+                    g.NumOfnodes);
+                foreach (VertexNeighbor vn in dijkstra.Edgelist)
+                    g1.AddEdge(vn.A, g.EList[vn.A, vn.Neighbor].NodeId, g.EList[vn.A, vn.Neighbor].Selected, g.EList[vn.A, vn.Neighbor].Used);
+
             }
 
             for (int i = 0; i < g1.NumOfnodes; i++)
                 if (g1.DegList[i] == 0) g1.VList[i].Invalid = true;
-                        
+
 
             return g1;
         }
 
 
-
-
         public Dictionary<SymmetricSegment, Rail> Segs = new Dictionary<SymmetricSegment, Rail>();
-        GreedyNodeRailLevelCalculator calc;
+        GreedyNodeRailLevelCalculator _calc;
 
-        public bool MsaglNodeSuccessfullyPlotted(Tiling g, LgLevel level, int nodeToBePlotted, IEnumerable<Node> nodes, Dictionary<Node, int> nodeId)
+        public bool MsaglNodeSuccessfullyPlotted(MeshGraph g, LgLevel level, int nodeToBePlotted, IEnumerable<Node> nodes, Dictionary<Node, int> nodeId)
         {
-            DijkstraAlgo dijkstra = new DijkstraAlgo();
+           
 
-            List<Edge> CurrentEdgeList = new List<Edge>();
+            var currentEdgeList = new List<Edge>();
             foreach (Edge edge in _mainGeometryGraph.Edges)
             {
                 if (!level._railsOfEdges.ContainsKey(edge))
                 {
-                    var railsOfEdge = MsaglAddRailsOfEdge(level, g, edge, dijkstra, nodeId);
+                    var railsOfEdge = MsaglAddRailsOfEdge(level, g, edge);
                     if (railsOfEdge.Count > 0) {                        
                         level._railsOfEdges[edge] = railsOfEdge;
-                        CurrentEdgeList.Add(edge);
+                        currentEdgeList.Add(edge);
                     }
                  }
 
@@ -721,19 +736,18 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
             
             var bbox = GetLargestTile();
-            GridTraversal grid = new GridTraversal(bbox, level.ZoomLevel);
-            GreedyNodeRailLevelCalculator calc = new GreedyNodeRailLevelCalculator(_lgData.SortedLgNodeInfos);
+            var grid = new GridTraversal(bbox, level.ZoomLevel);
+            var calc = new GreedyNodeRailLevelCalculator(_lgData.SortedLgNodeInfos);
             
             if(calc == null) calc = new GreedyNodeRailLevelCalculator(_lgData.SortedLgNodeInfos);
-            calc.MaxAmountRailsPerTile = this._lgLayoutSettings.MaxNumberOfRailsPerTile;
+            calc.MaxAmountRailsPerTile = _lgLayoutSettings.MaxNumberOfRailsPerTile;
             
-            Point start, end;
-            SymmetricSegment s;
-            List<SymmetricSegment> newSegments = new List<SymmetricSegment>();
+            Point end;
+            var newSegments = new List<SymmetricSegment>();
              foreach (var rail in level.RailDictionary.Values)
-            {
-                s = new SymmetricSegment(rail.Left, rail.Right);
-                //s2 = new SymmetricSegment(rail.Right, rail.Left);
+             {
+                 var s = new SymmetricSegment(rail.Left, rail.Right);
+                 //s2 = new SymmetricSegment(rail.Right, rail.Left);
 
                 if (!Segs.ContainsKey(s))
                 {
@@ -742,25 +756,24 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 }
                 // rail.GetStartEnd(out start,out end);
                 // Segs.Add(new SymmetricSegment(start,end));
-            }
+             }
             //Console.WriteLine("Total Rails = " + level.RailDictionary.Values.Count);
-             foreach (var seg in newSegments)
-                if (calc.IfCanInsertLooseSegmentUpdateTiles(seg, grid) == false)
-                {
-                    foreach (Edge edge in CurrentEdgeList)
-                    {
-                        foreach (Rail rail in level._railsOfEdges[edge])                        
-                            Segs.Remove(new SymmetricSegment(rail.Left, rail.Right));                        
-                        level._railsOfEdges[edge].Clear();
-                    }
-                    return false;
-                }
+             if (newSegments.Any(seg => calc.IfCanInsertLooseSegmentUpdateTiles(seg, grid) == false))
+             {
+                 foreach (Edge edge in currentEdgeList)
+                 {
+                     foreach (Rail rail in level._railsOfEdges[edge])                        
+                         Segs.Remove(new SymmetricSegment(rail.Left, rail.Right));                        
+                     level._railsOfEdges[edge].Clear();
+                 }
+                 return false;
+             }
              
             return true;//level.QuotaSatisfied(nodes, this._lgLayoutSettings.MaxNumberOfNodesPerTile, this._lgLayoutSettings.MaxNumberOfRailsPerTile);
         }
         public Dictionary<Rail, List<Edge>> RailToEdges = new Dictionary<Rail, List<Edge>>();
 
-        private Set<Rail> MsaglAddRailsOfEdge(LgLevel level, Tiling g, Edge edge, DijkstraAlgo dijkstra, Dictionary<Node, int> nodeId)
+        private Set<Rail> MsaglAddRailsOfEdge(LgLevel level, MeshGraph g, Edge edge)
         {
             if (_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel > level.ZoomLevel ||
                 _lgData.GeometryNodesToLgNodeInfos[edge.Target].ZoomLevel > level.ZoomLevel)
@@ -774,51 +787,20 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                     Math.Max(_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel,
                         _lgData.GeometryNodesToLgNodeInfos[edge.Target].ZoomLevel)
             };
-
-            //dijkstra.MSAGLAstarShortestPath(g.VList, g.EList, g.DegList, nodeId[edge.Source], nodeId[edge.Target], g.NumOfnodes);
-
-            /* Plot All Edges
-            List<VertexNeighbor> vn = new List<VertexNeighbor>();
-
-            for (int i = 0; i<g.NumOfnodes ; i++)
-            {
-                for (int j = 0; j < g.DegList[i] && g.EList[i, j] != null; j++)
-                    vn.Add(new VertexNeighbor(i, j));
-            }
-            dijkstra.Edgelist = vn;
-            //*/
+             
             
             var railsOfEdge = new Set<Rail>();
 
-            /*
-            foreach (VertexNeighbor e in dijkstra.Edgelist)
-            {
-                var a = new Point(g.VList[e.A].XLoc, g.VList[e.A].YLoc);
-                var b = new Point(g.VList[g.EList[e.A, e.Neighbor].NodeId].XLoc, g.VList[g.EList[e.A, e.Neighbor].NodeId].YLoc);
-                var tuple = new SymmetricSegment(a, b);
-                Rail rail;
-                if (!level._railDictionary.TryGetValue(tuple, out rail))
-                {
-                    var ls = new LineSegment(a, b);
-                    rail = new Rail(ls, _lgData.GeometryEdgesToLgEdgeInfos[edge],
-                        (int)_lgData.GeometryEdgesToLgEdgeInfos[edge].ZoomLevel);
-                    level._railDictionary[tuple] = rail;
-                    level._railTree.Add(ls.BoundingBox, rail);
-                }
-                else rail.ZoomLevel = Math.Max(rail.ZoomLevel, level.ZoomLevel);
-                railsOfEdge.Insert(rail);
-            }
-            //*/
-            ///*
-            int[] pathVertices = g.pathList[edge].ToArray();
+          
+            int[] pathVertices = g.PathList[edge].ToArray();
             for (int index = 0; index < pathVertices.Length-1; index++ )
             {
                 var a = new Point(g.VList[pathVertices[index]].PreciseX, g.VList[pathVertices[index]].PreciseY);
                 var b = new Point(g.VList[pathVertices[index + 1]].PreciseX, g.VList[pathVertices[index + 1]].PreciseY);
-                var initial_a = new Point(g.VList[pathVertices[index]].XLoc, g.VList[pathVertices[index]].YLoc);
-                var initial_b = new Point(g.VList[pathVertices[index + 1]].XLoc, g.VList[pathVertices[index + 1]].YLoc);
-                var target_a = new Point(g.VList[pathVertices[index]].TargetX, g.VList[pathVertices[index]].TargetY);
-                var target_b = new Point(g.VList[pathVertices[index + 1]].TargetX, g.VList[pathVertices[index + 1]].TargetY);
+                var initialA = new Point(g.VList[pathVertices[index]].XLoc, g.VList[pathVertices[index]].YLoc);
+                var initialB = new Point(g.VList[pathVertices[index + 1]].XLoc, g.VList[pathVertices[index + 1]].YLoc);
+                var targetA = new Point(g.VList[pathVertices[index]].TargetX, g.VList[pathVertices[index]].TargetY);
+                var targetB = new Point(g.VList[pathVertices[index + 1]].TargetX, g.VList[pathVertices[index + 1]].TargetY);
                 
                 var left = new Point(0,0);
                 var right= new Point(0,0);
@@ -849,10 +831,10 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
                     rail.A = a;
                     rail.B = b;
-                    rail.initialA = initial_a;
-                    rail.initialB = initial_b;
-                    rail.targetA = target_a;
-                    rail.targetB = target_b;
+                    rail.initialA = initialA;
+                    rail.initialB = initialB;
+                    rail.targetA = targetA;
+                    rail.targetB = targetB;
 
                     if (left.X != 0 && left.Y != 0)
                     { rail.Left = left; rail.Right = right; }
@@ -868,44 +850,19 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 }
                 railsOfEdge.Insert(rail);
             }
-            //*/
+             
             return railsOfEdge;
-        }
-
-        private void FillGeometryNodesToLgNodeInfos()
-        {
-            int rankIndex = int.MaxValue;
-            _lgData.SortedLgNodeInfos = new List<LgNodeInfo>();
-            foreach (Node node in _mainGeometryGraph.Nodes)
-            {                 
-                var nodeInfo = new LgNodeInfo(node)
-                {
-                    Rank = rankIndex--,
-                    ZoomLevel = 1000,
-                    LabelVisibleFromScale = 1, //GetDoubleAttributeOrDefault(GeometryToken.LabelVisibleFromScale, 1.0),
-                    LabelWidthToHeightRatio = 1, // = GetDoubleAttributeOrDefault(GeometryToken.LabelWidthToHeightRatio, 1.0),
-                    LabelOffset = new Point(1, 1) // = TryGetPointAttribute(GeometryToken.LabelOffset)
-                };
-                _lgData.SortedLgNodeInfos.Add(nodeInfo);
-                _lgData.GeometryNodesToLgNodeInfos[node] = nodeInfo;
-                Console.WriteLine("" + node);
-            }
         }
 
         /// <summary>
         ///     does the initialization
         /// </summary>
         public void Run() {
-            Dictionary<Node, int> nodeToIndex;
-
-           
-                Console.WriteLine("dot graph");
-                RunForMsaglFiles();
-                //RunForDotFiles();
-             
-
-
-            //ProcessEdges(points, nodeToIndex, level, _grid);
+            
+            //here we build the competition mesh, play with it and finally fill the 
+            //zoomlevels with rails
+            EntranceOfGraphVisualizationUsingCompetitionMesh();
+                 
 
             _lgData.CreateLevelNodeTrees(NodeDotWidth(1));
             _railGraph = new RailGraph();
@@ -938,170 +895,10 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 #endif
         }
 
-        private void RunForDotFiles()
-        {
-            Dictionary<Node, int> nodeToIndex;
-            //create the triangular tiling of the plane
-            Console.WriteLine("Create the triangular tiling of the plane.");
-            Tiling grid = new Tiling(10 + _mainGeometryGraph.Nodes.Count);
-
-            var points = TriangularTiling(out nodeToIndex, grid);
-
-
-            //until all edges are added 
-            //create a layer and add vertices one after another
-
-            int layer = 0;
-            int plottedNodeCount = 0;
-            List<Node> nodes = new List<Node>();
-            var level = CreateLevel(layer);
-            while (plottedNodeCount < _mainGeometryGraph.Nodes.Count)
-            {
-                nodes.Add(_lgData.SortedLgNodeInfos[plottedNodeCount].GeometryNode);
-                _lgData.SortedLgNodeInfos[plottedNodeCount].ZoomLevel = layer;
-
-                Console.WriteLine("vertex level " + _lgData.SortedLgNodeInfos[plottedNodeCount].GeometryNode + " : " + layer);
-
-                while (NodeSuccessfullyPlotted(points, nodeToIndex, level, grid, plottedNodeCount, nodes) == false)
-                {
-                    layer++;
-                    level = CreateLevel(layer);
-                    _lgData.SortedLgNodeInfos[plottedNodeCount].ZoomLevel = layer;
-                }
-                plottedNodeCount++;
-            }
-            Console.WriteLine("MAX Num of Level " + layer);
-        }
-
-        private PointSet TriangularTiling(out Dictionary<Node, int> nodeToIndex, Tiling grid)
-        {
-//*********************************************************************************************************//       
-            //FILL DATA WITH TRIANGUILAR TILING
-            Network g;
-            //*********************************************************************************************************//
-
-
-            //*********************************************************************************************************//
-
-
-            //select subset of points for placing nodes
-            Console.WriteLine("Create point set.");
-            var points = new PointSet(_mainGeometryGraph.Nodes.Count, grid, _mainGeometryGraph.Nodes.Count/6);
-            //assign the nodes a center
-            int index = 1;
-            nodeToIndex = new Dictionary<Node, int>();
-            foreach (Node node in _mainGeometryGraph.Nodes)
-            {
-                node.Center = new Point(points.Pt[index].X, points.Pt[index].Y);
-                nodeToIndex[node] = index;
-                index++;                
-            }
-             
-            _lgData.SortedLgNodeInfos = new List<LgNodeInfo>();
-
-            foreach (Node node in _mainGeometryGraph.Nodes)
-            {
-                //Console.WriteLine("" + node.Center.X + "," + node.Center.Y + ":" + _points.pointMap[(int)node.Center.X, (int)node.Center.Y]);
-                 
-                var nodeId = nodeToIndex[node];
-                var nodeInfo = new LgNodeInfo(node)
-                {
-                    Rank = points.Pt[nodeId].Weight,
-                    ZoomLevel = 1000,
-                    LabelVisibleFromScale = 1, //GetDoubleAttributeOrDefault(GeometryToken.LabelVisibleFromScale, 1.0),
-                    LabelWidthToHeightRatio = 1, // = GetDoubleAttributeOrDefault(GeometryToken.LabelWidthToHeightRatio, 1.0),
-                    LabelOffset = new Point(1, 1) // = TryGetPointAttribute(GeometryToken.LabelOffset)
-                };
-                _lgData.SortedLgNodeInfos.Add(nodeInfo);
-                _lgData.GeometryNodesToLgNodeInfos[node] = nodeInfo;
-            }
-            
-
-            //create a graph as in _mainGeometryGraph
-            g = new Network(_mainGeometryGraph.Nodes.Count, _mainGeometryGraph.Edges.Count, false);
-
-            foreach (var edge in _mainGeometryGraph.Edges)
-            {
-                int a = points.pointMap[(int) edge.Source.Center.X, (int) edge.Source.Center.Y];
-                int b = points.pointMap[(int) edge.Target.Center.X, (int) edge.Target.Center.Y];
-                g.M[a, b] = g.M[b, a] = 1;
-            }
-
-            //compute the weight of the g edges
-            Console.WriteLine("Compute the density based point weights.");
-            grid.ComputeGridEdgeWeights();
-
-            //plot some edges
-            Console.WriteLine("Draw the recursive steiner routes.");
-            grid.PlotAllEdges(points.Pt, g, points.NumPoints, points.NumOfLevels);
-            //*********************************************************************************************************//
-            _mainGeometryGraph.UpdateBoundingBox();
-
-            return points;
-        }
-
-        private  bool NodeSuccessfullyPlotted(PointSet points, Dictionary<Node, int> nodeToIndex, LgLevel level, Tiling grid, int nodeToBePlotted, IEnumerable<Node> nodes)
-        {
-            DijkstraAlgo dijkstra = new DijkstraAlgo();
-
-             foreach (Edge edge in _mainGeometryGraph.Edges)
-            {
-                var railsOfEdge = AddRailsOfEdge(points, nodeToIndex, level, grid, edge, dijkstra);
-                level._railsOfEdges[edge] = railsOfEdge;    
-                
-            }
- 
-            return level.QuotaSatisfied(nodes,  _lgLayoutSettings.MaxNumberOfNodesPerTile, _lgLayoutSettings.MaxNumberOfRailsPerTile);
-        }
-
-        private Set<Rail> AddRailsOfEdge(PointSet points, Dictionary<Node, int> nodeToIndex, LgLevel level, Tiling grid, Edge edge,
-            DijkstraAlgo dijkstra)
-        {
-            if (_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel > level.ZoomLevel ||
-                _lgData.GeometryNodesToLgNodeInfos[edge.Target].ZoomLevel > level.ZoomLevel)
-                return new Set<Rail>();
-                   
-
-                
-            _lgData.GeometryEdgesToLgEdgeInfos[edge] = new LgEdgeInfo(edge)
-            {
-                Rank = Math.Min(_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel,
-                        _lgData.GeometryNodesToLgNodeInfos[edge.Target].ZoomLevel),
-                ZoomLevel =
-                    Math.Max(_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel,
-                        _lgData.GeometryNodesToLgNodeInfos[edge.Target].ZoomLevel)
-            };
-
-            dijkstra.SelectShortestPath(grid.VList, grid.EList, grid.DegList, points.Pt[nodeToIndex[edge.Source]].GridPoint,
-                points.Pt[nodeToIndex[edge.Target]].GridPoint, grid.NumOfnodes);
-
-            var railsOfEdge = new Set<Rail>();
-            foreach (VertexNeighbor e in dijkstra.Edgelist)
-            {
-                var a = new Point(grid.VList[e.A].XLoc, grid.VList[e.A].YLoc);
-                var b = new Point(grid.VList[grid.EList[e.A, e.Neighbor].NodeId].XLoc,
-                    grid.VList[grid.EList[e.A, e.Neighbor].NodeId].YLoc);
-                //_grid.EList[e.A, e.Neighbor].Used++;
-                var tuple = new SymmetricSegment(a, b);
-                Rail rail;
-                if (!level._railDictionary.TryGetValue(tuple, out rail))
-                {
-                    var ls = new LineSegment(a, b);
-                    rail = new Rail(ls, _lgData.GeometryEdgesToLgEdgeInfos[edge],
-                        (int) _lgData.GeometryEdgesToLgEdgeInfos[edge].ZoomLevel);
-                    level._railDictionary[tuple] = rail;
-                    level._railTree.Add(ls.BoundingBox, rail);
-                }
-                else rail.ZoomLevel = Math.Max(rail.ZoomLevel, level.ZoomLevel);
-                railsOfEdge.Insert(rail);
-            }
-            return railsOfEdge;
-        }
-
         private LgLevel CreateLevel(int layer)
         { 
             //FillGeometryNodeToLgInfosTables();
-            LgLevel level = new LgLevel(layer, _mainGeometryGraph);
+            var level = new LgLevel(layer, _mainGeometryGraph);
 
             int levelNodeCount = _mainGeometryGraph.Nodes.Count;
             if (_lgData.LevelNodeCounts == null)
@@ -1565,7 +1362,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         /// <param name="rail"></param>
         /// <returns></returns>
         public List<Edge> GetEdgesPassingThroughRail(Rail rail) {
-            int i = (int) Math.Log(rail.ZoomLevel, 2);
+            var i = (int) Math.Log(rail.ZoomLevel, 2);
             LgLevel railLevel = _lgData.Levels[i];
             List<Edge> passingEdges = railLevel.GetEdgesPassingThroughRail(rail);
             return passingEdges;

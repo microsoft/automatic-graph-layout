@@ -60,7 +60,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             }
             return false;
         }
-        public PointSet(int n, Tiling g, int pointsPerLevel)
+        public PointSet(int n, MeshGraph g, int pointsPerLevel)
         {
             NumPoints = n;
             Pt = new WeightedPoint[n + 1];

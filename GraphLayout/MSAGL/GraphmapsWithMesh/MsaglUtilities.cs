@@ -43,21 +43,17 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 if (l.Start.X < l.End.X && l.Start.X <= p.X && p.X <= l.End.X) return true;
                 if (l.Start.X > l.End.X && l.Start.X >= p.X && p.X >= l.End.X) return true;
             }
-            /*
-            double AB =  Math.Sqrt((l.Start.X - l.End.X)*(l.Start.X - l.End.X) + (l.Start.Y - l.End.Y)*(l.Start.Y - l.End.Y));
-            double AP = Math.Sqrt((l.Start.X - p.X) * (l.Start.X - p.X) + (l.Start.Y - p.Y) * (l.Start.Y - p.Y));
-            double PB = Math.Sqrt((p.X - l.End.X) * (p.X - l.End.X) + (p.Y - l.End.Y) * (p.Y - l.End.Y));
-            if (AB == AP + PB) return true;*/
+            
             return false;
         }
 
         public static bool PointIsOnSegment(LineSegment l, Core.Geometry.Point p)
         {
            
-            double AB =  Math.Sqrt((l.Start.X - l.End.X)*(l.Start.X - l.End.X) + (l.Start.Y - l.End.Y)*(l.Start.Y - l.End.Y));
-            double AP = Math.Sqrt((l.Start.X - p.X) * (l.Start.X - p.X) + (l.Start.Y - p.Y) * (l.Start.Y - p.Y));
-            double PB = Math.Sqrt((p.X - l.End.X) * (p.X - l.End.X) + (p.Y - l.End.Y) * (p.Y - l.End.Y));
-            if (AB < (AP + PB + .0001) &&  (AP + PB - .0001)<AB) return true; 
+            double ab =  Math.Sqrt((l.Start.X - l.End.X)*(l.Start.X - l.End.X) + (l.Start.Y - l.End.Y)*(l.Start.Y - l.End.Y));
+            double ap = Math.Sqrt((l.Start.X - p.X) * (l.Start.X - p.X) + (l.Start.Y - p.Y) * (l.Start.Y - p.Y));
+            double pb = Math.Sqrt((p.X - l.End.X) * (p.X - l.End.X) + (p.Y - l.End.Y) * (p.Y - l.End.Y));
+            if (ab < (ap + pb + .0001) &&  (ap + pb - .0001)<ab) return true; 
             return false;
         }
 
