@@ -432,7 +432,6 @@
     <Compile Include="Core\Layout\GeometryGraph.cs" />
     <Compile Include="Core\Layout\GeometryObject.cs" />
     <Compile Include="Core\DataStructures\GenericHeapElement.cs" />
-    <Compile Include="Core\DataStructures\HeapElement.cs" />
     <Compile Include="Layout\Layered\HorizontalConstraintsForSugiyama.cs" />
     <Compile Include="Core\GraphAlgorithms\IEdge.cs" />
     <Compile Include="Core\Layout\ILabeledObject.cs" />
