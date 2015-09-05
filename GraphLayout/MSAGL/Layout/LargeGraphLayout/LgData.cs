@@ -216,8 +216,26 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             SelectedEdges.InsertRange(passingEdges);
             for (int i = _levels.Count - 1; i >= 0; i--)
                 SelectEdgesOnLevel(i, passingEdges);
+             
         }
-
+        internal void SelectEdges(List<Edge> passingEdges, int currentLayer)
+        {
+            SelectedEdges.InsertRange(passingEdges);
+ 
+            foreach (Edge edge in passingEdges)
+            {
+                for (int i = 0; i <= currentLayer; i++)
+                {
+                    Set<Rail> railsOfEdge;
+                    if (_levels[i]._railsOfEdges.TryGetValue(edge, out railsOfEdge))
+                    {
+                        var passingEdge = new List<Edge>();
+                        passingEdge.Add(edge);
+                        SelectEdgesOnLevel(i, passingEdge);
+                    }
+                }
+            }
+        }
         public Set<Edge> SelectedEdges {
             get { return _selectedEdges; } }
 
@@ -230,16 +248,35 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             var level = _levels[i];
             var railsToHighlight = new Set<Rail>();
             foreach (var edge in edges) {
-                Set<Rail> railsOfEdge;
-                if (!level._railsOfEdges.TryGetValue(edge, out railsOfEdge)) {
+                Set<Rail> railsOfEdge;                
+                //Added the following two lines and commented out the third line
+                level._railsOfEdges.TryGetValue(edge, out railsOfEdge);
+                if (railsOfEdge== null ||railsOfEdge.Count ==0)
+                //if (!level._railsOfEdges.TryGetValue(edge, out railsOfEdge))
+                {
                     var edgeInfo = GeometryEdgesToLgEdgeInfos[edge];
-                    int edgeLevelIndex = (int)Math.Min( Math.Log(edgeInfo.ZoomLevel, 2), _levels.Count - 1);
+                    int edgeLevelIndex = (int) Math.Min(Math.Log(edgeInfo.ZoomLevel, 2), _levels.Count - 1);
+                    edgeLevelIndex =  _levels.Count - 1 ; 
+                    /*
+                    //added this loop for computing edge level index
+                    for (int levelIndex = 0;levelIndex<_levels.Count; levelIndex++)
+                    {
+                        var dict = _levels[levelIndex]._railsOfEdges;
+                        if (!dict.ContainsKey(edge)) continue;
+                        if (_levels[levelIndex]._railsOfEdges[edge].Count > 0) {edgeLevelIndex = levelIndex;
+                            break;
+                        }
+                    }
+                    */
+
                     railsOfEdge = _levels[edgeLevelIndex]._railsOfEdges[edge];
                     TransferHighlightedRails(level, edge, railsOfEdge);
                 }
-                else
+                else                
                     railsToHighlight.InsertRange(railsOfEdge);
+                
             }
+
             //need to analyze and highlight the new highlighted rails
             foreach (var rail in railsToHighlight) {
                 if (!level.HighlightedRails.Contains(rail)) {
@@ -247,6 +284,10 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                     level.HighlightedRails.Insert(rail);
                 }
             }
+            
+            //DEBUG comment out by jyoti
+            //var l = level.HighlightedRails.Select(r => new DebugCurve((ICurve) r.Geometry));
+            //LayoutAlgorithmSettings.ShowDebugCurves(l.ToArray());
 
         }
 
@@ -351,6 +392,21 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             var edgesToPutoffSet = new Set<Edge>(edgesToPutOff);
             for (int i = _levels.Count - 1; i >= 0; i--)
                 PutOffEdgesOnLevel(i, edgesToPutoffSet);
+            /*
+            foreach (Edge edge in edgesToPutOff)
+            {
+                for (int i = 0; i <= _levels.Count - 1; i++){
+                    Set<Rail> railsOfEdge;
+                    if (_levels[i]._railsOfEdges.TryGetValue(edge, out railsOfEdge))
+                    {
+                        var PutoffSet = new List<Edge>();
+                        PutoffSet.Add(edge);
+                        PutOffEdgesOnLevel(i, new Set<Edge>(PutoffSet));
+                        break;
+                    }
+                }
+            }
+             */
             foreach (var e in edgesToPutOff)
                 SelectedEdges.Remove(e);
         }
@@ -363,7 +419,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 if (!railsThatShouldBeHiglighted.Contains(rail)) {
                     if (RailBelongsToLevel(level, rail))
                         rail.IsHighlighted = false;
-                    else {
+                    else
+                    {
                         var railTuple = rail.PointTuple();  
                         var rect = new Rectangle(railTuple.Item1, railTuple.Item2);
                         level._railTree.Remove(rect, rail);

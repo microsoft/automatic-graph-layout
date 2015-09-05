@@ -12,7 +12,14 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
     /// keeps a part of EdgeGeometry which is visible
     /// </summary>
     public class Rail {
-
+        public Point A;
+        public Point B;
+        public Point targetA;
+        public Point targetB;
+        public Point initialA;
+        public Point initialB;
+        public Point Left;
+        public Point Right;
 #if DEBUG
         static int railCount;
         int id;

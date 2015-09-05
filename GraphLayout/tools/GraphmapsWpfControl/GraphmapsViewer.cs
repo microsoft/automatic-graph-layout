@@ -50,8 +50,12 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         LgStringFinder _stringFinder;
         TileFetcher _tileFetcher;
         int _frame;
-       
         
+        
+        int _layer;
+        List<LgNodeInfo> SelectedNodeSet = new List<LgNodeInfo>();
+
+
         LgLayoutSettings _lgLayoutSettings;
         
 
@@ -203,14 +207,19 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 HandleClickForNode(vnode);
             else {
                 var rail = clickCounter.ClickedObject as Rail;
-                if (rail != null) {
+                if (rail != null)
+                {
                     if (clickCounter.UpCount == clickCounter.DownCount && clickCounter.UpCount == 2)
                         HandleDoubleClickForRail(rail);
                     else if (clickCounter.UpCount == clickCounter.DownCount && clickCounter.UpCount == 1)
                         ToggleSelectRailUnderCursor();
                 }
                 else
+                {
+                    //DO NOT SELECT INVISIBLE NODES
+                    return;
                     _lgLayoutSettings.Interactor.AnalyzeClick(_mouseDownPositionInGraph, clickCounter.DownCount);
+                }
             }
         }
 
@@ -252,14 +261,30 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         void HandleClickForNode(GraphmapsNode vnode) {
             if (clickCounter.DownCount == clickCounter.UpCount && clickCounter.UpCount == 1) {                
                 //SelectRailsOfIncidentEdgesOnActiveLayer(vnode, !isSelected(vnode));
-                SelectEdgesIncidentTo(vnode);
+                //SelectEdgesIncidentTo(vnode);
+
+                SelectVEdgesIncidentTo(vnode);
                 SelectUnselectNode(vnode.LgNodeInfo, !IsSelected(vnode));
+
+
+                ViewChangeEvent(null, null);
+
                 //ToggleNodeSlidingZoom(vnode);
                 //ToggleNodeEdgesSlidingZoom(vnode);
             }
             vnode.Invalidate();
         }
 
+        void SelectVEdgesIncidentTo(GraphmapsNode vnode)
+        {
+            var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
+            if (lgSettings == null) return;
+
+            var nodeInfo = lgSettings.GeometryNodesToLgNodeInfos[vnode.Node.GeometryNode];
+            lgSettings.Interactor.SelectAllEdgesIncidentTo(nodeInfo);
+            //lgSettings.Interactor.SelectVisibleEdgesIncidentTo(nodeInfo, _layer);
+        }
+        /*
         void SelectEdgesIncidentTo(GraphmapsNode vnode) {
             var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
             if (lgSettings == null) return;
@@ -268,7 +293,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             lgSettings.Interactor.SelectAllEdgesIncidentTo(nodeInfo);
             ViewChangeEvent(null, null);
         }
-
+        */
         bool IsSelected(GraphmapsNode vnode) {
             //if (lgSettings == null) return false;
             var nodeInfo = _lgLayoutSettings.GeometryNodesToLgNodeInfos[vnode.Node.GeometryNode];
@@ -280,9 +305,15 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         void SelectUnselectNode(LgNodeInfo nodeInfo, bool selected) {
             nodeInfo.Selected = selected;
             if (selected)
+            {
                 SelectedNodeInfos.Insert(nodeInfo);
+                SelectedNodeSet.Add(nodeInfo);
+            }
             else
+            {
                 SelectedNodeInfos.Remove(nodeInfo);
+                SelectedNodeSet.Remove(nodeInfo);
+            }
 
         }
 
@@ -1079,14 +1110,18 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         /// oGraph has changed too
         /// </summary>
         void OGraphChanged() {
+
+ 
             if (UnderLayout) return;
             var existingEdges = new Set<DrawingEdge>();
             var existindNodes = new Set<Node>();
             FillExistingNodesEdges(existindNodes, existingEdges);
-            
+
+
             var railGraph = _lgLayoutSettings.RailGraph;
             if (railGraph == null)
                 return;
+            
 
             var nodesFromVectorTiles = NodesFromVectorTiles();
             var railGraphNodes = new Set<Node>(railGraph.Nodes.Select(node => (Node)node.UserData));
@@ -1103,15 +1138,45 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             ProcessEdgesAddRemove(existingEdges, requiredEdges);
             RemoveNoLongerVisibleRails(railGraph);
 
+
+
+            //UpdateVisibleRails is for linear interpolation - jyoti
+            //Rectangle vp = _lgLayoutSettings.ClientViewportFunc();
+            //double factor = Math.Min(vp.Width / _lgLayoutSettings.mainGeometryGraphWidth, vp.Height / _lgLayoutSettings.mainGeometryGraphHeight);
+            //double currentlayer = Math.Max(0, _lgLayoutSettings.TransformFromGraphToScreen()[0, 0] / factor);
+            //_layer = (int)currentlayer;
+            double currentlayer = Math.Max(0,GetZoomFactorToTheGraph());
+            Console.WriteLine("Layer = " + GetLevelIndexByScale(currentlayer));
+            _layer = GetLevelIndexByScale(currentlayer);
+            UpdateVisibleRails(railGraph, Math.Log(currentlayer,2));
+
+
             CreateOrInvalidateFrameworksElementForVisibleRails(railGraph);
             InvalidateNodesOfRailGraph(nodesFromVectorTiles);
+
+            /*
+            foreach (LgNodeInfo nodeInfo in SelectedNodeSet)
+            {
+                var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
+                lgSettings.Interactor.UpdateVisibleEdgesIncidentTo(nodeInfo, _layer);
+            }*/ 
+ 
 
             _lgLayoutSettings.Interactor.AddLabelsOfHighlightedNodes(CurrentScale);
 
             InvalidateNodesOfRailGraph(fakeTileNodes);
             _tileFetcher.StartLoadindTiles();
-        }
 
+
+        }
+        internal int GetLevelIndexByScale(double scale)
+        {
+            if (scale <= 1) return 0;
+            if (scale >= _lgLayoutSettings.maximumNumOfLayers) return _lgLayoutSettings.maximumNumOfLayers - 1;
+            var z = Math.Log(scale, 2);
+            int ret = (int)Math.Ceiling(z);
+            return ret;
+        }
         private Rectangle NodeDotRect(LgNodeInfo ni)
         {
             double w = NodeDotWidth;
@@ -1357,6 +1422,120 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 CreateOrInvalidateFrameworksElementForVisibleRailWithoutChangingGeometry(rail);
         }
 
+        double LayerNumber = -1;
+        Stack<int> layers = new Stack<int>();
+        void UpdateVisibleRails(RailGraph railGraph, double currentLayerNumber)
+        {
+
+            int integralLayerNumber = GetLevelIndexByScale(currentLayerNumber);
+            double  t= currentLayerNumber - integralLayerNumber;
+            if (t > 1) t = 1;
+            if (t < 0) t = 1 + t; 
+            //if (integralLayerNumber == 0 && t < .4) t = 0;
+
+            Console.WriteLine(currentLayerNumber + t );
+
+            if (LayerNumber < currentLayerNumber)
+            {
+                layers.Push(integralLayerNumber);
+                LayerNumber = currentLayerNumber;
+            }
+            if (LayerNumber > currentLayerNumber)
+            {
+                if(layers.Count>0)layers.Pop();
+                LayerNumber = currentLayerNumber;
+            }
+            if (layers.Count >= 2)
+            {                
+                    var pop1 = layers.Pop(); var pop2 = layers.Pop();
+                    layers.Push(pop2); layers.Push(pop1);
+                    if (pop1 != pop2) t = 0;
+                    //Console.WriteLine(layers.Count + " " + pop1 + " " + pop2 + " " + t);
+            }
+            
+
+            if (CurrentScale / FitFactor <= 0.4) t = 0;
+            if (integralLayerNumber > _lgLayoutSettings.maximumNumOfLayers)
+            {
+                t = 1;
+                //Console.WriteLine(layers.Count + " " +  t);
+            }
+
+            List<Rail> highlightedRails = new List<Rail>();
+            List<Rail> adjacenttoHighLightedRails = new List<Rail>();
+            List<Edge> highlightedEdges = new List<Edge>();
+            foreach (var rail in railGraph.Rails)
+                if (rail.IsHighlighted)
+                {
+                    highlightedRails.Add(rail);
+                    foreach (Edge e in _lgLayoutSettings.Interactor.RailToEdges[rail])
+                    {
+                        if(!highlightedEdges.Contains(e))
+                            highlightedEdges.Add(e);
+                    }
+                }
+            /*
+            foreach (var rail in railGraph.Rails)
+                if (!rail.IsHighlighted && IntersectsRails(rail, highlightedRails))
+                    adjacenttoHighLightedRails.Add(rail);
+            */
+
+            foreach (var rail in railGraph.Rails)
+            {
+                //if (t>.5 && Math.Sqrt((23-rail.B.X)*(23-rail.B.X)+ (238-rail.B.Y)*(238-rail.B.Y)) < 4)
+                    //Console.WriteLine();
+
+
+                Point A = new Point();
+                Point B = new Point();
+
+                                  
+                A.X = rail.A.X + t * (rail.targetA.X - rail.A.X);
+                A.Y = rail.A.Y + t * (rail.targetA.Y - rail.A.Y);
+                B.X = rail.B.X + t * (rail.targetB.X - rail.B.X);
+                B.Y = rail.B.Y + t * (rail.targetB.Y - rail.B.Y);
+                   
+                if (SelectedNodeSet.Count > 0 )
+                {
+                    bool ChangeItToInitialCondition = false;
+                    foreach (Edge e in _lgLayoutSettings.Interactor.RailToEdges[rail])
+                    {
+                        //checked if e contains a Selected  rail
+                        if (highlightedEdges.Contains(e)) ChangeItToInitialCondition = true;  
+                    }
+                    if (ChangeItToInitialCondition)
+                    {
+                        A = rail.initialA;
+                        B = rail.initialB;
+                    } 
+                }
+                
+                /*
+                if (IntersectsRails(rail, highlightedRails) || IntersectsRails(rail,adjacenttoHighLightedRails))
+                {
+                    A = rail.initialA;
+                    B = rail.initialB;
+                }
+                */
+                rail.Geometry = new LineSegment(A, B);
+                ReplaceFrameworkElementForSkeletonRail(rail);
+            } 
+        }
+
+        bool IntersectsRails(Rail rail, List<Rail> highlightedRails)
+        {
+            Microsoft.Msagl.Core.Geometry.Point interestionPoint;
+            var a = rail.A;
+            var b = rail.B;
+
+            foreach(var hrail in highlightedRails){
+                var c = hrail.A;
+                var d = hrail.B;
+                if (Microsoft.Msagl.Core.Geometry.Point.SegmentSegmentIntersection(a, b, c, d, out interestionPoint))
+                    return true;
+            }
+            return false;
+        }
         void CreateOrInvalidateFrameworksElementForVisibleRailWithoutChangingGeometry(Rail rail) {
             FrameworkElement fe;
             GraphmapsEdge vEdgeOfRail = GetVEdgeOfRail(rail);
@@ -1384,6 +1563,12 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
         void GraphCanvasChildrenAdd(FrameworkElement fe) {
             _graphCanvas.Children.Add(fe);
+        }
+
+        void GraphCanvasChildrenRemove(FrameworkElement fe)
+        {
+            if(_graphCanvas.Children.Contains(fe))
+                _graphCanvas.Children.Remove(fe);
         }
 
         void UpdateRailZindex(FrameworkElement fe, Rail rail) {
@@ -1428,6 +1613,19 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             path.Tag = rail;
             GraphCanvasChildrenAdd(path);
             _visibleRailsToFrameworkElems[rail] = path;
+        }
+
+
+        void ReplaceFrameworkElementForSkeletonRail(Rail rail)
+        {
+            var iCurve = rail.Geometry as ICurve;
+            if (iCurve == null) return;
+            if (!_visibleRailsToFrameworkElems.ContainsKey(rail)) return;
+            var elm = _visibleRailsToFrameworkElems[rail] as Path;
+            elm.Data = GraphmapsEdge.GetICurveWpfGeometry(iCurve);
+ 
+            // GraphCanvasChildrenAdd(path);
+            //_visibleRailsToFrameworkElems[rail] = path;
         }
 
         void InvalidateSkeletonRail(Rail rail, Path path) {
@@ -1625,6 +1823,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 new Point(_graphCanvas.RenderSize.Width, _graphCanvas.RenderSize.Height));
             SetTransformOnViewport(scale, graphCenter, vp);
             SetScaleRangeForLgLayoutSettings();
+            
         }
 
         /// <summary>

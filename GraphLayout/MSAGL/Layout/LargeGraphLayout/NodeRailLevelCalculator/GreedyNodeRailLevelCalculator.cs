@@ -387,21 +387,28 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout.NodeRailLevelCalculator {
         }
 
 
-        bool IfCanInsertLooseSegmentUpdateTiles(SymmetricSegment seg,  GridTraversal grid) {
+        internal bool IfCanInsertLooseSegmentUpdateTiles(SymmetricSegment seg,  GridTraversal grid) {
             //test if already inserted
             if (IsSegmentAlreadyAdded(seg))
                 return true;
 
             var intersectedTiles = GetIntersectedTiles(seg.A, seg.B, grid);
 
+            int maxNumRailPerTile = 0;
+
             bool canInsertSegment = true;
             foreach (var tile in intersectedTiles) {
                 if (!_segmentTileTable.ContainsKey(tile))
                     _segmentTileTable[tile] = 0;
-
+                if(maxNumRailPerTile<_segmentTileTable[tile])maxNumRailPerTile = _segmentTileTable[tile];
                 canInsertSegment &= _segmentTileTable[tile] < MaxAmountRailsPerTile;
             }
-            if (!canInsertSegment) return false;
+
+            if (!canInsertSegment)
+            {
+                Console.WriteLine("maxNumRailPerTile = " + maxNumRailPerTile);
+                return false;
+            }
 
             foreach (var tile in intersectedTiles) {
                 _segmentTileTable[tile]++;

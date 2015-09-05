@@ -12,7 +12,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
     /// layout settings to handle a large graph
     /// </summary>
     public class  LgLayoutSettings : LayoutAlgorithmSettings {
-        internal readonly Func<PlaneTransformation> TransformFromGraphToScreen;
+
+        public int maximumNumOfLayers;
+        public double mainGeometryGraphWidth;
+        public double mainGeometryGraphHeight;
+
+        public readonly Func<PlaneTransformation> TransformFromGraphToScreen;
         internal readonly double DpiX;
         internal readonly double DpiY;
 
@@ -72,7 +77,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         /// <summary>
         /// a delegate returning the current viewport of the viewer
         /// </summary>
-        internal Func<Rectangle> ClientViewportFunc { get; set; }
+        public Func<Rectangle> ClientViewportFunc { get; set; }
 
         /// <summary>
         /// constructor
