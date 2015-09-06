@@ -104,6 +104,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             if (pairArray.Length > 0) {
                 PositionLabelsOfFlatEdges();
                 interactiveEdgeRouter = new InteractiveEdgeRouter(GetObstacles(), PaddingForEdges, PaddingForEdges/3, Math.PI/6);
+                interactiveEdgeRouter.CalculateWholeTangentVisibilityGraph();
                 foreach (IntEdge intEdge in IntEdges())
                 {
                     this.ProgressStep();
