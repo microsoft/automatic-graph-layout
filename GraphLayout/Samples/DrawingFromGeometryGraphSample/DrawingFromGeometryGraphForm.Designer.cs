@@ -1,5 +1,5 @@
-namespace DrawingFromMsaglGraph {
-    partial class Form1 {
+namespace DrawingFromGeometryGraphSample {
+    partial class DrawingFromGeometryGraphForm {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -30,7 +30,7 @@ namespace DrawingFromMsaglGraph {
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(282, 257);
-            this.Name = "Form1";
+            this.Name = "DrawingFromGeometryGraphForm";
             this.Text = "Form1";
             this.ResumeLayout(false);
 

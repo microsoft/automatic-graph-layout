@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.GraphAlgorithms;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Layout.Layered;
 using Microsoft.Msagl.Core;
+using Microsoft.Msagl.Core.DataStructures;
 
 namespace Microsoft.Msagl.Prototype.Phylo {
     internal class PhyloTreeLayoutCalclulation : AlgorithmBase{
@@ -36,6 +39,8 @@ namespace Microsoft.Msagl.Prototype.Phylo {
         }
 
         protected override void RunInternal() {
+            if (!IsATree())
+                throw new InvalidDataException("the graph is not a tree");
             DefineCellSize();
             CalculateOriginalNodeToGridLayerIndices();
             CreateLayerArraysAndProperLayeredGraph();            
@@ -48,6 +53,21 @@ namespace Microsoft.Msagl.Prototype.Phylo {
 //            SugiyamaLayoutSettings.ShowDataBase(this.dataBase);
 
             RouteSplines();
+        }
+
+        bool IsATree() {
+            Set<Node> visited = new Set<Node>();
+            Node root = tree.Nodes.FirstOrDefault(n => !n.InEdges.Any());
+            if (root == null)
+                return false;
+
+            return IsATreeUnderNode(root, visited) && visited.Count==tree.Nodes.Count;
+        }
+
+        static bool IsATreeUnderNode(Node node, Set<Node> visited) {
+            if (visited.Contains(node)) return false;
+            visited.Insert(node);
+            return node.OutEdges.All(outEdge => IsATreeUnderNode(outEdge.Target, visited));
         }
 
         private void StretchIfNeeded() {
