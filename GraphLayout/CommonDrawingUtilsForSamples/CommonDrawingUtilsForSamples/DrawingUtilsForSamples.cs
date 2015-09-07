@@ -41,9 +41,9 @@ namespace CommonDrawingUtilsForSamples {
         static void DrawEdge(Edge e, Pen pen, Graphics graphics) {
             graphics.DrawPath(pen, CreateGraphicsPath(e.Curve));
 
-            if (e.EdgeGeometry?.SourceArrowhead != null)
+            if (e.EdgeGeometry != null && e.EdgeGeometry.SourceArrowhead != null )
                 DrawArrow(pen, graphics, e.Curve.Start, e.EdgeGeometry.SourceArrowhead.TipPosition);
-            if (e.EdgeGeometry?.TargetArrowhead != null)
+            if (e.EdgeGeometry != null && e.EdgeGeometry.TargetArrowhead != null)
                 DrawArrow(pen, graphics, e.Curve.End, e.EdgeGeometry.TargetArrowhead.TipPosition);
         }
 
