@@ -1883,6 +1883,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
             var labelRTree = new RTree<LgNodeInfo>();
 
+            var skippedRTree = new RTree<LgNodeInfo>();
+
 
             // insert all nodes inserted before
             foreach (LgNodeInfo node in nodes) {
@@ -1921,9 +1923,26 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                     }
                 }
 
+                // uncomment: insert no labels until Johann Sebastian Bach can be labeled
+                if (!couldPlace) break;
+
+                // finally, test if inserting would overlap too much important skipped nodes
+                if (couldPlace)
+                {
+                    var overlappedSkipped = skippedRTree.GetAllIntersecting(labelRect);
+                    if (overlappedSkipped.Any())
+                    {
+                        if (DoesOverlapTooManyImportant(node, overlappedSkipped))
+                        {
+                            couldPlace = false;
+                        }
+                    }                    
+                }
 
                 if (!couldPlace) {
                     node.LabelVisibleFromScale = 0;
+
+                    skippedRTree.Add(labelRect, node);
                 }
                 else {
                     if (node.LabelVisibleFromScale <= 0)
@@ -1934,6 +1953,17 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             }
 
             return labeledNodes;
+        }
+
+        private bool DoesOverlapTooManyImportant(LgNodeInfo node, IEnumerable<LgNodeInfo> overlappedNodes)
+        {
+            // rank high == important
+
+            double nodeWeight = node.Rank;
+            double overlappedWeight = overlappedNodes.Sum(n => n.Rank);
+
+            return nodeWeight * 20.0 < overlappedWeight;
+
         }
 
         class RankComparer : IComparer<Node> {

@@ -927,6 +927,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                         MaxNumberOfNodesPerTile = DefaultLargeLayoutSettings.MaxNumberOfNodesPerTile,
                         MaxNumberOfRailsPerTile = DefaultLargeLayoutSettings.MaxNumberOfRailsPerTile,
                         RailColors = DefaultLargeLayoutSettings.RailColors,
+                        SelectionColors = DefaultLargeLayoutSettings.SelectionColors,
                         IncreaseNodeQuota = DefaultLargeLayoutSettings.IncreaseNodeQuota,
                         ExitAfterInit = DefaultLargeLayoutSettings.ExitAfterInit,
                         SimplifyRoutes = DefaultLargeLayoutSettings.SimplifyRoutes,
@@ -1923,7 +1924,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 FrameworkElement feOfLabel = CreateAndRegisterFrameworkElementOfDrawingNode(node);
 
                 var vn = new GraphmapsNode(node, GetCorrespondingLgNode(node), feOfLabel,
-                    e => (GraphmapsEdge) _drawingObjectsToIViewerObjects[e], () => GetBorderPathThickness()*node.Attr.LineWidth);
+                    e => (GraphmapsEdge)_drawingObjectsToIViewerObjects[e], () => GetBorderPathThickness() * node.Attr.LineWidth, _lgLayoutSettings);
 
                 foreach (var fe in vn.FrameworkElements) {
                     GraphCanvasChildrenAdd(fe);

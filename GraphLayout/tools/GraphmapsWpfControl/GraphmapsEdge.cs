@@ -365,27 +365,31 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             //               B = Edge.Attr.Color.B
             //           })
             //           : Brushes.Red;
+
             brush = rail.IsHighlighted ? Brushes.Red.Color : Brushes.SlateGray.Color;
             if (rail.TopRankedEdgeInfoOfTheRail == null) return new SolidColorBrush(brush);
 
             if (lgSettings != null)
             {
-                var col = lgSettings.GetColorForZoomLevel(rail.MinPassingEdgeZoomLevel);
-                brush = ((SolidColorBrush)(new BrushConverter().ConvertFrom(col))).Color;
+                String col;
+                col = !rail.IsHighlighted ? lgSettings.GetColorForZoomLevel(rail.MinPassingEdgeZoomLevel) : lgSettings.GetSelColorForZoomLevel(rail.MinPassingEdgeZoomLevel);
+                brush = ((SolidColorBrush)(new BrushConverter().ConvertFrom(col))).Color;                
             }
             else
             {
-                if (rail.MinPassingEdgeZoomLevel <= 1) brush = Brushes.LightSkyBlue.Color; //Brushes.DimGray.Color;
-                else if (rail.MinPassingEdgeZoomLevel <= 2)
-                    brush = Brushes.LightGoldenrodYellow.Color; //Brushes.SlateGray.Color;
-                else brush = Brushes.WhiteSmoke.Color; //Brushes.Gray.Color;
-            }
-
-            if (rail.IsHighlighted)
-            {
-                if (rail.MinPassingEdgeZoomLevel <= 1) brush = Brushes.Red.Color;
-                else if (rail.MinPassingEdgeZoomLevel <= 2) brush = new WpfColor{A = 255, R=235, G=48, B=68};
-                else brush = new WpfColor { A = 255, R = 229, G = 92, B = 127 };
+                if (!rail.IsHighlighted)
+                {
+                    if (rail.MinPassingEdgeZoomLevel <= 1) brush = Brushes.LightSkyBlue.Color; //Brushes.DimGray.Color;
+                    else if (rail.MinPassingEdgeZoomLevel <= 2)
+                        brush = Brushes.LightGoldenrodYellow.Color; //Brushes.SlateGray.Color;
+                    else brush = Brushes.WhiteSmoke.Color; //Brushes.Gray.Color;
+                }
+                else
+                {
+                    if (rail.MinPassingEdgeZoomLevel <= 1) brush = new WpfColor { A = 255, R = 255, G = 0, B = 0 };
+                    else if (rail.MinPassingEdgeZoomLevel <= 2) brush = new WpfColor { A = 255, R = 235, G = 48, B = 68 };
+                    else brush = new WpfColor { A = 255, R = 229, G = 92, B = 127 };            
+                }
             }
 
             return new SolidColorBrush(brush);

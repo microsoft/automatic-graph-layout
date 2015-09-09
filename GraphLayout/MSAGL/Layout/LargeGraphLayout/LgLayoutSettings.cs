@@ -95,7 +95,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             EdgeRoutingSettings.Padding = NodeSeparation/4;
             EdgeRoutingSettings.PolylinePadding = NodeSeparation/6;
             InitDefaultRailColors();
-        }
+            InitDefaultSelectionColors();
+            }
 
         public Func<Rectangle> ClientViewportMappedToGraph { get; set; }            
 
@@ -206,6 +207,13 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             set { _railColors = value; }
         }
 
+        private String[] _selectionColors;
+
+        public string[] SelectionColors {
+            get { return _selectionColors; }
+            set { _selectionColors = value; }
+        }
+
         private void InitDefaultRailColors()
         {
             _railColors = new String[3];
@@ -214,12 +222,34 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             _railColors[2] = "#F5F5F5";
         }
 
+        private void InitDefaultSelectionColors() {
+            // init red selection
+            _selectionColors = new String[3];
+            _selectionColors[0] = "#FF0000";
+            _selectionColors[1] = "#EB3044";
+            _selectionColors[2] = "#E55C7F";
+
+            //orange: #FF6A00,#FF9047,FFB07F 
+        }
+
         public String GetColorForZoomLevel(double zoomLevel)
         {
             int logZoomLevel = (int)Math.Log(zoomLevel, 2.0);
             logZoomLevel = Math.Min(logZoomLevel, RailColors.Count() - 1);
             logZoomLevel = Math.Max(logZoomLevel, 0);
             return RailColors[logZoomLevel];
+        }
+
+        public String GetSelColorForZoomLevel(double zoomLevel) {
+            int logZoomLevel = (int)Math.Log(zoomLevel, 2.0);
+            logZoomLevel = Math.Min(logZoomLevel, SelectionColors.Count() - 1);
+            logZoomLevel = Math.Max(logZoomLevel, 0);
+            return SelectionColors[logZoomLevel];
+        }
+
+        public String GetNodeSelColor()
+        {
+            return SelectionColors[0];
         }
 
     }
