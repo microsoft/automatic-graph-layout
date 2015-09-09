@@ -82,6 +82,7 @@ namespace TestGraphmaps {
         const string BackgroundColorOption = "-bgcolor";
         const string RailColorsOption = "-railcolors";
         const string IncreaseNodeQuotaOption = "-inq";
+        const string SelectionColorsOption = "-selcolors";
 
         public static readonly RoutedUICommand OpenFileCommand = new RoutedUICommand("Open File...", "OpenFileCommand",
             typeof (App));
@@ -371,6 +372,7 @@ namespace TestGraphmaps {
             CheckNodeQuota();
             CheckRailQuota();
             CheckRailColors();
+            CheckSelectionColors();
             CheckIncreaseNodeQuota();
         }
 
@@ -379,6 +381,13 @@ namespace TestGraphmaps {
             if (railColors != null)
             {
                 _graphViewer.DefaultLargeLayoutSettings.RailColors = railColors.Split(',');
+            }
+        }
+
+        void CheckSelectionColors() {
+            string selColors = _argsParser.GetValueOfOptionWithAfterString(SelectionColorsOption);
+            if (selColors != null) {
+                _graphViewer.DefaultLargeLayoutSettings.SelectionColors = selColors.Split(',');
             }
         }
 
@@ -537,6 +546,8 @@ namespace TestGraphmaps {
     "sets the background color for the large layout viewer");
             _argsParser.AddOptionWithAfterStringWithHelp(RailColorsOption,
 "sets the rail colors for the large layout viewer");
+            _argsParser.AddOptionWithAfterStringWithHelp(SelectionColorsOption,
+"sets the selected rail colors for the large layout viewer");
 
             _argsParser.AddOptionWithAfterStringWithHelp(MaxNodesPerTileOption,
                 "sets the max nodes per tile for large layout");
