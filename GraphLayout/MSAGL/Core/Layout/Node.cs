@@ -327,7 +327,8 @@ namespace Microsoft.Msagl.Core.Layout {
         ///</summary>
         ///<param name="transformation"></param>
         public void Transform(PlaneTransformation transformation) {
-            BoundaryCurve = BoundaryCurve.Transform(transformation);
+            if (BoundaryCurve != null)
+                BoundaryCurve = BoundaryCurve.Transform(transformation);
         }
 
 

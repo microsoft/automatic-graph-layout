@@ -261,7 +261,8 @@ namespace Microsoft.Msagl.Miscellaneous
                     n.Transform(settings.Transformation);
                 foreach (var n in geometryGraph.RootCluster.AllClustersDepthFirst()) {
                     n.Transform(settings.Transformation);
-                    n.RectangularBoundary.Rect = n.BoundaryCurve.BoundingBox;
+                    if (n.BoundaryCurve != null)
+                        n.RectangularBoundary.Rect = n.BoundaryCurve.BoundingBox;
                 }
 
                 //restore labels widths and heights
