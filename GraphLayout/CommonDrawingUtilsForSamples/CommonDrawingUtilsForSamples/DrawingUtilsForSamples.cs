@@ -9,14 +9,13 @@ using Rectangle = Microsoft.Msagl.Core.Geometry.Rectangle;
 namespace CommonDrawingUtilsForSamples {
     public class DrawingUtilsForSamples {
         public static void DrawFromGraph(System.Drawing.Rectangle clientRectangle, GeometryGraph geometryGraph, Graphics graphics) {
-            SetGraphTransform(geometryGraph, clientRectangle);
+            SetGraphTransform(geometryGraph, clientRectangle, graphics);
             var pen = new Pen(Brushes.Black);
             DrawNodes(geometryGraph, pen, graphics);
             DrawEdges(geometryGraph, pen, graphics);
         }
 
-        public static void SetGraphTransform(GeometryGraph geometryGraph, System.Drawing.Rectangle rectangle) {
-            //instead of setting transormation for graphics we are going to transform the geometry graph, just to test that GeometryGraph.Transform() works
+        public static void SetGraphTransform(GeometryGraph geometryGraph, System.Drawing.Rectangle rectangle, Graphics graphics) {
             RectangleF clientRectangle = rectangle;
             var gr = geometryGraph.BoundingBox;
             if (clientRectangle.Height > 1 && clientRectangle.Width > 1) {
@@ -28,8 +27,13 @@ namespace CommonDrawingUtilsForSamples {
                 var c1 = (clientRectangle.Top + clientRectangle.Bottom) / 2;
                 var dx = c0 - scale * g0;
                 var dy = c1 - scale * g1;
+                /*
+                //instead of setting transormation for graphics it is possible to transform the geometry graph, just to test that GeometryGraph.Transform() works
+            
                 var planeTransformation=new PlaneTransformation(scale,0,dx, 0, scale, dy); 
                 geometryGraph.Transform(planeTransformation);
+                */
+                graphics.Transform = new Matrix((float)scale, 0, 0, (float)scale, (float)dx, (float)dy);
             }
         }
 
