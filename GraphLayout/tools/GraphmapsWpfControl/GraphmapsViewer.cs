@@ -250,12 +250,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         }
 
         void HandleClickForNode(GraphmapsNode vnode) {
-            if (clickCounter.DownCount == clickCounter.UpCount && clickCounter.UpCount == 1) {
-                //ToggleNodeSlidingZoom(vnode);
-                SelectUnselectNode(vnode.LgNodeInfo, !IsSelected(vnode));
-                _lgLayoutSettings.Interactor.RunOnViewChange();
-            }
-            else if (clickCounter.DownCount >= 2) {
+            if (clickCounter.DownCount == clickCounter.UpCount && clickCounter.UpCount == 1) {                
                 //SelectRailsOfIncidentEdgesOnActiveLayer(vnode, !isSelected(vnode));
                 SelectEdgesIncidentTo(vnode);
                 SelectUnselectNode(vnode.LgNodeInfo, !IsSelected(vnode));
@@ -931,6 +926,9 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                         NeedToLayout = NeedToCalculateLayout,
                         MaxNumberOfNodesPerTile = DefaultLargeLayoutSettings.MaxNumberOfNodesPerTile,
                         MaxNumberOfRailsPerTile = DefaultLargeLayoutSettings.MaxNumberOfRailsPerTile,
+                        RailColors = DefaultLargeLayoutSettings.RailColors,
+                        SelectionColors = DefaultLargeLayoutSettings.SelectionColors,
+                        IncreaseNodeQuota = DefaultLargeLayoutSettings.IncreaseNodeQuota,
                         ExitAfterInit = DefaultLargeLayoutSettings.ExitAfterInit,
                         SimplifyRoutes = DefaultLargeLayoutSettings.SimplifyRoutes,
                         NodeLabelHeightInInches = DefaultLargeLayoutSettings.NodeLabelHeightInInches,
@@ -941,12 +939,20 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 //lgsettings.ViewModel = ViewModel;
                 lgsettings.ViewerChangeTransformAndInvalidateGraph +=
                     OGraphChanged;
-                if (NeedToCalculateLayout) {
+                if (NeedToCalculateLayout)
+                {
                     _drawingGraph.CreateGeometryGraph(); //forcing the layout recalculation
                     if (_graphCanvas.Dispatcher.CheckAccess())
                         PopulateGeometryOfGeometryGraph();
                     else
                         _graphCanvas.Dispatcher.Invoke(PopulateGeometryOfGeometryGraph);
+                }
+                else
+                {
+                    if (_graphCanvas.Dispatcher.CheckAccess())
+                        SetLabelWidthToHeightRatiosOfGeometryGraph();
+                    else
+                        _graphCanvas.Dispatcher.Invoke(SetLabelWidthToHeightRatiosOfGeometryGraph);
                 }
 
                 geometryGraphUnderLayout = _drawingGraph.GeometryGraph;
@@ -1019,8 +1025,22 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 LayoutHelpers.LayoutLargeGraphWithLayers(geometryGraphUnderLayout, _drawingGraph.LayoutAlgorithmSettings,
                     CancelToken);
 
-            //added            
             _lgLayoutSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
+
+            var noldeLabelRatios = new List<double>();
+            foreach (var n in geometryGraphUnderLayout.Nodes)
+            {
+                var node = (Drawing.Node) n.UserData;
+                noldeLabelRatios.Add(node == null ? 1 : node.Attr.LabelWidthToHeightRatio);
+            }
+
+
+            LayoutHelpers.ComputeNodeLabelsOfLargeGraphWithLayers(geometryGraphUnderLayout,
+                _drawingGraph.LayoutAlgorithmSettings,
+                noldeLabelRatios,
+                CancelToken);
+
+            //added            
         }
 
         void PostLayoutStep() {
@@ -1073,6 +1093,8 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             var railGraphNodes = new Set<Node>(railGraph.Nodes.Select(node => (Node)node.UserData));
             var requiredNodes = railGraphNodes + NodesFromVectorTiles();
             var fakeTileNodes = nodesFromVectorTiles - railGraphNodes;
+
+            fakeTileNodes = GetIntersectingVisibleRectangle(fakeTileNodes);
              
             ProcessNodesAddRemove(requiredNodes, existindNodes);
             var requiredEdges =
@@ -1083,9 +1105,35 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             RemoveNoLongerVisibleRails(railGraph);
 
             CreateOrInvalidateFrameworksElementForVisibleRails(railGraph);
-            InvalidateNodesOfRailGraph();
-            InvalidateFakeTileNodes(fakeTileNodes);
+            InvalidateNodesOfRailGraph(nodesFromVectorTiles);
+
+            _lgLayoutSettings.Interactor.AddLabelsOfHighlightedNodes(CurrentScale);
+
+            InvalidateNodesOfRailGraph(fakeTileNodes);
             _tileFetcher.StartLoadindTiles();
+        }
+
+        private Rectangle NodeDotRect(LgNodeInfo ni)
+        {
+            double w = NodeDotWidth;
+            return new Rectangle(ni.Center - 0.5 * new Point(w, w), ni.Center + 0.5 * new Point(w, w));
+        }
+
+        private Set<Node> GetIntersectingVisibleRectangle(Set<Node> fakeTileNodes)
+        {
+            var rect = GetVisibleRectangleInGraph();
+            var nodes = new Set<Node>();
+            foreach (var node in fakeTileNodes)
+            {
+                IViewerObject o;
+                if (!_drawingObjectsToIViewerObjects.TryGetValue(node, out o)) continue;
+                var vnode = ((GraphmapsNode)o);
+                if (NodeDotRect(vnode.LgNodeInfo).Intersects(rect))
+                {
+                    nodes.Insert(node);
+                }
+            }
+            return nodes;
         }
 
         Set<Node> NodesFromVectorTiles() {
@@ -1244,42 +1292,65 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             return _lgLayoutSettings.Interactor.GetZoomFactorToTheGraph();
         }
 
-        void InvalidateNodesOfRailGraph() {
+        void InvalidateNodesOfRailGraph(Set<Node> nodesFromVectorTiles) {
+            double zf = ZoomFactor;
+
             foreach (var o in _drawingObjectsToIViewerObjects.Values) {
                 var vNode = o as GraphmapsNode;
                 if (vNode != null) {
-                    //vNode.Invalidate();                    
                     vNode.InvalidateNodeDot(NodeDotWidth);
                     if (vNode.LgNodeInfo == null) continue;
+                    ArrangeNodeLabel(vNode, zf);
+                    if (nodesFromVectorTiles.Contains(vNode.Node))
+                        SetupTileNode(vNode);
+                    vNode.Node.Attr.LineWidth = GetBorderPathThickness();
 
-                    double zf = GetZoomFactorToTheGraph();
+                    if (vNode.LgNodeInfo == null) continue;
+                    
                     double cs = CurrentScale;
 
-                    double nodeLabelHeight = _lgLayoutSettings.NodeLabelHeightInInches*DpiY/CurrentScale; //ZoomFactor;
+                    double nodeLabelHeight = _lgLayoutSettings.NodeLabelHeightInInches*DpiY/CurrentScale;
                     double nodeLabelWidth = nodeLabelHeight*vNode.LgNodeInfo.LabelWidthToHeightRatio;
 
                     if (vNode.LgNodeInfo.LabelVisibleFromScale >= 0 &&
-                        vNode.LgNodeInfo.LabelVisibleFromScale <= ZoomFactor) {
+                        vNode.LgNodeInfo.LabelVisibleFromScale <= zf) {
                         var offset = Point.Scale(nodeLabelWidth + NodeDotWidth*1.01, nodeLabelHeight + NodeDotWidth*1.01,
                             vNode.LgNodeInfo.LabelOffset);
+                        vNode.InvalidateNodeLabel(nodeLabelHeight, nodeLabelWidth, offset);
+                    } 
+                    else if (_lgLayoutSettings.Interactor.SelectedNodeLabels.ContainsKey(vNode.LgNodeInfo))
+                    {
+                        var pos = _lgLayoutSettings.Interactor.SelectedNodeLabels[vNode.LgNodeInfo];
+                        var offset = Point.Scale(nodeLabelWidth + NodeDotWidth * 1.01, nodeLabelHeight + NodeDotWidth * 1.01,
+                            LgNodeInfo.GetLabelOffset(pos));
                         vNode.InvalidateNodeLabel(nodeLabelHeight, nodeLabelWidth, offset);
                     }
                     else {
                         vNode.HideNodeLabel();
                     }
                 }
+
             }
         }
 
-        private void InvalidateFakeTileNodes(Set<Node> fakeTileNodes) {
-            foreach (var node in fakeTileNodes) {
-                IViewerObject o;
-                if (!_drawingObjectsToIViewerObjects.TryGetValue(node, out o)) continue;
-                var vnode = ((GraphmapsNode)o);
+        static void SetupTileNode(GraphmapsNode vNode) {
+            vNode.Node.Attr.LineWidth = 0;
+            vNode.SetLowTransparency();
+        }
 
-                vnode.Node.Attr.LineWidth = 0;
-                vnode.SetLowTransparency();
+        private void ArrangeNodeLabel(GraphmapsNode vNode, double zf)
+        {
+            double nodeLabelHeight = _lgLayoutSettings.NodeLabelHeightInInches*DpiY/CurrentScale;
+            double nodeLabelWidth = nodeLabelHeight*vNode.LgNodeInfo.LabelWidthToHeightRatio;
+
+            if (vNode.LgNodeInfo.LabelVisibleFromScale >= 0 &&
+                vNode.LgNodeInfo.LabelVisibleFromScale <= zf) {
+                var offset = Point.Scale(nodeLabelWidth + NodeDotWidth*1.01, nodeLabelHeight + NodeDotWidth*1.01,
+                    vNode.LgNodeInfo.LabelOffset);
+                vNode.InvalidateNodeLabel(nodeLabelHeight, nodeLabelWidth, offset);
             }
+            else
+                vNode.HideNodeLabel();
         }
 
         void CreateOrInvalidateFrameworksElementForVisibleRails(RailGraph railGraph) {
@@ -1442,11 +1513,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         void ProcessEdgeRemovals(Set<DrawingEdge> edgesToRemove) {
             foreach (var edge in edgesToRemove)
                 HideVEdge(edge);
-        }
-
-        void ProcessNodeRemovals(Set<Node> nodesToRemove) {
-            foreach (var vNode in nodesToRemove)
-                HideVNode(vNode);
         }
 
         void HideVNode(Node drawingNode) {
@@ -1677,55 +1743,55 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 }
         }
 
-        public Image DrawImage(string fileName) {
-            var ltrans = _graphCanvas.LayoutTransform;
-            var rtrans = _graphCanvas.RenderTransform;
-            _graphCanvas.LayoutTransform = null;
-            _graphCanvas.RenderTransform = null;
-            var renderSize = _graphCanvas.RenderSize;
-
-            double scale = FitFactor;
-            int w = (int) (this.GeomGraph.Width*scale);
-            int h = (int) (GeomGraph.Height*scale);
-
-            SetTransformOnViewportWithoutRaisingViewChangeEvent(scale, GeomGraph.BoundingBox.Center,
-                new Rectangle(0, 0, w, h));
-
-            Size size = new Size(w, h);
-            // Measure and arrange the surface
-            // VERY IMPORTANT
-            _graphCanvas.Measure(size);
-            _graphCanvas.Arrange(new Rect(size));
-
-            foreach (
-                var node in _drawingGraph.Nodes.Concat(_drawingGraph.RootSubgraph.AllSubgraphsDepthFirstExcludingSelf())) {
-                IViewerObject o;
-                if (_drawingObjectsToIViewerObjects.TryGetValue(node, out o)) {
-                    ((GraphmapsNode) o).Invalidate();
-                }
-            }
-
-            RenderTargetBitmap renderBitmap = new RenderTargetBitmap(w, h, DpiX, DpiY, PixelFormats.Pbgra32);
-            renderBitmap.Render(_graphCanvas);
-
-            if (fileName != null)
-                // Create a file stream for saving image
-                using (FileStream outStream = new FileStream(fileName, FileMode.Create)) {
-                    // Use png encoder for our data
-                    PngBitmapEncoder encoder = new PngBitmapEncoder();
-                    // push the rendered bitmap to it
-                    encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
-                    // save the data to the stream
-                    encoder.Save(outStream);
-                }
-
-            _graphCanvas.LayoutTransform = ltrans;
-            _graphCanvas.RenderTransform = rtrans;
-            _graphCanvas.Measure(renderSize);
-            _graphCanvas.Arrange(new Rect(renderSize));
-
-            return new Image {Source = renderBitmap};
-        }
+//        public Image DrawImage(string fileName) {
+//            var ltrans = _graphCanvas.LayoutTransform;
+//            var rtrans = _graphCanvas.RenderTransform;
+//            _graphCanvas.LayoutTransform = null;
+//            _graphCanvas.RenderTransform = null;
+//            var renderSize = _graphCanvas.RenderSize;
+//
+//            double scale = FitFactor;
+//            int w = (int) (this.GeomGraph.Width*scale);
+//            int h = (int) (GeomGraph.Height*scale);
+//
+//            SetTransformOnViewportWithoutRaisingViewChangeEvent(scale, GeomGraph.BoundingBox.Center,
+//                new Rectangle(0, 0, w, h));
+//
+//            Size size = new Size(w, h);
+//            // Measure and arrange the surface
+//            // VERY IMPORTANT
+//            _graphCanvas.Measure(size);
+//            _graphCanvas.Arrange(new Rect(size));
+//
+//            foreach (
+//                var node in _drawingGraph.Nodes.Concat(_drawingGraph.RootSubgraph.AllSubgraphsDepthFirstExcludingSelf())) {
+//                IViewerObject o;
+//                if (_drawingObjectsToIViewerObjects.TryGetValue(node, out o)) {
+//                    ((GraphmapsNode) o).Invalidate();
+//                }
+//            }
+//
+//            RenderTargetBitmap renderBitmap = new RenderTargetBitmap(w, h, DpiX, DpiY, PixelFormats.Pbgra32);
+//            renderBitmap.Render(_graphCanvas);
+//
+//            if (fileName != null)
+//                // Create a file stream for saving image
+//                using (FileStream outStream = new FileStream(fileName, FileMode.Create)) {
+//                    // Use png encoder for our data
+//                    PngBitmapEncoder encoder = new PngBitmapEncoder();
+//                    // push the rendered bitmap to it
+//                    encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+//                    // save the data to the stream
+//                    encoder.Save(outStream);
+//                }
+//
+//            _graphCanvas.LayoutTransform = ltrans;
+//            _graphCanvas.RenderTransform = rtrans;
+//            _graphCanvas.Measure(renderSize);
+//            _graphCanvas.Arrange(new Rect(renderSize));
+//
+//            return new Image {Source = renderBitmap};
+//        }
 
         void SetTransformOnViewportWithoutRaisingViewChangeEvent(double scale, Point graphCenter,
             Core.Geometry.Rectangle vp) {
@@ -1858,7 +1924,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 FrameworkElement feOfLabel = CreateAndRegisterFrameworkElementOfDrawingNode(node);
 
                 var vn = new GraphmapsNode(node, GetCorrespondingLgNode(node), feOfLabel,
-                    e => (GraphmapsEdge) _drawingObjectsToIViewerObjects[e], () => GetBorderPathThickness()*node.Attr.LineWidth);
+                    e => (GraphmapsEdge)_drawingObjectsToIViewerObjects[e], () => GetBorderPathThickness() * node.Attr.LineWidth, _lgLayoutSettings);
 
                 foreach (var fe in vn.FrameworkElements) {
                     GraphCanvasChildrenAdd(fe);
@@ -1924,7 +1990,9 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                     var msagNodeInThread = msaglNode;
                     _graphCanvas.Dispatcher.Invoke(() => msagNodeInThread.BoundaryCurve = GetNodeBoundaryCurve(node));
                 }
-                //AssignLabelWidthHeight(msaglNode, msaglNode.UserData as DrawingObject);
+
+                node.Attr.LabelWidthToHeightRatio = node.BoundingBox.Width/node.BoundingBox.Height;
+                        //AssignLabelWidthHeight(msaglNode, msaglNode.UserData as DrawingObject);
             }
 
             foreach (
@@ -1944,6 +2012,23 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 //AssignLabelWidthHeight(msaglNode, msaglNode.UserData as DrawingObject);
             }
 
+        }
+
+        void SetLabelWidthToHeightRatiosOfGeometryGraph() {
+            geometryGraphUnderLayout = _drawingGraph.GeometryGraph;
+            foreach (
+                Core.Layout.Node msaglNode in
+                    geometryGraphUnderLayout.Nodes) {
+                var node = (Node)msaglNode.UserData;
+                if (_graphCanvas.Dispatcher.CheckAccess())
+                {
+                    node.Attr.LabelWidthToHeightRatio = GetLabelWidthToHeightRatioByMeasuringText(node);
+                }                        
+                else {
+                    var msagNodeInThread = msaglNode;
+                    _graphCanvas.Dispatcher.Invoke(() => node.Attr.LabelWidthToHeightRatio = GetLabelWidthToHeightRatioByMeasuringText(node));                          
+                }                
+            }
         }
 
         ICurve GetClusterCollapsedBoundary(Subgraph subgraph) {
@@ -2016,6 +2101,24 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                     height = _drawingGraph.Attr.MinNodeHeight;
             }
             return NodeBoundaryCurves.GetNodeBoundaryCurve(node, width, height);
+        }
+
+        double GetLabelWidthToHeightRatioByMeasuringText(Node node) {
+            double width, height;
+            if (String.IsNullOrEmpty(node.LabelText)) {
+                width = 10;
+                height = 10;
+            } else {
+                var size = MeasureText(node.LabelText, new FontFamily(node.Label.FontName), node.Label.FontSize);
+                width = size.Width;
+                height = size.Height;
+
+                if (width < _drawingGraph.Attr.MinNodeWidth)
+                    width = _drawingGraph.Attr.MinNodeWidth;
+                if (height < _drawingGraph.Attr.MinNodeHeight)
+                    height = _drawingGraph.Attr.MinNodeHeight;
+            }
+            return width/height;
         }
 
         void SetUpTextBoxForApproxNodeBoundaries() {

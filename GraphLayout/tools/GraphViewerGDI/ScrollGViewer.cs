@@ -676,7 +676,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
                 if (OriginalGraph == null) return;
                 var pointSrc = ScreenToSource(e.X, e.Y);
                 const double zoomFractionLocal = 0.9;
-                var zoomInc = e.Delta > 0 ? zoomFractionLocal : 1.0 / zoomFractionLocal;
+                var zoomInc = e.Delta < 0 ? zoomFractionLocal : 1.0 / zoomFractionLocal;
                 var scale = CurrentScale*zoomInc;
                 var d = OriginalGraph.BoundingBox.Diagonal;
                 if (d*scale < 5 || d*scale > HugeDiagonal)

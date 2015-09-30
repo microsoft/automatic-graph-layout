@@ -226,6 +226,12 @@ namespace Microsoft.Msagl.Drawing {
 
         private void ReadEdges() {
             CheckToken(Tokens.Edges);
+
+            if (xmlReader.IsEmptyElement) {
+                XmlRead();
+                return;
+            }
+
             XmlRead();
             while (TokenIs(Tokens.Edge))
                 ReadEdge();

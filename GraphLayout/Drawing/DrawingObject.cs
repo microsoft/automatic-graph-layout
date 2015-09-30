@@ -45,7 +45,6 @@ namespace Microsoft.Msagl.Drawing {
                 isVisible = value;
                 if (was != isVisible && IsVisibleChanged != null)
                     IsVisibleChanged(this);
-                
             }
         }
     }

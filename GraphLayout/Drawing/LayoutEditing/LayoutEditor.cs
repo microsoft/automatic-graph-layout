@@ -284,17 +284,16 @@ namespace Microsoft.Msagl.Drawing {
         /// </summary>
         /// <param name="viewerObject"></param>
         public void AttachLayoutChangeEvent(IViewerObject viewerObject) {
-            var dre = viewerObject.DrawingObject;
-            if (dre != null) {
-                var geom = dre.GeometryObject;
+            var drawingObject = viewerObject.DrawingObject;
+            if (drawingObject != null) {
+                var geom = drawingObject.GeometryObject;
                 if (geom != null)
                     geom.BeforeLayoutChangeEvent += (a, b) => ReportBeforeChange(viewerObject);
                 var cluster = geom as Cluster;
                 if (cluster != null) {
-                    var iViewerNode =(IViewerNode) viewerObject;
+                    var iViewerNode = (IViewerNode) viewerObject;
                     iViewerNode.IsCollapsedChanged += RelayoutOnIsCollapsedChanged;
-                }
-                dre.IsVisibleChanged += a => ReportBeforeChange(viewerObject);
+                }                
             }
         }
 
@@ -359,7 +358,6 @@ namespace Microsoft.Msagl.Drawing {
 
         void CollapseCluster(Cluster cluster) {
             HideCollapsed(cluster);
-
             var center = cluster.RectangularBoundary.Rect.Center;
             var del = center - cluster.CollapsedBoundary.BoundingBox.Center;
             cluster.CollapsedBoundary.Translate(del);
@@ -373,11 +371,16 @@ namespace Microsoft.Msagl.Drawing {
         }
 
         static void HideCollapsed(Cluster cluster) {
-            foreach (var n in cluster.AllSuccessorsWidthFirst()) {
-                var drawingNode = (Node) n.UserData;
+            foreach (var n in cluster.Nodes) {
+                var drawingNode = (Node)n.UserData;
                 drawingNode.IsVisible = false;
-                //this will make all edges adjacent to the node invisible too                
             }
+            foreach (var cl in cluster.Clusters) {
+                var drawingNode = (Node)cl.UserData;
+                drawingNode.IsVisible = false;
+                if (!cl.IsCollapsed)
+                    HideCollapsed(cl);
+            }            
         }
 
 /*

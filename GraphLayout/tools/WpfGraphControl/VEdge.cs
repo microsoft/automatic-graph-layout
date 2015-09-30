@@ -50,8 +50,7 @@ using Size = System.Windows.Size;
 
 namespace Microsoft.Msagl.WpfGraphControl {
     internal class VEdge : IViewerEdge, IInvalidatable {
-        readonly LgLayoutSettings lgSettings;
-
+        
         internal FrameworkElement LabelFrameworkElement;
 
         public VEdge(Edge edge, FrameworkElement labelFrameworkElement) {
@@ -81,29 +80,31 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 Common.PositionFrameworkElement(LabelFrameworkElement, edge.Label.Center, 1);
             }
             edge.Attr.VisualsChanged += (a, b) => Invalidate();
-            
+
+            edge.IsVisibleChanged += obj => {
+                foreach (var frameworkElement in FrameworkElements) {
+                    frameworkElement.Visibility = edge.IsVisible ? Visibility.Visible : Visibility.Hidden;
+                }
+            };
         }
 
         internal IEnumerable<FrameworkElement> FrameworkElements {
             get {
-                if (lgSettings == null) {
-                    if (SourceArrowHeadPath != null)
-                        yield return this.SourceArrowHeadPath;
-                    if (TargetArrowHeadPath != null)
-                        yield return TargetArrowHeadPath;
+                if (SourceArrowHeadPath != null)
+                    yield return this.SourceArrowHeadPath;
+                if (TargetArrowHeadPath != null)
+                    yield return TargetArrowHeadPath;
 
-                    if (CurvePath != null)
-                        yield return CurvePath;
+                if (CurvePath != null)
+                    yield return CurvePath;
 
-                    if (
-                        LabelFrameworkElement != null)
-                        yield return
-                            LabelFrameworkElement;
-                } else {
-                    
-                }
+                if (
+                    LabelFrameworkElement != null)
+                    yield return
+                        LabelFrameworkElement;
             }
         }
+
 
         internal EdgeAttr EdgeAttrClone { get; set; }
             
@@ -320,10 +321,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
             foreach (var fe in FrameworkElements) fe.Visibility = vis;
             if (vis == Visibility.Hidden)
                 return;
-            if (lgSettings != null) {
-                InvalidateForLgCase();
-                return;
-            }
             CurvePath.Data = GetICurveWpfGeometry(Edge.GeometryEdge.Curve);
             if (Edge.Attr.ArrowAtSource)
                 SourceArrowHeadPath.Data = DefiningSourceArrowHead();
@@ -402,7 +399,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
         public VEdge(Edge edge, LgLayoutSettings lgSettings) {
             Edge = edge;
             EdgeAttrClone = edge.Attr.Clone();
-            this.lgSettings = lgSettings;
         }
 
         internal double DashSize()

@@ -1236,6 +1236,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
             foreach (var node in _drawingGraph.Nodes.Concat(_drawingGraph.RootSubgraph.AllSubgraphsDepthFirstExcludingSelf()))
             {
                 CreateVNode(node);
+                Invalidate(drawingObjectsToIViewerObjects[node]);
             }
         }
 
@@ -1248,7 +1249,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 if (!drawingObjectsToFrameworkElements.TryGetValue(node, out feOfLabel))
                     feOfLabel = CreateAndRegisterFrameworkElementOfDrawingNode(node);
 
-                var vn = new VNode(node, GetCorrespondingLgNode(node), feOfLabel,
+                var vn = new VNode(node, feOfLabel,
                     e => (VEdge)drawingObjectsToIViewerObjects[e], () => GetBorderPathThickness() * node.Attr.LineWidth);
 
                 foreach (var fe in vn.FrameworkElements)

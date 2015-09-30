@@ -79,6 +79,10 @@ namespace TestGraphmaps {
         const string NoEdgeRoutingOption = "-nr";
         const string ExitAfterLgLayoutOption = "-lgexit";
         const string BackgroundImageOption = "-bgimage";
+        const string BackgroundColorOption = "-bgcolor";
+        const string RailColorsOption = "-railcolors";
+        const string IncreaseNodeQuotaOption = "-inq";
+        const string SelectionColorsOption = "-selcolors";
 
         public static readonly RoutedUICommand OpenFileCommand = new RoutedUICommand("Open File...", "OpenFileCommand",
             typeof (App));
@@ -191,6 +195,12 @@ namespace TestGraphmaps {
             _graphViewer.BindToPanel(_graphViewerPanel);
             _dockPanel.Loaded += GraphViewerLoaded;
             _argsParser = SetArgsParser(Args);
+
+            if (_argsParser.OptionIsUsed(BackgroundColorOption)) {
+                var bc = _argsParser.GetValueOfOptionWithAfterString(BackgroundColorOption);
+                _graphViewerPanel.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom(bc));
+            }
+
             //graphViewer.MainPanel.MouseLeftButtonUp += TestApi;
             TrySettingGraphViewerLargeLayoutThresholdAndSomeOtherLgSettings();
             if (_argsParser.OptionIsUsed(ExitAfterLgLayoutOption)) {
@@ -361,6 +371,24 @@ namespace TestGraphmaps {
             }
             CheckNodeQuota();
             CheckRailQuota();
+            CheckRailColors();
+            CheckSelectionColors();
+            CheckIncreaseNodeQuota();
+        }
+
+        void CheckRailColors() {
+            string railColors = _argsParser.GetValueOfOptionWithAfterString(RailColorsOption);
+            if (railColors != null)
+            {
+                _graphViewer.DefaultLargeLayoutSettings.RailColors = railColors.Split(',');
+            }
+        }
+
+        void CheckSelectionColors() {
+            string selColors = _argsParser.GetValueOfOptionWithAfterString(SelectionColorsOption);
+            if (selColors != null) {
+                _graphViewer.DefaultLargeLayoutSettings.SelectionColors = selColors.Split(',');
+            }
         }
 
         void CheckRailQuota() {
@@ -383,6 +411,16 @@ namespace TestGraphmaps {
                     _graphViewer.DefaultLargeLayoutSettings.MaxNumberOfNodesPerTile = n;
                 else
                     Console.WriteLine("cannot parse {0}", nodeQuota);
+            }
+        }
+        void CheckIncreaseNodeQuota() {
+            string incrNodeQuota = _argsParser.GetValueOfOptionWithAfterString(IncreaseNodeQuotaOption);
+            if (incrNodeQuota != null) {
+                double inq;
+                if (Double.TryParse(incrNodeQuota, out inq))
+                    _graphViewer.DefaultLargeLayoutSettings.IncreaseNodeQuota = inq;
+                else
+                    Console.WriteLine("cannot parse {0}", incrNodeQuota);
             }
         }
 
@@ -494,6 +532,7 @@ namespace TestGraphmaps {
             _argsParser.AddAllowedOptionWithHelpString(PrintMaxNodeDegreeOption, "print max node degree and exit");
             _argsParser.AddOptionWithAfterStringWithHelp(NodeSeparationOption, "node separation");
             _argsParser.AddOptionWithAfterStringWithHelp(NodeQuotaOption, "max number of nodes per tile");
+            _argsParser.AddOptionWithAfterStringWithHelp(IncreaseNodeQuotaOption, "increase max number of nodes per tile for higher levels");
             _argsParser.AddOptionWithAfterStringWithHelp("-rt", "max number of rails per tile");
             _argsParser.AddAllowedOption(AllowOverlapsInMds);
             _argsParser.AddAllowedOption(RunRemoveOverlapsOption);
@@ -503,6 +542,12 @@ namespace TestGraphmaps {
             _argsParser.AddOptionWithAfterStringWithHelp(LargeLayoutThresholdOption, "sets the large layout threshold");
             _argsParser.AddOptionWithAfterStringWithHelp(BackgroundImageOption,
                 "sets the background image for the large layout");
+            _argsParser.AddOptionWithAfterStringWithHelp(BackgroundColorOption,
+    "sets the background color for the large layout viewer");
+            _argsParser.AddOptionWithAfterStringWithHelp(RailColorsOption,
+"sets the rail colors for the large layout viewer");
+            _argsParser.AddOptionWithAfterStringWithHelp(SelectionColorsOption,
+"sets the selected rail colors for the large layout viewer");
 
             _argsParser.AddOptionWithAfterStringWithHelp(MaxNodesPerTileOption,
                 "sets the max nodes per tile for large layout");

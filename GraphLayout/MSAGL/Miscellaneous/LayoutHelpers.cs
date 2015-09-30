@@ -86,6 +86,13 @@ namespace Microsoft.Msagl.Miscellaneous
             largeGraphLayout.Run();
         }
 
+        static public void ComputeNodeLabelsOfLargeGraphWithLayers(GeometryGraph geometryGraph, LayoutAlgorithmSettings settings, List<double> noldeLabelRatios, CancelToken cancelToken) {
+            var largeGraphLayoutSettings = (LgLayoutSettings)settings;
+            var largeGraphLayout = largeGraphLayoutSettings.Interactor;
+            largeGraphLayout.InitNodeLabelWidthToHeightRatios(noldeLabelRatios);
+            largeGraphLayout.LabelingOfOneRun();
+        }
+
         static void ProcessSugiamaLayout(GeometryGraph geometryGraph, SugiyamaLayoutSettings sugiyamaLayoutSettings, CancelToken cancelToken) {
             PlaneTransformation originalTransform;
             var transformIsNotIdentity = HandleTransformIsNotIdentity(geometryGraph, sugiyamaLayoutSettings, out originalTransform);
@@ -133,12 +140,10 @@ namespace Microsoft.Msagl.Miscellaneous
         static void PrepareGraphForInitialLayoutByCluster(GeometryGraph geometryGraph,
             SugiyamaLayoutSettings sugiyamaLayoutSettings) {
             foreach (var cluster in geometryGraph.RootCluster.AllClustersDepthFirst()) {
-                if (cluster.RectangularBoundary == null) {}
-                cluster.RectangularBoundary = new RectangularClusterBoundary() {TopMargin = 10};
+                cluster.RectangularBoundary = new RectangularClusterBoundary {TopMargin = 10};
 
-                if (cluster.BoundaryCurve == null) {
+                if (cluster.BoundaryCurve == null)
                     cluster.BoundaryCurve = new RoundedRect(new Rectangle(0, 0, 10, 10), 3, 3);
-                }
             }
 
             foreach (var edge in geometryGraph.Edges) {
@@ -254,9 +259,10 @@ namespace Microsoft.Msagl.Miscellaneous
             if (transform) {
                 foreach (Node n in geometryGraph.Nodes)
                     n.Transform(settings.Transformation);
-                foreach (var n in geometryGraph.RootCluster.Clusters) {
+                foreach (var n in geometryGraph.RootCluster.AllClustersDepthFirst()) {
                     n.Transform(settings.Transformation);
-                    n.RectangularBoundary.Rect = n.BoundaryCurve.BoundingBox;
+                    if (n.BoundaryCurve != null)
+                        n.RectangularBoundary.Rect = n.BoundaryCurve.BoundingBox;
                 }
 
                 //restore labels widths and heights
@@ -269,7 +275,6 @@ namespace Microsoft.Msagl.Miscellaneous
 
                 TransformCurves(geometryGraph, settings);
             }
-
             geometryGraph.UpdateBoundingBox();
         }
 

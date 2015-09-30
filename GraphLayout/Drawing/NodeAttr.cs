@@ -147,6 +147,7 @@ namespace Microsoft.Msagl.Drawing {
         }        
 
         int labelMargin = 1;
+
         /// <summary>
         /// the node label margin
         /// </summary>
@@ -157,6 +158,15 @@ namespace Microsoft.Msagl.Drawing {
                 RaiseVisualsChangedEvent(this, null);
             }
         }
-        
+
+        private double labelWidthToHeightRatio = 1.0;
+
+        /// <summary>
+        /// the label width to height ratio.
+        /// </summary>
+        public double LabelWidthToHeightRatio {
+            get { return labelWidthToHeightRatio; }
+            set { labelWidthToHeightRatio = value; }
+        }
     }
 }

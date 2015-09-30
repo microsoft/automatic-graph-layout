@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -38,6 +10,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Msagl.Core.DataStructures;
+using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Routing;
@@ -769,57 +742,59 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         ///// <param name="target"></param>
         ///// <param name="registerForUndo"></param>
         ///// <returns></returns>
-        //public Microsoft.Msagl.Drawing.Edge AddEdge(Microsoft.Msagl.Drawing.Node source, Microsoft.Msagl.Drawing.Node target, bool registerForUndo) {
-        //    System.Diagnostics.Debug.Assert(this.Graph.FindNode(source.Id) == source);
-        //    System.Diagnostics.Debug.Assert(this.Graph.FindNode(target.Id) == target);
+        public Drawing.Edge AddEdge(Drawing.Node source, Drawing.Node target, bool registerForUndo) {
+            Debug.Assert(Graph.FindNode(source.Id) == source);
+            Debug.Assert(Graph.FindNode(target.Id) == target);
 
-        //    Microsoft.Msagl.Drawing.Edge edge = this.Graph.AddEdge(source.Id, target.Id);
-        //    edge.Label = new Microsoft.Msagl.Drawing.Label();
-        //    Microsoft.Msagl.Edge geometryEdge = edge.GeometryEdge = new Microsoft.Msagl.Edge();
-        //    geometryEdge.Parent = this.Graph.GeometryGraph;
+            Drawing.Edge drawingEdge = Graph.AddEdge(source.Id, target.Id);
+            drawingEdge.Label = new Label();
+            var geometryEdge = drawingEdge.GeometryEdge = new Microsoft.Msagl.Core.Layout.Edge();
+            geometryEdge.GeometryParent = this.Graph.GeometryGraph;
 
-        //    Microsoft.Msagl.Point a = source.GeometryNode.Center;
-        //    Microsoft.Msagl.Point b = target.GeometryNode.Center;
-        //    if (source == target) {
-        //        Site start = new Site(a);
-        //        Site end = new Site(b);
-        //        Microsoft.Msagl.Point mid1 = source.GeometryNode.Center;
-        //        mid1.X += (source.GeometryNode.BoundingBox.Width / 3 * 2);
-        //        Microsoft.Msagl.Point mid2 = mid1;
-        //        mid1.Y -= source.GeometryNode.BoundingBox.Height / 2;
-        //        mid2.Y += source.GeometryNode.BoundingBox.Height / 2;
-        //        Site mid1s = new Site(mid1);
-        //        Site mid2s = new Site(mid2);
-        //        start.Next = mid1s;
-        //        mid1s.Previous = start;
-        //        mid1s.Next = mid2s;
-        //        mid2s.Previous = mid1s;
-        //        mid2s.Next = end;
-        //        end.Previous = mid2s;
-        //        geometryEdge.UnderlyingPolyline = new UnderlyingPolyline(start);
-        //        geometryEdge.Curve = geometryEdge.UnderlyingPolyline.CreateCurve();
-        //    } else {
-        //        Site start = new Site(a);
-        //        Site end = new Site(b);
-        //        Site mids = new Site(a * 0.5 + b * 0.5);
-        //        start.Next = mids;
-        //        mids.Previous = start;
-        //        mids.Next = end;
-        //        end.Previous = mids;
-        //        geometryEdge.UnderlyingPolyline = new UnderlyingPolyline(start);
-        //        geometryEdge.Curve = geometryEdge.UnderlyingPolyline.CreateCurve();
-        //    }
+            var a = source.GeometryNode.Center;
+            var b = target.GeometryNode.Center;
+            if (source == target) {
+                Site start = new Site(a);
+                Site end = new Site(b);
+                var mid1 = source.GeometryNode.Center;
+                mid1.X += (source.GeometryNode.BoundingBox.Width / 3 * 2);
+                var mid2 = mid1;
+                mid1.Y -= source.GeometryNode.BoundingBox.Height / 2;
+                mid2.Y += source.GeometryNode.BoundingBox.Height / 2;
+                Site mid1s = new Site(mid1);
+                Site mid2s = new Site(mid2);
+                start.Next = mid1s;
+                mid1s.Previous = start;
+                mid1s.Next = mid2s;
+                mid2s.Previous = mid1s;
+                mid2s.Next = end;
+                end.Previous = mid2s;
+                geometryEdge.UnderlyingPolyline = new SmoothedPolyline(start);
+                geometryEdge.Curve = geometryEdge.UnderlyingPolyline.CreateCurve();
+            } else {
+                Site start = new Site(a);
+                Site end = new Site(b);
+                Site mids = new Site(a * 0.5 + b * 0.5);
+                start.Next = mids;
+                mids.Previous = start;
+                mids.Next = end;
+                end.Previous = mids;
+                geometryEdge.UnderlyingPolyline = new SmoothedPolyline(start);
+                geometryEdge.Curve = geometryEdge.UnderlyingPolyline.CreateCurve();
+            }
 
-        //    geometryEdge.Source = edge.SourceNode.GeometryNode;
-        //    geometryEdge.Target = edge.TargetNode.GeometryNode;
-        //    geometryEdge.ArrowheadLength = edge.Attr.ArrowheadLength;
-        //    if (!Routing.TrimSplineAndCalculateArrowheads(geometryEdge, geometryEdge.Curve, true))
-        //        Routing.CreateBigEnoughSpline(geometryEdge);
+            geometryEdge.Source = drawingEdge.SourceNode.GeometryNode;
+            geometryEdge.Target = drawingEdge.TargetNode.GeometryNode;
+            geometryEdge.EdgeGeometry.TargetArrowhead = new Arrowhead(){Length = drawingEdge.Attr.ArrowheadLength};
+            Arrowheads.TrimSplineAndCalculateArrowheads(geometryEdge, geometryEdge.Curve, true,true);
 
-        //    AddEdge(edge, registerForUndo);
-        //    return edge;
 
-        //}
+            IViewerEdge ve;
+            AddEdge(ve=CreateEdgeWithGivenGeometry(drawingEdge), registerForUndo);
+            layoutEditor.AttachLayoutChangeEvent(ve);
+            return drawingEdge;
+
+        }
 
         /// <summary>
         /// 
@@ -835,7 +810,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
 
             //the edge has to be disconnected from the graph
             Debug.Assert(DGraph.Edges.Contains(dEdge) == false);
-            Debug.Assert(Graph.Edges.Contains(drawingEdge) == false);
+            //Debug.Assert(Graph.Edges.Contains(drawingEdge) == false);
             Debug.Assert(Graph.GeometryGraph.Edges.Contains(geomEdge) == false);
 
             DGraph.Edges.Add(dEdge);

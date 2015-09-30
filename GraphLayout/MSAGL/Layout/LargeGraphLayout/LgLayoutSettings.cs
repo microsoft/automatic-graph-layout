@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
@@ -93,7 +94,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             MaximalArrowheadLength = maximalArrowheadLength;
             EdgeRoutingSettings.Padding = NodeSeparation/4;
             EdgeRoutingSettings.PolylinePadding = NodeSeparation/6;
-        }
+            InitDefaultRailColors();
+            InitDefaultSelectionColors();
+            }
 
         public Func<Rectangle> ClientViewportMappedToGraph { get; set; }            
 
@@ -153,9 +156,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             set { maxNumberOfNodesPerTile = value; }
         }
 
-        private int increaseNodeQuota;
+        private double increaseNodeQuota;
 
-        public int IncreaseNodeQuota
+        public double IncreaseNodeQuota
         {
             get { return increaseNodeQuota; }
             set { increaseNodeQuota = value; }
@@ -178,7 +181,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 
         bool _simplifyRoutes = true;
-        int _numberOfNodeShapeSegs = 16;
+        private int _numberOfNodeShapeSegs = 12; //16;
 
         public bool SimplifyRoutes {
             get { return _simplifyRoutes; }
@@ -196,6 +199,58 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 
         bool _generateTiles = true;
+
+        private String[] _railColors;
+
+        public String[] RailColors {
+            get { return _railColors; }
+            set { _railColors = value; }
+        }
+
+        private String[] _selectionColors;
+
+        public string[] SelectionColors {
+            get { return _selectionColors; }
+            set { _selectionColors = value; }
+        }
+
+        private void InitDefaultRailColors()
+        {
+            _railColors = new String[3];
+            _railColors[0] = "#87CEFA";
+            _railColors[1] = "#FAFAD2";
+            _railColors[2] = "#F5F5F5";
+        }
+
+        private void InitDefaultSelectionColors() {
+            // init red selection
+            _selectionColors = new String[3];
+            _selectionColors[0] = "#FF0000";
+            _selectionColors[1] = "#EB3044";
+            _selectionColors[2] = "#E55C7F";
+
+            //orange: #FF6A00,#FF9047,FFB07F 
+        }
+
+        public String GetColorForZoomLevel(double zoomLevel)
+        {
+            int logZoomLevel = (int)Math.Log(zoomLevel, 2.0);
+            logZoomLevel = Math.Min(logZoomLevel, RailColors.Count() - 1);
+            logZoomLevel = Math.Max(logZoomLevel, 0);
+            return RailColors[logZoomLevel];
+        }
+
+        public String GetSelColorForZoomLevel(double zoomLevel) {
+            int logZoomLevel = (int)Math.Log(zoomLevel, 2.0);
+            logZoomLevel = Math.Min(logZoomLevel, SelectionColors.Count() - 1);
+            logZoomLevel = Math.Max(logZoomLevel, 0);
+            return SelectionColors[logZoomLevel];
+        }
+
+        public String GetNodeSelColor()
+        {
+            return SelectionColors[0];
+        }
 
     }
 }

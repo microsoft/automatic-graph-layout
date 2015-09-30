@@ -3,7 +3,7 @@ A set of tools for graph layout and viewing
 
 The simplest way to start with MSAGL in C# is to open GraphLayout.sln in Visual Studio 2013, and have a look at Samples there.
 
-MSAGL is a .NET tool for graph layout and viewing. It was developed in Microsoft by Lev Nachmanson, Sergey Pupyrev, Tim Dwyer and Ted Hart. MSAGL is available as open source at https://github.com/Microsoft/automatic-graph-layout.git.
+MSAGL is a .NET tool for graph layout and viewing. It was developed in Microsoft by Lev Nachmanson, Sergey Pupyrev, Tim Dwyer, Ted Hart, and Roman Prutkin. MSAGL is available as open source at https://github.com/Microsoft/automatic-graph-layout.git.
 
 ## The Distribution Content and Important Features
 The package contains the following:
@@ -34,34 +34,47 @@ using System.Windows.Forms;
 class ViewerSample { 
     public static void Main() { 
     //create a form 
-        System.Windows.Forms.Form form = new System.Windows.Forms.Form(); 
+        System.Windows.Forms.Form form = new System.Windows.Forms.Form();
     //create a viewer object 
-        Microsoft.Msagl.GraphViewerGdi.GViewer viewer = new Microsoft.Msagl.GraphViewerGdi.GViewer(); 
+        Microsoft.Msagl.GraphViewerGdi.GViewer viewer = new Microsoft.Msagl.GraphViewerGdi.GViewer();
     //create a graph object 
-        Microsoft.Msagl.Drawing.Graph graph = new Microsoft.Msagl.Drawing.Graph("graph"); 
+        Microsoft.Msagl.Drawing.Graph graph = new Microsoft.Msagl.Drawing.Graph("graph");
     //create the graph content 
         graph.AddEdge("A", "B");
-        graph.AddEdge("B", "C"); 
-        graph.AddEdge("A", "C").EdgeAttr.Color = Microsoft.Msagl.Drawing.Color.Green; 
-        graph.FindNode("A").Attr.Fillcolor = Microsoft.Msagl.Drawing.Color.Magenta; 
-        graph.FindNode("B").Attr.Fillcolor = Microsoft.Msagl.Drawing.Color.MistyRose; 
-        Microsoft.Msagl.Drawing.Node c = graph.FindNode("C");  
-        c.Attr.Fillcolor = Microsoft.Msagl.Drawing.Color.PaleGreen;
-        c.Attr.Shape = Microsoft.Msagl.Drawing.Shape.Diamond; 
+        graph.AddEdge("B", "C");
+        graph.AddEdge("A", "C").Attr.Color = Microsoft.Msagl.Drawing.Color.Green;
+        graph.FindNode("A").Attr.FillColor = Microsoft.Msagl.Drawing.Color.Magenta;
+        graph.FindNode("B").Attr.FillColor = Microsoft.Msagl.Drawing.Color.MistyRose;
+        Microsoft.Msagl.Drawing.Node c = graph.FindNode("C");
+        c.Attr.FillColor = Microsoft.Msagl.Drawing.Color.PaleGreen;
+        c.Attr.Shape = Microsoft.Msagl.Drawing.Shape.Diamond;
     //bind the graph to the viewer 
-        viewer.Graph = graph; 
+        viewer.Graph = graph;
     //associate the viewer with the form 
-        form.SuspendLayout(); 
-        viewer.Dock = System.Windows.Forms.DockStyle.Fill; 
-        form.Controls.Add(viewer); 
-        form.ResumeLayout(); 
+        form.SuspendLayout();
+        viewer.Dock = System.Windows.Forms.DockStyle.Fill;
+        form.Controls.Add(viewer);
+        form.ResumeLayout();
     //show the form 
-        form.ShowDialog(); 
+        form.ShowDialog();
     } 
 }
 ```
 
-[More code samples…](http://research.microsoft.com/en-us/projects/msagl/codesamples.aspx)
+[More code
+samples…](http://research.microsoft.com/en-us/projects/msagl/codesamples.aspx)
+
+#GraphMaps
+This functionality allows viewing a large graph in the
+online map fashion. Here is a [video](http://1drv.ms/1IsBEVh) demoing
+GraphMaps. To see the system in action please open Lg.sln, build it,
+and run TestGraphMaps. The configuration Release/x64 needs to be used
+to load a large graph.  The graph from the video can be found in
+GraphLayout/graphs/composers.zip. Please load composers.msagl to avoid
+the preprocessing step.  If composers.dot is loaded then
+composers.msagl and the tiles directory composers.msagl_tiles will be
+regenerated. GraphMaps ideas, design, and the mathematics are described in a
+[paper](http://arxiv.org/pdf/1506.06745v1.pdf).
 
 #Layouts Created by MSAGL
 ![](http://research.microsoft.com/en-us/projects/msagl/195f1b23116b4f049b6e5dc815d96c89.png)
