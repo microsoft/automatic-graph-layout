@@ -1,8 +1,8 @@
-﻿import G = require('./ggraph');
+﻿/// <amd-dependency path="ggraph"/>
 
 // Abstract class for a renderer that targets a CanvasRenderingContext2D.
-export class ContextGraph {
-    private drawEllipse(context: CanvasRenderingContext2D, ellipse: G.GEllipse, continuous: boolean): void {
+class ContextGraph {
+    private drawEllipse(context: CanvasRenderingContext2D, ellipse: GEllipse, continuous: boolean): void {
         var center = ellipse.center;
         var yAxis = ellipse.axisB.y;
         if (yAxis == 0)
@@ -22,7 +22,7 @@ export class ContextGraph {
         context.scale(1, 1 / ratio);
     }
 
-    private drawLine(context: CanvasRenderingContext2D, line: G.GLine, continuous: boolean): void {
+    private drawLine(context: CanvasRenderingContext2D, line: GLine, continuous: boolean): void {
         var start = line.start;
         var end = line.end;
         if (continuous)
@@ -32,7 +32,7 @@ export class ContextGraph {
         context.lineTo(end.x, end.y);
     }
 
-    private drawBezier(context: CanvasRenderingContext2D, bezier: G.GBezier, continuous: boolean): void {
+    private drawBezier(context: CanvasRenderingContext2D, bezier: GBezier, continuous: boolean): void {
         var start = bezier.start;
         var p1 = bezier.p1;
         var p2 = bezier.p2;
@@ -44,13 +44,13 @@ export class ContextGraph {
         context.bezierCurveTo(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
     }
 
-    private drawSegmentedCurve(context: CanvasRenderingContext2D, curve: G.GSegmentedCurve, continuous: boolean): void {
+    private drawSegmentedCurve(context: CanvasRenderingContext2D, curve: GSegmentedCurve, continuous: boolean): void {
         for (var i = 0; i < curve.segments.length; i++)
             this.drawCurve(context, curve.segments[i], continuous || i > 0);
     }
 
-    private drawPolyline(context: CanvasRenderingContext2D, polyline: G.GPolyline, continuous: boolean): void {
-        var start: G.GPoint = polyline.start;
+    private drawPolyline(context: CanvasRenderingContext2D, polyline: GPolyline, continuous: boolean): void {
+        var start: GPoint = polyline.start;
         if (continuous)
             context.lineTo(start.x, start.y);
         else
@@ -63,30 +63,30 @@ export class ContextGraph {
             context.closePath();
     }
 
-    private drawRoundedRect(context: CanvasRenderingContext2D, roundedRect: G.GRoundedRect, continuous: boolean): void {
+    private drawRoundedRect(context: CanvasRenderingContext2D, roundedRect: GRoundedRect, continuous: boolean): void {
         var curve = roundedRect.getCurve();
         this.drawSegmentedCurve(context, curve, continuous);
     }
 
-    private drawCurve(context: CanvasRenderingContext2D, curve: G.GCurve, continuous: boolean): void {
+    private drawCurve(context: CanvasRenderingContext2D, curve: GCurve, continuous: boolean): void {
         if (curve.type === "SegmentedCurve")
-            this.drawSegmentedCurve(context, <G.GSegmentedCurve>curve, continuous);
+            this.drawSegmentedCurve(context, <GSegmentedCurve>curve, continuous);
         else if (curve.type === "Polyline")
-            this.drawPolyline(context, <G.GPolyline>curve, continuous);
+            this.drawPolyline(context, <GPolyline>curve, continuous);
         else if (curve.type === "Bezier")
-            this.drawBezier(context, <G.GBezier>curve, continuous);
+            this.drawBezier(context, <GBezier>curve, continuous);
         else if (curve.type === "Line")
-            this.drawLine(context, <G.GLine>curve, continuous);
+            this.drawLine(context, <GLine>curve, continuous);
         else if (curve.type === "Ellipse")
-            this.drawEllipse(context, <G.GEllipse>curve, continuous);
+            this.drawEllipse(context, <GEllipse>curve, continuous);
         else if (curve.type === "RoundedRect")
-            this.drawRoundedRect(context, <G.GRoundedRect>curve, continuous);
+            this.drawRoundedRect(context, <GRoundedRect>curve, continuous);
     }
 
     // Return true to suppress default label rendering.
-    customDrawLabel: (context: CanvasRenderingContext2D, label: G.GLabel) => boolean = null;
+    customDrawLabel: (context: CanvasRenderingContext2D, label: GLabel) => boolean = null;
 
-    private drawLabel(context: CanvasRenderingContext2D, label: G.GLabel): void {
+    private drawLabel(context: CanvasRenderingContext2D, label: GLabel): void {
         if (this.customDrawLabel != null && this.customDrawLabel(context, label))
             return;
         if (label.fill != "")
@@ -94,15 +94,15 @@ export class ContextGraph {
         context.fillText(label.content, label.bounds.x, label.bounds.y + label.bounds.height);
     }
 
-    private drawNode(context: CanvasRenderingContext2D, node: G.GNode): void {
-        var cluster = <G.GCluster>node;
+    private drawNode(context: CanvasRenderingContext2D, node: GNode): void {
+        var cluster = <GCluster>node;
         if (cluster.children !== undefined)
             for (var i = 0; i < cluster.children.length; i++)
                 this.drawNode(context, cluster.children[i]);
 
         context.save();
         context.beginPath();
-        var curve: G.GCurve = node.boundaryCurve;
+        var curve: GCurve = node.boundaryCurve;
         this.drawCurve(context, curve, false);
         if (node.stroke != "")
             context.strokeStyle = node.stroke;
@@ -116,11 +116,11 @@ export class ContextGraph {
         context.restore();
     }
 
-    private drawArrow(context: CanvasRenderingContext2D, arrowHead: G.GArrowHead): void {
+    private drawArrow(context: CanvasRenderingContext2D, arrowHead: GArrowHead): void {
         context.save();
         var start = arrowHead.start;
         var end = arrowHead.end;
-        var dir = new G.GPoint({ x: start.x - end.x, y: start.y - end.y });
+        var dir = new GPoint({ x: start.x - end.x, y: start.y - end.y });
         var offsetX = -dir.y * Math.tan(25 * 0.5 * (Math.PI / 180));
         var offsetY = dir.x * Math.tan(25 * 0.5 * (Math.PI / 180));
         context.beginPath();
@@ -140,10 +140,10 @@ export class ContextGraph {
         context.restore();
     }
 
-    private drawEdge(context: CanvasRenderingContext2D, edge: G.GEdge): void {
+    private drawEdge(context: CanvasRenderingContext2D, edge: GEdge): void {
         context.save();
         context.beginPath();
-        var curve: G.GCurve = edge.curve;
+        var curve: GCurve = edge.curve;
         this.drawCurve(context, curve, false);
         if (edge.stroke != "")
             context.strokeStyle = edge.stroke;
@@ -166,10 +166,18 @@ export class ContextGraph {
             };
     }
 
-    drawGraphInternal(context: CanvasRenderingContext2D, graph: G.GGraph): void {
+    drawGraphInternal(context: CanvasRenderingContext2D, graph: GGraph): void {
         for (var i = 0; i < graph.nodes.length; i++)
             this.drawNode(context, graph.nodes[i]);
         for (var i = 0; i < graph.edges.length; i++)
             this.drawEdge(context, graph.edges[i]);
+    }
+}
+
+declare module "contextgraph" {
+    export class ContextGraph {
+        customDrawLabel: (context: CanvasRenderingContext2D, label: GLabel) => boolean;
+        drawGrid(context: CanvasRenderingContext2D): void
+        drawGraphInternal(context: CanvasRenderingContext2D, graph: GGraph): void
     }
 }

@@ -1,28 +1,27 @@
-﻿importScripts("sharpkit_pre.js");
+﻿/// <amd-dependency path="ggraph"/>
+importScripts("sharpkit_pre.js");
 importScripts("jsclr.js");
 importScripts("Microsoft.Msagl.js");
 importScripts("sharpkit_post.js");
-
-import G = require('ggraph');
 
 declare var Microsoft;
 declare var Is;
 declare var self;
 
 class Worker {
-    getMsaglPoint(ipoint: G.IPoint): any {
+    getMsaglPoint(ipoint: IPoint): any {
         return new Microsoft.Msagl.Core.Geometry.Point.ctor$$Double$$Double(ipoint.x, ipoint.y);
     }
 
-    getMsaglRect(grect: G.GRect): any {
+    getMsaglRect(grect: GRect): any {
         return new Microsoft.Msagl.Core.Geometry.Rectangle.ctor$$Double$$Double$$Point(grect.x, grect.y, this.getMsaglPoint({ x: grect.width, y: grect.height }));
     }
 
-    getMsaglCurve(gcurve: G.GCurve): any {
+    getMsaglCurve(gcurve: GCurve): any {
         if (gcurve == null)
             return null;
         else if (gcurve.type == "Ellipse") {
-            var gellipse = <G.GEllipse>gcurve;
+            var gellipse = <GEllipse>gcurve;
             return new Microsoft.Msagl.Core.Geometry.Curves.Ellipse.ctor$$Double$$Double$$Point$$Point$$Point(
                 gellipse.parStart,
                 gellipse.parEnd,
@@ -31,13 +30,13 @@ class Worker {
                 this.getMsaglPoint(gellipse.center));
         }
         else if (gcurve.type == "Line") {
-            var gline = <G.GLine>gcurve;
+            var gline = <GLine>gcurve;
             return new Microsoft.Msagl.Core.Geometry.Curves.LineSegment.ctor$$Point$$Point(
                 this.getMsaglPoint(gline.start),
                 this.getMsaglPoint(gline.end));
         }
         else if (gcurve.type == "Bezier") {
-            var gbezier = <G.GBezier>gcurve;
+            var gbezier = <GBezier>gcurve;
             return new Microsoft.Msagl.Core.Geometry.Curves.CubicBezierSegment.ctor(
                 this.getMsaglPoint(gbezier.start),
                 this.getMsaglPoint(gbezier.p1),
@@ -45,21 +44,21 @@ class Worker {
                 this.getMsaglPoint(gbezier.p3));
         }
         else if (gcurve.type == "Polyline") {
-            var gpolyline = <G.GPolyline>gcurve;
+            var gpolyline = <GPolyline>gcurve;
             var points = [];
             for (var i = 0; i < gpolyline.points.length; i++)
                 points.push(this.getMsaglPoint(gpolyline.points[i]));
             return new Microsoft.Msagl.Core.Geometry.Curves.Polyline.ctor$$IEnumerable$1$Point(points);
         }
         else if (gcurve.type == "RoundedRect") {
-            var groundedrect = <G.GRoundedRect>gcurve;
+            var groundedrect = <GRoundedRect>gcurve;
             return new Microsoft.Msagl.Core.Geometry.Curves.RoundedRect.ctor$$Rectangle$$Double$$Double(
                 this.getMsaglRect(groundedrect.bounds),
                 groundedrect.radiusX,
                 groundedrect.radiusY);
         }
         else if (gcurve.type == "SegmentedCurve") {
-            var gsegcurve = <G.GSegmentedCurve>gcurve;
+            var gsegcurve = <GSegmentedCurve>gcurve;
             var curves = [];
             for (var i = 0; i < gsegcurve.segments.length; i++)
                 curves.push(this.getMsaglCurve(gsegcurve.segments[i]));
@@ -68,20 +67,20 @@ class Worker {
         return null;
     }
 
-    addClusterToMsagl(graph: any, cluster: any, nodeMap: Object, gcluster: G.GCluster) {
+    addClusterToMsagl(graph: any, cluster: any, nodeMap: Object, gcluster: GCluster) {
         for (var i = 0; i < gcluster.children.length; i++) {
             var gnode = gcluster.children[i];
             this.addNodeToMsagl(graph, cluster, nodeMap, gnode);
         }
     }
 
-    addNodeToMsagl(graph: any, rootCluster: any, nodeMap: Object, gnode: G.GNode) {
-        var isCluster = (<G.GCluster>gnode).children !== undefined;
+    addNodeToMsagl(graph: any, rootCluster: any, nodeMap: Object, gnode: GNode) {
+        var isCluster = (<GCluster>gnode).children !== undefined;
         var node = null;
         if (isCluster) {
             node = new Microsoft.Msagl.Core.Layout.Cluster.ctor();
             rootCluster.AddCluster(node);
-            this.addClusterToMsagl(graph, node, nodeMap, <G.GCluster>gnode);
+            this.addClusterToMsagl(graph, node, nodeMap, <GCluster>gnode);
         }
         else {
             node = new Microsoft.Msagl.Core.Layout.Node.ctor();
@@ -92,14 +91,14 @@ class Worker {
 
         var curve = this.getMsaglCurve(gnode.boundaryCurve);
         if (curve == null)
-            curve = this.getMsaglCurve(new G.GRoundedRect({
+            curve = this.getMsaglCurve(new GRoundedRect({
                 bounds: { x: 0, y: 0, width: 0, height: 0 }, radiusX: 0, radiusY: 0
             }));
         node.set_BoundaryCurve(curve);
         nodeMap[gnode.id] = { mnode: node, gnode: gnode };
     }
 
-    addEdgeToMsagl(graph: any, nodeMap: Object, edgeMap: Object, gedge: G.GEdge) {
+    addEdgeToMsagl(graph: any, nodeMap: Object, edgeMap: Object, gedge: GEdge) {
         var source = nodeMap[gedge.source].mnode;
         var target = nodeMap[gedge.target].mnode;
         var edge = new Microsoft.Msagl.Core.Layout.Edge.ctor$$Node$$Node(source, target);
@@ -119,7 +118,7 @@ class Worker {
         edgeMap[gedge.id] = { medge: edge, gedge: gedge };
     }
 
-    getMsagl(ggraph: G.GGraph): any {
+    getMsagl(ggraph: GGraph): any {
         var nodeMap = new Object(); // id -> { msagl node, ggraph node }
         var edgeMap = new Object(); // id -> { msagl edge, ggraph edge }
         var graph = new Microsoft.Msagl.Core.Layout.GeometryGraph.ctor();
@@ -134,7 +133,7 @@ class Worker {
             this.addEdgeToMsagl(graph, nodeMap, edgeMap, ggraph.edges[i]);
 
         var settings;
-        if (ggraph.settings.layout == G.GSettings.mdsLayout) {
+        if (ggraph.settings.layout == GSettings.mdsLayout) {
             settings = new Microsoft.Msagl.Layout.MDS.MdsLayoutSettings.ctor();
         }
         else {
@@ -145,29 +144,29 @@ class Worker {
             settings.set_Transformation(transformation);
 
             var edgeRoutingSettings = settings.get_EdgeRoutingSettings();
-            if (ggraph.settings.routing == G.GSettings.rectilinearRouting)
+            if (ggraph.settings.routing == GSettings.rectilinearRouting)
                 edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.Rectilinear);
         }
 
         return { graph: graph, settings: settings, nodeMap: nodeMap, edgeMap: edgeMap, source: ggraph };
     }
 
-    getGPoint(point): G.GPoint {
-        return new G.GPoint({ x: point.get_X(), y: point.get_Y() });
+    getGPoint(point): GPoint {
+        return new GPoint({ x: point.get_X(), y: point.get_Y() });
     }
 
-    getGRect(rect): G.GRect {
-        return new G.GRect({ x: rect.get_Left(), y: rect.get_Bottom(), width: rect.get_Width(), height: rect.get_Height() });
+    getGRect(rect): GRect {
+        return new GRect({ x: rect.get_Left(), y: rect.get_Bottom(), width: rect.get_Width(), height: rect.get_Height() });
     }
 
-    getGCurve(curve): G.GCurve {
-        var ret: G.GCurve;
+    getGCurve(curve): GCurve {
+        var ret: GCurve;
         if (Is(curve, Microsoft.Msagl.Core.Geometry.Curves.Curve.ctor)) {
             var segments = [];
             var sEn = curve.get_Segments().GetEnumerator();
             while (sEn.MoveNext())
                 segments.push(this.getGCurve(sEn.get_Current()));
-            ret = new G.GSegmentedCurve({
+            ret = new GSegmentedCurve({
                 type: "SegmentedCurve",
                 segments: segments
             });
@@ -177,7 +176,7 @@ class Worker {
             var pEn = curve.get_PolylinePoints().GetEnumerator();
             while (pEn.MoveNext())
                 points.push(this.getGPoint(pEn.get_Current()));
-            ret = new G.GPolyline({
+            ret = new GPolyline({
                 type: "Polyline",
                 start: this.getGPoint(curve.get_Start()),
                 points: points,
@@ -185,7 +184,7 @@ class Worker {
             });
         }
         else if (Is(curve, Microsoft.Msagl.Core.Geometry.Curves.CubicBezierSegment.ctor)) {
-            ret = new G.GBezier({
+            ret = new GBezier({
                 type: "Bezier",
                 start: this.getGPoint(curve.get_Start()),
                 p1: this.getGPoint(curve.B(1)),
@@ -194,14 +193,14 @@ class Worker {
             });
         }
         else if (Is(curve, Microsoft.Msagl.Core.Geometry.Curves.LineSegment.ctor)) {
-            ret = new G.GLine({
+            ret = new GLine({
                 type: "Line",
                 start: this.getGPoint(curve.get_Start()),
                 end: this.getGPoint(curve.get_End())
             });
         }
         else if (Is(curve, Microsoft.Msagl.Core.Geometry.Curves.Ellipse.ctor)) {
-            ret = new G.GEllipse({
+            ret = new GEllipse({
                 type: "Ellipse",
                 axisA: this.getGPoint(curve.get_AxisA()),
                 axisB: this.getGPoint(curve.get_AxisB()),
@@ -211,7 +210,7 @@ class Worker {
             });
         }
         else if (Is(curve, Microsoft.Msagl.Core.Geometry.Curves.RoundedRect.ctor)) {
-            ret = new G.GRoundedRect({
+            ret = new GRoundedRect({
                 type: "RoundedRect",
                 bounds: this.getGRect(curve.get_BoundingBox()),
                 radiusX: curve.get_RadiusX(),
@@ -221,11 +220,11 @@ class Worker {
         return ret;
     }
 
-    getGGraph(msagl): G.GGraph {
+    getGGraph(msagl): GGraph {
         msagl.source.boundingBox = this.getGRect(msagl.graph.get_BoundingBox());
         for (var id in msagl.nodeMap) {
             var node = msagl.nodeMap[id].mnode;
-            var gnode: G.GNode = msagl.nodeMap[id].gnode;
+            var gnode: GNode = msagl.nodeMap[id].gnode;
             var curve = node.get_BoundaryCurve();
             gnode.boundaryCurve = this.getGCurve(curve);
             if (gnode.label != null) {
@@ -236,7 +235,7 @@ class Worker {
 
         for (var id in msagl.edgeMap) {
             var edge = msagl.edgeMap[id].medge;
-            var gedge: G.GEdge = msagl.edgeMap[id].gedge;
+            var gedge: GEdge = msagl.edgeMap[id].gedge;
             var curve = edge.get_Curve();
             if (gedge.label != null) {
                 var labelbbox = this.getGRect(edge.get_Label().get_BoundingBox());
@@ -256,9 +255,9 @@ class Worker {
         return msagl.source;
     }
 
-    graph: G.GGraph;
+    graph: GGraph;
 
-    constructor(graph: G.GGraph) {
+    constructor(graph: GGraph) {
         this.graph = graph;
     }
 
@@ -272,7 +271,7 @@ class Worker {
 }
 
 export function handleMessage(e): void {
-    var ggraph = G.GGraph.ofJSON(e.data);
+    var ggraph = GGraph.ofJSON(e.data);
     var worker = new Worker(ggraph);
     worker.runLayout();
     var serialisedGraph = worker.graph.getJSON();

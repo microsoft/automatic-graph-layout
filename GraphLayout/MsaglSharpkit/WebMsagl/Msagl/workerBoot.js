@@ -1,7 +1,7 @@
 ﻿// A web worker that uses Require.JS can receive messages before the dependencies have been loaded. Also, a web worker implemented in TS cannot use the require keyword directly,
 // because Require.JS will not have been loaded yet. This file imports Require.JS and sets aside an incoming message to be handled after all dependencies have been loaded.
 
-importScripts("../Scripts/Components/RequireJS/require.js");
+importScripts("../Scripts/require.js");
 
 // This callback stores a message. A queue would be more generic, but in this case one message is sufficient.
 var message;

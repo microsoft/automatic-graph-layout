@@ -1,13 +1,13 @@
-﻿import G = require('./ggraph');
-import CoG = require('./contextgraph');
+﻿/// <amd-dependency path="ggraph"/>
+/// <amd-dependency path="contextgraph"/>
 
 // Renderer that targets a Canvas.
-export class CGraph extends CoG.ContextGraph {
-    graph: G.GGraph;
+class CGraph extends ContextGraph {
+    graph: GGraph;
     canvas: HTMLCanvasElement;
     grid: boolean = false;
 
-    constructor(canvasID: string, graph?: G.GGraph) {
+    constructor(canvasID: string, graph?: GGraph) {
         super();
         this.graph = graph === undefined ? null : graph;
         this.canvas = <HTMLCanvasElement>document.getElementById(canvasID);
@@ -20,7 +20,7 @@ export class CGraph extends CoG.ContextGraph {
             this.drawGrid(context);
         context.save();
 
-        var bbox: G.GRect = this.graph.boundingBox;
+        var bbox: GRect = this.graph.boundingBox;
         var offsetX = -bbox.x;
         var offsetY = -bbox.y;
 
@@ -29,5 +29,15 @@ export class CGraph extends CoG.ContextGraph {
         this.drawGraphInternal(context, this.graph);
 
         context.restore();
+    }
+}
+
+declare module "cgraph" {
+    export class CGraph extends ContextGraph {
+        graph: GGraph;
+        canvas: HTMLCanvasElement;
+        grid: boolean;
+        constructor(canvasID: string, graph?: GGraph);
+        drawGraph(): void
     }
 }

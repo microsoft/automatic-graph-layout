@@ -1,10 +1,9 @@
-﻿import G = require('./ggraph');
-import SVGG = require('./svggraph');
-
+﻿/// <amd-dependency path="ggraph"/>
+/// <amd-dependency path="svggraph"/>
 /// <amd-dependency path="idd"/>
-var InteractiveDataDisplay = require('idd');
+declare var InteractiveDataDisplay;
 
-export class IDDSVGGraph extends SVGG.SVGGraph {
+class IDDSVGGraph extends SVGGraph {
     gplot: any;
 
     private static msaglPlot = function (graph: IDDSVGGraph, jqDiv, master) {
@@ -20,7 +19,7 @@ export class IDDSVGGraph extends SVGG.SVGGraph {
                 return _svg;
             },
         });
-        
+
         this.computeLocalBounds = function (step, computedBounds) {
             if (graph.graph == null)
                 return undefined;
@@ -55,8 +54,8 @@ export class IDDSVGGraph extends SVGG.SVGGraph {
 
     chart: any;
 
-    constructor(chartID: string, graph?: G.GGraph) {
-        var self = this;
+    constructor(chartID: string, graph?: GGraph) {
+        var that = this;
         var plotContainerID = chartID + '-container';
         var plotID = chartID + '-plot';
         var container = document.getElementById(chartID);
@@ -76,16 +75,21 @@ export class IDDSVGGraph extends SVGG.SVGGraph {
         super(chartID + '-container', graph);
 
         IDDSVGGraph.msaglPlot.prototype = new InteractiveDataDisplay.Plot;
-        InteractiveDataDisplay.register(plotID, function (jqDiv, master) { return new IDDSVGGraph.msaglPlot(self, jqDiv, master); });
+        InteractiveDataDisplay.register(plotID, function (jqDiv, master) { return new IDDSVGGraph.msaglPlot(that, jqDiv, master); });
         this.chart = InteractiveDataDisplay.asPlot(chartID);
         this.chart.aspectRatio = 1;
 
         var gestureSource = InteractiveDataDisplay.Gestures.getGesturesStream($("#" + chartID));
         this.chart.navigation.gestureSource = gestureSource;
         this.gplot = this.chart.get(plotContainerID);
+        //$(container).resize(function (e) { that.onSVGResized(e); });
     }
 
-    getViewBox(): G.GRect {
+    onSVGResized(e) {
+        alert(e);
+    }
+
+    getViewBox(): GRect {
         var vb: string = this.gplot.svg.getAttribute("viewBox");
         if (vb == null || vb == "")
             return null;
@@ -95,10 +99,10 @@ export class IDDSVGGraph extends SVGG.SVGGraph {
         var width = parseFloat(tokens[2]);
         var height = parseFloat(tokens[3]);
 
-        return new G.GRect({ x: x, y: y, width: width, height: height });
+        return new GRect({ x: x, y: y, width: width, height: height });
     }
 
-    setViewBox(box: G.IRect) {
+    setViewBox(box: IRect) {
         var x = box.x;
         var y = box.y;
         var width = box.width;
@@ -121,7 +125,7 @@ export class IDDSVGGraph extends SVGG.SVGGraph {
     drawGraph(): void {
         if (!this.redrawGraph())
             return;
-        var bbox: G.GRect = this.graph.boundingBox;
+        var bbox: GRect = this.graph.boundingBox;
         var offsetX = bbox.x;
         var offsetY = bbox.y;
         var cwidth = parseFloat(this.svg.getAttribute('width'));
@@ -129,18 +133,27 @@ export class IDDSVGGraph extends SVGG.SVGGraph {
         var scaleX = Math.max(0.5, Math.min(2.0, cwidth / bbox.width));
         var scaleY = Math.max(0.5, Math.min(2.0, cheight / bbox.height));
         var scale = Math.min(scaleX, scaleY);
+        if (isNaN(scale))
+            scale = 1;
         var width = bbox.width * scale;
         var height = bbox.height * scale;
-        if (this.chart.host.width() <= 1 || this.chart.host.height() <= 1) {
-            // Handle case when the host is not currently displayed (e.g. in a tab).
-            this.chart.host.width(width);
-            this.chart.host.height(height);
-        }
-        //this.chart.navigation.setVisibleRect({ x: offsetX, y: -height - offsetY, width: width, height: height }, false);
         this.chart.navigation.setVisibleRect({ x: offsetX, y: -offsetY - bbox.height, width: bbox.width, height: bbox.height }, false);
         this.chart.navigation.setVisibleRect({ x: offsetX, y: -offsetY - (cheight / scale), width: cwidth / scale, height: cheight / scale }, false);
 
         var viewBox: string = "" + offsetX + " " + offsetY + " " + width + " " + height;
         this.svg.setAttribute("viewBox", viewBox);
+    }
+}
+
+declare module "iddsvggraph" {
+    export class IDDSVGGraph {
+        gplot: any;
+        chart: any;
+        constructor(chartID: string, graph?: GGraph);
+        onSVGResized(e);
+        getViewBox(): GRect;
+        setViewBox(box: IRect);
+        redrawGraph(): boolean;
+        drawGraph(): void;
     }
 }
