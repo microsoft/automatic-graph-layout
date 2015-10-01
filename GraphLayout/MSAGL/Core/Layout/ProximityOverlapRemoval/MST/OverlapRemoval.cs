@@ -178,8 +178,15 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
         /// <param name="scanlinePhase"></param>
         /// <returns></returns>
         bool OneIteration(Point[] nodePositions, Size[] nodeSizes, bool scanlinePhase) {
+#if SHARPKIT
+            var ts = new Tuple<Point, object>[nodePositions.Length];
+            for (int i = 0; i < nodePositions.Length; i++)
+                ts[i] = Tuple.Create(nodePositions[i], (object)i);
+            var cdt = new Cdt(ts);
+#else
             var cdt = new Cdt(nodePositions.Select((p, index) => Tuple.Create(p, (object) index)));
-            cdt.Run();
+#endif
+                cdt.Run();
             var siteIndex = new Dictionary<CdtSite, int>();
             for (int i = 0; i < nodePositions.Length; i++)
                 siteIndex[cdt.PointsToSites[nodePositions[i]]] = i;

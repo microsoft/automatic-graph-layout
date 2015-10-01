@@ -560,24 +560,29 @@ export class GPlaneTransformation implements IPlaneTransformation {
     static defaultTransformation = new GPlaneTransformation({ m00: -1, m01: 0, m02: 0, m10: 0, m11: -1, m12: 0 });
 }
 
-export class ISettings {
+export interface ISettings {
+    layout: string;
     transformation: IPlaneTransformation;
     routing: string;
 }
 
-export class GSettings {
-    transformation: GPlaneTransformation;
-    routing: string;
+export class GSettings implements ISettings {
     constructor(settings: any)
     constructor(settings: ISettings) {
+        this.layout = settings.layout === undefined ? GSettings.sugiyamaLayout : settings.layout;
         this.transformation = settings.transformation === undefined ? GPlaneTransformation.defaultTransformation : settings.transformation;
         this.routing = settings.routing === undefined ? GSettings.sugiyamaSplinesRouting : settings.routing;
     }
+    layout: string; // "sugiyama" or "mds"
+    transformation: GPlaneTransformation;
+    routing: string;
+    static sugiyamaLayout = "sugiyama";
+    static mdsLayout = "mds";
     static sugiyamaSplinesRouting = "sugiyamasplines";
     static rectilinearRouting = "rectilinear";
 }
 
-export class IGraph {
+export interface IGraph {
     nodes: GNode[];
     edges: GEdge[];
     boundingBox: IRect;

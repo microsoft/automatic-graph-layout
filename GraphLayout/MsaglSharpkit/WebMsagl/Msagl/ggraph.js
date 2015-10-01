@@ -400,28 +400,19 @@ define(["require", "exports"], function (require, exports) {
         return GPlaneTransformation;
     })();
     exports.GPlaneTransformation = GPlaneTransformation;
-    var ISettings = (function () {
-        function ISettings() {
-        }
-        return ISettings;
-    })();
-    exports.ISettings = ISettings;
     var GSettings = (function () {
         function GSettings(settings) {
+            this.layout = settings.layout === undefined ? GSettings.sugiyamaLayout : settings.layout;
             this.transformation = settings.transformation === undefined ? GPlaneTransformation.defaultTransformation : settings.transformation;
             this.routing = settings.routing === undefined ? GSettings.sugiyamaSplinesRouting : settings.routing;
         }
+        GSettings.sugiyamaLayout = "sugiyama";
+        GSettings.mdsLayout = "mds";
         GSettings.sugiyamaSplinesRouting = "sugiyamasplines";
         GSettings.rectilinearRouting = "rectilinear";
         return GSettings;
     })();
     exports.GSettings = GSettings;
-    var IGraph = (function () {
-        function IGraph() {
-        }
-        return IGraph;
-    })();
-    exports.IGraph = IGraph;
     var GNodeInternal = (function () {
         function GNodeInternal() {
         }

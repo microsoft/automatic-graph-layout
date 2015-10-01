@@ -133,15 +133,21 @@ class Worker {
         for (var i = 0; i < ggraph.edges.length; i++)
             this.addEdgeToMsagl(graph, nodeMap, edgeMap, ggraph.edges[i]);
 
-        var settings = new Microsoft.Msagl.Layout.Layered.SugiyamaLayoutSettings.ctor();
-        var transformation = new Microsoft.Msagl.Core.Geometry.Curves.PlaneTransformation.ctor$$Double$$Double$$Double$$Double$$Double$$Double(
-            ggraph.settings.transformation.m00, ggraph.settings.transformation.m01, ggraph.settings.transformation.m02,
-            ggraph.settings.transformation.m10, ggraph.settings.transformation.m11, ggraph.settings.transformation.m12);
-        settings.set_Transformation(transformation);
+        var settings;
+        if (ggraph.settings.layout == G.GSettings.mdsLayout) {
+            settings = new Microsoft.Msagl.Layout.MDS.MdsLayoutSettings.ctor();
+        }
+        else {
+            settings = new Microsoft.Msagl.Layout.Layered.SugiyamaLayoutSettings.ctor();
+            var transformation = new Microsoft.Msagl.Core.Geometry.Curves.PlaneTransformation.ctor$$Double$$Double$$Double$$Double$$Double$$Double(
+                ggraph.settings.transformation.m00, ggraph.settings.transformation.m01, ggraph.settings.transformation.m02,
+                ggraph.settings.transformation.m10, ggraph.settings.transformation.m11, ggraph.settings.transformation.m12);
+            settings.set_Transformation(transformation);
 
-        var edgeRoutingSettings = settings.get_EdgeRoutingSettings();
-        if (ggraph.settings.routing == G.GSettings.rectilinearRouting)
-            edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.Rectilinear);
+            var edgeRoutingSettings = settings.get_EdgeRoutingSettings();
+            if (ggraph.settings.routing == G.GSettings.rectilinearRouting)
+                edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.Rectilinear);
+        }
 
         return { graph: graph, settings: settings, nodeMap: nodeMap, edgeMap: edgeMap, source: ggraph };
     }

@@ -47,7 +47,7 @@
   <ItemGroup>
     <Compile Include="ExtensionsForSharpKit.cs" />
     <Compile Include="GlobalSharpKit.cs" />
-        <Compile Include="..\..\msagl\Core\AlgorithmBase.cs">
+    <Compile Include="..\..\msagl\Core\AlgorithmBase.cs">
       <Link>AlgorithmBase.cs</Link>
     </Compile>
     <Compile Include="..\..\msagl\Core\DataStructures\CollectionUtilities.cs">
@@ -293,9 +293,6 @@
     <Compile Include="..\..\msagl\Layout\LargeGraphLayout\IZoomLevelCalculator.cs">
       <Link>IZoomLevelCalculator.cs</Link>
     </Compile>
-    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LayerInfo.cs">
-      <Link>LayerInfo.cs</Link>
-    </Compile>
     <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LgCellInfo.cs">
       <Link>LgCellInfo.cs</Link>
     </Compile>
@@ -322,9 +319,6 @@
     </Compile>
     <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LgSkeletonLevel.cs">
       <Link>LgSkeletonLevel.cs</Link>
-    </Compile>
-    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\NodeMagnifier.cs">
-      <Link>NodeMagnifier.cs</Link>
     </Compile>
     <Compile Include="..\..\msagl\Layout\LargeGraphLayout\NodeRailLevelCalculator\GreedyNodeRailLevelCalculator.cs">
       <Link>GreedyNodeRailLevelCalculator.cs</Link>
@@ -817,9 +811,6 @@
     </Compile>
     <Compile Include="..\..\msagl\Core\DataStructures\GenericHeapElement.cs">
       <Link>GenericHeapElement.cs</Link>
-    </Compile>
-    <Compile Include="..\..\msagl\Core\DataStructures\HeapElement.cs">
-      <Link>HeapElement.cs</Link>
     </Compile>
     <Compile Include="..\..\msagl\Layout\Layered\HorizontalConstraintsForSugiyama.cs">
       <Link>HorizontalConstraintsForSugiyama.cs</Link>

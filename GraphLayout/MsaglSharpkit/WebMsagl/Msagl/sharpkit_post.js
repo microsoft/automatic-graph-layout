@@ -830,6 +830,7 @@ var System$Console = {
     fullname: "System.Console",
     baseTypeName: "System.Object",
     staticDefinition: {
+        WriteLine: function () { },
         WriteLine$$String: function () { },
         WriteLine$$String$$Object: function () { },
         WriteLine$$String$$Object$$Object: function () { }
@@ -880,12 +881,15 @@ JsTypes.push(System$Diagnostics$Debug);
 * MSAGL TYPES CHANGES *
 **********************/
 
-// Prevents crashes when calling Add<T> on a set as an ICollection<T>
-// 04/11/2014: fixed in SharpKit?
-/*if (typeof Microsoft$Msagl$Core$DataStructures$Set$1.definition.Add !== "undefined")
-    throw new Error();
-Microsoft$Msagl$Core$DataStructures$Set$1.definition.Add = Microsoft$Msagl$Core$DataStructures$Set$1.definition.Add$$T;
-*/
+// This handles nullable points.
+Microsoft$Msagl$Core$Geometry$Point.staticDefinition.op_Equality = function (point0, point1) {
+    if (point0 == null && point1 == null)
+        return true;
+    if ((point0 == null) != (point1 == null))
+        return false;
+    return point0.get_X() == point1.get_X() && point0.get_Y() == point1.get_Y();
+};
+
 // This resolves naming issues with the generic HashSet.Contains method.
 if (typeof Microsoft$Msagl$Core$DataStructures$Set$1.definition.Contains !== "undefined")
     throw new Error();
@@ -905,7 +909,7 @@ Microsoft$Msagl$Core$DataStructures$Set$1.definition.UpdateHashKey = function ()
     }
 
     this._hashKey = ret.toString();
-},
+};
 
 
 // Invoke SharpKit
