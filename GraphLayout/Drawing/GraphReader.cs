@@ -167,6 +167,7 @@ namespace Microsoft.Msagl.Drawing {
                     Text = ReadStringElement(Tokens.Text),
                     FontName = ReadStringElement(Tokens.FontName),
                     FontColor = ReadColorElement(Tokens.FontColor),
+                    FontStyle = TokenIs(Tokens.FontStyle) ? (FontStyle)ReadIntElement(Tokens.FontStyle) : FontStyle.Regular,
                     FontSize = ReadDoubleElement(Tokens.FontSize),
                     Width = ReadDoubleElement(Tokens.Width),
                     Height = ReadDoubleElement(Tokens.Height),

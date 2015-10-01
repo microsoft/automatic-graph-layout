@@ -341,6 +341,28 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         }
 
         /// <summary>
+        ///hides and shows the undo/redo buttons
+        /// </summary>
+        public bool UndoRedoButtonsVisible
+        {
+            get { return undoButton.Visible; }
+            set
+            {
+                undoButton.Visible = value;
+                redoButton.Visible = value;
+            }
+        }
+
+        /// <summary>
+        ///hides and shows the edge insert button
+        /// </summary>
+        public bool EdgeInsertButtonVisible
+        {
+            get { return edgeInsertButton.Visible; }
+            set { edgeInsertButton.Visible = value; }
+        }
+
+        /// <summary>
         /// exposes the kind of the layout that is used when the graph is laid out by the viewer
         /// </summary>
         public LayoutMethod CurrentLayoutMethod{
