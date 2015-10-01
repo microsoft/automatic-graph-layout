@@ -44,6 +44,7 @@ export var txt_manyNodes = function (nodeCount: number, edgeCount: number, custo
 // Prepare a custom-made graph.
 export var txt_fourNodes =
     '{                                      \r\n' +
+    '"settings": {"layout":"mds"},'+
     '    "nodes": [                         \r\n' +
     '        {                              \r\n' +
     '            "id": "node1",             \r\n' +
