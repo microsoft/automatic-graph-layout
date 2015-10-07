@@ -1,20 +1,18 @@
-﻿import G = require('./ggraph');
+﻿/// <amd-dependency path="ggraph"/>
 
-declare var $;
-
-// Abstract class that renders to SVG.
-export class SVGGraph {
-    graph: G.GGraph;
+// Abstract class that renders to SV
+class SVGGraph {
+    graph: GGraph;
     container: HTMLElement;
     svg: Element;
     grid: boolean = false;
 
-    constructor(containerID: string, graph?: G.GGraph) {
+    constructor(containerID: string, graph?: GGraph) {
         this.container = document.getElementById(containerID);
         this.graph = graph === undefined ? null : graph;
     }
 
-    private pathEllipse(ellipse: G.GEllipse, continuous: boolean): string {
+    private pathEllipse(ellipse: GEllipse, continuous: boolean): string {
         var center = ellipse.center;
         // Note that MSAGL's representation of ellipses can handle axes that are not horizontal or vertical - but at the moment I can't.
         var yAxis = (ellipse.axisB.y == 0) ? ellipse.axisA.y : ellipse.axisB.y;
@@ -30,8 +28,8 @@ export class SVGGraph {
         // The SVG path command is unable to draw a complete ellipse (or an ellipse that is very close to complete), so I need to treat it as a special case.
         var isFullEllipse = Math.abs(Math.abs(parEnd - parStart) - 2 * Math.PI) < 0.01;
         if (isFullEllipse) {
-            var firstHalf = new G.GEllipse(ellipse);
-            var secondHalf = new G.GEllipse(ellipse);
+            var firstHalf = new GEllipse(ellipse);
+            var secondHalf = new GEllipse(ellipse);
             firstHalf.parEnd = (ellipse.parStart + ellipse.parEnd) / 2;
             secondHalf.parStart = (ellipse.parStart + ellipse.parEnd) / 2;
             path += this.pathEllipse(firstHalf, continuous);
@@ -54,7 +52,7 @@ export class SVGGraph {
         return path;
     }
 
-    private pathLine(line: G.GLine, continuous: boolean): string {
+    private pathLine(line: GLine, continuous: boolean): string {
         var start = line.start;
         var end = line.end;
         var path = (continuous ? " L" : " M") + start.x + " " + start.y;
@@ -62,7 +60,7 @@ export class SVGGraph {
         return path;
     }
 
-    private pathBezier(bezier: G.GBezier, continuous: boolean): string {
+    private pathBezier(bezier: GBezier, continuous: boolean): string {
         var start = bezier.start;
         var p1 = bezier.p1;
         var p2 = bezier.p2;
@@ -72,15 +70,15 @@ export class SVGGraph {
         return path;
     }
 
-    private pathSegmentedCurve(curve: G.GSegmentedCurve, continuous: boolean): string {
+    private pathSegmentedCurve(curve: GSegmentedCurve, continuous: boolean): string {
         var path = "";
         for (var i = 0; i < curve.segments.length; i++)
             path += this.pathCurve(curve.segments[i], continuous || i > 0);
         return path;
     }
 
-    private pathPolyline(polyline: G.GPolyline, continuous: boolean): string {
-        var start: G.GPoint = polyline.start;
+    private pathPolyline(polyline: GPolyline, continuous: boolean): string {
+        var start: GPoint = polyline.start;
         var path = " M" + start.x + " " + start.y;
         for (var i = 0; i < polyline.points.length; i++) {
             var point = polyline.points[i];
@@ -91,30 +89,30 @@ export class SVGGraph {
         return path;
     }
 
-    private pathRoundedRect(roundedRect: G.GRoundedRect, continuous: boolean): string {
+    private pathRoundedRect(roundedRect: GRoundedRect, continuous: boolean): string {
         var curve = roundedRect.getCurve();
         return this.pathSegmentedCurve(curve, continuous);
     }
 
-    private pathCurve(curve: G.GCurve, continuous: boolean): string {
+    private pathCurve(curve: GCurve, continuous: boolean): string {
         if (curve.type === "SegmentedCurve")
-            return this.pathSegmentedCurve(<G.GSegmentedCurve>curve, continuous);
+            return this.pathSegmentedCurve(<GSegmentedCurve>curve, continuous);
         else if (curve.type === "Polyline")
-            return this.pathPolyline(<G.GPolyline>curve, continuous);
+            return this.pathPolyline(<GPolyline>curve, continuous);
         else if (curve.type === "Bezier")
-            return this.pathBezier(<G.GBezier>curve, continuous);
+            return this.pathBezier(<GBezier>curve, continuous);
         else if (curve.type === "Line")
-            return this.pathLine(<G.GLine>curve, continuous);
+            return this.pathLine(<GLine>curve, continuous);
         else if (curve.type === "Ellipse")
-            return this.pathEllipse(<G.GEllipse>curve, continuous);
+            return this.pathEllipse(<GEllipse>curve, continuous);
         else if (curve.type === "RoundedRect")
-            return this.pathRoundedRect(<G.GRoundedRect>curve, continuous);
+            return this.pathRoundedRect(<GRoundedRect>curve, continuous);
     }
 
     // Return true to suppress default label rendering.
-    customDrawLabel: (svg: Element, parent: Element, label: G.GLabel, owner: G.IElement) => boolean = null;
+    customDrawLabel: (svg: Element, parent: Element, label: GLabel, owner: IElement) => boolean = null;
 
-    private drawLabel(parent: Element, label: G.GLabel, owner: G.IElement): void {
+    private drawLabel(parent: Element, label: GLabel, owner: IElement): void {
         if (this.customDrawLabel != null && this.customDrawLabel(this.svg, parent, label, owner))
             return;
         var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -125,8 +123,8 @@ export class SVGGraph {
         parent.appendChild(text);
     }
 
-    private drawNode(parent: Element, node: G.GNode): void {
-        var cluster = <G.GCluster>node;
+    private drawNode(parent: Element, node: GNode): void {
+        var cluster = <GCluster>node;
         if (cluster.children !== undefined)
             for (var i = 0; i < cluster.children.length; i++)
                 this.drawNode(parent, cluster.children[i]);
@@ -135,7 +133,7 @@ export class SVGGraph {
         var nodeCopy = node;
         var thisCopy = this;
         g.onclick = function () { thisCopy.onNodeClick(nodeCopy); };
-        var curve: G.GCurve = node.boundaryCurve;
+        var curve: GCurve = node.boundaryCurve;
         var pathString = this.pathCurve(curve, false);
         if (node.shape != null && node.shape.multi > 0) {
             var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -158,10 +156,10 @@ export class SVGGraph {
         parent.appendChild(g);
     }
 
-    private drawArrow(parent: Element, arrowHead: G.GArrowHead, style: string): void {
+    private drawArrow(parent: Element, arrowHead: GArrowHead, style: string): void {
         var start = arrowHead.start;
         var end = arrowHead.end;
-        var dir = new G.GPoint({ x: start.x - end.x, y: start.y - end.y });
+        var dir = new GPoint({ x: start.x - end.x, y: start.y - end.y });
         var offsetX = -dir.y * Math.tan(25 * 0.5 * (Math.PI / 180));
         var offsetY = dir.x * Math.tan(25 * 0.5 * (Math.PI / 180));
         var pathString = "";
@@ -188,12 +186,12 @@ export class SVGGraph {
         parent.appendChild(path);
     }
 
-    private drawEdge(parent: Element, edge: G.GEdge): void {
+    private drawEdge(parent: Element, edge: GEdge): void {
         var g = <SVGGElement>document.createElementNS("http://www.w3.org/2000/svg", "g");
         var edgeCopy = edge;
         var thisCopy = this;
         g.onclick = function () { thisCopy.onEdgeClick(edgeCopy); };
-        var curve: G.GCurve = edge.curve;
+        var curve: GCurve = edge.curve;
         var pathString = this.pathCurve(curve, false);
         var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
         path.setAttribute("d", pathString);
@@ -250,7 +248,7 @@ export class SVGGraph {
         if (this.graph == null)
             return;
 
-        var bbox: G.GRect = this.graph.boundingBox;
+        var bbox: GRect = this.graph.boundingBox;
         var offsetX = bbox.x;
         var offsetY = bbox.y;
         var width = this.container.offsetWidth;
@@ -263,6 +261,23 @@ export class SVGGraph {
         this.populateGraph();
     }
 
-    public onNodeClick: (n: G.GNode) => void = function (n) { };
-    public onEdgeClick: (e: G.GEdge) => void = function (e) { };
+    public onNodeClick: (n: GNode) => void = function (n) { };
+    public onEdgeClick: (e: GEdge) => void = function (e) { };
+}
+
+declare module "svggraph" {
+    export class SVGGraph {
+        graph: GGraph;
+        container: HTMLElement;
+        svg: Element;
+        grid: boolean;
+        constructor(containerID: string, graph?: GGraph);
+        customDrawLabel: (svg: Element, parent: Element, label: GLabel, owner: IElement) => boolean;
+        drawGrid(parent: Element): void;
+        style: string;
+        populateGraph(): void;
+        drawGraph(): void;
+        public onNodeClick: (n: GNode) => void;
+        public onEdgeClick: (e: GEdge) => void;
+    }
 }

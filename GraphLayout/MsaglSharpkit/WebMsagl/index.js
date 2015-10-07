@@ -1,4 +1,10 @@
-define(["require", "exports", './MSAGL/ggraph', './MSAGL/cgraph', './MSAGL/iddgraph', './MSAGL/htmlsvggraph', './MSAGL/iddsvggraph', 'samples'], function (require, exports, G, CG, IDDG, HTMLSVGG, IDDSVGG, Samples) {
+/// <amd-dependancy path="ggraph"/>
+/// <amd-dependancy path="cgraph"/>
+/// <amd-dependancy path="iddgraph"/>
+/// <amd-dependancy path="htmlsvggraph"/>
+/// <amd-dependancy path="iddsvggraph"/>
+/// <amd-dependancy path="samples"/>
+define(["require", "exports"], function (require, exports) {
     // Declare the various types of graph rendering layers that I'm going to use. It's important to note that
     // I'm using multiple rendering layers for the same geometry graph; the two layers are independant. I am
     // using one geometry graph for the Canvas and IDD renderings, and another geometry graph for the SVG and
@@ -84,7 +90,7 @@ define(["require", "exports", './MSAGL/ggraph', './MSAGL/cgraph', './MSAGL/iddgr
         var translate = "translate(" + (label.bounds.x) + "," + (label.bounds.y) + ")";
         var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
         g.setAttribute("transform", translate);
-        var txt = Samples.customSVG;
+        var txt = customSVG;
         var content = new DOMParser().parseFromString(txt, 'image/svg+xml');
         function copyTree(source, dest) {
             for (var i = 0; i < source.childNodes.length; i++) {
@@ -110,13 +116,13 @@ define(["require", "exports", './MSAGL/ggraph', './MSAGL/cgraph', './MSAGL/iddgr
         $("#messages").text("");
         // Create and setup the various rendering graphs. Note that if you only have text labels, you don't
         // need to set the customDrawLabel property.
-        cgraph = new CG.CGraph('graphCanvas');
+        cgraph = new CGraph('graphCanvas');
         cgraph.customDrawLabel = customDrawLabelCanvas;
-        iddgraph = new IDDG.IDDGraph('iddchart');
+        iddgraph = new IDDGraph('iddchart');
         iddgraph.customDrawLabel = customDrawLabelCanvas;
-        svggraph = new HTMLSVGG.HTMLSVGGraph('graphSvg');
+        svggraph = new HTMLSVGGraph('graphSvg');
         svggraph.customDrawLabel = customDrawLabelSVG;
-        iddsvggraph = new IDDSVGG.IDDSVGGraph('iddsvgchart');
+        iddsvggraph = new IDDSVGGraph('iddsvgchart');
         iddsvggraph.customDrawLabel = customDrawLabelSVG;
         // Load the "four nodes" example in the text box.
         onLoadFourNodes();
@@ -136,7 +142,7 @@ define(["require", "exports", './MSAGL/ggraph', './MSAGL/cgraph', './MSAGL/iddgr
         var json = $("#graphJsonTextIn").text();
         if (updateCanvas || updateIDD) {
             // Get a GGraph from the JSON string.
-            var ggraphContext = G.GGraph.ofJSON(json);
+            var ggraphContext = GGraph.ofJSON(json);
             // Call createNodeBoundariesFromContext. This will make sure that every node has a proper boundary
             // curve. If any node does not have a boundary curve, layout will fail. Note that if you are
             // explicitly setting the boundary curve for every single node, you do not need to call this
@@ -153,7 +159,7 @@ define(["require", "exports", './MSAGL/ggraph', './MSAGL/cgraph', './MSAGL/iddgr
         }
         // This block does the same as the above, for SVG.
         if (updateSVG || updateIDDSVG) {
-            var ggraphSVG = G.GGraph.ofJSON(json);
+            var ggraphSVG = GGraph.ofJSON(json);
             ggraphSVG.createNodeBoundariesFromSVG();
             ggraphSVG.beginLayoutGraph(function () {
                 callbackSVGGraph(ggraphSVG);
@@ -162,18 +168,18 @@ define(["require", "exports", './MSAGL/ggraph', './MSAGL/cgraph', './MSAGL/iddgr
         }
     }
     function onLoadProgrammatically() {
-        $("#graphJsonTextIn").text(Samples.txt_programmatically);
+        $("#graphJsonTextIn").text(txt_programmatically);
     }
     exports.onLoadProgrammatically = onLoadProgrammatically;
     function onLoadFourNodes() {
-        $("#graphJsonTextIn").text(Samples.txt_fourNodes);
+        $("#graphJsonTextIn").text(txt_fourNodes);
     }
     exports.onLoadFourNodes = onLoadFourNodes;
     function onLoadManyNodes() {
         var nodes = $("#randomGraphNodes").val();
         var edges = $("#randomGraphEdges").val();
         var custom = $("#randomGraphCustom")[0].checked;
-        var txt = Samples.txt_manyNodes(nodes, edges, custom ? 0.2 : 0.0);
+        var txt = txt_manyNodes(nodes, edges, custom ? 0.2 : 0.0);
         $("#graphJsonTextIn").text(txt);
     }
     exports.onLoadManyNodes = onLoadManyNodes;

@@ -1,4 +1,5 @@
-define(["require", "exports", 'ggraph'], function (require, exports, G) {
+define(["require", "exports", "ggraph"], function (require, exports) {
+    /// <amd-dependency path="ggraph"/>
     importScripts("sharpkit_pre.js");
     importScripts("jsclr.js");
     importScripts("Microsoft.Msagl.js");
@@ -70,7 +71,7 @@ define(["require", "exports", 'ggraph'], function (require, exports, G) {
             node.set_UserData(gnode.id);
             var curve = this.getMsaglCurve(gnode.boundaryCurve);
             if (curve == null)
-                curve = this.getMsaglCurve(new G.GRoundedRect({
+                curve = this.getMsaglCurve(new GRoundedRect({
                     bounds: { x: 0, y: 0, width: 0, height: 0 },
                     radiusX: 0,
                     radiusY: 0
@@ -108,7 +109,7 @@ define(["require", "exports", 'ggraph'], function (require, exports, G) {
             for (var i = 0; i < ggraph.edges.length; i++)
                 this.addEdgeToMsagl(graph, nodeMap, edgeMap, ggraph.edges[i]);
             var settings;
-            if (ggraph.settings.layout == G.GSettings.mdsLayout) {
+            if (ggraph.settings.layout == GSettings.mdsLayout) {
                 settings = new Microsoft.Msagl.Layout.MDS.MdsLayoutSettings.ctor();
             }
             else {
@@ -116,16 +117,16 @@ define(["require", "exports", 'ggraph'], function (require, exports, G) {
                 var transformation = new Microsoft.Msagl.Core.Geometry.Curves.PlaneTransformation.ctor$$Double$$Double$$Double$$Double$$Double$$Double(ggraph.settings.transformation.m00, ggraph.settings.transformation.m01, ggraph.settings.transformation.m02, ggraph.settings.transformation.m10, ggraph.settings.transformation.m11, ggraph.settings.transformation.m12);
                 settings.set_Transformation(transformation);
                 var edgeRoutingSettings = settings.get_EdgeRoutingSettings();
-                if (ggraph.settings.routing == G.GSettings.rectilinearRouting)
+                if (ggraph.settings.routing == GSettings.rectilinearRouting)
                     edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.Rectilinear);
             }
             return { graph: graph, settings: settings, nodeMap: nodeMap, edgeMap: edgeMap, source: ggraph };
         };
         Worker.prototype.getGPoint = function (point) {
-            return new G.GPoint({ x: point.get_X(), y: point.get_Y() });
+            return new GPoint({ x: point.get_X(), y: point.get_Y() });
         };
         Worker.prototype.getGRect = function (rect) {
-            return new G.GRect({ x: rect.get_Left(), y: rect.get_Bottom(), width: rect.get_Width(), height: rect.get_Height() });
+            return new GRect({ x: rect.get_Left(), y: rect.get_Bottom(), width: rect.get_Width(), height: rect.get_Height() });
         };
         Worker.prototype.getGCurve = function (curve) {
             var ret;
@@ -134,7 +135,7 @@ define(["require", "exports", 'ggraph'], function (require, exports, G) {
                 var sEn = curve.get_Segments().GetEnumerator();
                 while (sEn.MoveNext())
                     segments.push(this.getGCurve(sEn.get_Current()));
-                ret = new G.GSegmentedCurve({
+                ret = new GSegmentedCurve({
                     type: "SegmentedCurve",
                     segments: segments
                 });
@@ -144,7 +145,7 @@ define(["require", "exports", 'ggraph'], function (require, exports, G) {
                 var pEn = curve.get_PolylinePoints().GetEnumerator();
                 while (pEn.MoveNext())
                     points.push(this.getGPoint(pEn.get_Current()));
-                ret = new G.GPolyline({
+                ret = new GPolyline({
                     type: "Polyline",
                     start: this.getGPoint(curve.get_Start()),
                     points: points,
@@ -152,7 +153,7 @@ define(["require", "exports", 'ggraph'], function (require, exports, G) {
                 });
             }
             else if (Is(curve, Microsoft.Msagl.Core.Geometry.Curves.CubicBezierSegment.ctor)) {
-                ret = new G.GBezier({
+                ret = new GBezier({
                     type: "Bezier",
                     start: this.getGPoint(curve.get_Start()),
                     p1: this.getGPoint(curve.B(1)),
@@ -161,14 +162,14 @@ define(["require", "exports", 'ggraph'], function (require, exports, G) {
                 });
             }
             else if (Is(curve, Microsoft.Msagl.Core.Geometry.Curves.LineSegment.ctor)) {
-                ret = new G.GLine({
+                ret = new GLine({
                     type: "Line",
                     start: this.getGPoint(curve.get_Start()),
                     end: this.getGPoint(curve.get_End())
                 });
             }
             else if (Is(curve, Microsoft.Msagl.Core.Geometry.Curves.Ellipse.ctor)) {
-                ret = new G.GEllipse({
+                ret = new GEllipse({
                     type: "Ellipse",
                     axisA: this.getGPoint(curve.get_AxisA()),
                     axisB: this.getGPoint(curve.get_AxisB()),
@@ -178,7 +179,7 @@ define(["require", "exports", 'ggraph'], function (require, exports, G) {
                 });
             }
             else if (Is(curve, Microsoft.Msagl.Core.Geometry.Curves.RoundedRect.ctor)) {
-                ret = new G.GRoundedRect({
+                ret = new GRoundedRect({
                     type: "RoundedRect",
                     bounds: this.getGRect(curve.get_BoundingBox()),
                     radiusX: curve.get_RadiusX(),
@@ -230,7 +231,7 @@ define(["require", "exports", 'ggraph'], function (require, exports, G) {
         return Worker;
     })();
     function handleMessage(e) {
-        var ggraph = G.GGraph.ofJSON(e.data);
+        var ggraph = GGraph.ofJSON(e.data);
         var worker = new Worker(ggraph);
         worker.runLayout();
         var serialisedGraph = worker.graph.getJSON();

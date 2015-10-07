@@ -1,19 +1,19 @@
-﻿import G = require('./MSAGL/ggraph');
-import CG = require('./MSAGL/cgraph');
-import IDDG = require('./MSAGL/iddgraph');
-import HTMLSVGG = require('./MSAGL/htmlsvggraph');
-import IDDSVGG = require('./MSAGL/iddsvggraph');
-import Samples = require('samples');
+﻿/// <amd-dependancy path="ggraph"/>
+/// <amd-dependancy path="cgraph"/>
+/// <amd-dependancy path="iddgraph"/>
+/// <amd-dependancy path="htmlsvggraph"/>
+/// <amd-dependancy path="iddsvggraph"/>
+/// <amd-dependancy path="samples"/>
 
 // Declare the various types of graph rendering layers that I'm going to use. It's important to note that
 // I'm using multiple rendering layers for the same geometry graph; the two layers are independant. I am
 // using one geometry graph for the Canvas and IDD renderings, and another geometry graph for the SVG and
 // IDD SVG renderings. The reason I'm not using just one geometry graph is that Canvas and SVG render text
 // a bit differently, which may require labels of different size.
-var cgraph: CG.CGraph;
-var iddgraph: IDDG.IDDGraph;
-var svggraph: HTMLSVGG.HTMLSVGGraph;
-var iddsvggraph: IDDSVGG.IDDSVGGraph;
+var cgraph: CGraph;
+var iddgraph: IDDGraph;
+var svggraph: HTMLSVGGraph;
+var iddsvggraph: IDDSVGGraph;
 
 // This is the callback function for Canvas graphs. It will be called when the layout for the geometry
 // graph that I want to use for Canvas is completed. In this function, I will use the Canvas and IDD
@@ -85,7 +85,7 @@ function callbackSVGGraph(ggraph) {
 // the default rendering (i.e. text). Note that if you use custom labels, you must make sure that the label size
 // is set before starting the layout; the engine cannot infer the size of a custom label.
 // In this case, if the label content is a single asterisk, then I'm drawing a filled circle with a radius of 20.
-function customDrawLabelCanvas(context: CanvasRenderingContext2D, label: G.GLabel): boolean {
+function customDrawLabelCanvas(context: CanvasRenderingContext2D, label: GLabel): boolean {
     if (label.content != "*")
         return false;
     context.beginPath();
@@ -96,14 +96,14 @@ function customDrawLabelCanvas(context: CanvasRenderingContext2D, label: G.GLabe
 }
 
 // Same as above, for SVG. In this case, I'm using an SVG picture as the node content.
-function customDrawLabelSVG(svg: any, parent: Element, label: G.GLabel): boolean {
+function customDrawLabelSVG(svg: any, parent: Element, label: GLabel): boolean {
     if (label.content != "*")
         return false;
     var translate = "translate(" + (label.bounds.x) + "," + (label.bounds.y) + ")";
     var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g.setAttribute("transform", translate);
 
-    var txt = Samples.customSVG;
+    var txt = customSVG;
     var content: Document = new DOMParser().parseFromString(txt, 'image/svg+xml');
 
     function copyTree(source: any, dest: Element) {
@@ -133,13 +133,13 @@ export function init() {
 
     // Create and setup the various rendering graphs. Note that if you only have text labels, you don't
     // need to set the customDrawLabel property.
-    cgraph = new CG.CGraph('graphCanvas');
+    cgraph = new CGraph('graphCanvas');
     cgraph.customDrawLabel = customDrawLabelCanvas;
-    iddgraph = new IDDG.IDDGraph('iddchart');
+    iddgraph = new IDDGraph('iddchart');
     iddgraph.customDrawLabel = customDrawLabelCanvas;
-    svggraph = new HTMLSVGG.HTMLSVGGraph('graphSvg');
+    svggraph = new HTMLSVGGraph('graphSvg');
     svggraph.customDrawLabel = customDrawLabelSVG;
-    iddsvggraph = new IDDSVGG.IDDSVGGraph('iddsvgchart');
+    iddsvggraph = new IDDSVGGraph('iddsvgchart');
     iddsvggraph.customDrawLabel = customDrawLabelSVG;
 
     // Load the "four nodes" example in the text box.
@@ -164,7 +164,7 @@ function performUpdate() {
 
     if (updateCanvas || updateIDD) {
         // Get a GGraph from the JSON string.
-        var ggraphContext = G.GGraph.ofJSON(json);
+        var ggraphContext = GGraph.ofJSON(json);
         // Call createNodeBoundariesFromContext. This will make sure that every node has a proper boundary
         // curve. If any node does not have a boundary curve, layout will fail. Note that if you are
         // explicitly setting the boundary curve for every single node, you do not need to call this
@@ -181,7 +181,7 @@ function performUpdate() {
 
     // This block does the same as the above, for SVG.
     if (updateSVG || updateIDDSVG) {
-        var ggraphSVG = G.GGraph.ofJSON(json);
+        var ggraphSVG = GGraph.ofJSON(json);
         ggraphSVG.createNodeBoundariesFromSVG();
 
         ggraphSVG.beginLayoutGraph(function () { callbackSVGGraph(ggraphSVG) });
@@ -190,18 +190,18 @@ function performUpdate() {
 }
 
 export function onLoadProgrammatically() {
-    $("#graphJsonTextIn").text(Samples.txt_programmatically);
+    $("#graphJsonTextIn").text(txt_programmatically);
 }
 
 export function onLoadFourNodes() {
-    $("#graphJsonTextIn").text(Samples.txt_fourNodes);
+    $("#graphJsonTextIn").text(txt_fourNodes);
 }
 
 export function onLoadManyNodes() {
     var nodes = $("#randomGraphNodes").val();
     var edges = $("#randomGraphEdges").val();
     var custom = (<HTMLInputElement>$("#randomGraphCustom")[0]).checked;
-    var txt = Samples.txt_manyNodes(nodes, edges, custom ? 0.2 : 0.0);
+    var txt = txt_manyNodes(nodes, edges, custom ? 0.2 : 0.0);
     $("#graphJsonTextIn").text(txt);
 }
 
