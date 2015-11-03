@@ -123,7 +123,17 @@ namespace Microsoft.Msagl.Drawing
         {
             nodes.Insert(node);
             IsUpdated = true;
-      }
+        }
+
+        /// <summary>
+        /// Removes the node from this subgraph.
+        /// </summary>
+        /// <param name="node">The node to remove.</param>
+        public void RemoveNode(Node node)
+        {
+            nodes.Remove(node);
+            IsUpdated = true;
+        }
 
         ///<summary>
         ///</summary>
