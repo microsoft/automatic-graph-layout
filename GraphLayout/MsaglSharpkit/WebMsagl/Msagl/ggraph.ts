@@ -1,10 +1,13 @@
 ﻿// Geometry graph.
-export interface IPoint {
+
+declare var rootFolder: string;
+
+interface IPoint {
     x: number;
     y: number;
 }
 
-export class GPoint implements IPoint {
+class GPoint implements IPoint {
     x: number;
     y: number;
     constructor(p: any)
@@ -27,14 +30,14 @@ export class GPoint implements IPoint {
     }
 }
 
-export interface IRect {
+interface IRect {
     x: number;
     y: number;
     width: number;
     height: number;
 }
 
-export class GRect implements IRect {
+class GRect implements IRect {
     x: number;
     y: number;
     width: number;
@@ -77,13 +80,13 @@ export class GRect implements IRect {
     }
 }
 
-export interface ICurve {
+interface ICurve {
     type: string;
     getCenter(): GPoint;
     getBoundingBox(): GRect;
 }
 
-export class GCurve implements ICurve {
+class GCurve implements ICurve {
     type: string;
     constructor(type: string) {
         if (type === undefined)
@@ -116,7 +119,7 @@ export class GCurve implements ICurve {
     }
 }
 
-export interface IEllipse {
+interface IEllipse {
     center: IPoint;
     axisA: IPoint;
     axisB: IPoint;
@@ -124,7 +127,7 @@ export interface IEllipse {
     parEnd: number;
 }
 
-export class GEllipse extends GCurve implements IEllipse {
+class GEllipse extends GCurve implements IEllipse {
     center: GPoint;
     axisA: GPoint;
     axisB: GPoint;
@@ -153,12 +156,12 @@ export class GEllipse extends GCurve implements IEllipse {
     }
 }
 
-export interface ILine {
+interface ILine {
     start: IPoint;
     end: IPoint;
 }
 
-export class GLine extends GCurve implements ILine {
+class GLine extends GCurve implements ILine {
     start: GPoint;
     end: GPoint;
     constructor(line: any)
@@ -177,13 +180,13 @@ export class GLine extends GCurve implements ILine {
     }
 }
 
-export interface IPolyline {
+interface IPolyline {
     start: IPoint;
     points: IPoint[];
     closed: boolean;
 }
 
-export class GPolyline extends GCurve implements ICurve {
+class GPolyline extends GCurve implements ICurve {
     start: GPoint;
     points: GPoint[];
     closed: boolean;
@@ -211,13 +214,13 @@ export class GPolyline extends GCurve implements ICurve {
     }
 }
 
-export interface IRoundedRect {
+interface IRoundedRect {
     bounds: IRect;
     radiusX: number;
     radiusY: number;
 }
 
-export class GRoundedRect extends GCurve implements IRoundedRect {
+class GRoundedRect extends GCurve implements IRoundedRect {
     bounds: GRect;
     radiusX: number;
     radiusY: number;
@@ -251,14 +254,14 @@ export class GRoundedRect extends GCurve implements IRoundedRect {
     }
 }
 
-export interface IBezier {
+interface IBezier {
     start: IPoint;
     p1: IPoint;
     p2: IPoint;
     p3: IPoint;
 }
 
-export class GBezier extends GCurve implements ICurve {
+class GBezier extends GCurve implements ICurve {
     start: GPoint;
     p1: GPoint;
     p2: GPoint;
@@ -288,11 +291,11 @@ export class GBezier extends GCurve implements ICurve {
     }
 }
 
-export interface ISegmentedCurve {
+interface ISegmentedCurve {
     segments: ICurve[];
 }
 
-export class GSegmentedCurve extends GCurve implements ICurve {
+class GSegmentedCurve extends GCurve implements ICurve {
     segments: ICurve[];
     constructor(segmentedCurve: any)
     constructor(segmentedCurve: ISegmentedCurve) {
@@ -316,17 +319,17 @@ export class GSegmentedCurve extends GCurve implements ICurve {
     }
 }
 
-export interface IElement {
+interface IElement {
     tooltip: string;
 }
 
-export interface ILabel {
+interface ILabel {
     bounds: IRect;
     content: string;
     fill: string;
 }
 
-export class GLabel {
+class GLabel {
     bounds: IRect;
     content: string;
     fill: string;
@@ -342,7 +345,7 @@ export class GLabel {
     }
 }
 
-export class GShape {
+class GShape {
     static GetRect(): GShape {
         var ret = new GShape();
         ret.shape = "rect";
@@ -383,7 +386,7 @@ export class GShape {
     multi: number;
 }
 
-export interface INode extends IElement {
+interface INode extends IElement {
     id: string;
     label: ILabel;
     labelMargin: number;
@@ -394,7 +397,7 @@ export interface INode extends IElement {
     stroke: string;
 }
 
-export class GNode implements INode {
+class GNode implements INode {
     id: string;
     tooltip: string;
     label: GLabel;
@@ -423,11 +426,11 @@ export class GNode implements INode {
     }
 }
 
-export interface ICluster extends INode {
+interface ICluster extends INode {
     children: INode[];
 }
 
-export class GCluster extends GNode implements ICluster {
+class GCluster extends GNode implements ICluster {
     children: GNode[];
     constructor(cluster: any)
     constructor(cluster: ICluster) {
@@ -441,7 +444,7 @@ export class GCluster extends GNode implements ICluster {
     }
 }
 
-export interface IArrowHead {
+interface IArrowHead {
     start: IPoint;
     end: IPoint;
     closed: boolean;
@@ -450,7 +453,7 @@ export interface IArrowHead {
     style: string;
 }
 
-export class GArrowHead implements IArrowHead {
+class GArrowHead implements IArrowHead {
     start: IPoint;
     end: IPoint;
     closed: boolean;
@@ -466,13 +469,13 @@ export class GArrowHead implements IArrowHead {
         this.dash = arrowHead.dash == undefined ? null : arrowHead.dash;
         this.style = arrowHead.style == undefined ? "standard" : arrowHead.style;
     }
-    static standard: GArrowHead = new GArrowHead({ });
+    static standard: GArrowHead = new GArrowHead({});
     static closed: GArrowHead = new GArrowHead({ closed: true });
     static filled: GArrowHead = new GArrowHead({ closed: true, fill: true });
     static tee: GArrowHead = new GArrowHead({ style: "tee" });
 }
-   
-export interface IEdge extends IElement {
+
+interface IEdge extends IElement {
     id: string;
     source: string;
     target: string;
@@ -485,7 +488,7 @@ export interface IEdge extends IElement {
     stroke: string;
 }
 
-export class GEdge implements IEdge {
+class GEdge implements IEdge {
     id: string;
     tooltip: string;
     source: string;
@@ -519,7 +522,7 @@ export class GEdge implements IEdge {
     }
 }
 
-export interface IPlaneTransformation {
+interface IPlaneTransformation {
     m00: number;
     m01: number;
     m02: number;
@@ -528,7 +531,7 @@ export interface IPlaneTransformation {
     m12: number;
 }
 
-export class GPlaneTransformation implements IPlaneTransformation {
+class GPlaneTransformation implements IPlaneTransformation {
     m00: number;
     m01: number;
     m02: number;
@@ -560,29 +563,29 @@ export class GPlaneTransformation implements IPlaneTransformation {
     static defaultTransformation = new GPlaneTransformation({ m00: -1, m01: 0, m02: 0, m10: 0, m11: -1, m12: 0 });
 }
 
-export interface ISettings {
+interface ISettings {
     layout: string;
     transformation: IPlaneTransformation;
     routing: string;
 }
 
-export class GSettings implements ISettings {
+class GSettings implements ISettings {
+    layout: string;
+    transformation: GPlaneTransformation;
+    routing: string;
     constructor(settings: any)
     constructor(settings: ISettings) {
         this.layout = settings.layout === undefined ? GSettings.sugiyamaLayout : settings.layout;
         this.transformation = settings.transformation === undefined ? GPlaneTransformation.defaultTransformation : settings.transformation;
         this.routing = settings.routing === undefined ? GSettings.sugiyamaSplinesRouting : settings.routing;
     }
-    layout: string; // "sugiyama" or "mds"
-    transformation: GPlaneTransformation;
-    routing: string;
     static sugiyamaLayout = "sugiyama";
     static mdsLayout = "mds";
     static sugiyamaSplinesRouting = "sugiyamasplines";
     static rectilinearRouting = "rectilinear";
 }
 
-export interface IGraph {
+interface IGraph {
     nodes: GNode[];
     edges: GEdge[];
     boundingBox: IRect;
@@ -596,7 +599,7 @@ class GNodeInternal {
     selfEdges: string[];
 }
 
-export class GGraph implements IGraph {
+class GGraph implements IGraph {
     private nodesMap: Object; // id -> GNodeInternal
     private edgesMap: Object; // id -> GEdge
     nodes: GNode[];
@@ -785,7 +788,8 @@ export class GGraph implements IGraph {
         var bbox = element.getBBox();
         var ret = { x: bbox.width, y: bbox.height };
         svg.removeChild(element);
-        ret.y -= 6; // Hack: offset miscalculated height.
+        if (ret.y > 6)
+            ret.y -= 6; // Hack: offset miscalculated height.
         if (label.content.length == 1)
             ret.x = ret.y; // Hack: make single-letter nodes round.
         return ret;
@@ -873,8 +877,371 @@ export class GGraph implements IGraph {
         }
 
         var serialisedGraph = this.getJSON();
-        this.worker = new Worker('/MSAGL/workerBoot.js');
+        if (typeof rootFolder == "undefined")
+            rootFolder = "/";
+        this.worker = new Worker(rootFolder + 'MSAGL/workerBoot.js');
         this.worker.addEventListener('message', workerCallback);
         this.worker.postMessage(serialisedGraph);
+    }
+}
+
+declare module "ggraph" {
+    export interface IPoint {
+        x: number;
+        y: number;
+    }
+
+    export class GPoint implements IPoint {
+        x: number;
+        y: number;
+        constructor(p: any);
+        constructor(p: IPoint);
+        static origin: GPoint;
+        add(other: IPoint);
+        sub(other: IPoint);
+        div(op: number);
+        mul(op: number);
+    }
+
+    export interface IRect {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+    }
+
+    export class GRect implements IRect {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+        constructor(r: any);
+        constructor(r: IRect);
+        static zero: GRect;
+        getTopLeft(): GPoint;
+        getBottomRight(): GPoint;
+        getBottom(): number;
+        getRight(): number;
+        getCenter(): GPoint;
+        extend(other: GRect);
+        extendP(point: GPoint);
+    }
+
+    export interface ICurve {
+        type: string;
+        getCenter(): GPoint;
+        getBoundingBox(): GRect;
+    }
+
+    export class GCurve implements ICurve {
+        type: string;
+        constructor(type: string);
+        getCenter(): GPoint;
+        getBoundingBox(): GRect;
+        static ofCurve(curve: ICurve): GCurve;
+    }
+
+    export interface IEllipse {
+        center: IPoint;
+        axisA: IPoint;
+        axisB: IPoint;
+        parStart: number;
+        parEnd: number;
+    }
+
+    export class GEllipse extends GCurve implements IEllipse {
+        center: GPoint;
+        axisA: GPoint;
+        axisB: GPoint;
+        parStart: number;
+        parEnd: number;
+        constructor(ellipse: any);
+        constructor(ellipse: IEllipse);
+        getCenter(): GPoint;
+        getBoundingBox(): GRect;
+        static make(width: number, height: number): GEllipse;
+    }
+
+    export interface ILine {
+        start: IPoint;
+        end: IPoint;
+    }
+
+    export class GLine extends GCurve implements ILine {
+        start: GPoint;
+        end: GPoint;
+        constructor(line: any)
+        constructor(line: ILine);
+        getCenter(): GPoint;
+        getBoundingBox(): GRect;
+    }
+
+    export interface IPolyline {
+        start: IPoint;
+        points: IPoint[];
+        closed: boolean;
+    }
+
+    export class GPolyline extends GCurve implements ICurve {
+        start: GPoint;
+        points: GPoint[];
+        closed: boolean;
+        constructor(polyline: any);
+        constructor(polyline: IPolyline);
+        getCenter(): GPoint;
+        getBoundingBox(): GRect;
+    }
+
+    export interface IRoundedRect {
+        bounds: IRect;
+        radiusX: number;
+        radiusY: number;
+    }
+
+    export class GRoundedRect extends GCurve implements IRoundedRect {
+        bounds: GRect;
+        radiusX: number;
+        radiusY: number;
+        constructor(roundedRect: any);
+        constructor(roundedRect: IRoundedRect);
+        getCenter(): GPoint;
+        getBoundingBox(): GRect;
+        getCurve(): GSegmentedCurve;
+    }
+
+    export interface IBezier {
+        start: IPoint;
+        p1: IPoint;
+        p2: IPoint;
+        p3: IPoint;
+    }
+
+    export class GBezier extends GCurve implements ICurve {
+        start: GPoint;
+        p1: GPoint;
+        p2: GPoint;
+        p3: GPoint;
+        constructor(bezier: any)
+        constructor(bezier: IBezier);
+        getCenter(): GPoint;
+        getBoundingBox(): GRect;
+    }
+
+    export interface ISegmentedCurve {
+        segments: ICurve[];
+    }
+
+    export class GSegmentedCurve extends GCurve implements ICurve {
+        segments: ICurve[];
+        constructor(segmentedCurve: any);
+        constructor(segmentedCurve: ISegmentedCurve);
+        getCenter(): GPoint;
+        getBoundingBox(): GRect;
+    }
+
+    export interface IElement {
+        tooltip: string;
+    }
+
+    export interface ILabel {
+        bounds: IRect;
+        content: string;
+        fill: string;
+    }
+
+    export class GLabel {
+        bounds: IRect;
+        content: string;
+        fill: string;
+        constructor(label: any);
+        constructor(label: ILabel);
+    }
+
+    export class GShape {
+        static GetRect(): GShape;
+        static GetRoundedRect(radiusX?: number, radiusY?: number): GShape;
+        static GetMaxRoundedRect(): GShape;
+        static RectShape: string;
+        static FromString(shape: string);
+        constructor();
+        shape: string;
+        radiusX: number;
+        radiusY: number;
+        multi: number;
+    }
+
+    export interface INode extends IElement {
+        id: string;
+        label: ILabel;
+        labelMargin: number;
+        shape: GShape;
+        boundaryCurve: ICurve;
+        thickness: number;
+        fill: string;
+        stroke: string;
+    }
+
+    export class GNode implements INode {
+        id: string;
+        tooltip: string;
+        label: GLabel;
+        labelMargin: number;
+        shape: GShape;
+        boundaryCurve: GCurve;
+        thickness: number;
+        fill: string;
+        stroke: string;
+        constructor(node: any);
+        constructor(node: INode);
+        isCluster();
+    }
+
+    export interface ICluster extends INode {
+        children: INode[];
+    }
+
+    export class GCluster extends GNode implements ICluster {
+        children: GNode[];
+        constructor(cluster: any);
+        constructor(cluster: ICluster);
+    }
+
+    export interface IArrowHead {
+        start: IPoint;
+        end: IPoint;
+        closed: boolean;
+        fill: boolean;
+        dash: string;
+        style: string;
+    }
+
+    export class GArrowHead implements IArrowHead {
+        start: IPoint;
+        end: IPoint;
+        closed: boolean;
+        fill: boolean;
+        dash: string;
+        style: string;
+        constructor(arrowHead: any);
+        constructor(arrowHead: IArrowHead);
+        static standard: GArrowHead;
+        static closed: GArrowHead;
+        static filled: GArrowHead;
+        static tee: GArrowHead;
+    }
+
+    export interface IEdge extends IElement {
+        id: string;
+        source: string;
+        target: string;
+        label: ILabel;
+        arrowHeadAtTarget: GArrowHead;
+        arrowHeadAtSource: GArrowHead;
+        thickness: number;
+        dash: string;
+        curve: ICurve;
+        stroke: string;
+    }
+
+    export class GEdge implements IEdge {
+        id: string;
+        tooltip: string;
+        source: string;
+        target: string;
+        label: GLabel;
+        arrowHeadAtTarget: GArrowHead;
+        arrowHeadAtSource: GArrowHead;
+        thickness: number;
+        dash: string;
+        curve: GCurve;
+        stroke: string;
+        constructor(edge: any);
+        constructor(edge: IEdge);
+    }
+
+    export interface IPlaneTransformation {
+        m00: number;
+        m01: number;
+        m02: number;
+        m10: number;
+        m11: number;
+        m12: number;
+    }
+
+    export class GPlaneTransformation implements IPlaneTransformation {
+        m00: number;
+        m01: number;
+        m02: number;
+        m10: number;
+        m11: number;
+        m12: number;
+        constructor(transformation: any);
+        constructor(transformation: IPlaneTransformation);
+        static defaultTransformation;
+    }
+
+    export interface ISettings {
+        transformation: IPlaneTransformation;
+        routing: string;
+    }
+
+    export class GSettings {
+        transformation: GPlaneTransformation;
+        routing: string;
+        constructor(settings: any);
+        constructor(settings: ISettings);
+        static sugiyamaSplinesRouting;
+        static rectilinearRouting;
+    }
+
+    export interface IGraph {
+        nodes: GNode[];
+        edges: GEdge[];
+        boundingBox: IRect;
+        settings: ISettings;
+    }
+
+    export class GNodeInternal {
+        node: GNode;
+        outEdges: string[];
+        inEdges: string[];
+        selfEdges: string[];
+    }
+
+    export class GGraph implements IGraph {
+        private nodesMap: Object; // id -> GNodeInternal
+        private edgesMap: Object; // id -> GEdge
+        nodes: GNode[];
+        edges: GEdge[];
+        boundingBox: GRect;
+        settings: GSettings;
+
+        constructor();
+
+        addNode(node: GNode): void;
+        getNode(id: string): GNode;
+        getInEdges(id: string): string[];
+        getOutEdges(id: string): string[];
+        getSelfEdges(id: string): string[];
+        addEdge(edge: GEdge): void;
+        getEdge(id: string): GEdge;
+
+        getJSON(): string;
+        static ofJSON(json: string): GGraph;
+
+        private createNodeBoundariesRec(node: GNode, sizer?: (label: GLabel, owner: IElement) => IPoint);
+        createNodeBoundaries(sizer?: (label: GLabel, owner: IElement) => IPoint);
+        static contextSizer(context: CanvasRenderingContext2D, label: GLabel): IPoint;
+        createNodeBoundariesFromContext(context?: CanvasRenderingContext2D);
+        static divSizer(div: HTMLDivElement, label: GLabel): IPoint;
+        createNodeBoundariesFromDiv(div?: HTMLDivElement);
+        static SVGSizer(svg: Element, label: GLabel): IPoint;
+        createNodeBoundariesFromSVG(svg?: Element, style?: CSSStyleDeclaration);
+        static SVGInContainerSizer(container: HTMLElement, svg: Element, label: GLabel);
+        createNodeBoundariesForSVGInContainer(container: HTMLElement);
+
+        private worker: Worker;
+        stopLayoutGraph(): void;
+        beginLayoutGraph(callback: () => void): void;
     }
 }

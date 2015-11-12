@@ -1,18 +1,18 @@
-﻿import G = require('./MSAGL/ggraph');
+﻿/// <amd-dependancy path="ggraph"/>
 
 // Prepare a graph programmatically. Please look at the various interfaces in ggraph.ts for all the various options.
-export var txt_programmatically = function () {
-    var ggraph = new G.GGraph();
-    var node1 = new G.GNode({ id: "node1", label: "Node 1" }); // Labels are objects, but you can use a simple string here - it'll get converted.
-    var node2 = new G.GNode({ id: "node2", label: { content: "Node 2" } });
-    var edge1 = new G.GEdge({ id: "edge1", source: node1.id, target: node2.id });
+var txt_programmatically = function () {
+    var ggraph = new GGraph();
+    var node1 = new GNode({ id: "node1", label: "Node 1" }); // Labels are objects, but you can use a simple string here - it'll get converted.
+    var node2 = new GNode({ id: "node2", label: { content: "Node 2" } });
+    var edge1 = new GEdge({ id: "edge1", source: node1.id, target: node2.id });
     // I'm returning the JSON form of this graph, but I could just as well start the layout here (after creating the node boundaries).
     var json = ggraph.getJSON();
     return json;
 } ();
 
 // Prepare a random graph with a substantial number of elements.
-export var txt_manyNodes = function (nodeCount: number, edgeCount: number, customLabelChance: number) {
+var txt_manyNodes = function (nodeCount: number, edgeCount: number, customLabelChance: number) {
     var ret = '{\r\n    "nodes": [\r\n';
     for (var i = 0; i < nodeCount; i++) {
         var labelcontent;
@@ -42,9 +42,8 @@ export var txt_manyNodes = function (nodeCount: number, edgeCount: number, custo
 };
 
 // Prepare a custom-made graph.
-export var txt_fourNodes =
+var txt_fourNodes =
     '{                                      \r\n' +
-    '"settings": {"layout":"mds"},'+
     '    "nodes": [                         \r\n' +
     '        {                              \r\n' +
     '            "id": "node1",             \r\n' +
@@ -120,7 +119,7 @@ export var txt_fourNodes =
     '        }]                             \r\n' +
     '}                                      \r\n';
 
-export var customSVG =
+var customSVG =
     //'<svg xmlns="http://www.w3.org/2000/svg" height="78.769" width="179.411">                                        ' +
     '    <g>                                                                                                         ' +
     '<style>g.Normal { fill: none; } path.Normal { stroke: silver; stroke-width: 2.5; stroke-linejoin: round; }      ' +
@@ -181,3 +180,10 @@ export var customSVG =
     '</g>                                                                                                            ' +
     //'</svg>                                                                                                          ' +
     '';
+
+declare module "samples" {
+    export var txt_programmatically: string;
+    export var txt_manyNodes: (nodeCount: number, edgeCount: number, customLabelChance: number) => string;
+    export var txt_fourNodes: string;
+    export var customSVG: string;
+}

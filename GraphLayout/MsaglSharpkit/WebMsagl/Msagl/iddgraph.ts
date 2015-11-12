@@ -1,12 +1,11 @@
-﻿import G = require('./ggraph');
-import CoG = require('./contextgraph');
-
+﻿/// <amd-dependency path="ggraph"/>
+/// <amd-dependency path="contextgraph"/>
 /// <amd-dependency path="idd"/>
 var InteractiveDataDisplay = require('idd');
 
 // Renderer that targets a Canvas inside IDD.
-export class IDDGraph extends CoG.ContextGraph {
-    graph: G.GGraph;
+class IDDGraph extends ContextGraph {
+    graph: GGraph;
     grid: boolean = false;
     gplot: any;
 
@@ -39,11 +38,11 @@ export class IDDGraph extends CoG.ContextGraph {
         this.setGraph = function (g) { _graph = g };
 
         this.computeLocalBounds = function (step, computedBounds) {
-            return _graph ? { x: 0, y: 0, width: _graph.graph.boundingBox.width, height: _graph.graph.boundingBox.height }  : { x: 0, y: 0, width: 1, height: 1 };
+            return _graph ? { x: 0, y: 0, width: _graph.graph.boundingBox.width, height: _graph.graph.boundingBox.height } : { x: 0, y: 0, width: 1, height: 1 };
         };
     };
 
-    constructor(chartID: string, graph?: G.GGraph) {
+    constructor(chartID: string, graph?: GGraph) {
         super();
 
         var plotContainerID = chartID + '-container';
@@ -62,7 +61,7 @@ export class IDDGraph extends CoG.ContextGraph {
         var chart = InteractiveDataDisplay.asPlot(chartID);
         var gestureSource = InteractiveDataDisplay.Gestures.getGesturesStream($("#" + chartID));
         chart.navigation.gestureSource = gestureSource;
-        container.ondblclick = function (ev : MouseEvent) {
+        container.ondblclick = function (ev: MouseEvent) {
             chart.fitToView();
         };
         this.gplot = chart.get(plotContainerID);
@@ -78,5 +77,15 @@ export class IDDGraph extends CoG.ContextGraph {
         if (this.grid)
             this.drawGrid(context);
         this.drawGraphInternal(context, this.graph);
+    }
+}
+
+declare module "iddgraph" {
+    class IDDGraph extends ContextGraph {
+        graph: GGraph;
+        grid: boolean;
+        gplot: any;
+        constructor(chartID: string, graph?: GGraph)
+        drawGraph(): void
     }
 }
