@@ -387,14 +387,50 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             int layer = 0;
             int plottedNodeCount = 0;
             List<Node> nodes = new List<Node>();
-            var level = CreateLevel(layer);
+             
 
 
 
             foreach (var node in _mainGeometryGraph.Nodes)
                 _lgData.GeometryNodesToLgNodeInfos[node].ZoomLevel = 100;
 
+            for (int i = 0; i < g.Length; i++)
+            {
 
+                layer++;
+                var level = CreateLevel(layer);
+
+                //set the zoomlevel of the nodes
+                for (int j = 0; j < g[i].N; j++)
+                {
+                    if (g[i].DegList[j]>0)
+                    {
+                        Node nd = idToNode[g[i].VList[j].Id];
+                        if (_lgData.GeometryNodesToLgNodeInfos[nd].ZoomLevel==100)
+                        {
+                            _lgData.GeometryNodesToLgNodeInfos[nd].ZoomLevel = layer;
+                            _lgLayoutSettings.GeometryNodesToLgNodeInfos[nd].ZoomLevel = layer;
+                        }
+                    }                    
+                }
+                //add the edges to the current level for this graph
+                Dictionary<Node, int>nodeId = new Dictionary<Node, int>();//-remove later - not needed
+         
+                Set<Rail> railsOfEdge = new Set<Rail>();
+                foreach (Edge edge in _mainGeometryGraph.Edges)
+                {
+                    if (!level._railsOfEdges.ContainsKey(edge))
+                    {
+                        railsOfEdge = MsaglAddRailsOfEdge(level, g[i], edge, nodeId);
+                        if (railsOfEdge.Count > 0)
+                        {
+                            level._railsOfEdges[edge] = railsOfEdge;
+                        }
+                    }
+                }
+
+            }
+            /*
             foreach (LgNodeInfo node in _lgData.SortedLgNodeInfos)
             {
                 _lgData.SortedLgNodeInfos[plottedNodeCount].ZoomLevel = layer;
@@ -449,7 +485,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             }
             _lgLayoutSettings.maximumNumOfLayers = g.Length - 1;
-
+            */
             Console.WriteLine("MAX Num of Level " + layer);
             /*
             level.RunLevelStatistics(_mainGeometryGraph.Nodes);
