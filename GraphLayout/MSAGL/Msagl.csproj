@@ -258,6 +258,8 @@
     <Compile Include="DebugHelpers\Persistence\CurveStreamElement.cs" />
     <Compile Include="DebugHelpers\Persistence\DoubleStreamElement.cs" />
     <Compile Include="GraphmapsWithMesh\DijkstraAlgo.cs" />
+    <Compile Include="GraphmapsWithMesh\Network.cs" />
+    <Compile Include="GraphmapsWithMesh\Tiling.cs" />
     <Compile Include="Layout\Incremental\Relayout.cs" />
     <Compile Include="Layout\Initial\InitialLayoutByCluster.cs" />
     <Compile Include="Layout\Initial\InitialLayoutHelpers.cs" />
@@ -322,11 +324,9 @@
     <Compile Include="Layout\LargeGraphLayout\LgPathRouter.cs" />
     <Compile Include="Miscellaneous\Routing\ShortestPathTree.cs" />
     <Compile Include="GraphmapsWithMesh\MsaglUtilities.cs" />
-    <Compile Include="GraphmapsWithMesh\Network.cs" />
     <Compile Include="GraphmapsWithMesh\PlanarGraphUtilities.cs" />
     <Compile Include="GraphmapsWithMesh\PointSet.cs" />
     <Compile Include="GraphmapsWithMesh\PointToSegmentDistance.cs" />
-    <Compile Include="GraphmapsWithMesh\PriorityQueue.cs" />
     <Compile Include="Routing\ClusterBoundaryPort.cs" />
     <Compile Include="Routing\ConstrainedDelaunayTriangulation\CdtEdge.cs" />
     <Compile Include="Routing\ConstrainedDelaunayTriangulation\CdtFront.cs" />
@@ -693,7 +693,7 @@
     <Compile Include="Routing\Visibility\TangentVisibilityGraphCalculator.cs" />
     <Compile Include="Layout\Layered\XCoordsWithAlignment.cs" />
     <Compile Include="GraphmapsWithMesh\SteinerTree.cs" />
-    <Compile Include="GraphmapsWithMesh\Tiling.cs" />
+    <Compile Include="GraphmapsWithMesh\MeshGraph.cs" />
     <Compile Include="ValidateArg.cs" />
     <Compile Include="Strings.Designer.cs">
       <AutoGen>True</AutoGen>

@@ -2,6 +2,14 @@ using System;
 
 namespace Microsoft.Msagl.GraphmapsWithMesh
 {
+
+    /*
+     * This class is not used for the current implementation
+     * This was written in the previous one when we were trying to route with 
+     * regular grid and then recursively found the stainer trees for the 
+     * components of different zoomlevel
+     */
+
     public class ComponentCollection
     {
         internal int NumOfComponents;
