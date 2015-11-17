@@ -34,7 +34,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 return Math.Abs(Math.Atan2(yDiff1, xDiff1) - Math.Atan2(yDiff2, xDiff2));
 
 
-            return Math.PI/2;//Abs(Math.Atan2(yDiff1, xDiff1) - Math.Atan2(yDiff2, xDiff2));
+            return Math.PI / 2;//Abs(Math.Atan2(yDiff1, xDiff1) - Math.Atan2(yDiff2, xDiff2));
         }
 
         public static double getClockwiseAngle(Vertex A, Vertex B, Vertex C)
@@ -50,7 +50,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             double det = xDiff1 * yDiff2 - yDiff1 * xDiff2;     // determinant
             double angle = Math.Atan2(det, dot);  // atan2(y, x) or atan2(sin, cos)
 
-            if (angle < 0) angle = 2*Math.PI + angle;
+            if (angle < 0) angle = 2 * Math.PI + angle;
             return Math.Abs(angle); // in degree*180/Math.PI; 
         }
     }

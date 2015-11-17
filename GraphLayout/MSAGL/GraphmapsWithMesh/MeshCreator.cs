@@ -439,9 +439,10 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
         static Dictionary<double, List<OrthogonalEdge>> HVEdges = new Dictionary<double, List<OrthogonalEdge>>();
         static Dictionary<double, List<OrthogonalEdge>> VHEdges = new Dictionary<double, List<OrthogonalEdge>>();
-        public static void FastCompetitionMesh(Tiling g, Dictionary<int, Node> idToNode, int maxX, int maxY)
+
+        public static void FastCompetitionMesh(Tiling g, Dictionary<int, Node> idToNode, int maxX, int maxY, Dictionary<Point, int> locationtoNode)
         {
-             
+
 
             double[] Px = new double[g.N];
             double[] Py = new double[g.N];
@@ -469,10 +470,10 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             Dictionary<int, int> Neighbors5 = ManhattanNearestNeighbor(Px, Py, Pid, 5, maxX, maxY);
 
             //create the bounding box             
-            int a = g.InsertVertex(0, 0);
-            int b = g.InsertVertex(0, maxY);
-            int c = g.InsertVertex(maxX, maxY);
-            int d = g.InsertVertex(maxX, 0);
+            int a = g.InsertVertexWithDuplicateCheck(0, 0, locationtoNode);
+            int b = g.InsertVertexWithDuplicateCheck(0, maxY, locationtoNode);
+            int c = g.InsertVertexWithDuplicateCheck(maxX, maxY, locationtoNode);
+            int d = g.InsertVertexWithDuplicateCheck(maxX, 0, locationtoNode);
             g.AddEdge(a, b);
             g.AddEdge(b, c);
             g.AddEdge(c, d);
@@ -506,15 +507,14 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             */
 
             //Process each left ray
-            ProcessLeftRays(g, Neighbors4, Neighbors5, maxX, maxY);
+            ProcessLeftRays(g, Neighbors4, Neighbors5, maxX, maxY, locationtoNode);
             //Process each Right ray
-            ProcessRightRays(g, Neighbors1, Neighbors8, maxX, maxY);
+            ProcessRightRays(g, Neighbors1, Neighbors8, maxX, maxY, locationtoNode);
             //Process each Upward ray
-            ProcessUpwardRays(g, maxX, maxY);
+            ProcessUpwardRays(g, maxX, maxY, locationtoNode);
             //Process each Downward ray
-            ProcessDownwardRays(g, maxX, maxY);
+            ProcessDownwardRays(g, maxX, maxY, locationtoNode);
 
-            /*
             int numOfVEdges = 0, numOfHEdges = 0;
             foreach (var list in HVEdges.Keys)
                 numOfVEdges += HVEdges[list].Count;
@@ -524,11 +524,11 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
             Console.WriteLine("Number of Vertical Edges: " + numOfVEdges);
             Console.WriteLine("Number of Horizontal Edges: " + numOfHEdges);
-            */
+
         }
 
 
-        public static void ProcessLeftRays(Tiling g, Dictionary<int, int> Neighbors4, Dictionary<int, int> Neighbors5, int maxX, int maxY)
+        public static void ProcessLeftRays(Tiling g, Dictionary<int, int> Neighbors4, Dictionary<int, int> Neighbors5, int maxX, int maxY, Dictionary<Point, int> locationtoNode)
         {
             int a;
             LineSegment l;
@@ -647,7 +647,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                             }
                             if (r != null)
                             {
-                                a = g.InsertVertex(Neighbor.XLoc, CurrentVertex.YLoc);
+                                a = g.InsertVertexWithDuplicateCheck(Neighbor.XLoc, CurrentVertex.YLoc, locationtoNode);
                                 g.RemoveEdge(r.a.Id, r.b.Id);
                                 g.AddEdge(r.a.Id, a);
                                 g.AddEdge(r.b.Id, a);
@@ -662,7 +662,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                             }
                             else
                             {
-                                a = g.InsertVertex(ClosestVertex.XLoc, CurrentVertex.YLoc);
+                                a = g.InsertVertexWithDuplicateCheck(ClosestVertex.XLoc, CurrentVertex.YLoc, locationtoNode);
                                 g.AddEdge(CurrentVertex.Id, a);
                                 g.AddEdge(ClosestVertex.Id, a);
 
@@ -687,7 +687,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         }
 
 
-        public static void ProcessUpwardRays(Tiling g, int maxX, int maxY)
+        public static void ProcessUpwardRays(Tiling g, int maxX, int maxY, Dictionary<Point, int> locationtoNode)
         {
             int a;
             LineSegment l;
@@ -774,31 +774,32 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 foreach (var w in nodesToCheck)
                 {
                     //find the topmost neighbor of w
-                    Vertex CurrentVertex = w;
-                    Vertex topNeighbor;
+                    int CurrentVertexId = w.Id;
+                    int topNeighborId;
                     do
                     {
-                        topNeighbor = CurrentVertex;
-                        for (int j = 0; j < g.DegList[CurrentVertex.Id]; j++)
+                        topNeighborId = CurrentVertexId;
+                        for (int j = 0; j < g.DegList[CurrentVertexId]; j++)
                         {
-                            Vertex Candidate = g.VList[g.EList[CurrentVertex.Id, j].NodeId];
-                            if (Candidate.YLoc > CurrentVertex.YLoc)
+                            Vertex Candidate = g.VList[g.EList[CurrentVertexId, j].NodeId];
+                            if (Candidate.YLoc > g.VList[CurrentVertexId].YLoc)
                             {
-                                CurrentVertex = Candidate;
+                                CurrentVertexId = Candidate.Id;
                                 break;
                             }
                         }
-                    } while (topNeighbor.Id != CurrentVertex.Id);
-                    if (topNeighbor.YLoc >= CurrentY) continue;
+                    } while (topNeighborId != CurrentVertexId);
+                    if (g.VList[topNeighborId].YLoc >= CurrentY) continue;
 
                     //add a subdivision
-                    a = g.InsertVertex(topNeighbor.XLoc, CurrentY);
+                    a = g.InsertVertexWithDuplicateCheck(g.VList[topNeighborId].XLoc, CurrentY, locationtoNode);
                     addedVertices.Add(g.VList[a]);
 
-                    g.AddEdge(topNeighbor.Id, a);
-                    if (!HVEdges.ContainsKey(topNeighbor.XLoc))
-                        HVEdges[topNeighbor.XLoc] = new List<OrthogonalEdge>();
-                    HVEdges[topNeighbor.XLoc].Add(new OrthogonalEdge(topNeighbor, g.VList[a]));
+
+                    g.AddEdge(topNeighborId, a);
+                    if (!HVEdges.ContainsKey(g.VList[topNeighborId].XLoc))
+                        HVEdges[g.VList[topNeighborId].XLoc] = new List<OrthogonalEdge>();
+                    HVEdges[g.VList[topNeighborId].XLoc].Add(new OrthogonalEdge(g.VList[topNeighborId], g.VList[a]));
 
                     nodesToRemove.Add(w);
 
@@ -807,21 +808,31 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
                 foreach (var newnode in addedVertices)
                 {
-                    g.AddEdge(CurrentEdge.a.Id, newnode.Id);
+
+
+                    bool e1 = g.AddEdge(CurrentEdge.a.Id, newnode.Id);
                     if (!VHEdges.ContainsKey(newnode.YLoc))
                         VHEdges[newnode.YLoc] = new List<OrthogonalEdge>();
                     VHEdges[newnode.YLoc].Add(new OrthogonalEdge(CurrentEdge.a, newnode));
 
-                    g.AddEdge(CurrentEdge.b.Id, newnode.Id);
+                    bool e2 = g.AddEdge(CurrentEdge.b.Id, newnode.Id);
                     if (!VHEdges.ContainsKey(newnode.YLoc))
                         VHEdges[newnode.YLoc] = new List<OrthogonalEdge>();
                     VHEdges[newnode.YLoc].Add(new OrthogonalEdge(CurrentEdge.b, newnode));
 
-                    g.RemoveEdge(CurrentEdge.a.Id, CurrentEdge.b.Id);
-                    if (VHEdges.ContainsKey(CurrentEdge.b.YLoc))
-                        VHEdges[CurrentEdge.b.YLoc].Remove(CurrentEdge);
+
+                    if (e1 && e2)
+                    {
+                        g.RemoveEdge(CurrentEdge.a.Id, CurrentEdge.b.Id);
+                        if (VHEdges.ContainsKey(CurrentEdge.b.YLoc))
+                            VHEdges[CurrentEdge.b.YLoc].Remove(CurrentEdge);
+
+                    }
+
 
                     CurrentEdge = new OrthogonalEdge(newnode, CurrentEdge.a);
+
+
                 }
 
                 foreach (var w in nodesToRemove)
@@ -831,7 +842,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         }
 
 
-        public static void ProcessDownwardRays(Tiling g, int maxX, int maxY)
+        public static void ProcessDownwardRays(Tiling g, int maxX, int maxY, Dictionary<Point, int> locationtoNode)
         {
             int a;
             LineSegment l;
@@ -936,7 +947,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                     if (bottomNeighbor.YLoc <= CurrentY) continue;
 
                     //add a subdivision
-                    a = g.InsertVertex(bottomNeighbor.XLoc, CurrentY);
+                    a = g.InsertVertexWithDuplicateCheck(bottomNeighbor.XLoc, CurrentY, locationtoNode);
                     addedVertices.Add(g.VList[a]);
 
                     g.AddEdge(bottomNeighbor.Id, a);
@@ -951,20 +962,22 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
                 foreach (var newnode in addedVertices)
                 {
-                    g.AddEdge(CurrentEdge.a.Id, newnode.Id);
+                    bool e1 = g.AddEdge(CurrentEdge.a.Id, newnode.Id);
                     if (!VHEdges.ContainsKey(newnode.YLoc))
                         VHEdges[newnode.YLoc] = new List<OrthogonalEdge>();
                     VHEdges[newnode.YLoc].Add(new OrthogonalEdge(CurrentEdge.a, newnode));
 
-                    g.AddEdge(CurrentEdge.b.Id, newnode.Id);
+                    bool e2 = g.AddEdge(CurrentEdge.b.Id, newnode.Id);
                     if (!VHEdges.ContainsKey(newnode.YLoc))
                         VHEdges[newnode.YLoc] = new List<OrthogonalEdge>();
                     VHEdges[newnode.YLoc].Add(new OrthogonalEdge(CurrentEdge.b, newnode));
 
-                    g.RemoveEdge(CurrentEdge.a.Id, CurrentEdge.b.Id);
-                    if (VHEdges.ContainsKey(CurrentEdge.b.YLoc))
-                        VHEdges[CurrentEdge.b.YLoc].Remove(CurrentEdge);
-
+                    if (e1 && e2)
+                    {
+                        g.RemoveEdge(CurrentEdge.a.Id, CurrentEdge.b.Id);
+                        if (VHEdges.ContainsKey(CurrentEdge.b.YLoc))
+                            VHEdges[CurrentEdge.b.YLoc].Remove(CurrentEdge);
+                    }
                     CurrentEdge = new OrthogonalEdge(newnode, CurrentEdge.a);
                 }
 
@@ -974,7 +987,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             }
         }
 
-        public static void ProcessRightRays(Tiling g, Dictionary<int, int> Neighbors1, Dictionary<int, int> Neighbors8, int maxX, int maxY)
+        public static void ProcessRightRays(Tiling g, Dictionary<int, int> Neighbors1, Dictionary<int, int> Neighbors8, int maxX, int maxY, Dictionary<Point, int> locationtoNode)
         {
             int a;
             LineSegment l;
@@ -1076,7 +1089,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                         }
                         if (r != null)
                         {
-                            a = g.InsertVertex(Neighbor.XLoc, CurrentVertex.YLoc);
+                            a = g.InsertVertexWithDuplicateCheck(Neighbor.XLoc, CurrentVertex.YLoc, locationtoNode);
                             g.RemoveEdge(r.a.Id, r.b.Id);
                             g.AddEdge(r.a.Id, a);
                             g.AddEdge(r.b.Id, a);
@@ -1093,7 +1106,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                         }
                         else
                         {
-                            a = g.InsertVertex(ClosestVertex.XLoc, CurrentVertex.YLoc);
+                            a = g.InsertVertexWithDuplicateCheck(ClosestVertex.XLoc, CurrentVertex.YLoc, locationtoNode);
                             g.AddEdge(CurrentVertex.Id, a);
                             g.AddEdge(ClosestVertex.Id, a);
 
@@ -1187,32 +1200,37 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             double[] Py = new double[ID.Length];
             int[] Pid = new int[ID.Length];
 
-            for (int i = 0; i < ID.Length; i++){
-                if(ConeId == 4){
+            for (int i = 0; i < ID.Length; i++)
+            {
+                if (ConeId == 4)
+                {
                     Px[i] = X[i];
                     Py[i] = Y[i];
                 }
-                if(ConeId == 1){
-                    Px[i] = -X[i]+maxX;
+                if (ConeId == 1)
+                {
+                    Px[i] = -X[i] + maxX;
                     Py[i] = Y[i];
                 }
-                if(ConeId == 8){
-                    Px[i] = -X[i]+maxX;
-                    Py[i] = -Y[i]+maxY;
+                if (ConeId == 8)
+                {
+                    Px[i] = -X[i] + maxX;
+                    Py[i] = -Y[i] + maxY;
                 }
-                if(ConeId == 5){
+                if (ConeId == 5)
+                {
                     Px[i] = X[i];
-                    Py[i] = -Y[i]+maxY;
+                    Py[i] = -Y[i] + maxY;
                 }
                 Pid[i] = ID[i];
-                a[i] = Px[i] + Py[i]; 
+                a[i] = Px[i] + Py[i];
 
             }
 
             Dictionary<int, int> neighborlist = new Dictionary<int, int>();
             double[] from = a;
             double[] to = new double[a.Length];
- 
+
             int[] toPid = new int[a.Length];
             double[] toPx = new double[a.Length];
             double[] toPy = new double[a.Length];
@@ -1222,7 +1240,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             Dictionary<int, double> IdToY = new Dictionary<int, double>();
             for (int k = 0; k < a.Length; k++) IdToY.Add(Pid[k], Py[k]);
             Dictionary<int, int> PosToId = new Dictionary<int, int>();
-            for (int k = 0; k < a.Length; k++) PosToId.Add(k,Pid[k]);
+            for (int k = 0; k < a.Length; k++) PosToId.Add(k, Pid[k]);
 
 
             for (int blockSize = 1; blockSize < a.Length; blockSize *= 2)
@@ -1249,9 +1267,9 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 else { Assign(k, i, from, to, Px, Py, Pid, toPx, toPy, toPid); i++; }
             }
 
- 
 
- 
+
+
 
 
             //foreach point in x+y order
@@ -1260,20 +1278,20 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             for (int k = lo; k < hi; k++)
             {
                 int currentPointId = toPid[k];
- 
-                
+
+
 
                 //find the neighbor
                 if (currentPointId != CandidateNeighborId)
                 {// if the point is on lower half
                     if (CandidateNeighborId >= 0)
                     {
- 
+
                         if (neighborlist.ContainsKey(currentPointId))
                         {
                             //compare with the current neighbor
                             int currentneighborId = neighborlist[currentPointId];
-  
+
                             double currentNeighborValue = IdToX[currentneighborId] - IdToY[currentneighborId];
                             if (currentNeighborValue < LargestXMinusY && IdToY[CandidateNeighborId] >= IdToY[currentPointId])
                             {
@@ -1289,7 +1307,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 }
 
                 //process current point
-                if (mid == from.Length) --mid; 
+                if (mid == from.Length) --mid;
                 if (IdToY[currentPointId] >= IdToY[PosToId[mid]] && (IdToX[currentPointId] - IdToY[currentPointId] >= LargestXMinusY))
                 {
                     LargestXMinusY = IdToX[currentPointId] - IdToY[currentPointId];
@@ -1318,28 +1336,28 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             for (int blockSize = 1; blockSize < a.Length; blockSize *= 2)
             {
                 for (int start = 0; start < a.Length; start += 2 * blockSize)
-                    merge(from, to, start, start + blockSize, start + 2 * blockSize,   Px,   Py,   Pid, toPx,toPy,toPid);                
+                    merge(from, to, start, start + blockSize, start + 2 * blockSize, Px, Py, Pid, toPx, toPy, toPid);
             }
             for (int k = 0; k < a.Length; k++)
-                    a[k] = from[k];
+                a[k] = from[k];
         }
 
-        private static void merge(double[] from, double[] to, int lo, int mid, int hi, double[] Px, double[] Py, int[] Pid, double[]toPx, double[]toPy, int[] toPid)
-        { 
+        private static void merge(double[] from, double[] to, int lo, int mid, int hi, double[] Px, double[] Py, int[] Pid, double[] toPx, double[] toPy, int[] toPid)
+        {
             if (mid > from.Length) mid = from.Length;
             if (hi > from.Length) hi = from.Length;
             int i = lo, j = mid;
             for (int k = lo; k < hi; k++)
             {
-                if (i == mid) {Assign(k, j, from, to, Px, Py, Pid, toPx, toPy, toPid);j++;}
-                else if (j == hi) {Assign(k, i, from, to, Px, Py, Pid, toPx, toPy, toPid);i++;}
-                else if (from[j] < from[i]) {Assign(k, j, from, to, Px, Py, Pid, toPx, toPy, toPid);j++;}
+                if (i == mid) { Assign(k, j, from, to, Px, Py, Pid, toPx, toPy, toPid); j++; }
+                else if (j == hi) { Assign(k, i, from, to, Px, Py, Pid, toPx, toPy, toPid); i++; }
+                else if (from[j] < from[i]) { Assign(k, j, from, to, Px, Py, Pid, toPx, toPy, toPid); j++; }
                 else if (from[i] == from[j] && Px[i] < Px[j]) { Assign(k, i, from, to, Px, Py, Pid, toPx, toPy, toPid); i++; }
                 else if (from[i] == from[j] && Px[i] >= Px[j]) { Assign(k, j, from, to, Px, Py, Pid, toPx, toPy, toPid); j++; }
                 else { Assign(k, i, from, to, Px, Py, Pid, toPx, toPy, toPid); i++; }
             }
             for (int k = lo; k < hi; k++)
-                Assign(k, k, to, from,  toPx, toPy, toPid, Px, Py, Pid);
+                Assign(k, k, to, from, toPx, toPy, toPid, Px, Py, Pid);
 
         }
 
@@ -1397,13 +1415,13 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
                                     for (int i = 0; i < points.Length; i++)
                                         for (int j = i + 1; j < points.Length; j++)
-                                            g.RemoveEdge(g.GetNode((int) points[i].X, (int) points[i].Y),
-                                                g.GetNode((int) points[j].X, (int) points[j].Y));
+                                            g.RemoveEdge(g.GetNode((int)points[i].X, (int)points[i].Y),
+                                                g.GetNode((int)points[j].X, (int)points[j].Y));
 
                                     for (int i = 0; i < points.Length - 1; i++)
                                     {
-                                        g.AddEdge(g.GetNode((int) points[i].X, (int) points[i].Y),
-                                            g.GetNode((int) points[i + 1].X, (int) points[i + 1].Y));
+                                        g.AddEdge(g.GetNode((int)points[i].X, (int)points[i].Y),
+                                            g.GetNode((int)points[i + 1].X, (int)points[i + 1].Y));
                                     }
                                 }
                             }
@@ -1651,9 +1669,11 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
         public OrthogonalEdge(Vertex p, Vertex q)
         {
+
+
             if (p.XLoc == q.XLoc)
             {
-                if (p.YLoc < q.YLoc)
+                if (p.YLoc <= q.YLoc)
                 {
                     a = p;
                     b = q;
@@ -1666,7 +1686,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             }
             if (p.YLoc == q.YLoc)
             {
-                if (p.XLoc < q.XLoc)
+                if (p.XLoc <= q.XLoc)
                 {
                     a = p;
                     b = q;

@@ -15,28 +15,28 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
 
 
-        public PointSet(int n )
+        public PointSet(int n)
         {
             NumPoints = n;
             Pt = new WeightedPoint[n];
             Random r1 = new Random(2);
 
-  
+
             //generate points in random
             while (n > 0)
-            {                
+            {
                 int XLoc = r1.Next(100);
                 int YLoc = r1.Next(100);
                 if (exists(XLoc, YLoc, n)) continue;
                 n--;
-                Pt[n] = new WeightedPoint( XLoc,  YLoc, 0);                                 
+                Pt[n] = new WeightedPoint(XLoc, YLoc, 0);
             }
             for (int i = 0; i < NumPoints; i++)
             {
                 Pt[i].X *= 3;
                 Pt[i].Y *= 3;
             }
-             
+
         }
 
         public bool isVeryClose(int x, int y, int n)
@@ -44,8 +44,8 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             double d;
             for (int i = NumPoints - 1; i > n; i--)
             {
-                d = Math.Sqrt((Pt[i].X - x)*(Pt[i].X - x) + (Pt[i].Y - y)*(Pt[i].Y - y));               
-                if (d<=3) return true;
+                d = Math.Sqrt((Pt[i].X - x) * (Pt[i].X - x) + (Pt[i].Y - y) * (Pt[i].Y - y));
+                if (d <= 3) return true;
             }
             return false;
         }
@@ -56,7 +56,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             double d;
             for (int i = NumPoints - 1; i > n; i--)
             {
-                if(Pt[i].X == x && Pt[i].Y == y) return true;
+                if (Pt[i].X == x && Pt[i].Y == y) return true;
             }
             return false;
         }
@@ -66,7 +66,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             Pt = new WeightedPoint[n + 1];
             pointMap = new int[g.NumOfnodes + 1, g.NumOfnodes + 1];
 
-            _selected = new int[g.NumOfnodes+1];
+            _selected = new int[g.NumOfnodes + 1];
             Random r1 = new Random();
 
             //List<int> list = new List<int>();
@@ -81,7 +81,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             while (n > 0)
             {
                 var temp = r1.Next(1, g.NumOfnodes); //,temp2;
-                if (_selected[temp] == 1 || (g.VList[temp].XLoc + g.VList  [temp].YLoc) % 2 == 1) continue;
+                if (_selected[temp] == 1 || (g.VList[temp].XLoc + g.VList[temp].YLoc) % 2 == 1) continue;
                 Pt[n] = new WeightedPoint(g.VList[temp].XLoc, g.VList[temp].YLoc, 0);
                 _selected[temp] = 1;
                 //compute weight based on point density                    

@@ -13,9 +13,10 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         public int NumOfnodes;
         public int NumOfnodesBeforeDetour;
         public int maxTheoreticalZoomLevel;
-        
-        public Dictionary<Microsoft.Msagl.Core.Layout.Edge,List<int>> pathList = new Dictionary<Microsoft.Msagl.Core.Layout.Edge,List<int>>();
+
+        public Dictionary<Microsoft.Msagl.Core.Layout.Edge, List<int>> pathList = new Dictionary<Microsoft.Msagl.Core.Layout.Edge, List<int>>();
         public Dictionary<int, List<Microsoft.Msagl.Core.Layout.Edge>> JunctionToEdgeList = new Dictionary<int, List<Microsoft.Msagl.Core.Layout.Edge>>();
+        public Dictionary<Node, Point> nodeToLoc = new Dictionary<Node, Point>();
 
 
         public int[,] NodeMap;
@@ -29,14 +30,14 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         readonly double _angularResolution;
         public bool isPlanar;
         public double thinness;
-        
+
         public RTree<int> nodeTree = new RTree<int>();
         public Tiling(int nodeCount, bool isGraph)
         {
             thinness = 2;
             _angularResolution = 0.3;
-            NumOfnodes=N = nodeCount;
-            EList = new Edge[10*N , 10];
+            NumOfnodes = N = nodeCount;
+            EList = new Edge[10 * N, 10];
             VList = new Vertex[10 * N];
             DegList = new int[10 * N];
             _edgeNodeSeparation = new double[20];
@@ -161,10 +162,25 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         public int InsertVertex(int x, int y)
         {
             int index = NumOfnodes;
-            VList[index] = new Vertex(x, y) { Id = index};
+            VList[index] = new Vertex(x, y) { Id = index };
             NumOfnodes++;
             return index;
         }
+
+
+        public int InsertVertexWithDuplicateCheck(int x, int y, Dictionary<Point, int> locationtoNode)
+        {
+            Point p = new Point(x, y);
+            if (locationtoNode.ContainsKey(p))
+                return locationtoNode[p];
+
+            int index = NumOfnodes;
+            VList[index] = new Vertex(x, y) { Id = index };
+            locationtoNode.Add(p, index);
+            NumOfnodes++;
+            return index;
+        }
+
         public void ComputeGridEdgeWeights()
         {
             Queue q = new Queue();
@@ -236,7 +252,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             double sigma = 15;// Math.Sqrt(w);
             w = 50;
             //return w - d;
-            var w1 = w* (Math.Exp(-(d1 * d1 / (2 * sigma * sigma))) / (sigma * Math.Sqrt(2 * Math.PI)));
+            var w1 = w * (Math.Exp(-(d1 * d1 / (2 * sigma * sigma))) / (sigma * Math.Sqrt(2 * Math.PI)));
             var w2 = w * (Math.Exp(-(d2 * d2 / (2 * sigma * sigma))) / (sigma * Math.Sqrt(2 * Math.PI)));
             return (w1 + w2) / 2 + .0001;
         }
@@ -338,7 +354,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             int a = 0, b = 0, mincostA = 0, mincostB = 0;
             bool localRefinementsFound = true;
             int iteration = 10;
-            int offset = iteration*2;
+            int offset = iteration * 2;
 
             while (localRefinementsFound && iteration > 0)
             {
@@ -364,7 +380,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                     if (numNeighbors <= 1) continue;
 
                     //if (index > NumOfnodesBeforeDetour)
-                        //Console.WriteLine();
+                    //Console.WriteLine();
                     for (int counter = 1; counter <= 9; counter++)
                     {
                         d[counter] = 0;
@@ -455,11 +471,11 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         public bool noCrossings(Vertex w)
         {
             for (int i = 0; i < NumOfnodes; i++)
-            {                
+            {
                 for (int j = 0; j < DegList[i]; j++)
                 {
                     int k1 = EList[i, j].NodeId;
-                    Microsoft.Msagl.Core.Geometry.Point a = new Microsoft.Msagl.Core.Geometry.Point(VList[i].XLoc,VList[i].YLoc);
+                    Microsoft.Msagl.Core.Geometry.Point a = new Microsoft.Msagl.Core.Geometry.Point(VList[i].XLoc, VList[i].YLoc);
                     Microsoft.Msagl.Core.Geometry.Point b = new Microsoft.Msagl.Core.Geometry.Point(VList[k1].XLoc, VList[k1].YLoc);
                     for (int l = 0; l < DegList[w.Id]; l++)
                     {
@@ -467,11 +483,11 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                         Microsoft.Msagl.Core.Geometry.Point c = new Microsoft.Msagl.Core.Geometry.Point(w.XLoc, w.YLoc);
                         Microsoft.Msagl.Core.Geometry.Point d = new Microsoft.Msagl.Core.Geometry.Point(VList[k2].XLoc, VList[k2].YLoc);
 
-                        if(w.Id ==i || k2 == i || w.Id ==k1 || k2 == k1 ) continue;
+                        if (w.Id == i || k2 == i || w.Id == k1 || k2 == k1) continue;
                         Microsoft.Msagl.Core.Geometry.Point intersectionPoint;
-                        if (Microsoft.Msagl.Core.Geometry.Point.SegmentSegmentIntersection(a, b, c, d, out intersectionPoint)) 
+                        if (Microsoft.Msagl.Core.Geometry.Point.SegmentSegmentIntersection(a, b, c, d, out intersectionPoint))
                             return false;
-                        
+
                     }
                 }
             }
@@ -485,22 +501,22 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
             for (int i = 0; i < NumOfnodes; i++)
             {
-                if(w.Id == i || w1.Id == i || w2.Id ==i) continue;
+                if (w.Id == i || w1.Id == i || w2.Id == i) continue;
                 for (int j = 0; j < DegList[i]; j++)
                 {
                     int k1 = EList[i, j].NodeId;
                     if (w1.Id == k1 || w2.Id == k1) continue;
-                    
-                    
-                    Microsoft.Msagl.Core.Geometry.Point a = new Microsoft.Msagl.Core.Geometry.Point(VList[i].XLoc, VList[i].YLoc);
-                    Microsoft.Msagl.Core.Geometry.Point b = new Microsoft.Msagl.Core.Geometry.Point(VList[k1].XLoc, VList[k1].YLoc);                                         
 
-                     
+
+                    Microsoft.Msagl.Core.Geometry.Point a = new Microsoft.Msagl.Core.Geometry.Point(VList[i].XLoc, VList[i].YLoc);
+                    Microsoft.Msagl.Core.Geometry.Point b = new Microsoft.Msagl.Core.Geometry.Point(VList[k1].XLoc, VList[k1].YLoc);
+
+
                     Microsoft.Msagl.Core.Geometry.Point interestionPoint;
 
                     if (Microsoft.Msagl.Core.Geometry.Point.SegmentSegmentIntersection(a, b, c, d, out interestionPoint))
                         return false;
-                   
+
                 }
             }
             return true;
@@ -517,14 +533,14 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             {
                 int index = 0;
                 for (; index < r.Length; index++)
-                    if(r[index]  ==i)break;
-                                                    
-                if (index<r.Length || w1.Id == i || w2.Id == i) continue;
+                    if (r[index] == i) break;
+
+                if (index < r.Length || w1.Id == i || w2.Id == i) continue;
                 for (int j = 0; j < DegList[i]; j++)
                 {
 
                     int k1 = EList[i, j].NodeId;
-                    
+
                     index = 0;
                     for (; index < r.Length; index++)
                         if (r[index] == k1) break;
@@ -644,16 +660,16 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 }
             }
         }
-        public bool MsaglGoodResolution(Vertex w, int[,] listNeighbors, int numNeighbors, int offset )
+        public bool MsaglGoodResolution(Vertex w, int[,] listNeighbors, int numNeighbors, int offset)
         {
-            for (int i = 1; i <  numNeighbors; i++)
+            for (int i = 1; i < numNeighbors; i++)
             {
                 for (int j = i + 1; j <= numNeighbors; j++)
                 {
                     //check for angular resolution   
                     if (Angle.getAngleIfSmallerThanPIby2(w, VList[listNeighbors[i, 1]], VList[listNeighbors[j, 1]]) < _angularResolution)
                     {
-                         return false;
+                        return false;
                     }
                 }
 
@@ -679,7 +695,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                     //distance from z to w,i
                     if (PointToSegmentDistance.GetDistance(w, VList[listNeighbors[i, 1]], z) < _edgeNodeSeparation[0])
                     {
-                          return false;
+                        return false;
                     }
                 }
                 /*//check for distance
@@ -707,7 +723,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 {
                     //check for angular resolution  
 
-                    
+
                     //if (Math.Abs(Math.Atan2(yDiff1, xDiff1) - Math.Atan2(yDiff2, xDiff2)) < 0.3)
                     if (Angle.getAngleIfSmallerThanPIby2(w, VList[listNeighbors[1, 1]], VList[listNeighbors[2, 1]]) < 0.5)
                     {
@@ -813,28 +829,28 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
 
 
-        public bool MsaglIsWellSeperated(Vertex w, int w1, int w2 )
+        public bool MsaglIsWellSeperated(Vertex w, int w1, int w2)
         {
 
             //add the edge if they are not very close to a point
-            for (int index = 0; index <NumOfnodes; index++)
+            for (int index = 0; index < NumOfnodes; index++)
             {
                 //if vertex is one of the neighbors forget it
-                if (VList[index].Invalid || DegList[index] ==0 || VList[index].Id == w1 || VList[index].Id == w2 || VList[index].Id == w.Id) continue;
+                if (VList[index].Invalid || DegList[index] == 0 || VList[index].Id == w1 || VList[index].Id == w2 || VList[index].Id == w.Id) continue;
 
                 //otherwise find distance from index to w1w2                
                 if (PointToSegmentDistance.GetDistance(VList[w1], VList[w2], VList[index]) < _edgeNodeSeparation[0])
                 {
-                     return false;
+                    return false;
                 }
             }
 
 
             //check for angular resolution at neighbor1
             for (int neighb = 0; neighb < DegList[w1]; neighb++)
-            {                
+            {
                 if (EList[w1, neighb].NodeId == w.Id || EList[w1, neighb].NodeId == w2) continue;
-                 
+
 
                 if (Angle.getAngleIfSmallerThanPIby2(VList[w1], VList[w2], VList[EList[w1, neighb].NodeId]) < _angularResolution)
                 {
@@ -846,11 +862,11 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             for (int neighb = 0; neighb < DegList[w2]; neighb++)
             {
                 if (EList[w2, neighb].NodeId == w.Id || EList[w2, neighb].NodeId == w1) continue;
-                 
+
 
                 //if (Math.Abs(Math.Atan2(yDiff1, xDiff1) - Math.Atan2(yDiff2, xDiff2)) < AngularResolution)
                 if (Angle.getAngleIfSmallerThanPIby2(VList[w2], VList[w1], VList[EList[w2, neighb].NodeId]) < _angularResolution)
-                {             
+                {
                     return false;
                 }
             }
@@ -859,7 +875,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         }
 
 
-        public void MsaglRemoveDeg2(Dictionary<int, Node> idToNodes )
+        public void MsaglRemoveDeg2(Dictionary<int, Node> idToNodes)
         {
             int[,] listNeighbors = new int[20, 3];
 
@@ -871,42 +887,42 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             {
                 iteration--;
                 localRefinementsFound = false;
-                for(int index = N ;index < NumOfnodes; index ++ )
+                for (int index = N; index < NumOfnodes; index++)
                 {
                     Vertex w = VList[index];
                     var numNeighbors = 0;
-        
-                    for (int k = 0; k <  DegList[w.Id]; k++)
+
+                    for (int k = 0; k < DegList[w.Id]; k++)
                     {
-                            //if (EList[w.Id, k].Used == 0) continue;
-                            numNeighbors++;
-                            listNeighbors[numNeighbors, 1] = EList[w.Id, k].NodeId;
+                        //if (EList[w.Id, k].Used == 0) continue;
+                        numNeighbors++;
+                        listNeighbors[numNeighbors, 1] = EList[w.Id, k].NodeId;
                     }
-                    
-                    if (numNeighbors == 1) 
+
+                    if (numNeighbors == 1)
                         DegList[index] = 0;
 
-                     /*
+                    /*
                    
                         
-                        if (Math.Abs(259-w.XLoc) + Math.Abs(255-w.YLoc) < 5)
-                        {
-                                // continue;
-                            Console.WriteLine("" + IsAnEdge(w.Id, listNeighbors[1, 1]));
-                            Console.WriteLine("" + IsAnEdge(listNeighbors[1, 1], w.Id));
-                            Console.WriteLine("" + IsAnEdge(w.Id, listNeighbors[2, 1]));
-                            Console.WriteLine("" + IsAnEdge(listNeighbors[2, 1], w.Id));
-                            Console.WriteLine("" + IsAnEdge(w.Id, listNeighbors[3, 1]));
-                            Console.WriteLine("" + IsAnEdge(listNeighbors[3, 1], w.Id));                             
-                        }
+                       if (Math.Abs(259-w.XLoc) + Math.Abs(255-w.YLoc) < 5)
+                       {
+                               // continue;
+                           Console.WriteLine("" + IsAnEdge(w.Id, listNeighbors[1, 1]));
+                           Console.WriteLine("" + IsAnEdge(listNeighbors[1, 1], w.Id));
+                           Console.WriteLine("" + IsAnEdge(w.Id, listNeighbors[2, 1]));
+                           Console.WriteLine("" + IsAnEdge(listNeighbors[2, 1], w.Id));
+                           Console.WriteLine("" + IsAnEdge(w.Id, listNeighbors[3, 1]));
+                           Console.WriteLine("" + IsAnEdge(listNeighbors[3, 1], w.Id));                             
+                       }
 
                         
-                  //*/
+                 //*/
                     if (numNeighbors == 2)
                     {
-                   
+
                         var adjust = MsaglIsWellSeperated(w, listNeighbors[1, 1], listNeighbors[2, 1]);
-                        adjust = adjust &&    noCrossings(w,VList[listNeighbors[1, 1]], VList[listNeighbors[2, 1]])  ;
+                        adjust = adjust && noCrossings(w, VList[listNeighbors[1, 1]], VList[listNeighbors[2, 1]]);
 
                         if (adjust)
                         {
@@ -915,7 +931,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                             var used = EList[index, listNeighbors[2, 2]].Used;
                             RemoveEdge(index, listNeighbors[1, 1]);
                             RemoveEdge(index, listNeighbors[2, 1]);
-    
+
                             AddEdge(listNeighbors[1, 1], listNeighbors[2, 1], selected, used);
 
                             if (DegList[w.Id] == 0) w.Invalid = true;
@@ -930,7 +946,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                              */
                         }
                         //else
-                            //noCrossings(w, VList[listNeighbors[1, 1]], VList[listNeighbors[2, 1]]);
+                        //noCrossings(w, VList[listNeighbors[1, 1]], VList[listNeighbors[2, 1]]);
                     }
                 }
             }
@@ -971,8 +987,8 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
                         //dont remove if length is already large
                         //if (GetEucledianDist(w.Id, listNeighbors[1, 1]) > 10 ||
-                            //GetEucledianDist(w.Id, listNeighbors[2, 1]) > 10)
-                            //adjust = false;
+                        //GetEucledianDist(w.Id, listNeighbors[2, 1]) > 10)
+                        //adjust = false;
 
                         if (adjust)
                         {
@@ -1057,51 +1073,51 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
             for (int index = 0; index < N; index++)
             {
-                Vertex w = VList[index];                
-                Vertex []list = new Vertex[10];
+                Vertex w = VList[index];
+                Vertex[] list = new Vertex[10];
                 int separation = 1;
                 int neighbor;
 
 
                 //if (DegList[index] == 4)
-                  //  Console.WriteLine();
+                //  Console.WriteLine();
 
-                int [,] removelist = new int[10,2];
-                int [,] addlist = new int[10,4];
+                int[,] removelist = new int[10, 2];
+                int[,] addlist = new int[10, 4];
 
                 int remove = 0;
                 int add = 0;
                 int newnode = 0;
 
-                for (  neighbor = 0; neighbor < DegList[index]; neighbor ++)
+                for (neighbor = 0; neighbor < DegList[index]; neighbor++)
                 {
 
                     int a = NumOfnodes;
                     Vertex b = VList[EList[index, neighbor].NodeId];
 
-                     
+
 
                     if (w.YLoc == b.YLoc && w.XLoc > b.XLoc)
                     {
                         int exists = GetNode(w.XLoc - separation, w.YLoc);
                         if (exists == -1)
                         {
-                            VList[a] = new Vertex(w.XLoc-separation,w.YLoc){Id = a};
-                            removelist[remove,0] = w.Id;removelist[remove,1] = b.Id; remove++;
-                            addlist[add, 0] = w.Id; addlist[add, 1] = a;  
+                            VList[a] = new Vertex(w.XLoc - separation, w.YLoc) { Id = a };
+                            removelist[remove, 0] = w.Id; removelist[remove, 1] = b.Id; remove++;
+                            addlist[add, 0] = w.Id; addlist[add, 1] = a;
                             addlist[add, 2] = b.Id; addlist[add, 3] = a; add++;
                             list[newnode++] = VList[a];
                             NumOfnodes++;
                         }
-                        else { list[newnode++] = VList[exists]; }                        
+                        else { list[newnode++] = VList[exists]; }
                     }
-                     
+
                     if (w.YLoc == b.YLoc && w.XLoc < b.XLoc)
                     {
                         int exists = GetNode(w.XLoc + separation, w.YLoc);
                         if (exists == -1)
                         {
-                            VList[a] = new Vertex(w.XLoc + separation, w.YLoc){Id = a};
+                            VList[a] = new Vertex(w.XLoc + separation, w.YLoc) { Id = a };
                             removelist[remove, 0] = w.Id; removelist[remove, 1] = b.Id; remove++;
                             addlist[add, 0] = w.Id; addlist[add, 1] = a;
                             addlist[add, 2] = b.Id; addlist[add, 3] = a; add++;
@@ -1116,7 +1132,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                         int exists = GetNode(w.XLoc, w.YLoc - separation);
                         if (exists == -1)
                         {
-                            VList[a] = new Vertex(w.XLoc, w.YLoc - separation){Id = a};
+                            VList[a] = new Vertex(w.XLoc, w.YLoc - separation) { Id = a };
                             removelist[remove, 0] = w.Id; removelist[remove, 1] = b.Id; remove++;
                             addlist[add, 0] = w.Id; addlist[add, 1] = a;
                             addlist[add, 2] = b.Id; addlist[add, 3] = a; add++;
@@ -1131,7 +1147,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                         int exists = GetNode(w.XLoc, w.YLoc + separation);
                         if (exists == -1)
                         {
-                            VList[a] = new Vertex(w.XLoc, w.YLoc + separation){Id = a};
+                            VList[a] = new Vertex(w.XLoc, w.YLoc + separation) { Id = a };
                             removelist[remove, 0] = w.Id; removelist[remove, 1] = b.Id; remove++;
                             addlist[add, 0] = w.Id; addlist[add, 1] = a;
                             addlist[add, 2] = b.Id; addlist[add, 3] = a; add++;
@@ -1140,41 +1156,42 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                         }
                         else list[newnode++] = VList[exists];
                     }
-                    if(list[neighbor] == null)
-                        Console.WriteLine("Degenerate Case "+ w.XLoc + " " + w.YLoc + " : " +b.XLoc+" "+b.YLoc);
+                    if (list[neighbor] == null)
+                        Console.WriteLine("Degenerate Case " + w.XLoc + " " + w.YLoc + " : " + b.XLoc + " " + b.YLoc);
                 }
 
                 for (int i = 0; i < remove; i++) RemoveEdge(removelist[i, 0], removelist[i, 1]);
                 for (int i = 0; i < add; i++)
                 {
-                    AddEdge(addlist[i, 0], addlist[i, 1],1,0);
+                    AddEdge(addlist[i, 0], addlist[i, 1], 1, 0);
                     AddEdge(addlist[i, 2], addlist[i, 3]);
                 }
 
                 int removeA = 0, removeB = 0;
                 for (int i = 0; i < newnode; i++)
-                {                     
+                {
                     for (int j = i + 1; j < newnode; j++)
                     {
-                        if(list[i] == null || list[j] == null) continue;
-                        if(list[i].XLoc == list[j].XLoc || list[i].YLoc == list[j].YLoc) continue;
+                        if (list[i] == null || list[j] == null) continue;
+                        if (list[i].XLoc == list[j].XLoc || list[i].YLoc == list[j].YLoc) continue;
                         if (AddEdge(list[i].Id, list[j].Id))
                         {
                             removeA = list[i].Id;
                             removeB = list[j].Id;
                         }
-                    }                    
+                    }
                 }
                 //remove one edge
                 if (removeA + removeB > 0) RemoveEdge(removeA, removeB);
 
             }
             nodeTree.Clear();
-            for(int index = 0; index < NumOfnodes; index++)
-                nodeTree.Add(new Rectangle(new Microsoft.Msagl.Core.Geometry.Point(VList[index].XLoc, VList[index].YLoc)),  index );
-            
+            for (int index = 0; index < NumOfnodes; index++)
+                nodeTree.Add(new Rectangle(new Microsoft.Msagl.Core.Geometry.Point(VList[index].XLoc, VList[index].YLoc)), index);
+
 
         }
+
         public void ComputeDetourAroundVertex(WeightedPoint[] pt, int numPoints)
         {
             for (int i = numPoints; i >= 1; i--)
@@ -1468,7 +1485,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             {
                 if (EList[b, index].NodeId == a) return false;
             }
-            EList[a,  DegList[a]] = new Edge(b);           
+            EList[a, DegList[a]] = new Edge(b);
             DegList[a]++;
             EList[b, DegList[b]] = new Edge(a);
             DegList[b]++;
@@ -1480,7 +1497,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             for (int index = 0; index < DegList[a]; index++)
             {
                 if (EList[a, index].NodeId == b) return true;
-            } 
+            }
             return false;
         }
 
@@ -1494,16 +1511,16 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             {
                 if (EList[b, index].NodeId == a) return false;
             }
-            EList[a, DegList[a]] = new Edge(b) {Selected = select, Used = zoomLevel};
+            EList[a, DegList[a]] = new Edge(b) { Selected = select, Used = zoomLevel };
             DegList[a]++;
-            EList[b, DegList[b]] = new Edge(a) {Selected = select, Used = zoomLevel};
+            EList[b, DegList[b]] = new Edge(a) { Selected = select, Used = zoomLevel };
             DegList[b]++;
             return true;
         }
         public int GetNode(int a, int b)
         {
             for (int index = 0; index < NumOfnodes; index++)
-                if (a == VList[index].XLoc && b == VList[index].YLoc && VList[index].Invalid==false) return index;
+                if (a == VList[index].XLoc && b == VList[index].YLoc && VList[index].Invalid == false) return index;
             return -1;
         }
         public int GetNodeOtherthanThis(int givenNodeId, int a, int b)
@@ -1512,12 +1529,12 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 if (a == VList[index].XLoc && b == VList[index].YLoc && VList[index].Invalid == false && index != givenNodeId) return index;
             return -1;
         }
-        public int  GetNodeExceptTheGivenNode(Vertex w, int a, int b, int offset)
+        public int GetNodeExceptTheGivenNode(Vertex w, int a, int b, int offset)
         {
             Microsoft.Msagl.Core.Geometry.Point p1 = new Microsoft.Msagl.Core.Geometry.Point(a - offset, b - offset);
             Microsoft.Msagl.Core.Geometry.Point p2 = new Microsoft.Msagl.Core.Geometry.Point(a + offset, b + offset);
             Rectangle queryRectangle = new Rectangle(p1, p2);
-            int []candidateList = nodeTree.GetAllIntersecting(queryRectangle);
+            int[] candidateList = nodeTree.GetAllIntersecting(queryRectangle);
             for (int index = 0; index < candidateList.Length; index++)
             {
                 int candidate = candidateList[index];
@@ -1535,7 +1552,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 {
                     DegList[a]--;
                     i++;
-                    for (; index < DegList[a]; index++){ EList[a, index]  = EList[a, index+1] ;}
+                    for (; index < DegList[a]; index++) { EList[a, index] = EList[a, index + 1]; }
                 }
             }
             for (int index = 0; index < DegList[b]; index++)
@@ -1544,7 +1561,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 {
                     DegList[b]--;
                     i++;
-                    for (; index < DegList[b]; index++) EList[b, index]  = EList[b, index + 1] ;
+                    for (; index < DegList[b]; index++) EList[b, index] = EList[b, index + 1];
                 }
             }
             return i == 2;
@@ -1573,7 +1590,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         public Vertex Parent = null;
         public bool Visited;
         public bool Invalid;
-        
+
         public Ray topRay;
         public Ray bottomRay;
         public Ray leftRay;
@@ -1623,7 +1640,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
     {
         public List<VertexNeighbor> Edgelist = new List<VertexNeighbor>();
     }
-     
+
 }
 
 

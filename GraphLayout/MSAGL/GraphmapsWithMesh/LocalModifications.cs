@@ -247,28 +247,32 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
          */
         public static void PolygonalChainSimplification(Microsoft.Msagl.Core.Geometry.Point[] PointList, int start, int end, double epsilon)
         {
-             
+
             // Find the point with the maximum distance
-            double dmax = 0,d =0;
+            double dmax = 0, d = 0;
             int index = 0;
-            for(int i = start+1; i<=end-1; i++){
-                d = PointToSegmentDistance.GetDistance(PointList[start], PointList[end],PointList[i]);            
-                if ( d > dmax ) {
+            for (int i = start + 1; i <= end - 1; i++)
+            {
+                d = PointToSegmentDistance.GetDistance(PointList[start], PointList[end], PointList[i]);
+                if (d > dmax)
+                {
                     index = i;
                     dmax = d;
                 }
             }
-        
-    
+
+
             // If max distance is greater than epsilon, recursively simplify
-            if ( dmax > epsilon ) {
+            if (dmax > epsilon)
+            {
                 // Recursive call
                 PolygonalChainSimplification(PointList, start, index, epsilon);
                 PolygonalChainSimplification(PointList, index, end, epsilon);
             }
-            else {
-                for(int i = start+1; i<=end-1; i++) 
-                    PointList[i] = new Core.Geometry.Point(-1,-1);
+            else
+            {
+                for (int i = start + 1; i <= end - 1; i++)
+                    PointList[i] = new Core.Geometry.Point(-1, -1);
             }
         }
     }

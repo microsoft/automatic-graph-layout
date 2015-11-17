@@ -56,9 +56,9 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
          */
         public static int GetAnticlockwiseNextNeighbor(Tiling planarGraph, int currentVertexId, int neighborVertexId)
         {
-          
+
             int nextNeighborId = -1;
-          
+
             if (planarGraph.isPlanar)
             {
                 for (int neighborIndex = 0; neighborIndex < planarGraph.DegList[currentVertexId]; neighborIndex++)
@@ -70,7 +70,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                     }
                 }
             }
-             
+
             return nextNeighborId;
         }
 
@@ -86,8 +86,8 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             Vertex currentHead = givenHeadVertex, currentTail = givenTailVertex;
 
             do
-            { 
-                int subsequentVertxId = GetAnticlockwiseNextNeighbor(gPlanar, currentHead.Id,currentTail.Id);
+            {
+                int subsequentVertxId = GetAnticlockwiseNextNeighbor(gPlanar, currentHead.Id, currentTail.Id);
                 currentTail = currentHead;
                 currentHead = gPlanar.VList[subsequentVertxId];
                 if (face.Contains(currentHead)) degenerate = true;
@@ -106,8 +106,8 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             bool searchFurther = true;
             //while (searchFurther)
             //{
-                //you need to handle face one after another - since you are changing the adjacency list
-                //searchFurther = false;
+            //you need to handle face one after another - since you are changing the adjacency list
+            //searchFurther = false;
             List<Face> faces = new List<Face>();
             for (int nodeIndex = 0; nodeIndex < gPlanar.NumOfnodes; nodeIndex++)
             {
@@ -130,16 +130,16 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             foreach (var face in faces)
             {
                 //if not a valid boundary continue
-                if (!FaceIsStillValid(gPlanar,face.boundary)) continue;
+                if (!FaceIsStillValid(gPlanar, face.boundary)) continue;
                 //check whether the face is thin, and if so, find the longest edge in this face and remove it                      
                 if (GetFacewidth(face.boundary) > gPlanar.thinness) continue;
                 //searchFurther = 
-                        RemoveLongestEdge(gPlanar, face.boundary);
+                RemoveLongestEdge(gPlanar, face.boundary);
             }
             //}
         }
 
-        public static bool FaceIsStillValid(Tiling g,List<Vertex> boundary)
+        public static bool FaceIsStillValid(Tiling g, List<Vertex> boundary)
         {
             Vertex[] b = boundary.ToArray();
             for (int index = 0; index < b.Length; index++)
@@ -149,7 +149,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                     if (g.IsAnEdge(b[index].Id, b[0].Id) == false) return false;
                     continue;
                 }
-                if (g.IsAnEdge(b[index].Id,b[index+1].Id) == false) return false;
+                if (g.IsAnEdge(b[index].Id, b[index + 1].Id) == false) return false;
             }
             return true;
         }
@@ -165,7 +165,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
         private static bool AllBoundaryVerticesAreJunctions(Tiling gPlanar, List<Vertex> face)
         {
-             foreach (Vertex boundaryVertex in face)
+            foreach (Vertex boundaryVertex in face)
                 if (boundaryVertex.Id < gPlanar.N)
                 {
                     return false;
@@ -206,9 +206,9 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 for (int j = 0; j < face.Count; j++)
                 {
                     if (i == j) continue;
-                    if (segments[i].Start == segments[j].Start || segments[i].End == segments[j].End || 
+                    if (segments[i].Start == segments[j].Start || segments[i].End == segments[j].End ||
                         segments[i].End == segments[j].Start || segments[i].Start == segments[j].End) continue;
-  
+
                     double width;
                     width = PointToSegmentDistance.GetDistance(segmentVertices[i, 0], segmentVertices[i, 1],
                         segmentVertices[j, 0]);
@@ -222,7 +222,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                     width = PointToSegmentDistance.GetDistance(segmentVertices[j, 0], segmentVertices[j, 1],
                         segmentVertices[i, 1]);
                     if (facewidth > width) facewidth = width;
-                   
+
                 }
             }
             return facewidth;
@@ -230,7 +230,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
         private static bool RemoveLongestEdge(Tiling gPlanar, List<Vertex> face)
         {
-            
+
             double longestLength = -1, length;
             Vertex initialVertex = null, oldVertex = null;
             Vertex removeA = null, removeB = null;

@@ -10,24 +10,24 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         }
         public static Microsoft.Msagl.Core.Geometry.Point getClosestPoint(Vertex pointA, Vertex pointB, Vertex pointP)
         {
-         
-            double []AP = new double[2];
-            AP[0] = pointP.XLoc - pointA.XLoc;  
+
+            double[] AP = new double[2];
+            AP[0] = pointP.XLoc - pointA.XLoc;
             AP[1] = pointP.YLoc - pointA.YLoc;
 
-            double []AB = new double[2];
-            AB[0] = pointB.XLoc - pointA.XLoc;  
+            double[] AB = new double[2];
+            AB[0] = pointB.XLoc - pointA.XLoc;
             AB[1] = pointB.YLoc - pointA.YLoc;
 
-            double AB_length = AB[0]*AB[0] + AB[1]*AB[1];    
-            double AP_AB_Dot = AP[0]*AB[0] + AP[1]*AB[1];
-            double t = AP_AB_Dot/AB_length;
-            
-            if(t<0) t = 0;
-            if(t>1) t = 1;
-            double pointx = pointA.XLoc+ AB[0]*t;
-            double pointy = pointA.YLoc+ AB[1]*t;
-            return new Microsoft.Msagl.Core.Geometry.Point(pointx,pointy);
+            double AB_length = AB[0] * AB[0] + AB[1] * AB[1];
+            double AP_AB_Dot = AP[0] * AB[0] + AP[1] * AB[1];
+            double t = AP_AB_Dot / AB_length;
+
+            if (t < 0) t = 0;
+            if (t > 1) t = 1;
+            double pointx = pointA.XLoc + AB[0] * t;
+            double pointy = pointA.YLoc + AB[1] * t;
+            return new Microsoft.Msagl.Core.Geometry.Point(pointx, pointy);
         }
         //Compute the distance from AB to C
         //if isSegment is true, AB is a segment, not a line.
@@ -46,7 +46,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             return Math.Abs(dist);
         }
 
- 
+
 
         //Compute the dot product AB . AC
         private static double DotProduct(Vertex pointA, Vertex pointB, Vertex pointC)
@@ -86,6 +86,6 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         }
 
 
- 
+
     }
 }
