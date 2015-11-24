@@ -80,6 +80,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             {
                 _initFromPrecomputedLgData = true;
                 _lgData = geometryGraph.LgData;
+                _lgLayoutSettings.GeometryNodesToLgNodeInfos = _lgData.GeometryNodesToLgNodeInfos;
             }
             // add skeleton levels
             AddSkeletonLevels();
