@@ -287,7 +287,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
             BinaryHeapPriorityQueue q = new BinaryHeapPriorityQueue(n);
 
-
+             
 
             vList[source].Dist = 0;
             q.Enqueue(source, vList[source].Dist);

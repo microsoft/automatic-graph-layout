@@ -38,33 +38,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                     }
 
                     if (numNeighbors <= 1) continue;
-                    /*
-                    if (numNeighbors ==4  )
-                    {
-
-                        double d1 = 1000,d2=1000;
-                        for (int q = 0; q < g.N; q++)
-                        {
-                            if (idToNodes[q].ToString().Contains("2.8 BSD"))
-                            {
-                                for (int r = 1; r <= 4; r++)
-                                    if (d1 > g.GetEucledianDist(q, listNeighbors[r, 1]))
-                                        d1 = g.GetEucledianDist(q, listNeighbors[r, 1]);
-                            }
-                            if (idToNodes[q].ToString().Contains("Mini Unix"))
-                            {
-                                for (int r = 1; r <= 4; r++)
-                                    if (d2 > g.GetEucledianDist(q, listNeighbors[r, 1]))
-                                        d2 = g.GetEucledianDist(q, listNeighbors[r, 1]);
-                            }
-                        }
-                        if (d1 < 2 && d2 < 2)
-                           // continue;
-                          Console.WriteLine(""+w.XLoc +" " +w.YLoc);
-                    }*/
-
-                    //if (index > g.NumOfnodesBeforeDetour)
-                    // Console.WriteLine();
+                    
                     for (int counter = 1; counter <= 9; counter++)
                     {
                         d[counter] = 0;
@@ -98,10 +72,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
                         }
 
-                        //if (cost > d[counter])
-                        //{
-                        //    cost = d[counter]; mincostA = a; mincostB = b;
-                        //}
+                    
                         p[counter] = new Core.Geometry.Point(a, b);
 
 
@@ -117,9 +88,9 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                         {
                             w.XLoc += mincostA;
                             w.YLoc += mincostB;
-                            if (g.GetNodeExceptTheGivenNode(w, w.XLoc, w.YLoc, offset) >= 0 ||
-                                g.MsaglGoodResolution(w, listNeighbors, numNeighbors, offset) == false
-                                //|| g.noCrossings(w) == false
+                            if (g.GetNodeExceptTheGivenNode(w, w.XLoc, w.YLoc, 5) >= 0 ||
+                                g.MsaglGoodResolution(w, listNeighbors, numNeighbors, 5) == false
+                                || g.noCrossingsHeuristics(w) == false
                                 )
                             {
                                 w.XLoc -= mincostA;

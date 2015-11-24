@@ -4,67 +4,76 @@ using Microsoft.Msagl.Core;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 
-namespace Microsoft.Msagl.Routing.Visibility {
+namespace Microsoft.Msagl.Routing.Visibility
+{
     [DebuggerDisplay("({Point.X} {Point.Y})")]
-    internal class VisibilityVertex : IComparer<VisibilityEdge> {
+    internal class VisibilityVertex : IComparer<VisibilityEdge>
+    {
 
         // This member is accessed a lot.  Using a field instead of a property for performance.
         readonly internal Point Point;
+        public bool isReal;
         bool _isTerminal;
         bool _isShortestPathTerminal;
-        readonly List<VisibilityEdge> _inEdges=new List<VisibilityEdge>();
+        readonly List<VisibilityEdge> _inEdges = new List<VisibilityEdge>();
 
-        internal List<VisibilityEdge> InEdges {
+        internal List<VisibilityEdge> InEdges
+        {
             get { return _inEdges; }
         }
 
         readonly RbTree<VisibilityEdge> _outEdges;
-       /* VisibilityEdge prev; */
+        /* VisibilityEdge prev; */
 
         /// <summary>
         /// this collection is sorted by the target point, in the lexicographical order
         /// </summary>
-        internal RbTree<VisibilityEdge> OutEdges {
+        internal RbTree<VisibilityEdge> OutEdges
+        {
             get { return _outEdges; }
         }
 
-        internal int Degree {
+        internal int Degree
+        {
             get { return InEdges.Count + OutEdges.Count; }
         }
         /// <summary>
         /// needed for shortest path calculations
         /// </summary>
-        internal double Distance { get;set;}
+        internal double Distance { get; set; }
 
-        internal bool IsTerminal {
+        internal bool IsTerminal
+        {
             get { return _isTerminal; }
             set { _isTerminal = value; }
         }
 
-        internal bool IsShortestPathTerminal {
+        internal bool IsShortestPathTerminal
+        {
             get { return _isShortestPathTerminal; }
             set { _isShortestPathTerminal = value; }
         }
 
 
-/*
-        /// <summary>
-        /// needed for shortest path calculations
-        /// </summary>        
-        internal VisibilityVertex Prev {
-            get {
-                if (prev == null) return null;
-                if(prev.Source==this)
-                    return prev.Target;
-                return prev.Source;
-            }
-        }
+        /*
+                /// <summary>
+                /// needed for shortest path calculations
+                /// </summary>        
+                internal VisibilityVertex Prev {
+                    get {
+                        if (prev == null) return null;
+                        if(prev.Source==this)
+                            return prev.Target;
+                        return prev.Source;
+                    }
+                }
 
-        internal void SetPreviousEdge(VisibilityEdge e) {
-            prev = e;
-        }
-        */
-        internal VisibilityVertex(Point point) {
+                internal void SetPreviousEdge(VisibilityEdge e) {
+                    prev = e;
+                }
+                */
+        internal VisibilityVertex(Point point)
+        {
             _outEdges = new RbTree<VisibilityEdge>(this);
             Point = point;
         }
@@ -73,7 +82,8 @@ namespace Microsoft.Msagl.Routing.Visibility {
         /// Rounded representation; DebuggerDisplay shows the unrounded form.
         /// </summary>
         /// <returns></returns>
-        public override string ToString() {
+        public override string ToString()
+        {
             return Point.ToString();
         }
 
@@ -84,13 +94,17 @@ namespace Microsoft.Msagl.Routing.Visibility {
         /// rectilinear, this optimization isn't always possible).
         /// </summary>
         /// <param name="edge"></param>
-        internal void RemoveOutEdge(VisibilityEdge edge) {
-            OutEdges.Remove(edge);          
+        internal void RemoveOutEdge(VisibilityEdge edge)
+        {
+            OutEdges.Remove(edge);
         }
 
-        internal void RemoveInEdge(VisibilityEdge edge) {
-            for (int ii = InEdges.Count - 1; ii >= 0; --ii) {
-                if (InEdges[ii] == edge) {
+        internal void RemoveInEdge(VisibilityEdge edge)
+        {
+            for (int ii = InEdges.Count - 1; ii >= 0; --ii)
+            {
+                if (InEdges[ii] == edge)
+                {
                     InEdges.RemoveAt(ii);
                     break;
                 }
@@ -102,13 +116,14 @@ namespace Microsoft.Msagl.Routing.Visibility {
         /// <param name="tree"></param>
         /// <param name="targetPoint"></param>
         /// <returns></returns>
-        static RBNode<VisibilityEdge> FindFirst(RbTree<VisibilityEdge> tree, Point targetPoint) {
+        static RBNode<VisibilityEdge> FindFirst(RbTree<VisibilityEdge> tree, Point targetPoint)
+        {
             return FindFirst(tree.Root, tree, targetPoint);
         }
 
         static RBNode<VisibilityEdge> FindFirst(RBNode<VisibilityEdge> n, RbTree<VisibilityEdge> tree, Point targetPoint)
         {
-            if ( n ==  tree.Nil)
+            if (n == tree.Nil)
                 return null;
             RBNode<VisibilityEdge> good = null;
             while (n != tree.Nil)
@@ -117,18 +132,23 @@ namespace Microsoft.Msagl.Routing.Visibility {
             return good;
         }
 
-        internal bool TryGetEdge(VisibilityVertex target, out VisibilityEdge visEdge) {
+        internal bool TryGetEdge(VisibilityVertex target, out VisibilityEdge visEdge)
+        {
             var node = FindFirst(OutEdges, target.Point);// OutEdges.FindFirst(e => e.TargetPoint >= target.Point); 
-            if (node != null) {
-                if (node.Item.Target == target) {
+            if (node != null)
+            {
+                if (node.Item.Target == target)
+                {
                     visEdge = node.Item;
                     return true;
                 }
             }
             node = FindFirst(target.OutEdges, Point);// target.OutEdges.FindFirst(e => e.TargetPoint >= Point);
-            if (node != null) {
-                if (node.Item.Target == this) {
-                    visEdge= node.Item;
+            if (node != null)
+            {
+                if (node.Item.Target == this)
+                {
+                    visEdge = node.Item;
                     return true;
                 }
             }
@@ -137,12 +157,14 @@ namespace Microsoft.Msagl.Routing.Visibility {
         }
 
         #region IComparer<VisibilityEdge>
-        public int Compare(VisibilityEdge a, VisibilityEdge b) {
+        public int Compare(VisibilityEdge a, VisibilityEdge b)
+        {
             return a.TargetPoint.CompareTo(b.TargetPoint);
         }
         #endregion // IComparer<VisibilityEdge>
 
-        public void ClearEdges() {
+        public void ClearEdges()
+        {
             _outEdges.Clear();
             _inEdges.Clear();
         }
