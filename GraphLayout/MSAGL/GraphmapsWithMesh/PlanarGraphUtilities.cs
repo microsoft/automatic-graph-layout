@@ -90,7 +90,10 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 int subsequentVertxId = GetAnticlockwiseNextNeighbor(gPlanar, currentHead.Id, currentTail.Id);
                 currentTail = currentHead;
                 currentHead = gPlanar.VList[subsequentVertxId];
-                if (face.Contains(currentHead)) degenerate = true;
+                if (face.Contains(currentHead)) {
+                    degenerate = true;
+                    break;
+                }
                 face.Add(currentHead);
             } while (!(givenTailVertex.Id == currentTail.Id && givenHeadVertex.Id == currentHead.Id));
             return face;

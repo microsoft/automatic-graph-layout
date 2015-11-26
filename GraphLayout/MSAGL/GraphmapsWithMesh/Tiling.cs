@@ -850,6 +850,83 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
         public void MsaglRemoveDeg2(Dictionary<int, Node> idToNodes)
         {
+            int[,] listNeighbors = new int[20, 3];
+
+            bool localRefinementsFound = true;
+            int iteration = 20;
+
+
+            List<int> Deg2Vertices = new List<int>();
+            for (int index = N; index < NumOfnodes; index++)
+            {
+                Vertex w = VList[index];
+                 
+
+                var numNeighbors = 0;
+                //compute the deg of w
+                for (int k = 0; k < DegList[w.Id]; k++)
+                {
+                    numNeighbors++;
+                    listNeighbors[numNeighbors, 1] = EList[w.Id, k].NodeId;
+                    listNeighbors[numNeighbors, 2] = k;
+                }
+                //if deg is 1 fix it
+                if (numNeighbors == 1)
+                    DegList[index] = 0;
+                //if deg is 2 then add in the list
+                if (numNeighbors == 2) Deg2Vertices.Add(index);
+            }
+
+            while (localRefinementsFound && iteration > 0)
+            {
+                iteration--;
+                localRefinementsFound = false;
+                foreach(int index in Deg2Vertices)// (int index = N; index < NumOfnodes; index++)
+                {
+                    Vertex w = VList[index];
+                    if(w.Invalid) continue;
+                    var numNeighbors = 0;
+
+                    for (int k = 0; k < DegList[w.Id]; k++)
+                    { 
+                        numNeighbors++;
+                        listNeighbors[numNeighbors, 1] = EList[w.Id, k].NodeId;
+                        listNeighbors[numNeighbors, 2] = k;
+                    }
+
+                    if (numNeighbors == 1)
+                        DegList[index] = 0;
+
+               
+                    if (numNeighbors == 2)
+                    {
+
+                        var adjust = MsaglIsWellSeperated(w, listNeighbors[1, 1], listNeighbors[2, 1]);
+                        adjust = adjust && noCrossings(w, VList[listNeighbors[1, 1]], VList[listNeighbors[2, 1]]);
+
+                        if (adjust)
+                        {
+                            localRefinementsFound = true;
+                            var selected = EList[index, listNeighbors[2, 2]].Selected;
+                            var used = EList[index, listNeighbors[2, 2]].Used;
+                            RemoveEdge(index, listNeighbors[1, 1]);
+                            RemoveEdge(index, listNeighbors[2, 1]);
+
+                            AddEdge(listNeighbors[1, 1], listNeighbors[2, 1], selected, used);
+
+                            if (DegList[w.Id] == 0) w.Invalid = true;
+
+                             
+                        }
+                         
+                    }
+                }
+            }
+            Deg2Vertices.Clear();
+        }
+        /*
+        public void MsaglRemoveDeg2(Dictionary<int, Node> idToNodes)
+        {
 
 
             bool localRefinementsFound = true;
@@ -868,6 +945,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 {
                     numNeighbors++;
                     listNeighbors[numNeighbors, 1] = EList[w.Id, k].NodeId;
+                    listNeighbors[numNeighbors, 2] = k;
                 }
                 //if deg is 1 fix it
                 if (numNeighbors == 1)
@@ -897,13 +975,11 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                     //if the new position is good then remove this deg 2 vertex 
                     if (adjust)
                     {
-                        
-                        //if (EList[index, listNeighbors[1, 2]].NodeId < N || EList[index, listNeighbors[2, 2]].NodeId < N)
-                            //continue;
+                         
 
                         localRefinementsFound = true;
                         var selected = Math.Max(EList[index, listNeighbors[1, 2]].Selected, EList[index, listNeighbors[2, 2]].Selected);
-                        var used = Math.Min(EList[index, listNeighbors[1, 2]].Used, EList[index, listNeighbors[2, 2]].Used);
+                        var used = Math.Max(EList[index, listNeighbors[1, 2]].Used, EList[index, listNeighbors[2, 2]].Used);
                         RemoveEdge(index, listNeighbors[1, 1]);
                         RemoveEdge(index, listNeighbors[2, 1]);
 
@@ -913,7 +989,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
                         RemoveList.Add(index);
 
-                        nodeTree.Remove(new Rectangle(new Point(VList[index].XLoc, VList[index].YLoc)), index);
+                       // nodeTree.Remove(new Rectangle(new Point(VList[index].XLoc, VList[index].YLoc)), index);
 
                     }
                 }
@@ -922,6 +998,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                     Deg2Vertices.Remove(q);
             }
         }
+        */
         public void RemoveDeg2(WeightedPoint[] pt, int numPoints)
         {
             int[,] listNeighbors = new int[20, 3];
