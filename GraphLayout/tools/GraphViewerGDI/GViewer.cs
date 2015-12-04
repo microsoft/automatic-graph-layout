@@ -1270,20 +1270,35 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             if (bBNode == null && DGraph != null)
                 bBNode = DGraph.BBNode;
             if (bBNode != null) {
-                Geometry geometry = bBNode.Hit(ScreenToSource(point), GetHitSlack(), filter);
-
-                selectedDObject = geometry == null ? null : geometry.dObject;
-
-
-                if (old != selectedDObject) {
-                    SetSelectedObject(selectedDObject);
-                    if (ObjectUnderMouseCursorChanged != null) {
-                        var changedArgs = new ObjectUnderMouseCursorChangedEventArgs((IViewerObject) old,
-                                                                                     selectedDObject);
-                        ObjectUnderMouseCursorChanged(this, changedArgs);
-                    }
+                var subgraphs=new List<Geometry>();
+                Geometry geometry = bBNode.Hit(ScreenToSource(point), GetHitSlack(), filter, subgraphs) ??
+                                    PickSubgraph(subgraphs, ScreenToSource(point));
+                selectedDObject = geometry?.dObject;
+                if (old == selectedDObject) return;
+                SetSelectedObject(selectedDObject);
+                if (ObjectUnderMouseCursorChanged != null) {
+                    var changedArgs = new ObjectUnderMouseCursorChangedEventArgs((IViewerObject) old,
+                        selectedDObject);
+                    ObjectUnderMouseCursorChanged(this, changedArgs);
                 }
             }
+        }
+
+        Geometry PickSubgraph(List<Geometry> subgraphs, Point screenToSource)
+        {
+            if (subgraphs.Count == 0) return null;
+            double area = subgraphs[0].dObject.DrawingObject.BoundingBox.Area;
+            int ret = 0;
+            for (int i = 1; i < subgraphs.Count; i++)
+            {
+                double a = subgraphs[i].dObject.DrawingObject.BoundingBox.Area;
+                if (a < area)
+                {
+                    area = a;
+                    ret = i;
+                }
+            }
+            return subgraphs[ret];
         }
 
         /// <summary>
@@ -1730,11 +1745,11 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             BBNode bn = BbNode;
             if (bn == null)
                 return null;
-            Geometry g = bn.Hit(ScreenToSource(new System.Drawing.Point(x, y)), GetHitSlack(), EntityFilterDelegate);
-            if (g == null)
-                return null;
+            List<Geometry> subgraphs=new List<Geometry>();
+            Geometry g = bn.Hit(ScreenToSource(new System.Drawing.Point(x, y)), GetHitSlack(), EntityFilterDelegate, subgraphs) ??
+                         PickSubgraph(subgraphs, ScreenToSource(new System.Drawing.Point(x, y)));
 
-            return g.dObject;
+            return g?.dObject;
         }
 
         /// <summary>
