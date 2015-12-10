@@ -393,9 +393,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             int plottedNodeCount = 0;
             List<Node> nodes = new List<Node>();
 
-
-
-
+             
             foreach (var node in _mainGeometryGraph.Nodes)
                 _lgData.GeometryNodesToLgNodeInfos[node].ZoomLevel = 100;
 
@@ -405,6 +403,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 layer++;
                 var level = CreateLevel(layer);
 
+                var count = 0;
                 //set the zoomlevel of the nodes
                 for (int j = 0; j < g[i].N; j++)
                 {
@@ -412,12 +411,14 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     {
                         Node nd = idToNode[g[i].VList[j].Id];
                         if (_lgData.GeometryNodesToLgNodeInfos[nd].ZoomLevel == 100)
-                        {                            
+                        {
+                            count++;
                             _lgData.GeometryNodesToLgNodeInfos[nd].ZoomLevel = layer;
                             _lgLayoutSettings.GeometryNodesToLgNodeInfos[nd].ZoomLevel = layer;
                         }
                     }
                 }
+                Console.WriteLine("**Level " + layer + " has " + count + " nodes**");
                 
                 //add the edges to the current level for this graph
                 Dictionary<Node, int> nodeId = new Dictionary<Node, int>();//-remove later - not needed
@@ -643,7 +644,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
 
                 stopwatch.Start();
-                //RouteByLayers();
+                RouteByLayers();
                 stopwatch.Stop();
                 Console.WriteLine("Lev's = " + stopwatch.ElapsedMilliseconds);
 
@@ -684,7 +685,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 LocalModifications.MsaglMoveToMedian(g, idToNode);
                 stopwatch.Stop();
                 Console.WriteLine("Ink Minimization Time = " + stopwatch.ElapsedMilliseconds);
-
 
             }
 
