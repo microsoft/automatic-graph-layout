@@ -235,7 +235,8 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
             WriteStartElement(GeometryToken.EdgeRails);
             WriteAttribute(GeometryToken.EdgeId, edgeIds[edge]);
             List<string> railIdStrings = new List<string>();
-            foreach (var rail in rails) {
+            foreach (var rail in rails)
+            {
                 railIdStrings.Add(railIds[rail].ToString());
             }
 

@@ -1172,8 +1172,9 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         internal int GetLevelIndexByScale(double scale)
         {
             if (scale <= 1) return 0;
-            if (scale >= _lgLayoutSettings.maximumNumOfLayers) return _lgLayoutSettings.maximumNumOfLayers - 1;
+            //if (scale >= _lgLayoutSettings.maximumNumOfLayers) return _lgLayoutSettings.maximumNumOfLayers - 1;
             var z = Math.Log(scale, 2);
+            if (z >= _lgLayoutSettings.maximumNumOfLayers) return _lgLayoutSettings.maximumNumOfLayers - 1;
             int ret = (int)Math.Ceiling(z);
             return ret;
         }
@@ -1513,7 +1514,8 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 /*
                 if (IntersectsRails(rail, highlightedRails) || IntersectsRails(rail,adjacenttoHighLightedRails))
                 {
-                    A = rail.initialA;
+                    A = 
+                 * ;
                     B = rail.initialB;
                 }
                 */

@@ -177,6 +177,34 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             _railDictionary.Remove(new SymmetricSegment(p0, p1));
         }
 
+        internal bool PrintQuota(IEnumerable<Node> nodes, int NodeQuota, int RailQuota)
+        {
+            //Console.WriteLine("running stats "+nodes.Count());
+            tileTableForStatistic.Clear();
+            foreach (var rail in _railDictionary.Values)
+                if (rail.ZoomLevel == ZoomLevel)
+                    CreateStatisticsForRail(rail);
+
+            RunStatisticsForNodes(nodes);
+
+
+            int maxVerticesPerTile = 0;
+            int maxRailsPerTile = 0;
+
+            foreach (var tileStatistic in tileTableForStatistic.Values)
+            {
+                if (maxRailsPerTile < tileStatistic.rails)
+                    maxRailsPerTile = tileStatistic.rails;
+                if (maxVerticesPerTile < tileStatistic.vertices)
+                    maxVerticesPerTile = tileStatistic.vertices;
+            }
+
+            Console.WriteLine("max rails per tile {0}\n" + "max verts per tile {1}.\n", maxRailsPerTile, maxVerticesPerTile);
+
+            if (maxVerticesPerTile <= NodeQuota && maxRailsPerTile <= RailQuota) return true;
+            //if ( maxRailsPerTile <= RailQuota) return true;
+            return false;
+        }
 
         internal bool QuotaSatisfied(IEnumerable<Node> nodes, int NodeQuota, int RailQuota)
         {
@@ -202,8 +230,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
              
             //Console.WriteLine("max rails per tile {0}\n" +"max verts per tile {1}.\n", maxRailsPerTile,maxVerticesPerTile );
 
-            //if (maxVerticesPerTile <= NodeQuota && maxRailsPerTile <= RailQuota) return true;
-            if ( maxRailsPerTile <= RailQuota) return true;
+            if (maxVerticesPerTile <= NodeQuota && maxRailsPerTile <= RailQuota) return true;
+            //if ( maxRailsPerTile <= RailQuota) return true;
             return false;
         }
 
@@ -250,7 +278,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
         void RunStatisticsForNodes(IEnumerable<Node> nodes) {
             foreach (var node in nodes)
+            {
                 CreateStatisticsForNode(node);
+            }
         }
 
         void CreateStatisticsForNode(Node node) {

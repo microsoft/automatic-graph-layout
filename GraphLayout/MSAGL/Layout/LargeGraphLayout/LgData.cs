@@ -133,6 +133,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             if (scale <= 1) return 0;
             if (scale >= _levels.Last().ZoomLevel) return _levels.Count - 1;
             var z = Math.Log(scale, 2);
+            //if (z >= _levels.Last().ZoomLevel) return _levels.Count - 1;
             int ret = (int)Math.Ceiling(z);
             Debug.Assert(0 <= ret && ret < _levels.Count);
             return ret;
