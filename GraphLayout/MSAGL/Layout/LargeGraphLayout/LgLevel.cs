@@ -230,8 +230,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
              
             //Console.WriteLine("max rails per tile {0}\n" +"max verts per tile {1}.\n", maxRailsPerTile,maxVerticesPerTile );
 
-            if (maxVerticesPerTile <= NodeQuota && maxRailsPerTile <= RailQuota) return true;
-            //if ( maxRailsPerTile <= RailQuota) return true;
+            //if (maxVerticesPerTile <= NodeQuota && maxRailsPerTile <= RailQuota) return true;
+            if ( maxRailsPerTile <= RailQuota) return true;
             return false;
         }
 

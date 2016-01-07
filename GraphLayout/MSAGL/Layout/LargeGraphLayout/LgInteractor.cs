@@ -540,8 +540,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             idToNode = new Dictionary<int, Node>();
             nodeToId = new Dictionary<Node, int>();
 
-            this._lgLayoutSettings.MaxNumberOfNodesPerTile = 20;
-            this._lgLayoutSettings.MaxNumberOfRailsPerTile = 300;
+            //this._lgLayoutSettings.MaxNumberOfNodesPerTile = 20;
+            //this._lgLayoutSettings.MaxNumberOfRailsPerTile = 300;
             
             var stopwatch = new Stopwatch();
 
@@ -974,44 +974,38 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 foreach (Edge edge in _lgData.Levels[level.ZoomLevel - 1]._railsOfEdges.Keys)
                 {
                     railsOfEdge = _lgData.Levels[level.ZoomLevel - 1]._railsOfEdges[edge];
-
+                     
                     Set<Rail> rails = new Set<Rail>();
                     Set<Rail> oldRails = new Set<Rail>();
 
                     foreach (var r in railsOfEdge)
                     {
-                        
-                        //Rail r = new Rail(s, _lgData.GeometryEdgesToLgEdgeInfos[edge],(int)_lgData.GeometryEdgesToLgEdgeInfos[edge].ZoomLevel);
-                        //level._railsOfEdges[edge].Insert(r);
+                         
                         LineSegment ls = new LineSegment(r.A, r.B);
                         var tuple = new SymmetricSegment(r.A, r.B);
-
-
-
-
+ 
                         Rail rail;
                         if (!level._railDictionary.TryGetValue(tuple, out rail))
                         {
                             rail = new Rail(ls, _lgData.GeometryEdgesToLgEdgeInfos[edge],
                                                 level.ZoomLevel);
                             _lgData.GeometryEdgesToLgEdgeInfos[edge].ZoomLevel = level.ZoomLevel;
-                            /*
+
                             rail.A = r.targetA;
                             rail.B = r.targetB;
-                            rail.initialA = r.targetA;
-                            rail.initialB = r.targetB;
+                            rail.initialA = r.initialA;
+                            rail.initialB = r.initialB;
                             rail.targetA = r.targetA;
                             rail.targetB = r.targetB;
-                            */
-                            
+/*
                             rail.A = r.A;
                             rail.B = r.B;
                             rail.initialA = r.initialA;
                             rail.initialB = r.initialB;
                             rail.targetA = r.targetA;
                             rail.targetB = r.targetB;
- 
 
+                            */
                             if (!RailToEdges.ContainsKey(rail)) RailToEdges[rail] = new List<Edge>();
                             if (!RailToEdges[rail].Contains(edge)) RailToEdges[rail].Add(edge);
 
@@ -1025,8 +1019,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                         }
                         //rail.ZoomLevel = (int) _lgData.GeometryEdgesToLgEdgeInfos[edge].ZoomLevel;
                     }
-                    level._railsOfEdges[edge] = rails;
+                    level._railsOfEdges[edge] = rails; 
                 }
+                /*
                 if (_lgData.Levels[level.ZoomLevel - 1]._railsOfEdges.Count == level._railsOfEdges.Count)
                 {
                     foreach (Edge edge in _lgData.Levels[level.ZoomLevel - 1]._railsOfEdges.Keys)
@@ -1034,11 +1029,11 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                         railsOfEdge = _lgData.Levels[level.ZoomLevel - 1]._railsOfEdges[edge];
                         foreach (var r in railsOfEdge)
                         {
-                            r.targetA = r.A;
-                            r.targetB = r.B;
+                            //r.targetA = r.A;
+                            //r.targetB = r.B;
                         }
                     }
-                }
+                }*/
                 return false;
             }
 
