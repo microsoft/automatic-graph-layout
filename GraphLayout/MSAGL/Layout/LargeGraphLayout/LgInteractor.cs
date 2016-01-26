@@ -47,6 +47,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
         Dictionary<Point, int> PointToId = new Dictionary<Point, int>();
         public Dictionary<Point, int> locationtoNode = new Dictionary<Point, int>();
+        public Dictionary<int, Node> idToNode;
         /// <summary>
         /// </summary>
         bool _runInParallel = true;
@@ -375,24 +376,31 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             Tiling[] graphs = calculateGraphsForEachZoomLevel(g, nodeToId);
 
             stopwatch.Start();
-            RenderGraphForEachZoomLevel(graphs, nodeToId);
+            DrawAtEachLevelQuotaBounded(graphs, nodeToId);
+            //DrawAtEachLevelQuotaSatisfied(graphs, nodeToId);
+
             stopwatch.Stop();
-            Console.WriteLine("Time for RenderGraphForEachZoomLevel = " + stopwatch.ElapsedMilliseconds);
+            Console.WriteLine("Time for DrawAtEachLevelQuotaBounded = " + stopwatch.ElapsedMilliseconds);
+
+            Console.WriteLine("Total Number of Rails = " + _lgData.Levels[_lgData.Levels.Count-1].RailDictionary.Values.Count);
+
+            //_lgLayoutSettings.MaxNumberOfNodesPerTile = 20;
+            //_lgLayoutSettings.MaxNumberOfRailsPerTile = 300;
 
             //g = graphs[0];
             //RenderGraph( g,   nodeToId);
 
         }
 
-        /*
-        public void RenderGraphForEachZoomLevel(Tiling[] g, Dictionary<Node, int> nodeToId)
+        ///*
+        public void DrawAtEachLevelQuotaBounded(Tiling[] g, Dictionary<Node, int> nodeToId)
         {
 
             //until all edges are added create a layer and add vertices one after another
             int layer = 0;
             int plottedNodeCount = 0;
             List<Node> nodes = new List<Node>();
-
+            _lgData.Levels.Clear();
              
             foreach (var node in _mainGeometryGraph.Nodes)
                 _lgData.GeometryNodesToLgNodeInfos[node].ZoomLevel = 100;
@@ -400,8 +408,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             for (int i = 0; i < g.Length; i++)
             {
 
-                layer++;
+                
                 var level = CreateLevel(layer);
+                
 
                 var count = 0;
                 //set the zoomlevel of the nodes
@@ -414,11 +423,13 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                         {
                             count++;
                             _lgData.GeometryNodesToLgNodeInfos[nd].ZoomLevel = layer;
-                            _lgLayoutSettings.GeometryNodesToLgNodeInfos[nd].ZoomLevel = layer;
+                            _lgLayoutSettings.GeometryNodesToLgNodeInfos[nd].ZoomLevel = layer;                            
                         }
+                        else count++;
                     }
                 }
-                Console.WriteLine("**Level " + layer + " has " + count + " nodes**");
+                _lgData.LevelNodeCounts[layer] = count;
+               
                 
                 //add the edges to the current level for this graph
                 Dictionary<Node, int> nodeId = new Dictionary<Node, int>();//-remove later - not needed
@@ -428,7 +439,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 {
                     //if (!level._railsOfEdges.ContainsKey(edge))
                     {
-                        railsOfEdge = MsaglAddRailsOfEdge(level, g[i], edge, nodeId);
+                        railsOfEdge = MsaglAddRailsOfEdgeQuotaBounded(level, g[i], edge, nodeId);
                         if (railsOfEdge.Count > 0)
                         {
                             level._railsOfEdges[edge] = railsOfEdge;
@@ -436,14 +447,15 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     }
                 }
 
+                layer++;
             }
             
             Console.WriteLine("MAX Num of Level " + layer);
             
         }
-        */
+        //*/
          
-        public void RenderGraphForEachZoomLevel(Tiling[] g, Dictionary<Node, int> nodeToId)
+        public void DrawAtEachLevelQuotaSatisfied(Tiling[] g, Dictionary<Node, int> nodeToId)
         {
        
             //until all edges are added create a layer and add vertices one after another
@@ -506,29 +518,14 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             
             Console.WriteLine("MAX Num of Level " + layer);
             
-            //check whether quota is satisfied for everybody
-            for (int i = 0; i < _lgData.Levels.Count; i++)
-            {
-                Console.WriteLine("Level "+i);
-                var NodesOfCurrentLevel =  nodes.GetRange(0, _lgData.LevelNodeCounts[i]);
-                _lgData.Levels[i].QuotaSatisfied(NodesOfCurrentLevel, _lgLayoutSettings.MaxNumberOfNodesPerTile,
-                    _lgLayoutSettings.MaxNumberOfRailsPerTile);
-            }
-
-            /*
-            level.RunLevelStatistics(_mainGeometryGraph.Nodes);
-
-            double ink = 0;
-            foreach (SymmetricSegment s in level.RailDictionary.Keys)
-            {
-                ink += Math.Sqrt((s.A.X - s.B.X) * (s.A.X - s.B.X) + (s.A.Y - s.B.Y) * (s.A.Y - s.B.Y));
-            }
-            Console.WriteLine("Total Rails " + level.RailDictionary.Keys.Count);
-            Console.WriteLine("Total Ink " + ink);
-            */
+             
         }
- 
-        public Dictionary<int, Node> idToNode;
+         
+
+
+
+
+
 
         private Tiling TryCompetitionMeshApproach(out Dictionary<Node, int> nodeToId)
         {
@@ -540,8 +537,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             idToNode = new Dictionary<int, Node>();
             nodeToId = new Dictionary<Node, int>();
 
-            //this._lgLayoutSettings.MaxNumberOfNodesPerTile = 20;
-            //this._lgLayoutSettings.MaxNumberOfRailsPerTile = 300;
+            
             
             var stopwatch = new Stopwatch();
 
@@ -919,12 +915,10 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             }
 
 
-            var bbox = GetLargestTile();
-            GridTraversal grid = new GridTraversal(bbox, level.ZoomLevel);
-            GreedyNodeRailLevelCalculator calc = new GreedyNodeRailLevelCalculator(_lgData.SortedLgNodeInfos);
-
-
-            calc.MaxAmountRailsPerTile = _lgLayoutSettings.MaxNumberOfRailsPerTile;
+            //var bbox = GetLargestTile();
+            //GridTraversal grid = new GridTraversal(bbox, level.ZoomLevel);
+            //GreedyNodeRailLevelCalculator calc = new GreedyNodeRailLevelCalculator(_lgData.SortedLgNodeInfos);
+            //calc.MaxAmountRailsPerTile = _lgLayoutSettings.MaxNumberOfRailsPerTile;
 
 
             SymmetricSegment s;
@@ -1113,9 +1107,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
         private Set<Rail> MsaglAddRailsOfEdge(LgLevel level, Tiling g, Edge edge, Dictionary<Node, int> nodeId)
         {
-            //if (_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel > level.ZoomLevel ||
-            // _lgData.GeometryNodesToLgNodeInfos[edge.Target].ZoomLevel > level.ZoomLevel)
-            //return new Set<Rail>();
+            if (_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel > level.ZoomLevel ||
+             _lgData.GeometryNodesToLgNodeInfos[edge.Target].ZoomLevel > level.ZoomLevel)
+                return new Set<Rail>();
 
             if (!g.pathList.ContainsKey(edge)) return new Set<Rail>();
 
@@ -1194,6 +1188,95 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             return railsOfEdge;
         }
+
+
+
+
+        private Set<Rail> MsaglAddRailsOfEdgeQuotaBounded(LgLevel level, Tiling g, Edge edge, Dictionary<Node, int> nodeId)
+        {
+            if (_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel > level.ZoomLevel ||
+             _lgData.GeometryNodesToLgNodeInfos[edge.Target].ZoomLevel > level.ZoomLevel)
+                return new Set<Rail>();
+
+            if (!g.pathList.ContainsKey(edge)) return new Set<Rail>();
+
+            _lgData.GeometryEdgesToLgEdgeInfos[edge] = new LgEdgeInfo(edge)
+            {
+                Rank = Math.Min(_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel,
+                        _lgData.GeometryNodesToLgNodeInfos[edge.Target].ZoomLevel),
+                ZoomLevel =
+                    Math.Max(_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel,
+                        _lgData.GeometryNodesToLgNodeInfos[edge.Target].ZoomLevel)
+            };
+
+
+            var railsOfEdge = new Set<Rail>();
+
+
+            int[] pathVertices = g.pathList[edge].ToArray();
+            for (int index = 0; index < pathVertices.Length - 1; index++)
+            {
+                var a = new Point(g.VList[pathVertices[index]].PreciseX, g.VList[pathVertices[index]].PreciseY);
+                var b = new Point(g.VList[pathVertices[index + 1]].PreciseX, g.VList[pathVertices[index + 1]].PreciseY);
+                var initial_a = new Point(g.VList[pathVertices[index]].XLoc, g.VList[pathVertices[index]].YLoc);
+                var initial_b = new Point(g.VList[pathVertices[index + 1]].XLoc, g.VList[pathVertices[index + 1]].YLoc);
+                var target_a = new Point(g.VList[pathVertices[index]].TargetX, g.VList[pathVertices[index]].TargetY);
+                var target_b = new Point(g.VList[pathVertices[index + 1]].TargetX, g.VList[pathVertices[index + 1]].TargetY);
+
+                var left = new Point(0, 0);
+                var right = new Point(0, 0);
+
+                if (g.VList[pathVertices[index]].LeftX != 0 && g.VList[pathVertices[index]].RightX != 0)
+                {
+                    left = new Point(g.VList[pathVertices[index]].LeftX, g.VList[pathVertices[index]].LeftY);
+                    right = new Point(g.VList[pathVertices[index]].RightX, g.VList[pathVertices[index]].RightY);
+                }
+                else if (g.VList[pathVertices[index + 1]].LeftX != 0 && g.VList[pathVertices[index + 1]].RightX != 0)
+                {
+                    left = new Point(g.VList[pathVertices[index + 1]].LeftX, g.VList[pathVertices[index + 1]].LeftY);
+                    right = new Point(g.VList[pathVertices[index + 1]].RightX, g.VList[pathVertices[index + 1]].RightY);
+                }
+
+
+                var tuple = new SymmetricSegment(a, b);
+                Rail rail;
+                if (!level._railDictionary.TryGetValue(tuple, out rail))
+                {
+                    var ls = new LineSegment(a, b);
+                    //CubicBezierSegment cb = new CubicBezierSegment(a, a, a, a);
+                    rail = new Rail(ls, _lgData.GeometryEdgesToLgEdgeInfos[edge], level.ZoomLevel);
+                    //(int)_lgData.GeometryEdgesToLgEdgeInfos[edge].ZoomLevel);
+
+                    if (!RailToEdges.ContainsKey(rail)) RailToEdges[rail] = new List<Edge>();
+                    if (!RailToEdges[rail].Contains(edge)) RailToEdges[rail].Add(edge);
+
+                    rail.A = a;
+                    rail.B = b;
+                    rail.initialA = initial_a;
+                    rail.initialB = initial_b;
+                    rail.targetA = target_a;
+                    rail.targetB = target_b;
+
+                    if (left.X != 0 && left.Y != 0)
+                    { rail.Left = left; rail.Right = right; }
+                    else { rail.Left = a; rail.Right = b; }
+
+                    level._railDictionary[tuple] = rail;
+                    level._railTree.Add(ls.BoundingBox, rail);
+                }
+                else
+                {
+                    rail.ZoomLevel = Math.Max(rail.ZoomLevel, level.ZoomLevel);
+                    rail.ZoomLevel = level.ZoomLevel;
+                    if (!RailToEdges[rail].Contains(edge)) RailToEdges[rail].Add(edge);
+                }
+                railsOfEdge.Insert(rail);
+            }
+
+            return railsOfEdge;
+        }
+
+
 
         private void FillGeometryNodesToLgNodeInfos()
         {
