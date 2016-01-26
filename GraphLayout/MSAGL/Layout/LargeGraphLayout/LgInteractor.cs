@@ -490,7 +490,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     if (nodeOnlyZoomLevel <= layer)
                     {
                         //try to insert the node
-                        if (MsaglNodeSuccessfullyPlottedandQuotaSatisfied(g[graphLayer], level, graphLayer,
+                        if (MsaglNodePlottedandQuotaSatisfied(g[graphLayer], level, graphLayer,
                             plottedNodeCount,nodes, nodeToId))
                         {
                             //if the node is successfully inserted, break the loop to proceed with a new node
@@ -896,7 +896,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
         public int[] graphLayer = new int[100];
 
-        public bool MsaglNodeSuccessfullyPlottedandQuotaSatisfied(Tiling g, LgLevel level, int currentGraphLayer, int nodeToBePlotted, IEnumerable<Node> nodes, Dictionary<Node, int> nodeId)
+        public bool MsaglNodePlottedandQuotaSatisfied(Tiling g, LgLevel level, int currentGraphLayer, int nodeToBePlotted, IEnumerable<Node> nodes, Dictionary<Node, int> nodeId)
         {
 
             graphLayer[level.ZoomLevel] = currentGraphLayer;
@@ -914,12 +914,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 }
             }
 
-
-            //var bbox = GetLargestTile();
-            //GridTraversal grid = new GridTraversal(bbox, level.ZoomLevel);
-            //GreedyNodeRailLevelCalculator calc = new GreedyNodeRailLevelCalculator(_lgData.SortedLgNodeInfos);
-            //calc.MaxAmountRailsPerTile = _lgLayoutSettings.MaxNumberOfRailsPerTile;
-
+             
 
             SymmetricSegment s;
             List<SymmetricSegment> newSegments = new List<SymmetricSegment>();
@@ -935,24 +930,15 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             }
             //Console.WriteLine("Total Rails = " + level.RailDictionary.Values.Count);
 
-            Boolean allInserted = true;
+
+            var allInserted = true;
 
 
             if (!level.QuotaSatisfied(nodes,
                 _lgLayoutSettings.MaxNumberOfNodesPerTile,
                 _lgLayoutSettings.MaxNumberOfRailsPerTile))
                 allInserted = false;
-            /*else
-            {
-                foreach (var seg in newSegments)
-                {
-                    if (calc.IfCanInsertLooseSegmentUpdateTiles(seg, grid) == false)
-                    {
-                        allInserted = false;
-                        break;
-                    }
-                }
-            }*/
+            
 
             if (!allInserted && level.ZoomLevel - 1 >= 0)
             {
@@ -991,15 +977,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                             rail.initialB = r.initialB;
                             rail.targetA = r.targetA;
                             rail.targetB = r.targetB;
-/*
-                            rail.A = r.A;
-                            rail.B = r.B;
-                            rail.initialA = r.initialA;
-                            rail.initialB = r.initialB;
-                            rail.targetA = r.targetA;
-                            rail.targetB = r.targetB;
-
-                            */
+ 
                             if (!RailToEdges.ContainsKey(rail)) RailToEdges[rail] = new List<Edge>();
                             if (!RailToEdges[rail].Contains(edge)) RailToEdges[rail].Add(edge);
 
@@ -1015,19 +993,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     }
                     level._railsOfEdges[edge] = rails; 
                 }
-                /*
-                if (_lgData.Levels[level.ZoomLevel - 1]._railsOfEdges.Count == level._railsOfEdges.Count)
-                {
-                    foreach (Edge edge in _lgData.Levels[level.ZoomLevel - 1]._railsOfEdges.Keys)
-                    {
-                        railsOfEdge = _lgData.Levels[level.ZoomLevel - 1]._railsOfEdges[edge];
-                        foreach (var r in railsOfEdge)
-                        {
-                            //r.targetA = r.A;
-                            //r.targetB = r.B;
-                        }
-                    }
-                }*/
+                 
                 return false;
             }
 
