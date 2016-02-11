@@ -11,6 +11,7 @@ using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.DebugHelpers;
 using Microsoft.Msagl.Drawing;
+using Microsoft.Msagl.Layout.LargeGraphLayout;
 using Color = System.Windows.Media.Color;
 using Edge = Microsoft.Msagl.Drawing.Edge;
 using Ellipse = Microsoft.Msagl.Core.Geometry.Curves.Ellipse;
@@ -24,6 +25,7 @@ using WpfLineSegment = System.Windows.Media.LineSegment;
 
 namespace Microsoft.Msagl.GraphmapsWpfControl {
     public class GraphmapsNode : IViewerNode, IInvalidatable {
+        readonly LgLayoutSettings lgSettings;
         internal Path BoundaryPath;
         internal FrameworkElement FrameworkElementOfNodeForLabel;
         readonly Func<Edge, GraphmapsEdge> funcFromDrawingEdgeToVEdge;
@@ -61,6 +63,30 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             }
         }
 
+
+        internal GraphmapsNode(Node node, LgNodeInfo lgNodeInfo, FrameworkElement frameworkElementOfNodeForLabelOfLabel,
+            Func<Edge, GraphmapsEdge> funcFromDrawingEdgeToVEdge, Func<double> pathStrokeThicknessFunc, LgLayoutSettings lgSettings)
+        {
+            this.lgSettings = lgSettings;
+            PathStrokeThicknessFunc = pathStrokeThicknessFunc;
+            LgNodeInfo = lgNodeInfo;
+            Node = node;
+            FrameworkElementOfNodeForLabel = frameworkElementOfNodeForLabelOfLabel;
+
+            this.funcFromDrawingEdgeToVEdge = funcFromDrawingEdgeToVEdge;
+
+            CreateNodeBoundaryPath();
+            if (FrameworkElementOfNodeForLabel != null)
+            {
+                FrameworkElementOfNodeForLabel.Tag = this; //get a backpointer to the VNode 
+                Common.PositionFrameworkElement(FrameworkElementOfNodeForLabel, node.GeometryNode.Center, 1);
+                Panel.SetZIndex(FrameworkElementOfNodeForLabel, Panel.GetZIndex(BoundaryPath) + 1);
+            }
+            SetupSubgraphDrawing();
+            Node.GeometryNode.BeforeLayoutChangeEvent += GeometryNodeBeforeLayoutChangeEvent;
+            Node.Attr.VisualsChanged += (a, b) => Invalidate();
+
+        }
 
         internal GraphmapsNode(Node node, LgNodeInfo lgNodeInfo, FrameworkElement frameworkElementOfNodeForLabelOfLabel,
             Func<Edge, GraphmapsEdge> funcFromDrawingEdgeToVEdge, Func<double> pathStrokeThicknessFunc)
@@ -566,6 +592,19 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             return (byte)(b/3);
         }
 
+        private Brush GetSelBrushColor()
+        {
+            if (lgSettings != null)
+            {
+                var col = lgSettings.GetNodeSelColor();
+                var brush = (SolidColorBrush)(new BrushConverter().ConvertFrom(col));
+                return brush;
+            }
+            else
+            {
+                return Brushes.Red;
+            }
+        }
         internal void SetLowTransparency()
         {
             if (BoundaryPath != null) {

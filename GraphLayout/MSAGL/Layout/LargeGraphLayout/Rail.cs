@@ -171,7 +171,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             if (TopRankedEdgeInfoOfTheRail == null || TopRankedEdgeInfoOfTheRail.Rank < ei.Rank)
                 TopRankedEdgeInfoOfTheRail = ei;
 
-            MinPassingEdgeZoomLevel = Math.Min(MinPassingEdgeZoomLevel, ei.ZoomLevel);
+            MinPassingEdgeZoomLevel = 1+Math.Min(MinPassingEdgeZoomLevel, ei.ZoomLevel);
         }
 
         public LgEdgeInfo GetTopEdgeInfo()

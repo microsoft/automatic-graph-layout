@@ -984,12 +984,13 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                             level._railDictionary[tuple] = rail;
                             level._railTree.Add(ls.BoundingBox, rail);
                             rails.Insert(rail);
+
                         }
                         else
                         {                             
-                            if (!RailToEdges[rail].Contains(edge)) RailToEdges[rail].Add(edge);
+                            if (!RailToEdges[rail].Contains(edge)) RailToEdges[rail].Add(edge);                            
                         }
-                        //rail.ZoomLevel = (int) _lgData.GeometryEdgesToLgEdgeInfos[edge].ZoomLevel;
+                         
                     }
                     level._railsOfEdges[edge] = rails; 
                 }
@@ -1168,7 +1169,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             _lgData.GeometryEdgesToLgEdgeInfos[edge] = new LgEdgeInfo(edge)
             {
-                Rank = Math.Min(_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel,
+                Rank = Math.Max(_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel,
                         _lgData.GeometryNodesToLgNodeInfos[edge.Target].ZoomLevel),
                 ZoomLevel =
                     Math.Max(_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel,
@@ -1229,11 +1230,14 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
                     level._railDictionary[tuple] = rail;
                     level._railTree.Add(ls.BoundingBox, rail);
+
+                    //rail.TopRankedEdgeInfoOfTheRail = _lgData.GeometryEdgesToLgEdgeInfos[edge];
+                    rail.UpdateTopEdgeInfo(_lgData.GeometryEdgesToLgEdgeInfos[edge]);
                 }
                 else
                 {
-                    rail.ZoomLevel = Math.Max(rail.ZoomLevel, level.ZoomLevel);
-                    rail.ZoomLevel = level.ZoomLevel;
+                    //rail.ZoomLevel = Math.Max(rail.ZoomLevel, level.ZoomLevel);
+                    //rail.ZoomLevel = level.ZoomLevel;
                     if (!RailToEdges[rail].Contains(edge)) RailToEdges[rail].Add(edge);
                 }
                 railsOfEdge.Insert(rail);
