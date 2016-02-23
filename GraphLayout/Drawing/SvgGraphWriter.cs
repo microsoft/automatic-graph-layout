@@ -406,6 +406,10 @@ namespace Microsoft.Msagl.Drawing
             WriteAttribute("stroke", MsaglColorToSvgColor(attr.Color));
             WriteAttribute("stroke-opacity", MsaglColorToSvgOpacity(attr.Color));
             WriteAttribute("stroke-width", attr.LineWidth);
+            if (attr.Styles.Any(style => style == Style.Dashed))
+            {
+                WriteAttribute("stroke-dasharray", 5);
+            }
         }
 
         void WriteCurve(Curve curve, Node node)
