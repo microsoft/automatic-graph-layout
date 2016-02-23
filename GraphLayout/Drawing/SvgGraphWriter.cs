@@ -406,9 +406,10 @@ namespace Microsoft.Msagl.Drawing
             WriteAttribute("stroke", MsaglColorToSvgColor(attr.Color));
             WriteAttribute("stroke-opacity", MsaglColorToSvgOpacity(attr.Color));
             WriteAttribute("stroke-width", attr.LineWidth);
-            if (attr.Styles.Any(style => style == Style.Dashed))
-            {
+            if (attr.Styles.Any(style => style == Style.Dashed)) {
                 WriteAttribute("stroke-dasharray", 5);
+            } else if (attr.Styles.Any(style => style == Style.Dotted)) {
+                WriteAttribute("stroke-dasharray", 2);
             }
         }
 
