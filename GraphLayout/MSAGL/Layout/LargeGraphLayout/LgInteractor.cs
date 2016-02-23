@@ -246,10 +246,10 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     foreach (int vertex in path)
                     {
                         PointList[q++] = new Point(graph.VList[vertex].XLoc, graph.VList[vertex].YLoc);
-                        if (MsaglUtilities.EucledianDistance(99, 60, graph.VList[vertex].XLoc, graph.VList[vertex].YLoc) < 2)
-                            Console.WriteLine();
+                        //if (MsaglUtilities.EucledianDistance(99, 60, graph.VList[vertex].XLoc, graph.VList[vertex].YLoc) < 2)
+                            //Console.WriteLine();
                     }
-                    LocalModifications.PolygonalChainSimplification(PointList, 0, PointList.Length - 1, 100);
+                    LocalModifications.PolygonalChainSimplification(PointList, 0, PointList.Length - 1, 1000);
 
                     //Modify graph according to the simplified path
                     for (int currentPoint = 0; currentPoint < PointList.Length - 1; )
@@ -449,7 +449,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
                 layer++;
             }
-            
+
+            _lgLayoutSettings.maximumNumOfLayers = layer;
+
             Console.WriteLine("MAX Num of Level " + layer);
             
         }
@@ -724,11 +726,11 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             //bound the graph inside a 1000 by 1000 box
             foreach (Node node in _mainGeometryGraph.Nodes)
             {
-                var x =  (node.Center.X / maxX) * 1000;
-                var y = (node.Center.Y / maxY) * 1000;
+                var x = node.Center.X;//(node.Center.X / maxX) * 1000;
+                var y = node.Center.Y;//(node.Center.Y / maxY) * 1000;
                 Point p = new Point((int)x, (int)y);
 
-
+                /*
                 x = (int)x;
                 y = (int)y;
                 while (locationtoNode.ContainsKey(p))
@@ -737,8 +739,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     y++;
                     p = new Point((int)x, (int)y);
                 }
+                 */
                 node.Center = p;
-
+                
                 if (!locationtoNode.ContainsKey(p)) locationtoNode.Add(p, nodeToId[node]);
                 g.VList[nodeToId[node]] = new Vertex((int)p.X, (int)p.Y) { Id = nodeToId[node] };
             }
@@ -753,14 +756,15 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 }
             }
              */
+
             maxX = 0;
             maxY = 0;
             //scale the node positions to create intermediate gaps
             for (int i = 0; i < g.NumOfnodes; i++)
             {
 
-                g.VList[i].XLoc *= 3;
-                g.VList[i].YLoc *= 3;
+                g.VList[i].XLoc *= 5;
+                g.VList[i].YLoc *= 5;
                 idToNode[i].Center = new Point(g.VList[i].XLoc, g.VList[i].YLoc);
                 if (g.VList[i].XLoc > maxX) maxX = g.VList[i].XLoc;
                 if (g.VList[i].YLoc > maxY) maxY = g.VList[i].YLoc;

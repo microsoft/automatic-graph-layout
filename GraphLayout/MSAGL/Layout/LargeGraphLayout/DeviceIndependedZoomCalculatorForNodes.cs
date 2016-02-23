@@ -49,7 +49,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             while ( SomeNodesAreNotAssigned()) {
                 Console.WriteLine("zoom level = {0} with the grid size = {1}", zoomLevel, gridSize);
-                DrawNodesOnLevel(gridSize);
+                DrawNodesOnLevel(gridSize, zoomLevel);
                 zoomLevel *= 2;
                 gridSize /= 2;
             }
@@ -64,7 +64,19 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         }
 
 
-        void DrawNodesOnLevel(double gridSize) {
+        void DrawNodesOnLevel(double gridSize, int currentLevel) {
+            int []nodeBoundPerLevel = new int[530];
+            nodeBoundPerLevel[1] = 20;
+            nodeBoundPerLevel[2] = 20;
+            nodeBoundPerLevel[4] = 15;
+            nodeBoundPerLevel[8] = 10;
+            nodeBoundPerLevel[16] = 5;
+            nodeBoundPerLevel[32] = 5;
+            nodeBoundPerLevel[64] = 5;
+            nodeBoundPerLevel[128] = 20;
+            nodeBoundPerLevel[256] = 1000;
+ 
+
             var tileTable = new Dictionary<Tuple<int, int>, int>();
             for (int i = 0; i < sortedLgNodeInfos.Count; i++) {
                 var ni = sortedLgNodeInfos[i];
@@ -73,7 +85,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     tileTable[tuple] = 0;
 
                 int countForTile = tileTable[tuple]++ + 1;
-                if (countForTile > maxAmountPerTile) {
+                //if (countForTile > nodeBoundPerLevel[currentLevel])
+                if (countForTile > maxAmountPerTile)
+                    {
                     _levelNodeCounts.Add(i);
                     break;
                 }

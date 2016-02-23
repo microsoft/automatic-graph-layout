@@ -884,6 +884,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 foreach(int index in Deg2Vertices)// (int index = N; index < NumOfnodes; index++)
                 {
                     Vertex w = VList[index];
+                    
                     if(w.Invalid) continue;
                     var numNeighbors = 0;
 
@@ -1123,7 +1124,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             {
                 Vertex w = VList[index];
                 Vertex[] list = new Vertex[10];
-                int separation = 1;
+                int separation = 2;
                 int neighbor;
 
 

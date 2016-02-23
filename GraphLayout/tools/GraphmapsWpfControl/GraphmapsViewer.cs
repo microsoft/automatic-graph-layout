@@ -1270,6 +1270,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             //double currentlayer = Math.Max(0, _lgLayoutSettings.TransformFromGraphToScreen()[0, 0] / factor);
             //_layer = (int)currentlayer;
             double currentlayer = Math.Max(0, GetZoomFactorToTheGraph());
+            Console.WriteLine("Raw Layer = " + currentlayer);
             Console.WriteLine("Layer = " + GetLevelIndexByScale(currentlayer));
             _layer = GetLevelIndexByScale(currentlayer);
             UpdateVisibleRails(railGraph, Math.Log(currentlayer, 2));
@@ -1297,7 +1298,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
         {
             if (scale <= 1) return 0;
             //if (scale >= _lgLayoutSettings.maximumNumOfLayers) return _lgLayoutSettings.maximumNumOfLayers - 1;
-            var z = Math.Log(scale, 2);
+            var z = Math.Floor(scale);//Math.Log(scale, 2);
             if (z >= _lgLayoutSettings.maximumNumOfLayers) return _lgLayoutSettings.maximumNumOfLayers - 1;
             int ret = (int)Math.Ceiling(z);
             return ret;
@@ -1585,12 +1586,13 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
         void UpdateVisibleRails(RailGraph railGraph, double currentLayerNumber)
         {
 
-            int integralLayerNumber = GetLevelIndexByScale(currentLayerNumber);
+            //int integralLayerNumber = GetLevelIndexByScale(currentLayerNumber);
+            int integralLayerNumber = (int)(currentLayerNumber);
             double t = currentLayerNumber - integralLayerNumber;
             if (t > 1) t = 1;
             if (t < 0) t = 1 + t;
 
-            Console.WriteLine(currentLayerNumber + t);
+           // Console.WriteLine(currentLayerNumber + t);
 
             if (LayerNumber < currentLayerNumber)
             {
@@ -2089,8 +2091,9 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             }
 
             vnode.Node.Attr.LineWidth = 0; //GetBorderPathThickness(tileScale);
-
-            vnode.InvalidateNodeDot(nodeDotWidth * 0.8); // make them just a bit smaller
+            //this is to make the background nodes smaller
+            //vnode.InvalidateNodeDot(nodeDotWidth * 0.8); // make them just a bit smaller
+            vnode.InvalidateNodeDot(5*Math.Log(nodeDotWidth)); // make them just a bit smaller
             vnode.HideNodeLabel();
             vnode.SetLowTransparency();
         }
