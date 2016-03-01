@@ -618,12 +618,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 Console.WriteLine("Deg 2 removal Time = " + stopwatch.ElapsedMilliseconds);
 
                 stopwatch.Start();
-                //PlanarGraphUtilities.TransformToGeometricPlanarGraph(g);
+                PlanarGraphUtilities.TransformToGeometricPlanarGraph(g);
                 stopwatch.Stop();
                 Console.WriteLine("Planar Graph Building Time = " + stopwatch.ElapsedMilliseconds);
 
                 stopwatch.Start();
-                //PlanarGraphUtilities.RemoveLongEdgesFromThinFaces(g);
+                PlanarGraphUtilities.RemoveLongEdgesFromThinFaces(g);
                 stopwatch.Stop();
                 Console.WriteLine("Thin Face Removal Time = " + stopwatch.ElapsedMilliseconds);
 
@@ -632,7 +632,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 //Console.WriteLine("Moving junctions to minimize ink");
                 stopwatch.Start();
                 //LocalModifications.MsaglStretchAccordingToZoomLevel(g, idToNode);
-                LocalModifications.MsaglMoveToMedian(g, idToNode);
+                LocalModifications.MsaglMoveToMedian(g, idToNode, _lgLayoutSettings);
                 stopwatch.Stop();
                 Console.WriteLine("Ink Minimization Time = " + stopwatch.ElapsedMilliseconds);
 
@@ -1725,7 +1725,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         {
             _railGraph.Rails.Clear();
             var level = _lgData.GetCurrentLevelByScale(CurrentZoomLevel);
-            Console.WriteLine(level.ZoomLevel+" ???");
+            //Console.WriteLine(level.ZoomLevel+" ???");
             _railGraph.Rails.InsertRange(level.GetRailsIntersectingRect(_visibleRectangle));
             _railGraph.Nodes.InsertRange(level.GetNodesIntersectingRect(_visibleRectangle));
             _railGraph.Edges.Clear();

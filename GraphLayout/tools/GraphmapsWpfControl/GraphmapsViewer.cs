@@ -1300,8 +1300,9 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             //if (scale >= _lgLayoutSettings.maximumNumOfLayers) return _lgLayoutSettings.maximumNumOfLayers - 1;
             var z = Math.Floor(scale);//Math.Log(scale, 2);
             if (z >= _lgLayoutSettings.maximumNumOfLayers) return _lgLayoutSettings.maximumNumOfLayers - 1;
-            int ret = (int)Math.Ceiling(z);
-            return ret;
+            //int ret = (int)Math.Ceiling(z);
+            //return ret;
+            return (int)z;
         }
         private Rectangle NodeDotRect(LgNodeInfo ni)
         {

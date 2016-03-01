@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Msagl.Core.Layout;
+using Microsoft.Msagl.Layout.LargeGraphLayout;
 
 namespace Microsoft.Msagl.GraphmapsWithMesh
 {
     class LocalModifications
     {
 
-        public static void MsaglMoveToMedian(Tiling g, Dictionary<int, Node> idToNodes)
+        public static void MsaglMoveToMedian(Tiling g, Dictionary<int, Node> idToNodes, LgLayoutSettings _lgLayoutSettings)
         {
             int[,] listNeighbors = new int[20, 3];
             double[] d = new double[10];
@@ -16,7 +17,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             bool localRefinementsFound = true;
             int iteration = 10;
             int offset = iteration * 2;
-
+            int unit = (int)_lgLayoutSettings.NodeSeparation/2;
 
             while (localRefinementsFound && iteration > 0)
             {
@@ -43,14 +44,14 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                     {
                         d[counter] = 0;
 
-                        if (counter == 1) { a = 1; b = 1; }
-                        if (counter == 2) { a = 0; b = 1; }
-                        if (counter == 3) { a = -1; b = 1; }
-                        if (counter == 4) { a = -1; b = 0; }
-                        if (counter == 5) { a = -1; b = -1; }
-                        if (counter == 6) { a = 0; b = -1; }
-                        if (counter == 7) { a = 1; b = -1; }
-                        if (counter == 8) { a = 1; b = 0; }
+                        if (counter == 1) { a = unit; b = unit; }
+                        if (counter == 2) { a = 0; b = unit; }
+                        if (counter == 3) { a = -unit; b = unit; }
+                        if (counter == 4) { a = -unit; b = 0; }
+                        if (counter == 5) { a = -unit; b = -unit; }
+                        if (counter == 6) { a = 0; b = -unit; }
+                        if (counter == 7) { a = unit; b = -unit; }
+                        if (counter == 8) { a = unit; b = 0; }
                         if (counter == 9) { a = 0; b = 0; }
 
 

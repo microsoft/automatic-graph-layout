@@ -66,9 +66,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
         void DrawNodesOnLevel(double gridSize, int currentLevel) {
             int []nodeBoundPerLevel = new int[530];
-            nodeBoundPerLevel[1] = 20;
-            nodeBoundPerLevel[2] = 20;
-            nodeBoundPerLevel[4] = 15;
+            nodeBoundPerLevel[1] = 40;
+            nodeBoundPerLevel[2] = 30;
+            nodeBoundPerLevel[4] = 20;
             nodeBoundPerLevel[8] = 10;
             nodeBoundPerLevel[16] = 5;
             nodeBoundPerLevel[32] = 5;
