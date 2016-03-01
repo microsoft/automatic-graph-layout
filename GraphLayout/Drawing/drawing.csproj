@@ -511,6 +511,7 @@
     <Compile Include="..\version.cs">
       <Link>version.cs</Link>
     </Compile>
+    <Compile Include="FontStyle.cs" />
     <Compile Include="LayerConstraints.cs" />
     <Compile Include="HorizontalConstraintsForLayeredLayout.cs" />
     <Compile Include="LayoutEditing\DraggingMode.cs" />

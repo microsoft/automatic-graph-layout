@@ -79,9 +79,10 @@ namespace Agl {
             argsParser.AddOptionWithAfterString(OutputDirOption);
             argsParser.AddAllowedOption(NoArrowheads);
             argsParser.AddAllowedOption(NoUrls);
+            argsParser.AddOptionWithAfterStringWithHelp("-orient", "one of options  TB, LR, BT, RL");
         }
 
-        
+
         static int Main(string[] args) {
             var p = new Dot2SvgMain(args);
             return p.DoJob();
@@ -209,7 +210,8 @@ namespace Agl {
 
         int ProcessDotFile(string inputFile) {
             Graph graph;
-            int i=CreateGraphFromDotFile(inputFile, out graph);
+            int i = CreateGraphFromDotFile(inputFile, out graph);
+            graph.Attr.LayerDirection = GetLayerDirection();
 
             if (i != 0)
                 return i;
@@ -250,6 +252,26 @@ namespace Agl {
                 WriteGeomGraph(outputFile, geomGraph);
             }
             return 0;
+        }
+
+        private LayerDirection GetLayerDirection()
+        {
+            string orientOption = argsParser.GetValueOfOptionWithAfterString("-orient");
+            if (orientOption == null)
+                return LayerDirection.TB;
+            switch (orientOption)
+            {
+                case "LR":
+                    return LayerDirection.LR;
+                case "TB":
+                    return LayerDirection.TB;
+                case "BT":
+                    return LayerDirection.BT;
+                case "RL":
+                    return LayerDirection.RL;
+                default:return LayerDirection.TB;
+            }
+
         }
 
         static void RemoveArrowheadsFromGraph(Graph graph) {

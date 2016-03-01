@@ -2076,7 +2076,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 text,
                 CultureInfo.CurrentCulture,
                 FlowDirection.LeftToRight,
-                new Typeface(family, new FontStyle(), FontWeights.Regular, FontStretches.Normal),
+                new Typeface(family, new System.Windows.FontStyle(), FontWeights.Regular, FontStretches.Normal),
                 size,
                 Brushes.Black,
                 null);

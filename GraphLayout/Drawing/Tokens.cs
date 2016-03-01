@@ -8,7 +8,7 @@ namespace Microsoft.Msagl.Drawing {
         NodeAttribute, NodeSeparation, AspectRatio, OptimizeLabelPositions, Padding,
         TransparencyOfSelectedEntityColor, SelectedEntityColor, Color, A, R, G, B,
         SelectedNodeBoundaryColor, MinNodeWidth,
-        MinNodeHeight, Border, Fillcolor, FontColor, FontName, FontSize,
+        MinNodeHeight, Border, Fillcolor, FontColor, FontStyle, FontName, FontSize,
         Label, LabelMargin, LineWidth, Shape, XRad, YRad, Styles, Style,
         BaseAttr, LabelSize, Width, Height, EdgeAttribute, EdgeSeparation, Weight, ArrowStyle, ArrowheadLength,
         GraphAttribute, BackgroundColor, Margin, MinNodeSeparation, MinLayerSeparation, LayerDirection,

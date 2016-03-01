@@ -39,7 +39,6 @@ namespace Microsoft.Msagl.Miscellaneous
         /// <exception cref="System.OperationCanceledException">Thrown when the layout is canceled.</exception>
 #endif
         public static void CalculateLayout(GeometryGraph geometryGraph, LayoutAlgorithmSettings settings, CancelToken cancelToken) {
-            Console.WriteLine("starting CalculateLayout");
             if (settings is RankingLayoutSettings) {
                 var rankingLayoutSettings = settings as RankingLayoutSettings;
                 var rankingLayout = new RankingLayout(rankingLayoutSettings, geometryGraph);
