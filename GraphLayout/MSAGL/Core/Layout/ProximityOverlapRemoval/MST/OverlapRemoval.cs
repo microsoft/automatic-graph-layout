@@ -164,6 +164,8 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
                 avgEdgeLength += euclid;
                 i++;
             }
+            if (i == 0)
+                return 1;
             avgEdgeLength /= i;
             return avgEdgeLength;
         }

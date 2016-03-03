@@ -95,7 +95,7 @@ namespace Microsoft.Msagl.Drawing {
         public override string ToString() {
             var sw = new StringWriter();
 
-            sw.WriteLine("digraph \"" + Label + "\" {");
+            sw.WriteLine("digraph \"" + (string.IsNullOrEmpty(Label.Text)? "noname":Label.Text) + "\" {");
 
             WriteStms(sw);
 

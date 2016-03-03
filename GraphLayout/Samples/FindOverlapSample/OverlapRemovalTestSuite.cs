@@ -115,7 +115,7 @@ namespace FindOverlapSample {
 
         private IOverlapRemoval GetOverlapRemover(OverlapRemovalSettings settings, GeometryGraph geomGraph) {
             if (settings.Method == OverlapRemovalMethod.MinimalSpanningTree) return new OverlapRemoval(settings, geomGraph.Nodes.ToArray());
-            else if (settings.Method==OverlapRemovalMethod.Prism) return new ProximityOverlapRemoval(settings);
+            else if (settings.Method==OverlapRemovalMethod.Prism) return new ProximityOverlapRemoval(settings, geomGraph);
             return null;
         }
 
@@ -136,80 +136,88 @@ namespace FindOverlapSample {
         public void RunOverlapRemoval(String graphFilename) {
             String graphName = Path.GetFileNameWithoutExtension(graphFilename);
             Graph graph=DotLoader.LoadGraphFile(graphFilename);
-            Point[] initPositions = graph.GeometryGraph.Nodes.Select(v => v.Center).ToArray();
             if (graph == null || graph.GeometryGraph == null) {
                 Console.WriteLine("Failed to load graph: {0}", graphName);
                 return;
             }
+            Point[] initPositions = graph.GeometryGraph.Nodes.Select(v => v.Center).ToArray();
 
-            for (int i = 0; i < layoutMethods.Count(); i++) {
+            for (int i = 0; i < layoutMethods.Count(); i++)
+            {
                 var layoutMethod = layoutMethods[i];
                 layoutMethod.Item2.Invoke(graph.GeometryGraph); //do initial layout
                 //randomize cooincident points
                 Point[] nodePositions = graph.GeometryGraph.Nodes.Select(v => v.Center).ToArray();
 
-//                LayoutAlgorithmSettings.ShowDebugCurves(
-//                    nodePositions.Select(p => new DebugCurve(220, 0.01, "green", CurveFactory.CreateOctagon(2, 2, p)))
-//                                 .ToArray());
+                //                LayoutAlgorithmSettings.ShowDebugCurves(
+                //                    nodePositions.Select(p => new DebugCurve(220, 0.01, "green", CurveFactory.CreateOctagon(2, 2, p)))
+                //                                 .ToArray());
 
-                ProximityOverlapRemoval.RandomizePoints(nodePositions, new Random(100), 0.01, true);
-                for (int k = 0; k < nodePositions.Length; k++) {
-                    graph.GeometryGraph.Nodes[k].Center = nodePositions[k];
-                }
+                RandomizeNodes(graph, nodePositions);
 
-                DoInitialScaling(graph.GeometryGraph,InitialScaling.Inch72Pixel);
+                DoInitialScaling(graph.GeometryGraph, InitialScaling.Inch72Pixel);
                 RefreshAndCleanGraph(graph);
                 SvgGraphWriter.Write(graph, graphName + "-" + i.ToString() + "-" + layoutMethod.Item1 + ".svg");
 
-//                HashSet<Point> pointSet=new HashSet<Point>();
-//                foreach (Point p in nodePositions) {
-//                    Console.WriteLine(p);
-//                    if (pointSet.Contains(p)) {
-//                        Console.WriteLine("Coincident points.");
-//                    }
-//                    else pointSet.Add(p);
-//                }
+                //                HashSet<Point> pointSet=new HashSet<Point>();
+                //                foreach (Point p in nodePositions) {
+                //                    Console.WriteLine(p);
+                //                    if (pointSet.Contains(p)) {
+                //                        Console.WriteLine("Coincident points.");
+                //                    }
+                //                    else pointSet.Add(p);
+                //                }
 
                 HashSet<Tuple<int, int, int>> proximityTriangles;
                 HashSet<Tuple<int, int>> proximityEdges;
                 GetProximityRelations(graph.GeometryGraph, out proximityEdges, out proximityTriangles);
 
-                for (int j = 0; j < overlapMethods.Count; j++) {
+                for (int j = 0; j < overlapMethods.Count; j++)
+                {
+                    if (graph.NodeCount == 0) continue;
                     var overlapMethod = overlapMethods[j];
-                    TestOverlapRemovalOnGraph(graphName, graph,proximityEdges,proximityTriangles, layoutMethod, i, overlapMethod, j);
-
+                    TestOverlapRemovalOnGraph(graphName, graph, proximityEdges, proximityTriangles, layoutMethod, i, overlapMethod, j);
                     SetOldPositions(nodePositions, graph);
                 }
                 SetOldPositions(initPositions, graph);
             }
-            
-           
-           
 
-        
 
-//#if DEBUG
-//            //write the number of crossings per iteration
-//            String convergenceFilename = graphName + "-crossPerIterat.csv";
-//            List<int> crossings1 = prism1.crossingsOverTime;
-//            List<int> crossings2 = prism2.crossingsOverTime;
-//
-//            int maxIter = Math.Max(crossings1.Count, crossings2.Count);
-//            List<String> lines=new List<string>();
-//            lines.Add("iteration,crossingsPRISM,crossingsGridBoost");
-//            for (int i = 0; i < maxIter; i++) {
-//                String l = i.ToString();
-//                if (i < crossings1.Count)
-//                    l += "," + crossings1[i];
-//                else l += ",0";
-//                if (i < crossings2.Count)
-//                    l += "," + crossings2[i];
-//                else l += ",0";
-//                lines.Add(l);
-//            }
-//            File.WriteAllLines(convergenceFilename,
-//                lines.ToArray(),Encoding.UTF8);
-//#endif
+
+
+
+
+            //#if DEBUG
+            //            //write the number of crossings per iteration
+            //            String convergenceFilename = graphName + "-crossPerIterat.csv";
+            //            List<int> crossings1 = prism1.crossingsOverTime;
+            //            List<int> crossings2 = prism2.crossingsOverTime;
+            //
+            //            int maxIter = Math.Max(crossings1.Count, crossings2.Count);
+            //            List<String> lines=new List<string>();
+            //            lines.Add("iteration,crossingsPRISM,crossingsGridBoost");
+            //            for (int i = 0; i < maxIter; i++) {
+            //                String l = i.ToString();
+            //                if (i < crossings1.Count)
+            //                    l += "," + crossings1[i];
+            //                else l += ",0";
+            //                if (i < crossings2.Count)
+            //                    l += "," + crossings2[i];
+            //                else l += ",0";
+            //                lines.Add(l);
+            //            }
+            //            File.WriteAllLines(convergenceFilename,
+            //                lines.ToArray(),Encoding.UTF8);
+            //#endif
+        }
+
+        private static void RandomizeNodes(Graph graph, Point[] nodePositions)
+        {
+            ProximityOverlapRemoval.RandomizePoints(nodePositions, new Random(100), 0.01, true);
+            for (int k = 0; k < nodePositions.Length; k++)
+            {
+                graph.GeometryGraph.Nodes[k].Center = nodePositions[k];
+            }
         }
 
         static void DoInitialScaling(GeometryGraph Graph,InitialScaling initScaling) {
@@ -384,7 +392,7 @@ namespace FindOverlapSample {
         /// <summary>
         /// Runs the comparison for a given folder.
         /// </summary>
-        public static void ComparisonSuite(String graphsFolder, String resultLog, bool parallelTest ) {
+        public static void ComparisonSuite(String graphsFolder, String resultLog, bool parallelTest, bool runLayout) {
 
             string dataFolder = Path.GetFileName(Path.GetDirectoryName(graphsFolder));
             string dateTime = DateTime.Now.ToString("-yyyy.MM.dd-HH_mm");
@@ -399,7 +407,7 @@ namespace FindOverlapSample {
             var testSuite = new OverlapRemovalTestSuite(resultLog);
 
             testSuite.overlapMethods = CollectionOverlapRemovalMethods();
-            testSuite.layoutMethods = CollectionInitialLayout();
+            testSuite.layoutMethods = CollectionInitialLayout(runLayout);
 
 
           string[] filePaths = Directory.GetFiles(graphsFolder, "*.dot");
@@ -454,11 +462,17 @@ namespace FindOverlapSample {
         /// Set of Layout Collection
         /// </summary>
         /// <returns></returns>
-        public static Tuple<String,Action<GeometryGraph>>[] CollectionInitialLayout() {
-            return new Tuple<String, Action<GeometryGraph>>[] {
+        public static Tuple<String,Action<GeometryGraph>>[] CollectionInitialLayout(bool runLayout) {
+            if (runLayout)
+                return new Tuple<String, Action<GeometryGraph>>[] {
 //                new Tuple<String, Action<GeometryGraph>>("PivotMDS",PivotMDS),
                 new Tuple<String, Action<GeometryGraph>>("PivotMDS+Stress",PivotMdsFullStress),
                 new Tuple<String, Action<GeometryGraph>>("SFDP",SFDP)
+            };
+            else
+                return new Tuple<String, Action<GeometryGraph>>[] {
+//            
+                new Tuple<String, Action<GeometryGraph>>("Nolayout", a=> { })
             };
         }
 
@@ -486,7 +500,7 @@ namespace FindOverlapSample {
             settings.StopOnMaxIterat = false;
             settings.NodeSeparation = 4;
             settings.RandomizationSeed = 21;
-            settings.InitialScaling=InitialScaling.Inch72Pixel;
+            settings.InitialScaling=InitialScaling.None;
             settings.WorkInInches = false;
             settings.RandomizeAllPointsOnStart = false;
             settings.RandomizationSeed = 10;

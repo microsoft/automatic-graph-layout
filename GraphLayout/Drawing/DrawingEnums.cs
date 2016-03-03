@@ -56,25 +56,21 @@ namespace Microsoft.Msagl.Drawing {
         }
 
 
-        static string ConcatWithDelimeter(string delimeter, string[] s, int offset) {
-
-            if (offset == s.Length)
-                return "";
-
-            string ret = ConcatTwoWithDelimeter(delimeter, s[offset], ConcatWithDelimeter(delimeter, s, offset + 1));
-
-            return ret;
-
-        }
-
+        
         public static string ConcatWithComma(params string[] s) {
-            string ret = ConcatWithDelimeter(",", s, 0);
-            return ret;
+            return ConcatWithDelimeter(",", s);
         }
 
 
         public static string ConcatWithDelimeter(string delimeter, params string[] s) {
-            return ConcatWithDelimeter(delimeter, s, 0);
+            if (s.Length == 0)
+                return "";
+            if (s.Length == 1)
+                return s[0];
+            string ret = s[0];
+            for (int i = 1; i < s.Length; i++)
+                ret += delimeter + s[i];
+            return ret;
         }
 
 

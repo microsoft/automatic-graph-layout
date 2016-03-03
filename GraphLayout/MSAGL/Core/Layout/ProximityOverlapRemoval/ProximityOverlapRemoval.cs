@@ -113,8 +113,8 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="settings"></param>
-        public ProximityOverlapRemoval(OverlapRemovalSettings settings) {
+        public ProximityOverlapRemoval(OverlapRemovalSettings settings, GeometryGraph graph) {
+            Graph = graph;
             Settings = settings;
         }
 
