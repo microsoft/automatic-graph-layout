@@ -25,8 +25,9 @@ using Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation;
 using Edge = Microsoft.Msagl.Core.Layout.Edge;
 using Node = Microsoft.Msagl.Core.Layout.Node;
 using Timer = Microsoft.Msagl.DebugHelpers.Timer;
+using Dot2Graph;
 
-namespace FindOverlapSample {
+namespace OverlapGraphExperiments {
     internal class OverlapRemovalTestSuite {
         StreamWriter resultWriter;
      
@@ -74,7 +75,10 @@ namespace FindOverlapSample {
             
             overlapRemover.RemoveOverlaps();
             
-            RefreshAndCleanGraph(parentGraph);
+            RouteGraphEdges(parentGraph);
+
+            MakeEdgesTransparent(parentGraph);
+
          
 
             var statIterations = Tuple.Create("Iterations", (double)overlapRemover.GetLastRunIterations());
@@ -95,15 +99,10 @@ namespace FindOverlapSample {
 
             String nameAddon = "-" + layoutPos.ToString() + "_" + overlapMethodPos + "-" + layoutMethodName + "_" +
                                overlapMethodName;
-          
-//            RefreshAndCleanGraph(parentGraph);
-//           Parallel.Invoke(
-//            ()=>parentGraph.Write(graphName + nameAddon+".msagl"),
-//            () => 
-            SvgGraphWriter.Write(parentGraph, graphName + nameAddon + ".svg");
-//            
-//            );
 
+            parentGraph.GeometryGraph.UpdateBoundingBox();
+            
+            SvgGraphWriter.Write(parentGraph, graphName + nameAddon + ".svg");
             WriteHeader(statistics);
             String line = graphName + "," + geomGraph.Nodes.Count + "," + geomGraph.Edges.Count +","+layoutMethodName+","+overlapMethodName;
             for (int i = 0; i < statistics.Count; i++) {
@@ -111,6 +110,12 @@ namespace FindOverlapSample {
                 line += "," + stat.Item2;
             }
             WriteLine(line);
+        }
+
+        private void MakeEdgesTransparent(Graph parentGraph)
+        {
+            foreach (var e in parentGraph.Edges)
+                e.Attr.Color = new Color(0, 0, 0, 0);
         }
 
         private IOverlapRemoval GetOverlapRemover(OverlapRemovalSettings settings, GeometryGraph geomGraph) {
@@ -129,15 +134,35 @@ namespace FindOverlapSample {
             proximityEdges = GetProximityEdges(cdt);
         }
 
+        static Graph LoadGraphFile(String fileName)
+        {
+            int line, column;
+            string msg;
+            Graph gwgraph = Parser.Parse(fileName, out line, out column, out msg);
+            gwgraph.GeometryGraph.Margins = gwgraph.Width / 50;
+            gwgraph.GeometryGraph.UpdateBoundingBox();
+            if (gwgraph != null)
+            {
+                return gwgraph;
+            }
+            else
+                MessageBox.Show(msg + String.Format(" line {0} column {1}", line, column));
+            return null;
+        }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="graphFilename"></param>
         public void RunOverlapRemoval(String graphFilename) {
             String graphName = Path.GetFileNameWithoutExtension(graphFilename);
-            Graph graph=DotLoader.LoadGraphFile(graphFilename);
-            if (graph == null || graph.GeometryGraph == null) {
-                Console.WriteLine("Failed to load graph: {0}", graphName);
+            Graph graph = LoadGraphFile(graphFilename);
+            if (graph == null) {
+                Console.WriteLine("Failed to load drawing graph: {0}", graphName);
+                return;
+            }
+            if (graph.GeometryGraph == null)
+            {
+                Console.WriteLine("Failed to load geometry graph: {0}", graphName);
                 return;
             }
             Point[] initPositions = graph.GeometryGraph.Nodes.Select(v => v.Center).ToArray();
@@ -154,9 +179,7 @@ namespace FindOverlapSample {
                 //                                 .ToArray());
 
                 RandomizeNodes(graph, nodePositions);
-
-                DoInitialScaling(graph.GeometryGraph, InitialScaling.Inch72Pixel);
-                RefreshAndCleanGraph(graph);
+                RouteGraphEdges(graph);
                 SvgGraphWriter.Write(graph, graphName + "-" + i.ToString() + "-" + layoutMethod.Item1 + ".svg");
 
                 //                HashSet<Point> pointSet=new HashSet<Point>();
@@ -221,46 +244,48 @@ namespace FindOverlapSample {
         }
 
         static void DoInitialScaling(GeometryGraph Graph,InitialScaling initScaling) {
-            if (Graph.Edges.Count == 0) return;
-            var nodePositions = Graph.Nodes.Select(v => v.Center).ToArray();
-            var nodeBoxes = Graph.Nodes.Select(v => v.BoundingBox).ToArray();
+            return;
+            //if (Graph.Edges.Count == 0) return;
+            //var nodePositions = Graph.Nodes.Select(v => v.Center).ToArray();
+            //var nodeBoxes = Graph.Nodes.Select(v => v.BoundingBox).ToArray();
 
-            var avgEdgeLength = AvgEdgeLength(Graph);
+            //var avgEdgeLength = AvgEdgeLength(Graph);
 
-            double goalLength;
-            if (initScaling== InitialScaling.Inch72Pixel)
-                goalLength = 72;
-            else if (initScaling == InitialScaling.AvgNodeSize)
-                goalLength = nodeBoxes.Average(box => (box.Width + box.Height) / 2);
-            else return;
+            //double goalLength;
+            //if (initScaling== InitialScaling.Inch72Pixel)
+            //    goalLength = 72;
+            //else if (initScaling == InitialScaling.AvgNodeSize)
+            //    goalLength = nodeBoxes.Average(box => (box.Width + box.Height) / 2);
+            //else return;
 
-            double scaling = goalLength / avgEdgeLength;
+            //double scaling = goalLength / avgEdgeLength;
 
 
-            for (int j = 0; j < nodePositions.Length; j++) {
-                nodePositions[j] *= scaling;
-                Rectangle rect = nodeBoxes[j];
-                rect.Center = nodePositions[j];
-                nodeBoxes[j] = rect;
-                Graph.Nodes[j].Center = nodePositions[j];
-            }
+            //for (int j = 0; j < nodePositions.Length; j++) {
+            //    nodePositions[j] *= scaling;
+            //    Rectangle rect = nodeBoxes[j];
+            //    rect.Center = nodePositions[j];
+            //    nodeBoxes[j] = rect;
+            //    Graph.Nodes[j].Center = nodePositions[j];
+            //}
 
         
 
         }
 
         private static double AvgEdgeLength(GeometryGraph Graph) {
-            int i = 0;
-            double avgEdgeLength = 0;
-            foreach (Edge edge in Graph.Edges) {
-                Point sPoint = edge.Source.Center;
-                Point tPoint = edge.Target.Center;
-                double euclid = (sPoint - tPoint).Length;
-                avgEdgeLength += euclid;
-                i++;
-            }
-            avgEdgeLength /= i;
-            return avgEdgeLength;
+            return 1;
+            //int i = 0;
+            //double avgEdgeLength = 0;
+            //foreach (Edge edge in Graph.Edges) {
+            //    Point sPoint = edge.Source.Center;
+            //    Point tPoint = edge.Target.Center;
+            //    double euclid = (sPoint - tPoint).Length;
+            //    avgEdgeLength += euclid;
+            //    i++;
+            //}
+            //avgEdgeLength /= i;
+            //return avgEdgeLength;
         }
 
 
@@ -271,40 +296,10 @@ namespace FindOverlapSample {
         }
 
 
-        private void RefreshAndCleanGraph(Graph graph) {
-//            List<Microsoft.Msagl.Drawing.Edge> selfEdges=new List<Microsoft.Msagl.Drawing.Edge>();
-//            foreach (Microsoft.Msagl.Drawing.Node node in graph.Nodes) {
-//                selfEdges.AddRange(node.SelfEdges);
-//            }
-//
-//            selfEdges.ForEach((edge) => graph.RemoveEdge(edge));
-
-//            if (graph.Edges.Count() > 3000) {
-//            //delete all edges
-//                graph.GeometryGraph.Edges.Clear();
-////            var edgeList=graph.GeometryGraph.Edges.Reverse().ToList();
-////                edgeList.ForEach((edge)=>graph.GeometryGraph.Edges.Remove(edge));
-//            }
-//            else {
-
-          
-
-
-//            }
-
-            foreach (Microsoft.Msagl.Drawing.Node node in graph.Nodes) {
-                var c = node.Attr.Color;
-                node.Attr.FillColor = new Color(170,c.R,c.G,c.B);
-            }
-
-            foreach (Microsoft.Msagl.Drawing.Edge edge in graph.Edges) {
-                edge.Attr.Color=new Color(220,115,115,115);
-            }
-
+        private void RouteGraphEdges(Graph graph) {
             foreach (Edge edge in graph.GeometryGraph.Edges) {
                 StraightLineEdges.RouteEdge(edge, 0);
             }
-            
         }
 
         private ProximityOverlapRemoval RunOverlapRemoval(GeometryGraph graphCopy, GeometryGraph graphOriginal, HashSet<Tuple<int, int>> proximityEdges,
@@ -472,7 +467,7 @@ namespace FindOverlapSample {
             else
                 return new Tuple<String, Action<GeometryGraph>>[] {
 //            
-                new Tuple<String, Action<GeometryGraph>>("Nolayout", a=> { })
+                new Tuple<String, Action<GeometryGraph>>("ident", a=> { })
             };
         }
 
@@ -525,14 +520,14 @@ namespace FindOverlapSample {
             settings.StressSettings.SolvingMethod = SolvingMethod.PrecondConjugateGradient;
 //            testList.Add(Tuple.Create("PRISM-CG-2", settings));
 
-            settings = settings.Clone();
-            settings.StressSettings.MaxStressIterations = 15;
-            settings.StressSettings.SolvingMethod = SolvingMethod.Localized;
-            testList.Add(Tuple.Create("PRISM-LM",settings));
+            //settings = settings.Clone();
+            //settings.StressSettings.MaxStressIterations = 15;
+            //settings.StressSettings.SolvingMethod = SolvingMethod.Localized;
+            //testList.Add(Tuple.Create("PRISM-LM",settings));
 
             settings = settings.Clone();
             settings.Method=OverlapRemovalMethod.MinimalSpanningTree;
-            testList.Add(Tuple.Create("MST", settings));
+            testList.Add(Tuple.Create("GTree", settings));
 
             return testList;
         }

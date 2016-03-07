@@ -109,7 +109,7 @@ namespace Microsoft.Msagl.Drawing {
 
         void WriteEdges(TextWriter tw) {
             foreach (Edge edge in Edges) {
-                tw.WriteLine(edge.ToString());
+                tw.WriteLine(edge.ToDotGeometry());
             }
         }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ArgsParser;
-using FindOverlapSample.Statistics;
+using OverlapGraphExperiments.Statistics;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
@@ -13,8 +13,9 @@ using Microsoft.Msagl.Routing;
 using Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation;
 using Edge = Microsoft.Msagl.Core.Layout.Edge;
 using Node = Microsoft.Msagl.Core.Layout.Node;
+using System.Windows.Forms;
 
-namespace FindOverlapSample {
+namespace OverlapGraphExperiments {
     /// <summary>
     /// This class is used to run some tests with different node overlap removal methods.
     /// </summary>
@@ -45,43 +46,10 @@ namespace FindOverlapSample {
                 Console.WriteLine("-test_dir is not given, exiting");
                 return;
             }
-
-            bool circlesAreCreated = CreateDirectoryWithCirclesIfNeeded(argsParser);
-            
-
-            //          OverlapRemovalTestSuite.ComparisonSuite(@"C:\dev\GraphLayout\graphs\overlapSamples\debugOnly\", "DebugOnlyTestSuite1.csv", false);
-            //          OverlapRemovalTestSuite.ComparisonSuite(@"C:\dev\GraphLayout\graphs\overlapSamples\", "ResultsOverlapRemovalTestSuite1.csv", false);
-            //            OverlapRemovalTestSuite.ComparisonSuite(@"C:\dev\GraphLayout\graphs\overlapSamples\net50comp1\", "ResultsNet50comp1TestSuite1.csv", false);
-            //          OverlapRemovalTestSuite.ComparisonSuite(@"C:\dev\GraphLayout\graphs\overlapSamples\large\", "ResultsLargeGraphsTestSuite1.csv", false);
+            bool circlesAreCreated = CreateCircleGraphsIfRequired(argsParser);
             OverlapRemovalTestSuite.ComparisonSuite(
                 test_dir,
                 "ResultsPrism-original-datasetTestSuite1.csv", false, !circlesAreCreated );
-
-
-            //            Console.ReadLine();
-            //            var rootGraph = DotLoader.LoadFile(@"C:\dev\GraphLayout\graphs\overlapSamples\root.dot");
-
-            ////          var rootGraph = DotLoader.LoadFile(@"C:\dev\GraphLayout\graphs\overlapSamples\net50comp1\net50comp_1.gv.dot");
-            ////          var rootGraph = DotLoader.LoadFile(@"C:\dev\GraphLayout\graphs\overlapSamples\badvoro.gv.dot");
-            ////          var rootGraph = DotLoader.LoadFile(@"C:\dev\GraphLayout\graphs\large\twittercrawl-sfdp.dot");
-            ////          var oldPositions = rootGraph.Nodes.Select(v => v.Center).ToList();
-            ////          LayoutAlgorithmSettings.ShowGraph(rootGraph);
-            //            ProximityOverlapRemoval prism=new ProximityOverlapRemoval(rootGraph);
-            //            prism.Settings.WorkInInches = true;
-            //            prism.Settings.StressSettings.ResidualTolerance = 0.06;
-            //#if DEBUG
-            //            ProximityOverlapRemoval.DebugMode = false;
-            //#endif 
-            //            prism.RemoveOverlap();
-            ////            var newPositions = rootGraph.Nodes.Select(v => v.Center).ToList();
-            ////            var procrustes = Statistics.Statistics.ProcrustesStatistics(oldPositions, newPositions);
-            ////            Console.WriteLine("ProcrustesStatistics: {0}",procrustes);
-            //            
-            //#if DEBUG
-            //
-            //            LayoutAlgorithmSettings.ShowGraph(rootGraph);
-            //#endif
-            //            Console.ReadLine();
         }
 
         static void CleanDirectory(string dir)
@@ -92,7 +60,7 @@ namespace FindOverlapSample {
                 subDirectory.Delete(true);
         }
 
-        private static bool CreateDirectoryWithCirclesIfNeeded(ArgsParser.ArgsParser argsParser)
+        private static bool CreateCircleGraphsIfRequired(ArgsParser.ArgsParser argsParser)
         {
             int nOfGraphs = GetNumberOfGraphsToGenerate(argsParser);
             if (nOfGraphs == 0)
@@ -120,11 +88,24 @@ namespace FindOverlapSample {
         {
             Graph graph = new Graph();
             string graphName = "circle_graph" + i;
-            string fileName = System.IO.Path.Combine(dir, graphName + ".dot");
-            FillGraph(graph, random, argsParser, graphName);
-            //LayoutAlgorithmSettings.ShowGraph(graph.GeometryGraph);
+            int nOfCrc=FillGraph(graph, random, argsParser, graphName);
+            string fileName = System.IO.Path.Combine(dir, graphName + "_ncrc"+ nOfCrc+".dot");
             System.IO.File.WriteAllText(fileName, graph.ToString());
         }
+
+        internal static void ShowGraph(Graph graph)
+        {
+            Form f = new Form();
+            GViewer v = new GViewer();
+            v.Dock = DockStyle.Fill;
+            f.SuspendLayout();
+            f.Controls.Add(v);
+            f.ResumeLayout();
+            v.NeedToCalculateLayout = false;
+            v.Graph = graph;
+            f.ShowDialog();
+        }
+
         static double GetWidthOfGraph(ArgsParser.ArgsParser argsParser) {
             string s = argsParser.GetValueOfOptionWithAfterString("-box_width");
             if (s == null)
@@ -138,16 +119,20 @@ namespace FindOverlapSample {
             return ret;
         }
 
-        private static void FillGraph(Graph graph, Random random, ArgsParser.ArgsParser argsParser, string graphName)
+        private static int FillGraph(Graph graph, Random random, ArgsParser.ArgsParser argsParser, string graphName)
         {
             graph.Label.Text = graphName;
             double width = GetWidthOfGraph(argsParser);
             double rad = width / 10; // the node radius
             int circles = GetNumberOfCircles(argsParser);
+            int h = circles / 2;
+            circles = h + random.Next() % circles;
             graph.CreateGeometryGraph();
-            while (circles-- > 0)
+            graph.GeometryGraph.Margins = width / 100;
+            for(int i=0;i<circles;i++)
                 AddCircleToGraph(graph, random, argsParser, width, rad);
-
+            graph.GeometryGraph.UpdateBoundingBox();
+            return circles;
         }
 
         private static void AddCircleToGraph(Graph graph, Random random, ArgsParser.ArgsParser argsParser, double w, double rad)
@@ -155,20 +140,45 @@ namespace FindOverlapSample {
             Point center = w * (new Point(random.NextDouble(), random.NextDouble()));
             int nodesPerCircle = GetNumberOfNodesPerCircle(argsParser);
             double angle = 2*Math.PI / nodesPerCircle;
+            List<Microsoft.Msagl.Drawing.Node> circleNodes = new List<Microsoft.Msagl.Drawing.Node>();
             while (nodesPerCircle-- > 0)
-                AddCircleToGraphOnCenter(center, graph, rad, nodesPerCircle*angle);
+                circleNodes.Add(AddCircleToGraphOnCenter(center, graph, rad, nodesPerCircle*angle));
+            for (int i = 0; i < circleNodes.Count - 1; i++)
+                AddEdge(circleNodes[i], circleNodes[i + 1], graph);
+            AddEdge(circleNodes[circleNodes.Count - 1], circleNodes[0], graph);
         }
 
-        private static void AddCircleToGraphOnCenter(Point center, Graph graph, double rad, double angle)
+        private static void AddEdge(Microsoft.Msagl.Drawing.Node a, Microsoft.Msagl.Drawing.Node b, Graph graph)
+        {
+            var de = new Microsoft.Msagl.Drawing.Edge(a, b, ConnectionToGraph.Connected);
+            de.Attr.LineWidth = Math.Max(1,(int)(a.Width/10));
+            de.Attr.Color = new Microsoft.Msagl.Drawing.Color(100, 100, 100, 100);
+            var ge = new Edge(a.GeometryNode, b.GeometryNode);
+            Point start = a.GeometryNode.Center;
+            Point end = b.GeometryNode.Center;
+            Point d = (end - start) / 4;
+            Point b1 = start + d;
+            Point b2 = b1 + d;
+            Point b3 = b2 + d;
+            ge.EdgeGeometry.Curve = new CubicBezierSegment(start, b1, b2, b3);
+            ge.EdgeGeometry.TargetArrowhead = new Arrowhead() { TipPosition = end};
+            de.GeometryEdge = ge;
+            ge.UserData = de;
+        }
+
+        private static Microsoft.Msagl.Drawing.Node AddCircleToGraphOnCenter(Point center, Graph graph, double rad, double angle)
         {
             var node = new Microsoft.Msagl.Drawing.Node(graph.NodeCount.ToString());
             node.Attr.Shape = Microsoft.Msagl.Drawing.Shape.Circle;
+            node.Attr.FillColor = new Microsoft.Msagl.Drawing.Color(100, 100, 100, 100);
+            node.Attr.Color = node.Attr.FillColor;
             var nodeCenter = center + rad * (new Point(Math.Cos(angle), Math.Sin(angle)));
-            var geomNode = new Node(CurveFactory.CreateCircle(rad / 100, nodeCenter));
+            var geomNode = new Node(CurveFactory.CreateCircle(rad / 3, nodeCenter));
             node.GeometryNode = geomNode;
             geomNode.UserData = node;
             graph.AddNode(node);
             graph.GeometryGraph.Nodes.Add(geomNode);
+            return node;
         }
 
         private static int GetNumberOfGraphsToGenerate(ArgsParser.ArgsParser argsParser)

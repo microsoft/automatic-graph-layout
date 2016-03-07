@@ -169,9 +169,40 @@ namespace Microsoft.Msagl.Drawing {
         public override string ToString() {
             return Utils.Quote(source) + " -> " + Utils.Quote(target) +(Label==null?"":"[" + Label.Text + "]");
         }
-/// <summary>
-/// the edge source node ID
-/// </summary>
+        /// <summary>
+        /// Head->Tail->Label.
+        /// </summary>
+        /// <returns></returns>
+        public string ToDotGeometry()
+        {
+            return Utils.Quote(source) + " -> " + Utils.Quote(target) + 
+                "[" + Utils.ConcatWithComma((Label == null ? "" : Label.Text), DotGeomString(geometryEdge),this.attr.ToStringWithText(""))+ "]";
+        }
+
+        private string DotGeomString(Core.Layout.Edge geometryEdge)
+        {
+            var edgeGeom = geometryEdge.EdgeGeometry;
+            if (edgeGeom == null) return "";
+            CubicBezierSegment b = edgeGeom.Curve as CubicBezierSegment;
+            if (b == null)
+                throw new NotImplementedException();
+            string ret = "";
+            if (edgeGeom.SourceArrowhead != null)
+            {
+                ret += string.Format("s,{0},{1} ", edgeGeom.SourceArrowhead.TipPosition.X, edgeGeom.SourceArrowhead.TipPosition.Y);
+            }
+            if (edgeGeom.TargetArrowhead != null)
+            {
+                ret += string.Format("e,{0},{1} ", edgeGeom.TargetArrowhead.TipPosition.X, edgeGeom.TargetArrowhead.TipPosition.Y);
+            }
+            for (int i= 0;i<4;i++)
+            ret += string.Format("{0},{1} ", b.B(i).X, b.B(i).Y);
+            return "pos=" + Utils.Quote(ret);
+        }
+
+        /// <summary>
+        /// the edge source node ID
+        /// </summary>
         public string Source {
             get { return source; }
         }

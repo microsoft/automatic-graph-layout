@@ -509,7 +509,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
         /// <param name="scalingMethod"></param>
         static void DoInitialScaling(Node[] nodes, Point[] nodePositions, Size[] nodeSizes,
             InitialScaling scalingMethod) {
-
+            return;
             var avgEdgeLength = AvgEdgeLength(nodes);
             double goalLength;
             if (scalingMethod == InitialScaling.Inch72Pixel)

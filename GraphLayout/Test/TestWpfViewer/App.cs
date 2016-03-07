@@ -874,8 +874,8 @@ namespace TestWpfViewer {
             int line, column;
             string msg;
             Graph gwgraph = Parser.Parse(fileName, out line, out column, out msg);
-            TestGraph(gwgraph);
             if (gwgraph != null) {
+                TestGraph(gwgraph);
                 PassGraphToControl(gwgraph);
             }
             else

@@ -101,7 +101,7 @@ namespace Microsoft.Msagl.Drawing {
         /// <param name="text"></param>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1304:SpecifyCultureInfo", MessageId = "System.String.ToLower")]
-        public string ToString(string text) {
+        public string ToStringWithText(string text) {
             string ret = "";
             if (!String.IsNullOrEmpty(text)) {
                 text = text.Replace("\r\n", "\\n");

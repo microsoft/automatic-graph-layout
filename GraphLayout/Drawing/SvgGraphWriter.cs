@@ -285,7 +285,8 @@ namespace Microsoft.Msagl.Drawing
             var edgeAttr = attr as EdgeAttr;
             if (edgeAttr != null)
             {
-                WriteAttribute("fill", "#000000");
+                WriteAttribute("fill", MsaglColorToSvgColor(attr.Color));
+                WriteAttribute("fill-opacity", MsaglColorToSvgOpacity(attr.Color));
             }
             else
             {
@@ -414,7 +415,6 @@ namespace Microsoft.Msagl.Drawing
             WriteFillAndStroke(node.Attr);
             WriteCurveGeometry(curve);
             WriteEndElement();
-
         }
 
         void WriteCurveGeometry(Curve curve)
