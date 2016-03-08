@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using ArgsParser;
-using OverlapGraphExperiments.Statistics;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
-using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval;
 using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.GraphViewerGdi;
-using Microsoft.Msagl.Routing;
-using Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation;
 using Edge = Microsoft.Msagl.Core.Layout.Edge;
 using Node = Microsoft.Msagl.Core.Layout.Node;
 using System.Windows.Forms;
 
-namespace OverlapGraphExperiments {
+namespace OverlapGraphExperiments
+{
     /// <summary>
     /// This class is used to run some tests with different node overlap removal methods.
     /// </summary>
@@ -29,7 +24,8 @@ namespace OverlapGraphExperiments {
         string _testDir;
         int _nodesPerCircle;
         Random _random;
-        
+        int _nodesInDenseSpot = 30;
+        Color[] _colors = { Color.Brown, Color.Black, Color.Red, Color.Green, Color.Gray, Color.Magenta };
         public Program(ArgsParser.ArgsParser argsParser)
         {
             _argsParser = argsParser;
@@ -49,6 +45,8 @@ namespace OverlapGraphExperiments {
             argsParser.AddOptionWithAfterStringWithHelp("-nodes_per_circle", "number of nodes per circle");
             argsParser.AddOptionWithAfterStringWithHelp("-box_width", "the initial width of the rectangle to layout the nodes");
             argsParser.AddOptionWithAfterStringWithHelp("-test_dir", "the directory of test files");
+            argsParser.AddOptionWithAfterStringWithHelp("-ds", "generate a number of dense spots");
+            argsParser.AddAllowedOptionWithHelpString("-dup", "duplicate with color");
 
             if (!argsParser.Parse())
             {
@@ -114,8 +112,41 @@ namespace OverlapGraphExperiments {
             Graph graph = new Graph();
             string graphName = "graph" + i;
             string signature = FillGraph(graph, graphName);
-            string fileName = System.IO.Path.Combine(_testDir, graphName + signature+".dot");
+            string fileNameMain = System.IO.Path.Combine(_testDir, graphName + signature);
+            string fileName = System.IO.Path.Combine(fileNameMain+".dot");
+
             System.IO.File.WriteAllText(fileName, graph.ToString());
+            if (_argsParser.OptionIsUsed("-dup"))
+            { 
+                ColorGraph(graph);
+                fileName = System.IO.Path.Combine(fileNameMain + "_color.dot");
+
+                System.IO.File.WriteAllText(fileName, graph.ToString());
+            }
+
+        }
+
+        private void ColorGraph(Graph graph)
+        {
+            int nodes = graph.NodeCount;
+            int ds = nodes / _nodesInDenseSpot;
+            int j = 0;
+            for (int i = 0; i < ds; i++)
+            {
+                Color c = RandomColor(i);
+                for (int k=0;k< _nodesInDenseSpot;k++)
+                {
+                    var n = graph.FindNode(j.ToString());
+                    if (n == null) { j++; continue; }
+                    n.Attr.FillColor = c;
+                    j++;
+                }
+            }
+        }
+
+        private Color RandomColor(int i)
+        {
+            return _colors[i%_colors.Length];
         }
 
         internal static void ShowGraph(Graph graph)
@@ -152,7 +183,37 @@ namespace OverlapGraphExperiments {
             int circles = AddCircles(graph);
             int triangles = AddTriangles(graph);
             graph.GeometryGraph.UpdateBoundingBox();
-            return string.Format("crc{0}tri{1}", circles, triangles);
+            int denseSpots = AddDenseSpots(graph);
+            return string.Format("crc{0}_tri{1}_densespots{2}", circles, triangles, denseSpots);
+        }
+
+        private int AddDenseSpots(Graph graph)
+        {
+            int nofDenseSpots;
+            _argsParser.GetIntOptionValue("-ds", out nofDenseSpots);
+            if (nofDenseSpots == 0) return 0;
+            int h = nofDenseSpots / 2;
+            nofDenseSpots = Math.Max(h + _random.Next() % nofDenseSpots, 1);
+            for (int i = 0; i < nofDenseSpots; i++)
+                GenerateDenseSpot(graph);
+            return nofDenseSpots;
+        }
+
+        private void GenerateDenseSpot(Graph graph)
+        {
+            Point center = RandomCenter();
+            for (int i = 0; i < _nodesInDenseSpot; i++)
+            {
+                Point nodeCenter = RandomPointNotFarFromCenter(center);
+                CreateNodeOnCenter(graph, nodeCenter);
+            }
+        }
+
+        private Point RandomPointNotFarFromCenter(Point center)
+        {
+            double distFromCenter = _circleRadius * _random.NextDouble();
+            double angle = Math.PI * 2 * _random.NextDouble();
+            return new Point(Math.Cos(angle), Math.Sin(angle)) * distFromCenter + center;
         }
 
         private int AddCircles(Graph graph)
