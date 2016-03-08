@@ -5,29 +5,24 @@ using System.Linq;
 using System.IO;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Msagl.Core;
-using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
-using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval;
 using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTree;
 using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.StressEnergy;
-using Microsoft.Msagl.DebugHelpers;
 using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.Layout.MDS;
 using Microsoft.Msagl.Routing;
 using Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation;
 using Edge = Microsoft.Msagl.Core.Layout.Edge;
-using Node = Microsoft.Msagl.Core.Layout.Node;
 using Timer = Microsoft.Msagl.DebugHelpers.Timer;
 using Dot2Graph;
 
-namespace OverlapGraphExperiments {
+namespace OverlapGraphExperiments
+{
     internal class OverlapRemovalTestSuite {
         StreamWriter resultWriter;
      
@@ -78,9 +73,7 @@ namespace OverlapGraphExperiments {
             RouteGraphEdges(parentGraph);
 
             MakeEdgesTransparent(parentGraph);
-
-         
-
+            
             var statIterations = Tuple.Create("Iterations", (double)overlapRemover.GetLastRunIterations());
 
             var statEdgeLength = Statistics.Statistics.EdgeLengthDeviation(geomGraphOld, geomGraph, proximityEdges);
@@ -181,16 +174,7 @@ namespace OverlapGraphExperiments {
                 RandomizeNodes(graph, nodePositions);
                 RouteGraphEdges(graph);
                 SvgGraphWriter.Write(graph, graphName + "-" + i.ToString() + "-" + layoutMethod.Item1 + ".svg");
-
-                //                HashSet<Point> pointSet=new HashSet<Point>();
-                //                foreach (Point p in nodePositions) {
-                //                    Console.WriteLine(p);
-                //                    if (pointSet.Contains(p)) {
-                //                        Console.WriteLine("Coincident points.");
-                //                    }
-                //                    else pointSet.Add(p);
-                //                }
-
+                
                 HashSet<Tuple<int, int, int>> proximityTriangles;
                 HashSet<Tuple<int, int>> proximityEdges;
                 GetProximityRelations(graph.GeometryGraph, out proximityEdges, out proximityTriangles);
@@ -242,53 +226,7 @@ namespace OverlapGraphExperiments {
                 graph.GeometryGraph.Nodes[k].Center = nodePositions[k];
             }
         }
-
-        static void DoInitialScaling(GeometryGraph Graph,InitialScaling initScaling) {
-            return;
-            //if (Graph.Edges.Count == 0) return;
-            //var nodePositions = Graph.Nodes.Select(v => v.Center).ToArray();
-            //var nodeBoxes = Graph.Nodes.Select(v => v.BoundingBox).ToArray();
-
-            //var avgEdgeLength = AvgEdgeLength(Graph);
-
-            //double goalLength;
-            //if (initScaling== InitialScaling.Inch72Pixel)
-            //    goalLength = 72;
-            //else if (initScaling == InitialScaling.AvgNodeSize)
-            //    goalLength = nodeBoxes.Average(box => (box.Width + box.Height) / 2);
-            //else return;
-
-            //double scaling = goalLength / avgEdgeLength;
-
-
-            //for (int j = 0; j < nodePositions.Length; j++) {
-            //    nodePositions[j] *= scaling;
-            //    Rectangle rect = nodeBoxes[j];
-            //    rect.Center = nodePositions[j];
-            //    nodeBoxes[j] = rect;
-            //    Graph.Nodes[j].Center = nodePositions[j];
-            //}
-
         
-
-        }
-
-        private static double AvgEdgeLength(GeometryGraph Graph) {
-            return 1;
-            //int i = 0;
-            //double avgEdgeLength = 0;
-            //foreach (Edge edge in Graph.Edges) {
-            //    Point sPoint = edge.Source.Center;
-            //    Point tPoint = edge.Target.Center;
-            //    double euclid = (sPoint - tPoint).Length;
-            //    avgEdgeLength += euclid;
-            //    i++;
-            //}
-            //avgEdgeLength /= i;
-            //return avgEdgeLength;
-        }
-
-
         private static void SetOldPositions(Point[] initPositions, Graph parentGraph) {
             for (int k = 0; k < initPositions.Length; k++) {
                 parentGraph.GeometryGraph.Nodes[k].Center = initPositions[k];
