@@ -69,11 +69,12 @@ namespace Microsoft.Msagl.WpfGraphControl {
         CancelToken _cancelToken = new CancelToken();
         BackgroundWorker _backgroundWorker;
         Point _mouseDownPositionInGraph;
-       
+        bool _mouseDownPositionInGraph_initialized;
+
         Ellipse _sourcePortCircle;
         protected Ellipse TargetPortCircle { get; set; }
 
-		WpfPoint _objectUnderMouseDetectionLocation;
+        WpfPoint _objectUnderMouseDetectionLocation;
         public event EventHandler LayoutStarted;
         public event EventHandler LayoutComplete;
 
@@ -319,6 +320,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
             if (e.Handled) return;
             _mouseDownPositionInGraph = Common.MsaglPoint(e.GetPosition(_graphCanvas));
+            _mouseDownPositionInGraph_initialized = true;
         }
 
         
@@ -330,7 +332,15 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
 
             if (Mouse.LeftButton == MouseButtonState.Pressed && (!LayoutEditingEnabled || _objectUnderMouseCursor == null))
+            {
+                if (!_mouseDownPositionInGraph_initialized)
+                {
+                    _mouseDownPositionInGraph = Common.MsaglPoint(e.GetPosition(_graphCanvas));
+                    _mouseDownPositionInGraph_initialized = true;
+                }
+
                 Pan(e);
+            }
             else {
                 // Retrieve the coordinate of the mouse position.
                 WpfPoint mouseLocation = e.GetPosition(_graphCanvas);
@@ -538,7 +548,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
         public IViewerObject ObjectUnderMouseCursor {
             get {
                 // this function can bring a stale object
-				var location = Mouse.GetPosition(_graphCanvas);
+                var location = Mouse.GetPosition(_graphCanvas);
                 if (!(_objectUnderMouseDetectionLocation == location))
                     UpdateWithWpfHitObjectUnderMouseOnLocation(location, MyHitTestResultCallbackWithNoCallbacksToTheUser);
                 return GetIViewerObjectFromObjectUnderCursor(_objectUnderMouseCursor);
