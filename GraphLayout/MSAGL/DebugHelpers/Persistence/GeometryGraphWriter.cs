@@ -480,6 +480,11 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
         void WriteEdge(Edge edge)
         {
             WriteStartElement(GeometryToken.Edge);
+
+            //jyoti - this is for the case 'create nodeposition from file'
+            //check for missing node positions
+            if ( ! edgeIds.ContainsKey(edge) ) return; 
+
             WriteAttribute(GeometryToken.Id, edgeIds[edge]);
             WriteAttribute(GeometryToken.S, NodeOrClusterId(edge.Source).ToString(CultureInfo.InvariantCulture));
             WriteAttribute(GeometryToken.T, NodeOrClusterId(edge.Target).ToString(CultureInfo.InvariantCulture));

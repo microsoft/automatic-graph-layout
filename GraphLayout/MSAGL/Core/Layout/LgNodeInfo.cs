@@ -22,6 +22,7 @@ namespace Microsoft.Msagl.Core.Layout {
         public Node GeometryNode { get; set; }
 
         public bool Selected;
+        public bool SelectedNeighbor;
 
         public ICurve BoundaryCurve {
             get { return BoundaryOnLayer; }
@@ -66,6 +67,7 @@ namespace Microsoft.Msagl.Core.Layout {
         public double LabelWidthToHeightRatio = 1.0;
 
         public LabelPlacement LabelPosition = LabelPlacement.Top;
+        public System.Windows.Media.SolidColorBrush Color;
 
         public enum LabelPlacement
         {

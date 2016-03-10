@@ -81,6 +81,19 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
         Set<Rail> _selectedRails = new Set<Rail>();
 
+
+
+
+
+        //jyoti controller
+        private double pathThicknessController = 0.01 ;
+
+
+
+
+
+
+
         // Set<VNode> _selectedVnodes = new Set<VNode>();
         Set<LgNodeInfo> SelectedNodeInfos
         {
@@ -229,8 +242,8 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 }
                 else
                 {
-                    //DO NOT SELECT INVISIBLE NODES
-                    return;
+                    //return; //DO NOT SELECT INVISIBLE NODES
+                    
                     _lgLayoutSettings.Interactor.AnalyzeClick(_mouseDownPositionInGraph, clickCounter.DownCount);
                 }
             }
@@ -283,6 +296,26 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 //SelectRailsOfIncidentEdgesOnActiveLayer(vnode, !isSelected(vnode));
                 //SelectEdgesIncidentTo(vnode);
 
+                //jyoti assigned colors
+                var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
+                if (lgSettings == null) return;
+                var nodeInfo = lgSettings.GeometryNodesToLgNodeInfos[vnode.Node.GeometryNode];
+                if ((SelectedNodeSet.Count+1) == 1)
+                {
+                    nodeInfo.Color = Brushes.Red;
+                }
+                else if ((SelectedNodeSet.Count+1) == 2)
+                {
+                    nodeInfo.Color = Brushes.LimeGreen;
+                }
+                else
+                {
+                    nodeInfo.Color = Brushes.Coral;
+                }
+
+
+
+
                 SelectVEdgesIncidentTo(vnode);
                 SelectUnselectNode(vnode.LgNodeInfo, !IsSelected(vnode));
 
@@ -330,6 +363,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             {
                 SelectedNodeInfos.Insert(nodeInfo);
                 SelectedNodeSet.Add(nodeInfo);
+
             }
             else
             {
@@ -515,7 +549,15 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             {
                 TakeScreenShot("C:/tmp/screenshot.png");
             }
-
+            //jyoti added the following controls
+            else if (e.Key == Key.OemPlus)
+            {
+                pathThicknessController += .01;
+            }
+            else if (e.Key == Key.OemMinus)
+            {
+                pathThicknessController -= .01;
+            }
             Keyboard.Focus(_graphCanvas);
         }
 
@@ -1023,13 +1065,15 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
         //            }
         //        }
 
+
         const double DesiredPathThicknessInInches = 0.016;
 
         readonly ClickCounter clickCounter;
 
         double GetBorderPathThickness()
         {
-            return DesiredPathThicknessInInches*DpiX/  CurrentScale;
+            return pathThicknessController * DpiX / CurrentScale; //jyoti made it thinner
+            //return DesiredPathThicknessInInches*DpiX/  CurrentScale;
         }
 
         readonly Object _processGraphLock = new object();
@@ -1540,6 +1584,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                     }
                     else if (_lgLayoutSettings.Interactor.SelectedNodeLabels.ContainsKey(vNode.LgNodeInfo))
                     {
+
                         var pos = _lgLayoutSettings.Interactor.SelectedNodeLabels[vNode.LgNodeInfo];
                         var offset = Point.Scale(nodeLabelWidth + NodeDotWidth * 1.01, nodeLabelHeight + NodeDotWidth * 1.01,
                             LgNodeInfo.GetLabelOffset(pos));
@@ -1636,7 +1681,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                     }
                 }
             */
-
+            
             foreach (var rail in railGraph.Rails)
             {
                  
@@ -1671,10 +1716,11 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 // For each selected highlighted rails,
                 //take the lowest layer form of the rail
                 if (SelectedNodeSet.Count > 0 && rail.IsHighlighted)
-                {  
-                        A = rail.initialA;
-                        B = rail.initialB;                    
+                {
+                    A = rail.initialA;
+                    B = rail.initialB;
                 }
+                else rail.Color = null;
                
                 rail.Geometry = new LineSegment(A, B);
                 ReplaceFrameworkElementForSkeletonRail(rail);
@@ -1905,6 +1951,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
         void UnhideVNode(Node drawingNode)
         {
+
             drawingNode.IsVisible = true;
 
             if (!_drawingObjectsToIViewerObjects.ContainsKey(drawingNode))
@@ -2092,9 +2139,10 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             }
 
             vnode.Node.Attr.LineWidth = 0; //GetBorderPathThickness(tileScale);
+            //jyoti
             //this is to make the background nodes smaller
             //vnode.InvalidateNodeDot(nodeDotWidth * 0.8); // make them just a bit smaller
-            vnode.InvalidateNodeDot(5*Math.Log(nodeDotWidth)); // make them just a bit smaller
+            vnode.InvalidateNodeDot(4 * Math.Log(nodeDotWidth)); // make them just a bit smaller
             vnode.HideNodeLabel();
             vnode.SetLowTransparency();
         }
@@ -2332,6 +2380,10 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
         {
             foreach (var node in _drawingGraph.Nodes)
             {
+                //jyoti - for the case of include node position from file
+                if (!_lgLayoutSettings._geometryGraph.Nodes.Contains(node.GeometryNode)) return;
+
+
                 node.IsVisible = true;
                 UnhideVNode(node);
                 //VNode vnode = (VNode)CreateVNode(node);
@@ -2944,6 +2996,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 Debug.Assert(!string.IsNullOrEmpty(TileDirectory));
                 Clear();
                 CreateTileDirectoryIfNeededAndRemoveEverythingUnderIt();
+                
                 MakeAllNodesVisible();
                 UpdateAllNodeBorders();
                 RemoveAllVisibleRails();

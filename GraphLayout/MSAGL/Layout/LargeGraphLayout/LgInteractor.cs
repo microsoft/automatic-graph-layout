@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Microsoft.Msagl.Core;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
@@ -12,7 +13,6 @@ using Microsoft.Msagl.Core.GraphAlgorithms;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTree;
 using Microsoft.Msagl.Core.Routing;
-using Microsoft.Msagl.DebugHelpers;
 using Microsoft.Msagl.GraphmapsWithMesh;
 using Microsoft.Msagl.Layout.Incremental;
 using Microsoft.Msagl.Layout.Initial;
@@ -28,6 +28,7 @@ using Microsoft.Msagl.Routing.Visibility;
 using Edge = Microsoft.Msagl.Core.Layout.Edge;
 using Point = Microsoft.Msagl.Core.Geometry.Point;
 using SymmetricSegment = Microsoft.Msagl.Core.DataStructures.SymmetricTuple<Microsoft.Msagl.Core.Geometry.Point>;
+using Timer = Microsoft.Msagl.DebugHelpers.Timer;
 
 namespace Microsoft.Msagl.Layout.LargeGraphLayout
 {
@@ -531,6 +532,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
         private Tiling TryCompetitionMeshApproach(out Dictionary<Node, int> nodeToId)
         {
+            Boolean loaded = true ;
+
+            if (loaded) LoadNodeLocationsFromFile();
+            _mainGeometryGraph.UpdateBoundingBox();
+            _lgLayoutSettings._geometryGraph = _mainGeometryGraph;
+
             Console.WriteLine("Nodes = " + _mainGeometryGraph.Nodes.Count + "Edges = " + _mainGeometryGraph.Edges.Count);
 
             //create a set of nodes and empty edges 
@@ -546,8 +553,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             stopwatch.Start();
             CreateConnectedGraphs();
             FillGeometryNodeToLgInfosTables();
+ 
+            
             LevelCalculator.RankGraph(_lgData, _mainGeometryGraph);
-            LayoutTheWholeGraph();
+            if(!loaded) LayoutTheWholeGraph();
+            
+
             int maxY;
             var maxX = CreateNodePositions(g, nodeToId, idToNode, out maxY);
             stopwatch.Stop();
@@ -594,7 +605,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
 
                 stopwatch.Start();
-                RouteByLayers();
+                g = ComputeEdgeRoutes(g, nodeToId, AdjacencyList);
+                //RouteByLayers();
                 stopwatch.Stop();
                 Console.WriteLine("Lev's = " + stopwatch.ElapsedMilliseconds);
 
@@ -639,6 +651,61 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             }
 
             return g;
+        }
+
+        public bool LoadNodeLocationsFromFile()
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            String line="";
+            openFileDialog1.DefaultExt = "loc";
+            openFileDialog1.Filter = "Text files (*.loc)|*.loc|All files (*.*)|*.*";
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                line = openFileDialog1.FileName;
+            }
+            System.IO.StreamReader file = new System.IO.StreamReader(line);
+            Dictionary <string,Point> nametopoint = new Dictionary<string, Point>();
+            int count = 0;
+            while ((line = file.ReadLine()) != null)
+            {
+                string[] words = line.Split(',');
+                //if (count++ > 200) break;
+                Point p = new Point(Double.Parse(words[1]), Double.Parse(words[2]));
+                nametopoint[words[0]] = p;
+            }
+            List<Node> remove = new List<Node>();
+            foreach (Node w in _mainGeometryGraph.Nodes)
+            {
+                if (!nametopoint.ContainsKey(w.ToString()))
+                {
+                    remove.Add(w);
+                }
+                else
+                    w.Center = nametopoint[w.ToString()];
+            }
+
+
+            List<Edge> removeE = new List<Edge>();
+            foreach (Edge e in _mainGeometryGraph.Edges)
+            {
+                if(remove.Contains(e.Source) || remove.Contains(e.Target))
+                    removeE.Add(e);
+            }
+
+            return true;
+            foreach (var w in remove)
+            {
+                _mainGeometryGraph.Nodes.Remove(w);
+            }
+            foreach (var e in removeE)
+            {
+                _mainGeometryGraph.Edges.Remove(e);
+            }
+            file.Close();
+
+            return true;
         }
 
         private Dictionary<Node, List<Edge>> BuildAdjacencyListFromEdgeList()
@@ -730,7 +797,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 var y = node.Center.Y;//(node.Center.Y / maxY) * 1000;
                 Point p = new Point((int)x, (int)y);
 
-                /*
+                
                 x = (int)x;
                 y = (int)y;
                 while (locationtoNode.ContainsKey(p))
@@ -739,7 +806,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     y++;
                     p = new Point((int)x, (int)y);
                 }
-                 */
+                 
                 node.Center = p;
                 
                 if (!locationtoNode.ContainsKey(p)) locationtoNode.Add(p, nodeToId[node]);
@@ -3230,6 +3297,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 //if (_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel > CurrentZoomLevel ||
                 //    _lgData.GeometryNodesToLgNodeInfos[edge.Target].ZoomLevel > CurrentZoomLevel) continue;
                 filteredEdges.Add(edge);
+                _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor = !nodeInfo.Selected;
+                _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor = !nodeInfo.Selected;
+                if (!nodeInfo.Selected) 
+                    edge.Color = nodeInfo.Color;
+                else
+                    edge.Color = null;
             }
             edges = filteredEdges;
             //END-jyoti to select only the neighbors within the current zoom level

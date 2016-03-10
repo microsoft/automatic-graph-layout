@@ -292,16 +292,24 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         }
 
         
-        void SetFillAndStroke() {
-            BoundaryPath.Stroke = Common.BrushFromMsaglColor(node.Attr.Color);
+        void SetFillAndStroke()
+        {
+            BoundaryPath.Stroke = Common.BrushFromMsaglColor(Drawing.Color.Black);
+            //jyoti changed node color
+            //BoundaryPath.Stroke = Common.BrushFromMsaglColor(node.Attr.Color);
+
             SetBoundaryFill();
-            BoundaryPath.StrokeThickness = PathStrokeThickness;
+
+            BoundaryPath.StrokeThickness = PathStrokeThickness/2;//jyoti changed strokethickness
+            //BoundaryPath.StrokeThickness = PathStrokeThickness;
 
             var textBlock = FrameworkElementOfNodeForLabel as TextBlock;
             if (textBlock != null)
             {
-                var col = Node.Label.FontColor;
-                textBlock.Foreground = Common.BrushFromMsaglColor(new Drawing.Color(col.A, col.R, col.G, col.B));
+                textBlock.Foreground = Common.BrushFromMsaglColor(Drawing.Color.Black);
+                //jyoti changed node color
+                //var col = Node.Label.FontColor;
+                //textBlock.Foreground = Common.BrushFromMsaglColor(new Drawing.Color(col.A, col.R, col.G, col.B));
             }
            
 
@@ -309,6 +317,18 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
 
         void SetBoundaryFill() {
+
+            //jyoti changed all node colors
+
+            BoundaryPath.Fill = Brushes.DarkGray;
+            if (LgNodeInfo != null && LgNodeInfo.Selected)
+                BoundaryPath.Fill = LgNodeInfo.Color;//Brushes.Red;
+            else if (LgNodeInfo != null && LgNodeInfo.SelectedNeighbor)
+            {
+                BoundaryPath.Fill = Brushes.Yellow;
+            }  
+            return;
+
             if (LgNodeInfo == null) {
                 BoundaryPath.Fill = Brushes.Blue;
                 return;

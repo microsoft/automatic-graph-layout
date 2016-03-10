@@ -18,6 +18,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         public int maximumNumOfLayers;
         public double mainGeometryGraphWidth;
         public double mainGeometryGraphHeight;
+        public GeometryGraph _geometryGraph;
 
         internal readonly Func<PlaneTransformation> TransformFromGraphToScreen;
         internal readonly double DpiX;
@@ -26,7 +27,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         /// <summary>
         /// size of drawn node
         /// </summary>
-        public double NodeDotWidthInInches = 0.1;
+        //public double NodeDotWidthInInches = 0.1;
+        public double NodeDotWidthInInches = 0.08; //jyoti made it small
         public double NodeDotWidthInInchesMinInImage = 0.06;
         public double NodeLabelHeightInInches = 0.22;
 
@@ -239,18 +241,31 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         private void InitDefaultRailColors()
         {
             _railColors = new String[3];
+
             _railColors[0] = "#87CEFA";
             _railColors[1] = "#FAFAD2";
-            _railColors[2] = "#F5F5F5";
+            _railColors[2] = "#FAFAD2";
+
+            //jyoti changed colors
+            //_railColors[0] = "#87CEFA";
+            //_railColors[1] = "#FAFAD2";
+            //_railColors[2] = "#F5F5F5";
         }
 
         private void InitDefaultSelectionColors()
         {
             // init red selection
             _selectionColors = new String[3];
-            _selectionColors[0] = "#FF0000";
-            _selectionColors[1] = "#EB3044";
-            _selectionColors[2] = "#E55C7F";
+
+
+            _selectionColors[0] = "#E60000";
+            _selectionColors[1] = "#E60000";
+            _selectionColors[2] = "#E60000";
+            
+            //jyoti changed colors
+            //_selectionColors[0] = "#FF0000";
+            //_selectionColors[1] = "#EB3044";
+            //_selectionColors[2] = "#E55C7F";
 
             //orange: #FF6A00,#FF9047,FFB07F 
         }

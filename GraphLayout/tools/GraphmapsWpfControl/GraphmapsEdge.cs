@@ -383,10 +383,15 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
             if (rail.IsHighlighted)
             {
-                if (rail.MinPassingEdgeZoomLevel <= 1) brush = Brushes.Red.Color;
-                else if (rail.MinPassingEdgeZoomLevel <= 2) brush = new WpfColor{A = 255, R=235, G=48, B=68};
-                else brush = new WpfColor { A = 255, R = 229, G = 92, B = 127 };
+
+                brush = rail.Color.Color;
+
+                //jyoti changed edge selection color
+                //if (rail.MinPassingEdgeZoomLevel <= 1) brush = Brushes.Red.Color;
+                //else if (rail.MinPassingEdgeZoomLevel <= 2) brush = new WpfColor{A = 255, R=235, G=48, B=68};
+                //else brush = new WpfColor { A = 255, R = 229, G = 92, B = 127 };
             }
+            else rail.Color = null;
 
             return new SolidColorBrush(brush);
         }

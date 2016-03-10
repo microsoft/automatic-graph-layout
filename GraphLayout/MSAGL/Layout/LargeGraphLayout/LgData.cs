@@ -275,7 +275,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 }
                 else                
                     railsToHighlight.InsertRange(railsOfEdge);
-                
+
+                foreach (Rail r in railsOfEdge)
+                {
+                    //if(r.Color==null)
+                        r.Color = edge.Color;
+                }
             }
 
             //need to analyze and highlight the new highlighted rails
