@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Media;
+using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
@@ -21,7 +23,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         public Point initialB;
         public Point Left;
         public Point Right;
-#if DEBUG
+       // public List<int> unnecessaryTransfer = new List<int>();
+ #if DEBUG
         static int railCount;
         int id;
 #endif
@@ -57,7 +60,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 
         internal int ZoomLevel;
-        public SolidColorBrush Color;
+        public List<SolidColorBrush> Color;
 #if DEBUG
         Rail() {
             railCount++;

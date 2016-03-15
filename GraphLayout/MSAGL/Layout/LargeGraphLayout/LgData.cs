@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
+using System.Windows.Media;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
@@ -252,34 +253,30 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 Set<Rail> railsOfEdge;                
                 //Added the following two lines and commented out the third line
                 level._railsOfEdges.TryGetValue(edge, out railsOfEdge);
-                if (railsOfEdge== null ||railsOfEdge.Count ==0)
-                //if (!level._railsOfEdges.TryGetValue(edge, out railsOfEdge))
+
+                // if (railsOfEdge== null ||railsOfEdge.Count ==0)                
                 {
                     var edgeInfo = GeometryEdgesToLgEdgeInfos[edge];
                     int edgeLevelIndex = (int) Math.Min(Math.Log(edgeInfo.ZoomLevel, 2), _levels.Count - 1);
                     edgeLevelIndex =  _levels.Count - 1 ; 
-                    /*
-                    //added this loop for computing edge level index
-                    for (int levelIndex = 0;levelIndex<_levels.Count; levelIndex++)
-                    {
-                        var dict = _levels[levelIndex]._railsOfEdges;
-                        if (!dict.ContainsKey(edge)) continue;
-                        if (_levels[levelIndex]._railsOfEdges[edge].Count > 0) {edgeLevelIndex = levelIndex;
-                            break;
-                        }
-                    }
-                    */
+                    
 
                     railsOfEdge = _levels[edgeLevelIndex]._railsOfEdges[edge];
-                    TransferHighlightedRails(level, edge, railsOfEdge);
+                    if (railsOfEdge != null)
+                    {
+                        TransferHighlightedRails(level, edge, railsOfEdge);
+                        railsToHighlight.InsertRange(railsOfEdge);
+                    }
+
                 }
-                else                
-                    railsToHighlight.InsertRange(railsOfEdge);
+                //else                
+                    // railsToHighlight.InsertRange(railsOfEdge);
 
                 foreach (Rail r in railsOfEdge)
                 {
-                    //if(r.Color==null)
-                        r.Color = edge.Color;
+                    if(r.Color==null) r.Color = new List<SolidColorBrush>();
+                    if (r.Color.Contains(edge.Color) == false) r.Color.Add(edge.Color);
+                    r.IsHighlighted = true;
                 }
             }
 
@@ -394,7 +391,69 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             UnselectEdges(passingEdges);
         }
 
-        public void UnselectEdges(List<Edge> edgesToPutOff) {
+
+        public void UnselectColoredEdges(List<Edge> edgesToPutOff, SolidColorBrush c)
+        {
+            
+            //do not put off all the edges, otherwise it will cause disconnected components in
+            //multiple selection
+            Set<Rail> railsOfEdge = new Set<Rail>();
+            Dictionary<Edge, Boolean> removeEdge = new Dictionary<Edge, Boolean>();
+            foreach (Edge e in edgesToPutOff)
+            {
+                 int i = Levels.Count - 1;
+                {
+                     railsOfEdge = _levels[i]._railsOfEdges[e];
+                    foreach (var r in railsOfEdge)
+                    {
+                        if (r.Color == null) continue;
+
+                        if (r.Color.Count > 1)
+                            if (!removeEdge.ContainsKey(e)) removeEdge[e] = true;
+                        r.Color.Remove(c);
+                    }
+                }
+                if (!removeEdge.ContainsKey(e)) e.Color = null;
+            }
+            
+            //foreach (Edge e in removeEdge.Keys)
+                //edgesToPutOff.Remove(e);
+           
+
+            var edgesToPutoffSet = new Set<Edge>(edgesToPutOff);
+            for (int i = _levels.Count - 1; i >= 0; i--)
+                PutOffEdgesOnLevel(i, edgesToPutoffSet);
+            
+            foreach (var e in edgesToPutOff)
+                SelectedEdges.Remove(e);
+        }
+
+        public void UnselectEdges(List<Edge> edgesToPutOff )
+        {
+            Set<Rail> railsOfEdge = new Set<Rail>();
+            Dictionary<Edge,Boolean> removeEdge = new Dictionary<Edge,Boolean>();
+            foreach (Edge e in edgesToPutOff)
+            {
+                //for (int i = _levels.Count - 1; i >= 0; i--)
+                int i = Levels.Count-1;
+                {
+                    //if (_levels[i]._railsOfEdges.ContainsKey(e) == false) continue;
+                    railsOfEdge = _levels[i]._railsOfEdges[e];
+                    foreach (var r in railsOfEdge)
+                    {
+                        if (r.Color == null || r.Color.Count==0)continue;
+                         
+
+                        if(r.Color.Count>1) 
+                            if(!removeEdge.ContainsKey(e)) removeEdge[e] = true;
+                        r.Color.Remove(e.Color);
+                    }
+                }
+                if (!removeEdge.ContainsKey(e)) e.Color = null;
+            }
+            foreach (Edge e in removeEdge.Keys)
+                edgesToPutOff.Remove(e);
+
             var edgesToPutoffSet = new Set<Edge>(edgesToPutOff);
             for (int i = _levels.Count - 1; i >= 0; i--)
                 PutOffEdgesOnLevel(i, edgesToPutoffSet);
@@ -424,7 +483,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             foreach (var rail in level.HighlightedRails) {
                 if (!railsThatShouldBeHiglighted.Contains(rail)) {
                     if (RailBelongsToLevel(level, rail))
-                        rail.IsHighlighted = false;
+                        if (rail.Color != null && rail.Color.Count > 0) { }
+                        else rail.IsHighlighted = false;
                     else
                     {
                         var railTuple = rail.PointTuple();  

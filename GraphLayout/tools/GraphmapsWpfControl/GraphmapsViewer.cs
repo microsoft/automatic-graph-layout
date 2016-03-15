@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -289,6 +290,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             OnMouseUp(e);
         }
 
+        
         void HandleClickForNode(GraphmapsNode vnode)
         {
             if (clickCounter.DownCount == clickCounter.UpCount && clickCounter.UpCount == 1)
@@ -300,23 +302,30 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
                 if (lgSettings == null) return;
                 var nodeInfo = lgSettings.GeometryNodesToLgNodeInfos[vnode.Node.GeometryNode];
-                if ((SelectedNodeSet.Count+1) == 1)
+
+                var c = nodeInfo.Color;
+                List<SolidColorBrush> ColorSet = new List<SolidColorBrush>();
+                ColorSet.Add(Brushes.Red);
+                ColorSet.Add(Brushes.Blue);
+                ColorSet.Add(Brushes.Green);
+                ColorSet.Add(Brushes.Coral);
+                ColorSet.Add(Brushes.BlueViolet);
+                ColorSet.Add(Brushes.HotPink);
+
+                foreach (LgNodeInfo vinfo in SelectedNodeSet)
                 {
-                    nodeInfo.Color = Brushes.Red;
+                    ColorSet.Remove(vinfo.Color);
                 }
-                else if ((SelectedNodeSet.Count+1) == 2)
-                {
-                    nodeInfo.Color = Brushes.LimeGreen;
-                }
+
+                if (ColorSet.Count > 0)
+                    nodeInfo.Color = ColorSet.First();
                 else
-                {
-                    nodeInfo.Color = Brushes.Coral;
-                }
+                    nodeInfo.Color = Brushes.Red;  
 
 
 
 
-                SelectVEdgesIncidentTo(vnode);
+                SelectColoredEdgesIncidentTo(vnode,c);
                 SelectUnselectNode(vnode.LgNodeInfo, !IsSelected(vnode));
 
 
@@ -326,6 +335,16 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 //ToggleNodeEdgesSlidingZoom(vnode);
             }
             vnode.Invalidate();
+        }
+
+        void SelectColoredEdgesIncidentTo(GraphmapsNode vnode, SolidColorBrush c)
+        {
+            var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
+            if (lgSettings == null) return;
+
+            var nodeInfo = lgSettings.GeometryNodesToLgNodeInfos[vnode.Node.GeometryNode];
+            lgSettings.Interactor.SelectAllColoredEdgesIncidentTo(nodeInfo,c);
+            //lgSettings.Interactor.SelectVisibleEdgesIncidentTo(nodeInfo, _layer);
         }
 
         void SelectVEdgesIncidentTo(GraphmapsNode vnode)
@@ -369,6 +388,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             {
                 SelectedNodeInfos.Remove(nodeInfo);
                 SelectedNodeSet.Remove(nodeInfo);
+                nodeInfo.Color = null;
             }
 
         }
@@ -1682,6 +1702,29 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 }
             */
             
+            //this can fix the bottom node garbage rail of b102
+            //but why it cannot do that for the right node?
+            List<Rail> UnusedRails = new List<Rail>();
+            foreach (var rail in railGraph.Rails)
+            if (rail.GetTopEdgeInfo() != null && rail.TopRankedEdgeInfoOfTheRail.ZoomLevel > _layer && !rail.IsHighlighted)            
+                UnusedRails.Add(rail);
+            foreach (var rail in UnusedRails)
+            {
+                railGraph.Rails.Remove(rail);
+                FrameworkElement fe;
+                GraphmapsEdge vEdgeOfRail = GetVEdgeOfRail(rail);
+                
+                if (_visibleRailsToFrameworkElems.TryGetValue(rail, out fe))
+                {                   
+                    fe.Visibility = Visibility.Hidden;
+                    vEdgeOfRail.Invalidate(fe, rail);
+                    Panel.SetZIndex(fe, -10);
+                    RemoveRail(rail);
+                }
+                
+            }
+              
+
             foreach (var rail in railGraph.Rails)
             {
                  
@@ -1720,9 +1763,24 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                     A = rail.initialA;
                     B = rail.initialB;
                 }
-                else rail.Color = null;
-               
+                else
+                {
+                    rail.Color = null;
+                }
+
+
                 rail.Geometry = new LineSegment(A, B);
+
+                /*
+                //this is a garbage rail
+                if (rail.GetTopEdgeInfo() != null && rail.TopRankedEdgeInfoOfTheRail.ZoomLevel > _layer &&
+                    !rail.IsHighlighted)
+                {
+                    
+                }   
+                */
+               
+
                 ReplaceFrameworkElementForSkeletonRail(rail);
             }
              
@@ -1826,9 +1884,11 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             };
 
             InvalidateSkeletonRail(rail, path);
+ 
 
             path.Tag = rail;
-            GraphCanvasChildrenAdd(path);
+            
+            GraphCanvasChildrenAdd(path);            
             _visibleRailsToFrameworkElems[rail] = path;
         }
 
@@ -1873,10 +1933,14 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
         void RemoveNoLongerVisibleRails(RailGraph oGraph)
         {
+
             var railsToRemove = new List<Rail>();
             foreach (var rail in _visibleRailsToFrameworkElems.Keys)
+            {
+ 
                 if (!oGraph.Rails.Contains(rail))
                     railsToRemove.Add(rail);
+            }
 
             RemoveRustyRails(railsToRemove);
         }
@@ -1891,7 +1955,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
         void RemoveRail(Rail rail)
         {
-            _graphCanvas.Children.Remove(_visibleRailsToFrameworkElems[rail]);
+             _graphCanvas.Children.Remove(_visibleRailsToFrameworkElems[rail]);
             _visibleRailsToFrameworkElems.Remove(rail);
         }
 

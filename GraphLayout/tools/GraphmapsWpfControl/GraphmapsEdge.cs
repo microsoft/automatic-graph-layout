@@ -383,15 +383,47 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
             if (rail.IsHighlighted)
             {
+                //jyoti changed edge selection color 
+               
+                //this is a garbage rail
+                if (rail.Color == null || rail.Color.Count == 0)
+                {
+                    rail.IsHighlighted = false;
+                }
+                else
+                {
+                    int Ax = 0, Rx = 0, Gx = 0, Bx = 0;
+                    foreach (var c in rail.Color)
+                    {
+                        Ax += c.Color.A;
+                        Rx += c.Color.R;
+                        Gx += c.Color.G;
+                        Bx += c.Color.B;
+                    }
+                    byte Ay = 0, Ry = 0, Gy = 0, By = 0;
+                    Ay = (Byte) ((int) (Ax/rail.Color.Count));
+                    Ry = (Byte) ((int) (Rx/rail.Color.Count));
+                    Gy = (Byte) ((int) (Gx/rail.Color.Count));
+                    By = (Byte) ((int) (Bx/rail.Color.Count));
 
-                brush = rail.Color.Color;
+                    brush = new System.Windows.Media.Color
+                    {
+                        A = Ay,
+                        R = Ry,
+                        G = Gy,
+                        B = By
+                    };
 
-                //jyoti changed edge selection color
+                 
+                }
+
+                //jyoti changed edge selection color 
+
                 //if (rail.MinPassingEdgeZoomLevel <= 1) brush = Brushes.Red.Color;
                 //else if (rail.MinPassingEdgeZoomLevel <= 2) brush = new WpfColor{A = 255, R=235, G=48, B=68};
                 //else brush = new WpfColor { A = 255, R = 229, G = 92, B = 127 };
             }
-            else rail.Color = null;
+           
 
             return new SolidColorBrush(brush);
         }

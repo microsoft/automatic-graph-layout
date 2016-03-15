@@ -2,9 +2,11 @@
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media;
 using Microsoft.Msagl.Core;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
@@ -26,7 +28,10 @@ using Microsoft.Msagl.Miscellaneous.RegularGrid;
 using Microsoft.Msagl.Miscellaneous.Routing;
 using Microsoft.Msagl.Routing.Visibility;
 using Edge = Microsoft.Msagl.Core.Layout.Edge;
+using LineSegment = Microsoft.Msagl.Core.Geometry.Curves.LineSegment;
 using Point = Microsoft.Msagl.Core.Geometry.Point;
+using Rectangle = Microsoft.Msagl.Core.Geometry.Rectangle;
+using Size = Microsoft.Msagl.Core.DataStructures.Size;
 using SymmetricSegment = Microsoft.Msagl.Core.DataStructures.SymmetricTuple<Microsoft.Msagl.Core.Geometry.Point>;
 using Timer = Microsoft.Msagl.DebugHelpers.Timer;
 
@@ -532,7 +537,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
         private Tiling TryCompetitionMeshApproach(out Dictionary<Node, int> nodeToId)
         {
-            Boolean loaded = true ;
+            Boolean loaded = false ;
 
             if (loaded) LoadNodeLocationsFromFile();
             _mainGeometryGraph.UpdateBoundingBox();
@@ -1217,8 +1222,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 }
                 else
                 {
-                    //rail.ZoomLevel = Math.Max(rail.ZoomLevel, level.ZoomLevel);
-                    rail.ZoomLevel = level.ZoomLevel;
+                    rail.ZoomLevel = Math.Max(rail.ZoomLevel, level.ZoomLevel);
+                    //rail.ZoomLevel = level.ZoomLevel;
                     if (!RailToEdges[rail].Contains(edge)) RailToEdges[rail].Add(edge);
                 }
                 railsOfEdge.Insert(rail);
@@ -1307,7 +1312,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 }
                 else
                 {
-                    //rail.ZoomLevel = Math.Max(rail.ZoomLevel, level.ZoomLevel);
+                    rail.ZoomLevel = Math.Max(rail.ZoomLevel, level.ZoomLevel);
                     //rail.ZoomLevel = level.ZoomLevel;
                     if (!RailToEdges[rail].Contains(edge)) RailToEdges[rail].Add(edge);
                 }
@@ -3285,6 +3290,34 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 }
         */
 
+        public void SelectAllColoredEdgesIncidentTo(LgNodeInfo nodeInfo, SolidColorBrush c)
+        {
+            List<Edge> edges = nodeInfo.GeometryNode.Edges.ToList();
+
+            //START-jyoti to select only the neighbors within the current zoom level
+            List<Edge> filteredEdges = new List<Edge>();
+            foreach (Edge edge in edges)
+            {
+                //if (_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel > CurrentZoomLevel ||
+                //    _lgData.GeometryNodesToLgNodeInfos[edge.Target].ZoomLevel > CurrentZoomLevel) continue;
+                filteredEdges.Add(edge);
+                _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor = !nodeInfo.Selected;
+                _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor = !nodeInfo.Selected;
+                if (!nodeInfo.Selected)
+                    edge.Color = nodeInfo.Color;
+            }
+            edges = filteredEdges;
+            //END-jyoti to select only the neighbors within the current zoom level
+
+
+            if (!nodeInfo.Selected)
+                _lgData.SelectEdges(edges);
+            else
+            {
+                _lgData.UnselectColoredEdges(edges,c);
+            }
+
+        }
 
         public void SelectAllEdgesIncidentTo(LgNodeInfo nodeInfo)
         {
@@ -3299,10 +3332,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 filteredEdges.Add(edge);
                 _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor = !nodeInfo.Selected;
                 _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor = !nodeInfo.Selected;
-                if (!nodeInfo.Selected) 
+                if (!nodeInfo.Selected)
                     edge.Color = nodeInfo.Color;
-                else
-                    edge.Color = null;
             }
             edges = filteredEdges;
             //END-jyoti to select only the neighbors within the current zoom level
@@ -3311,32 +3342,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             if (!nodeInfo.Selected)
                 _lgData.SelectEdges(edges);
             else
-                _lgData.UnselectEdges(edges);
-        }
-
-        public void SelectVisibleEdgesIncidentTo(LgNodeInfo nodeInfo, int currentLayer)
-        {
-
-            List<Edge> edges = nodeInfo.GeometryNode.Edges.ToList();
-            int currentZoomFromLayer = Math.Max(0, currentLayer - 1);
-
-            //START-jyoti to select only the neighbors within the current zoom level
-            List<Edge> filteredEdges = new List<Edge>();
-            foreach (Edge edge in edges)
             {
-                if (_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel <= currentZoomFromLayer &&
-                    _lgData.GeometryNodesToLgNodeInfos[edge.Target].ZoomLevel <= currentZoomFromLayer)
-                    filteredEdges.Add(edge);
+                _lgData.UnselectEdges(edges);                
             }
-            //END-jyoti to select only the neighbors within the current zoom level
-
-
-            if (!nodeInfo.Selected)
-                _lgData.SelectEdges(edges, Math.Min(currentLayer, _lgLayoutSettings.maximumNumOfLayers));
-            else
-                _lgData.UnselectEdges(edges);
+                
         }
-
+ 
         public void UpdateVisibleEdgesIncidentTo(LgNodeInfo nodeInfo, int currentLayer)
         {
             List<Edge> edges = nodeInfo.GeometryNode.Edges.ToList();
