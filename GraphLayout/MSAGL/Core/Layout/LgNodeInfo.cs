@@ -22,7 +22,7 @@ namespace Microsoft.Msagl.Core.Layout {
         public Node GeometryNode { get; set; }
 
         public bool Selected;
-        public bool SelectedNeighbor;
+        public int SelectedNeighbor = 0;
 
         public ICurve BoundaryCurve {
             get { return BoundaryOnLayer; }

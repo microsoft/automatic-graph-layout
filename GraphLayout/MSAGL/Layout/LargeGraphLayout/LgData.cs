@@ -261,13 +261,15 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                     edgeLevelIndex =  _levels.Count - 1 ; 
                     
 
-                    railsOfEdge = _levels[edgeLevelIndex]._railsOfEdges[edge];
-                    if (railsOfEdge != null)
+                    //if (railsOfEdge == null)
                     {
+                        if (_levels[edgeLevelIndex]._railsOfEdges.ContainsKey(edge) == false) continue; //jyoti is it a bug?
+                        railsOfEdge = _levels[edgeLevelIndex]._railsOfEdges[edge];
+                        
                         TransferHighlightedRails(level, edge, railsOfEdge);
                         railsToHighlight.InsertRange(railsOfEdge);
                     }
-
+                     
                 }
                 //else                
                     // railsToHighlight.InsertRange(railsOfEdge);
@@ -275,7 +277,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 foreach (Rail r in railsOfEdge)
                 {
                     if(r.Color==null) r.Color = new List<SolidColorBrush>();
-                    if (r.Color.Contains(edge.Color) == false) r.Color.Add(edge.Color);
+                    if (r.Color.Contains(edge.Color) == false && edge.Color!=null ) r.Color.Add(edge.Color);
                     r.IsHighlighted = true;
                 }
             }
@@ -403,7 +405,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             {
                  int i = Levels.Count - 1;
                 {
-                     railsOfEdge = _levels[i]._railsOfEdges[e];
+                    if (_levels[i]._railsOfEdges.ContainsKey(e) == false) continue; //is it a bug?
+                    railsOfEdge = _levels[i]._railsOfEdges[e];
                     foreach (var r in railsOfEdge)
                     {
                         if (r.Color == null) continue;

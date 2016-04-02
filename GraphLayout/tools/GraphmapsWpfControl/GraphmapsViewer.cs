@@ -244,8 +244,55 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 else
                 {
                     //return; //DO NOT SELECT INVISIBLE NODES
-                    
-                    _lgLayoutSettings.Interactor.AnalyzeClick(_mouseDownPositionInGraph, clickCounter.DownCount);
+                    //jyoti - fixed the selection for all types of nodes
+                    var invNode = _lgLayoutSettings.Interactor.AnalyzeClickForInvisibleNode(_mouseDownPositionInGraph, clickCounter.DownCount);
+                    if (invNode != null)
+                    {
+
+                        IViewerObject o;
+                        if (!_drawingObjectsToIViewerObjects.TryGetValue((Node)invNode.UserData, out o)) return;                        
+                        var x = ((GraphmapsNode)o);
+                        ViewChangeEvent(null, null);
+                        var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
+                        var nodeInfo = lgSettings.GeometryNodesToLgNodeInfos[invNode];
+                        nodeInfo.Selected = false;
+                        if (x != null)HandleClickForNode(x);                        
+                        return;
+                        /*
+                        //jyoti assigned colors
+                        var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
+                        if (lgSettings == null) return;
+                        var nodeInfo = lgSettings.GeometryNodesToLgNodeInfos[invNode];
+
+                        var c = nodeInfo.Color;
+                        List<SolidColorBrush> ColorSet = new List<SolidColorBrush>();
+                        ColorSet.Add(Brushes.Red);
+                        ColorSet.Add(Brushes.Blue);
+                        ColorSet.Add(Brushes.Green);
+                        ColorSet.Add(Brushes.Coral);
+                        ColorSet.Add(Brushes.BlueViolet);
+                        ColorSet.Add(Brushes.HotPink);
+
+                        foreach (LgNodeInfo vinfo in SelectedNodeSet)
+                        {
+                            ColorSet.Remove(vinfo.Color);
+                        }
+
+                        if (ColorSet.Count > 0)
+                            nodeInfo.Color = ColorSet.First();
+                        else
+                            nodeInfo.Color = Brushes.Red;
+
+
+                        if (x != null) x.Invalidate();
+                        SelectColoredEdgesIncidentTo(nodeInfo, c);
+                        SelectUnselectNode(nodeInfo, true);
+                        */ 
+
+                        //ViewChangeEvent(null, null);
+                        
+                    }
+
                 }
             }
         }
@@ -335,6 +382,16 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 //ToggleNodeEdgesSlidingZoom(vnode);
             }
             vnode.Invalidate();
+        }
+
+        void SelectColoredEdgesIncidentTo(LgNodeInfo nodeInfo, SolidColorBrush c)
+        {
+            var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
+            if (lgSettings == null) return;
+
+            //var nodeInfo = lgSettings.GeometryNodesToLgNodeInfos[vnode.Node.GeometryNode];
+            lgSettings.Interactor.SelectAllColoredEdgesIncidentTo(nodeInfo, c);
+            //lgSettings.Interactor.SelectVisibleEdgesIncidentTo(nodeInfo, _layer);
         }
 
         void SelectColoredEdgesIncidentTo(GraphmapsNode vnode, SolidColorBrush c)
@@ -1708,6 +1765,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             foreach (var rail in railGraph.Rails)
             if (rail.GetTopEdgeInfo() != null && rail.TopRankedEdgeInfoOfTheRail.ZoomLevel > _layer && !rail.IsHighlighted)            
                 UnusedRails.Add(rail);
+
             foreach (var rail in UnusedRails)
             {
                 railGraph.Rails.Remove(rail);

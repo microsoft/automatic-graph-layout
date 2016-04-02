@@ -323,7 +323,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             BoundaryPath.Fill = Brushes.DarkGray;
             if (LgNodeInfo != null && LgNodeInfo.Selected)
                 BoundaryPath.Fill = LgNodeInfo.Color;//Brushes.Red;
-            else if (LgNodeInfo != null && LgNodeInfo.SelectedNeighbor)
+            else if (LgNodeInfo != null && LgNodeInfo.SelectedNeighbor>0)
             {
                 BoundaryPath.Fill = Brushes.Yellow;
             }  

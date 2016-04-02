@@ -530,11 +530,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         }
          
 
-
-
-
-
-
         private Tiling TryCompetitionMeshApproach(out Dictionary<Node, int> nodeToId)
         {
             Boolean loaded = false ;
@@ -3301,10 +3296,18 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 //if (_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel > CurrentZoomLevel ||
                 //    _lgData.GeometryNodesToLgNodeInfos[edge.Target].ZoomLevel > CurrentZoomLevel) continue;
                 filteredEdges.Add(edge);
-                _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor = !nodeInfo.Selected;
-                _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor = !nodeInfo.Selected;
+
                 if (!nodeInfo.Selected)
+                {
                     edge.Color = nodeInfo.Color;
+                    _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor++; //= !nodeInfo.Selected;
+                    _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor++; // = !nodeInfo.Selected;
+                }
+                else
+                {
+                    _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor--; //= !nodeInfo.Selected;
+                    _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor--; // = !nodeInfo.Selected;
+                }
             }
             edges = filteredEdges;
             //END-jyoti to select only the neighbors within the current zoom level
@@ -3329,11 +3332,18 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             {
                 //if (_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel > CurrentZoomLevel ||
                 //    _lgData.GeometryNodesToLgNodeInfos[edge.Target].ZoomLevel > CurrentZoomLevel) continue;
-                filteredEdges.Add(edge);
-                _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor = !nodeInfo.Selected;
-                _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor = !nodeInfo.Selected;
+                filteredEdges.Add(edge); 
                 if (!nodeInfo.Selected)
+                {
                     edge.Color = nodeInfo.Color;
+                    _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor++; //= !nodeInfo.Selected;
+                    _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor++; // = !nodeInfo.Selected;
+                }
+                else
+                {
+                    _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor--; //= !nodeInfo.Selected;
+                    _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor--; // = !nodeInfo.Selected;
+                }
             }
             edges = filteredEdges;
             //END-jyoti to select only the neighbors within the current zoom level
@@ -3698,10 +3708,23 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             _railGraph.Edges.InsertRange(edges);
             closest.Selected = true;
             _lgData.SelectedNodeInfos.Insert(closest);
-            _railGraph.Nodes.Insert(closest.GeometryNode);
+            _railGraph.Nodes.Insert(closest.GeometryNode);            
             RunOnViewChange();
         }
 
+        public Node AnalyzeClickForInvisibleNode(Point mouseDownPositionInGraph, int downCount)
+        {
+            var closest = FindClosestNodeInfoForMouseClickBelowCurrentLevel(mouseDownPositionInGraph);
+            if (closest == null) return null;
+            SelectAllEdgesIncidentTo(closest);
+            var edges = closest.GeometryNode.Edges.ToList();
+            _railGraph.Edges.InsertRange(edges);
+            closest.Selected = true;
+            _lgData.SelectedNodeInfos.Insert(closest);
+            _railGraph.Nodes.Insert(closest.GeometryNode);
+            RunOnViewChange();
+            return closest.GeometryNode;
+        }
 
 
         public bool NumberOfNodesOfLastLayerIntersectedRectIsLessThanBound(int iLevel, Rectangle rect, int bound)
