@@ -1601,7 +1601,10 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
         {
             var nodesToDeselect = SelectedNodeInfos.Clone();
             foreach (LgNodeInfo ni in nodesToDeselect)
-                SelectUnselectNode(ni, false);
+            {
+                SelectColoredEdgesIncidentTo(ni, null);
+                SelectUnselectNode(ni, false);                
+            }
             foreach (var o in _drawingObjectsToIViewerObjects.Values)
             {
                 var vNode = o as GraphmapsNode;
@@ -2264,7 +2267,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             //jyoti
             //this is to make the background nodes smaller
             //vnode.InvalidateNodeDot(nodeDotWidth * 0.8); // make them just a bit smaller
-            vnode.InvalidateNodeDot(4 * Math.Log(nodeDotWidth)); // make them just a bit smaller
+            vnode.InvalidateNodeDot(6 * Math.Log(nodeDotWidth)); // make them just a bit smaller
             vnode.HideNodeLabel();
             vnode.SetLowTransparency();
         }

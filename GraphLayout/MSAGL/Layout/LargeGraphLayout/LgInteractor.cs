@@ -3291,22 +3291,41 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             //START-jyoti to select only the neighbors within the current zoom level
             List<Edge> filteredEdges = new List<Edge>();
+            Dictionary<Edge,SolidColorBrush> reselectEdges = new Dictionary<Edge, SolidColorBrush>();
+
             foreach (Edge edge in edges)
             {
                 //if (_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel > CurrentZoomLevel ||
                 //    _lgData.GeometryNodesToLgNodeInfos[edge.Target].ZoomLevel > CurrentZoomLevel) continue;
+
+                //jyoti - user selects a and then the neighbor b of a is selected
+                // if the user deselect b, then we still need the edge (a,b) to be there.
+                // so reselect these edges.
+                if (_lgData.GeometryNodesToLgNodeInfos[edge.Source].Color != null &&
+                    _lgData.GeometryNodesToLgNodeInfos[edge.Target].Color != null)
+                {
+                    if (nodeInfo.GeometryNode.Center == edge.Source.Center)
+                        reselectEdges[edge] = _lgData.GeometryNodesToLgNodeInfos[edge.Target].Color;
+                    else reselectEdges[edge] = _lgData.GeometryNodesToLgNodeInfos[edge.Source].Color;
+                }
+
+
                 filteredEdges.Add(edge);
 
                 if (!nodeInfo.Selected)
                 {
                     edge.Color = nodeInfo.Color;
-                    _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor++; //= !nodeInfo.Selected;
-                    _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor++; // = !nodeInfo.Selected;
+                    if(nodeInfo.GeometryNode.Center == edge.Source.Center)                        
+                        _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor++; // = !nodeInfo.Selected;
+                    else                    
+                        _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor++; //= !nodeInfo.Selected;                    
                 }
                 else
                 {
-                    _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor--; //= !nodeInfo.Selected;
-                    _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor--; // = !nodeInfo.Selected;
+                    if (nodeInfo.GeometryNode.Center == edge.Source.Center)
+                        _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor--; // = !nodeInfo.Selected;
+                    else
+                        _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor--; //= !nodeInfo.Selected;
                 }
             }
             edges = filteredEdges;
@@ -3318,7 +3337,30 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             else
             {
                 _lgData.UnselectColoredEdges(edges,c);
+
+                //reselect the edges that have been deselected by the complcated case of "both endvertices selection"                
+                foreach (Edge edge in reselectEdges.Keys)
+                    edge.Color = reselectEdges[edge];
+                _lgData.SelectEdges(reselectEdges.Keys.ToList());
+
+                /*foreach (Edge edge in reselectEdges)
+                {
+                    
+                    if (!nodeInfo.Selected)
+                    {
+                        edge.Color = nodeInfo.Color;
+                        _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor++; //= !nodeInfo.Selected;
+                        _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor++; // = !nodeInfo.Selected;
+                    }
+                    else
+                    {
+                        _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor--; //= !nodeInfo.Selected;
+                        _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor--; // = !nodeInfo.Selected;
+                    }
+                }*/
             }
+
+            
 
         }
 
