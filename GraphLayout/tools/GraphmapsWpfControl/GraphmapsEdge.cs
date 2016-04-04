@@ -365,6 +365,8 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             //               B = Edge.Attr.Color.B
             //           })
             //           : Brushes.Red;
+
+            
             brush = rail.IsHighlighted ? Brushes.Red.Color : Brushes.SlateGray.Color;
             if (rail.TopRankedEdgeInfoOfTheRail == null) return new SolidColorBrush(brush);
 
@@ -381,6 +383,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 else brush = Brushes.WhiteSmoke.Color; //Brushes.Gray.Color;
             }
 
+            brush.A = 100;
             if (rail.IsHighlighted)
             {
                 //jyoti changed edge selection color 

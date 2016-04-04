@@ -16,6 +16,7 @@ namespace Microsoft.Msagl.Core.Layout {
         internal Edge Prev; 
         internal double Cost;
         internal bool Processed;
+        public int PartiteSet;
         /// <summary>
         /// underlying geometry node
         /// </summary>

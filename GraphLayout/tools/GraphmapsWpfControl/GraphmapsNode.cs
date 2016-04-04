@@ -94,6 +94,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             PathStrokeThicknessFunc = pathStrokeThicknessFunc;
             LgNodeInfo = lgNodeInfo;
             Node = node;
+            
             FrameworkElementOfNodeForLabel = frameworkElementOfNodeForLabelOfLabel;
 
             this.funcFromDrawingEdgeToVEdge = funcFromDrawingEdgeToVEdge;
@@ -300,8 +301,13 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
             SetBoundaryFill();
 
-            BoundaryPath.StrokeThickness = PathStrokeThickness/2;//jyoti changed strokethickness
             //BoundaryPath.StrokeThickness = PathStrokeThickness;
+            //jyoti changed strokethickness
+            BoundaryPath.StrokeThickness = PathStrokeThickness / 2;
+            if (LgNodeInfo != null && LgNodeInfo.PartiteSet == 1)                
+                BoundaryPath.StrokeThickness = (PathStrokeThickness*1.5);
+
+            
 
             var textBlock = FrameworkElementOfNodeForLabel as TextBlock;
             if (textBlock != null)
@@ -320,6 +326,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
             //jyoti changed all node colors
 
+            
             BoundaryPath.Fill = Brushes.DarkGray;
             if (LgNodeInfo != null && LgNodeInfo.Selected)
                 BoundaryPath.Fill = LgNodeInfo.Color;//Brushes.Red;

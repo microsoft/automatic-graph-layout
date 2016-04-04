@@ -1285,6 +1285,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 try
                 {
                     var ls = _drawingGraph.LayoutAlgorithmSettings as LgLayoutSettings;
+                    geometryGraphUnderLayout.directory = this.TileDirectory;
                     LayoutHelpers.CalculateLayout(geometryGraphUnderLayout, _drawingGraph.LayoutAlgorithmSettings,
                         CancelToken);
                 }
@@ -2229,7 +2230,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             _graphCanvas.Measure(size);
             _graphCanvas.Arrange(new Rect(size));
             renderBitmap.Clear();
-            renderBitmap.Render(_graphCanvas);
+            renderBitmap.Render(_graphCanvas);            
         }
 
         bool RectIsEmptyAfterLevel(Rectangle tileBox, int iLevel)

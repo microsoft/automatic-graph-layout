@@ -390,8 +390,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             Console.WriteLine("Total Number of Rails = " + _lgData.Levels[_lgData.Levels.Count-1].RailDictionary.Values.Count);
 
-            //_lgLayoutSettings.MaxNumberOfNodesPerTile = 20;
-            //_lgLayoutSettings.MaxNumberOfRailsPerTile = 300;
+            _lgLayoutSettings.MaxNumberOfNodesPerTile = 20;
+            //_lgLayoutSettings.MaxNumberOfRailsPerTile = 1000;
 
             //g = graphs[0];
             //RenderGraph( g,   nodeToId);
@@ -532,9 +532,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
         private Tiling TryCompetitionMeshApproach(out Dictionary<Node, int> nodeToId)
         {
-            Boolean loaded = false ;
+             
 
-            if (loaded) LoadNodeLocationsFromFile();
+            Boolean loaded = LoadNodeLocationsFromFile();
             _mainGeometryGraph.UpdateBoundingBox();
             _lgLayoutSettings._geometryGraph = _mainGeometryGraph;
 
@@ -557,7 +557,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             
             LevelCalculator.RankGraph(_lgData, _mainGeometryGraph);
             if(!loaded) LayoutTheWholeGraph();
-            
+            loadBipartiteData();
 
             int maxY;
             var maxX = CreateNodePositions(g, nodeToId, idToNode, out maxY);
@@ -653,11 +653,43 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             return g;
         }
 
+        public bool loadBipartiteData()
+        {
+            String line = _mainGeometryGraph.directory;
+            line = line.Replace(".tiles", "");
+            try
+            {
+                System.IO.StreamReader file = new System.IO.StreamReader(line + ".set");
+                Dictionary<string, int> nametoset = new Dictionary<string, int>();
+                int count = 0;
+                while ((line = file.ReadLine()) != null)
+                {
+                    string[] words = line.Split(',');
+                    nametoset[words[0].Trim()] = int.Parse(words[1]);
+                }
+                foreach (var n in _mainGeometryGraph.Nodes)
+                {
+                    var nodename = n.ToString().Trim();
+                    if ( nametoset.ContainsKey(nodename))
+                        _lgData.GeometryNodesToLgNodeInfos[n].PartiteSet = nametoset[nodename];
+                }
+                file.Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("May not be a Bipartite Graph");
+                return false;
+            }
+        }
         public bool LoadNodeLocationsFromFile()
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            //OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            
+            String line = _mainGeometryGraph.directory;
+            line = line.Replace(".tiles", "");
 
-            String line="";
+            /*
             openFileDialog1.DefaultExt = "loc";
             openFileDialog1.Filter = "Text files (*.loc)|*.loc|All files (*.*)|*.*";
 
@@ -665,47 +697,49 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             {
                 line = openFileDialog1.FileName;
             }
-            System.IO.StreamReader file = new System.IO.StreamReader(line);
-            Dictionary <string,Point> nametopoint = new Dictionary<string, Point>();
-            int count = 0;
-            while ((line = file.ReadLine()) != null)
+             */
+
+
+            try
             {
-                string[] words = line.Split(',');
-                //if (count++ > 200) break;
-                Point p = new Point(Double.Parse(words[1]), Double.Parse(words[2]));
-                nametopoint[words[0]] = p;
-            }
-            List<Node> remove = new List<Node>();
-            foreach (Node w in _mainGeometryGraph.Nodes)
-            {
-                if (!nametopoint.ContainsKey(w.ToString()))
+                System.IO.StreamReader file = new System.IO.StreamReader(line+".loc");
+                Dictionary<string, Point> nametopoint = new Dictionary<string, Point>();
+                int count = 0;
+                while ((line = file.ReadLine()) != null)
                 {
-                    remove.Add(w);
+                    string[] words = line.Split(',');
+                    //if (count++ > 200) break;
+                    Point p = new Point(Double.Parse(words[1]), Double.Parse(words[2]));
+                    nametopoint[words[0]] = p;
                 }
-                else
-                    w.Center = nametopoint[w.ToString()];
-            }
+                List<Node> remove = new List<Node>();
+                foreach (Node w in _mainGeometryGraph.Nodes)
+                {
+                    if (!nametopoint.ContainsKey(w.ToString()))
+                    {
+                        remove.Add(w);
+                    }
+                    else
+                        w.Center = nametopoint[w.ToString()];
+                }
 
 
-            List<Edge> removeE = new List<Edge>();
-            foreach (Edge e in _mainGeometryGraph.Edges)
-            {
-                if(remove.Contains(e.Source) || remove.Contains(e.Target))
-                    removeE.Add(e);
+                List<Edge> removeE = new List<Edge>();
+                foreach (Edge e in _mainGeometryGraph.Edges)
+                {
+                    if (remove.Contains(e.Source) || remove.Contains(e.Target))
+                        removeE.Add(e);
+                }
+                file.Close();
+                return true;
+            }
+            catch (Exception e)
+            {                
+                Console.WriteLine("No prespecified location found.");
+                return false;
             }
 
-            return true;
-            foreach (var w in remove)
-            {
-                _mainGeometryGraph.Nodes.Remove(w);
-            }
-            foreach (var e in removeE)
-            {
-                _mainGeometryGraph.Edges.Remove(e);
-            }
-            file.Close();
-
-            return true;
+            
         }
 
         private Dictionary<Node, List<Edge>> BuildAdjacencyListFromEdgeList()
@@ -3342,22 +3376,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 foreach (Edge edge in reselectEdges.Keys)
                     edge.Color = reselectEdges[edge];
                 _lgData.SelectEdges(reselectEdges.Keys.ToList());
-
-                /*foreach (Edge edge in reselectEdges)
-                {
-                    
-                    if (!nodeInfo.Selected)
-                    {
-                        edge.Color = nodeInfo.Color;
-                        _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor++; //= !nodeInfo.Selected;
-                        _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor++; // = !nodeInfo.Selected;
-                    }
-                    else
-                    {
-                        _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor--; //= !nodeInfo.Selected;
-                        _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor--; // = !nodeInfo.Selected;
-                    }
-                }*/
+ 
             }
 
             

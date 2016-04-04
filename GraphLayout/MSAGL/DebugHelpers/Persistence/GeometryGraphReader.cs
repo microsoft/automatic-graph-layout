@@ -339,6 +339,13 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence {
                             ReadEndElement();
                             break;
                         }
+
+                        //jyoti - added this if block for reloading msagl
+                        if (XmlReader.NodeType == XmlNodeType.None)
+                        { 
+                            done = true;
+                            break;
+                        }
                         XmlRead();
                         break;
                     default: //ignore this element

@@ -51,7 +51,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 Console.WriteLine("zoom level = {0} with the grid size = {1}", zoomLevel, gridSize);
                 DrawNodesOnLevel(gridSize, zoomLevel);
                 zoomLevel *= 2;
-                gridSize /= 2;
+                gridSize /= 2.5;  //jyoti changed it from 2 to make smooth transition between levels
             }
         }
 
