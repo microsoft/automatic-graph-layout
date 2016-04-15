@@ -1471,7 +1471,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             var t1 = grid.PointToTuple(visibleRectangle.LeftBottom);
             var t2 = grid.PointToTuple(visibleRectangle.RightTop);
 
-            for (int ix = t1.Item1; ix <= t2.Item1; ix++)
+            for (int ix = t1.   Item1; ix <= t2.Item1; ix++)
                 for (int iy = t1.Item2; iy <= t2.Item2; iy++)
                 {
                     var t = new Triple(iLevel, ix, iy);

@@ -390,7 +390,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             Console.WriteLine("Total Number of Rails = " + _lgData.Levels[_lgData.Levels.Count-1].RailDictionary.Values.Count);
 
-            _lgLayoutSettings.MaxNumberOfNodesPerTile = 20;
+            _lgLayoutSettings.MaxNumberOfNodesPerTile = 40;
             //_lgLayoutSettings.MaxNumberOfRailsPerTile = 1000;
 
             //g = graphs[0];
@@ -411,6 +411,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             foreach (var node in _mainGeometryGraph.Nodes)
                 _lgData.GeometryNodesToLgNodeInfos[node].ZoomLevel = 100;
 
+            
             for (int i = 0; i < g.Length; i++)
             {
 
@@ -433,7 +434,11 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                         }
                         else count++;
                     }
+                    else  //jyoti - added this in case all top level nodes are of degree 0 - bipartite graph
+                        if (g[i].VList[j].ZoomLevel <= i+1) count++;
                 }
+                
+
                 _lgData.LevelNodeCounts[layer] = count;
                
                 
@@ -557,7 +562,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             
             LevelCalculator.RankGraph(_lgData, _mainGeometryGraph);
             if(!loaded) LayoutTheWholeGraph();
-            loadBipartiteData();
+            
+            
 
             int maxY;
             var maxX = CreateNodePositions(g, nodeToId, idToNode, out maxY);
@@ -891,12 +897,43 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             //CreateConnectedGraphs();
             //LevelCalculator.RankGraph(_lgData, _mainGeometryGraph);
             LevelCalculator.SetNodeZoomLevelsAndRouteEdgesOnLevels(_lgData, _mainGeometryGraph, _lgLayoutSettings);
+            
+            bool bipartite = loadBipartiteData();
+
+
+            if (bipartite)
+            {
+
+                List<LgNodeInfo> listOfinfo = new List<LgNodeInfo>();
+                foreach (var node in _lgData.SortedLgNodeInfos)
+                {
+                    if (node.PartiteSet == 1)
+                    {
+                        listOfinfo.Add(node);
+                    }
+                }
+                foreach (var node in _lgData.SortedLgNodeInfos)
+                {
+                    if (node.PartiteSet == 0)
+                    {
+                        listOfinfo.Add(node);
+                    }
+                }
+                _lgData.SortedLgNodeInfos.Clear();
+                
+                foreach (var node in listOfinfo)
+                    _lgData.SortedLgNodeInfos.Add(node);
+            }
+
+
+
 
             foreach (var node in _lgData.SortedLgNodeInfos)
             {
                 int l = (int)node.ZoomLevel;
                 g.VList[nodeToId[node.GeometryNode]].ZoomLevel = l;
                 if (g.maxTheoreticalZoomLevel < l) g.maxTheoreticalZoomLevel = l;
+
             }
             _lgData.Levels.Clear();
 
@@ -3397,13 +3434,13 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 if (!nodeInfo.Selected)
                 {
                     edge.Color = nodeInfo.Color;
-                    _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor++; //= !nodeInfo.Selected;
-                    _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor++; // = !nodeInfo.Selected;
+                   // _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor++; //= !nodeInfo.Selected;
+                  //  _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor++; // = !nodeInfo.Selected;
                 }
                 else
                 {
-                    _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor--; //= !nodeInfo.Selected;
-                    _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor--; // = !nodeInfo.Selected;
+                   // _lgData.GeometryNodesToLgNodeInfos[edge.Source].SelectedNeighbor--; //= !nodeInfo.Selected;
+                   // _lgData.GeometryNodesToLgNodeInfos[edge.Target].SelectedNeighbor--; // = !nodeInfo.Selected;
                 }
             }
             edges = filteredEdges;
