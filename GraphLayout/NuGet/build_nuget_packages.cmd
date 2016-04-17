@@ -1,0 +1,1 @@
+"%~dp0\nuget.exe" pack Microsoft.Automatic.Graph.Layout.nuspec
