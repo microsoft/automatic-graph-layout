@@ -1,0 +1,24 @@
+<package>
+  <metadata>
+    <id>Microsoft.Automatic.Graph.Layout</id>
+    <version>1.0.0</version>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <licenseUrl>https://github.com/Microsoft/automatic-graph-layout/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/Microsoft/automatic-graph-layout</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>MSAGL is a .NET tool for graph layout and viewing.</description>
+    <releaseNotes>
+    </releaseNotes>
+    <copyright>Copyright © Microsoft Corporation</copyright>
+    <language>en-US</language>
+    <tags>MSAGL Graph Layout</tags>
+    <dependencies>
+    </dependencies>
+    <frameworkAssemblies>
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="..\MSAGL\bin\debug\Microsoft.Msagl.dll" target="lib\net40" />
+  </files>
+</package>
