@@ -185,7 +185,7 @@ namespace Microsoft.Msagl.Drawing {
             if (edgeGeom == null) return "";
             CubicBezierSegment b = edgeGeom.Curve as CubicBezierSegment;
             if (b == null)
-                throw new NotImplementedException();
+                return "";
             string ret = "";
             if (edgeGeom.SourceArrowhead != null)
             {
