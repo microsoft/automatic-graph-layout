@@ -258,8 +258,10 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         void ProcessPan(MouseEventArgs args) {
             if (ClientRectangle.Contains(args.X, args.Y)) {
                 if (args.Button == MouseButtons.Left) {
-                    gViewer.Transform[0, 2] = mouseDownTransform[0, 2] + args.X - mouseDownPoint.X;
-                    gViewer.Transform[1, 2] = mouseDownTransform[1, 2] + args.Y - mouseDownPoint.Y;
+                    if (mouseDownTransform != null) {
+                        gViewer.Transform[0, 2] = mouseDownTransform[0, 2] + args.X - mouseDownPoint.X;
+                        gViewer.Transform[1, 2] = mouseDownTransform[1, 2] + args.Y - mouseDownPoint.Y;
+                    }
                     gViewer.Invalidate();
                 } else
                     GViewer.Hit(args);
