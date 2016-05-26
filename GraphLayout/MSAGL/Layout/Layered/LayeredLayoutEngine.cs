@@ -162,6 +162,10 @@ namespace Microsoft.Msagl.Layout.Layered {
                 foreach (IntEdge e in IntGraph.Edges)
                     database.RegisterOriginalEdgeInMultiedges(e);
 
+#if REPORTING
+                if (sugiyamaSettings.Reporting && SugiyamaLayoutLogger == null)
+                    SugiyamaLayoutLogger = new SugiyamaLayoutLogger();
+#endif
                 CycleRemoval();
             }
         }

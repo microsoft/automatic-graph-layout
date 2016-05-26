@@ -1273,7 +1273,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                 var subgraphs=new List<Geometry>();
                 Geometry geometry = bBNode.Hit(ScreenToSource(point), GetHitSlack(), filter, subgraphs) ??
                                     PickSubgraph(subgraphs, ScreenToSource(point));
-                selectedDObject = geometry?.dObject;
+                selectedDObject = geometry == null ? null : geometry.dObject;
                 if (old == selectedDObject) return;
                 SetSelectedObject(selectedDObject);
                 if (ObjectUnderMouseCursorChanged != null) {
@@ -1749,7 +1749,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             Geometry g = bn.Hit(ScreenToSource(new System.Drawing.Point(x, y)), GetHitSlack(), EntityFilterDelegate, subgraphs) ??
                          PickSubgraph(subgraphs, ScreenToSource(new System.Drawing.Point(x, y)));
 
-            return g?.dObject;
+            return g == null ? null : g.dObject;
         }
 
         /// <summary>

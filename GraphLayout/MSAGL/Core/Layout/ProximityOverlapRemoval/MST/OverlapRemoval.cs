@@ -164,6 +164,8 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
                 avgEdgeLength += euclid;
                 i++;
             }
+            if (i == 0)
+                return 1;
             avgEdgeLength /= i;
             return avgEdgeLength;
         }
@@ -507,7 +509,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
         /// <param name="scalingMethod"></param>
         static void DoInitialScaling(Node[] nodes, Point[] nodePositions, Size[] nodeSizes,
             InitialScaling scalingMethod) {
-
+            return;
             var avgEdgeLength = AvgEdgeLength(nodes);
             double goalLength;
             if (scalingMethod == InitialScaling.Inch72Pixel)

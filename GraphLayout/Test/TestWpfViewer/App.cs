@@ -767,8 +767,8 @@ namespace TestWpfViewer {
 
         void ProcessGraphml(string fileName) {
             var parser = new GraphmlParser(fileName);
-            Microsoft.Msagl.Drawing.Graph graph = parser.Parse();
-            GiveGraphToControl(graph);
+            Graph graph = parser.Parse();
+            PassGraphToControl(graph);
         }
 
         void ProcessMsagl(string fileName) {
@@ -778,7 +778,7 @@ namespace TestWpfViewer {
                 if (argsParser.OptionIsUsed(PrintMaxNodeDegreeOption)) {
                     Console.WriteLine("max node degree {0}",
                         graph.Nodes.Max(n => n.OutEdges.Count() + n.InEdges.Count() + n.SelfEdges.Count()));
-                    System.Environment.Exit(0);
+                    Environment.Exit(0);
                 }
 
 
@@ -874,15 +874,15 @@ namespace TestWpfViewer {
             int line, column;
             string msg;
             Graph gwgraph = Parser.Parse(fileName, out line, out column, out msg);
-            TestGraph(gwgraph);
             if (gwgraph != null) {
-                GiveGraphToControl(gwgraph);
+                TestGraph(gwgraph);
+                PassGraphToControl(gwgraph);
             }
             else
                 MessageBox.Show(msg + String.Format(" line {0} column {1}", line, column));
         }
 
-        void GiveGraphToControl(Graph gwgraph) {
+        void PassGraphToControl(Graph gwgraph) {
             if (argsParser.OptionIsUsed(RoundedCornersOption))
                 foreach (var n in gwgraph.Nodes) {
                     n.Attr.Shape = Shape.Box;

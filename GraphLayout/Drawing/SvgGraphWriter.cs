@@ -285,7 +285,8 @@ namespace Microsoft.Msagl.Drawing
             var edgeAttr = attr as EdgeAttr;
             if (edgeAttr != null)
             {
-                WriteAttribute("fill", "#000000");
+                WriteAttribute("fill", MsaglColorToSvgColor(attr.Color));
+                WriteAttribute("fill-opacity", MsaglColorToSvgOpacity(attr.Color));
             }
             else
             {
@@ -406,6 +407,11 @@ namespace Microsoft.Msagl.Drawing
             WriteAttribute("stroke", MsaglColorToSvgColor(attr.Color));
             WriteAttribute("stroke-opacity", MsaglColorToSvgOpacity(attr.Color));
             WriteAttribute("stroke-width", attr.LineWidth);
+            if (attr.Styles.Any(style => style == Style.Dashed)) {
+                WriteAttribute("stroke-dasharray", 5);
+            } else if (attr.Styles.Any(style => style == Style.Dotted)) {
+                WriteAttribute("stroke-dasharray", 2);
+            }
         }
 
         void WriteCurve(Curve curve, Node node)
@@ -414,7 +420,6 @@ namespace Microsoft.Msagl.Drawing
             WriteFillAndStroke(node.Attr);
             WriteCurveGeometry(curve);
             WriteEndElement();
-
         }
 
         void WriteCurveGeometry(Curve curve)

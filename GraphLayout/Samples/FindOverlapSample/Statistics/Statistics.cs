@@ -8,7 +8,7 @@ using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Layout;
 
-namespace FindOverlapSample.Statistics {
+namespace OverlapGraphExperiments.Statistics {
     class Statistics {
 
 
@@ -104,7 +104,7 @@ namespace FindOverlapSample.Statistics {
         /// <param name="B"></param>
         /// <returns></returns>
         public static Tuple<String,double> ProcrustesStatistics(List<Point> A, List<Point> B) {
-            int n = A.Count;
+            int n = A.Count;            
             //make A to be unitlength
             double minX = A.Min(p => p.X);
             double maxX = A.Max(p => p.X);

@@ -95,7 +95,7 @@ namespace Microsoft.Msagl.Drawing {
         public override string ToString() {
             var sw = new StringWriter();
 
-            sw.WriteLine("digraph \"" + Label + "\" {");
+            sw.WriteLine("digraph \"" + (string.IsNullOrEmpty(Label.Text)? "noname":Label.Text) + "\" {");
 
             WriteStms(sw);
 
@@ -109,7 +109,7 @@ namespace Microsoft.Msagl.Drawing {
 
         void WriteEdges(TextWriter tw) {
             foreach (Edge edge in Edges) {
-                tw.WriteLine(edge.ToString());
+                tw.WriteLine(edge.ToDotGeometry());
             }
         }
 

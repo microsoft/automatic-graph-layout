@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Microsoft.Msagl.Drawing {
@@ -56,25 +57,27 @@ namespace Microsoft.Msagl.Drawing {
         }
 
 
-        static string ConcatWithDelimeter(string delimeter, string[] s, int offset) {
-
-            if (offset == s.Length)
-                return "";
-
-            string ret = ConcatTwoWithDelimeter(delimeter, s[offset], ConcatWithDelimeter(delimeter, s, offset + 1));
-
-            return ret;
-
-        }
-
+        
         public static string ConcatWithComma(params string[] s) {
-            string ret = ConcatWithDelimeter(",", s, 0);
-            return ret;
+            return ConcatWithDelimeter(",", s);
         }
 
 
         public static string ConcatWithDelimeter(string delimeter, params string[] s) {
-            return ConcatWithDelimeter(delimeter, s, 0);
+            List<string> ns = new List<string>();
+            foreach(var str in s) {
+                if (!string.IsNullOrEmpty(str))
+                    ns.Add(str);
+            }
+            // ns does not have empty strings or nulls
+            if (ns.Count == 0)
+                return "";
+            if (ns.Count == 1)
+                return ns[0];
+            string ret = ns[0];
+            for (int i = 1; i < ns.Count; i++)
+                ret += delimeter + ns[i];
+            return ret;
         }
 
 

@@ -24,6 +24,8 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
         internal CdtSweeper(List<CdtSite> listOfSites, CdtSite p_1, CdtSite p_2, 
             Func<CdtSite, CdtSite, CdtEdge> createEdgeDelegate) {
             this.listOfSites=listOfSites;
+            if (listOfSites.Count == 0)
+                return;
             var firstTriangle=new CdtTriangle(p_1, p_2, listOfSites[0], createEdgeDelegate);
             Triangles.Insert( firstTriangle );
             front.Insert(new CdtFrontElement(p_1, firstTriangle.Edges[2] ));
@@ -42,6 +44,7 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
         /// the method making the main work
         /// </summary>
         protected override void RunInternal() {
+            if (listOfSites.Count == 0) return;
             for(int i=1;i<listOfSites.Count;i++)
                 ProcessSite(listOfSites[i]);
 
@@ -91,7 +94,7 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
         }
 
         PerimeterEdge CreateDoubleLinkedListOfPerimeter() {
-
+            
             var firstEdge = front.First().Edge;
             var edge = firstEdge;
             PerimeterEdge pe, prevPe = null, listStart = null;
