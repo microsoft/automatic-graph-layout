@@ -22,16 +22,6 @@ using SymmetricSegment = Microsoft.Msagl.Core.DataStructures.SymmetricTuple<Micr
 
 namespace Microsoft.Msagl.DebugHelpers.Persistence {
 
-#if SILVERLIGHT
-    public class InvalidDataException : Exception
-    {
-        public InvalidDataException(string s)
-            : base(s)
-        {
-        }
-    }
-#endif
-
     /// <summary>
     /// reads the GeometryGraph from a file
     /// </summary>
