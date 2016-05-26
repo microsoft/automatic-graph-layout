@@ -72,6 +72,9 @@
     <Compile Include="..\..\Drawing\Enums.cs">
       <Link>Enums.cs</Link>
     </Compile>
+    <Compile Include="..\..\Drawing\FontStyle.cs">
+      <Link>FontStyle.cs</Link>
+    </Compile>
     <Compile Include="..\..\Drawing\GeometryGraphCreator.cs">
       <Link>GeometryGraphCreator.cs</Link>
     </Compile>

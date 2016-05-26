@@ -1,0 +1,30 @@
+﻿.jsonBox {
+    height: 35%;
+    width: 100%;
+}
+
+#controls {
+    height: 95%;
+    width: 30%;
+}
+
+#graphContainer {
+    box-sizing: border-box;
+    border: 1px solid black;
+    height: 95%;
+    width: 65%;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+#graphView {
+    height: 100%;
+    width: 100%;
+}
+
+#workingIndicator{
+    display: none;
+    vertical-align: central;
+    text-align: center;
+}
