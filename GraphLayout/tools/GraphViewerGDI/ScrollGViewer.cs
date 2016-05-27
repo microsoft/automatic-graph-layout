@@ -473,14 +473,6 @@ namespace Microsoft.Msagl.GraphViewerGdi{
 
         #endregion
 
-        
-
-        
-        
-        void ZoomWithOne(){
-            
-        }
-
         void CalcDestRect() {
             var lt = Transform*new Point(srcRect.Left, srcRect.Bottom);
             destRect.X = (int) lt.X;
