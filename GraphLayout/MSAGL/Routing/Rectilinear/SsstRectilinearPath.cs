@@ -111,10 +111,18 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
             // This routine is only called once so don't worry about optimizing foreach.
             foreach (var edge in vert.OutEdges) {
+#if SHARPKIT //http://code.google.com/p/sharpkit/issues/detail?id=368 property assignment not working with |= operator
+                EntryDirectionsToTarget = EntryDirectionsToTarget | CompassVector.DirectionsFromPointToPoint(edge.TargetPoint, vert.Point);
+#else
                 EntryDirectionsToTarget |= CompassVector.DirectionsFromPointToPoint(edge.TargetPoint, vert.Point);
+#endif
             }
             foreach (var edge in vert.InEdges) {
+#if SHARPKIT //http://code.google.com/p/sharpkit/issues/detail?id=368 property assignment not working with |= operator
+                EntryDirectionsToTarget = EntryDirectionsToTarget | CompassVector.DirectionsFromPointToPoint(edge.SourcePoint, vert.Point);
+#else
                 EntryDirectionsToTarget |= CompassVector.DirectionsFromPointToPoint(edge.SourcePoint, vert.Point);
+#endif
             }
             // If this returns false then the target is isolated.
             return EntryDirectionsToTarget != Directions. None;
@@ -271,7 +279,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return list;
         }
 
-        #region TEST_MSAGL
+#region TEST_MSAGL
 #if TEST_MSAGL
 // ReSharper disable UnusedMember.Local
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "len"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "newEntry"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "nbend"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "iters"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "hcost"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ccost"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "so"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "q"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "edges"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String,System.Object[])"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
@@ -395,7 +403,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
 #endif // TEST_MSAGL
-        #endregion // TEST_MSAGL
+#endregion // TEST_MSAGL
 
         private void QueueReversedEntryToNeighborVertexIfNeeded(VertexEntry bestEntry, VertexEntry entryFromNeighbor, double weight) {
             // If we have a lower-cost path from bestEntry to entryFromNeighbor.PreviousVertex than the cost of entryFromNeighbor,
@@ -487,7 +495,11 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                     // We'll never get a duplicate entry direction here; we either relaxed the cost via UpdateEntryToNeighborIfNeeded
                     // before we dequeued it, or it was closed.  So, we simply remove the direction from the valid target entry directions
                     // and if we get to none, we're done.  We return a null path until the final stage.
+#if SHARPKIT //http://code.google.com/p/sharpkit/issues/detail?id=368 property assignment not working with &= operator
+                    this.EntryDirectionsToTarget = this.EntryDirectionsToTarget & ~bestEntry.Direction;
+#else
                     this.EntryDirectionsToTarget &= ~bestEntry.Direction;
+#endif
                     if (this.EntryDirectionsToTarget == Directions. None) {
                         this.Target.VertexEntries.CopyTo(targetVertexEntries, 0); 
                         Cleanup();
@@ -641,7 +653,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             this.TestClearIterations();
         }
 
-        #region DevTrace
+#region DevTrace
 #if DEVTRACE
         private static readonly DevTrace ssstTrace = new DevTrace("Rectilinear_SsstTrace", "Ssst");
         private static readonly DevTrace ssstDisplay = new DevTrace("Rectilinear_SsstDisplay");
@@ -726,6 +738,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 #endif // TEST_MSAGL
         }
 
-        #endregion // DevTrace
+#endregion // DevTrace
     }
 }

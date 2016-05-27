@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>MSAGL_JS Big Graph Sample</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../samples.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="/Lib/requirejs/require.js" data-main="/Samples/BigGraph/boot"></script>
+</head>
+<body>
+    <div id="controls">
+        Nodes:
+        <input type="number" id="nodeCount" value="100"/>
+        Edges:
+        <input type="number" id="edgeCount" value="100"/>
+        <button id="startButton">START</button>
+        <button id="stopButton" disabled>STOP</button>
+        <span id="working">WORKING...</span>
+        <span id="elapsed"></span>
+    </div>
+    <div id="graphContainer"><div id="graphView"></div></div>
+</body>
+</html>

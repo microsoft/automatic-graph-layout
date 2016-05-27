@@ -30,3 +30,14 @@ namespace System.Threading.Tasks
         }
     }
 }
+
+namespace System
+{ 
+    public class InvalidDataException : Exception
+    {
+        public InvalidDataException(string s)
+            : base(s)
+        {
+        }
+    }
+}

@@ -1,0 +1,96 @@
+﻿{
+  "nodes": [
+    {
+      "id": "node1",
+      "label": "Node 1",
+      "shape": "roundedrect"
+    },
+    {
+      "id": "node2",
+      "label": "Node 2",
+      "fill": "lightgray",
+      "stroke": "darkgray"
+    },
+    {
+      "id": "node3",
+      "label": "Node 3"
+    },
+    {
+      "id": "node4",
+      "label": "Node 4"
+    },
+    {
+      "id": "node5",
+      "label": {
+        "content": "Node 5",
+        "bounds": {
+          "width": 45,
+          "height": 10
+        }
+      },
+      "boundaryCurve": {
+        "type": "RoundedRect",
+        "bounds": {
+          "x": 0,
+          "y": 0,
+          "width": 100,
+          "height": 100
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge12",
+      "source": "node1",
+      "target": "node2",
+      "stroke": "darkgray"
+    },
+    {
+      "id": "edge13",
+      "source": "node1",
+      "target": "node3",
+      "arrowHeadAtTarget": {
+        "style": "tee"
+      }
+    },
+    {
+      "id": "edge34",
+      "source": "node3",
+      "target": "node4",
+      "dash": "10"
+    },
+    {
+      "id": "edge45",
+      "source": "node4",
+      "target": "node5",
+      "thickness": 2
+    },
+    {
+      "id": "edge51",
+      "source": "node5",
+      "target": "node1",
+      "label": "goes back",
+      "arrowHeadAtSource": {
+        "closed": true
+      }
+    }
+  ],
+  "settings": {
+    "transformation": {
+      "m00": "0",
+      "m01": "-1",
+      "m02": "0",
+      "m10": "1",
+      "m11": "0",
+      "m12": "0"
+    },
+    "upDownConstraints": [
+      {
+        "upNode": "node3",
+        "downNode": "node4"
+      }
+    ],
+    "aspectRatio": 0.7
+  }
+}
