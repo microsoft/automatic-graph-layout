@@ -132,15 +132,20 @@ namespace OverlapGraphExperiments
             int line, column;
             string msg;
             Graph gwgraph = Parser.Parse(fileName, out line, out column, out msg);
+            if (gwgraph == null) {
+                MessageBox.Show(msg + String.Format(" line {0} column {1}", line, column));
+                return null;
+            }
+            var edges = new List<Microsoft.Msagl.Drawing.Edge>(gwgraph.Edges);
+            foreach (var edge in edges) {
+                gwgraph.RemoveEdge(edge);
+            }
             gwgraph.GeometryGraph.Margins = gwgraph.Width / 50;
             gwgraph.GeometryGraph.UpdateBoundingBox();
-            if (gwgraph != null)
-            {
-                return gwgraph;
-            }
-            else
-                MessageBox.Show(msg + String.Format(" line {0} column {1}", line, column));
-            return null;
+            return gwgraph;
+
+            
+            
         }
         /// <summary>
         /// 
@@ -163,6 +168,7 @@ namespace OverlapGraphExperiments
             for (int i = 0; i < layoutMethods.Count(); i++)
             {
                 var layoutMethod = layoutMethods[i];
+              
                 layoutMethod.Item2.Invoke(graph.GeometryGraph); //do initial layout
                 //randomize cooincident points
                 Point[] nodePositions = graph.GeometryGraph.Nodes.Select(v => v.Center).ToArray();
@@ -172,7 +178,6 @@ namespace OverlapGraphExperiments
                 //                                 .ToArray());
 
                 RandomizeNodes(graph, nodePositions);
-                RouteGraphEdges(graph);
                 SvgGraphWriter.Write(graph, graphName + "-" + i.ToString() + "-" + layoutMethod.Item1 + ".svg");
                 
                 HashSet<Tuple<int, int, int>> proximityTriangles;
@@ -405,7 +410,7 @@ namespace OverlapGraphExperiments
             else
                 return new Tuple<String, Action<GeometryGraph>>[] {
 //            
-                new Tuple<String, Action<GeometryGraph>>("ident", a=> { })
+                new Tuple<String, Action<GeometryGraph>>("ident", a=> {a.Edges.Clear(); })
             };
         }
 
