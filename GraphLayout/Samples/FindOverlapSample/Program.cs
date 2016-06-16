@@ -47,6 +47,8 @@ namespace OverlapGraphExperiments
             argsParser.AddOptionWithAfterStringWithHelp("-test_dir", "the directory of test files");
             argsParser.AddOptionWithAfterStringWithHelp("-ds", "generate a number of dense spots");
             argsParser.AddAllowedOptionWithHelpString("-dup", "duplicate with color");
+            argsParser.AddAllowedOptionWithHelpString("-dot", "load real dot files");
+
 
             if (!argsParser.Parse())
             {
@@ -58,25 +60,29 @@ namespace OverlapGraphExperiments
             program.Run();
         }
 
-        private void Run()
-        {
+        private void Run() {
             _testDir = _argsParser.GetValueOfOptionWithAfterString("-test_dir");
 
-            if (_testDir == null)
-            {
+            if (_testDir == null) {
                 Console.WriteLine("-test_dir is not given, exiting");
                 return;
             }
-            _graphWidth = GetWidthOfGraph();
-            _circleRadius = _graphWidth / 10;
-            _nofCircles = GetNumberOfCircles();
-            _nodesPerCircle = GetNumberOfNodesPerCircle();
-            _nodeWidth = 2 * _circleRadius / 3;
+            bool run_layout;
+            if (!_argsParser.OptionIsUsed("-dot")) {
+                _graphWidth = GetWidthOfGraph();
+                _circleRadius = _graphWidth/10;
+                _nofCircles = GetNumberOfCircles();
+                _nodesPerCircle = GetNumberOfNodesPerCircle();
+                _nodeWidth = 2*_circleRadius/3;
+                run_layout = false;
+                CreateArtificialGraphsIfRequired();
+            } else {
+                run_layout = true;
+            }
 
-            bool artificialGraphsAreCreated = CreateArtificialGraphsIfRequired();
             OverlapRemovalTestSuite.ComparisonSuite(
                 _testDir,
-                "ResultsPrism-original-datasetTestSuite1.csv", false, !artificialGraphsAreCreated);
+                "ResultsPrism-original-datasetTestSuite1.csv", false, run_layout);
         }
 
         static void CleanDirectory(string dir)

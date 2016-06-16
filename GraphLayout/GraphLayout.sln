@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Msagl", "MSAGL\Msagl.csproj", "{415D3E3F-7105-46C1-84D2-7ECB34213D92}"
 EndProject
@@ -1132,7 +1132,8 @@ Global
 		{543B61A8-A0A4-4C9E-93AB-79559A59EAEA}.Release|Itanium.ActiveCfg = Release|Any CPU
 		{543B61A8-A0A4-4C9E-93AB-79559A59EAEA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{543B61A8-A0A4-4C9E-93AB-79559A59EAEA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{543B61A8-A0A4-4C9E-93AB-79559A59EAEA}.Release|x64.ActiveCfg = Release|Any CPU
+		{543B61A8-A0A4-4C9E-93AB-79559A59EAEA}.Release|x64.ActiveCfg = Release|x64
+		{543B61A8-A0A4-4C9E-93AB-79559A59EAEA}.Release|x64.Build.0 = Release|x64
 		{543B61A8-A0A4-4C9E-93AB-79559A59EAEA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution

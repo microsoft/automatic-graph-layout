@@ -282,7 +282,7 @@
     <Compile Include="Layout\Layered\LayeredLayoutEngine.cs" />
     <Compile Include="Layout\Layered\RecoveryLayerCalculator.cs" />
     <Compile Include="Layout\Layered\RecoveryLayeredLayoutEngine.cs" />
-    <Compile Include="Core\Layout\ProximityOverlapRemoval\MST\OverlapRemoval.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\MST\GTreeOverlapRemoval.cs" />
     <Compile Include="Core\Layout\ProximityOverlapRemoval\OverlapRemovalMethod.cs" />
     <Compile Include="Layout\OverlapRemovalFixedSegments\FakeBitmap.cs" />
     <Compile Include="Layout\OverlapRemovalFixedSegments\OverlapRemovalFixedSegmentsBitmap.cs" />

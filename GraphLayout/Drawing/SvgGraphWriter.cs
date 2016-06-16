@@ -18,10 +18,13 @@ namespace Microsoft.Msagl.Drawing
     ///</summary>
     public class SvgGraphWriter
     {
-        readonly Graph graph;
+        readonly Graph _graph;
         Func<string, string> nodeSanitizer = s => s;
         Func<string, string> attrSanitizer = s => s;
-
+        /// <summary>
+        /// if is set to true then no edges are written
+        /// </summary>
+        public bool IgnoreEdges { get; set; }
         readonly Stream stream;
 
         readonly XmlWriter xmlWriter;
@@ -33,7 +36,7 @@ namespace Microsoft.Msagl.Drawing
         public SvgGraphWriter(Stream streamPar, Graph graphP) {
             InitColorSet();
             stream = streamPar;
-            graph = graphP;
+            _graph = graphP;
             var xmlWriterSettings = new XmlWriterSettings { Indent = true };
             xmlWriter = XmlWriter.Create(stream, xmlWriterSettings);
         }
@@ -72,14 +75,13 @@ namespace Microsoft.Msagl.Drawing
         {
             CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            var matrix = new PlaneTransformation(1, 0, 0, 0, -1, 0);
-
+            
             try
             {
-                graph.GeometryGraph.Transform(matrix);
+                TransformGraphByFlippingY();
                 Open();
-                WriteGraphAttr(graph.Attr);
-                WriteLabel(graph.Label);
+                WriteGraphAttr(_graph.Attr);
+                WriteLabel(_graph.Label);
                 WriteEdges();
                 WriteNodes();
                 
@@ -90,15 +92,15 @@ namespace Microsoft.Msagl.Drawing
             }
             finally
             {
-                //restore the culture
-                graph.GeometryGraph.Transform(matrix);
+                TransformGraphByFlippingY();
+
                 Thread.CurrentThread.CurrentCulture = currentCulture;
             }
         }
 #if DEBUG && TEST_MSAGL
         void WriteDebugCurves() {
-            if(graph.DebugCurves!=null)
-                foreach (var debugCurve in graph.DebugCurves) {
+            if(_graph.DebugCurves!=null)
+                foreach (var debugCurve in _graph.DebugCurves) {
                     WriteDebugCurve(debugCurve);
                 }
         }
@@ -170,10 +172,17 @@ namespace Microsoft.Msagl.Drawing
         }
 
 
-        static string MsaglColorToSvgColor(Color color)
-        {
+        string MsaglColorToSvgColor(Color color) {
+            if (BlackAndWhite)
+                return "#000000";
             return "#" + Color.Xex(color.R) + Color.Xex(color.G) + Color.Xex(color.B);
         }
+
+        /// <summary>
+        /// If set then only the black color is used
+        /// </summary>
+        public bool BlackAndWhite { get; set; }
+
         void WriteAttribute(string attrName, object attrValue)
         {
             if (attrValue is double)
@@ -201,7 +210,7 @@ namespace Microsoft.Msagl.Drawing
 #if !SILVERLIGHT
             WriteComment("SvgWriter version " + typeof(SvgGraphWriter).Assembly.GetName().Version);
 #endif
-            var box = graph.BoundingBox;
+            var box = _graph.BoundingBox;
             xmlWriter.WriteStartElement("svg", "http://www.w3.org/2000/svg");
             WriteAttributeWithPrefix("xmlns", "xlink", "http://www.w3.org/1999/xlink");
             WriteAttribute("width", box.Width);
@@ -212,8 +221,10 @@ namespace Microsoft.Msagl.Drawing
             WriteStartElement("g");
             WriteAttribute("transform", String.Format("translate({0},{1})", -box.Left, -box.Bottom));
         }
-
-        void Close()
+        /// <summary>
+        /// writes the end of the file end closes the the stream
+        /// </summary>
+        public void Close()
         {
             xmlWriter.WriteEndElement();
             xmlWriter.WriteEndDocument();
@@ -221,10 +232,10 @@ namespace Microsoft.Msagl.Drawing
             xmlWriter.Close();
         }
 
-        void WriteEdges()
-        {
+        void WriteEdges() {
+            if (IgnoreEdges) return;
             WriteComment("Edges");
-            foreach (Edge edge in graph.Edges)
+            foreach (Edge edge in _graph.Edges)
                 WriteEdge(edge);
         }
 
@@ -301,7 +312,7 @@ namespace Microsoft.Msagl.Drawing
         void WriteNodes()
         {
             WriteComment("nodes");
-            foreach (Node node in graph.Nodes)
+            foreach (Node node in _graph.Nodes)
                 WriteNode(node);
             WriteComment("end of nodes");
 
@@ -707,9 +718,23 @@ namespace Microsoft.Msagl.Drawing
         ///</summary>
         ///<param name="graph"></param>
         ///<param name="outputFile"></param>
-        static public void Write(Graph graph, string outputFile)
+        public static void Write(Graph graph, string outputFile)
         {
             Write(graph, outputFile, null, null, 4);
+        }
+
+        ///<summary>
+        ///</summary>
+        ///<param name="graph"></param>
+        ///<param name="outputFile"></param>
+        public static void WriteAllExceptEdges(Graph graph, string outputFile) {
+            using (var stream = File.Create(outputFile)) {
+                var writer = new SvgGraphWriter(stream, graph) {
+                    Precision = 4,
+                    IgnoreEdges = true
+                };
+                writer.Write();
+            }
         }
 
         ///<summary>
@@ -875,6 +900,53 @@ namespace Microsoft.Msagl.Drawing
             colorSet.Insert("WhiteSmoke".ToLower());
             colorSet.Insert("Yellow".ToLower());
             colorSet.Insert("YellowGreen".ToLower());
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <param name="outputFile"></param>
+        public static void WriteAllExceptEdgesInBlack(Graph graph, string outputFile) {
+            using (var stream = File.Create(outputFile)) {
+                var writer = new SvgGraphWriter(stream, graph) {
+                    Precision = 4,
+                    IgnoreEdges = true,
+                    BlackAndWhite =true
+                };
+                writer.Write();
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public void WriteOpening() {
+            CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            Open();
+
+        }
+        /// <summary>
+        /// flips the y-coordinate
+        /// </summary>
+        public void TransformGraphByFlippingY() {
+            var matrix = new PlaneTransformation(1, 0, 0, 0, -1, 0);
+            _graph.GeometryGraph.Transform(matrix);
+        }
+        /// <summary>
+        /// writes a black line
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        public void WriteLine(Point a, Point b) {
+            WriteStartElement("line");
+            WriteAttribute("x1", a.X);
+            WriteAttribute("y1", a.Y);
+            WriteAttribute("x2", b.X);
+            WriteAttribute("y2", b.Y);
+            WriteAttribute("style", "stroke:rgb(0,0,0);stroke-width:1");
+            // < line x1 = "0" y1 = "0" x2 = "200" y2 = "200" style = "stroke:rgb(255,0,0);stroke-width:2" />
+            WriteEndElement();
         }
     }
 }

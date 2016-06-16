@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-﻿using System.Runtime.InteropServices;
+ using System.Runtime.InteropServices;
 ﻿using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
@@ -787,7 +787,7 @@ namespace TestWpfViewer {
                         n.Attr.XRadius = n.Attr.YRadius = 3;
 
                 if (argsParser.OptionIsUsed(RunRemoveOverlapsOption)) {
-                    OverlapRemoval.RemoveOverlaps(graph.GeometryGraph.Nodes.ToArray(),
+                    GTreeOverlapRemoval.RemoveOverlaps(graph.GeometryGraph.Nodes.ToArray(),
                         graph.LayoutAlgorithmSettings.NodeSeparation);
                 }
             }
@@ -899,7 +899,7 @@ namespace TestWpfViewer {
                         ProximityOverlapRemoval.RemoveOverlaps(compGraph, gwgraph.LayoutAlgorithmSettings.NodeSeparation);
                         break;
                     case OverlapRemovalMethod.MinimalSpanningTree:
-                        OverlapRemoval.RemoveOverlaps(compGraph.Nodes.ToArray(), gwgraph.LayoutAlgorithmSettings.NodeSeparation);
+                        GTreeOverlapRemoval.RemoveOverlaps(compGraph.Nodes.ToArray(), gwgraph.LayoutAlgorithmSettings.NodeSeparation);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

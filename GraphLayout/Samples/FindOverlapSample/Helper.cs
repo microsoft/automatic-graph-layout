@@ -18,7 +18,7 @@ namespace OverlapGraphExperiments {
             Dictionary<Node,Node> nodeCopy=new Dictionary<Node, Node>(graph.Nodes.Count);
 
             foreach (Node node in graph.Nodes) {
-                var c = new Node();
+                var c = new Node() {UserData = node.UserData};
                 copy.Nodes.Add(c);
                 nodeCopy[node] = c;
                 c.BoundaryCurve = node.BoundaryCurve.Clone();
