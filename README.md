@@ -23,7 +23,7 @@ Some important features of the viewer are:
 The code snippet demonstrates the basic usage of the viewer. It uses the C# language.
 
 ##The Viewer sample
-![Drawing of the graph from the sampleDrawing of the graph from the sample](http://research.microsoft.com/en-us/projects/msagl/abc.jpg)
+![Drawing of the graph from the sampleDrawing of the graph from the sample](http://rmc-stage/en-us/projects/msagl/abc.jpg)
 
 *Drawing of the graph from the sampleDrawing of the graph from the sample*
 
@@ -62,7 +62,7 @@ class ViewerSample {
 ```
 
 [More code
-samples…](http://research.microsoft.com/en-us/projects/msagl/codesamples.aspx)
+samples…](http://rmc-stage/en-us/projects/msagl/codesamples.aspx)
 
 #GraphMaps
 This functionality allows viewing a large graph in the
@@ -77,10 +77,10 @@ regenerated. GraphMaps ideas, design, and the mathematics are described in a
 [paper](http://arxiv.org/pdf/1506.06745v1.pdf).
 
 #Layouts Created by MSAGL
-![](http://research.microsoft.com/en-us/projects/msagl/195f1b23116b4f049b6e5dc815d96c89.png)
-![](http://research.microsoft.com/en-us/projects/msagl/e7c8e896bfd942f7876c394c5250a584.jpg)
-![](http://research.microsoft.com/en-us/projects/msagl/c34826a5e3af4cecbd8165fabc947b36.jpg)
-![](http://research.microsoft.com/en-us/projects/msagl/44a7b11774a54cab92a3f75a9501601b.png)
+![](http://rmc-stage/en-us/projects/msagl/195f1b23116b4f049b6e5dc815d96c89.png)
+![](http://rmc-stage/en-us/projects/msagl/e7c8e896bfd942f7876c394c5250a584.jpg)
+![](http://rmc-stage/en-us/projects/msagl/c34826a5e3af4cecbd8165fabc947b36.jpg)
+![](http://rmc-stage/en-us/projects/msagl/44a7b11774a54cab92a3f75a9501601b.png)
 
 
 
