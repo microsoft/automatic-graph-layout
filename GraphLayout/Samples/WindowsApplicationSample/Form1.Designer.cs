@@ -108,8 +108,6 @@ namespace WindowsApplicationSample
             this.gViewer.ToolBarIsVisible = true;
             this.gViewer.WindowZoomButtonPressed = false;
             this.gViewer.ZoomF = 1D;
-            this.gViewer.ZoomFraction = 0.5D;
-            this.gViewer.ZoomWhenMouseWheelScroll = true;
             this.gViewer.ZoomWindowThreshold = 0.05D;
             // 
             // splitter1

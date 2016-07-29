@@ -107,7 +107,6 @@ namespace FindEmptySpotSample
         this.gViewer.TightOffsetForRouting = 0.125;
         this.gViewer.ToolBarIsVisible = true;
         this.gViewer.ZoomF = 1;
-        this.gViewer.ZoomFraction = 0.5;
         this.gViewer.ZoomWindowThreshold = 0.05;
         // 
         // splitter1

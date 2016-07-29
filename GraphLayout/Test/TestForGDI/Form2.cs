@@ -292,11 +292,8 @@ namespace TestForGdi {
 
 
         internal static Graph CreateDrawingGraphFromFile(string fileName, out int line, out int column, out bool msaglFile) {
-            var sr = new StreamReader(fileName);
-            string dotString = sr.ReadToEnd();
-            sr.Close();
             string msg;
-            var graph= Parser.Parse(dotString, out line, out column, out msg);
+            var graph= Parser.Parse(fileName, out line, out column, out msg);
             if (graph != null) {
                 msaglFile = false;
                 return graph;
