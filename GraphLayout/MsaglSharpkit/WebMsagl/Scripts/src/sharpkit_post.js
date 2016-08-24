@@ -564,6 +564,9 @@ var System$Globalization$CultureInfo = {
         },
         get_InvariantCulture: function () { return null; }
     },
+    definition: {
+        ctor$$String: function (s) { System.Object.ctor.call(this); }
+    },
     assemblyName: "SharpKit.JsClr",
     Kind: "Class",
 };

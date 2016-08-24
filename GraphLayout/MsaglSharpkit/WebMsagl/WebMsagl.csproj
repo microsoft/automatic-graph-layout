@@ -60,6 +60,7 @@
     <Content Include="Samples\Options\styles.css" />
     <Content Include="Samples\samples.css" />
     <Content Include="Scripts\src\jsclr.js" />
+    <Content Include="Scripts\src\Microsoft.Msagl.Drawing.js" />
     <Content Include="Scripts\src\Microsoft.Msagl.js" />
     <Content Include="Scripts\src\sharpkit_post.js" />
     <Content Include="Scripts\src\sharpkit_pre.js" />
@@ -134,7 +135,8 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PreBuildEvent>xcopy /y "$(SolutionDir)MsaglSharpKit\res\Microsoft.Msagl.js" "$(ProjectDir)Msagl\"</PreBuildEvent>
+    <PreBuildEvent>xcopy /y "$(SolutionDir)MsaglSharpKit\res\Microsoft.Msagl.js" "$(ProjectDir)Msagl\"
+xcopy /y "$(SolutionDir)MsaglDrawingSharpkit\res\Microsoft.Msagl.Drawing.js" "$(ProjectDir)Msagl\"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

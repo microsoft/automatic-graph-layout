@@ -10,3 +10,14 @@
     height: 100%;
     overflow: hidden;
 }
+
+.textBlock {
+    margin-bottom: 10px;
+}
+
+#status {
+    float: right;
+    width: 30%;
+    height: 100%;
+    margin-left: 20px;
+}

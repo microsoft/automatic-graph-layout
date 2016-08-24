@@ -46,6 +46,8 @@ export interface IRect {
     y: number;
     width: number;
     height: number;
+    getCenter(): GPoint;
+    setCenter(p: GPoint): void;
 }
 
 /** A GRect represents a rectangular region in 2D space. */
@@ -77,6 +79,11 @@ export class GRect implements IRect {
     getCenter(): GPoint {
         return new GPoint({ x: this.x + this.width / 2, y: this.y + this.height / 2 });
     }
+    setCenter(p: GPoint) {
+        var delta = p.sub(this.getCenter());
+        this.x += delta.x;
+        this.y += delta.y;
+    }
     /** Combines this GRect with another GRect, returning the smallest GRect that contains both of them. */
     extend(other: GRect) {
         if (other == null)
@@ -100,10 +107,11 @@ export interface ICurve {
     type: string;
     getCenter(): GPoint;
     getBoundingBox(): GRect;
+    setCenter(p: GPoint);
 }
 
-/** A GCurve describes a curve. This is actually abstract; you don't instantiate this directly. */
-export class GCurve implements ICurve {
+/** A GCurve describes a curve. */
+export abstract class GCurve implements ICurve {
     /** A string that tells what concrete type of curve this is. */
     type: string;
     constructor(type: string) {
@@ -111,12 +119,9 @@ export class GCurve implements ICurve {
             throw new Error("Undefined curve type");
         this.type = type;
     }
-    getCenter(): GPoint {
-        throw new Error("Attempt to get the center of an undefined curve type");
-    }
-    getBoundingBox(): GRect {
-        throw new Error("Attempt to get the bounding box of an undefined curve type");
-    }
+    abstract getCenter(): GPoint;
+    abstract setCenter(p: GPoint);
+    abstract getBoundingBox(): GRect;
     /** Constructs a concrete curve, based on the ICurve passed. This behaves similarly to the constructors of
     other types, but because this also needs to decide on a type, I cannot use the constructor directly. */
     static ofCurve(curve: ICurve): GCurve {
@@ -169,6 +174,9 @@ export class GEllipse extends GCurve implements IEllipse {
     getCenter(): GPoint {
         return this.center;
     }
+    setCenter(p: GPoint) {
+        this.center = new GPoint(p);
+    }
     getBoundingBox(): GRect {
         var width = 2 * Math.max(Math.abs(this.axisA.x), Math.abs(this.axisB.x));
         var height = 2 * Math.max(Math.abs(this.axisA.y), Math.abs(this.axisB.y));
@@ -200,6 +208,11 @@ export class GLine extends GCurve implements ILine {
     getCenter(): GPoint {
         return this.start.add(this.end).div(2);
     }
+    setCenter(p: GPoint) {
+        var delta = p.sub(this.getCenter());
+        this.start = this.start.add(delta);
+        this.end = this.end.add(delta);
+    }
     getBoundingBox(): GRect {
         var ret = new GRect({ x: this.start.x, y: this.start.y, width: 0, height: 0 });
         ret = ret.extendP(this.end);
@@ -215,7 +228,7 @@ export interface IPolyline {
 }
 
 /** A GPolyline represents a GCurve that is a sequence of contiguous segments. */
-export class GPolyline extends GCurve implements ICurve {
+export class GPolyline extends GCurve implements IPolyline {
     start: GPoint;
     points: GPoint[];
     closed: boolean;
@@ -234,6 +247,11 @@ export class GPolyline extends GCurve implements ICurve {
             ret = ret.add(this.points[i]);
         ret = ret.div(1 + this.points.length);
         return ret;
+    }
+    setCenter(p: GPoint) {
+        var delta = p.sub(this.getCenter());
+        for (var i = 0; i < this.points.length; i++)
+            this.points[i] = this.points[i].add(delta);
     }
     getBoundingBox(): GRect {
         var ret = new GRect({ x: this.points[0].x, y: this.points[0].y, height: 0, width: 0 });
@@ -265,6 +283,9 @@ export class GRoundedRect extends GCurve implements IRoundedRect {
     }
     getCenter(): GPoint {
         return this.bounds.getCenter();
+    }
+    setCenter(p: GPoint) {
+        this.bounds.setCenter(p);
     }
     getBoundingBox(): GRect {
         return this.bounds;
@@ -317,6 +338,13 @@ export class GBezier extends GCurve implements ICurve {
         ret = ret.div(4);
         return ret;
     }
+    setCenter(p: GPoint) {
+        var delta = p.sub(this.getCenter());
+        this.start = this.start.add(delta);
+        this.p1 = this.p1.add(delta);
+        this.p2 = this.p2.add(delta);
+        this.p3 = this.p3.add(delta);
+    }
     getBoundingBox(): GRect {
         var ret = new GRect({ x: this.start.x, y: this.start.y, width: 0, height: 0 });
         ret = ret.extendP(this.p1);
@@ -348,6 +376,8 @@ export class GSegmentedCurve extends GCurve implements ICurve {
         ret = ret.div(this.segments.length);
         return ret;
     }
+    setCenter(p: GPoint) {
+    }
     getBoundingBox(): GRect {
         var ret = this.segments[0].getBoundingBox();
         for (var i = 1; i < this.segments.length; i++)
@@ -362,17 +392,18 @@ export interface IElement {
 }
 
 /** An ILabel describes a label. */
-export interface ILabel {
+export interface ILabel extends IElement {
     bounds: IRect;
     content: string;
     fill: string;
 }
 
 /** A GLabel represents a label. */
-export class GLabel {
+export class GLabel implements ILabel {
     bounds: IRect;
     content: string;
     fill: string;
+    tooltip: string;
     /** For this constructor, you can also pass a string. This will create a label with that string as its text. */
     constructor(label: any)
     constructor(label: ILabel) {
@@ -380,6 +411,7 @@ export class GLabel {
             this.content = <string><any>label;
         else {
             this.bounds = label.bounds == undefined || label.bounds == GRect.zero ? GRect.zero : new GRect(label.bounds);
+            this.tooltip = label.tooltip === undefined ? null : label.tooltip;
             this.content = label.content;
             this.fill = label.fill === undefined ? "Black" : label.fill;
         }

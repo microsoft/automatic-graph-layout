@@ -22,6 +22,7 @@ class LayoutWorker {
         return new Microsoft.Msagl.Core.Geometry.Rectangle.ctor$$Double$$Double$$Point(grect.x, grect.y, this.getMsaglPoint({ x: grect.width, y: grect.height }));
     }
 
+    /** Converts a GCurve to a MSAGL curve (depending on the type of curve). */
     private getMsaglCurve(gcurve: G.GCurve): any {
         if (gcurve == null)
             return null;
@@ -63,6 +64,8 @@ class LayoutWorker {
                 groundedrect.radiusY);
         }
         else if (gcurve.type == "SegmentedCurve") {
+            // In the case of a SegmentedCurve, I actually need to convert each of the sub-curves, and then build a MSAGL
+            // object out of them.
             var gsegcurve = <G.GSegmentedCurve>gcurve;
             var curves = [];
             for (var i = 0; i < gsegcurve.segments.length; i++)
@@ -123,6 +126,7 @@ class LayoutWorker {
         edgeMap[gedge.id] = { medge: edge, gedge: gedge };
     }
 
+    /** Converts a GGraph to a MSAGL geometry graph. The GGraph is stored inside the MSAGL graph, so that it can be retrieved later. */
     private getMsagl(ggraph: G.GGraph): any {
         var nodeMap = new Object(); // id -> { mnode: msagl node, gnode: ggraph node }
         var edgeMap = new Object(); // id -> { medge: msagl edge, mnode: ggraph edge }
@@ -137,36 +141,40 @@ class LayoutWorker {
         for (var i = 0; i < ggraph.edges.length; i++)
             this.addEdgeToMsagl(graph, nodeMap, edgeMap, ggraph.edges[i]);
 
+        // Set the settings. Different layout algorithm support different settings.
         var settings;
         if (ggraph.settings.layout == G.GSettings.mdsLayout) {
             settings = new Microsoft.Msagl.Layout.MDS.MdsLayoutSettings.ctor();
         }
         else {
             settings = new Microsoft.Msagl.Layout.Layered.SugiyamaLayoutSettings.ctor();
+            // Set the plane transformation used for the Sugiyama layout.
             var transformation = new Microsoft.Msagl.Core.Geometry.Curves.PlaneTransformation.ctor$$Double$$Double$$Double$$Double$$Double$$Double(
                 ggraph.settings.transformation.m00, ggraph.settings.transformation.m01, ggraph.settings.transformation.m02,
                 ggraph.settings.transformation.m10, ggraph.settings.transformation.m11, ggraph.settings.transformation.m12);
             settings.set_Transformation(transformation);
+            // Set the enforced aspect ratio for the Sugiyama layout.
             settings.set_AspectRatio(ggraph.settings.aspectRatio);
-
+            // Set the up/down constraints for the Sugiyama layout.
             for (var i = 0; i < ggraph.settings.upDownConstraints.length; i++) {
                 var upNode = nodeMap[ggraph.settings.upDownConstraints[i].upNode].mnode;
                 var downNode = nodeMap[ggraph.settings.upDownConstraints[i].downNode].mnode;
                 settings.AddUpDownConstraint(upNode, downNode);
             }
-
-            var edgeRoutingSettings = settings.get_EdgeRoutingSettings();
-            if (ggraph.settings.routing == G.GSettings.splinesRouting)
-                edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.Spline);
-            else if (ggraph.settings.routing == G.GSettings.splinesBundlingRouting)
-                edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.SplineBundling);
-            else if (ggraph.settings.routing == G.GSettings.straightLineRouting)
-                edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.StraightLine);
-            else if (ggraph.settings.routing == G.GSettings.rectilinearRouting)
-                edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.Rectilinear);
-            else if (ggraph.settings.routing == G.GSettings.rectilinearToCenterRouting)
-                edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.RectilinearToCenter);
         }
+
+        // All layout algorithms support certain edge routing algorithms (they are called after laying out the nodes).
+        var edgeRoutingSettings = settings.get_EdgeRoutingSettings();
+        if (ggraph.settings.routing == G.GSettings.splinesRouting)
+            edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.Spline);
+        else if (ggraph.settings.routing == G.GSettings.splinesBundlingRouting)
+            edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.SplineBundling);
+        else if (ggraph.settings.routing == G.GSettings.straightLineRouting)
+            edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.StraightLine);
+        else if (ggraph.settings.routing == G.GSettings.rectilinearRouting)
+            edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.Rectilinear);
+        else if (ggraph.settings.routing == G.GSettings.rectilinearToCenterRouting)
+            edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.RectilinearToCenter);
 
         return { graph: graph, settings: settings, nodeMap: nodeMap, edgeMap: edgeMap, source: ggraph };
     }
@@ -179,9 +187,11 @@ class LayoutWorker {
         return new G.GRect({ x: rect.get_Left(), y: rect.get_Bottom(), width: rect.get_Width(), height: rect.get_Height() });
     }
 
+    /** Converts a MSAGL curve to a TS curve object. */
     private getGCurve(curve): G.GCurve {
         var ret: G.GCurve;
         if (Is(curve, Microsoft.Msagl.Core.Geometry.Curves.Curve.ctor)) {
+            // The segmented curve is a special case; each of its components need to get converted separately.
             var segments = [];
             var sEn = curve.get_Segments().GetEnumerator();
             while (sEn.MoveNext())
@@ -240,8 +250,11 @@ class LayoutWorker {
         return ret;
     }
 
+    /** Converts a MSAGL graph into a GGraph. More accurately, it gets back the GGraph that was originally used to make the MSAGL
+    graph, and sets all of its geometrical elements to the ones that were calculated by MSAGL. */
     private getGGraph(msagl): G.GGraph {
         msagl.source.boundingBox = this.getGRect(msagl.graph.get_BoundingBox());
+        // Get the node boundary curves and labels.
         for (var id in msagl.nodeMap) {
             var node = msagl.nodeMap[id].mnode;
             var gnode: G.GNode = msagl.nodeMap[id].gnode;
@@ -252,7 +265,7 @@ class LayoutWorker {
                 gnode.label.bounds.y = node.get_Center().get_Y() - gnode.label.bounds.height / 2;
             }
         }
-
+        // Get the edge curves, labels and arrowheads.
         for (var id in msagl.edgeMap) {
             var edge = msagl.edgeMap[id].medge;
             var gedge: G.GEdge = msagl.edgeMap[id].gedge;
