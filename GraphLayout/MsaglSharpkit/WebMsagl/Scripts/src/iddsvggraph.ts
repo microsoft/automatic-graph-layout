@@ -168,9 +168,6 @@ class IDDSVGGraph extends SVGGraph {
         var scaleY = cheight / bbox.height;
         var scale = Math.min(scaleX, scaleY);
         this.chart.navigation.setVisibleRect({ x: offsetX, y: -offsetY - (isNaN(scale) ? bbox.height : (cheight / scale)), width: bbox.width, height: bbox.height }, false);
-
-        var that = this;
-        this.svg.onmousemove = e => that.onMouseMove(e);
     }
 }
 
