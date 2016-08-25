@@ -1,4 +1,4 @@
-﻿/// <reference path="../../typings/requirejs/require.d.ts"/>
+﻿/// <reference path="../../Scripts/typings/requirejs/require.d.ts"/>
 import G = require("../../Scripts/src/ggraph");
 import IDDSVGGraph = require("../../Scripts/src/iddsvggraph");
 

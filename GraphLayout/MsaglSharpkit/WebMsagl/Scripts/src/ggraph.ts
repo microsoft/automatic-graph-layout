@@ -1,4 +1,4 @@
-﻿///<reference path="../../typings/requirejs/require.d.ts"/>
+﻿///<reference path="../../Scripts/typings/requirejs/require.d.ts"/>
 
 /* This file contains classes that can be used to describe a geometry graph. The classes in this file, especially GGraph, are
 the main way you use MSAGL_JS. Generally speaking, you construct one of these classes by passing to the constructor a JS object

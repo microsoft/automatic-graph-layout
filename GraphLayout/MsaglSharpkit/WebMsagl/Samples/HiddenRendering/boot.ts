@@ -1,4 +1,4 @@
-﻿/// <reference path="../../typings/requirejs/require.d.ts"/>
+﻿/// <reference path="../../Scripts/typings/requirejs/require.d.ts"/>
 require(["../config"], () => {
     require(["../Samples/HiddenRendering/app"]), () => {
     }

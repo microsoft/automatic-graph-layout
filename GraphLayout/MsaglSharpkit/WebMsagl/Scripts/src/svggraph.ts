@@ -1,4 +1,4 @@
-﻿///<reference path="../../typings/FileSaver/FileSaver.d.ts"/>
+﻿///<reference path="../../Scripts/typings/FileSaver/FileSaver.d.ts"/>
 ///<amd-dependency path="filesaver"/>
 import G = require('./ggraph');
 
@@ -416,11 +416,13 @@ class SVGGraph {
 
     /** Returns the current mouse coordinates, in graph space. If null, the mouse is outside the graph. */
     public getMousePoint() { return this.mousePoint; };
+
     /** Returns the graph element that is currently under the mouse cursor. This can be a node, an edge, or an edge label. Note
     that node labels are just considered part of the node. If null, the mouse is over blank space, or not over the graph. */
     public getObjectUnderMouseCursor() {
         return this.elementUnderMouseCursor == null ? null : this.elementUnderMouseCursor.getGeometryElement();
     };
+
     /** Converts a point from a MouseEvent into graph space coordinates. */
     public getGraphPoint(e) {
         var clientPoint = this.svg.createSVGPoint();
@@ -430,6 +432,9 @@ class SVGGraph {
         var graphPoint = clientPoint.matrixTransform(matrix);
         return new G.GPoint({ x: graphPoint.x, y: graphPoint.y });
     };
+
+    // Mouse event handlers.
+
     private onMouseMove(e) {
         this.mousePoint = this.getGraphPoint(e);
         this.doDrag();
@@ -470,6 +475,7 @@ class SVGGraph {
 
     /** Returns the object that is currently being dragged (or null if nothing is being dragged). */
     public getDragObject() { return this.dragElement == null ? null : this.dragElement.getGeometryElement(); };
+
     /** Begins a drag operation on the object that is currently under the mouse cursor, if it is a draggable object. */
     private beginDrag() {
         if (this.elementUnderMouseCursor == null)
@@ -480,15 +486,18 @@ class SVGGraph {
             this.beginDragLabel(this.elementUnderMouseCursor);
         }
     };
+
     private beginDragNode(renderNode) {
         this.dragElement = renderNode;
         renderNode.boundaryCenterOnMouseDown = renderNode.node.boundaryCurve.getCenter();
         renderNode.labelCenterOnMouseDown = renderNode.node.label.bounds.getCenter();
     };
+
     private beginDragLabel(renderEdgeLabel) {
         this.dragElement = renderEdgeLabel;
         renderEdgeLabel.boundsCenterOnMouseDown = renderEdgeLabel.edge.label.bounds.getCenter();
     };
+
     /** Updates the position of the object that is currently being dragged, according to the current mouse position. */
     private doDrag() {
         if (this.dragElement == null)
@@ -498,6 +507,7 @@ class SVGGraph {
         else if (this.dragElement instanceof RenderEdgeLabel)
             this.doDragEdgeLabel(this.dragElement);
     };
+
     private doDragNode(renderNode) {
         var delta = this.mousePoint.sub(this.mouseDownPoint);
         var newBoundaryCenter = renderNode.boundaryCenterOnMouseDown.add(delta);
@@ -507,6 +517,7 @@ class SVGGraph {
         this.svg.removeChild(renderNode.group);
         this.drawNode(this.svg, renderNode.node);
     };
+
     private doDragEdgeLabel(renderEdgeLabel) {
         var delta = this.mousePoint.sub(this.mouseDownPoint);
         var newBoundsCenter = renderEdgeLabel.boundsCenterOnMouseDown.add(delta);
@@ -514,6 +525,7 @@ class SVGGraph {
         this.svg.removeChild(renderEdgeLabel.group);
         this.drawLabel(this.svg, renderEdgeLabel.edge.label, renderEdgeLabel.edge);
     };
+
     /** Ends the current drag operation, if any. After calling this, further mouse movements will not move any object. */
     private endDrag() {
         this.dragElement = null;
