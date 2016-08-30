@@ -3,7 +3,7 @@ A set of tools for graph layout and viewing
 
 The simplest way to start with MSAGL in C# is to open GraphLayout.sln in Visual Studio 2013, and have a look at Samples there.
 
-MSAGL is a .NET tool for graph layout and viewing. It was developed in Microsoft by Lev Nachmanson, Sergey Pupyrev, Tim Dwyer, Ted Hart, and Roman Prutkin. MSAGL is available as open source at https://github.com/Microsoft/automatic-graph-layout.git.
+MSAGL is a .NET tool for graph layout and viewing. It was developed in Microsoft by Lev Nachmanson, Sergey Pupyrev, Tim Dwyer, Ted Hart, and Roman Prutkin.
 
 ## The Distribution Content and Important Features
 The package contains the following:
