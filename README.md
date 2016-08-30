@@ -23,7 +23,7 @@ Some important features of the viewer are:
 The code snippet demonstrates the basic usage of the viewer. It uses the C# language.
 
 ##The Viewer sample
-![Drawing of the graph from the sampleDrawing of the graph from the sample](http://rmc-stage/en-us/projects/msagl/abc.jpg)
+![Drawing of the graph from the sampleDrawing of the graph from the sample](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/msagl-abc.jpg)
 
 *Drawing of the graph from the sampleDrawing of the graph from the sample*
 
@@ -62,7 +62,7 @@ class ViewerSample {
 ```
 
 [More code
-samples…](http://rmc-stage/en-us/projects/msagl/codesamples.aspx)
+samples can be found here…](https://www.microsoft.com/en-us/research/project/microsoft-automatic-graph-layout/#code-samples)
 
 #GraphMaps
 This functionality allows viewing a large graph in the
