@@ -77,10 +77,10 @@ regenerated. GraphMaps ideas, design, and the mathematics are described in a
 [paper](http://arxiv.org/pdf/1506.06745v1.pdf).
 
 #Layouts Created by MSAGL
-![](http://rmc-stage/en-us/projects/msagl/195f1b23116b4f049b6e5dc815d96c89.png)
-![](http://rmc-stage/en-us/projects/msagl/e7c8e896bfd942f7876c394c5250a584.jpg)
-![](http://rmc-stage/en-us/projects/msagl/c34826a5e3af4cecbd8165fabc947b36.jpg)
-![](http://rmc-stage/en-us/projects/msagl/44a7b11774a54cab92a3f75a9501601b.png)
+![](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/msagl-195f1b23116b4f049b6e5dc815d96c89.png)
+![](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/msagl-195f1b23116b4f049b6e5dc815d96c89.png)
+![](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/msagl-c34826a5e3af4cecbd8165fabc947b36.jpg)
+![](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/msagl-44a7b11774a54cab92a3f75a9501601b.png)
 
 
 
