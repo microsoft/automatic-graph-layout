@@ -137,8 +137,8 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PreBuildEvent>xcopy /y "$(SolutionDir)MsaglSharpKit\res\Microsoft.Msagl.js" "$(ProjectDir)Msagl\"
-xcopy /y "$(SolutionDir)MsaglDrawingSharpkit\res\Microsoft.Msagl.Drawing.js" "$(ProjectDir)Msagl\"</PreBuildEvent>
+    <PreBuildEvent>xcopy /y "$(SolutionDir)MsaglSharpKit\res\Microsoft.Msagl.js" "$(ProjectDir)Scripts\src\"
+xcopy /y "$(SolutionDir)MsaglDrawingSharpkit\res\Microsoft.Msagl.Drawing.js" "$(ProjectDir)Scripts\src\"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

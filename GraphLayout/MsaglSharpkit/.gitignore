@@ -1,5 +1,4 @@
 .vs/config
-MsaglDrawingSharpkit/res
 packages
 WebMsagl/**/*.js
 WebMsagl/**/*.map
