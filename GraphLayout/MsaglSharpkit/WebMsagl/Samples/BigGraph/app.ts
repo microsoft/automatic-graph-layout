@@ -37,13 +37,14 @@ function run(nodeCount: number, edgeCount: number) {
 
     var startTime = new Date();
     graphControl.graph.createNodeBoundariesForSVGInContainer(graphView);
-    graphControl.graph.beginLayoutGraph(() => {
+    graphControl.graph.layoutCallback = () => {
         graphControl.drawGraph();
         setGUIToNotRunning();
         var endTime = new Date();
         var diff = endTime.getTime() - startTime.getTime();
         elapsed.textContent = diff + " msecs";
-    });
+    }
+    graphControl.graph.beginLayoutGraph();
 }
 
 function startButtonClicked() {

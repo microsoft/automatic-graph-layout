@@ -26,10 +26,8 @@ function renderButtonClicked() {
     graphControl.graph.addEdge(new G.GEdge({ id: "edge13", source: "node1", target: "node3" }));
     graphControl.graph.addEdge(new G.GEdge({ id: "edge23", source: "node2", target: "node3" }));
     graphControl.graph.createNodeBoundariesFromSVG();
-
-    graphControl.graph.beginLayoutGraph(() => {
-        graphControl.drawGraph();
-    });
+    graphControl.graph.layoutCallback = () => graphControl.drawGraph();
+    graphControl.graph.beginLayoutGraph();
 }
 
 showButton.onclick = showButtonClicked;

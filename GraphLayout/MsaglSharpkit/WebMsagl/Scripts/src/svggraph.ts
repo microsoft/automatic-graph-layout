@@ -19,9 +19,6 @@ class RenderNode extends RenderElement {
     }
     public node: G.GNode;
     public getGeometryElement() { return this.node; }
-
-    public boundaryCenterOnMouseDown: G.GPoint = null;
-    public labelCenterOnMouseDown: G.GPoint = null;
 }
 
 class RenderEdge extends RenderElement {
@@ -40,8 +37,6 @@ class RenderEdgeLabel extends RenderElement {
     }
     public edge: G.GEdge;
     public getGeometryElement() { return this.edge.label; }
-
-    public boundsCenterOnMouseDown: G.GPoint = null;
 }
 
 /** Renderer that targets SVG. */
@@ -406,6 +401,27 @@ class SVGGraph {
         this.populateGraph();
     }
 
+    redrawElement(el: RenderElement) {
+        if (el instanceof RenderNode) {
+            var renderNode = <RenderNode>el;
+            this.svg.removeChild(renderNode.group);
+            this.drawNode(this.svg, renderNode.node);
+        }
+        else if (el instanceof RenderEdge) {
+            var renderEdge = <RenderEdge>el;
+            this.svg.removeChild(renderEdge.group);
+            var renderLabel = this.renderEdgeLabels[renderEdge.edge.id];
+            if (renderLabel != null)
+                this.svg.removeChild(renderLabel.group);
+            this.drawEdge(this.svg, renderEdge.edge);
+        }
+        else if (el instanceof RenderEdgeLabel) {
+            var renderEdgeLabel = <RenderEdgeLabel>el;
+            this.svg.removeChild(renderEdgeLabel.group);
+            this.drawLabel(this.svg, renderEdgeLabel.edge.label, renderEdgeLabel.edge);
+        }
+    }
+
     /** This callback gets invoked when the user clicks on a node. */
     public onNodeClick: (n: G.GNode) => void = function (n) { };
     /** This callback gets invoked when the user clicks on an edge. */
@@ -480,54 +496,29 @@ class SVGGraph {
     private beginDrag() {
         if (this.elementUnderMouseCursor == null)
             return;
-        if (this.elementUnderMouseCursor instanceof RenderNode)
-            this.beginDragNode(this.elementUnderMouseCursor);
-        else if (this.elementUnderMouseCursor instanceof RenderEdgeLabel) {
-            this.beginDragLabel(this.elementUnderMouseCursor);
-        }
-    };
-
-    private beginDragNode(renderNode) {
-        this.dragElement = renderNode;
-        renderNode.boundaryCenterOnMouseDown = renderNode.node.boundaryCurve.getCenter();
-        renderNode.labelCenterOnMouseDown = renderNode.node.label.bounds.getCenter();
-    };
-
-    private beginDragLabel(renderEdgeLabel) {
-        this.dragElement = renderEdgeLabel;
-        renderEdgeLabel.boundsCenterOnMouseDown = renderEdgeLabel.edge.label.bounds.getCenter();
+        var geometryElement = this.elementUnderMouseCursor.getGeometryElement();
+        this.graph.startMoveElement(geometryElement);
+        this.dragElement = this.elementUnderMouseCursor;
     };
 
     /** Updates the position of the object that is currently being dragged, according to the current mouse position. */
     private doDrag() {
         if (this.dragElement == null)
             return;
-        if (this.dragElement instanceof RenderNode)
-            this.doDragNode(this.dragElement);
-        else if (this.dragElement instanceof RenderEdgeLabel)
-            this.doDragEdgeLabel(this.dragElement);
-    };
-
-    private doDragNode(renderNode) {
         var delta = this.mousePoint.sub(this.mouseDownPoint);
-        var newBoundaryCenter = renderNode.boundaryCenterOnMouseDown.add(delta);
-        renderNode.node.boundaryCurve.setCenter(newBoundaryCenter);
-        var newLabelCenter = renderNode.labelCenterOnMouseDown.add(delta);
-        renderNode.node.label.bounds.setCenter(newLabelCenter);
-        this.svg.removeChild(renderNode.group);
-        this.drawNode(this.svg, renderNode.node);
-    };
-
-    private doDragEdgeLabel(renderEdgeLabel) {
-        var delta = this.mousePoint.sub(this.mouseDownPoint);
-        var newBoundsCenter = renderEdgeLabel.boundsCenterOnMouseDown.add(delta);
-        renderEdgeLabel.edge.label.bounds.setCenter(newBoundsCenter);
-        this.svg.removeChild(renderEdgeLabel.group);
-        this.drawLabel(this.svg, renderEdgeLabel.edge.label, renderEdgeLabel.edge);
+        this.graph.moveElements(delta);
+        this.redrawElement(this.dragElement);
     };
 
     /** Ends the current drag operation, if any. After calling this, further mouse movements will not move any object. */
     private endDrag() {
+        var that = this;
+        this.graph.edgeRoutingCallback = edges => {
+            if (edges != null)
+                for (var e in edges)
+                    that.redrawElement(that.renderEdges[edges[e]]);
+        };
+        this.graph.endMoveElements();
         this.dragElement = null;
     };
 }

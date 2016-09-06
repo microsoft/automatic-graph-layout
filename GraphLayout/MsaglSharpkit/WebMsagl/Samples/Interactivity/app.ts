@@ -30,7 +30,8 @@ function makeInitialGraph() {
     graphControl.graph.addEdge(new G.GEdge({ id: "edge23", label: "Edge 2-3", source: "node2", target: "node3" }));
 
     graphControl.graph.createNodeBoundariesForSVGInContainer(graphView);
-    graphControl.graph.beginLayoutGraph(() => { graphControl.drawGraph(); updateTexts(); setInterval(updateTexts, 100); });
+    graphControl.graph.layoutCallback = () => { graphControl.drawGraph(); updateTexts(); setInterval(updateTexts, 100); };
+    graphControl.graph.beginLayoutGraph();
 }
 
 makeInitialGraph();

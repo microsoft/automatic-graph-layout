@@ -10,12 +10,13 @@ function parseJsonClicked() {
     var jsonText = jsonTextArea.textContent;
     graphControl.graph = G.GGraph.ofJSON(jsonText);
     graphControl.graph.createNodeBoundariesForSVGInContainer(graphView);
-    graphControl.graph.beginLayoutGraph(() => {
+    graphControl.graph.layoutCallback = () => {
         var jsonOutputArea = document.getElementById("jsonOutput");
         var graphText = graphControl.graph.getJSON();
         jsonOutputArea.textContent = graphText;
         graphControl.drawGraph();
-    });
+    };
+    graphControl.graph.beginLayoutGraph();
 }
 
 document.getElementById("parseButton").onclick = parseJsonClicked;

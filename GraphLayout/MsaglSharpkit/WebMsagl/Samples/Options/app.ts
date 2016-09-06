@@ -13,54 +13,78 @@ var workingIndicator = <HTMLDivElement>document.getElementById("workingIndicator
 
 var jsonGraph = "";
 
-function stop() {
-    if (graphControl.graph != null)
-        graphControl.graph.stopLayoutGraph();
-    workingIndicator.style.display = "none";
-    graphView.style.display = "";
+function showWorking(show: boolean) {
+    if (show) {
+        workingIndicator.style.display = "inherit";
+        graphView.style.display = "none";
+    }
+    else {
+        workingIndicator.style.display = "none";
+        graphView.style.display = "";
+    }
 }
 
-function layoutClicked() {
-    stop();
+function stop() {
+    if (graphControl.graph != null && graphControl.graph.working)
+        graphControl.graph.stopLayoutGraph();
+    showWorking(false);
+}
 
-    graphControl.graph = G.GGraph.ofJSON(jsonGraph);
-
+function copySettingsToGraph() {
     graphControl.graph.settings.layout = layeredLayoutCheckBox.checked ? G.GSettings.sugiyamaLayout : G.GSettings.mdsLayout;
     graphControl.graph.settings.transformation = horizontalLayoutCheckBox.checked ? G.GPlaneTransformation.ninetyDegreesTransformation : G.GPlaneTransformation.defaultTransformation;
     if (aspectRatioTextBox.value != null && aspectRatioTextBox.value != "")
         graphControl.graph.settings.aspectRatio = parseFloat(aspectRatioTextBox.value);
     graphControl.graph.settings.routing = edgeRoutingSelect.value;
+}
 
+function layoutClicked() {
+    stop();
+    copySettingsToGraph();
     graphControl.graph.createNodeBoundariesForSVGInContainer(graphView);
+    showWorking(true);
+    graphControl.graph.beginLayoutGraph();
+}
 
-    workingIndicator.style.display = "inherit";
-    graphView.style.display = "none";
-    graphControl.graph.beginLayoutGraph(() => {
-        workingIndicator.style.display = "none";
-        graphView.style.display = "";
-        graphControl.drawGraph();
-    });
+function routeClicked() {
+    stop();
+    copySettingsToGraph();
+    showWorking(true);
+    graphControl.graph.beginEdgeRouting();
 }
 
 function stopClicked() {
     stop();
 }
 
+function loadGraph(json: string) {
+    jsonGraph = json;
+    graphControl.graph = G.GGraph.ofJSON(jsonGraph);
+    graphControl.graph.layoutCallback = () => {
+        showWorking(false);
+        graphControl.drawGraph();
+    };
+    graphControl.graph.edgeRoutingCallback = () => {
+        showWorking(false);
+        graphControl.drawGraph();
+    };
+    layoutClicked();
+}
+
 function loadGraph1() {
     require(["text!Samples/Options/samplegraph1.json"], (sample) => {
-        jsonGraph = sample;
-        layoutClicked();
+        loadGraph(sample);
     });
 }
 
 function loadGraph2() {
     require(["text!Samples/Options/samplegraph2.json"], (sample) => {
-        jsonGraph = sample;
-        layoutClicked();
+        loadGraph(sample);
     });
 }
 
 document.getElementById("layoutButton").onclick = layoutClicked;
+document.getElementById("routeButton").onclick = routeClicked;
 document.getElementById("stopButton").onclick = stopClicked;
 document.getElementById("loadGraph1Button").onclick = loadGraph1;
 document.getElementById("loadGraph2Button").onclick = loadGraph2;

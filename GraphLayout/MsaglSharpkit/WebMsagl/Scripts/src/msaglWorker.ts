@@ -127,9 +127,9 @@ class LayoutWorker {
     }
 
     /** Converts a GGraph to a MSAGL geometry graph. The GGraph is stored inside the MSAGL graph, so that it can be retrieved later. */
-    private getMsagl(ggraph: G.GGraph): any {
-        var nodeMap = new Object(); // id -> { mnode: msagl node, gnode: ggraph node }
-        var edgeMap = new Object(); // id -> { medge: msagl edge, mnode: ggraph edge }
+    private getMsagl(ggraph: G.GGraph): { graph: any, settings: any, nodeMap: { [id: string]: { mnode: any, gnode: G.GNode } }, edgeMap: { [id: string]: { medge: any, gedge: G.GEdge } }, source: G.GGraph } {
+        var nodeMap: { [id: string]: { mnode: any, gnode: G.GNode } } = {};
+        var edgeMap: { [id: string]: { medge: any, gedge: G.GEdge } } = {};
         var graph = new Microsoft.Msagl.Core.Layout.GeometryGraph.ctor();
 
         // Add nodes (and clusters)
@@ -310,18 +310,45 @@ class LayoutWorker {
         // Convert the MSAGL-shaped graph to a GGraph.
         this.finalGraph = this.getGGraph(msagl);
     }
+
+    runEdgeRouting(edgeIDs: string[]): void {
+        // Reset the settings to spline if they are Sugiyama splines. Sugiyama splines cannot be used separately from layout.
+        if (this.originalGraph.settings.routing == G.GSettings.sugiyamaSplinesRouting)
+            this.originalGraph.settings.routing = G.GSettings.splinesRouting;
+        // Get the MSAGL shape of the GGraph.
+        var msagl = this.getMsagl(this.originalGraph);
+        // Create an edge set.
+        var edges = [];
+        if (edgeIDs == null || edgeIDs.length == 0)
+            for (var id in msagl.edgeMap)
+                edges.push(msagl.edgeMap[id].medge);
+        else
+            for (var i = 0; i < edgeIDs.length; i++) {
+                var msaglEdge = msagl.edgeMap[edgeIDs[i]].medge;
+                edges.push(msaglEdge);
+            }
+        // Run the layout operation. This can take some time.
+        Microsoft.Msagl.Miscellaneous.LayoutHelpers.RouteAndLabelEdges(msagl.graph, msagl.settings, edges);
+        // Convert the MSAGL-shaped graph to a GGraph.
+        this.finalGraph = this.getGGraph(msagl);
+    }
 }
 
 /** Handles a web worker message (which is always a JSON string representing a GGraph, for which a layout operation should be performed). */
 export function handleMessage(e): void {
+    var message: { type: string, graph: string, edges?: string[] } = e.data;
     // Get the GGraph from the message.
-    var ggraph = G.GGraph.ofJSON(e.data);
+    var ggraph = G.GGraph.ofJSON(message.graph);
     // Instantiate a layout worker for the GGraph.
     var worker = new LayoutWorker(ggraph);
-    // Run the layout; this can take some time.
-    worker.runLayout();
+    // Run the layout operation; this can take some time.
+    if (message.type == "layout")
+        worker.runLayout();
+    else if (message.type == "edgerouting")
+        worker.runEdgeRouting(message.edges);
     // Get the JSON representation of the post-layout GGraph.
     var serialisedGraph = worker.finalGraph.getJSON();
     // Send it back.
-    self.postMessage(serialisedGraph);
+    var answer: { type: string, graph: string, edges?: string[] } = { type: message.type, graph: serialisedGraph, edges: message.edges };
+    self.postMessage(answer);
 }

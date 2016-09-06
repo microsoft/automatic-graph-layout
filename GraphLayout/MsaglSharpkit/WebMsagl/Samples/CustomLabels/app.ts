@@ -71,9 +71,8 @@ function generateGraph() {
     graphControl.customDrawLabel = customDrawLabel;
     graphControl.graph.createNodeBoundariesForSVGInContainer(graphView);
 
-    graphControl.graph.beginLayoutGraph(() => {
-        graphControl.drawGraph();
-    });
+    graphControl.graph.layoutCallback = () => graphControl.drawGraph();
+    graphControl.graph.beginLayoutGraph();
 }
 
 function startButtonClicked() {

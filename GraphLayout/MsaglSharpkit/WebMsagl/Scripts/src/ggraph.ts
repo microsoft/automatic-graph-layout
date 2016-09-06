@@ -740,6 +740,20 @@ class GNodeInternal {
     selfEdges: string[];
 }
 
+class MoveElementToken {
+}
+
+class MoveNodeToken extends MoveElementToken {
+    public node: GNode;
+    public originalBoundsCenter: GPoint;
+    public originalLabelCenter: GPoint;
+}
+
+class MoveEdgeLabelToken extends MoveElementToken {
+    public label: GLabel;
+    public originalLabelCenter: GPoint;
+}
+
 /** A GGraph represents a graph, plus its layout settings, and provides methods to manipulate it. */
 export class GGraph implements IGraph {
     /** Maps node IDs to GNodeInternal instances. */
@@ -990,38 +1004,34 @@ export class GGraph implements IGraph {
         container.removeChild(svg);
     }
 
-    /** The web worker that's laying out the graph. There's only one of these at any given time. */
+    /** The web worker that performs layout operations. There's at most one of these at any given time. */
     private worker: Worker = null;
+    public working: boolean = false;
 
     /** Aborts a layout operation, if there is one ongoing. */
-    stopLayoutGraph(): void {
+    public stopLayoutGraph(): void {
         if (this.worker != null) {
             this.worker.terminate();
             this.worker = null;
         }
+        this.working = false;
     }
 
-    /** Starts running layout on the graph. Pass a callback to get notified when the layout operation is done. */
-    beginLayoutGraph(callback: () => void = null): void {
-        // Stop any current layout operation.
-        this.stopLayoutGraph();
-        var that = this;
-        // Declare the web worker message handler.
-        var workerCallback = function (gstr) {
-            // Stop any current layout operation (this is probably not necessary, but it doesn't hurt).
-            that.stopLayoutGraph();
-            // gstr.data contains a string that is the JSON string for an IGraph.
-            // Deserialize it into a GGraph. This GGraph doesn't directly replace myself; I just want to copy its curves over mine. This way,
-            // the user can keep using this GGraph.
-            var gs: GGraph = GGraph.ofJSON(gstr.data);
+    private workerCallback(msg: MessageEvent) {
+        var data: { type: string, graph: string, edges?: string[] } = msg.data;
+        // data.graph contains a string that is the JSON string for an IGraph.
+        // Deserialize it into a GGraph. This GGraph doesn't directly replace myself; I just want to copy its curves over mine. This way,
+        // the user can keep using this GGraph.
+        var gs: GGraph = GGraph.ofJSON(data.graph);
+        if (data.type == "layout") {
             // Copy its bounding box to me, extending the margins a little bit.
-            that.boundingBox = new GRect({
+            this.boundingBox = new GRect({
                 x: gs.boundingBox.x - 10, y: gs.boundingBox.y - 10, width: gs.boundingBox.width + 20, height: gs.boundingBox.height + 20
             });
             // Copy all of the curves of the nodes, including the label boundaries.
             for (var i = 0; i < gs.nodes.length; i++) {
                 var workerNode = gs.nodes[i];
-                var myNode = that.getNode(workerNode.id);
+                var myNode = this.getNode(workerNode.id);
                 myNode.boundaryCurve = workerNode.boundaryCurve;
                 if (myNode.label != null)
                     myNode.label.bounds = workerNode.label.bounds;
@@ -1029,7 +1039,7 @@ export class GGraph implements IGraph {
             // Copy all of the curves of the edges, including the label boundaries and the arrowheads.
             for (var i = 0; i < gs.edges.length; i++) {
                 var workerEdge = gs.edges[i];
-                var myEdge = that.getEdge(workerEdge.id);
+                var myEdge = this.getEdge(workerEdge.id);
                 myEdge.curve = workerEdge.curve;
                 if (myEdge.label != null)
                     myEdge.label.bounds = workerEdge.label.bounds;
@@ -1039,17 +1049,135 @@ export class GGraph implements IGraph {
                     myEdge.arrowHeadAtTarget = workerEdge.arrowHeadAtTarget;
             }
             // Invoke the user callback.
-            if (callback != null)
-                callback();
+            this.layoutCallback();
         }
+        else if (data.type == "edgerouting") {
+            // Copy all of the curves of the edges, including the label boundaries and the arrowheads.
+            for (var i = 0; i < gs.edges.length; i++) {
+                var workerEdge = gs.edges[i];
+                if (data.edges == null || data.edges.length == 0 || data.edges.indexOf(workerEdge.id) >= 0) {
+                    var myEdge = this.getEdge(workerEdge.id);
+                    myEdge.curve = workerEdge.curve;
+                    if (myEdge.label != null)
+                        myEdge.label.bounds = workerEdge.label.bounds;
+                    if (myEdge.arrowHeadAtSource != null)
+                        myEdge.arrowHeadAtSource = workerEdge.arrowHeadAtSource;
+                    if (myEdge.arrowHeadAtTarget != null)
+                        myEdge.arrowHeadAtTarget = workerEdge.arrowHeadAtTarget;
+                }
+            }
+            // Invoke the user callback.
+            this.edgeRoutingCallback(data.edges);
+        }
+        this.working = false;
+    }
 
+    /** Ensures that a layout worker is present and ready. */
+    private ensureWorkerReady(): void {
+        // Stop any currently active layout operations.
+        if (this.working)
+            this.stopLayoutGraph();
+        if (this.worker == null) {
+            this.worker = new Worker(require.toUrl("./workerBoot.js"));
+            // Hook up to messages from the worker.
+            var that = this;
+            this.worker.addEventListener('message', ev => this.workerCallback(ev));
+        }
+    }
+
+    /** A callback you can set to be notified when a layout operation is complete. */
+    public layoutCallback: () => void = () => { };
+    /** A callback you can set to be notified when an edge routing operation is complete. The set of routed edges is passed
+    as a parameter. If it is null, it means that all edges in the graph were routed. Note that edge routing may happen after
+    being invoked by the user program, but it may also happen as a consequence of moving a node. */
+    public edgeRoutingCallback: (edges: string[]) => void = edges => { };
+
+    /** Starts running layout on the graph. The layout callback will be invoked when the layout operation is done. */
+    public beginLayoutGraph(): void {
+        this.ensureWorkerReady();
+        this.working = true;
         // Serialize the graph.
         var serialisedGraph = this.getJSON();
-        // Create the worker.
-        this.worker = new Worker(require.toUrl("./workerBoot.js"));
-        // Hook up to messages from the worker.
-        this.worker.addEventListener('message', workerCallback);
         // Send the worker the serialized graph to layout.
-        this.worker.postMessage(serialisedGraph);
+        this.worker.postMessage({ type: "layout", graph: serialisedGraph });
+    }
+
+    /** Starts running edge routing on the graph. The edge routing callback will be invoked when the edge routing operation is done. */
+    public beginEdgeRouting(edges?: string[]): void {
+        this.ensureWorkerReady();
+        this.working = true;
+        // Serialize the graph.
+        var serialisedGraph = this.getJSON();
+        // Send the worker the serialized graph to layout.
+        this.worker.postMessage({ type: "edgerouting", graph: serialisedGraph, edges: edges });
+    }
+
+    private moveTokens: MoveElementToken[] = [];
+
+    /** This function selects an element for moving. After calling this, you can call moveElement to apply a delta to the
+    position of the element. You can select multiple elements and then move them all in one operation, but you should not
+    move elements between selections (in that case, call endMoveElements and then select them all again). */
+    public startMoveElement(el: IElement) {
+        if (el instanceof GNode) {
+            var node = <GNode>el;
+            var mnt = new MoveNodeToken();
+            mnt.node = node;
+            mnt.originalBoundsCenter = node.boundaryCurve.getCenter();
+            mnt.originalLabelCenter = node.label == null ? null : node.label.bounds.getCenter();
+            this.moveTokens.push(mnt);
+        }
+        else if (el instanceof GLabel) {
+            var label = <GLabel>el;
+            var melt = new MoveEdgeLabelToken();
+            melt.label = label;
+            melt.originalLabelCenter = label.bounds.getCenter();
+            this.moveTokens.push(melt);
+        }
+    }
+
+    /** This function applies a delta to the positions of the element(s) currently selected for moving. */
+    public moveElements(delta: GPoint) {
+        for (var i in this.moveTokens) {
+            var token = this.moveTokens[i];
+            if (token instanceof MoveNodeToken) {
+                var ntoken = <MoveNodeToken>token;
+                var newBoundaryCenter = ntoken.originalBoundsCenter.add(delta);
+                ntoken.node.boundaryCurve.setCenter(newBoundaryCenter);
+                var newLabelCenter = ntoken.originalLabelCenter.add(delta);
+                ntoken.node.label.bounds.setCenter(newLabelCenter);
+            }
+            else if (token instanceof MoveEdgeLabelToken) {
+                var etoken = <MoveEdgeLabelToken>token;
+                var newBoundsCenter = etoken.originalLabelCenter.add(delta);
+                etoken.label.bounds.setCenter(newBoundsCenter);
+            }
+        }
+    }
+
+    /** Build an array of all the edges that were affected by the move. */
+    private getOutdatedEdges():string[] {
+        var affectedEdges: { [id: string]: boolean } = {};
+        for (var t in this.moveTokens) {
+            var token = this.moveTokens[t];
+            if (token instanceof MoveNodeToken) {
+                var ntoken = <MoveNodeToken>token;
+                var nEdges = this.getInEdges(ntoken.node.id).concat(this.getOutEdges(ntoken.node.id)).concat(this.getSelfEdges(ntoken.node.id));
+                for (var edge in nEdges)
+                    affectedEdges[nEdges[edge]] = true;
+            }
+        }
+        var edges = [];
+        for (var e in affectedEdges)
+            edges.push(e);
+        return edges;
+    }
+
+    /** Clear the list of elements that are selected for moving. */
+    public endMoveElements() {
+        var edges = this.getOutdatedEdges();
+        // If any edges were affected, route them.
+        if (edges.length > 0)
+            this.beginEdgeRouting(edges);
+        this.moveTokens = [];
     }
 }

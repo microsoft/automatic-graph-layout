@@ -11,21 +11,21 @@ and replaced with a callback that goes directly to the function that does the jo
 // Load RequireJS.
 importScripts("/Lib/requirejs/require.js");
 
-/** The message that has been stored by the temporary callback. Note that this is a single message. In the general case, I would need to 
-set up a queue, but in the case of MSAGL, a single message is sufficient because GGraph will instantiate a separate web worker for every
-request. */
-var message;
+/** A queue of messages that have been stored by the temporary callback. */
+var messages = [];
 /** The temporary callback. All it does is store the message. */
-var storeMessage = function (e) { message = e; }
+var storeMessage = function (e) { messages.push(e); }
 
 // Start loading the AMD modules, including the "real" web worker file.
 require(['./ggraph', './msaglWorker'], function (G, Worker) {
     // Now that I'm ready, I no longer need to store incoming messages. I'll replace the handler with the real one.
     self.removeEventListener('message', storeMessage)
     self.addEventListener('message', Worker.handleMessage);
-    // If I have a stored message (due to it having arrived while I was still loading the AMD modules), I should process it now.
-    if (message !== undefined)
-        Worker.handleMessage(message);
+    // If I have stored messages (due to them having arrived while I was still loading the AMD modules), I should process then now.
+    // Note that using "for(var i in messages)" does not work due to SharpKit messing with arrays.
+    for (var i = 0; i < messages.length; i++)
+        Worker.handleMessage(messages[i]);
+    messages = null;
 });
 
 // Add the temporary callback.
