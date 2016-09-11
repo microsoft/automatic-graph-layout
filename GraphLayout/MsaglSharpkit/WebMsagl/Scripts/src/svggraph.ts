@@ -41,7 +41,7 @@ class RenderEdgeLabel extends RenderElement {
 
 /** Renderer that targets SVG. */
 class SVGGraph {
-    graph: G.GGraph;
+    protected graph: G.GGraph;
     container: HTMLElement;
     svg: SVGSVGElement;
     grid: boolean = false;
@@ -51,6 +51,21 @@ class SVGGraph {
     constructor(container: HTMLElement, graph?: G.GGraph) {
         this.container = container;
         this.graph = graph === undefined ? null : graph;
+    }
+
+    private edgeRoutingCallback: ((edges: string[]) => void) = null;
+    public getGraph(): G.GGraph { return this.graph; }
+    public setGraph(graph: G.GGraph) {
+        if (this.graph != null && this.edgeRoutingCallback != null)
+            this.graph.edgeRoutingCallbacks.remove(this.edgeRoutingCallback);
+        this.graph = graph;
+        var that = this;
+        this.edgeRoutingCallback = edges => {
+            if (edges != null)
+                for (var e in edges)
+                    that.redrawElement(that.renderEdges[edges[e]]);
+        };
+        this.graph.edgeRoutingCallbacks.add(this.edgeRoutingCallback);
     }
 
     public getSVGString(): string {
@@ -512,12 +527,6 @@ class SVGGraph {
 
     /** Ends the current drag operation, if any. After calling this, further mouse movements will not move any object. */
     private endDrag() {
-        var that = this;
-        this.graph.edgeRoutingCallback = edges => {
-            if (edges != null)
-                for (var e in edges)
-                    that.redrawElement(that.renderEdges[edges[e]]);
-        };
         this.graph.endMoveElements();
         this.dragElement = null;
     };

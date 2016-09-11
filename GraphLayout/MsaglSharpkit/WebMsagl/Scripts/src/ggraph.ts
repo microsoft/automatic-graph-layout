@@ -754,6 +754,23 @@ class MoveEdgeLabelToken extends MoveElementToken {
     public originalLabelCenter: GPoint;
 }
 
+export class CallbackSet<T> {
+    private callbacks: ((par: T) => void)[] = [];
+
+    public add(callback: (par: T) => void) {
+        this.callbacks.push(callback);
+    }
+    public remove(callback: (par: T) => void) {
+        var idx = this.callbacks.indexOf(callback);
+        if (idx >= 0)
+            this.callbacks.splice(idx);
+    }
+    public fire(par?: T) {
+        for (var i = 0; i < this.callbacks.length; i++)
+            this.callbacks[i](par);
+    }
+}
+
 /** A GGraph represents a graph, plus its layout settings, and provides methods to manipulate it. */
 export class GGraph implements IGraph {
     /** Maps node IDs to GNodeInternal instances. */
@@ -1014,7 +1031,7 @@ export class GGraph implements IGraph {
             this.worker.terminate();
             this.worker = null;
         }
-        this.working = false;
+        this.setWorking(false);
     }
 
     private workerCallback(msg: MessageEvent) {
@@ -1048,8 +1065,8 @@ export class GGraph implements IGraph {
                 if (myEdge.arrowHeadAtTarget != null)
                     myEdge.arrowHeadAtTarget = workerEdge.arrowHeadAtTarget;
             }
-            // Invoke the user callback.
-            this.layoutCallback();
+            // Invoke the user callbacks.
+            this.layoutCallbacks.fire();
         }
         else if (data.type == "edgerouting") {
             // Copy all of the curves of the edges, including the label boundaries and the arrowheads.
@@ -1066,10 +1083,10 @@ export class GGraph implements IGraph {
                         myEdge.arrowHeadAtTarget = workerEdge.arrowHeadAtTarget;
                 }
             }
-            // Invoke the user callback.
-            this.edgeRoutingCallback(data.edges);
+            // Invoke the user callbacks.
+            this.edgeRoutingCallbacks.fire(data.edges);
         }
-        this.working = false;
+        this.setWorking(false);
     }
 
     /** Ensures that a layout worker is present and ready. */
@@ -1085,17 +1102,29 @@ export class GGraph implements IGraph {
         }
     }
 
-    /** A callback you can set to be notified when a layout operation is complete. */
-    public layoutCallback: () => void = () => { };
-    /** A callback you can set to be notified when an edge routing operation is complete. The set of routed edges is passed
+    /** Callbacks you can set to be notified when a layout operation is complete. */
+    public layoutCallbacks: CallbackSet<void> = new CallbackSet<void>();
+    /** Callbacks you can set to be notified when an edge routing operation is complete. The set of routed edges is passed
     as a parameter. If it is null, it means that all edges in the graph were routed. Note that edge routing may happen after
     being invoked by the user program, but it may also happen as a consequence of moving a node. */
-    public edgeRoutingCallback: (edges: string[]) => void = edges => { };
+    public edgeRoutingCallbacks: CallbackSet<string[]> = new CallbackSet<string[]>();
+    /** Callbacks you can set to be notified when the engine starts an asynchronous operation. */
+    public workStartedCallbacks: CallbackSet<void> = new CallbackSet<void>();
+    /** Callbacks you can set to be notified when the engine ends an asynchronous operation. */
+    public workStoppedCallbacks: CallbackSet<void> = new CallbackSet<void>();
+
+    private setWorking(working: boolean) {
+        this.working = working;
+        if (working)
+            this.workStartedCallbacks.fire();
+        else
+            this.workStoppedCallbacks.fire();
+    }
 
     /** Starts running layout on the graph. The layout callback will be invoked when the layout operation is done. */
     public beginLayoutGraph(): void {
         this.ensureWorkerReady();
-        this.working = true;
+        this.setWorking(true);
         // Serialize the graph.
         var serialisedGraph = this.getJSON();
         // Send the worker the serialized graph to layout.
@@ -1105,7 +1134,7 @@ export class GGraph implements IGraph {
     /** Starts running edge routing on the graph. The edge routing callback will be invoked when the edge routing operation is done. */
     public beginEdgeRouting(edges?: string[]): void {
         this.ensureWorkerReady();
-        this.working = true;
+        this.setWorking(true);
         // Serialize the graph.
         var serialisedGraph = this.getJSON();
         // Send the worker the serialized graph to layout.
@@ -1152,10 +1181,28 @@ export class GGraph implements IGraph {
                 etoken.label.bounds.setCenter(newBoundsCenter);
             }
         }
+        this.checkRouteEdges();
+    }
+
+    private delayCheckRouteEdges: () => void = null;
+    private checkRouteEdges() {
+        if (this.delayCheckRouteEdges != null)
+            this.workStoppedCallbacks.remove(this.delayCheckRouteEdges);
+        this.delayCheckRouteEdges = null;
+        var edges = this.getOutdatedEdges();
+        if (edges.length > 0) {
+            if (this.working) {
+                var that = this;
+                this.delayCheckRouteEdges = () => { that.checkRouteEdges(); };
+                this.workStoppedCallbacks.add(this.delayCheckRouteEdges);
+            }
+            else
+                this.beginEdgeRouting(edges);
+        }
     }
 
     /** Build an array of all the edges that were affected by the move. */
-    private getOutdatedEdges():string[] {
+    private getOutdatedEdges(): string[] {
         var affectedEdges: { [id: string]: boolean } = {};
         for (var t in this.moveTokens) {
             var token = this.moveTokens[t];

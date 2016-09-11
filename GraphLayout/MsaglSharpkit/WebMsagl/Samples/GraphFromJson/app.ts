@@ -4,19 +4,21 @@ import IDDSVGGraph = require("../../Scripts/src/iddsvggraph");
 
 var graphView = document.getElementById("graphView");
 var graphControl = new IDDSVGGraph(graphView);
+var graph: G.GGraph = null;
 
 function parseJsonClicked() {
     var jsonTextArea = document.getElementById("jsonInput");
     var jsonText = jsonTextArea.textContent;
-    graphControl.graph = G.GGraph.ofJSON(jsonText);
-    graphControl.graph.createNodeBoundariesForSVGInContainer(graphView);
-    graphControl.graph.layoutCallback = () => {
+    graph = G.GGraph.ofJSON(jsonText);
+    graphControl.setGraph(graph);
+    graph.createNodeBoundariesForSVGInContainer(graphView);
+    graph.layoutCallbacks.add(() => {
         var jsonOutputArea = document.getElementById("jsonOutput");
-        var graphText = graphControl.graph.getJSON();
+        var graphText = graph.getJSON();
         jsonOutputArea.textContent = graphText;
         graphControl.drawGraph();
-    };
-    graphControl.graph.beginLayoutGraph();
+    });
+    graph.beginLayoutGraph();
 }
 
 document.getElementById("parseButton").onclick = parseJsonClicked;

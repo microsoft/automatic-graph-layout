@@ -4,6 +4,7 @@ import IDDSVGGraph = require("../../Scripts/src/iddsvggraph");
 
 var graphView = document.getElementById("graphView");
 var graphControl = new IDDSVGGraph(graphView);
+var graph: G.GGraph = null;
 
 var layeredLayoutCheckBox = <HTMLInputElement>document.getElementById("layeredLayoutCheckBox");
 var horizontalLayoutCheckBox = <HTMLInputElement>document.getElementById("horizontalLayoutCheckBox");
@@ -25,32 +26,32 @@ function showWorking(show: boolean) {
 }
 
 function stop() {
-    if (graphControl.graph != null && graphControl.graph.working)
-        graphControl.graph.stopLayoutGraph();
+    if (graph != null && graph.working)
+        graph.stopLayoutGraph();
     showWorking(false);
 }
 
 function copySettingsToGraph() {
-    graphControl.graph.settings.layout = layeredLayoutCheckBox.checked ? G.GSettings.sugiyamaLayout : G.GSettings.mdsLayout;
-    graphControl.graph.settings.transformation = horizontalLayoutCheckBox.checked ? G.GPlaneTransformation.ninetyDegreesTransformation : G.GPlaneTransformation.defaultTransformation;
+    graph.settings.layout = layeredLayoutCheckBox.checked ? G.GSettings.sugiyamaLayout : G.GSettings.mdsLayout;
+    graph.settings.transformation = horizontalLayoutCheckBox.checked ? G.GPlaneTransformation.ninetyDegreesTransformation : G.GPlaneTransformation.defaultTransformation;
     if (aspectRatioTextBox.value != null && aspectRatioTextBox.value != "")
-        graphControl.graph.settings.aspectRatio = parseFloat(aspectRatioTextBox.value);
-    graphControl.graph.settings.routing = edgeRoutingSelect.value;
+        graph.settings.aspectRatio = parseFloat(aspectRatioTextBox.value);
+    graph.settings.routing = edgeRoutingSelect.value;
 }
 
 function layoutClicked() {
     stop();
     copySettingsToGraph();
-    graphControl.graph.createNodeBoundariesForSVGInContainer(graphView);
+    graph.createNodeBoundariesForSVGInContainer(graphView);
     showWorking(true);
-    graphControl.graph.beginLayoutGraph();
+    graph.beginLayoutGraph();
 }
 
 function routeClicked() {
     stop();
     copySettingsToGraph();
     showWorking(true);
-    graphControl.graph.beginEdgeRouting();
+    graph.beginEdgeRouting();
 }
 
 function stopClicked() {
@@ -59,15 +60,12 @@ function stopClicked() {
 
 function loadGraph(json: string) {
     jsonGraph = json;
-    graphControl.graph = G.GGraph.ofJSON(jsonGraph);
-    graphControl.graph.layoutCallback = () => {
+    graph = G.GGraph.ofJSON(jsonGraph);
+    graphControl.setGraph(graph);
+    graph.workStoppedCallbacks.add(() => {
         showWorking(false);
         graphControl.drawGraph();
-    };
-    graphControl.graph.edgeRoutingCallback = () => {
-        showWorking(false);
-        graphControl.drawGraph();
-    };
+    });
     layoutClicked();
 }
 
