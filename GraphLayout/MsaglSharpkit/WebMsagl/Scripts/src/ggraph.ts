@@ -500,7 +500,7 @@ export class GNode implements INode {
         this.label = node.label === undefined ? null : node.label == null ? null : typeof (node.label) == "string" ? new GLabel({ content: node.label }) : new GLabel(node.label);
         this.labelMargin = node.labelMargin === undefined ? 5 : node.labelMargin;
         this.thickness = node.thickness == undefined ? 1 : node.thickness;
-        this.fill = node.fill === undefined ? "" : node.fill;
+        this.fill = node.fill === undefined ? "White" : node.fill;
         this.stroke = node.stroke === undefined ? "Black" : node.stroke;
     }
     /** Type check: returns true if this is actually a cluster. */
