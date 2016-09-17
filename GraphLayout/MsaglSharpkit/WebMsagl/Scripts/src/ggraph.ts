@@ -1185,15 +1185,15 @@ export class GGraph implements IGraph {
     }
 
     private delayCheckRouteEdges: () => void = null;
-    private checkRouteEdges() {
+    private checkRouteEdges(edgeSet?: string[]) {
         if (this.delayCheckRouteEdges != null)
             this.workStoppedCallbacks.remove(this.delayCheckRouteEdges);
         this.delayCheckRouteEdges = null;
-        var edges = this.getOutdatedEdges();
+        var edges: string[] = edgeSet == null ? this.getOutdatedEdges() : edgeSet;
         if (edges.length > 0) {
             if (this.working) {
                 var that = this;
-                this.delayCheckRouteEdges = () => { that.checkRouteEdges(); };
+                this.delayCheckRouteEdges = () => { that.checkRouteEdges(edges); };
                 this.workStoppedCallbacks.add(this.delayCheckRouteEdges);
             }
             else
@@ -1221,10 +1221,7 @@ export class GGraph implements IGraph {
 
     /** Clear the list of elements that are selected for moving. */
     public endMoveElements() {
-        var edges = this.getOutdatedEdges();
-        // If any edges were affected, route them.
-        if (edges.length > 0)
-            this.beginEdgeRouting(edges);
+        this.checkRouteEdges();
         this.moveTokens = [];
     }
 }

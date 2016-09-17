@@ -3,7 +3,7 @@ import SVGGraph = require("../../Scripts/src/svggraph");
 import IDDSVGGraph = require("../../Scripts/src/iddsvggraph");
 
 var graphView = document.getElementById("graphView");
-var graphControl = new SVGGraph(graphView);
+var graphControl = new IDDSVGGraph(graphView);
 var graph: G.GGraph = null;
 
 var statusText = document.getElementById("status");

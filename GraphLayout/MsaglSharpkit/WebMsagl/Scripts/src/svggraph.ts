@@ -406,14 +406,17 @@ class SVGGraph {
         var viewBox: string = "" + offsetX + " " + offsetY + " " + bbox.width + " " + bbox.height;
         this.svg.setAttribute("viewBox", viewBox);
 
+        this.hookUpMouseEvents();
+        this.populateGraph();
+    }
+
+    protected hookUpMouseEvents() {
         var that = this;
         // Note: the SVG element does not have onmouseleave, and onmouseout is useless because it fires on moving to children.
-        this.container.onmousemove = function (e) { return that.onMouseMove(e); };
-        this.container.onmouseleave = function (e) { return that.onMouseOut(e); };
-        this.container.onmousedown = function (e) { return that.onMouseDown(e); };
-        this.container.onmouseup = function (e) { return that.onMouseUp(e); };
-
-        this.populateGraph();
+        this.container.onmousemove = function (e) { that.onMouseMove(e); };
+        this.container.onmouseleave = function (e) { that.onMouseOut(e); };
+        this.container.onmousedown = function (e) { that.onMouseDown(e); };
+        this.container.onmouseup = function (e) { that.onMouseUp(e); };
     }
 
     redrawElement(el: RenderElement) {
@@ -466,20 +469,20 @@ class SVGGraph {
 
     // Mouse event handlers.
 
-    private onMouseMove(e) {
+    protected onMouseMove(e) {
         this.mousePoint = this.getGraphPoint(e);
         this.doDrag();
     };
-    private onMouseOut(e) {
+    protected onMouseOut(e) {
         this.mousePoint = null;
         this.elementUnderMouseCursor = null;
         this.endDrag();
     };
-    private onMouseDown(e) {
+    protected onMouseDown(e) {
         this.mouseDownPoint = new G.GPoint(this.getGraphPoint(e));
         this.beginDrag();
     };
-    private onMouseUp(e) {
+    protected onMouseUp(e) {
         this.endDrag();
     };
     private onNodeMouseOver(n, e) {
