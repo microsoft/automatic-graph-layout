@@ -419,7 +419,7 @@ class SVGGraph {
         this.container.onmouseup = function (e) { that.onMouseUp(e); };
     }
 
-    redrawElement(el: RenderElement) {
+    private redrawElement(el: RenderElement) {
         if (el instanceof RenderNode) {
             var renderNode = <RenderNode>el;
             this.svg.removeChild(renderNode.group);
