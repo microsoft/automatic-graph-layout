@@ -20,7 +20,11 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
 		public Point Point {
             get { return point; }
             set {
+#if SHARPIT
+                point = value.Clone();
+#else
                 point = value;
+#endif
                 if (Polyline != null)
                     Polyline.RequireInit();
             }
@@ -62,7 +66,11 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         /// 
         /// </summary>
         public PolylinePoint(Point p) {
+#if SHARKPIT
+            Point = p.Clone();
+#else
             Point = p;
+#endif
         }
 
         Polyline polyline;

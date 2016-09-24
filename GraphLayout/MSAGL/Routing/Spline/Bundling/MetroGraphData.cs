@@ -277,8 +277,9 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
         int RegisterStation(int i, PolylinePoint pp, bool isRealNode) {
             if (!PointToStations.ContainsKey(pp.Point)) {
-                Station station;
-                PointToStations[pp.Point] = station = new Station(i++, isRealNode, pp.Point);
+                // Filippo Polo: assigning the return value of the assignment operator (i.e. a = b = c) does not work well in Sharpkit.
+                Station station = new Station(i++, isRealNode, pp.Point);
+                PointToStations[pp.Point] = station;
                 Stations.Insert(station);
             }
             else {

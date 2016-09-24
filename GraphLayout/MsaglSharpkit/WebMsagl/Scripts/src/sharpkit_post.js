@@ -509,6 +509,25 @@ Microsoft$Msagl$Core$DataStructures$Set$1.definition.Add = function (set0, set1)
         return Microsoft.Msagl.Core.DataStructures.Set$1.op_Addition(set0, set1);
 }
 
+// .NET stacks are ordered in the opposite way compared to JS stacks. This is irrelevant if you're just using push and pop, but it's important if you're enumerating.
+System$Collections$Generic$Stack$1.definition.Push = function (item) {
+    this._list.unshift(item);
+}
+
+// .NET stacks are ordered in the opposite way compared to JS stacks. This is irrelevant if you're just using push and pop, but it's important if you're enumerating.
+System$Collections$Generic$Stack$1.definition.Pop = function () {
+    if (this._list.length == 0)
+        throw $CreateException(new Error("Cannot pop from stack - stack is empty"), new Error());
+    return this._list.shift();
+}
+
+// .NET stacks are ordered in the opposite way compared to JS stacks. This is irrelevant if you're just using push and pop, but it's important if you're enumerating.
+System$Collections$Generic$Stack$1.definition.Peek = function (){
+    if (this._list.length == 0)
+        throw $CreateException(new Error("Cannot peek in stack - stack is empty"), new Error());
+    return this._list[0];
+}
+
 
 /***********************
 * ADDITIONAL CLR TYPES *
@@ -994,6 +1013,11 @@ Microsoft$Msagl$Core$DataStructures$Set$1.definition.GetHashCode = function () {
     return ret;
 };
 
+// MSAGL attempts an ordering on HullPoint instances at some point.
+Microsoft$Msagl$Core$Geometry$HullPoint.definition.GetHashCode = function () {
+    var ret = this.point.GetHashCode();
+    return ret;
+}
 
 // Invoke SharpKit.
 Compile();

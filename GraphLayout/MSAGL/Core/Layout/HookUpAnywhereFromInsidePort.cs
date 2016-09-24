@@ -44,7 +44,11 @@ namespace Microsoft.Msagl.Core.Layout {
             set { throw new InvalidCastException(); }
         }
 
+#if SHARPKIT
+        internal void SetLocation(Point p) { location = p.Clone(); }
+#else
         internal void SetLocation(Point p) { location = p; }
+#endif
         internal Polyline LoosePolyline { get; set; }
 
         /// <summary>

@@ -287,6 +287,8 @@ class SVGGraph {
     private drawArrow(parent: Element, arrowHead: G.GArrowHead, style: string): void {
         var start = arrowHead.start;
         var end = arrowHead.end;
+        if (start == null || end == null)
+            return;
         var dir = new G.GPoint({ x: start.x - end.x, y: start.y - end.y });
         var offsetX = -dir.y * Math.tan(25 * 0.5 * (Math.PI / 180));
         var offsetY = dir.x * Math.tan(25 * 0.5 * (Math.PI / 180));
@@ -320,14 +322,16 @@ class SVGGraph {
         var that = this;
         g.onclick = function () { that.onEdgeClick(edgeCopy); };
         var curve: G.GCurve = edge.curve;
-        var pathString = this.pathCurve(curve, false);
-        var path = document.createElementNS(SVGGraph.SVGNS, "path");
-        path.setAttribute("d", pathString);
-        var style = "stroke: " + edge.stroke + "; stroke-width: " + edge.thickness + "; fill: none"
-        if (edge.dash != null)
-            style += "; stroke-dasharray: " + edge.dash;
-        path.setAttribute("style", style);
-        g.appendChild(path);
+        if (curve != null) {
+            var pathString = this.pathCurve(curve, false);
+            var path = document.createElementNS(SVGGraph.SVGNS, "path");
+            path.setAttribute("d", pathString);
+            var style = "stroke: " + edge.stroke + "; stroke-width: " + edge.thickness + "; fill: none"
+            if (edge.dash != null)
+                style += "; stroke-dasharray: " + edge.dash;
+            path.setAttribute("style", style);
+            g.appendChild(path);
+        }
         if (edge.arrowHeadAtTarget != null)
             this.drawArrow(g, edge.arrowHeadAtTarget, "stroke: " + edge.stroke + "; stroke-width: " + edge.thickness + "; fill: " + (edge.arrowHeadAtTarget.fill ? edge.stroke : "none"));
         if (edge.arrowHeadAtSource != null)
