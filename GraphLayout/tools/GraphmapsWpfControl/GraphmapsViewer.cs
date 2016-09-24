@@ -88,7 +88,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
         //jyoti controller
         private double pathThicknessController = 0.01 ;
-
+        private int BackGroundEdgeWeight = 1;
 
 
 
@@ -627,14 +627,20 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 TakeScreenShot("C:/tmp/screenshot.png");
             }
             //jyoti added the following controls
-            else if (e.Key == Key.OemPlus)
+            else if (e.Key == Key.L)
             {
                 pathThicknessController += .01;
             }
-            else if (e.Key == Key.OemMinus)
+            else if (e.Key == Key.S)
             {
                 pathThicknessController -= .01;
             }
+            //jyoti added the background node controls
+            else if (e.Key == Key.H)
+            {
+                BackGroundEdgeWeight = Math.Abs(BackGroundEdgeWeight-1);  
+            }
+
             Keyboard.Focus(_graphCanvas);
         }
 
@@ -1392,8 +1398,10 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             //double currentlayer = Math.Max(0, _lgLayoutSettings.TransformFromGraphToScreen()[0, 0] / factor);
             //_layer = (int)currentlayer;
             double currentlayer = Math.Max(0, GetZoomFactorToTheGraph());
-            Console.WriteLine("Raw Layer = " + currentlayer);
-            Console.WriteLine("Layer = " + GetLevelIndexByScale(currentlayer));
+            
+            //jyoti - print current layer
+            //Console.WriteLine("Raw Layer = " + currentlayer);
+            //Console.WriteLine("Layer = " + GetLevelIndexByScale(currentlayer));
             _layer = GetLevelIndexByScale(currentlayer);
             UpdateVisibleRails(railGraph, Math.Log(currentlayer, 2));
 
@@ -1833,6 +1841,11 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
                 rail.Geometry = new LineSegment(A, B);
 
+                /*if (BackGroundEdgeWeight == 0 && !rail.IsHighlighted)
+                {
+                    rail.Weight = BackGroundEdgeWeight;
+                }*/
+
                 /*
                 //this is a garbage rail
                 if (rail.GetTopEdgeInfo() != null && rail.TopRankedEdgeInfoOfTheRail.ZoomLevel > _layer &&
@@ -2268,7 +2281,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             //jyoti
             //this is to make the background nodes smaller
             //vnode.InvalidateNodeDot(nodeDotWidth * 0.8); // make them just a bit smaller
-            vnode.InvalidateNodeDot(6 * Math.Log(nodeDotWidth)); // make them just a bit smaller
+            vnode.InvalidateNodeDot((_lgLayoutSettings.GetMaximalZoomLevel()+2)* Math.Log(nodeDotWidth)); // make them just a bit smaller
             vnode.HideNodeLabel();
             vnode.SetLowTransparency();
         }

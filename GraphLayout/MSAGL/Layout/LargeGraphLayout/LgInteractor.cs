@@ -373,6 +373,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         }
         public void RunForMsaglFiles()
         {
+            _lgLayoutSettings.MaxNumberOfNodesPerTile = 40;
+            //_lgLayoutSettings.MaxNumberOfRailsPerTile = 1000;
+
             Dictionary<Node, int> nodeToId;
 
             var g = TryCompetitionMeshApproach(out nodeToId);
@@ -390,8 +393,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             Console.WriteLine("Total Number of Rails = " + _lgData.Levels[_lgData.Levels.Count-1].RailDictionary.Values.Count);
 
-            _lgLayoutSettings.MaxNumberOfNodesPerTile = 40;
-            //_lgLayoutSettings.MaxNumberOfRailsPerTile = 1000;
+
 
             //g = graphs[0];
             //RenderGraph( g,   nodeToId);

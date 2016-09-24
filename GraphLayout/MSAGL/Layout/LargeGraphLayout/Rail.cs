@@ -23,6 +23,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         public Point initialB;
         public Point Left;
         public Point Right;
+        public int Weight = 1;
        // public List<int> unnecessaryTransfer = new List<int>();
  #if DEBUG
         static int railCount;
