@@ -528,6 +528,19 @@ var System$ArgumentNullException = {
 };
 JsTypes.push(System$ArgumentNullException);
 
+var System$InvalidOperationException = {
+    fullname: "System.InvalidOperationException",
+    baseTypeName: "System.Exception",
+    assemblyName: "System",
+    Kind: "Class",
+    definition: {
+        ctor$$String: function (msg) {
+            System.Exception.ctor$$String.call(this, msg);
+        }
+    }
+};
+JsTypes.push(System$InvalidOperationException);
+
 // Implementation of Grouping.
 var System$Linq$Grouping$2 = {
     fullname: "System.Linq.Grouping$2",
@@ -968,20 +981,17 @@ if (typeof Microsoft$Msagl$Core$DataStructures$Set$1.definition.Contains !== "un
 Microsoft$Msagl$Core$DataStructures$Set$1.definition.Contains = Microsoft$Msagl$Core$DataStructures$Set$1.definition.Contains$$T;
 
 // Sometimes MSAGL uses a Set as the key to something. So it needs to have a proper hash.
-Microsoft$Msagl$Core$DataStructures$Set$1.definition.UpdateHashKey = function () {
+Microsoft$Msagl$Core$DataStructures$Set$1.definition.GetHashCode = function () {
     var ret = 0;
-    var $it915 = this.GetEnumerator();
-    while ($it915.MoveNext()) {
-        var t = $it915.get_Current();
-        var code = null;
-        if (t.GetHashCode !== undefined)
-            code = t.GetHashCode();
-        else if (t._hashKey !== undefined)
-            code = t._hashKey;
-        ret |= code;
+    var $it1066 = this.GetEnumerator();
+    while ($it1066.MoveNext()) {
+        var t = $it1066.get_Current();
+        if (t.GetHashCode == null)
+            ret |= t._hashKey;
+        else
+            ret |= t.GetHashCode();
     }
-
-    this._hashKey = ret.toString();
+    return ret;
 };
 
 

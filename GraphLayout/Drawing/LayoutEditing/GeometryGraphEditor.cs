@@ -535,7 +535,11 @@ namespace Microsoft.Msagl.Drawing {
             }
             var p = new Point(-Graph.Margins, Graph.Margins);
 
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
+            Rectangle bounds = Graph.BoundingBox.Clone();
+#else
             Rectangle bounds = Graph.BoundingBox;
+#endif
             GraphBoundingBoxGetsExtended |= bounds.AddWithCheck(bBox.LeftTop + p);
             GraphBoundingBoxGetsExtended |= bounds.AddWithCheck(bBox.RightBottom - p);
             Graph.BoundingBox = bounds;

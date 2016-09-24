@@ -254,7 +254,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         /// </summary>
         /// <returns></returns>
         static Point Rectilinearise(Point a, Point b) {
-#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
             b = b.Clone();
 #endif
             if (a.X != b.X && a.Y != b.Y) {

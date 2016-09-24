@@ -479,8 +479,12 @@ namespace Microsoft.Msagl.Routing {
         internal static double FindMaxPaddingForTightPolyline(RectangleNode<Polyline> hierarchy, Polyline polyline, double desiredPadding ) {
             var dist = desiredPadding;
             var polygon = new Polygon(polyline);
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
+            var boundingBox = polyline.BoundingBox.Clone();
+#else
             var boundingBox = polyline.BoundingBox;
-            boundingBox.Pad(2.0*desiredPadding);
+#endif
+            boundingBox.Pad(2.0 * desiredPadding);
             foreach (var poly in hierarchy.GetNodeItemsIntersectingRectangle(boundingBox).Where(p=>p!=polyline)) {
                 var separation = Polygon.Distance(polygon, new Polygon(poly));
                 dist = Math.Min(dist, separation/LooseDistCoefficient);

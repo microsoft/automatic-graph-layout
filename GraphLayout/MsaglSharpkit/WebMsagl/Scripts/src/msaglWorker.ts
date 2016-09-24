@@ -327,8 +327,18 @@ class LayoutWorker {
                 var msaglEdge = msagl.edgeMap[edgeIDs[i]].medge;
                 edges.push(msaglEdge);
             }
+
         // Run the layout operation. This can take some time.
-        Microsoft.Msagl.Miscellaneous.LayoutHelpers.RouteAndLabelEdges(msagl.graph, msagl.settings, edges);
+        //Microsoft.Msagl.Miscellaneous.LayoutHelpers.RouteAndLabelEdges(msagl.graph, msagl.settings, edges);
+
+        var router = new Microsoft.Msagl.Routing.SplineRouter.ctor$$GeometryGraph$$Double$$Double$$Double$$BundlingSettings(msagl.graph, msagl.settings.get_EdgeRoutingSettings().get_Padding(),
+            msagl.settings.get_EdgeRoutingSettings().get_PolylinePadding(),
+            msagl.settings.get_EdgeRoutingSettings().get_ConeAngle(),
+            msagl.settings.get_EdgeRoutingSettings().get_BundlingSettings());
+        router.Run();
+        var elp = new Microsoft.Msagl.Core.Layout.EdgeLabelPlacement.ctor$$GeometryGraph(msagl.graph);
+        elp.Run();
+
         // Convert the MSAGL-shaped graph to a GGraph.
         this.finalGraph = this.getGGraph(msagl);
     }

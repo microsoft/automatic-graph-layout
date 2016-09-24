@@ -35,7 +35,11 @@ namespace Microsoft.Msagl.Miscellaneous.LayoutEditing {
         internal IEnumerable<Node> FixedNodes { get { return fixedNodes; } }
 
         Rectangle GetPaddedBoxOfNode(Node n) {
-            var ret= n.BoundaryCurve.BoundingBox;
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
+            var ret = n.BoundaryCurve.BoundingBox.Clone();
+#else
+            var ret = n.BoundaryCurve.BoundingBox;
+#endif
             ret.Pad(separation/2);
             return ret;
         }
