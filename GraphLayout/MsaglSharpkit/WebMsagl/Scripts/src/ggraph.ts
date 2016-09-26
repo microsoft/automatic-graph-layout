@@ -42,9 +42,25 @@ export class GPoint implements IPoint {
     mul(op: number): GPoint {
         return new GPoint({ x: this.x * op, y: this.y * op });
     }
+    /** Vector multiplication. */
+    vmul(other: IPoint): number {
+        return this.x * other.x + this.y * other.y;
+    }
+    /** Distance squared. */
     dist2(other: IPoint): number {
         var d = this.sub(other);
         return d.x * d.x + d.y * d.y;
+    }
+    closestParameter(start: GPoint, end: GPoint): number {
+        var bc = end.sub(start);
+        var ba = this.sub(start);
+        var c1 = bc.vmul(ba);
+        if (c1 <= 0.1)
+            return 0;
+        var c2 = bc.vmul(bc);
+        if (c2 <= c1 + 0.1)
+            return 1;
+        return c1 / c2;
     }
 }
 
@@ -1147,8 +1163,10 @@ export class GGraph implements IGraph {
                 var gs: GGraph = GGraph.ofJSON(routeEdgesMsg.graph);
                 var workerEdge = gs.edges[i];
                 if (routeEdgesMsg.edges == null || routeEdgesMsg.edges.length == 0 || routeEdgesMsg.edges.indexOf(workerEdge.id) >= 0) {
-                    var myEdge = this.getEdge(workerEdge.id);
+                    var edgeInternal = this.edgesMap[workerEdge.id];
+                    var myEdge = edgeInternal.edge;
                     myEdge.curve = workerEdge.curve;
+                    edgeInternal.polyline = null;
                     if (myEdge.label != null)
                         myEdge.label.bounds = workerEdge.label.bounds;
                     if (myEdge.arrowHeadAtSource != null)
@@ -1233,7 +1251,7 @@ export class GGraph implements IGraph {
         this.worker.postMessage(msg);
     }
 
-    public beginRebuildEdge(edge: string, points: GPoint[]): void {
+    public beginRebuildEdge(edge: string): void {
         this.ensureWorkerReady();
         this.setWorking(true);
         var serialisedGraph = this.getJSON();
@@ -1351,7 +1369,7 @@ export class GGraph implements IGraph {
             this.workStoppedCallbacks.add(this.delayCheckRebuildEdge);
         }
         else
-            this.beginRebuildEdge(edge, this.edgesMap[edge].polyline);
+            this.beginRebuildEdge(edge);
     }
 
     /** Build an array of all the edges that were affected by the move. */
@@ -1396,5 +1414,37 @@ export class GGraph implements IGraph {
             edgeInternal.polyline = points;
         }
         return edgeInternal.polyline;
+    }
+
+    public addPolylineCorner(edgeID: string, point: GPoint) {
+        var edgeInternal: GEdgeInternal = this.edgesMap[edgeID];
+        var iclosest = 0;
+        var dclosest = edgeInternal.polyline[0].dist2(point);
+        for (var i = 0; i < edgeInternal.polyline.length; i++) {
+            var d = edgeInternal.polyline[i].dist2(point);
+            if (d < dclosest) {
+                iclosest = i;
+                dclosest = d;
+            }
+        }
+        if (iclosest == edgeInternal.polyline.length - 1)
+            iclosest--;
+        else if (iclosest > 0) {
+            var par = point.closestParameter(edgeInternal.polyline[iclosest - 1], edgeInternal.polyline[iclosest]);
+            if (par > 0.1 && par < 0.9)
+                iclosest--;
+        }
+        edgeInternal.polyline.splice(iclosest + 1, 0, point);
+        this.beginRebuildEdge(edgeID);
+    }
+
+    public delPolylineCorner(edgeID: string, point: GPoint) {
+        var edgeInternal: GEdgeInternal = this.edgesMap[edgeID];
+        for (var i = 0; i < edgeInternal.polyline.length; i++)
+            if (edgeInternal.polyline[i].equals(point)) {
+                edgeInternal.polyline.splice(i,1);
+                break;
+            }
+        this.beginRebuildEdge(edgeID);
     }
 }

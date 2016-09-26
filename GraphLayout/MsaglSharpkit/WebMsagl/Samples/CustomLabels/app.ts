@@ -3,6 +3,7 @@ import IDDSVGGraph = require("../../Scripts/src/iddsvggraph");
 
 var graphView = document.getElementById("graphView");
 var graphControl = new IDDSVGGraph(graphView);
+graphControl.allowEditing = false;
 var graph: G.GGraph = null;
 var radiusControl = <HTMLInputElement>document.getElementById("radius");
 var pointsControl = <HTMLInputElement>document.getElementById("points");

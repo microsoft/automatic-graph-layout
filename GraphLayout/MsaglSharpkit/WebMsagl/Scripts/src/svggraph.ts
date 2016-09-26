@@ -45,6 +45,7 @@ class SVGGraph {
     container: HTMLElement;
     svg: SVGSVGElement;
     grid: boolean = false;
+    public allowEditing = true;
 
     private static SVGNS: string = "http://www.w3.org/2000/svg";
 
@@ -421,6 +422,7 @@ class SVGGraph {
         this.container.onmouseleave = function (e) { that.onMouseOut(e); };
         this.container.onmousedown = function (e) { that.onMouseDown(e); };
         this.container.onmouseup = function (e) { that.onMouseUp(e); };
+        this.container.ondblclick = function (e) { that.onMouseDblClick(e); };
     }
 
     private containsGroup(g: SVGGElement): boolean {
@@ -498,12 +500,16 @@ class SVGGraph {
     };
     protected onMouseDown(e: MouseEvent) {
         this.mouseDownPoint = new G.GPoint(this.getGraphPoint(e));
-        this.beginDrag();
+        if (this.allowEditing)
+            this.beginDrag();
     };
     protected onMouseUp(e: MouseEvent) {
         this.endDrag();
-        this.beginExitEdgeEditMode();
     };
+    protected onMouseDblClick(e: MouseEvent) {
+        if (this.edgeEditEdge != null)
+            this.edgeCornerEvent(this.getGraphPoint(e));
+    }
     private onNodeMouseOver(n: RenderNode, e: MouseEvent) {
         this.elementUnderMouseCursor = n;
     };
@@ -512,7 +518,8 @@ class SVGGraph {
     };
     private onEdgeMouseOver(ed: RenderEdge, e: MouseEvent) {
         this.elementUnderMouseCursor = ed;
-        this.enterEdgeEditMode(ed);
+        if (this.allowEditing)
+            this.enterEdgeEditMode(ed);
     };
     private onEdgeMouseOut(ed: RenderEdge, e: MouseEvent) {
         this.beginExitEdgeEditMode();
@@ -595,6 +602,7 @@ class SVGGraph {
 
     private enterEdgeEditMode(ed: RenderEdge) {
         if (this.edgeEditEdge == ed) {
+            console.log("timeout cleared");
             clearTimeout(this.edgeEditModeTimeout);
             this.edgeEditModeTimeout = 0;
         }
@@ -617,7 +625,22 @@ class SVGGraph {
     private static ExitEdgeModeTimeout = 2000;
     private beginExitEdgeEditMode() {
         var that = this;
+        console.log("timeout set");
         this.edgeEditModeTimeout = setTimeout(() => that.exitEdgeEditMode(), SVGGraph.ExitEdgeModeTimeout);
+    }
+
+    private edgeCornerEvent(point: G.GPoint) {
+        var polyline = this.graph.getPolyline(this.edgeEditEdge.edge.id);
+        for (var i = 0; i < polyline.length; i++) {
+            if (point.dist2(polyline[i]) <= G.GGraph.EdgeEditCircleRadius * G.GGraph.EdgeEditCircleRadius) {
+                if (i > 0 && i < polyline.length - 1)
+                    this.graph.delPolylineCorner(this.edgeEditEdge.edge.id, polyline[i]);
+                return;
+            }
+        }
+        this.graph.addPolylineCorner(this.edgeEditEdge.edge.id, point);
+        clearTimeout(this.edgeEditModeTimeout);
+        this.edgeEditModeTimeout = 0;
     }
 }
 
