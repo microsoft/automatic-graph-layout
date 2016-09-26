@@ -84,6 +84,7 @@
     <TypeScriptCompile Include="Scripts\src\ggraph.ts" />
     <TypeScriptCompile Include="Scripts\src\iddgraph.ts" />
     <TypeScriptCompile Include="Scripts\src\iddsvggraph.ts" />
+    <TypeScriptCompile Include="Scripts\src\messages.ts" />
     <TypeScriptCompile Include="Scripts\src\msaglWorker.ts" />
     <TypeScriptCompile Include="Scripts\src\svggraph.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />

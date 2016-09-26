@@ -423,23 +423,37 @@ class SVGGraph {
         this.container.onmouseup = function (e) { that.onMouseUp(e); };
     }
 
+    private containsGroup(g: SVGGElement): boolean {
+        if (this.svg.contains != null)
+            return this.svg.contains(g);
+        for (var i = 0; i < this.svg.childNodes.length; i++)
+            if (this.svg.childNodes[i] == g)
+                return true;
+        return false;
+    }
+
     private redrawElement(el: RenderElement) {
         if (el instanceof RenderNode) {
             var renderNode = <RenderNode>el;
-            this.svg.removeChild(renderNode.group);
+            if (this.containsGroup(renderNode.group))
+                this.svg.removeChild(renderNode.group);
             this.drawNode(this.svg, renderNode.node);
         }
         else if (el instanceof RenderEdge) {
             var renderEdge = <RenderEdge>el;
-            this.svg.removeChild(renderEdge.group);
+            if (this.containsGroup(renderEdge.group))
+                this.svg.removeChild(renderEdge.group);
             var renderLabel = this.renderEdgeLabels[renderEdge.edge.id];
             if (renderLabel != null)
                 this.svg.removeChild(renderLabel.group);
             this.drawEdge(this.svg, renderEdge.edge);
+            if (this.edgeEditEdge == renderEdge)
+                this.drawPolylineCircles();
         }
         else if (el instanceof RenderEdgeLabel) {
             var renderEdgeLabel = <RenderEdgeLabel>el;
-            this.svg.removeChild(renderEdgeLabel.group);
+            if (this.containsGroup(renderEdgeLabel.group))
+                this.svg.removeChild(renderEdgeLabel.group);
             this.drawLabel(this.svg, renderEdgeLabel.edge.label, renderEdgeLabel.edge);
         }
     }
@@ -462,7 +476,7 @@ class SVGGraph {
     };
 
     /** Converts a point from a MouseEvent into graph space coordinates. */
-    public getGraphPoint(e) {
+    public getGraphPoint(e: MouseEvent) {
         var clientPoint = this.svg.createSVGPoint();
         clientPoint.x = e.clientX;
         clientPoint.y = e.clientY;
@@ -473,38 +487,41 @@ class SVGGraph {
 
     // Mouse event handlers.
 
-    protected onMouseMove(e) {
+    protected onMouseMove(e: MouseEvent) {
         this.mousePoint = this.getGraphPoint(e);
         this.doDrag();
     };
-    protected onMouseOut(e) {
+    protected onMouseOut(e: MouseEvent) {
         this.mousePoint = null;
         this.elementUnderMouseCursor = null;
         this.endDrag();
     };
-    protected onMouseDown(e) {
+    protected onMouseDown(e: MouseEvent) {
         this.mouseDownPoint = new G.GPoint(this.getGraphPoint(e));
         this.beginDrag();
     };
-    protected onMouseUp(e) {
+    protected onMouseUp(e: MouseEvent) {
         this.endDrag();
+        this.beginExitEdgeEditMode();
     };
-    private onNodeMouseOver(n, e) {
+    private onNodeMouseOver(n: RenderNode, e: MouseEvent) {
         this.elementUnderMouseCursor = n;
     };
-    private onNodeMouseOut(n, e) {
+    private onNodeMouseOut(n: RenderNode, e: MouseEvent) {
         this.elementUnderMouseCursor = null;
     };
-    private onEdgeMouseOver(ed, e) {
+    private onEdgeMouseOver(ed: RenderEdge, e: MouseEvent) {
         this.elementUnderMouseCursor = ed;
+        this.enterEdgeEditMode(ed);
     };
-    private onEdgeMouseOut(ed, e) {
+    private onEdgeMouseOut(ed: RenderEdge, e: MouseEvent) {
+        this.beginExitEdgeEditMode();
         this.elementUnderMouseCursor = null;
     };
-    private onEdgeLabelMouseOver(l, e) {
+    private onEdgeLabelMouseOver(l: RenderEdgeLabel, e: MouseEvent) {
         this.elementUnderMouseCursor = l;
     };
-    private onEdgeLabelMouseOut(l, e) {
+    private onEdgeLabelMouseOut(l: RenderEdgeLabel, e: MouseEvent) {
         this.elementUnderMouseCursor = null;
     };
 
@@ -519,7 +536,7 @@ class SVGGraph {
         if (this.elementUnderMouseCursor == null)
             return;
         var geometryElement = this.elementUnderMouseCursor.getGeometryElement();
-        this.graph.startMoveElement(geometryElement);
+        this.graph.startMoveElement(geometryElement, this.mouseDownPoint);
         this.dragElement = this.elementUnderMouseCursor;
     };
 
@@ -537,6 +554,71 @@ class SVGGraph {
         this.graph.endMoveElements();
         this.dragElement = null;
     };
+
+    private edgeEditModeTimeout: number;
+    private edgeEditEdge: RenderEdge;
+
+    private drawPolylineCircles() {
+        if (this.edgeEditEdge == null)
+            return;
+        var group = this.edgeEditEdge.group;
+        var points = this.graph.getPolyline(this.edgeEditEdge.edge.id);
+        var existingCircles = [];
+        for (var i = 0; i < group.childNodes.length; i++)
+            if (group.childNodes[i].nodeName == "circle")
+                existingCircles.push(group.childNodes[i]);
+        for (var i = 0; i < points.length; i++) {
+            var point = points[i];
+            var c = i < existingCircles.length ? existingCircles[i] : <SVGCircleElement>document.createElementNS(SVGGraph.SVGNS, "circle");
+            c.setAttribute("r", G.GGraph.EdgeEditCircleRadius.toString());
+            c.setAttribute("cx", point.x.toString());
+            c.setAttribute("cy", point.y.toString());
+            c.setAttribute("style", "stroke: #5555FF; stroke-width: 1px; fill: white");
+            if (i >= existingCircles.length)
+                group.insertBefore(c, group.childNodes[0]);
+        }
+        for (var i = points.length; i < existingCircles.length; i++)
+            group.removeChild(existingCircles[i]);
+    }
+
+    private clearPolylineCircles() {
+        if (this.edgeEditEdge == null)
+            return;
+        var circles = [];
+        var group = this.edgeEditEdge.group;
+        for (var i = 0; i < group.childNodes.length; i++)
+            if (group.childNodes[i].nodeName == "circle")
+                circles.push(group.childNodes[i]);
+        for (var i = 0; i < circles.length; i++)
+            group.removeChild(circles[i]);
+    }
+
+    private enterEdgeEditMode(ed: RenderEdge) {
+        if (this.edgeEditEdge == ed) {
+            clearTimeout(this.edgeEditModeTimeout);
+            this.edgeEditModeTimeout = 0;
+        }
+        if (this.edgeEditEdge != null && this.edgeEditEdge != ed)
+            return;
+        this.edgeEditEdge = ed;
+        this.drawPolylineCircles();
+    }
+
+    private exitEdgeEditMode() {
+        var ed = this.edgeEditEdge;
+        if (ed == null)
+            return;
+        clearTimeout(this.edgeEditModeTimeout);
+        this.clearPolylineCircles();
+        this.edgeEditModeTimeout = 0;
+        this.edgeEditEdge = null;
+    }
+
+    private static ExitEdgeModeTimeout = 2000;
+    private beginExitEdgeEditMode() {
+        var that = this;
+        this.edgeEditModeTimeout = setTimeout(() => that.exitEdgeEditMode(), SVGGraph.ExitEdgeModeTimeout);
+    }
 }
 
 export = SVGGraph

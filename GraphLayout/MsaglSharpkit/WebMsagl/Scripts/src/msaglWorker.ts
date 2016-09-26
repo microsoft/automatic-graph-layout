@@ -1,4 +1,5 @@
 ﻿import G = require('./ggraph');
+import M = require('./messages');
 importScripts("sharpkit_pre.js");
 importScripts("jsclr.js");
 importScripts("Microsoft.Msagl.js");
@@ -10,6 +11,8 @@ declare var Microsoft;
 declare var Is;
 /** Variable that exists in web workers as a reference to the worker. */
 declare var self;
+
+type SetPolylineResult = { curve: G.GCurve, sourceArrowHeadStart: G.GPoint, sourceArrowHeadEnd: G.GPoint, targetArrowHeadStart: G.GPoint, targetArrowHeadEnd: G.GPoint };
 
 /** This class includes code to convert a GGraph to and from MSAGL shape - or, more accurately, the shape that SharpKit outputs on converting the
 MSAGL data structures. It can use this to run a layout operation (synchronously). */
@@ -311,7 +314,7 @@ class LayoutWorker {
         this.finalGraph = this.getGGraph(msagl);
     }
 
-    runEdgeRouting(edgeIDs: string[]): void {
+    runEdgeRouting(edgeIDs?: string[]): void {
         // Reset the settings to spline if they are Sugiyama splines. Sugiyama splines cannot be used separately from layout.
         if (this.originalGraph.settings.routing == G.GSettings.sugiyamaSplinesRouting)
             this.originalGraph.settings.routing = G.GSettings.splinesRouting;
@@ -342,23 +345,61 @@ class LayoutWorker {
         // Convert the MSAGL-shaped graph to a GGraph.
         this.finalGraph = this.getGGraph(msagl);
     }
+
+    setPolyline(edge: string, points: G.GPoint[]): SetPolylineResult {
+        var msagl = this.getMsagl(this.originalGraph);
+        var medge = msagl.edgeMap[edge].medge;
+        var mpoints = points.map(this.getMsaglPoint);
+        var mpolyline = Microsoft.Msagl.Core.Geometry.SmoothedPolyline.FromPoints(mpoints);
+        var mcurve = mpolyline.CreateCurve();
+        if (!Microsoft.Msagl.Core.Layout.Arrowheads.TrimSplineAndCalculateArrowheads$$Edge$$ICurve$$Boolean$$Boolean(medge, mcurve, true, false))
+            Microsoft.Msagl.Core.Layout.Arrowheads.CreateBigEnoughSpline(medge);
+        mcurve = medge.get_Curve();
+        var curve = this.getGCurve(mcurve);
+        var hasSourceArrowhead = medge.get_EdgeGeometry().get_SourceArrowhead() != null;
+        var hasTargetArrowhead = medge.get_EdgeGeometry().get_TargetArrowhead() != null;
+        var sourceArrowHeadStart = hasSourceArrowhead ? this.getGPoint(mcurve.get_Start()) : null;
+        var sourceArrowHeadEnd = hasSourceArrowhead ? this.getGPoint(medge.get_EdgeGeometry().get_SourceArrowhead().get_TipPosition()) : null;
+        var targetArrowHeadStart = hasTargetArrowhead ? this.getGPoint(mcurve.get_End()) : null;
+        var targetArrowHeadEnd = hasTargetArrowhead ? this.getGPoint(medge.get_EdgeGeometry().get_TargetArrowhead().get_TipPosition()) : null;
+        return { curve: curve, sourceArrowHeadStart: sourceArrowHeadStart, sourceArrowHeadEnd: sourceArrowHeadEnd, targetArrowHeadStart: targetArrowHeadStart, targetArrowHeadEnd: targetArrowHeadEnd };
+    }
 }
 
 /** Handles a web worker message (which is always a JSON string representing a GGraph, for which a layout operation should be performed). */
 export function handleMessage(e): void {
-    var message: { type: string, graph: string, edges?: string[] } = e.data;
-    // Get the GGraph from the message.
+    var message: M.Request = e.data;
     var ggraph = G.GGraph.ofJSON(message.graph);
-    // Instantiate a layout worker for the GGraph.
     var worker = new LayoutWorker(ggraph);
-    // Run the layout operation; this can take some time.
-    if (message.type == "layout")
-        worker.runLayout();
-    else if (message.type == "edgerouting")
-        worker.runEdgeRouting(message.edges);
-    // Get the JSON representation of the post-layout GGraph.
-    var serialisedGraph = worker.finalGraph.getJSON();
-    // Send it back.
-    var answer: { type: string, graph: string, edges?: string[] } = { type: message.type, graph: serialisedGraph, edges: message.edges };
+    var answer: M.Response = null;
+    switch (message.type) {
+        case "RunLayout":
+            {
+                worker.runLayout();
+                answer = { type: "RunLayout", graph: worker.finalGraph.getJSON() };
+                break;
+            }
+        case "RouteEdges":
+            {
+                var edges: string[] = (<M.Req_RouteEdges>message).edges;
+                worker.runEdgeRouting(edges);
+                answer = { type: "RouteEdges", graph: worker.finalGraph.getJSON(), edges: edges };
+                break;
+            }
+        case "SetPolyline":
+            {
+                var edge: string = (<M.Req_SetPolyline>message).edge;
+                var points: G.GPoint[] = JSON.parse((<M.Req_SetPolyline>message).polyline);
+                var result = worker.setPolyline(edge, points);
+                answer = {
+                    type: "SetPolyline", edge: edge, curve: JSON.stringify(result.curve),
+                    sourceArrowHeadStart: result.sourceArrowHeadStart == null ? null : JSON.stringify(result.sourceArrowHeadStart),
+                    sourceArrowHeadEnd: result.sourceArrowHeadEnd == null ? null : JSON.stringify(result.sourceArrowHeadEnd),
+                    targetArrowHeadStart: result.targetArrowHeadStart == null ? null : JSON.stringify(result.targetArrowHeadStart),
+                    targetArrowHeadEnd: result.targetArrowHeadEnd == null ? null : JSON.stringify(result.targetArrowHeadEnd)
+                };
+                break;
+            }
+    }
     self.postMessage(answer);
 }
