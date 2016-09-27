@@ -62,6 +62,11 @@ export class GPoint implements IPoint {
             return 1;
         return c1 / c2;
     }
+    /** If the area is negative then C lies to the right of the line [cornerA, cornerB] or, in other words, the triangle (A, B, C) is oriented clockwise.
+    If it is positive then C lies to the left of the line [A,B], and the triangle (A, B, C) is oriented counter-clockwise. If zero, A, B and C are colinear. */
+    public static signedDoubledTriangleArea(cornerA: GPoint, cornerB: GPoint, cornerC: GPoint): number {
+        return (cornerB.x - cornerA.x) * (cornerC.y - cornerA.y) - (cornerC.x - cornerA.x) * (cornerB.y - cornerA.y);
+    }
 }
 
 /** An IRect describes a rectangular region in 2D space. */
@@ -1396,23 +1401,35 @@ export class GGraph implements IGraph {
         this.moveTokens = [];
     }
 
+    private static ColinearityEpsilon: number = 50.00;
+    private removeColinearVertices(polyline: GPoint[]) {
+        for (var i = 1; i < polyline.length - 2; i++) {
+            var a = GPoint.signedDoubledTriangleArea(polyline[i - 1], polyline[i], polyline[i + 1]);
+            if (a >= -GGraph.ColinearityEpsilon && a <= GGraph.ColinearityEpsilon)
+                polyline.splice(i--, 1);
+        }
+    }
+
+    private makePolyline(edge: GEdge): GPoint[] {
+        var points = [];
+        var source = this.nodesMap[edge.source];
+        points.push(source.node.boundaryCurve.getCenter());
+        if (edge.curve.type == "SegmentedCurve") {
+            var scurve = <GSegmentedCurve>edge.curve;
+            points.push(scurve.getStart());
+            for (var i = 0; i < scurve.segments.length; i++)
+                points.push(scurve.segments[i].getEnd());
+        }
+        var target = this.nodesMap[edge.target];
+        points.push(target.node.boundaryCurve.getCenter());
+        this.removeColinearVertices(points);
+        return points;
+    }
+
     public getPolyline(edgeID: string): GPoint[] {
         var edgeInternal: GEdgeInternal = this.edgesMap[edgeID];
-        if (edgeInternal.polyline == null) {
-            var edge = edgeInternal.edge;
-            var points = [];
-            var source = this.nodesMap[edge.source];
-            points.push(source.node.boundaryCurve.getCenter());
-            if (edge.curve.type == "SegmentedCurve") {
-                var scurve = <GSegmentedCurve>edge.curve;
-                points.push(scurve.getStart());
-                for (var i = 0; i < scurve.segments.length; i++)
-                    points.push(scurve.segments[i].getEnd());
-            }
-            var target = this.nodesMap[edge.target];
-            points.push(target.node.boundaryCurve.getCenter());
-            edgeInternal.polyline = points;
-        }
+        if (edgeInternal.polyline == null)
+            edgeInternal.polyline = this.makePolyline(edgeInternal.edge);
         return edgeInternal.polyline;
     }
 
@@ -1442,7 +1459,7 @@ export class GGraph implements IGraph {
         var edgeInternal: GEdgeInternal = this.edgesMap[edgeID];
         for (var i = 0; i < edgeInternal.polyline.length; i++)
             if (edgeInternal.polyline[i].equals(point)) {
-                edgeInternal.polyline.splice(i,1);
+                edgeInternal.polyline.splice(i, 1);
                 break;
             }
         this.beginRebuildEdge(edgeID);
