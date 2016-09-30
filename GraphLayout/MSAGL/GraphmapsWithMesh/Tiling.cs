@@ -1116,10 +1116,11 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
         }
 
-        public void MsaglDetour(Dictionary<int, Node> idToNode)
+        public void MsaglDetour(Dictionary<int, Node> idToNode, bool omit)
         {
             NumOfnodesBeforeDetour = NumOfnodes;
 
+            if(omit) return;
             for (int index = 0; index < N; index++)
             {
                 Vertex w = VList[index];

@@ -8,6 +8,47 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
     class LocalModifications
     {
 
+        public static void MsaglShortcutShortEdges(Tiling g, Dictionary<int, Node> idToNodes,
+            LgLayoutSettings _lgLayoutSettings)
+        {
+            int unit = (int)_lgLayoutSettings.NodeSeparation ;
+
+            for (int index = g.N; index < g.NumOfnodesBeforeDetour; index++)
+            {
+                Vertex w = g.VList[index];
+
+                int numNeighbors = 0;
+
+                for (int k = 0; k < g.DegList[w.Id]; k++)
+                {                    
+                    Vertex neighbor = g.VList[g.EList[w.Id, k].NodeId];
+                    if(neighbor.Id<g.N) continue;
+                    //else check whether the edge is short
+                    double l = g.GetEucledianDist(w.Id,neighbor.Id);
+                    if (l < unit)
+                    {
+                        //shortcut this edge
+                        List<int> ModificationList = new List<int>();
+                        for (int j = 0; j < g.DegList[neighbor.Id]; j++)
+                        {
+                            int id = g.EList[neighbor.Id, j].NodeId;
+                            if (id != w.Id) 
+                            {                                
+                                ModificationList.Add(id);
+                            }                            
+                        }
+                        foreach (var x in ModificationList)
+                        {
+                            g.AddEdge(w.Id,x);
+                            g.RemoveEdge(w.Id, x);
+                        }
+                        
+                        g.RemoveEdge(w.Id, neighbor.Id);    
+                    }
+                }
+            }
+        }
+
         public static void MsaglMoveToMedian(Tiling g, Dictionary<int, Node> idToNodes, LgLayoutSettings _lgLayoutSettings)
         {
             int[,] listNeighbors = new int[20, 3];

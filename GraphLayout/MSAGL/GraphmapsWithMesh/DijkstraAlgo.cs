@@ -225,7 +225,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
             Vertex currentVertex = vList[source];
             int bestN;
-            double bestD, temp, discourage;
+            double bestD, temp, discourage=0;
             while (true)
             {
                 if (currentVertex == null || currentVertex.Invalid) return;

@@ -597,8 +597,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             stopwatch.Start();
             //Create Detour //less than a minute for 1500 vertices and 5000 edges
-            Console.WriteLine("Computing Detour Around Vertex");
-            g.MsaglDetour(idToNode);
+            //Console.WriteLine("Computing Detour Around Vertex");
+            g.MsaglDetour(idToNode, true); //true or false to control detour around vertices
+            
             g.CreateNodeTreeEdgeTree();
             stopwatch.Stop();
             Console.WriteLine("Detour Creation Time = " + stopwatch.ElapsedMilliseconds);
@@ -646,7 +647,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 PlanarGraphUtilities.RemoveLongEdgesFromThinFaces(g);
                 stopwatch.Stop();
                 Console.WriteLine("Thin Face Removal Time = " + stopwatch.ElapsedMilliseconds);
-
+                
 
                 //Move the points towards median
                 //Console.WriteLine("Moving junctions to minimize ink");
@@ -656,6 +657,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 stopwatch.Stop();
                 Console.WriteLine("Ink Minimization Time = " + stopwatch.ElapsedMilliseconds);
 
+                LocalModifications.MsaglShortcutShortEdges(g, idToNode, _lgLayoutSettings);
+                //g.MsaglRemoveDeg2(idToNode);
             }
 
             return g;
@@ -748,28 +751,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             }
 
             
-        }
-
-        private Dictionary<Node, List<Edge>> BuildAdjacencyListFromEdgeList()
-        {
-            Dictionary<Node, List<Edge>> AdjacencyList = new Dictionary<Node, List<Edge>>();
-            foreach (Node node in _mainGeometryGraph.Nodes)
-            {
-                List<Edge> EdgeList = new List<Edge>();
-                foreach (Edge edge in _mainGeometryGraph.Edges)
-                {
-                    if (edge.Source.ToString().Equals(node.ToString()) || edge.Target.ToString().Equals(node.ToString()))
-                    {
-                        if (_lgData.GeometryNodesToLgNodeInfos[edge.Source].ZoomLevel <=
-                            _lgData.GeometryNodesToLgNodeInfos[node].ZoomLevel &&
-                            _lgData.GeometryNodesToLgNodeInfos[edge.Target].ZoomLevel <=
-                            _lgData.GeometryNodesToLgNodeInfos[node].ZoomLevel)
-                            EdgeList.Add(edge);
-                    }
-                }
-                AdjacencyList.Add(node, EdgeList);
-            }
-            return AdjacencyList;
         }
 
         public void RouteByLayers()//int maxNodesPerTile, int maxSegmentsPerTile, double increaseNodeQuota)
@@ -942,25 +923,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             _mainGeometryGraph.UpdateBoundingBox();
             return maxX;
-        }
-
-        private static void ComputeSpanningRatio(Tiling g)
-        {
-            double spanningratio = 0;
-            double averageratio = 0;
-            for (int i = 0; i < g.N; i++)
-            {
-                for (int j = i + 1; j < g.N; j++)
-                {
-                    DijkstraAlgo dijkstra = new DijkstraAlgo();
-                    dijkstra.MSAGLSelectShortestPath(g.VList, g.EList, g.DegList, i, j, g.NumOfnodes);
-                    double baseDistance = g.GetEucledianDist(i, j);
-                    if (dijkstra.Distance / baseDistance > spanningratio) spanningratio = dijkstra.Distance / baseDistance;
-                    averageratio += dijkstra.Distance / baseDistance;
-                }
-            }
-            Console.WriteLine("Spanning Ratio = " + spanningratio);
-            Console.WriteLine("Average Spanning Ratio = " + (averageratio / (g.N * (g.N + 1) / 2)));
         }
 
         private Tiling ComputeEdgeRoutes(Tiling g, Dictionary<Node, int> nodeId, Dictionary<Node, List<Edge>> AdjacencyList)
