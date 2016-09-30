@@ -346,7 +346,14 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         static void TransferHighlightedRails(LgLevel level, Edge edge, Set<Rail> railsOfEdge) {
             //need to remove those rails later, when putting them off
             foreach (var rail in railsOfEdge)
+            {
+                /*
+                if (rail.A.X <= 4154 && rail.A.X >= 4152)
+                {
+                    Console.WriteLine("NOW I SEE YOU");
+                }*/
                 AddRailToRailTreeOfLowerLevel(rail, level);
+            }
             level._railsOfEdges[edge] = railsOfEdge;
             level.HighlightedRails.InsertRange(railsOfEdge);
         }
@@ -403,7 +410,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             Dictionary<Edge, Boolean> removeEdge = new Dictionary<Edge, Boolean>();
             foreach (Edge e in edgesToPutOff)
             {
-                 int i = Levels.Count - 1;
+                for (int i = _levels.Count - 1; i >= 0; i--)//int i = Levels.Count - 1;
                 {
                     if (_levels[i]._railsOfEdges.ContainsKey(e) == false) continue; //is it a bug?
                     railsOfEdge = _levels[i]._railsOfEdges[e];
@@ -411,7 +418,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                     {
                         if (r.Color == null) continue;
 
-                        if (r.Color.Count > 1)
+                        if (r.Color.Count >= 1)
                             if (!removeEdge.ContainsKey(e)) removeEdge[e] = true;
                         r.Color.Remove(c);
                     }
@@ -490,9 +497,20 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                         else rail.IsHighlighted = false;
                     else
                     {
+                        
                         var railTuple = rail.PointTuple();  
                         var rect = new Rectangle(railTuple.Item1, railTuple.Item2);
-                        level._railTree.Remove(rect, rail);
+                        /*
+                        if (rail.A.X <= 4154 && rail.A.X >= 4152)
+                        {
+                            Console.WriteLine("NOW I SEE YOU = " + level._railTree.Contains(rect, rail));
+                        }*/
+                        if (level._railTree.Contains(rect, rail) == false)
+                        {                            
+                            rect = new Rectangle(rail.A, rail.B);
+                            level._railTree.Remove(rect, rail);
+                        }
+                        else level._railTree.Remove(rect, rail);
                     }
                         
                 }

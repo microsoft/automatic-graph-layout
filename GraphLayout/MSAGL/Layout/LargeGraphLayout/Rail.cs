@@ -60,7 +60,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             set { _isUsedOnPreviousLevel = value; }
         }
 
-        internal int ZoomLevel;
+        public int ZoomLevel;
         public List<SolidColorBrush> Color;
 #if DEBUG
         Rail() {

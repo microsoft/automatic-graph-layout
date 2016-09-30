@@ -236,6 +236,10 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 var rail = clickCounter.ClickedObject as Rail;
                 if (rail != null)
                 {
+                    Console.WriteLine("rail's zoomlevel = " + rail.ZoomLevel);                    
+                    Console.WriteLine("rail's A" + rail.A);
+                    Console.WriteLine("rail's B" + rail.B);
+                    return;
                     if (clickCounter.UpCount == clickCounter.DownCount && clickCounter.UpCount == 2)
                         HandleDoubleClickForRail(rail);
                     else if (clickCounter.UpCount == clickCounter.DownCount && clickCounter.UpCount == 1)
@@ -2016,7 +2020,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 if (!oGraph.Rails.Contains(rail))
                     railsToRemove.Add(rail);
             }
-
+            Console.WriteLine("Removing " + railsToRemove.Count + " rails ");
             RemoveRustyRails(railsToRemove);
         }
 
