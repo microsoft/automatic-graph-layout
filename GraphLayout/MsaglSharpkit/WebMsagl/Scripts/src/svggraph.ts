@@ -580,7 +580,7 @@ class SVGGraph {
             c.setAttribute("r", G.GGraph.EdgeEditCircleRadius.toString());
             c.setAttribute("cx", point.x.toString());
             c.setAttribute("cy", point.y.toString());
-            c.setAttribute("style", "stroke: #5555FF; stroke-width: 1px; fill: white");
+            c.setAttribute("style", "stroke: #5555FF; stroke-width: 1px; fill: transparent");
             if (i >= existingCircles.length)
                 group.insertBefore(c, group.childNodes[0]);
         }

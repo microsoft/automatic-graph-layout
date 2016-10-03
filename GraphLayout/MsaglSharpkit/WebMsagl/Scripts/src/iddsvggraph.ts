@@ -185,13 +185,14 @@ class IDDSVGGraph extends SVGGraph {
         super.hookUpMouseEvents();
         var that = this;
         this.container.onmousedown = function (e) {
-            if (that.getObjectUnderMouseCursor() != null)
+            if (that.allowEditing && that.getObjectUnderMouseCursor() != null)
                 that.disableIDDMouseHandling();
             that.onMouseDown(e);
         };
         this.container.onmouseup = function (e) {
             that.onMouseUp(e);
-            that.restoreIDDMouseHandling();
+            if (that.allowEditing)
+                that.restoreIDDMouseHandling();
         }
     }
 }
