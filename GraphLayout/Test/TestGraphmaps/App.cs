@@ -852,7 +852,7 @@ namespace TestGraphmaps {
                         n.Attr.XRadius = n.Attr.YRadius = 3;
 
                 if (_argsParser.OptionIsUsed(RunRemoveOverlapsOption)) {
-                    OverlapRemoval.RemoveOverlaps(graph.GeometryGraph.Nodes.ToArray(),
+                    GTreeOverlapRemoval.RemoveOverlaps(graph.GeometryGraph.Nodes.ToArray(),
                         graph.LayoutAlgorithmSettings.NodeSeparation);
                 }
             }
@@ -991,7 +991,7 @@ namespace TestGraphmaps {
                         ProximityOverlapRemoval.RemoveOverlaps(compGraph, gwgraph.LayoutAlgorithmSettings.NodeSeparation);
                         break;
                     case OverlapRemovalMethod.MinimalSpanningTree:
-                        OverlapRemoval.RemoveOverlaps(compGraph.Nodes.ToArray(),
+                        GTreeOverlapRemoval.RemoveOverlaps(compGraph.Nodes.ToArray(),
                             gwgraph.LayoutAlgorithmSettings.NodeSeparation);
                         break;
                     default:

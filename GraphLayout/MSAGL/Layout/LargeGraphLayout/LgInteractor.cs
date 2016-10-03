@@ -309,7 +309,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             List<int> approxLayerCounts = GetApproximateLayerCounts(componentNodes);
             Size[] sizes = GetApproxSizesForOverlapRemoval(approxLayerCounts, _lgLayoutSettings.NodeSeparation*3,
                 componentNodes);
-            OverlapRemoval.RemoveOverlapsForLayers(componentNodes, sizes);
+            GTreeOverlapRemoval.RemoveOverlapsForLayers(componentNodes, sizes);
         }
 
         Size[] GetApproxSizesForOverlapRemoval(List<int> approxLayerCounts, double w, Node[] componentNodes) {

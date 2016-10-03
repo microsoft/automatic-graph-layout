@@ -37,6 +37,16 @@ namespace ArgsParser {
         public void AddOptionWithAfterStringWithHelp(string s, string helpString) {
             allowedOptionWithAfterString[s]=helpString;
         }
+        public bool GetDoubleOptionValue(string s, out double v) {
+            string svalue = GetValueOfOptionWithAfterString(s);
+            if (svalue == null) { v = 0; return false; }
+            bool ret = double.TryParse(svalue, out v);
+            if (!ret) {
+                Console.WriteLine("for option '{0}' cannot parse value of '{1}'", s, GetValueOfOptionWithAfterString(s));
+                return false;
+            }
+            return true;
+        }
 
         public bool GetIntOptionValue(string s, out int v)
         {

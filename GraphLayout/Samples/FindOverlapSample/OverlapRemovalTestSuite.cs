@@ -1,14 +1,15 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.IO;
 using System.Linq.Expressions;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Msagl.Core;
-using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval;
 using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTree;
@@ -20,6 +21,11 @@ using Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation;
 using Edge = Microsoft.Msagl.Core.Layout.Edge;
 using Timer = Microsoft.Msagl.DebugHelpers.Timer;
 using Dot2Graph;
+using Microsoft.Msagl.Core.Geometry.Curves;
+using Microsoft.Msagl.GraphViewerGdi;
+using Color = Microsoft.Msagl.Drawing.Color;
+using Node = Microsoft.Msagl.Drawing.Node;
+using Point = Microsoft.Msagl.Core.Geometry.Point;
 
 namespace OverlapGraphExperiments
 {
@@ -43,6 +49,7 @@ namespace OverlapGraphExperiments
         private List<Tuple<string, OverlapRemovalSettings>> overlapMethods;
         private Tuple<String,Action<GeometryGraph>>[] layoutMethods;
         private static string subFolderName;
+        public Dictionary<string, ErrorCouple> _errorDict = new Dictionary<string, ErrorCouple>();
 
         /// <summary>
         /// </summary>
@@ -54,55 +61,147 @@ namespace OverlapGraphExperiments
 
 
         private void TestOverlapRemovalOnGraph(string graphName, Graph parentGraph,
-            HashSet<Tuple<int, int>> proximityEdges, HashSet<Tuple<int, int, int>> proximityTriangles, Tuple<String, Action<GeometryGraph>> layoutMethod, int layoutPos, Tuple<string, OverlapRemovalSettings> overlapMethod, int overlapMethodPos) {
+            HashSet<Tuple<int, int>> proximityEdges, HashSet<Tuple<int, int, int>> proximityTriangles,
+            Tuple<String, Action<GeometryGraph>> layoutMethod, int layoutPos,
+            Tuple<string, OverlapRemovalSettings> overlapMethod, int overlapMethodPos) {
 //            Graph parentGraph = Helper.CopyGraph(parentGraphOriginal);
             var geomGraphOld = Helper.CopyGraph(parentGraph.GeometryGraph);
             var geomGraph = parentGraph.GeometryGraph;
+            graphName = Path.GetFileNameWithoutExtension(graphName);
 //            GeometryGraph graph = Helper.CopyGraph(geomGraph);
             List<Tuple<String, double>> statistics = new List<Tuple<string, double>>();
 
             String layoutMethodName = layoutMethod.Item1;
             String overlapMethodName = overlapMethod.Item1;
             var overlapSettings = overlapMethod.Item2;
-            
+
             IOverlapRemoval overlapRemover = GetOverlapRemover(overlapSettings, geomGraph);
-            
-            
+
             overlapRemover.RemoveOverlaps();
-            
+
             RouteGraphEdges(parentGraph);
 
             MakeEdgesTransparent(parentGraph);
-            
-            var statIterations = Tuple.Create("Iterations", (double)overlapRemover.GetLastRunIterations());
 
-            var statEdgeLength = Statistics.Statistics.EdgeLengthDeviation(geomGraphOld, geomGraph, proximityEdges);
-            var statProcrustes =
-                Statistics.Statistics.ProcrustesStatistics(geomGraphOld.Nodes.Select(v => v.Center).ToList(),
-                                                                  geomGraph.Nodes.Select(v => v.Center).ToList());
-            var statTriangleOrient = Statistics.Statistics.TriangleOrientation(geomGraphOld, geomGraph, proximityTriangles);
-            var statArea = Statistics.Statistics.Area(geomGraph);
-
-//            statistics.Add(Tuple.Create());
+            List<Tuple<string, double>> kClosestNeighborsError = new List<Tuple<string, double>>();
+            var statIterations = RunStats(proximityEdges, proximityTriangles, overlapRemover, geomGraphOld, geomGraph,
+                kClosestNeighborsError);
+            foreach (var t in kClosestNeighborsError)
+                statistics.Add(t);
             statistics.Add(statIterations);
-            statistics.Add(statEdgeLength);
-            statistics.Add(statProcrustes);
-            statistics.Add(statArea);
-            statistics.Add(statTriangleOrient);
 
-            String nameAddon = "-" + layoutPos.ToString() + "_" + overlapMethodPos + "-" + layoutMethodName + "_" +
+            String nameAddon = "-" + layoutPos + "_" + overlapMethodPos + "-" + layoutMethodName + "_" +
                                overlapMethodName;
 
             parentGraph.GeometryGraph.UpdateBoundingBox();
-            
-            SvgGraphWriter.Write(parentGraph, graphName + nameAddon + ".svg");
+            DumpProximityCdtToSvg("cdt_" + graphName + nameAddon + ".svg", parentGraph, proximityEdges);
+
+
+            SvgGraphWriter.WriteAllExceptEdgesInBlack(parentGraph, graphName + nameAddon + ".svg");
+
             WriteHeader(statistics);
-            String line = graphName + "," + geomGraph.Nodes.Count + "," + geomGraph.Edges.Count +","+layoutMethodName+","+overlapMethodName;
+            String line = graphName + "," + geomGraph.Nodes.Count + "," + geomGraph.Edges.Count + "," + layoutMethodName +
+                          "," + overlapMethodName;
+
+            double closestNeighErr = 0;
             for (int i = 0; i < statistics.Count; i++) {
                 Tuple<string, double> stat = statistics[i];
                 line += "," + stat.Item2;
+                if (stat.Item1.StartsWith("f"))
+                    closestNeighErr += stat.Item2;
             }
+            ErrorCouple ec;
+            if (!_errorDict.TryGetValue(graphName, out ec)) {
+                ec = new ErrorCouple();
+                _errorDict[graphName] = ec;
+            }
+            if (overlapMethodName.Contains("PRISM"))
+                ec.prismError = closestNeighErr;
+            else
+                ec.gtreeError = closestNeighErr;
+
             WriteLine(line);
+        }
+
+        private static Tuple<string, double> RunStats(HashSet<Tuple<int, int>> proximityEdges, HashSet<Tuple<int, int, int>> proximityTriangles, IOverlapRemoval overlapRemover,
+            GeometryGraph geomGraphOld, GeometryGraph geomGraph, List<Tuple<string, double>> sharedFamily) {
+            var statIterations = Tuple.Create("Iterations", (double) overlapRemover.GetLastRunIterations());
+            /*
+            rotationAngleMean = Statistics.Statistics.RotationAngleMean(geomGraphOld, geomGraph, proximityEdges);
+            statProcrustes = Statistics.Statistics.ProcrustesStatistics(geomGraphOld.Nodes.Select(v => v.Center).ToList(),
+                geomGraph.Nodes.Select(v => v.Center).ToList());
+            statTriangleOrient = Statistics.Statistics.TriangleOrientation(geomGraphOld, geomGraph,
+                proximityTriangles);
+            statArea = Statistics.Statistics.Area(geomGraph);
+            distortionOfTriangles = Statistics.Statistics.TrianglePropertyError(geomGraphOld, geomGraph, proximityTriangles);*/
+            for (int k = 8; k <= 12; k++)
+                sharedFamily.Add(Statistics.Statistics.SharedFamily(geomGraphOld, geomGraph, k));
+            return statIterations;
+        }
+
+        private void DumpGraphNodesAsTxt(GeometryGraph geomGraph, string filename) {
+            using (var stream = new StreamWriter(filename+".txt", true)) {
+                foreach (var n in geomGraph.Nodes) {
+                    DumpNodeToStream(n, stream);
+                }
+            }
+        }
+
+        private void DumpNodeToStream(Microsoft.Msagl.Core.Layout.Node node, StreamWriter stream) {
+            stream.WriteLine("x={0}, y={1}, width={2}, height={3}",node.Center.X, node.Center.Y, node.Width, node.Height);
+        }
+
+        private static void DumpScatterPlotOfDelaunayFacesAreaChange(string graphName, HashSet<Tuple<int, int, int>> proximityTriangles,
+            GeometryGraph geomGraphOld, GeometryGraph geomGraph, string nameAddon) {
+            Graph scatterPlot = new Graph();
+            for (int i = 0; i < proximityTriangles.Count; i++)
+                scatterPlot.AddNode(i.ToString());
+
+            scatterPlot.CreateGeometryGraph();
+            int k = 0;
+            foreach (var triangle in proximityTriangles) {
+                Point a = geomGraphOld.Nodes[triangle.Item1].Center;
+                Point b = geomGraphOld.Nodes[triangle.Item2].Center;
+                Point c = geomGraphOld.Nodes[triangle.Item3].Center;
+
+                Point d = geomGraph.Nodes[triangle.Item1].Center;
+                Point e = geomGraph.Nodes[triangle.Item2].Center;
+                Point f = geomGraph.Nodes[triangle.Item3].Center;
+
+                double signOld = Point.SignedDoubledTriangleArea(a, b, c);
+                double signNew = Point.SignedDoubledTriangleArea(d, e, f);
+                var node = scatterPlot.FindNode(k.ToString());
+                k++;
+                node.GeometryNode.BoundaryCurve = CurveFactory.CreateCircle(1, new Point(signOld, signNew));
+                if (signNew < 0)
+                    node.Attr.FillColor = node.Attr.Color = Color.Red;
+            }
+
+            scatterPlot.GeometryGraph.UpdateBoundingBox();
+            double w = scatterPlot.GeometryGraph.BoundingBox.Width;
+            double h = scatterPlot.GeometryGraph.BoundingBox.Height;
+            PlaneTransformation p = new PlaneTransformation(
+                200/w, 0, 0,
+                0, 200/h, 0);
+            scatterPlot.GeometryGraph.Transform(p);
+            scatterPlot.GeometryGraph.UpdateBoundingBox();
+            SvgGraphWriter.Write(scatterPlot, "cdt_area_change_" + graphName + nameAddon + ".svg");
+        }
+
+        private void DumpProximityCdtToSvg(string svgFileName, Graph graph, HashSet<Tuple<int, int>> proximityEdges) {
+            return; 
+            SvgGraphWriter writer=new SvgGraphWriter(File.Create(svgFileName), graph);
+            writer.TransformGraphByFlippingY();
+            writer.WriteOpening();
+            foreach (var t in proximityEdges) {
+                writer.WriteLine(GetIthPoint(t.Item1, graph), GetIthPoint(t.Item2, graph));
+            }
+            writer.TransformGraphByFlippingY();
+            writer.Close();
+        }
+
+        private Point GetIthPoint(int i, Graph graph) {
+            return graph.GeometryGraph.Nodes[i].Center;
         }
 
         private void MakeEdgesTransparent(Graph parentGraph)
@@ -112,7 +211,7 @@ namespace OverlapGraphExperiments
         }
 
         private IOverlapRemoval GetOverlapRemover(OverlapRemovalSettings settings, GeometryGraph geomGraph) {
-            if (settings.Method == OverlapRemovalMethod.MinimalSpanningTree) return new OverlapRemoval(settings, geomGraph.Nodes.ToArray());
+            if (settings.Method == OverlapRemovalMethod.MinimalSpanningTree) return new GTreeOverlapRemoval(settings, geomGraph.Nodes.ToArray());
             else if (settings.Method==OverlapRemovalMethod.Prism) return new ProximityOverlapRemoval(settings, geomGraph);
             return null;
         }
@@ -127,28 +226,58 @@ namespace OverlapGraphExperiments
             proximityEdges = GetProximityEdges(cdt);
         }
 
-        static Graph LoadGraphFile(String fileName)
+        static Graph LoadGraphFile(String fileName, bool runLayout)
         {
             int line, column;
             string msg;
             Graph gwgraph = Parser.Parse(fileName, out line, out column, out msg);
+            if (gwgraph == null) {
+                MessageBox.Show(msg + String.Format(" line {0} column {1}", line, column));
+                return null;
+            }
+            if (runLayout) {
+                if (gwgraph.GeometryGraph == null) {
+                    gwgraph.CreateGeometryGraph();
+                    InitNodeBoundaries(gwgraph);
+                }
+                PivotMdsFullStress(gwgraph.GeometryGraph);
+            }
+
             gwgraph.GeometryGraph.Margins = gwgraph.Width / 50;
             gwgraph.GeometryGraph.UpdateBoundingBox();
-            if (gwgraph != null)
-            {
-                return gwgraph;
-            }
-            else
-                MessageBox.Show(msg + String.Format(" line {0} column {1}", line, column));
-            return null;
+            return gwgraph;
         }
+
+        private static void InitNodeBoundaries(Graph gwgraph) {
+            foreach (var node in gwgraph.Nodes) {
+                InitNodeBoundary(node);
+            }
+        }
+
+        private static void InitNodeBoundary(Node node) {
+
+            double width = 0;
+            double height = 0;
+            if (node.Label != null) {
+                var font = new Font(node.Label.FontName, (float)node.Label.FontSize);
+                StringMeasure.MeasureWithFont(node.LabelText, font, out width, out height);
+              }
+            if (width <= 0)
+                StringMeasure.MeasureWithFont("a", new Font("New Courer", 10), out width, out height);
+
+            node.GeometryNode.BoundaryCurve = CurveFactory.CreateEllipse(width/2, height/2, new Point());
+        }
+
+//        private static List<double> _sharedFamilyForPrism=new List<double>();
+//        static List<double> _sharedFamilyForGtree=new List<double>();
         /// <summary>
         /// 
         /// </summary>
         /// <param name="graphFilename"></param>
-        public void RunOverlapRemoval(String graphFilename) {
+        /// <param name="runLayout"></param>
+        public void RunOverlapRemoval(string graphFilename, bool runLayout) {
             String graphName = Path.GetFileNameWithoutExtension(graphFilename);
-            Graph graph = LoadGraphFile(graphFilename);
+            Graph graph = LoadGraphFile(graphFilename, runLayout);
             if (graph == null) {
                 Console.WriteLine("Failed to load drawing graph: {0}", graphName);
                 return;
@@ -163,6 +292,7 @@ namespace OverlapGraphExperiments
             for (int i = 0; i < layoutMethods.Count(); i++)
             {
                 var layoutMethod = layoutMethods[i];
+              
                 layoutMethod.Item2.Invoke(graph.GeometryGraph); //do initial layout
                 //randomize cooincident points
                 Point[] nodePositions = graph.GeometryGraph.Nodes.Select(v => v.Center).ToArray();
@@ -172,18 +302,18 @@ namespace OverlapGraphExperiments
                 //                                 .ToArray());
 
                 RandomizeNodes(graph, nodePositions);
-                RouteGraphEdges(graph);
-                SvgGraphWriter.Write(graph, graphName + "-" + i.ToString() + "-" + layoutMethod.Item1 + ".svg");
+                SvgGraphWriter.WriteAllExceptEdges(graph,
+                    Path.GetFileNameWithoutExtension(graphName) + "-" + i.ToString() + "-" + layoutMethod.Item1 + ".svg");
                 
                 HashSet<Tuple<int, int, int>> proximityTriangles;
                 HashSet<Tuple<int, int>> proximityEdges;
                 GetProximityRelations(graph.GeometryGraph, out proximityEdges, out proximityTriangles);
-
-                for (int j = 0; j < overlapMethods.Count; j++)
-                {
+                DumpProximityCdtToSvg("cdt_" + graphName + "-" + i.ToString() + "-" + layoutMethod.Item1 + ".svg",graph, proximityEdges);
+                for (int j = 0; j < overlapMethods.Count; j++) {
                     if (graph.NodeCount == 0) continue;
                     var overlapMethod = overlapMethods[j];
-                    TestOverlapRemovalOnGraph(graphName, graph, proximityEdges, proximityTriangles, layoutMethod, i, overlapMethod, j);
+                    TestOverlapRemovalOnGraph(graphName, graph, proximityEdges, proximityTriangles, layoutMethod, i,
+                        overlapMethod, j);
                     SetOldPositions(nodePositions, graph);
                 }
                 SetOldPositions(initPositions, graph);
@@ -252,7 +382,7 @@ namespace OverlapGraphExperiments
             var statCpuTime = Tuple.Create("CPUTime", cpuTimeSpan.TotalSeconds);
             var statIterations = Tuple.Create("Iterations", (double)prism.LastRunIterations);
 
-            var statEdgeLength = Statistics.Statistics.EdgeLengthDeviation(graphOriginal, graphCopy, proximityEdges);
+            var statEdgeLength = Statistics.Statistics.RotationAngleMean(graphOriginal, graphCopy, proximityEdges);
             var statProcrustes =
                 Statistics.Statistics.ProcrustesStatistics(graphOriginal.Nodes.Select(v => v.Center).ToList(),
                                                                   graphCopy.Nodes.Select(v => v.Center).ToList());
@@ -329,11 +459,11 @@ namespace OverlapGraphExperiments
 
             string dataFolder = Path.GetFileName(Path.GetDirectoryName(graphsFolder));
             string dateTime = DateTime.Now.ToString("-yyyy.MM.dd-HH_mm");
-            
+
             //Set the current directory.
             subFolderName = "TestSuite2-";
-            Directory.CreateDirectory(subFolderName + dataFolder+dateTime);
-            Directory.SetCurrentDirectory(subFolderName+dataFolder+dateTime);
+            Directory.CreateDirectory(subFolderName + dataFolder + dateTime);
+            Directory.SetCurrentDirectory(subFolderName + dataFolder + dateTime);
             int numberCores = 1;
             if (parallelTest) numberCores = Environment.ProcessorCount;
 
@@ -343,14 +473,24 @@ namespace OverlapGraphExperiments
             testSuite.layoutMethods = CollectionInitialLayout(runLayout);
 
 
-          string[] filePaths = Directory.GetFiles(graphsFolder, "*.dot");
+            string[] filePaths = Directory.GetFiles(graphsFolder, "*.dot");
             
+            Console.WriteLine(@"total graphs  = {0} ", filePaths.Count());
             Parallel.ForEach(
                 filePaths,
-                new ParallelOptions { MaxDegreeOfParallelism = numberCores },
-                testSuite.RunOverlapRemoval
+                new ParallelOptions {MaxDegreeOfParallelism = numberCores},
+                graphFilename => testSuite.RunOverlapRemoval(graphFilename, runLayout)
                 );
 
+            int prismWins = 0;
+            int gtreeWins = 0;
+            foreach (var t in testSuite._errorDict) {
+                if (t.Value.prismError < t.Value.gtreeError)
+                    prismWins++;
+                else if (t.Value.prismError > t.Value.gtreeError)
+                    gtreeWins++;
+            }
+            Console.WriteLine(@"total graphs {2} prism wins {0} gtree wins {1}", prismWins, gtreeWins, filePaths.Length);
             testSuite.Finished();
         }
 
@@ -359,6 +499,8 @@ namespace OverlapGraphExperiments
             MdsLayoutSettings mSettings=new MdsLayoutSettings();
             mSettings.IterationsWithMajorization = 0;
             mSettings.RemoveOverlaps = false;
+            mSettings.AdjustScale = false;
+            mSettings.ScaleX = mSettings.ScaleY = 2;
             return mSettings;
         }
 
@@ -396,16 +538,15 @@ namespace OverlapGraphExperiments
         /// </summary>
         /// <returns></returns>
         public static Tuple<String,Action<GeometryGraph>>[] CollectionInitialLayout(bool runLayout) {
-            if (runLayout)
+//            if (runLayout)
+//                return new Tuple<String, Action<GeometryGraph>>[] {
+////                new Tuple<String, Action<GeometryGraph>>("PivotMDS",PivotMDS),
+//                new Tuple<String, Action<GeometryGraph>>("PivotMDS_Stress",PivotMdsFullStress)
+//   //             new Tuple<String, Action<GeometryGraph>>("SFDP",SFDP)
+//            };
+//            else
                 return new Tuple<String, Action<GeometryGraph>>[] {
-//                new Tuple<String, Action<GeometryGraph>>("PivotMDS",PivotMDS),
-                new Tuple<String, Action<GeometryGraph>>("PivotMDS+Stress",PivotMdsFullStress),
-                new Tuple<String, Action<GeometryGraph>>("SFDP",SFDP)
-            };
-            else
-                return new Tuple<String, Action<GeometryGraph>>[] {
-//            
-                new Tuple<String, Action<GeometryGraph>>("ident", a=> { })
+                new Tuple<String, Action<GeometryGraph>>("ident", geometryGraph => {geometryGraph.Edges.Clear(); })
             };
         }
 
@@ -480,5 +621,10 @@ namespace OverlapGraphExperiments
                 resultWriter.WriteLine(line);
             }
         }
+    }
+
+    internal class ErrorCouple {
+        public double prismError;
+        public double gtreeError;
     }
 }
