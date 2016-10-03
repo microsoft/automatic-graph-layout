@@ -45,6 +45,9 @@
     <Reference Include="SharpKit.jQuery" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\MSAGL\Core\Layout\ProximityOverlapRemoval\MST\GTreeOverlapRemoval.cs">
+      <Link>GTreeOverlapRemoval.cs</Link>
+    </Compile>
     <Compile Include="ExtensionsForSharpKit.cs" />
     <Compile Include="GlobalSharpKit.cs" />
     <Compile Include="..\..\msagl\Core\AlgorithmBase.cs">
@@ -352,9 +355,6 @@
     </Compile>
     <Compile Include="..\..\msagl\Layout\Layered\RecoveryLayeredLayoutEngine.cs">
       <Link>RecoveryLayeredLayoutEngine.cs</Link>
-    </Compile>
-    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\MST\OverlapRemoval.cs">
-      <Link>OverlapRemoval.cs</Link>
     </Compile>
     <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\OverlapRemovalMethod.cs">
       <Link>OverlapRemovalMethod.cs</Link>
