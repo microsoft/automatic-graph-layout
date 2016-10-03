@@ -1149,9 +1149,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                                 EventResetMode.AutoReset);
 
         PlaneTransformation transformation;
-
-        const double ScrollMaxF = ScrollMax;
-
+        
         /// <summary>
         /// Whether asynchronous layouting is enabled. Defaults to false.
         /// </summary>

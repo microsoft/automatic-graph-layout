@@ -3,7 +3,7 @@ A set of tools for graph layout and viewing
 
 The simplest way to start with MSAGL in C# is to open GraphLayout.sln in Visual Studio 2013, and have a look at Samples there.
 
-MSAGL is a .NET tool for graph layout and viewing. It was developed in Microsoft by Lev Nachmanson, Sergey Pupyrev, Tim Dwyer, Ted Hart, and Roman Prutkin. MSAGL is available as open source at https://github.com/Microsoft/automatic-graph-layout.git.
+MSAGL is a .NET tool for graph layout and viewing. It was developed in Microsoft by Lev Nachmanson, Sergey Pupyrev, Tim Dwyer, Ted Hart, and Roman Prutkin.
 
 ## The Distribution Content and Important Features
 The package contains the following:
@@ -23,7 +23,7 @@ Some important features of the viewer are:
 The code snippet demonstrates the basic usage of the viewer. It uses the C# language.
 
 ##The Viewer sample
-![Drawing of the graph from the sampleDrawing of the graph from the sample](http://research.microsoft.com/en-us/projects/msagl/abc.jpg)
+![Drawing of the graph from the sampleDrawing of the graph from the sample](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/msagl-abc.jpg)
 
 *Drawing of the graph from the sampleDrawing of the graph from the sample*
 
@@ -62,7 +62,7 @@ class ViewerSample {
 ```
 
 [More code
-samples…](http://research.microsoft.com/en-us/projects/msagl/codesamples.aspx)
+samples can be found here…](https://www.microsoft.com/en-us/research/project/microsoft-automatic-graph-layout/#code-samples)
 
 #GraphMaps
 This functionality allows viewing a large graph in the
@@ -77,10 +77,11 @@ regenerated. GraphMaps ideas, design, and the mathematics are described in a
 [paper](http://arxiv.org/pdf/1506.06745v1.pdf).
 
 #Layouts Created by MSAGL
-![](http://research.microsoft.com/en-us/projects/msagl/195f1b23116b4f049b6e5dc815d96c89.png)
-![](http://research.microsoft.com/en-us/projects/msagl/e7c8e896bfd942f7876c394c5250a584.jpg)
-![](http://research.microsoft.com/en-us/projects/msagl/c34826a5e3af4cecbd8165fabc947b36.jpg)
-![](http://research.microsoft.com/en-us/projects/msagl/44a7b11774a54cab92a3f75a9501601b.png)
+![](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/msagl-195f1b23116b4f049b6e5dc815d96c89.png)
+![](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/msagl-195f1b23116b4f049b6e5dc815d96c89.png)
+![](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/msagl-c34826a5e3af4cecbd8165fabc947b36.jpg)
+![](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/msagl-44a7b11774a54cab92a3f75a9501601b.png)
 
 
 
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.

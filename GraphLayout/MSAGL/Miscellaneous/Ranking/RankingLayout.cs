@@ -51,7 +51,7 @@ namespace Microsoft.Msagl.Prototype.Ranking {
                 index++;
             }
 
-            OverlapRemoval.RemoveOverlaps(graph.Nodes.ToArray(), settings.NodeSeparation);
+            GTreeOverlapRemoval.RemoveOverlaps(graph.Nodes.ToArray(), settings.NodeSeparation);
         }
 
         /// <summary>

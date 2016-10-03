@@ -391,7 +391,7 @@ namespace LocationLabeling {
             NodeSeparation = 2* Math.Max(NodeSeparation, (from label in labels select 2 * Math.Max(label.Width, label.Height)).Max());
             foreach (var node in this.labels)
                 g.Nodes.Add(node);
-            Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTree.OverlapRemoval.RemoveOverlaps(g.Nodes.ToArray(), NodeSeparation);
+            Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTree.GTreeOverlapRemoval.RemoveOverlaps(g.Nodes.ToArray(), NodeSeparation);
             //restore the parent for label nodes
             foreach (var node in this.labels)
                 node.GeometryParent = this.graph;

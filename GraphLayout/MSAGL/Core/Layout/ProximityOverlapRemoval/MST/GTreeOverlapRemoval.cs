@@ -14,7 +14,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
     /// <summary>
     /// Overlap Removal using Minimum Spanning Tree on the delaunay triangulation. The edge weight corresponds to the amount of overlap between two nodes.
     /// </summary>
-    public class OverlapRemoval : IOverlapRemoval {
+    public class GTreeOverlapRemoval : IOverlapRemoval {
         OverlapRemovalSettings _settings;
         readonly Size[] _sizes;
         bool _overlapForLayers;
@@ -26,12 +26,12 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
         /// </summary>
         /// <param name="settings"></param>
         /// <param name="nodes">the array of nodes to remover overlaps on</param>
-        public OverlapRemoval(OverlapRemovalSettings settings, Node[]  nodes) {
+        public GTreeOverlapRemoval(OverlapRemovalSettings settings, Node[]  nodes) {
             _settings = settings;
             _nodes = nodes;
         }
 
-        OverlapRemoval(OverlapRemovalSettings settings, Node[] nodes, Size[] sizes) {
+        GTreeOverlapRemoval(OverlapRemovalSettings settings, Node[] nodes, Size[] sizes) {
             _overlapForLayers = true;
             _settings = settings;
             _sizes = sizes;
@@ -48,7 +48,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
                 RandomizeAllPointsOnStart = true,
                 NodeSeparation = nodeSeparation
             };
-            var mst = new OverlapRemoval(settings, nodes);
+            var mst = new GTreeOverlapRemoval(settings, nodes);
             mst.RemoveOverlaps();
         }
 
@@ -549,7 +549,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
             {
                 RandomizeAllPointsOnStart = true,
             };
-            var mst = new OverlapRemoval(settings, nodes, sizesOnLayers);
+            var mst = new GTreeOverlapRemoval(settings, nodes, sizesOnLayers);
             mst.RemoveOverlaps();
         }
     }

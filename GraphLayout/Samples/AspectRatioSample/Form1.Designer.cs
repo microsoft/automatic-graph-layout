@@ -70,7 +70,6 @@
             this.viewer.ToolBarIsVisible = true;
             this.viewer.WindowZoomButtonPressed = false;
             this.viewer.ZoomF = 1;
-            this.viewer.ZoomFraction = 0.5;
             this.viewer.ZoomWindowThreshold = 0.05;
             this.viewer.Load += new System.EventHandler(this.gViewer1_Load);
             // 

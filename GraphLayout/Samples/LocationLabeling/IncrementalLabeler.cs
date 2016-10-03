@@ -378,7 +378,7 @@ namespace LocationLabeling {
             foreach (var node in this.liveLabels.Concat(fixedLabels))
                 g.Nodes.Add(node);
 
-            Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTree.OverlapRemoval.RemoveOverlaps(g.Nodes.ToArray(), NodeSeparation);
+            Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTree.GTreeOverlapRemoval.RemoveOverlaps(g.Nodes.ToArray(), NodeSeparation);
 
         }
 

@@ -268,10 +268,7 @@ namespace TestForGdi {
                                 else if (s.StartsWith("-f")) {
                                     listFileNames.Add(GetFileSpec(args, ref iarg));
                                     showForm = false;
-                                } else if (s.StartsWith("-p")) {
-                                    dotFileSpecs.Add(GetFileSpec(args, ref iarg));
-                                    showForm = false;
-                                } else if ((s == "-noshow") || (s == "-quiet")) {
+                                }  else if ((s == "-noshow") || (s == "-quiet")) {
                                     show = false;
                                 } else if (s == "-verbose") {
                                     Verbose = true;
@@ -284,7 +281,10 @@ namespace TestForGdi {
                                     phylo = true;
                                 } else if (s == testSaveOption)
                                     testSave = true;
-                                else Console.WriteLine("unknown option " + s);
+                                else if (s.StartsWith("-p")) {
+                                    dotFileSpecs.Add(GetFileSpec(args, ref iarg));
+                                    showForm = false;
+                                } else Console.WriteLine("unknown option " + s);
                                 break;
                         }
                     }
@@ -1600,28 +1600,27 @@ namespace TestForGdi {
 
         static void TestPhylo() {
             var f = new Form2(false);
-
             var tree = new PhyloTree();
-            var edge = (PhyloEdge) tree.AddEdge("a", "b");
+            var edge = (PhyloEdge)tree.AddEdge("a", "b");
             edge.Length = 1.0;
-            edge = (PhyloEdge) tree.AddEdge("a", "c");
+            edge = (PhyloEdge)tree.AddEdge("a", "c");
             edge.Length = 1.0000001;
-            edge = (PhyloEdge) tree.AddEdge("c", "d");
+            edge = (PhyloEdge)tree.AddEdge("c", "d");
             edge.Length = 2;
-            edge = (PhyloEdge) tree.AddEdge("c", "e");
+            edge = (PhyloEdge)tree.AddEdge("c", "e");
             edge.Length = 3;
-            edge = (PhyloEdge) tree.AddEdge("b", "f");
+            edge = (PhyloEdge)tree.AddEdge("b", "f");
             edge.Length = 3.5;
-            edge = (PhyloEdge) tree.AddEdge("f", "l");
+            edge = (PhyloEdge)tree.AddEdge("f", "l");
             edge.Length = 3.5;
-
-            edge = (PhyloEdge) tree.AddEdge("b", "g");
+            
+            edge = (PhyloEdge)tree.AddEdge("b", "g");
             edge.Length = 4;
             tree.FindNode("a").Label.Text = "";
             tree.FindNode("b").Label.Text = "";
             tree.FindNode("c").Label.Text = "";
             tree.FindNode("d").Label.Text = "";
-
+            
             f.GViewer.Graph = tree;
             f.ShowDialog();
         }
