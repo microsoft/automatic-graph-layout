@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MsaglDrawingSharpkit</RootNamespace>
-    <AssemblyName>MsaglDrawingSharpkit</AssemblyName>
+    <AssemblyName>Microsoft.Msagl.Drawing</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>

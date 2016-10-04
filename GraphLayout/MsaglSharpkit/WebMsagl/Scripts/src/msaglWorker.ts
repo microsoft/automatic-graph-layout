@@ -1,4 +1,5 @@
 ﻿import G = require('./ggraph');
+import M = require('./messages');
 importScripts("sharpkit_pre.js");
 importScripts("jsclr.js");
 importScripts("Microsoft.Msagl.js");
@@ -11,6 +12,8 @@ declare var Is;
 /** Variable that exists in web workers as a reference to the worker. */
 declare var self;
 
+type SetPolylineResult = { curve: G.GCurve, sourceArrowHeadStart: G.GPoint, sourceArrowHeadEnd: G.GPoint, targetArrowHeadStart: G.GPoint, targetArrowHeadEnd: G.GPoint };
+
 /** This class includes code to convert a GGraph to and from MSAGL shape - or, more accurately, the shape that SharpKit outputs on converting the
 MSAGL data structures. It can use this to run a layout operation (synchronously). */
 class LayoutWorker {
@@ -22,6 +25,7 @@ class LayoutWorker {
         return new Microsoft.Msagl.Core.Geometry.Rectangle.ctor$$Double$$Double$$Point(grect.x, grect.y, this.getMsaglPoint({ x: grect.width, y: grect.height }));
     }
 
+    /** Converts a GCurve to a MSAGL curve (depending on the type of curve). */
     private getMsaglCurve(gcurve: G.GCurve): any {
         if (gcurve == null)
             return null;
@@ -63,6 +67,8 @@ class LayoutWorker {
                 groundedrect.radiusY);
         }
         else if (gcurve.type == "SegmentedCurve") {
+            // In the case of a SegmentedCurve, I actually need to convert each of the sub-curves, and then build a MSAGL
+            // object out of them.
             var gsegcurve = <G.GSegmentedCurve>gcurve;
             var curves = [];
             for (var i = 0; i < gsegcurve.segments.length; i++)
@@ -123,9 +129,10 @@ class LayoutWorker {
         edgeMap[gedge.id] = { medge: edge, gedge: gedge };
     }
 
-    private getMsagl(ggraph: G.GGraph): any {
-        var nodeMap = new Object(); // id -> { mnode: msagl node, gnode: ggraph node }
-        var edgeMap = new Object(); // id -> { medge: msagl edge, mnode: ggraph edge }
+    /** Converts a GGraph to a MSAGL geometry graph. The GGraph is stored inside the MSAGL graph, so that it can be retrieved later. */
+    private getMsagl(ggraph: G.GGraph): { graph: any, settings: any, nodeMap: { [id: string]: { mnode: any, gnode: G.GNode } }, edgeMap: { [id: string]: { medge: any, gedge: G.GEdge } }, source: G.GGraph } {
+        var nodeMap: { [id: string]: { mnode: any, gnode: G.GNode } } = {};
+        var edgeMap: { [id: string]: { medge: any, gedge: G.GEdge } } = {};
         var graph = new Microsoft.Msagl.Core.Layout.GeometryGraph.ctor();
 
         // Add nodes (and clusters)
@@ -137,36 +144,40 @@ class LayoutWorker {
         for (var i = 0; i < ggraph.edges.length; i++)
             this.addEdgeToMsagl(graph, nodeMap, edgeMap, ggraph.edges[i]);
 
+        // Set the settings. Different layout algorithm support different settings.
         var settings;
         if (ggraph.settings.layout == G.GSettings.mdsLayout) {
             settings = new Microsoft.Msagl.Layout.MDS.MdsLayoutSettings.ctor();
         }
         else {
             settings = new Microsoft.Msagl.Layout.Layered.SugiyamaLayoutSettings.ctor();
+            // Set the plane transformation used for the Sugiyama layout.
             var transformation = new Microsoft.Msagl.Core.Geometry.Curves.PlaneTransformation.ctor$$Double$$Double$$Double$$Double$$Double$$Double(
                 ggraph.settings.transformation.m00, ggraph.settings.transformation.m01, ggraph.settings.transformation.m02,
                 ggraph.settings.transformation.m10, ggraph.settings.transformation.m11, ggraph.settings.transformation.m12);
             settings.set_Transformation(transformation);
+            // Set the enforced aspect ratio for the Sugiyama layout.
             settings.set_AspectRatio(ggraph.settings.aspectRatio);
-
+            // Set the up/down constraints for the Sugiyama layout.
             for (var i = 0; i < ggraph.settings.upDownConstraints.length; i++) {
                 var upNode = nodeMap[ggraph.settings.upDownConstraints[i].upNode].mnode;
                 var downNode = nodeMap[ggraph.settings.upDownConstraints[i].downNode].mnode;
                 settings.AddUpDownConstraint(upNode, downNode);
             }
-
-            var edgeRoutingSettings = settings.get_EdgeRoutingSettings();
-            if (ggraph.settings.routing == G.GSettings.splinesRouting)
-                edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.Spline);
-            else if (ggraph.settings.routing == G.GSettings.splinesBundlingRouting)
-                edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.SplineBundling);
-            else if (ggraph.settings.routing == G.GSettings.straightLineRouting)
-                edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.StraightLine);
-            else if (ggraph.settings.routing == G.GSettings.rectilinearRouting)
-                edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.Rectilinear);
-            else if (ggraph.settings.routing == G.GSettings.rectilinearToCenterRouting)
-                edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.RectilinearToCenter);
         }
+
+        // All layout algorithms support certain edge routing algorithms (they are called after laying out the nodes).
+        var edgeRoutingSettings = settings.get_EdgeRoutingSettings();
+        if (ggraph.settings.routing == G.GSettings.splinesRouting)
+            edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.Spline);
+        else if (ggraph.settings.routing == G.GSettings.splinesBundlingRouting)
+            edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.SplineBundling);
+        else if (ggraph.settings.routing == G.GSettings.straightLineRouting)
+            edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.StraightLine);
+        else if (ggraph.settings.routing == G.GSettings.rectilinearRouting)
+            edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.Rectilinear);
+        else if (ggraph.settings.routing == G.GSettings.rectilinearToCenterRouting)
+            edgeRoutingSettings.set_EdgeRoutingMode(Microsoft.Msagl.Core.Routing.EdgeRoutingMode.RectilinearToCenter);
 
         return { graph: graph, settings: settings, nodeMap: nodeMap, edgeMap: edgeMap, source: ggraph };
     }
@@ -179,9 +190,11 @@ class LayoutWorker {
         return new G.GRect({ x: rect.get_Left(), y: rect.get_Bottom(), width: rect.get_Width(), height: rect.get_Height() });
     }
 
+    /** Converts a MSAGL curve to a TS curve object. */
     private getGCurve(curve): G.GCurve {
         var ret: G.GCurve;
         if (Is(curve, Microsoft.Msagl.Core.Geometry.Curves.Curve.ctor)) {
+            // The segmented curve is a special case; each of its components need to get converted separately.
             var segments = [];
             var sEn = curve.get_Segments().GetEnumerator();
             while (sEn.MoveNext())
@@ -240,8 +253,11 @@ class LayoutWorker {
         return ret;
     }
 
+    /** Converts a MSAGL graph into a GGraph. More accurately, it gets back the GGraph that was originally used to make the MSAGL
+    graph, and sets all of its geometrical elements to the ones that were calculated by MSAGL. */
     private getGGraph(msagl): G.GGraph {
         msagl.source.boundingBox = this.getGRect(msagl.graph.get_BoundingBox());
+        // Get the node boundary curves and labels.
         for (var id in msagl.nodeMap) {
             var node = msagl.nodeMap[id].mnode;
             var gnode: G.GNode = msagl.nodeMap[id].gnode;
@@ -252,7 +268,7 @@ class LayoutWorker {
                 gnode.label.bounds.y = node.get_Center().get_Y() - gnode.label.bounds.height / 2;
             }
         }
-
+        // Get the edge curves, labels and arrowheads.
         for (var id in msagl.edgeMap) {
             var edge = msagl.edgeMap[id].medge;
             var gedge: G.GEdge = msagl.edgeMap[id].gedge;
@@ -297,18 +313,93 @@ class LayoutWorker {
         // Convert the MSAGL-shaped graph to a GGraph.
         this.finalGraph = this.getGGraph(msagl);
     }
+
+    runEdgeRouting(edgeIDs?: string[]): void {
+        // Reset the settings to spline if they are Sugiyama splines. Sugiyama splines cannot be used separately from layout.
+        if (this.originalGraph.settings.routing == G.GSettings.sugiyamaSplinesRouting)
+            this.originalGraph.settings.routing = G.GSettings.splinesRouting;
+        // Get the MSAGL shape of the GGraph.
+        var msagl = this.getMsagl(this.originalGraph);
+        // Create an edge set.
+        var edges = [];
+        if (edgeIDs == null || edgeIDs.length == 0)
+            for (var id in msagl.edgeMap)
+                edges.push(msagl.edgeMap[id].medge);
+        else
+            for (var i = 0; i < edgeIDs.length; i++) {
+                var msaglEdge = msagl.edgeMap[edgeIDs[i]].medge;
+                edges.push(msaglEdge);
+            }
+
+        // Run the layout operation. This can take some time.
+        //Microsoft.Msagl.Miscellaneous.LayoutHelpers.RouteAndLabelEdges(msagl.graph, msagl.settings, edges);
+
+        var router = new Microsoft.Msagl.Routing.SplineRouter.ctor$$GeometryGraph$$Double$$Double$$Double$$BundlingSettings(msagl.graph, msagl.settings.get_EdgeRoutingSettings().get_Padding(),
+            msagl.settings.get_EdgeRoutingSettings().get_PolylinePadding(),
+            msagl.settings.get_EdgeRoutingSettings().get_ConeAngle(),
+            msagl.settings.get_EdgeRoutingSettings().get_BundlingSettings());
+        router.Run();
+        var elp = new Microsoft.Msagl.Core.Layout.EdgeLabelPlacement.ctor$$GeometryGraph(msagl.graph);
+        elp.Run();
+
+        // Convert the MSAGL-shaped graph to a GGraph.
+        this.finalGraph = this.getGGraph(msagl);
+    }
+
+    setPolyline(edge: string, points: G.GPoint[]): SetPolylineResult {
+        var msagl = this.getMsagl(this.originalGraph);
+        var medge = msagl.edgeMap[edge].medge;
+        var mpoints = points.map(this.getMsaglPoint);
+        var mpolyline = Microsoft.Msagl.Core.Geometry.SmoothedPolyline.FromPoints(mpoints);
+        var mcurve = mpolyline.CreateCurve();
+        if (!Microsoft.Msagl.Core.Layout.Arrowheads.TrimSplineAndCalculateArrowheads$$Edge$$ICurve$$Boolean$$Boolean(medge, mcurve, true, false))
+            Microsoft.Msagl.Core.Layout.Arrowheads.CreateBigEnoughSpline(medge);
+        mcurve = medge.get_Curve();
+        var curve = this.getGCurve(mcurve);
+        var hasSourceArrowhead = medge.get_EdgeGeometry().get_SourceArrowhead() != null;
+        var hasTargetArrowhead = medge.get_EdgeGeometry().get_TargetArrowhead() != null;
+        var sourceArrowHeadStart = hasSourceArrowhead ? this.getGPoint(mcurve.get_Start()) : null;
+        var sourceArrowHeadEnd = hasSourceArrowhead ? this.getGPoint(medge.get_EdgeGeometry().get_SourceArrowhead().get_TipPosition()) : null;
+        var targetArrowHeadStart = hasTargetArrowhead ? this.getGPoint(mcurve.get_End()) : null;
+        var targetArrowHeadEnd = hasTargetArrowhead ? this.getGPoint(medge.get_EdgeGeometry().get_TargetArrowhead().get_TipPosition()) : null;
+        return { curve: curve, sourceArrowHeadStart: sourceArrowHeadStart, sourceArrowHeadEnd: sourceArrowHeadEnd, targetArrowHeadStart: targetArrowHeadStart, targetArrowHeadEnd: targetArrowHeadEnd };
+    }
 }
 
 /** Handles a web worker message (which is always a JSON string representing a GGraph, for which a layout operation should be performed). */
 export function handleMessage(e): void {
-    // Get the GGraph from the message.
-    var ggraph = G.GGraph.ofJSON(e.data);
-    // Instantiate a layout worker for the GGraph.
+    var message: M.Request = e.data;
+    var ggraph = G.GGraph.ofJSON(message.graph);
     var worker = new LayoutWorker(ggraph);
-    // Run the layout; this can take some time.
-    worker.runLayout();
-    // Get the JSON representation of the post-layout GGraph.
-    var serialisedGraph = worker.finalGraph.getJSON();
-    // Send it back.
-    self.postMessage(serialisedGraph);
+    var answer: M.Response = null;
+    switch (message.type) {
+        case "RunLayout":
+            {
+                worker.runLayout();
+                answer = { type: "RunLayout", graph: worker.finalGraph.getJSON() };
+                break;
+            }
+        case "RouteEdges":
+            {
+                var edges: string[] = (<M.Req_RouteEdges>message).edges;
+                worker.runEdgeRouting(edges);
+                answer = { type: "RouteEdges", graph: worker.finalGraph.getJSON(), edges: edges };
+                break;
+            }
+        case "SetPolyline":
+            {
+                var edge: string = (<M.Req_SetPolyline>message).edge;
+                var points: G.GPoint[] = JSON.parse((<M.Req_SetPolyline>message).polyline);
+                var result = worker.setPolyline(edge, points);
+                answer = {
+                    type: "SetPolyline", edge: edge, curve: JSON.stringify(result.curve),
+                    sourceArrowHeadStart: result.sourceArrowHeadStart == null ? null : JSON.stringify(result.sourceArrowHeadStart),
+                    sourceArrowHeadEnd: result.sourceArrowHeadEnd == null ? null : JSON.stringify(result.sourceArrowHeadEnd),
+                    targetArrowHeadStart: result.targetArrowHeadStart == null ? null : JSON.stringify(result.targetArrowHeadStart),
+                    targetArrowHeadEnd: result.targetArrowHeadEnd == null ? null : JSON.stringify(result.targetArrowHeadEnd)
+                };
+                break;
+            }
+    }
+    self.postMessage(answer);
 }

@@ -1368,7 +1368,11 @@ namespace Microsoft.Msagl.Routing {
             if (!activeRectangle.Contains(takenOutTargetPortLocation) ||
                 !activeRectangle.Contains(TargetLoosePolyline.BoundingBox)) {
                 if (activeRectangle.IsEmpty) {
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
+                    activeRectangle = TargetLoosePolyline.BoundingBox.Clone();
+#else
                     activeRectangle = TargetLoosePolyline.BoundingBox;
+#endif
                     activeRectangle.Add(SourcePort.Location);
                     activeRectangle.Add(StartPointOfEdgeRouting);
                     activeRectangle.Add(takenOutTargetPortLocation);
@@ -1770,7 +1774,7 @@ namespace Microsoft.Msagl.Routing {
         //                CalculatePortVisibilityGraph(GetPortLocationsPointSet(edgeGeometries));
         //        }
 
-#if DEBUG_MSAGL && ! SILVERLIGHT
+#if DEBUG_MSAGL && !SILVERLIGHT
         internal void ShowObstaclesAndVisGraph()
         {
             var obs = this.obstacleCalculator.LooseObstacles.Select(o => new DebugCurve(100, 1, "blue", o));

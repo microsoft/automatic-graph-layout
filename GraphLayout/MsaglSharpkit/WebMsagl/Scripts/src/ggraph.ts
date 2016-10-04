@@ -1,4 +1,5 @@
-﻿///<reference path="../../typings/requirejs/require.d.ts"/>
+﻿///<reference path="../../Scripts/typings/requirejs/require.d.ts"/>
+import M = require('./messages');
 
 /* This file contains classes that can be used to describe a geometry graph. The classes in this file, especially GGraph, are
 the main way you use MSAGL_JS. Generally speaking, you construct one of these classes by passing to the constructor a JS object
@@ -22,21 +23,49 @@ export class GPoint implements IPoint {
         this.y = p.y === undefined ? 0 : p.y;
     }
     static origin = new GPoint({ x: 0, y: 0 });
+    equals(other: IPoint): boolean {
+        return this.x == other.x && this.y == other.y;
+    }
     /** Vector sum. */
-    add(other: IPoint) {
+    add(other: IPoint): GPoint {
         return new GPoint({ x: this.x + other.x, y: this.y + other.y });
     }
     /** Vector subtraction. */
-    sub(other: IPoint) {
+    sub(other: IPoint): GPoint {
         return new GPoint({ x: this.x - other.x, y: this.y - other.y });
     }
     /** Scalar division. */
-    div(op: number) {
+    div(op: number): GPoint {
         return new GPoint({ x: this.x / op, y: this.y / op });
     }
     /** Scalar multiplication. */
-    mul(op: number) {
+    mul(op: number): GPoint {
         return new GPoint({ x: this.x * op, y: this.y * op });
+    }
+    /** Vector multiplication. */
+    vmul(other: IPoint): number {
+        return this.x * other.x + this.y * other.y;
+    }
+    /** Distance squared. */
+    dist2(other: IPoint): number {
+        var d = this.sub(other);
+        return d.x * d.x + d.y * d.y;
+    }
+    closestParameter(start: GPoint, end: GPoint): number {
+        var bc = end.sub(start);
+        var ba = this.sub(start);
+        var c1 = bc.vmul(ba);
+        if (c1 <= 0.1)
+            return 0;
+        var c2 = bc.vmul(bc);
+        if (c2 <= c1 + 0.1)
+            return 1;
+        return c1 / c2;
+    }
+    /** If the area is negative then C lies to the right of the line [cornerA, cornerB] or, in other words, the triangle (A, B, C) is oriented clockwise.
+    If it is positive then C lies to the left of the line [A,B], and the triangle (A, B, C) is oriented counter-clockwise. If zero, A, B and C are colinear. */
+    public static signedDoubledTriangleArea(cornerA: GPoint, cornerB: GPoint, cornerC: GPoint): number {
+        return (cornerB.x - cornerA.x) * (cornerC.y - cornerA.y) - (cornerC.x - cornerA.x) * (cornerB.y - cornerA.y);
     }
 }
 
@@ -46,6 +75,8 @@ export interface IRect {
     y: number;
     width: number;
     height: number;
+    getCenter(): GPoint;
+    setCenter(p: GPoint): void;
 }
 
 /** A GRect represents a rectangular region in 2D space. */
@@ -77,6 +108,11 @@ export class GRect implements IRect {
     getCenter(): GPoint {
         return new GPoint({ x: this.x + this.width / 2, y: this.y + this.height / 2 });
     }
+    setCenter(p: GPoint) {
+        var delta = p.sub(this.getCenter());
+        this.x += delta.x;
+        this.y += delta.y;
+    }
     /** Combines this GRect with another GRect, returning the smallest GRect that contains both of them. */
     extend(other: GRect) {
         if (other == null)
@@ -99,11 +135,14 @@ export interface ICurve {
     /** A string that tells what concrete type of curve this is. */
     type: string;
     getCenter(): GPoint;
+    getStart(): GPoint;
+    getEnd(): GPoint;
     getBoundingBox(): GRect;
+    setCenter(p: GPoint);
 }
 
-/** A GCurve describes a curve. This is actually abstract; you don't instantiate this directly. */
-export class GCurve implements ICurve {
+/** A GCurve describes a curve. */
+export abstract class GCurve implements ICurve {
     /** A string that tells what concrete type of curve this is. */
     type: string;
     constructor(type: string) {
@@ -111,12 +150,11 @@ export class GCurve implements ICurve {
             throw new Error("Undefined curve type");
         this.type = type;
     }
-    getCenter(): GPoint {
-        throw new Error("Attempt to get the center of an undefined curve type");
-    }
-    getBoundingBox(): GRect {
-        throw new Error("Attempt to get the bounding box of an undefined curve type");
-    }
+    abstract getCenter(): GPoint;
+    abstract setCenter(p: GPoint);
+    abstract getStart(): GPoint;
+    abstract getEnd(): GPoint;
+    abstract getBoundingBox(): GRect;
     /** Constructs a concrete curve, based on the ICurve passed. This behaves similarly to the constructors of
     other types, but because this also needs to decide on a type, I cannot use the constructor directly. */
     static ofCurve(curve: ICurve): GCurve {
@@ -169,6 +207,15 @@ export class GEllipse extends GCurve implements IEllipse {
     getCenter(): GPoint {
         return this.center;
     }
+    getStart(): GPoint {
+        return this.center.add(this.axisA.mul(Math.cos(this.parStart))).add(this.axisB.mul(Math.sin(this.parStart)));
+    }
+    getEnd(): GPoint {
+        return this.center.add(this.axisA.mul(Math.cos(this.parEnd))).add(this.axisB.mul(Math.sin(this.parEnd)));
+    }
+    setCenter(p: GPoint) {
+        this.center = new GPoint(p);
+    }
     getBoundingBox(): GRect {
         var width = 2 * Math.max(Math.abs(this.axisA.x), Math.abs(this.axisB.x));
         var height = 2 * Math.max(Math.abs(this.axisA.y), Math.abs(this.axisB.y));
@@ -200,6 +247,17 @@ export class GLine extends GCurve implements ILine {
     getCenter(): GPoint {
         return this.start.add(this.end).div(2);
     }
+    getStart(): GPoint {
+        return this.start;
+    }
+    getEnd(): GPoint {
+        return this.end;
+    }
+    setCenter(p: GPoint) {
+        var delta = p.sub(this.getCenter());
+        this.start = this.start.add(delta);
+        this.end = this.end.add(delta);
+    }
     getBoundingBox(): GRect {
         var ret = new GRect({ x: this.start.x, y: this.start.y, width: 0, height: 0 });
         ret = ret.extendP(this.end);
@@ -215,7 +273,7 @@ export interface IPolyline {
 }
 
 /** A GPolyline represents a GCurve that is a sequence of contiguous segments. */
-export class GPolyline extends GCurve implements ICurve {
+export class GPolyline extends GCurve implements IPolyline {
     start: GPoint;
     points: GPoint[];
     closed: boolean;
@@ -234,6 +292,17 @@ export class GPolyline extends GCurve implements ICurve {
             ret = ret.add(this.points[i]);
         ret = ret.div(1 + this.points.length);
         return ret;
+    }
+    getStart(): GPoint {
+        return this.start;
+    }
+    getEnd(): GPoint {
+        return this.points[this.points.length - 1];
+    }
+    setCenter(p: GPoint) {
+        var delta = p.sub(this.getCenter());
+        for (var i = 0; i < this.points.length; i++)
+            this.points[i] = this.points[i].add(delta);
     }
     getBoundingBox(): GRect {
         var ret = new GRect({ x: this.points[0].x, y: this.points[0].y, height: 0, width: 0 });
@@ -265,6 +334,15 @@ export class GRoundedRect extends GCurve implements IRoundedRect {
     }
     getCenter(): GPoint {
         return this.bounds.getCenter();
+    }
+    getStart(): GPoint {
+        throw new Error("getStart not supported by RoundedRect");
+    }
+    getEnd(): GPoint {
+        throw new Error("getEnd not supported by RoundedRect");
+    }
+    setCenter(p: GPoint) {
+        this.bounds.setCenter(p);
     }
     getBoundingBox(): GRect {
         return this.bounds;
@@ -317,6 +395,19 @@ export class GBezier extends GCurve implements ICurve {
         ret = ret.div(4);
         return ret;
     }
+    getStart(): GPoint {
+        return this.start;
+    }
+    getEnd(): GPoint {
+        return this.p3;
+    }
+    setCenter(p: GPoint) {
+        var delta = p.sub(this.getCenter());
+        this.start = this.start.add(delta);
+        this.p1 = this.p1.add(delta);
+        this.p2 = this.p2.add(delta);
+        this.p3 = this.p3.add(delta);
+    }
     getBoundingBox(): GRect {
         var ret = new GRect({ x: this.start.x, y: this.start.y, width: 0, height: 0 });
         ret = ret.extendP(this.p1);
@@ -348,6 +439,15 @@ export class GSegmentedCurve extends GCurve implements ICurve {
         ret = ret.div(this.segments.length);
         return ret;
     }
+    getStart(): GPoint {
+        return this.segments[0].getStart();
+    }
+    getEnd(): GPoint {
+        return this.segments[this.segments.length - 1].getEnd();
+    }
+    setCenter(p: GPoint) {
+        throw new Error("setCenter not supported by SegmentedCurve");
+    }
     getBoundingBox(): GRect {
         var ret = this.segments[0].getBoundingBox();
         for (var i = 1; i < this.segments.length; i++)
@@ -362,17 +462,18 @@ export interface IElement {
 }
 
 /** An ILabel describes a label. */
-export interface ILabel {
+export interface ILabel extends IElement {
     bounds: IRect;
     content: string;
     fill: string;
 }
 
 /** A GLabel represents a label. */
-export class GLabel {
+export class GLabel implements ILabel {
     bounds: IRect;
     content: string;
     fill: string;
+    tooltip: string;
     /** For this constructor, you can also pass a string. This will create a label with that string as its text. */
     constructor(label: any)
     constructor(label: ILabel) {
@@ -380,6 +481,7 @@ export class GLabel {
             this.content = <string><any>label;
         else {
             this.bounds = label.bounds == undefined || label.bounds == GRect.zero ? GRect.zero : new GRect(label.bounds);
+            this.tooltip = label.tooltip === undefined ? null : label.tooltip;
             this.content = label.content;
             this.fill = label.fill === undefined ? "Black" : label.fill;
         }
@@ -468,7 +570,7 @@ export class GNode implements INode {
         this.label = node.label === undefined ? null : node.label == null ? null : typeof (node.label) == "string" ? new GLabel({ content: node.label }) : new GLabel(node.label);
         this.labelMargin = node.labelMargin === undefined ? 5 : node.labelMargin;
         this.thickness = node.thickness == undefined ? 1 : node.thickness;
-        this.fill = node.fill === undefined ? "" : node.fill;
+        this.fill = node.fill === undefined ? "White" : node.fill;
         this.stroke = node.stroke === undefined ? "Black" : node.stroke;
     }
     /** Type check: returns true if this is actually a cluster. */
@@ -708,20 +810,65 @@ class GNodeInternal {
     selfEdges: string[];
 }
 
+/** This is a helper for internal use, which decorates edges with their polylines. */
+class GEdgeInternal {
+    edge: GEdge;
+    polyline: GPoint[];
+}
+
+class MoveElementToken {
+}
+
+class MoveNodeToken extends MoveElementToken {
+    public node: GNode;
+    public originalBoundsCenter: GPoint;
+    public originalLabelCenter: GPoint;
+}
+
+class MoveEdgeLabelToken extends MoveElementToken {
+    public label: GLabel;
+    public originalLabelCenter: GPoint;
+}
+
+class MoveEdgeToken extends MoveElementToken {
+    public edge: GEdge;
+    public originalPoint: GPoint;
+    public originalPolyline: GPoint[];
+}
+
+export class CallbackSet<T> {
+    private callbacks: ((par: T) => void)[] = [];
+
+    public add(callback: (par: T) => void) {
+        this.callbacks.push(callback);
+    }
+    public remove(callback: (par: T) => void) {
+        var idx = this.callbacks.indexOf(callback);
+        if (idx >= 0)
+            this.callbacks.splice(idx);
+    }
+    public fire(par?: T) {
+        for (var i = 0; i < this.callbacks.length; i++)
+            this.callbacks[i](par);
+    }
+}
+
 /** A GGraph represents a graph, plus its layout settings, and provides methods to manipulate it. */
 export class GGraph implements IGraph {
+    public static EdgeEditCircleRadius: number = 8;
+
     /** Maps node IDs to GNodeInternal instances. */
-    private nodesMap: Object;
+    private nodesMap: { [id: string]: GNodeInternal };
     /** Maps edge IDs to GEdge instances. */
-    private edgesMap: Object;
+    private edgesMap: { [id: string]: GEdgeInternal };
     nodes: GNode[];
     edges: GEdge[];
     boundingBox: GRect;
     settings: GSettings;
 
     constructor() {
-        this.nodesMap = new Object();
-        this.edgesMap = new Object();
+        this.nodesMap = {};
+        this.edgesMap = {};
         this.nodes = [];
         this.edges = [];
         this.boundingBox = GRect.zero;
@@ -736,7 +883,7 @@ export class GGraph implements IGraph {
 
     /** Returns a node, given its ID. */
     getNode(id: string): GNode {
-        var nodeInternal = <GNodeInternal>this.nodesMap[id];
+        var nodeInternal = this.nodesMap[id];
         return nodeInternal == null ? null : nodeInternal.node;
     }
 
@@ -764,7 +911,7 @@ export class GGraph implements IGraph {
             throw new Error("Undefined node " + edge.source);
         if (this.nodesMap[edge.target] == null)
             throw new Error("Undefined node " + edge.target);
-        this.edgesMap[edge.id] = edge;
+        this.edgesMap[edge.id] = <GEdgeInternal>{ edge: edge, polyline: null };
         this.edges.push(edge);
         if (edge.source == edge.target)
             (<GNodeInternal>this.nodesMap[edge.source]).selfEdges.push(edge.id);
@@ -776,7 +923,8 @@ export class GGraph implements IGraph {
 
     /** Returns an edge, given its ID. */
     getEdge(id: string): GEdge {
-        return this.edgesMap[id];
+        var edgeInternal = this.edgesMap[id];
+        return edgeInternal == null ? null : edgeInternal.edge;
     }
 
     /** Gets the JSON representation of the graph. */
@@ -958,38 +1106,35 @@ export class GGraph implements IGraph {
         container.removeChild(svg);
     }
 
-    /** The web worker that's laying out the graph. There's only one of these at any given time. */
+    /** The web worker that performs layout operations. There's at most one of these at any given time. */
     private worker: Worker = null;
+    public working: boolean = false;
 
     /** Aborts a layout operation, if there is one ongoing. */
-    stopLayoutGraph(): void {
+    public stopLayoutGraph(): void {
         if (this.worker != null) {
             this.worker.terminate();
             this.worker = null;
         }
+        this.setWorking(false);
     }
 
-    /** Starts running layout on the graph. Pass a callback to get notified when the layout operation is done. */
-    beginLayoutGraph(callback: () => void = null): void {
-        // Stop any current layout operation.
-        this.stopLayoutGraph();
-        var that = this;
-        // Declare the web worker message handler.
-        var workerCallback = function (gstr) {
-            // Stop any current layout operation (this is probably not necessary, but it doesn't hurt).
-            that.stopLayoutGraph();
-            // gstr.data contains a string that is the JSON string for an IGraph.
+    private workerCallback(msg: MessageEvent) {
+        var data: M.Response = msg.data;
+        if (data.type == "RunLayout") {
+            var runLayoutMsg = <M.Res_RunLayout>data;
+            // data.graph contains a string that is the JSON string for an IGraph.
             // Deserialize it into a GGraph. This GGraph doesn't directly replace myself; I just want to copy its curves over mine. This way,
             // the user can keep using this GGraph.
-            var gs: GGraph = GGraph.ofJSON(gstr.data);
+            var gs: GGraph = GGraph.ofJSON(runLayoutMsg.graph);
             // Copy its bounding box to me, extending the margins a little bit.
-            that.boundingBox = new GRect({
+            this.boundingBox = new GRect({
                 x: gs.boundingBox.x - 10, y: gs.boundingBox.y - 10, width: gs.boundingBox.width + 20, height: gs.boundingBox.height + 20
             });
             // Copy all of the curves of the nodes, including the label boundaries.
             for (var i = 0; i < gs.nodes.length; i++) {
                 var workerNode = gs.nodes[i];
-                var myNode = that.getNode(workerNode.id);
+                var myNode = this.getNode(workerNode.id);
                 myNode.boundaryCurve = workerNode.boundaryCurve;
                 if (myNode.label != null)
                     myNode.label.bounds = workerNode.label.bounds;
@@ -997,7 +1142,7 @@ export class GGraph implements IGraph {
             // Copy all of the curves of the edges, including the label boundaries and the arrowheads.
             for (var i = 0; i < gs.edges.length; i++) {
                 var workerEdge = gs.edges[i];
-                var myEdge = that.getEdge(workerEdge.id);
+                var myEdge = this.getEdge(workerEdge.id);
                 myEdge.curve = workerEdge.curve;
                 if (myEdge.label != null)
                     myEdge.label.bounds = workerEdge.label.bounds;
@@ -1006,18 +1151,317 @@ export class GGraph implements IGraph {
                 if (myEdge.arrowHeadAtTarget != null)
                     myEdge.arrowHeadAtTarget = workerEdge.arrowHeadAtTarget;
             }
-            // Invoke the user callback.
-            if (callback != null)
-                callback();
+            // Invoke the user callbacks.
+            this.layoutCallbacks.fire();
         }
+        else if (data.type == "RouteEdges") {
+            var routeEdgesMsg = <M.Res_RouteEdges>data;
+            // data.graph contains a string that is the JSON string for an IGraph.
+            // Deserialize it into a GGraph. This GGraph doesn't directly replace myself; I just want to copy its curves over mine. This way,
+            // the user can keep using this GGraph.
+            var gs: GGraph = GGraph.ofJSON(routeEdgesMsg.graph);
+            // Copy all of the curves of the edges, including the label boundaries and the arrowheads.
+            for (var i = 0; i < gs.edges.length; i++) {
+                // data.graph contains a string that is the JSON string for an IGraph.
+                // Deserialize it into a GGraph. This GGraph doesn't directly replace myself; I just want to copy its curves over mine. This way,
+                // the user can keep using this GGraph.
+                var gs: GGraph = GGraph.ofJSON(routeEdgesMsg.graph);
+                var workerEdge = gs.edges[i];
+                if (routeEdgesMsg.edges == null || routeEdgesMsg.edges.length == 0 || routeEdgesMsg.edges.indexOf(workerEdge.id) >= 0) {
+                    var edgeInternal = this.edgesMap[workerEdge.id];
+                    var myEdge = edgeInternal.edge;
+                    myEdge.curve = workerEdge.curve;
+                    edgeInternal.polyline = null;
+                    if (myEdge.label != null)
+                        myEdge.label.bounds = workerEdge.label.bounds;
+                    if (myEdge.arrowHeadAtSource != null)
+                        myEdge.arrowHeadAtSource = workerEdge.arrowHeadAtSource;
+                    if (myEdge.arrowHeadAtTarget != null)
+                        myEdge.arrowHeadAtTarget = workerEdge.arrowHeadAtTarget;
+                }
+            }
+            // Invoke the user callbacks.
+            this.edgeRoutingCallbacks.fire(routeEdgesMsg.edges);
+        }
+        else if (data.type == "SetPolyline") {
+            var setPolylineMsg = <M.Res_SetPolyline>data;
+            var edge = this.edgesMap[setPolylineMsg.edge].edge;
+            var curve = JSON.parse(setPolylineMsg.curve);
+            curve = GCurve.ofCurve(curve);
+            edge.curve = curve;
+            if (setPolylineMsg.sourceArrowHeadStart != null)
+                edge.arrowHeadAtSource.start = JSON.parse(setPolylineMsg.sourceArrowHeadStart);
+            if (setPolylineMsg.sourceArrowHeadEnd != null)
+                edge.arrowHeadAtSource.end = JSON.parse(setPolylineMsg.sourceArrowHeadEnd);
+            if (setPolylineMsg.targetArrowHeadStart != null)
+                edge.arrowHeadAtTarget.start = JSON.parse(setPolylineMsg.targetArrowHeadStart);
+            if (setPolylineMsg.targetArrowHeadEnd != null)
+                edge.arrowHeadAtTarget.end = JSON.parse(setPolylineMsg.targetArrowHeadEnd);
+            this.edgeRoutingCallbacks.fire([edge.id]);
+        }
+        this.setWorking(false);
+    }
 
+    /** Ensures that a layout worker is present and ready. */
+    private ensureWorkerReady(): void {
+        // Stop any currently active layout operations.
+        if (this.working)
+            this.stopLayoutGraph();
+        if (this.worker == null) {
+            this.worker = new Worker(require.toUrl("./workerBoot.js"));
+            // Hook up to messages from the worker.
+            var that = this;
+            this.worker.addEventListener('message', ev => this.workerCallback(ev));
+        }
+    }
+
+    /** Callbacks you can set to be notified when a layout operation is complete. */
+    public layoutCallbacks: CallbackSet<void> = new CallbackSet<void>();
+    /** Callbacks you can set to be notified when an edge routing operation is complete. The set of routed edges is passed
+    as a parameter. If it is null, it means that all edges in the graph were routed. Note that edge routing may happen after
+    being invoked by the user program, but it may also happen as a consequence of moving a node. */
+    public edgeRoutingCallbacks: CallbackSet<string[]> = new CallbackSet<string[]>();
+    /** Callbacks you can set to be notified when the engine starts an asynchronous operation. */
+    public workStartedCallbacks: CallbackSet<void> = new CallbackSet<void>();
+    /** Callbacks you can set to be notified when the engine ends an asynchronous operation. */
+    public workStoppedCallbacks: CallbackSet<void> = new CallbackSet<void>();
+
+    private setWorking(working: boolean) {
+        this.working = working;
+        if (working)
+            this.workStartedCallbacks.fire();
+        else
+            this.workStoppedCallbacks.fire();
+    }
+
+    /** Starts running layout on the graph. The layout callback will be invoked when the layout operation is done. */
+    public beginLayoutGraph(): void {
+        this.ensureWorkerReady();
+        this.setWorking(true);
         // Serialize the graph.
         var serialisedGraph = this.getJSON();
-        // Create the worker.
-        this.worker = new Worker(require.toUrl("./workerBoot.js"));
-        // Hook up to messages from the worker.
-        this.worker.addEventListener('message', workerCallback);
         // Send the worker the serialized graph to layout.
-        this.worker.postMessage(serialisedGraph);
+        var msg: M.Req_RunLayout = { type: "RunLayout", graph: serialisedGraph };
+        this.worker.postMessage(msg);
+    }
+
+    /** Starts running edge routing on the graph. The edge routing callback will be invoked when the edge routing operation is done. */
+    public beginEdgeRouting(edges?: string[]): void {
+        this.ensureWorkerReady();
+        this.setWorking(true);
+        // Serialize the graph.
+        var serialisedGraph = this.getJSON();
+        // Send the worker the serialized graph to layout.
+        var msg: M.Req_RouteEdges = { type: "RouteEdges", graph: serialisedGraph, edges: edges };
+        this.worker.postMessage(msg);
+    }
+
+    public beginRebuildEdge(edge: string): void {
+        this.ensureWorkerReady();
+        this.setWorking(true);
+        var serialisedGraph = this.getJSON();
+        var points = this.edgesMap[edge].polyline;
+        var msg: M.Req_SetPolyline = { type: "SetPolyline", graph: serialisedGraph, edge: edge, polyline: JSON.stringify(points) };
+        this.worker.postMessage(msg);
+    }
+
+    private moveTokens: MoveElementToken[] = [];
+
+    private getNearestControlPoint(edge: GEdge, point: GPoint): GPoint {
+        var points = this.getPolyline(edge.id);
+        var ret = points[0];
+        var dret = ret.dist2(point);
+        for (var i = 1; i < points.length; i++) {
+            var d = points[i].dist2(point);
+            if (d < dret) {
+                ret = points[i];
+                dret = d;
+            }
+        }
+        if (dret > GGraph.EdgeEditCircleRadius * GGraph.EdgeEditCircleRadius)
+            ret = null;
+        return ret;
+    }
+
+    /** This function selects an element for moving. After calling this, you can call moveElement to apply a delta to the
+    position of the element. You can select multiple elements and then move them all in one operation, but you should not
+    move elements between selections (in that case, call endMoveElements and then select them all again). */
+    public startMoveElement(el: IElement, mousePoint: GPoint) {
+        if (el instanceof GNode) {
+            var node = <GNode>el;
+            var mnt = new MoveNodeToken();
+            mnt.node = node;
+            mnt.originalBoundsCenter = node.boundaryCurve.getCenter();
+            mnt.originalLabelCenter = node.label == null ? null : node.label.bounds.getCenter();
+            this.moveTokens.push(mnt);
+        }
+        else if (el instanceof GLabel) {
+            var label = <GLabel>el;
+            var melt = new MoveEdgeLabelToken();
+            melt.label = label;
+            melt.originalLabelCenter = label.bounds.getCenter();
+            this.moveTokens.push(melt);
+        }
+        else if (el instanceof GEdge) {
+            var edge = <GEdge>el;
+            var point = this.getNearestControlPoint(edge, mousePoint);
+            if (point != null) {
+                var met = new MoveEdgeToken();
+                met.edge = edge;
+                met.originalPoint = point;
+                met.originalPolyline = this.getPolyline(edge.id);
+                this.moveTokens.push(met);
+            }
+        }
+    }
+
+    /** This function applies a delta to the positions of the element(s) currently selected for moving. */
+    public moveElements(delta: GPoint) {
+        for (var i in this.moveTokens) {
+            var token = this.moveTokens[i];
+            if (token instanceof MoveNodeToken) {
+                var ntoken = <MoveNodeToken>token;
+                var newBoundaryCenter = ntoken.originalBoundsCenter.add(delta);
+                ntoken.node.boundaryCurve.setCenter(newBoundaryCenter);
+                var newLabelCenter = ntoken.originalLabelCenter.add(delta);
+                ntoken.node.label.bounds.setCenter(newLabelCenter);
+            }
+            else if (token instanceof MoveEdgeLabelToken) {
+                var ltoken = <MoveEdgeLabelToken>token;
+                var newBoundsCenter = ltoken.originalLabelCenter.add(delta);
+                ltoken.label.bounds.setCenter(newBoundsCenter);
+            }
+            else if (token instanceof MoveEdgeToken) {
+                var etoken = <MoveEdgeToken>token;
+                var newPoint = etoken.originalPoint.add(delta);
+                for (var j = 0; j < etoken.originalPolyline.length; j++)
+                    if (etoken.originalPolyline[j].equals(etoken.originalPoint)) {
+                        var edgeInternal = this.edgesMap[etoken.edge.id];
+                        edgeInternal.polyline = etoken.originalPolyline.map((p, k) => k == j ? newPoint : p);
+                        this.checkRebuildEdge(etoken.edge.id);
+                        break;
+                    }
+            }
+        }
+        this.checkRouteEdges();
+    }
+
+    private delayCheckRouteEdges: () => void = null;
+    private checkRouteEdges(edgeSet?: string[]) {
+        if (this.delayCheckRouteEdges != null)
+            this.workStoppedCallbacks.remove(this.delayCheckRouteEdges);
+        this.delayCheckRouteEdges = null;
+        var edges: string[] = edgeSet == null ? this.getOutdatedEdges() : edgeSet;
+        if (edges.length > 0) {
+            if (this.working) {
+                var that = this;
+                this.delayCheckRouteEdges = () => { that.checkRouteEdges(edges); };
+                this.workStoppedCallbacks.add(this.delayCheckRouteEdges);
+            }
+            else
+                this.beginEdgeRouting(edges);
+        }
+    }
+
+    private delayCheckRebuildEdge: () => void = null;
+    private checkRebuildEdge(edge: string) {
+        if (this.delayCheckRebuildEdge != null)
+            this.workStoppedCallbacks.remove(this.delayCheckRebuildEdge);
+        this.delayCheckRebuildEdge = null;
+        if (this.working) {
+            var that = this;
+            this.delayCheckRebuildEdge = () => { that.checkRebuildEdge(edge); };
+            this.workStoppedCallbacks.add(this.delayCheckRebuildEdge);
+        }
+        else
+            this.beginRebuildEdge(edge);
+    }
+
+    /** Build an array of all the edges that were affected by the move. */
+    private getOutdatedEdges(): string[] {
+        var affectedEdges: { [id: string]: boolean } = {};
+        for (var t in this.moveTokens) {
+            var token = this.moveTokens[t];
+            if (token instanceof MoveNodeToken) {
+                var ntoken = <MoveNodeToken>token;
+                var nEdges = this.getInEdges(ntoken.node.id).concat(this.getOutEdges(ntoken.node.id)).concat(this.getSelfEdges(ntoken.node.id));
+                for (var edge in nEdges)
+                    affectedEdges[nEdges[edge]] = true;
+            }
+        }
+        var edges = [];
+        for (var e in affectedEdges)
+            edges.push(e);
+        return edges;
+    }
+
+    /** Clear the list of elements that are selected for moving. */
+    public endMoveElements() {
+        this.checkRouteEdges();
+        this.moveTokens = [];
+    }
+
+    private static ColinearityEpsilon: number = 50.00;
+    private removeColinearVertices(polyline: GPoint[]) {
+        for (var i = 1; i < polyline.length - 2; i++) {
+            var a = GPoint.signedDoubledTriangleArea(polyline[i - 1], polyline[i], polyline[i + 1]);
+            if (a >= -GGraph.ColinearityEpsilon && a <= GGraph.ColinearityEpsilon)
+                polyline.splice(i--, 1);
+        }
+    }
+
+    private makePolyline(edge: GEdge): GPoint[] {
+        var points = [];
+        var source = this.nodesMap[edge.source];
+        points.push(source.node.boundaryCurve.getCenter());
+        if (edge.curve.type == "SegmentedCurve") {
+            var scurve = <GSegmentedCurve>edge.curve;
+            points.push(scurve.getStart());
+            for (var i = 0; i < scurve.segments.length; i++)
+                points.push(scurve.segments[i].getEnd());
+        }
+        var target = this.nodesMap[edge.target];
+        points.push(target.node.boundaryCurve.getCenter());
+        this.removeColinearVertices(points);
+        return points;
+    }
+
+    public getPolyline(edgeID: string): GPoint[] {
+        var edgeInternal: GEdgeInternal = this.edgesMap[edgeID];
+        if (edgeInternal.polyline == null)
+            edgeInternal.polyline = this.makePolyline(edgeInternal.edge);
+        return edgeInternal.polyline;
+    }
+
+    public addPolylineCorner(edgeID: string, point: GPoint) {
+        var edgeInternal: GEdgeInternal = this.edgesMap[edgeID];
+        var iclosest = 0;
+        var dclosest = edgeInternal.polyline[0].dist2(point);
+        for (var i = 0; i < edgeInternal.polyline.length; i++) {
+            var d = edgeInternal.polyline[i].dist2(point);
+            if (d < dclosest) {
+                iclosest = i;
+                dclosest = d;
+            }
+        }
+        if (iclosest == edgeInternal.polyline.length - 1)
+            iclosest--;
+        else if (iclosest > 0) {
+            var par = point.closestParameter(edgeInternal.polyline[iclosest - 1], edgeInternal.polyline[iclosest]);
+            if (par > 0.1 && par < 0.9)
+                iclosest--;
+        }
+        edgeInternal.polyline.splice(iclosest + 1, 0, point);
+        this.beginRebuildEdge(edgeID);
+    }
+
+    public delPolylineCorner(edgeID: string, point: GPoint) {
+        var edgeInternal: GEdgeInternal = this.edgesMap[edgeID];
+        for (var i = 0; i < edgeInternal.polyline.length; i++)
+            if (edgeInternal.polyline[i].equals(point)) {
+                edgeInternal.polyline.splice(i, 1);
+                break;
+            }
+        this.beginRebuildEdge(edgeID);
     }
 }

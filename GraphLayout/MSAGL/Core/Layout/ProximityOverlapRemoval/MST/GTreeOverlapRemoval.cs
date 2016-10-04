@@ -115,8 +115,13 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
         }
 
         double GetIdealDistanceBetweenTwoNodes(Node a, Node b) {
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
+            var abox = a.BoundingBox.Clone();
+            var bbox = b.BoundingBox.Clone();
+#else
             var abox = a.BoundingBox;
             var bbox = b.BoundingBox;
+#endif
             abox.Pad(_settings.NodeSeparation/2);
             bbox.Pad(_settings.NodeSeparation/2);
             var ac = abox.Center;
@@ -140,7 +145,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
         }
 
 
-#if ! SILVERLIGHT
+#if !SILVERLIGHT
         static void PrintTimeSpan(Stopwatch stopWatch) {
             // Get the elapsed time as a TimeSpan value.
             TimeSpan ts = stopWatch.Elapsed;

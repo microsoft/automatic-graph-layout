@@ -168,6 +168,32 @@ class IDDSVGGraph extends SVGGraph {
         var scaleY = cheight / bbox.height;
         var scale = Math.min(scaleX, scaleY);
         this.chart.navigation.setVisibleRect({ x: offsetX, y: -offsetY - (isNaN(scale) ? bbox.height : (cheight / scale)), width: bbox.width, height: bbox.height }, false);
+        this.hookUpMouseEvents();
+    }
+
+    private gestureSource = undefined;
+    private disableIDDMouseHandling() {
+        this.gestureSource = this.chart.navigation.gestureSource;
+        this.chart.navigation.gestureSource = undefined;
+    }
+    private restoreIDDMouseHandling() {
+        if (this.gestureSource != null)
+            this.chart.navigation.gestureSource = this.gestureSource;
+    }
+
+    hookUpMouseEvents() {
+        super.hookUpMouseEvents();
+        var that = this;
+        this.container.onmousedown = function (e) {
+            if (that.allowEditing && that.getObjectUnderMouseCursor() != null)
+                that.disableIDDMouseHandling();
+            that.onMouseDown(e);
+        };
+        this.container.onmouseup = function (e) {
+            that.onMouseUp(e);
+            if (that.allowEditing)
+                that.restoreIDDMouseHandling();
+        }
     }
 }
 

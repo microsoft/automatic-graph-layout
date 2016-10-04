@@ -54,6 +54,8 @@
     <Content Include="Samples\GraphFromJson\styles.css" />
     <Content Include="Samples\HiddenRendering\index.html" />
     <Content Include="Samples\HiddenRendering\styles.css" />
+    <Content Include="Samples\Interactivity\index.html" />
+    <Content Include="Samples\Interactivity\styles.css" />
     <Content Include="Samples\Options\index.html" />
     <Content Include="Samples\Options\styles.css" />
     <Content Include="Samples\samples.css" />
@@ -74,14 +76,19 @@
     <TypeScriptCompile Include="Samples\GraphFromJson\boot.ts" />
     <TypeScriptCompile Include="Samples\HiddenRendering\app.ts" />
     <TypeScriptCompile Include="Samples\HiddenRendering\boot.ts" />
+    <TypeScriptCompile Include="Samples\Interactivity\app.ts" />
+    <TypeScriptCompile Include="Samples\Interactivity\boot.ts" />
     <TypeScriptCompile Include="Samples\Options\app.ts" />
     <TypeScriptCompile Include="Samples\Options\boot.ts" />
     <TypeScriptCompile Include="Scripts\src\contextgraph.ts" />
     <TypeScriptCompile Include="Scripts\src\ggraph.ts" />
     <TypeScriptCompile Include="Scripts\src\iddgraph.ts" />
     <TypeScriptCompile Include="Scripts\src\iddsvggraph.ts" />
+    <TypeScriptCompile Include="Scripts\src\messages.ts" />
     <TypeScriptCompile Include="Scripts\src\msaglWorker.ts" />
     <TypeScriptCompile Include="Scripts\src\svggraph.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\requirejs\require.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Samples\Options\samplegraph1.json" />
@@ -130,7 +137,8 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PreBuildEvent>xcopy /y "$(SolutionDir)MsaglSharpKit\res\Microsoft.Msagl.js" "$(ProjectDir)Msagl\"</PreBuildEvent>
+    <PreBuildEvent>xcopy /y "$(SolutionDir)MsaglSharpKit\res\Microsoft.Msagl.js" "$(ProjectDir)Scripts\src\"
+xcopy /y "$(SolutionDir)MsaglDrawingSharpkit\res\Microsoft.Msagl.Drawing.js" "$(ProjectDir)Scripts\src\"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -293,7 +293,11 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 RemoveOverlapsForLgLayout(component);
 
             }
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
+            Rectangle box = component.BoundingBox.Clone();
+#else
             Rectangle box = component.BoundingBox;
+#endif
             box.Pad(_lgLayoutSettings.NodeSeparation/2);
             component.BoundingBox = box;
         }

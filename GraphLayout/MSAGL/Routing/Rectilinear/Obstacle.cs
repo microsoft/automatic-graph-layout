@@ -26,7 +26,11 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         /// </summary>
         public Obstacle(Shape shape, bool makeRect, double padding) {
             if (makeRect) {
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
+                var paddedBox = shape.BoundingBox.Clone();
+#else
                 var paddedBox = shape.BoundingBox;
+#endif
                 paddedBox.Pad(padding);
                 this.PaddedPolyline = Curve.PolyFromBox(paddedBox);
             } else {

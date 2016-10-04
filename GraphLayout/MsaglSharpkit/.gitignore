@@ -1,0 +1,9 @@
+.vs/config
+packages
+WebMsagl/**/*.js
+WebMsagl/**/*.map
+!WebMsagl/Scripts/src/jsclr.js
+!WebMsagl/Scripts/Microsoft.Msagl.js
+!WebMsagl/Scripts/sharpkit_post.js
+!WebMsagl/Scripts/sharpkit_pre.js
+!WebMsagl/Scripts/workerBoot.js

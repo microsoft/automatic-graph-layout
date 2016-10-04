@@ -430,7 +430,11 @@ namespace Microsoft.Msagl.Core.Geometry{
         public static Rectangle Translate(Rectangle rectangle, Point delta)
         {
             rectangle.Center += delta;
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
+            return rectangle.Clone();
+#else
             return rectangle;
+#endif
         }
 
         /// <summary>

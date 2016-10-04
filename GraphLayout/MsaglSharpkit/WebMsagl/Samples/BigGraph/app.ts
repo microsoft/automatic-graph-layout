@@ -3,6 +3,7 @@ import IDDSVGGraph = require("../../Scripts/src/iddsvggraph");
 
 var graphView = document.getElementById("graphView");
 var graphControl = new IDDSVGGraph(graphView);
+var graph: G.GGraph = null;
 
 var nodeCountControl = <HTMLInputElement>document.getElementById("nodeCount");
 var edgeCountControl = <HTMLInputElement>document.getElementById("edgeCount");
@@ -25,25 +26,27 @@ function setGUIToNotRunning() {
 }
 
 function run(nodeCount: number, edgeCount: number) {
-    graphControl.graph = new G.GGraph();
-    graphControl.graph.settings.aspectRatio = graphView.offsetWidth / graphView.offsetHeight;
+    graph = new G.GGraph();
+    graphControl.setGraph(graph);
+    graph.settings.aspectRatio = graphView.offsetWidth / graphView.offsetHeight;
     for (var i = 1; i <= nodeCount; i++)
-        graphControl.graph.addNode(new G.GNode({ id: "node" + i, label: "Node " + i }));
+        graph.addNode(new G.GNode({ id: "node" + i, label: "Node " + i }));
     for (var i = 1; i <= edgeCount; i++)
-        graphControl.graph.addEdge(new G.GEdge({
+        graph.addEdge(new G.GEdge({
             id: "edge" + i, source: "node" + Math.floor(Math.random() * nodeCount + 1),
             target: "node" + Math.floor(Math.random() * nodeCount + 1)
         }));
 
     var startTime = new Date();
-    graphControl.graph.createNodeBoundariesForSVGInContainer(graphView);
-    graphControl.graph.beginLayoutGraph(() => {
+    graph.createNodeBoundariesForSVGInContainer(graphView);
+    graph.layoutCallbacks.add(() => {
         graphControl.drawGraph();
         setGUIToNotRunning();
         var endTime = new Date();
         var diff = endTime.getTime() - startTime.getTime();
         elapsed.textContent = diff + " msecs";
     });
+    graph.beginLayoutGraph();
 }
 
 function startButtonClicked() {
@@ -54,7 +57,7 @@ function startButtonClicked() {
 }
 
 function stopButtonClicked() {
-    graphControl.graph.stopLayoutGraph();
+    graph.stopLayoutGraph();
     setGUIToNotRunning();
 }
 

@@ -1,5 +1,5 @@
-﻿///<reference path="../../typings/jquery/jquery.d.ts"/>
-///<reference path="../../typings/requirejs/require.d.ts"/>
+﻿///<reference path="../../Scripts/typings/jquery/jquery.d.ts"/>
+///<reference path="../../Scripts/typings/requirejs/require.d.ts"/>
 
 /// <amd-dependency path="idd"/>
 import G = require('./ggraph');
