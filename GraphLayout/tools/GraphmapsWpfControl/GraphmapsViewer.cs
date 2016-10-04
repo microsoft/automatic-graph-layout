@@ -356,12 +356,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
                 var c = nodeInfo.Color;
                 List<SolidColorBrush> ColorSet = new List<SolidColorBrush>();
-                ColorSet.Add(Brushes.Red);
-                ColorSet.Add(Brushes.Blue);
-                ColorSet.Add(Brushes.Green);
-                ColorSet.Add(Brushes.Coral);
-                ColorSet.Add(Brushes.BlueViolet);
-                ColorSet.Add(Brushes.HotPink);
+                addColorsToSet(ColorSet);
 
                 foreach (LgNodeInfo vinfo in SelectedNodeSet)
                 {
@@ -386,6 +381,16 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 //ToggleNodeEdgesSlidingZoom(vnode);
             }
             vnode.Invalidate();
+        }
+
+        private static void addColorsToSet(List<SolidColorBrush> ColorSet)
+        {
+            ColorSet.Add(Brushes.Red);
+            ColorSet.Add(Brushes.Blue);
+            ColorSet.Add(Brushes.Green);
+            ColorSet.Add(Brushes.Coral);
+            ColorSet.Add(Brushes.BlueViolet);
+            ColorSet.Add(Brushes.HotPink);
         }
 
         void SelectColoredEdgesIncidentTo(LgNodeInfo nodeInfo, SolidColorBrush c)
@@ -1649,11 +1654,25 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
         {
             double zf = ZoomFactor;
 
+            //start: changing tooltip
+            String tooltiptext = "";
+            List<SolidColorBrush> ColorSet = new List<SolidColorBrush>();
+            addColorsToSet(ColorSet);
+            List<GraphmapsNode> coloredNodeList = new List<GraphmapsNode>();
+            //end: changing tooltip
+
             foreach (var o in _drawingObjectsToIViewerObjects.Values)
-            {
+            {                
                 var vNode = o as GraphmapsNode;
                 if (vNode != null)
                 {
+
+                    //Find the nodes that are selected                                        
+                    if (ColorSet.Contains(vNode.LgNodeInfo.Color))
+                    {
+                        coloredNodeList.Add(vNode);
+                    }
+
                     vNode.InvalidateNodeDot(NodeDotWidth);
                     if (vNode.LgNodeInfo == null) continue;
                     ArrangeNodeLabel(vNode, zf);
@@ -1690,6 +1709,73 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 }
 
             }
+            //start: changing tooltip
+            List<System.Windows.Media.SolidColorBrush> incidentColorSet;
+            foreach (var o in _drawingObjectsToIViewerObjects.Values)
+            {
+                var vNode = o as GraphmapsNode;
+                if (vNode == null) continue;
+                tooltiptext = "";
+
+                incidentColorSet = new List<System.Windows.Media.SolidColorBrush>();
+
+                foreach (var w in coloredNodeList)
+                {
+                    foreach (var edge in w.Node.GeometryNode.OutEdges)
+                    {
+                        if (vNode.Node.GeometryNode == edge.Target)
+                        {
+                            tooltiptext = tooltiptext+ "\n" + w.Node.LabelText;                                                        
+                            incidentColorSet.Add(w.LgNodeInfo.Color);
+                        }
+                    }
+                    foreach (var edge in w.Node.GeometryNode.InEdges)
+                    {
+                        if (vNode.Node.GeometryNode == edge.Source)
+                        {
+                            tooltiptext = tooltiptext + "\n" + w.Node.LabelText;
+                            incidentColorSet.Add(w.LgNodeInfo.Color);
+                        }
+                    }   
+                }
+                if (tooltiptext.Length > 0)
+                {
+                    tooltiptext = "\nSelected Neighbors:" + tooltiptext;
+                    int Ax = 0, Rx = 0, Gx = 0, Bx = 0;
+                    foreach (var c in incidentColorSet)
+                    {
+                        Ax += c.Color.A;
+                        Rx += c.Color.R;
+                        Gx += c.Color.G;
+                        Bx += c.Color.B;
+                    }
+                    byte Ay = 0, Ry = 0, Gy = 0, By = 0;
+                    Ay = (Byte)((int)(Ax / incidentColorSet.Count));
+                    Ry = (Byte)((int)(Rx / incidentColorSet.Count));
+                    Gy = (Byte)((int)(Gx / incidentColorSet.Count));
+                    By = (Byte)((int)(Bx / incidentColorSet.Count));
+
+                    System.Windows.Media.Color brush = new System.Windows.Media.Color
+                    {
+                        A = Ay,
+                        R = Ry,
+                        G = Gy,
+                        B = By
+                    };
+
+                    vNode.BoundaryPath.Stroke = new SolidColorBrush(brush);
+                    vNode.BoundaryPath.StrokeThickness = vNode.PathStrokeThickness*2;                    
+                }
+                else vNode.BoundaryPath.StrokeThickness = vNode.PathStrokeThickness/2;
+
+                vNode.BoundaryPath.ToolTip = new ToolTip
+                {
+                    Content = new TextBlock { Text = vNode.Node.LabelText + tooltiptext }                    
+                };
+
+                
+            }
+            //end: changing tooltip
         }
 
         static void SetupTileNode(GraphmapsNode vNode)

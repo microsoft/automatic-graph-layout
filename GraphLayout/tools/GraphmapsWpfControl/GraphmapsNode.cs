@@ -26,7 +26,7 @@ using WpfLineSegment = System.Windows.Media.LineSegment;
 namespace Microsoft.Msagl.GraphmapsWpfControl {
     public class GraphmapsNode : IViewerNode, IInvalidatable {
         readonly LgLayoutSettings lgSettings;
-        internal Path BoundaryPath;
+        public Path BoundaryPath;
         internal FrameworkElement FrameworkElementOfNodeForLabel;
         readonly Func<Edge, GraphmapsEdge> funcFromDrawingEdgeToVEdge;
         internal LgNodeInfo LgNodeInfo;
@@ -37,6 +37,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         Path collapseSymbolPath;
         Brush collapseSymbolPathInactive = Brushes.Silver;
         
+
         internal int ZIndex {
             get {
                 var geomNode = Node.GeometryNode;
@@ -283,7 +284,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         }
 
         internal Func<double> PathStrokeThicknessFunc;
-        double PathStrokeThickness
+        public double PathStrokeThickness
         {
             get
             {
@@ -326,13 +327,13 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
             //jyoti changed all node colors
 
-            
+                          
             BoundaryPath.Fill = Brushes.DarkGray;
             if (LgNodeInfo != null && LgNodeInfo.Selected)
                 BoundaryPath.Fill = LgNodeInfo.Color;//Brushes.Red;
             else if (LgNodeInfo != null && LgNodeInfo.SelectedNeighbor>0)
             {
-                BoundaryPath.Fill = Brushes.Yellow;
+                BoundaryPath.Fill = Brushes.Yellow;                
             }  
             return;
 

@@ -1125,7 +1125,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             {
                 Vertex w = VList[index];
                 Vertex[] list = new Vertex[10];
-                int separation = 2;
+                int separation = 30;
                 int neighbor;
 
 

@@ -27,6 +27,7 @@ using Microsoft.Msagl.Miscellaneous.ConstrainedSkeleton;
 using Microsoft.Msagl.Miscellaneous.RegularGrid;
 using Microsoft.Msagl.Miscellaneous.Routing;
 using Microsoft.Msagl.Routing.Visibility;
+using Brushes = System.Windows.Media.Brushes;
 using Edge = Microsoft.Msagl.Core.Layout.Edge;
 using LineSegment = Microsoft.Msagl.Core.Geometry.Curves.LineSegment;
 using Point = Microsoft.Msagl.Core.Geometry.Point;
@@ -583,11 +584,13 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             4     1.78:1.49		1.241:1.225
             */
 
-            stopwatch.Start();
             //MeshCreator.CreateMeshByLayers(g, idToNode, maxX, maxY);
             //MeshCreator.CreateCompetitionMesh(g, idToNode, maxX, maxY);
-            MeshCreator.FastCompetitionMesh(g, idToNode, maxX, maxY, locationtoNode);
+            //MeshCreator.FastCompetitionMesh(g, idToNode, maxX, maxY, locationtoNode);
             //MeshCreator.CreateCompetitionMeshWithLeftPriority(g, idToNode, maxX, maxY);
+
+            stopwatch.Start();
+            MeshCreator.FastCompetitionMesh(g, idToNode, maxX, maxY, locationtoNode); 
             stopwatch.Stop();
             Console.WriteLine("MeshCreation Time = " + stopwatch.ElapsedMilliseconds);
 
@@ -596,9 +599,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             //ComputeSpanningRatio(g);
 
             stopwatch.Start();
-            //Create Detour //less than a minute for 1500 vertices and 5000 edges
-            //Console.WriteLine("Computing Detour Around Vertex");
-            g.MsaglDetour(idToNode, true); //true or false to control detour around vertices
+            //Create Detour //less than a minute for 1500 vertices and 5000 edges            
+            g.MsaglDetour(idToNode, true); //true : don't create detour 
             
             g.CreateNodeTreeEdgeTree();
             stopwatch.Stop();
@@ -658,7 +660,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 Console.WriteLine("Ink Minimization Time = " + stopwatch.ElapsedMilliseconds);
 
                 LocalModifications.MsaglShortcutShortEdges(g, idToNode, _lgLayoutSettings);
-                //g.MsaglRemoveDeg2(idToNode);
             }
 
             return g;
@@ -1816,11 +1817,16 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             {
                 return;
             }
-
+            foreach (var n in selNodesSet)
+            {
+                
+            }
             var selNodes = selNodesSet.ToList();
             selNodes = selNodes.OrderByDescending(ni => ni.Rank).ToList();
 
             InsertCandidateLabelsGreedily(selNodes, scale);
+
+
         }
 
         void AddVisibleRailsAndNodes()
