@@ -660,6 +660,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 Console.WriteLine("Ink Minimization Time = " + stopwatch.ElapsedMilliseconds);
 
                 LocalModifications.MsaglShortcutShortEdges(g, idToNode, _lgLayoutSettings);
+                g.MsaglRemoveDeg2(idToNode);
+                LocalModifications.MsaglMoveToMedian(g, idToNode, _lgLayoutSettings);
             }
 
             return g;

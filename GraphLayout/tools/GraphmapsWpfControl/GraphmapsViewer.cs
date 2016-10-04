@@ -1740,7 +1740,11 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 }
                 if (tooltiptext.Length > 0)
                 {
-                    tooltiptext = "\nSelected Neighbors:" + tooltiptext;
+                    tooltiptext = "\nSelected Neighbors:" + tooltiptext;                    
+                }
+
+                if (vNode.BoundaryPath.Fill.Equals(Brushes.Yellow))
+                {
                     int Ax = 0, Rx = 0, Gx = 0, Bx = 0;
                     foreach (var c in incidentColorSet)
                     {
@@ -1764,7 +1768,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                     };
 
                     vNode.BoundaryPath.Stroke = new SolidColorBrush(brush);
-                    vNode.BoundaryPath.StrokeThickness = vNode.PathStrokeThickness*2;                    
+                    vNode.BoundaryPath.StrokeThickness = vNode.PathStrokeThickness * 2;
                 }
                 else vNode.BoundaryPath.StrokeThickness = vNode.PathStrokeThickness/2;
 
@@ -1772,7 +1776,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 {
                     Content = new TextBlock { Text = vNode.Node.LabelText + tooltiptext }                    
                 };
-
                 
             }
             //end: changing tooltip
