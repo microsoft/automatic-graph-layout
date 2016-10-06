@@ -444,10 +444,11 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             Dictionary<Edge,Boolean> removeEdge = new Dictionary<Edge,Boolean>();
             foreach (Edge e in edgesToPutOff)
             {
-                //for (int i = _levels.Count - 1; i >= 0; i--)
-                int i = Levels.Count-1;
+                //this for loop seems helping the keypress='end'
+                for (int i = _levels.Count - 1; i >= 0; i--)
+                //int i = Levels.Count-1;
                 {
-                    //if (_levels[i]._railsOfEdges.ContainsKey(e) == false) continue;
+                    if (_levels[i]._railsOfEdges.ContainsKey(e) == false) continue;
                     railsOfEdge = _levels[i]._railsOfEdges[e];
                     foreach (var r in railsOfEdge)
                     {

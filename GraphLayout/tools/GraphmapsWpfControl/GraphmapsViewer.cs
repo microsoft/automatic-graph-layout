@@ -1636,6 +1636,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             var railsToDeselect = _selectedRails.Clone();
             foreach (var r in railsToDeselect)
             {
+                r.Color = null; // this is to help KeyPress='End'
                 SetRailSelection(r, false);
             }
         }
@@ -1743,7 +1744,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                     tooltiptext = "\nSelected Neighbors:" + tooltiptext;                    
                 }
 
-                if (vNode.BoundaryPath.Fill.Equals(Brushes.Yellow))
+                if (vNode.BoundaryPath.Fill!= null && vNode.BoundaryPath.Fill.Equals(Brushes.Yellow))
                 {
                     int Ax = 0, Rx = 0, Gx = 0, Bx = 0;
                     foreach (var c in incidentColorSet)
