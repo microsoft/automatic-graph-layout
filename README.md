@@ -66,7 +66,7 @@ samples can be found here…](https://www.microsoft.com/en-us/research/project/m
 
 #GraphMaps
 This functionality allows viewing a large graph in the
-online map fashion. Here is a [video](http://1drv.ms/1IsBEVh) demoing
+online map fashion. Here is a [video](https://1drv.ms/v/s!AhsA76T-agdHgUBKXzpdOHeVNmq9) demoing
 GraphMaps. To see the system in action please open Lg.sln, build it,
 and run TestGraphMaps. The configuration Release/x64 needs to be used
 to load a large graph.  The graph from the video can be found in
