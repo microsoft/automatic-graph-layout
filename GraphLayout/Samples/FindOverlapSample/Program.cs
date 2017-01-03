@@ -26,6 +26,8 @@ namespace OverlapGraphExperiments
         Random _random;
         int _nodesInDenseSpot = 30;
         Color[] _colors = { Color.Brown, Color.Black, Color.Red, Color.Green, Color.Gray, Color.Magenta };
+        private int  _randomNodesCount = 0;
+
         public Program(ArgsParser.ArgsParser argsParser)
         {
             _argsParser = argsParser;
@@ -48,7 +50,7 @@ namespace OverlapGraphExperiments
             argsParser.AddOptionWithAfterStringWithHelp("-ds", "generate a number of dense spots");
             argsParser.AddAllowedOptionWithHelpString("-dup", "duplicate with color");
             argsParser.AddAllowedOptionWithHelpString("-dot", "load real dot files");
-
+            argsParser.AddOptionWithAfterStringWithHelp("-random_nodes", "create as set of random nodes");
 
             if (!argsParser.Parse())
             {
@@ -74,6 +76,12 @@ namespace OverlapGraphExperiments
                 _nofCircles = GetNumberOfCircles();
                 _nodesPerCircle = GetNumberOfNodesPerCircle();
                 _nodeWidth = 2*_circleRadius/3;
+                _randomNodesCount = GetRandomNodesCount();
+                if (_randomNodesCount !=0) {
+                    _circleRadius = 0;
+                    _nofCircles = 0;
+                }
+
                 run_layout = false;
                 CreateArtificialGraphsIfRequired();
             } else {
@@ -83,6 +91,18 @@ namespace OverlapGraphExperiments
             OverlapRemovalTestSuite.ComparisonSuite(
                 _testDir,
                 "ResultsPrism-original-datasetTestSuite1.csv", false, run_layout);
+        }
+
+        int GetRandomNodesCount() {
+            string s = _argsParser.GetValueOfOptionWithAfterString("-random_nodes");
+            if (s == null)
+                return 0;
+            int ret;
+            if (!int.TryParse(s, out ret)) {
+                Console.WriteLine("Cannot parse string '{0}' following option '-random_nodes'; Returning 0 by default", s);
+                return 0;
+            }
+            return ret;
         }
 
         static void CleanDirectory(string dir)
@@ -186,15 +206,34 @@ namespace OverlapGraphExperiments
             graph.Label.Text = graphName;
             graph.CreateGeometryGraph();
             graph.GeometryGraph.Margins = _graphWidth / 30;
-            int circles = AddCircles(graph);
-            int triangles = AddTriangles(graph);
+            int circles = 0;
+            int triangles = 0;
+            int denseSpots = 0;
+            if (_randomNodesCount == 0) {
+                circles = AddCircles(graph);
+                triangles = AddTriangles(graph);
+            }
+            else {
+                AddRandomNodes(graph);
+            }
             graph.GeometryGraph.UpdateBoundingBox();
-            int denseSpots = AddDenseSpots(graph);
+            if (_randomNodesCount == 0)
+                denseSpots = AddDenseSpots(graph);
             return string.Format("crc{0}_tri{1}_densespots{2}", circles, triangles, denseSpots);
         }
 
-        private int AddDenseSpots(Graph graph)
+        void AddRandomNode(Graph graph) {
+            var nodeCenter = RandomCenter();
+            Microsoft.Msagl.Drawing.Node node = CreateNodeOnCenter(graph, nodeCenter);
+        }
+
+        private void AddRandomNodes(Graph graph)
         {
+            for (int i = 0; i < _randomNodesCount; i++)
+                AddRandomNode(graph);
+        }
+
+        private int AddDenseSpots(Graph graph) {
             int nofDenseSpots;
             _argsParser.GetIntOptionValue("-ds", out nofDenseSpots);
             if (nofDenseSpots == 0) return 0;
@@ -204,6 +243,7 @@ namespace OverlapGraphExperiments
                 GenerateDenseSpot(graph);
             return nofDenseSpots;
         }
+
 
         private void GenerateDenseSpot(Graph graph)
         {
