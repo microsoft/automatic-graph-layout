@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace TinyClickDemo {
-    using System;
-    using System.Collections.Generic;
+﻿namespace TinyClickDemo {
     using System.Windows.Forms;
     class ViewerSample {
         public static void Main() {
