@@ -20,7 +20,8 @@ namespace SameLayerSample
             graph.AddEdge("A", "B");
             graph.AddEdge("A", "C");
             graph.AddEdge("A", "D");
-            graph.LayerConstraints.PinNodesToSameLayer(new[] { graph.FindNode("A"), graph.FindNode("B"), graph.FindNode("C") });
+            //graph.LayerConstraints.PinNodesToSameLayer(new[] { graph.FindNode("A"), graph.FindNode("B"), graph.FindNode("C") });
+            graph.LayerConstraints.AddSameLayerNeighbors(graph.FindNode("A"), graph.FindNode("B"), graph.FindNode("C"));
             gViewer.Graph = graph;
 
         }
