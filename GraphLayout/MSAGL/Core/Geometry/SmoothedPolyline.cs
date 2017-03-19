@@ -169,23 +169,5 @@ namespace Microsoft.Msagl.Core.Geometry {
         }
 
         #endregion
-        /// <summary>
-        /// returns the reversed smoothed polyline and does not change "this"
-        /// </summary>
-        /// <returns></returns>
-        internal SmoothedPolyline Reverse()
-        {
-            var ret = FromPoints(this);
-            var a = ret.HeadSite;
-            var b = ret.LastSite;
-            while(b!=null)
-            {
-                a.NextBezierSegmentFitCoefficient = b.PreviousBezierSegmentFitCoefficient;
-                a.PreviousBezierSegmentFitCoefficient = b.NextBezierSegmentFitCoefficient;
-                b = b.Previous;
-                a = a.Next;
-            }
-            return ret;
-        }
     }
 }

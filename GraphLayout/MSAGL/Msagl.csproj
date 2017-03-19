@@ -356,7 +356,6 @@
     <Compile Include="Routing\Spline\Bundling\BundleInfo.cs" />
     <Compile Include="Routing\Spline\Bundling\BundleRouter.cs" />
     <Compile Include="Routing\Spline\Bundling\BundlingStatus.cs" />
-    <Compile Include="Routing\Spline\Bundling\CdtGeneralPolylineTracer.cs" />
     <Compile Include="Routing\Spline\Bundling\CdtIntersections.cs" />
     <Compile Include="Routing\Spline\Bundling\ChannelFlag.cs" />
     <Compile Include="Routing\Spline\Bundling\EdgeNudger.cs" />

@@ -130,11 +130,6 @@ namespace TestForGdi {
             set { generatedGraph = value; }
         }
 
-        internal double ObstaclePadding {
-            get { return 2; }
-            set { throw new NotImplementedException(); }
-        }
-
         public double CornerFitRadius {
             get { return cornerFitRadius; }
             set { cornerFitRadius = value; }
@@ -552,11 +547,6 @@ namespace TestForGdi {
 //                return gViewer.Graph.LayoutAlgorithmSettings.EdgeRoutingSettings.UseSparseVisibilityGraph;
 //            return false;
 //        }
-
-        IEnumerable<ICurve> GetObstacleCurves() {
-            return gViewer.Graph.GeometryGraph.Nodes.Select(n => n.BoundaryCurve);
-        }
-
 
         void RouteEdges() {
             if (gViewer.Graph == null) return;

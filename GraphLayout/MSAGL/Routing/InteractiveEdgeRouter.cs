@@ -1757,16 +1757,6 @@ namespace Microsoft.Msagl.Routing {
             return VisibilityGraph;
         }
 
-        ///<summary>
-        ///</summary>
-        ///<param name="portLocationsPointSet"></param>
-        internal void CalculatePortVisibilityGraph(Set<Point> portLocationsPointSet) {
-            var coneSpanner = new ConeSpannerForPortLocations(
-                ObstacleCalculator.LooseObstacles, VisibilityGraph, portLocationsPointSet)
-                              {ConeAngle = ConeSpannerAngle};
-            coneSpanner.Run();
-        }
-
         //        internal void CalculateVisibilityGraph(IEnumerable<EdgeGeometry> edgeGeometries, bool qualityAtPorts)
         //        {
         //            CalculateWholeTangentVisibilityGraph();

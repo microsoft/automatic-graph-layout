@@ -1343,12 +1343,6 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             return new PointF((float) p2.X, (float) p2.Y);
         }
 
-
-        void ScrollHandler(object o, ScrollEventArgs args) {
-            //    if(args.Type==  ScrollEventType.EndScroll)
-            panel.Invalidate();
-        }
-
         /// <summary>
         /// Maps a point from the screen to the graph surface
         /// </summary>
@@ -1367,11 +1361,6 @@ namespace Microsoft.Msagl.GraphViewerGdi {
 
         internal Point ScreenToSource(int x, int y) {
             return ScreenToSource(new System.Drawing.Point(x, y));
-        }
-
-
-        static int Int(double f) {
-            return (int) (f + 0.5);
         }
 
 

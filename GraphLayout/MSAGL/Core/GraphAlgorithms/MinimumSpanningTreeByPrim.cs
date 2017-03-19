@@ -26,13 +26,6 @@ namespace Microsoft.Msagl.Core.GraphAlgorithms {
 
         }
 
-        static IEnumerable<IntPair> GetEdges(int count) {
-            for(int i=0;i<count;i++)
-                for (int j = i + 1; j < count; j++) {
-                    yield return new IntPair(i,j);
-                }
-        }
-
         /// <summary>
         /// constructor
         /// </summary>

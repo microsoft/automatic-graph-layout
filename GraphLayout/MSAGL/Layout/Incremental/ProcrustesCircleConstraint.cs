@@ -109,44 +109,6 @@ namespace Microsoft.Msagl.Layout.Incremental {
             return new Point(lambda1, lambda2);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        private static Point eigenSystem3(Point[] A, out Point[] Q) {
-            double a = A[0].X, b = A[0].Y, c = A[1].X, d = A[1].Y;
-            double T = a + d;
-            double D = a*d - b*c;
-            double l1, l2;
-            {
-                double t = Math.Sqrt(T * T / 4.0 - D);
-                l1 = l2 = T / 2.0;
-                l1 -= t;
-                l2 += t;
-            }
-            Point q1, q2;
-            if (c != 0) {
-                q1 = new Point(l1 - d, c);
-                q2 = new Point(l2 - d, c);
-            } else if (b != 0) {
-                q1 = new Point(b, l1 - a);
-                q2 = new Point(b, l2 - a);
-            } else {
-                q1 = new Point(1,0);
-                q2 = new Point(0,1);
-            }
-            Q = new Point[] { q1.Normalize(), q2.Normalize() };
-            return new Point(l1, l2);
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        static bool cmpPoint(Point x, Point y) {
-            if (Math.Abs(x.X - y.X) > 0.0001) {
-                return false;
-            }
-            if (Math.Abs(x.Y - y.Y) > 0.0001) {
-                return false;
-            }
-            return true;
-        }
-
         /// <summary>
         /// Compute singular value decomposition of a 2X2 matrix X=PSQ'
         /// </summary>

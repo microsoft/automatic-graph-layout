@@ -109,16 +109,12 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         static internal bool IntervalsOverlap(SegmentBase first, SegmentBase second) {
             return IntervalsOverlap(first.Start, first.End, second.Start, second.End);
         }
-        static internal bool IntervalsOverlap(LineSegment first, LineSegment second) {
-            return IntervalsOverlap(first.Start, first.End, second.Start, second.End);
-        }
+
         static internal bool IntervalsOverlap(Point start1, Point end1, Point start2, Point end2) {
             return IntervalsAreCollinear(start1, end1, start2, end2)
                 && PointComparer.Compare(start1, end2) != PointComparer.Compare(end1, start2);
         }
-        static internal bool IntervalsAreCollinear(SegmentBase first, SegmentBase second) {
-            return IntervalsAreCollinear(first.Start, first.End, second.Start, second.End);
-        }
+
         static internal bool IntervalsAreCollinear(Point start1, Point end1, Point start2, Point end2) {
             Debug.Assert(IsVertical(start1, end1) == IsVertical(start2, end2), "segments are not in the same orientation");
             bool vertical = IsVertical(start1, end1);
@@ -142,14 +138,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return SegmentIntersection(edge.SourcePoint, edge.TargetPoint, from);
         }
 
-        static internal VisibilityVertex LowVertex(VisibilityEdge edge) {
-            return IsAscending(edge) ? edge.Source : edge.Target;
-        }
-
-        static internal VisibilityVertex HighVertex(VisibilityEdge edge) {
-            return IsAscending(edge) ? edge.Target : edge.Source;
-        }
-
         static internal bool PointIsOnSegment(Point first, Point second, Point test) {
             return PointComparer.Equal(first, test)
                 || PointComparer.Equal(second, test)
@@ -157,22 +145,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
         static internal bool PointIsOnSegment(SegmentBase seg, Point test) {
             return PointIsOnSegment(seg.Start, seg.End, test);
-        }
-        static internal bool PointIsOnSegment(LineSegment seg, Point test) {
-            return PointIsOnSegment(seg.Start, seg.End, test);
-        }
-
-        static internal bool PointIsOnSegmentInterior(Point first, Point second, Point test) {
-            Directions firstDir = PointComparer.GetDirections(first, test);
-            Directions secondDir = PointComparer.GetDirections(test, second);
-            Debug.Assert((Directions. None != firstDir) || (Directions. None != secondDir), "zero-length segment");
-            return (firstDir == secondDir);
-        }
-        static internal bool PointIsOnSegmentInterior(LineSegment seg, Point test) {
-            return PointIsOnSegmentInterior(seg.Start, seg.End, test);
-        }
-        static internal bool PointIsOnSegmentInterior(SegmentBase seg, Point test) {
-            return PointIsOnSegmentInterior(seg.Start, seg.End, test);
         }
 
         static internal bool IsVertical(Directions dir) {
@@ -184,22 +156,13 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         static internal bool IsVertical(Point first, Point second) {
             return IsVertical(PointComparer.GetPureDirection(first, second));
         }
-        static internal bool IsVertical(SegmentBase seg) {
-            return IsVertical(PointComparer.GetPureDirection(seg.Start, seg.End));
-        }
+
         static internal bool IsVertical(LineSegment seg) {
             return IsVertical(PointComparer.GetPureDirection(seg.Start, seg.End));
         }
 
         static internal bool IsAscending(Directions dir) {
             return (0 != (dir & (Directions.North | Directions.East)));
-        }
-        static internal bool IsAscending(VisibilityEdge edge) {
-            return IsAscending(EdgeDirection(edge));
-        }
-
-        static internal double Slope(SegmentBase seg, ScanDirection scanDir) {
-            return Slope(seg.Start, seg.End, scanDir);
         }
 
         static internal double Slope(Point start, Point end, ScanDirection scanDir) {
@@ -273,16 +236,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         [Conditional("TEST_MSAGL")]
-// ReSharper disable InconsistentNaming
-        static internal void Test_ShowVisibilityGraph(ObstacleTree obstacleTree, VisibilityGraph vg) {
-#if TEST_MSAGL
-            var debugCurves = Test_GetObstacleDebugCurves(obstacleTree);
-            debugCurves.AddRange(Test_GetVisibilityGraphDebugCurves(vg));
-            LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(debugCurves);
-#endif // TEST
-        }
-
-        [Conditional("TEST_MSAGL")]
         static internal void Test_DumpVisibilityGraph(ObstacleTree obstacleTree, VisibilityGraph vg) {
 #if TEST_MSAGL
             var debugCurves = Test_GetObstacleDebugCurves(obstacleTree);
@@ -291,61 +244,14 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 #endif // TEST
         }
 
-        [Conditional("TEST_MSAGL")]
-        static internal void Test_ShowPathsBeforeNudging(ObstacleTree obstacleTree, IEnumerable<Path> edgePaths) {
-#if TEST_MSAGL
-            var debugCurves = Test_GetObstacleDebugCurves(obstacleTree);
-            debugCurves.AddRange(Test_GetPreNudgedPathDebugCurves(edgePaths));
-            LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(debugCurves);
-#endif //TEST
-        }
-
-        [Conditional("TEST_MSAGL")]
-        static internal void Test_DumpPathsBeforeNudging(ObstacleTree obstacleTree, IEnumerable<Path> edgePaths) {
-#if TEST_MSAGL
-            var debugCurves = Test_GetObstacleDebugCurves(obstacleTree);
-            debugCurves.AddRange(Test_GetPreNudgedPathDebugCurves(edgePaths));
-            DebugCurveCollection.WriteToFile(debugCurves, GetDumpFileName("PreNudgedPaths"));
-#endif //TEST
-        }
-
-        [Conditional("TEST_MSAGL")]
-        static internal void Test_ShowPathsAfterNudging(ObstacleTree obstacleTree, IEnumerable<Path> edgePaths) {
-#if TEST_MSAGL
-            var debugCurves = Test_GetObstacleDebugCurves(obstacleTree);
-            debugCurves.AddRange(Test_GetPostNudgedPathDebugCurves(edgePaths));
-            LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(debugCurves);
-#endif // TEST
-        }
-
-        [Conditional("TEST_MSAGL")]
-        static internal void Test_DumpPathsAfterNudging(ObstacleTree obstacleTree, IEnumerable<Path> edgePaths) {
-#if TEST_MSAGL
-            var debugCurves = Test_GetObstacleDebugCurves(obstacleTree);
-            debugCurves.AddRange(Test_GetPostNudgedPathDebugCurves(edgePaths));
-            DebugCurveCollection.WriteToFile(debugCurves, GetDumpFileName("PostNudgedPaths"));
-#endif // TEST
-        }
-
-        [Conditional("TEST_MSAGL")]
-        static internal void Test_ShowScanSegments(ObstacleTree obstacleTree, ScanSegmentTree hSegs, ScanSegmentTree vSegs) {
-#if TEST_MSAGL
-            var debugCurves = Test_GetObstacleDebugCurves(obstacleTree);
-            debugCurves.AddRange(Test_GetScanSegmentCurves(hSegs));
-            debugCurves.AddRange(Test_GetScanSegmentCurves(vSegs));
-            LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(debugCurves);
-#endif // TEST
-        }
-
-        [Conditional("TEST_MSAGL")]
+#if DEVTRACE
         static internal void Test_DumpScanSegments(ObstacleTree obstacleTree, ScanSegmentTree hSegs, ScanSegmentTree vSegs) {
-#if TEST_MSAGL
             var debugCurves = Test_GetObstacleDebugCurves(obstacleTree);
             debugCurves.AddRange(Test_GetScanSegmentCurves(hSegs));
             debugCurves.AddRange(Test_GetScanSegmentCurves(vSegs));
             DebugCurveCollection.WriteToFile(debugCurves, GetDumpFileName("ScanSegments"));
-#endif // TEST
         }
+#endif // DEVTRACE
 
 #if TEST_MSAGL
         static internal List<DebugCurve> Test_GetObstacleDebugCurves(ObstacleTree obstacleTree) {

@@ -15,8 +15,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
         internal BundleInfo IncomingBundleInfo;
 
-        internal BundleInfo BundleInfo { get { return OutgoingBundleInfo ?? IncomingBundleInfo; } }
-
         readonly Point[] points;
 
         readonly Point[] tangents;
@@ -64,8 +62,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         internal Point CurveCenter { get { return Curve.BoundingBox.Center; } }
 
         internal BundleBase OppositeBase { get { return OutgoingBundleInfo != null ? OutgoingBundleInfo.TargetBase : IncomingBundleInfo.SourceBase; } }
-
-        internal double TotalRequiredWidth { get { return BundleInfo.TotalRequiredWidth; } }
 
         internal int Count { get { return points.Length; } }
 

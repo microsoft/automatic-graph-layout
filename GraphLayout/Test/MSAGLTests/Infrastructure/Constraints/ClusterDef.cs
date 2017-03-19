@@ -382,25 +382,6 @@ namespace Microsoft.Msagl.UnitTests.Constraints
             this.Cluster = null;
             return succeeded;
         }
-        internal OverlapRemovalCluster ParentCluster
-        {
-            get
-            {
-                // By the time this is called we should always have created our ConGen.Cluster.
-                // The Debugger calls this to display the variable so don't assert in that case.
-#if DEBUG
-                if (!System.Diagnostics.Debugger.IsAttached)
-                {
-                    Validate.IsNotNull(this.Cluster, "Unexpected null==this.Cluster in ClusterDef.ParentCluster propget");
-                }
-#endif // DEBUG
-                if (null == this.ParentClusterDef)
-                {
-                    return null;
-                }
-                return this.ParentClusterDef.Cluster;
-            }
-        }
 
         // Compute initial borders, fixed or not - but only "set" the fixed positions as
         // we let the ConstraintGenerator actually do that.

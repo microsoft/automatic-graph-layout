@@ -9,10 +9,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
             IsEmpty = true;
         }
 
-        internal bool Intersects(RealNumberSpan a) {
-            return !(a.Max < Min || a.Min > Max);
-        }
-
         internal bool IsEmpty { get; set; }
 
         internal void AddValue(double x){

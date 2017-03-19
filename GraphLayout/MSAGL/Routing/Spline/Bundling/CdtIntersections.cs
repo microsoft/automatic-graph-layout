@@ -51,23 +51,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             return true;
         }
 
-        internal bool HubAvoidsObstacles(Station v, Point vPosition, double upperBound,
-            out List<double> closestDist) {
-
-            closestDist = new List<double>();
-            Set<Polyline> obstaclesToIgnore = metroGraphData.looseIntersections.ObstaclesToIgnoreForHub(v);
-            Dictionary<Polyline, double> closeObstacles = FindCloseObstaclesForHub(v.CdtTriangle, v.Position, vPosition, obstaclesToIgnore, upperBound);
-            if (closeObstacles == null) return false;
-
-            foreach (var item in closeObstacles) {
-                double dist = item.Value;
-
-                closestDist.Add(dist);
-            }
-
-            return true;
-        }
-
         /// <summary>
         /// returns null iff the edge overlap an obstacle
         /// </summary>
@@ -121,52 +104,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
             return obstacles;
         }
-
-        Dictionary<Polyline, double> FindCloseObstaclesForHub(CdtTriangle startTriangle, Point start, Point end, Set<Polyline> obstaclesToIgnore, double upperBound) {
-            var obstacles = new Dictionary<Polyline, double>();
-            List<CdtTriangle> nearestTriangles;
-            if (!ThreadLineSegmentThroughTriangles(startTriangle, start, end, obstaclesToIgnore, out nearestTriangles))
-                return null;
-
-            var checkedSites = new HashSet<CdtSite>();
-
-            foreach (var t in nearestTriangles) {
-                foreach (var s in t.Sites) {
-                    CheckSite(end, obstaclesToIgnore, checkedSites, s, upperBound, obstacles);
-
-                    var edge = t.OppositeEdge(s);
-                    var ot = edge.GetOtherTriangle(t);
-                    if (ot != null) {
-                        CheckSite(end, obstaclesToIgnore, checkedSites, ot.OppositeSite(edge), upperBound, obstacles);
-                    }
-                }
-            }
-
-            return obstacles;
-        }
-
-        void CheckSite(Point end, Set<Polyline> obstaclesToIgnore, HashSet<CdtSite> checkedSites, CdtSite s, double upperBound, Dictionary<Polyline, double> obstacles) {
-            if (!checkedSites.Add(s)) return;
-
-            var poly = (Polyline)s.Owner;
-            if (obstaclesToIgnore.Contains(poly)) return;
-
-            //distance to the obstacle
-            PolylinePoint pp = FindPolylinePoint(poly, s.Point);
-            double par;
-            double d12 = Point.DistToLineSegment(end, pp.Point, pp.NextOnPolyline.Point, out par);
-            double d22 = Point.DistToLineSegment(end, pp.Point, pp.PrevOnPolyline.Point, out par);
-            double dist = Math.Min(d12, d22);
-            if (dist > upperBound) return;
-
-            double currentValue;
-            if (!obstacles.TryGetValue(poly, out currentValue)) {
-                obstacles.Add(poly, dist);
-            }
-            else if (currentValue > dist) {
-                obstacles[poly] = dist;
-            }
-        }
         
         /// <summary>
         /// returns false iff the edge overlap an obstacle
@@ -216,13 +153,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 //                triangles.Add(currentTriangle);
 
             return true;
-        }
-
-        static internal int GetHyperplaneSign(Point start, Point end, CdtSite cdtSite) {
-            var area = Point.SignedDoubledTriangleArea(start, cdtSite.Point, end);
-            if (area > ApproximateComparer.DistanceEpsilon) return 1;
-            if (area < -ApproximateComparer.DistanceEpsilon) return -1;
-            return 0;
         }
 
         internal static PointLocation PointLocationInsideTriangle(Point p, CdtTriangle triangle) {

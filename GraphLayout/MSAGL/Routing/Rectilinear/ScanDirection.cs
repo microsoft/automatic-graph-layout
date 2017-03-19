@@ -49,13 +49,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return PointComparer.Compare((lhs - rhs) * PerpDirectionAsPoint, 0.0);
         }
 
-        internal bool IsEqualScanCoord(Point first, Point second) {
-            return 0 == CompareScanCoord(first, second);
-        }
-        internal bool IsEqualPerpCoord(Point first, Point second) {
-            return 0 == ComparePerpCoord(first, second);
-        }
-
         internal bool IsFlat(SegmentBase seg) {
             return IsFlat(seg.Start, seg.End);
         }
@@ -71,18 +64,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return PointComparer.Equal((end - start) * DirectionAsPoint, 0.0);
         }
 
-        internal Point Mask(Point point) {
-            return new Point(point.X * DirectionAsPoint.X, point.Y * DirectionAsPoint.Y);
-        }
-        internal Point PerpMask(Point point) {
-            return new Point(point.X * PerpDirectionAsPoint.X, point.Y * PerpDirectionAsPoint.Y);
-        }
-
         internal double Coord(Point point) {
             return point * DirectionAsPoint;
-        }
-        internal double PerpCoord(Point point) {
-            return point * PerpDirectionAsPoint;
         }
 
         internal Point Min(Point first, Point second) {

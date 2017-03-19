@@ -26,7 +26,6 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         internal Action<RectilinearEdgeRouterWrapper> ShowGraph { get; set; }
 
         internal bool NoPorts { get; set; }
-        internal bool UseSparseVisibilityGraph { get; set; }        
 
         internal GeomFileProcessor(Action<string> writeLineFunc,
                             Func<string, bool> errorFunc,
@@ -87,32 +86,6 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             if (null != ShowInitialObstacles)
             {
                 ShowInitialObstacles(router);
-            }
-            router.Run();
-            if (null != ShowGraph)
-            {
-                ShowGraph(router);
-            }
-            return router;
-        }
-
-        internal RectilinearEdgeRouterWrapper RunGeomGraphWithFreePorts(string fileName, bool loadOnly)
-        {
-            var geomGraph = GeometryGraphReader.CreateFromFile(fileName);
-            if (loadOnly)
-            {
-                return null;
-            }
-
-            var router = createRouterFunc(geomGraph.Nodes.Select(node => new Shape(node.BoundaryCurve)));
-            foreach (var edge in geomGraph.Edges)
-            {
-                // Use a null curve, for consistency with RectilinearVerifier.MakeAbsoluteObstaclePort
-                // treatment of UseFreePortsForObstaclePorts.
-                EdgeGeometry edgeGeom = edge.EdgeGeometry;
-                edgeGeom.SourcePort = new FloatingPort(null, edge.Source.Center);
-                edgeGeom.TargetPort = new FloatingPort(null, edge.Target.Center);
-                router.AddEdgeGeometryToRoute(edgeGeom);
             }
             router.Run();
             if (null != ShowGraph)

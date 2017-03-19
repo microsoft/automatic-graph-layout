@@ -130,10 +130,9 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 #endif // DEVTRACE
         }
 
-        [Conditional("DEVTRACE")]
+#if DEVTRACE
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         void DevTrace_VerifyVertex(VisibilityVertex vertex) {
-#if DEVTRACE
             if (transGraphVerify.IsLevel(1)) {
                 Directions dir = Directions.North;
                 for (int idir = 0; idir < 4; ++idir, dir = CompassVector.RotateRight(dir)) {
@@ -157,8 +156,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                     Debug.Assert(count < 2, "vertex has multiple edges in one direction");
                 }
             }
-#endif // DEVTRACE
         }
+#endif // DEVTRACE
 
         [Conditional("DEVTRACE")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
@@ -325,15 +324,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return perpEdge;
         }
 
-        internal void ConnectVertexToTargetEdge(VisibilityVertex sourceVertex, VisibilityEdge targetEdge,
-                    Point targetIntersect, Directions finalEdgeDir, double weight) {
-            VisibilityVertex targetVertex = FindOrAddVertex(targetIntersect);
-            if ((targetVertex != targetEdge.Source) && (targetVertex != targetEdge.Target)) {
-                SplitEdge(targetEdge, targetVertex);
-            }
-            ConnectVertexToTargetVertex(sourceVertex, targetVertex, finalEdgeDir, weight);
-        }
-            
         internal void ConnectVertexToTargetVertex(VisibilityVertex sourceVertex, VisibilityVertex targetVertex, Directions finalEdgeDir, double weight) {
             // finalDir is the required direction of the final edge to the targetIntersect
             // (there will be two edges if we have to add a bend vertex).
@@ -376,10 +366,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             }
             FindOrAddEdge(sourceVertex, targetVertex);
             return targetVertex;
-        }
-
-        internal VisibilityEdge SplitEdge(VisibilityEdge edge, Point splitPoint) {
-            return SplitEdge(edge, FindOrAddVertex(splitPoint));
         }
 
         internal VisibilityEdge SplitEdge(VisibilityEdge edge, VisibilityVertex splitVertex) {
@@ -817,15 +803,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         readonly DevTrace transGraphVerify = new DevTrace("Rectilinear_TransGraphVerify");
 #endif // DEVTRACE
 
-        [Conditional("DEVTRACE")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-// ReSharper disable UnusedMember.Local
-        void DevTraceInfo(int verboseLevel, string format, params object[] args) {
-// ReSharper restore UnusedMember.Local
-#if DEVTRACE
-            transGraphTrace.WriteLineIf(DevTrace.Level.Info, verboseLevel, format, args);
-#endif // DEVTRACE
-        }
         #endregion // DevTrace
     }
 }

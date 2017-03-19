@@ -382,7 +382,7 @@
     <Compile Include="..\msagl\Layout\Layered\RecoveryLayeredLayoutEngine.cs">
       <Link>RecoveryLayeredLayoutEngine.cs</Link>
     </Compile>
-    <Compile Include="..\msagl\Core\Layout\ProximityOverlapRemoval\MST\OverlapRemoval.cs">
+    <Compile Include="..\msagl\Core\Layout\ProximityOverlapRemoval\MST\GTreeOverlapRemoval.cs">
       <Link>OverlapRemoval.cs</Link>
     </Compile>
     <Compile Include="..\msagl\Core\Layout\ProximityOverlapRemoval\OverlapRemovalMethod.cs">
@@ -603,9 +603,6 @@
     </Compile>
     <Compile Include="..\msagl\Routing\Spline\Bundling\BundlingStatus.cs">
       <Link>BundlingStatus.cs</Link>
-    </Compile>
-    <Compile Include="..\msagl\Routing\Spline\Bundling\CdtGeneralPolylineTracer.cs">
-      <Link>CdtGeneralPolylineTracer.cs</Link>
     </Compile>
     <Compile Include="..\msagl\Routing\Spline\Bundling\CdtIntersections.cs">
       <Link>CdtIntersections.cs</Link>

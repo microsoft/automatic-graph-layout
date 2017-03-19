@@ -19,9 +19,5 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         internal PolylinePoint PolyPoint {
             get { return polyPoint; }
         }
-
-        internal Station Station {
-            get { return station; }
-        }
     }
 }

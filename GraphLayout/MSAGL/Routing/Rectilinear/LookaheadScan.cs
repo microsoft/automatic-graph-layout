@@ -67,10 +67,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return FindFirstInRange(site, site);
         }
 
-        internal bool Remove(BasicReflectionEvent initialSite) {
-            return null != eventTree.Remove(initialSite);
-        }
-
         internal bool RemoveExact(BasicReflectionEvent initialSite) {
             RBNode<BasicReflectionEvent> node = eventTree.Find(initialSite);
             if (null != node) {

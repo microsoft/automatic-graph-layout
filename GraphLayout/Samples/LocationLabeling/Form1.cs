@@ -52,12 +52,5 @@ namespace LocationLabeling {
   //          var graph = LocationLabeler.PositionLabels(  g.Nodes , 6, false, -6);
 
         }
-
-        private void ChangeShapes(GeometryGraph g) {
-            foreach(var n in g.Nodes){
-                var box=n.BoundaryCurve.BoundingBox;
-                n.BoundaryCurve = new Ellipse(20, 20, n.Center);
-            }
-        }
     }
 }

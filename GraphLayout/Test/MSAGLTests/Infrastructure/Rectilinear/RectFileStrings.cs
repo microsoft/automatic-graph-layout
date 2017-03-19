@@ -54,7 +54,6 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         internal static Regex ParseCornerTolerance = new Regex(@"^CornerTolerance\s+(?<value>" + ParseDouble + @")", RgxOptions);
 
         // Header Output summary
-        internal const string WriteVisibilityGraphSummary = "Vertices {0} Edges {1}";
         internal static Regex ParseVisibilityGraphSummary = new Regex(@"^\S+\s+(?<vcount>\d+)\s+\S+\s+(?<ecount>\d+)", RgxOptions);
 
         // Input detail

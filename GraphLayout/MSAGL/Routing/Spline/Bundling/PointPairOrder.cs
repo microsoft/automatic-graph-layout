@@ -7,8 +7,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         internal bool orderFixed;
         internal Dictionary<Metroline, int> LineIndexInOrder;
 
-        internal int Count { get { return Metrolines.Count; } }
-
         internal void Add(Metroline metroline) {
             Metrolines.Add(metroline);
         }

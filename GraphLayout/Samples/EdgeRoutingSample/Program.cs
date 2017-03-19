@@ -92,15 +92,5 @@ namespace EdgeRoutingSample {
                                                          false);
 
         }
-
-
-        private static IEnumerable<ICurve> ArrowHeadCurves(EdgeGeometry edgeGeom) {
-            var start = edgeGeom.Curve.End;
-            var end = edgeGeom.TargetArrowhead.TipPosition;
-            var ang = Math.PI / 12;
-            var leftTip = end + (start - end).Rotate(ang);
-            var rightTip = end + (start - end).Rotate(-ang);
-            return new List<ICurve> { new LineSegment(leftTip, end), new LineSegment(rightTip, end) };
-        }
     }
 }

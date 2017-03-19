@@ -527,19 +527,5 @@ namespace Microsoft.Msagl.Routing {
         static bool Inside(ICurve curveUnderTest, ICurve curve) {
             return Curve.PointRelativeToCurveLocation(curve.Start, curveUnderTest) == PointLocation.Inside;
         }
-        
-        //internal void HideTightPolylineContainingPoint(Point sourcePortLocation) {
-        //    //the source polyline should not participate in 
-        //    sourceTightNode = InteractiveEdgeRouter.GetFirstHitRectangleNode(sourcePortLocation, this.RootOfTightHierararchy);
-        //    sourceTightNode.rectangle = new Rectangle(double.PositiveInfinity, double.PositiveInfinity, double.PositiveInfinity, double.PositiveInfinity); //need to restore it when edge routing is done
-        //}
-        internal void ScaleLooseObstacles(double coefficient) {
-            LooseObstacles.Clear();
-            foreach (var tightPolyline in TightObstacles)
-                LooseObstacles.Add(LoosePolylineWithFewCorners(tightPolyline,
-                                                               tightPolylinesToLooseDistances[tightPolyline]*coefficient));
-            RootOfLooseHierarchy = CalculateHierarchy(LooseObstacles);
-            Debug.Assert(GetOverlappedPairSet(RootOfLooseHierarchy).Count == 0, "Overlaps are found in LooseObstacles");
-        }
     }
 }

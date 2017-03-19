@@ -31,10 +31,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             this.obstacleTree = obstacleTree;
         }
 
-        internal Set<Polyline> ObstaclesToIgnoreForHub(Station node) {
-            return (node != null ? obstaclesToIgnore(node) : new Set<Polyline>());
-        }
-
         internal Set<Polyline> ObstaclesToIgnoreForBundle(Station node, Station adj) {
             if (node != null && adj != null)
                 return obstaclesToIgnore(node) + obstaclesToIgnore(adj);
