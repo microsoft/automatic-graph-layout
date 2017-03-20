@@ -590,11 +590,6 @@ namespace Dot2Graph
 
         }
 
-        static PlaneTransformation GetTransformForDotSquashedGeometry()
-        {
-            return new PlaneTransformation(72, 0, 0, 0, 72, 0);
-        }
-
         static bool AllGeometryInPlace(Graph graph1)
         {
             bool nodes_are_ok = graph1.Nodes.All(n => n.GeometryNode != null);

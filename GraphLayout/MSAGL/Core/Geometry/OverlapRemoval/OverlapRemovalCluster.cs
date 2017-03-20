@@ -231,11 +231,6 @@ namespace Microsoft.Msagl.Core.Geometry
             }
         }
 
-        // Enumerates the Nodes (including Clusters) of this Cluster.
-        // This returns the immediate child Nodes, including Clusters; the caller should
-        // recurse into any Clusters if desired.
-        internal IEnumerable<OverlapRemovalNode> Nodes { get { return this.nodeList; } }
-
         // Enumerates only cluster children of this cluster.
         internal IEnumerable<OverlapRemovalCluster> Clusters { get { return this.clusterList; } }
 

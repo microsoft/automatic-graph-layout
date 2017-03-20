@@ -16,7 +16,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
     internal class ScanSegmentTree : IComparer<ScanSegment> {
         internal ScanDirection ScanDirection { get; private set; }
         private readonly RbTree<ScanSegment> segmentTree;
-        internal int Count { get { return this.segmentTree.Count; } }
 
         // Temporary variables for lookup.
         private readonly ScanSegment lookupSegment = new ScanSegment(new Point(0, 0), new Point(0, 1));  // dummy values avoid AF; will be overwritten

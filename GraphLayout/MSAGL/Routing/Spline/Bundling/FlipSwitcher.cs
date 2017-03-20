@@ -326,32 +326,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             return res;
         }
 
-        Polyline FindFlip(Polyline poly) {
-            var departed = new Dictionary<Polyline, PolylinePoint>();
-            for (PolylinePoint pp = poly.StartPoint.Next; pp != null; pp = pp.Next) {
-                FillDepartedOnPrev(departed, pp);
-
-                //look for a returning path
-                foreach (PolylinePoint polyPoint in pathsThroughPoints[pp.Point]) {
-                    PolylinePoint pointOfDeparture;
-                    if (departed.TryGetValue(polyPoint.Polyline, out pointOfDeparture))
-                        return pointOfDeparture.Polyline;
-                }
-            }
-
-            return null;
-        }
-
-        void FillDepartedOnPrev(Dictionary<Polyline, PolylinePoint> departed, PolylinePoint pp) {
-            Point prevPoint = pp.Prev.Point;
-            foreach (PolylinePoint polyPoint in pathsThroughPoints[prevPoint]) {
-                if (!IsNeighbor(polyPoint, pp)) {
-                    Debug.Assert(!departed.ContainsKey(polyPoint.Polyline));
-                    departed[polyPoint.Polyline] = polyPoint;
-                }
-            }
-        }
-
         bool IsNeighbor(PolylinePoint a, PolylinePoint b) {
             return a.Prev != null && a.Prev.Point == b.Point || a.Next != null && a.Next.Point == b.Point;
         }

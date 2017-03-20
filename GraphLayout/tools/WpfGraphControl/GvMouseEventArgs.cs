@@ -40,11 +40,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
             position = args.GetPosition((IInputElement) graphScrollerP.GraphCanvas.Parent);
         }
 
-        internal MouseEventArgs Args {
-            get { return args; }
-            set { args = value; }
-        }
-
         public override bool LeftButtonIsPressed {
             get { return args.LeftButton == MouseButtonState.Pressed; }
         }

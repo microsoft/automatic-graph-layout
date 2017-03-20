@@ -119,11 +119,6 @@ namespace WpfApplicationSample
         }
 
 
-        void ScaleNodeUpTest(object sender, ExecutedRoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         void SetMainMenu()
         {
             var mainMenu = new Menu { IsMainMenu = true };

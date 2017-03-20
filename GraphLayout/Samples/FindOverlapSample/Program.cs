@@ -175,19 +175,6 @@ namespace OverlapGraphExperiments
             return _colors[i%_colors.Length];
         }
 
-        internal static void ShowGraph(Graph graph)
-        {
-            Form f = new Form();
-            GViewer v = new GViewer();
-            v.Dock = DockStyle.Fill;
-            f.SuspendLayout();
-            f.Controls.Add(v);
-            f.ResumeLayout();
-            v.NeedToCalculateLayout = false;
-            v.Graph = graph;
-            f.ShowDialog();
-        }
-
         double GetWidthOfGraph() {
             string s = _argsParser.GetValueOfOptionWithAfterString("-box_width");
             if (s == null)

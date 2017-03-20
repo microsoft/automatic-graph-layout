@@ -30,8 +30,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             this.bundlingSettings = bundlingSettings;
         }
 
-        const int MaxIterations = 100;
-
         /// <summary>
         /// calculate node radii with fixed hubs
         /// </summary>
@@ -117,15 +115,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             if (idealR <= v.Radius)
                 return 0.0;
             return (idealR - v.Radius) / idealR;
-        }
-
-        double Cost() {
-            double cost = 0;
-            foreach (var v in metroGraphData.VirtualNodes()) {
-                double idealR = v.cachedIdealRadius;
-                cost += CostCalculator.RError(idealR, v.Radius, bundlingSettings);
-            }
-            return cost;
         }
 
         #region allowed and desired radii
@@ -238,45 +227,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             d = Math.Min(d, 2 * bundlingSettings.MaxHubRadius);
             d = Math.Max(d, r);
             return d;
-        }
-
-        internal static double GetMinRadiusForTwoAdjacentBundlesOld(double r, Station node, Point nodePosition, Station adj0, Station adj1,
-            MetroGraphData metroGraphData, BundlingSettings bundlingSettings) {
-            double w0 = metroGraphData.GetWidth(node, adj0, bundlingSettings.EdgeSeparation);
-            double w1 = metroGraphData.GetWidth(node, adj1, bundlingSettings.EdgeSeparation);
-
-            return GetMinRadiusForTwoAdjacentBundlesOld(r, nodePosition, adj0.Position, adj1.Position, w0, w1, metroGraphData, bundlingSettings);
-        }
-
-        /// <summary>
-        /// Radius we need to draw two adjacent bundles ab and ac
-        /// </summary>
-        internal static double GetMinRadiusForTwoAdjacentBundlesOld(double r, Point a, Point b, Point c, double widthAB, double widthAC,
-            MetroGraphData metroGraphData, BundlingSettings bundlingSettings) {
-            if (widthAB < ApproximateComparer.DistanceEpsilon || widthAC < ApproximateComparer.DistanceEpsilon)
-                return r;
-
-            double angle = Point.Angle(b, a, c);
-            angle = Math.Min(angle, Math.PI * 2 - angle);
-            if (angle < ApproximateComparer.DistanceEpsilon)
-                return 2 * bundlingSettings.MaxHubRadius;
-
-            //binary search
-            //TODO: solve the equation
-            double L = r;
-            double R = 2 * bundlingSettings.MaxHubRadius;
-            while (Math.Abs(R - L) > 0.1) {
-                double C = (L + R) / 2;
-
-                double alpha0 = Math.Asin(widthAB / (2 * C));
-                double alpha1 = Math.Asin(widthAC / (2 * C));
-                if (alpha0 + alpha1 <= angle)
-                    R = C;
-                else
-                    L = C;
-            }
-
-            return L;
         }
 
         #endregion

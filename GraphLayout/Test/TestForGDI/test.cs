@@ -351,12 +351,6 @@ namespace TestForGdi {
             return;
         }
 
-
-        static void FillPoints(List<Point> ps, Random r, int size) {
-            for(int i=0;i<size;i++)
-                ps.Add(new Point(r.NextDouble(), r.NextDouble()));
-        }
-
         static void LoadDrawingGraphs(IEnumerable<string> fileNames, EdgeRoutingSettings edgeRoutingSettings, double bendPenalty) {
             foreach (var fileName in fileNames) {
                 LoadDrawingGraph(fileName, edgeRoutingSettings, bendPenalty);
@@ -458,105 +452,6 @@ namespace TestForGdi {
             f.ShowDialog();
 
 
-        }
-
-        static void TestConstraints() {
-            var gg = new GeometryGraph();
-
-            var node1 = new Node {GeometryParent = gg};
-            node1.BoundaryCurve =CurveFactory.CreateEllipse(20.0,10.0,new Point(0.0, 0.0));
-            gg.Nodes.Add(node1);
-
-            var node2 = new Node {GeometryParent = gg};
-            node2.BoundaryCurve =
-                CurveFactory.CreateEllipse(20.0,10.0,new Point(0.0, 0.0));
-            gg.Nodes.Add(node2);
-
-            var edge = new Edge(node1,node2) {GeometryParent = gg};
-            gg.Edges.Add(edge);
-            edge.Label = new Label {GeometryParent = edge,
-                //need to set the label dimensions, otherwise the assertion is thrown
-                Width = 10, Height = 10
-            };
-            //node1.AddOutEdge(edge); //the edges have been already added to the nodes in gg.Edges.Add(edge)
-            //node2.AddInEdge(edge);
-
-            var settings = new SugiyamaLayoutSettings();
-            settings.AddSameLayerNeighbors(node1, node2);
-            var layoutAlgorithm = new
-                LayeredLayout(gg, settings);
-            layoutAlgorithm.Run();
-#if TEST_MSAGL
-            LayoutAlgorithmSettings.ShowGraph(gg);
-#endif
-            Environment.Exit(0);
-        }
-
-
-        static void TestSpeedOfIterations() {
-            int n = 1000;
-            var g = new GeometryGraph();
-            var nl = new Node[1000];
-            for (int i = 0; i < n; i++) {
-                Node node = nl[i] = new Node();
-                g.Nodes.Add(node);
-            }
-            for (int i = 0; i < n; i++)
-                for (int j = 0; j < n; j++)
-                    g.Edges.Add(new Edge(nl[i], nl[j]));
-
-            var watch = new Stopwatch();
-            watch.Start();
-            foreach (Edge e in g.Edges)
-                foo(e);
-            watch.Stop();
-            long t0 = watch.ElapsedMilliseconds;
-            Console.WriteLine("enumerating of the node list: {0}ms", t0);
-
-            watch.Start();
-            foreach (Edge e in EnumerateThroughNodes(g))
-                foo(e);
-            watch.Stop();
-            long t1 = watch.ElapsedMilliseconds;
-            Console.WriteLine("enumerating through the edges adjacent to nodes: {0} ms", t1);
-            Console.WriteLine("ratio is {0}", ((double) t1)/t0);
-
-
-            var set = new Set<Edge>(g.Edges);
-            watch.Start();
-            foreach (Edge e in set)
-                foo(e);
-            watch.Stop();
-            long t2 = watch.ElapsedMilliseconds;
-            Console.WriteLine("enumerating the Set: {0}ms", t2);
-            Console.WriteLine("ratio is {0}", ((double) t2)/t0);
-
-
-            Environment.Exit(0);
-        }
-
-        static void foo(Edge p0) {
-            p0.Weight *= 2;
-            p0.LineWidth *= 2;
-            p0.Weight *= 2;
-            p0.LineWidth *= 2;
-            p0.Weight *= 2;
-            p0.LineWidth *= 2;
-            p0.Weight *= 2;
-            if (p0.EdgeGeometry != null)
-                p0.EdgeGeometry.LineWidth /= 2;
-            p0.LineWidth *= 2;
-        }
-
-        static IEnumerable<Edge> EnumerateThroughNodes(GeometryGraph g) {
-            foreach (Node node in g.Nodes) {
-                foreach (Edge outEdge in node.OutEdges) {
-                    yield return outEdge;
-                }
-                foreach (Edge selfEdge in node.SelfEdges) {
-                    yield return selfEdge;
-                }
-            }
         }
 
         static void LayerSeparationWithTransform() {
@@ -779,25 +674,6 @@ namespace TestForGdi {
             Debug.Assert(ApproximateComparer.Close(a.Center.X, b.Center.X));
         }
 
-        static void BundleRouterTest() {
-            var graph = CreateGraphForGroupRouting();
-
-            var router = new SplineRouter(graph, 1, 1, Math.PI / 180 * 30, new BundlingSettings());
-            router.Run();
-#if DEBUG
-
-            //int j = 1;
-            List<DebugCurve> edges =
-                graph.Edges.Select(edgeGeometry => new DebugCurve(200, 0.5, "black" /*Nudger.Colors[j++]*/, edgeGeometry.Curve))
-                    .ToList();
-            var boundaries = graph.RootCluster.AllClustersDepthFirst().Select(
-                    s => new DebugCurve(s.BoundaryCurve, s.UserData)).Concat(graph.RootCluster.AllClustersDepthFirst().SelectMany(c=>c.Nodes.Select(n=>new DebugCurve(n.BoundaryCurve))));
-            LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(
-                boundaries.Concat(edges));
-#endif
-
-        }
-
         static void GroupRoutingTest() {
             const int count = 1;
             var sw = new Stopwatch();
@@ -865,19 +741,6 @@ namespace TestForGdi {
             }
         }
 
-        static Shape FindShape(IEnumerable<Shape> nodeShapes, string id) {
-            return nodeShapes.First(sh => (string) sh.UserData == id);
-        }
-
-        static ICurve CurveOnNodes(GeometryGraph graph, double pad, params string[] nodeIds) {
-            Rectangle rect = Rectangle.CreateAnEmptyBox();
-            foreach (string nodeId in nodeIds) {
-                rect.Add(graph.FindNodeByUserData(nodeId).BoundingBox);
-            }
-            rect.Pad(pad);
-            return rect.Perimeter();
-        }
-
         static void GroupRoutingTestRect() {
             LayoutAlgorithmSettings settings;
             GeometryGraph graph = GetTestGraphWithClusters(out settings);
@@ -939,120 +802,6 @@ namespace TestForGdi {
             return graph;
         }
 
-        static IEnumerable<Edge> CreateEdgesForGroupRouting(IEnumerable<Cluster> clusters) {
-            var c = GetClusterById(clusters, "c");
-            var f = GetClusterById(clusters, "f");
-            var a = c.Clusters.Single(s => s.UserData.Equals("a"));
-            var b = c.Clusters.Single(s => s.UserData.Equals("b"));
-            var d = f.Clusters.Single(s => s.UserData.Equals("d"));
-            var e = f.Clusters.Single(s => s.UserData.Equals("e"));
-            var h = GetClusterById(clusters, "h");
-            var g = GetClusterById(clusters, "g");
-            var l = GetClusterById(clusters, "l");
-            var k = GetClusterById(clusters, "k");
-            var ports = new Dictionary<Cluster, Set<Port>>();
-            AddPortToShape(k, ports, new CurvePort(k.BoundaryCurve, 0.4*(k.BoundaryCurve.ParEnd + k.BoundaryCurve.ParStart)));
-            AddPortToShape(l, ports);
-            AddPortToShape(a, ports);
-            AddPortToShape(b, ports);
-            AddPortToShape(d, ports);
-            AddPortToShape(e, ports);
-            AddPortToShape(h, ports);
-            AddPortToShape(g, ports);
-            var hSecondPort = new CurvePort(h.BoundaryCurve, 0.1);
-
-            ports[h].Insert(hSecondPort);
-            var hFreePort = new FloatingPort(null, new Point(-129, -55));
-            var kFreePort = new FloatingPort(null, new Point(137, -51));
-            ports[h].Insert(hFreePort);
-            ports[k].Insert(kFreePort);
-
-            var fFreePort = new FloatingPort(null, new Point(3, 3));
-            var kFreePort0 = new FloatingPort(null, new Point(106, 8));
-            AddPortToShape(f,ports, fFreePort);
-            AddPortToShape(k, ports, kFreePort0);
-
-            AddPortToShape(c,ports,new CurvePort(c.BoundaryCurve, 0));
-            AddPortToShape(f, ports,new FloatingPort(f.BoundaryCurve, f.BoundingBox.Center));
-            var freePort0 = new FloatingPort(null, new Point(72, -1.3));
-
-            var halfFreeEdge = new EdgeGeometry(freePort0, ports[a].First());
-            var freePort1 = new FloatingPort(null, new Point(-122, 110));
-            var freeEdge = new EdgeGeometry(freePort0, freePort1);
-            var ab = new EdgeGeometry(ports[a].First(), ports[b].First());
-            var abE = new Edge(a, b) {EdgeGeometry = ab};
-            var ae = new EdgeGeometry(ports[a].First(), ports[e].First());
-            var aeE = new Edge(a, e) {EdgeGeometry = ae};
-            var de = new EdgeGeometry(ports[d].First(), ports[e].First());
-            var deE = new Edge(d, e) {EdgeGeometry = de};
-            var ad = new EdgeGeometry(ports[a].First(), ports[d].First());
-            var adE = new Edge(a, d) {EdgeGeometry = ad};
-            var he = new EdgeGeometry(ports[h].First(), ports[e].First());
-            var heE = new Edge(h, e) {EdgeGeometry = he};
-            var gd = new EdgeGeometry(ports[g].First(), ports[d].First());
-            var gdE = new Edge(g, d) {EdgeGeometry = gd};
-            var lg = new EdgeGeometry(ports[l].First(), ports[g].First());
-            var lgE = new Edge(l, g) {EdgeGeometry = lg};
-            var le = new EdgeGeometry(ports[l].First(), ports[e].First());
-            var leE = new Edge(l, e) {EdgeGeometry = le};
-            var ca = new EdgeGeometry(ports[c].First(), ports[a].First());
-            var caE = new Edge(c, a) {EdgeGeometry = ca};
-            var cd = new EdgeGeometry(ports[c].First(), ports[d].First());
-            var cdE = new Edge(c, d) {EdgeGeometry = cd};
-            var hl = new EdgeGeometry(hSecondPort, ports[l].First());
-            var hlE = new Edge(h, l) {EdgeGeometry = hl};
-            var lh = new EdgeGeometry(ports[l].First(), hSecondPort);
-            var lhE = new Edge(l, h) {EdgeGeometry = lh};
-            var ha = new EdgeGeometry(hSecondPort, ports[a].First());
-            var haE = new Edge(h, a) {EdgeGeometry = ha};
-            var hk = new EdgeGeometry(hSecondPort, ports[k].First());
-            var hkE = new Edge(h, k) {EdgeGeometry = hk};
-
-            var hk0 = new EdgeGeometry(hFreePort, kFreePort);
-            var hk0E = new Edge(h, k) {EdgeGeometry = hk0};
-
-            var fk = new EdgeGeometry(fFreePort, kFreePort0);
-            var fkE = new Edge(f, k) {EdgeGeometry = fk};
-
-            var hThirdPort = new CurvePort(h.BoundaryCurve, 0.5);
-            var halfFreeInside = new EdgeGeometry(ports[b].First(), freePort1);
-            //var halfFreeInside = new Edge(b, d) { EdgeGeometry = ad };
-
-            ports[h].Insert(hThirdPort);
-            var lSecondPort = new CurvePort(l.BoundaryCurve, 0);
-            ports[l].Insert(lSecondPort);
-            var hThirdLSecond = new EdgeGeometry(hThirdPort, lSecondPort);
-            var hThirdLSecondE = new Edge(h, l) {EdgeGeometry = hThirdLSecond};
-            //            return new[] {
-            //                             /*halfFreeInside, freeEdge,*/ halfFreeEdge, lh
-            //                         };
-            return new[] {
-                             lhE, abE, aeE, deE, adE, heE, gdE, lgE, leE, cdE, hlE,
-                             hThirdLSecondE, caE, haE, hkE, hk0E, fkE
-                         };
-        }
-
-        static void AddPortToShape(Cluster a, Dictionary<Cluster, Set<Port>> ports, Port port) {
-            Set<Port> s;
-            if (!ports.TryGetValue(a, out s))
-                s = ports[a] = new Set<Port>();
-
-            s.Insert(port);
-        }
-
-        static Cluster GetClusterById(IEnumerable<Cluster> shapes, object id) {
-            return shapes.Single(s => id.Equals(s.UserData));
-        }
-
-        static void AddPortToShape(Cluster a, Dictionary<Cluster,Set<Port>> ports) {
-            Set<Port> s;
-            if(!ports.TryGetValue(a,out s))
-                s=ports[a]=new Set<Port>();
-
-            s.Insert(new FloatingPort(a.BoundaryCurve, a.BoundaryCurve.BoundingBox.Center));
-        }
-
-
         static GeometryGraph CreateGraphForGroupRouting() {
             return GeometryGraphReader.CreateFromFile("c:\\tmp\\bug.msagl.geom");
 #if UNREACHABLE_CODE
@@ -1073,59 +822,6 @@ namespace TestForGdi {
             return graph;
 #endif // UNREACHABLE_CODE
         }
-
-        static Cluster GenerateShapeK() {
-            var k = MakeCluster("k", 137, 4, 95, 147);
-            k.AddChild(MakeCluster("l", 137, 4, 40, 80));
-            return k;
-        }
-
-        static Cluster GenerateClusterH() {
-            var g = MakeCluster("g", -160, -50, 36, 72);
-            var h = MakeCluster("h", -130, -40, 117, 173);
-            h.AddChild(g);
-            h.AddChild(GenerateShapeC());
-            return h;
-        }
-
-        static Cluster GenerateShapeC() {
-            var a = MakeCluster("a", -100, -22, 15, 30);
-            var b = MakeCluster("b", -99, -62, 15, 30);
-            var c = MakeCluster("c", -100, -42, 32, 93);
-            c.AddChild(a);
-            c.AddChild(b);
-            return c;
-        }
-
-        static Cluster GenerateShapeF() {
-            var d = MakeCluster("d", 0, 43, 60, 60);
-            var e = MakeCluster("e", 2, -17, 60, 24);
-            var f = MakeCluster("f", 0, 0, 92, 173);
-            //LayoutAlgorithmSettings.Show(d.BoundaryCurve, e.BoundaryCurve, f.BoundaryCurve);
-            f.AddChild(d);
-            f.AddChild(e);
-            return f;
-        }
-
-        static Cluster MakeCluster(IComparable id, int x, int y, int w, int h) {
-            var ret = new Cluster {
-                                      UserData = id
-                                  };
-            ret.BoundaryCurve = MakeShapeCurve(new Point(x, y), w, h);
-            ret.RectangularBoundary = new RectangularClusterBoundary();
-            return ret;
-        }
-
-        static ICurve MakeShapeCurve(Point center, int width, int height) {
-            var r = new Rectangle(center) {Width = width, Height = height};
-            var c = new Curve();
-            Curve.AddLineSegment(c, r.LeftBottom, r.LeftTop);
-            Curve.ContinueWithLineSegment(c, r.RightTop);
-            Curve.ContinueWithLineSegment(c, r.RightBottom);
-            Curve.CloseCurve(c);
-            return c;
-        }
-
 
         static void TestPortEntry() {
             {
@@ -1788,49 +1484,6 @@ namespace TestForGdi {
                     Console.WriteLine("  {0} reps", rep);
                 }
             }
-        }
-
-        static GeometryGraph LoadGraph(string filePath) {
-            int line, column;
-            string msg;
-            Graph drawingGraph = Parser.Parse(filePath, out line, out column, out msg);
-            drawingGraph.CreateGeometryGraph();
-            GeometryGraph graph = drawingGraph.GeometryGraph;
-            SugiyamaLayoutSettings settings = drawingGraph.CreateLayoutSettings();
-            SetRandomNodeShapes(graph, new Random(1));
-            return graph;
-        }
-
-        static void SetRandomNodeShapes(GeometryGraph graph, Random random) {
-            foreach (Node node in graph.Nodes) {
-                node.BoundaryCurve = GetRandomShape(random);
-            }
-        }
-
-        static ICurve GetRandomShape(Random random) {
-            //we support rectangle, roundedRectangle, circle, ellipse, diamond, Octagon, triangle, star            
-            int index = random.Next(8);
-            switch (index) {
-                case 0:
-                    return CurveFactory.CreateRectangle(25, 15, new Point());
-                case 1:
-                    return CurveFactory.CreateRectangleWithRoundedCorners(35, 25, 3, 3,
-                                                                          new Point());
-                case 2:
-                    return CurveFactory.CreateCircle(19, new Point());
-                case 3:
-                    return CurveFactory.CreateEllipse(26, 18, new Point());
-                case 4:
-                    return CurveFactory.CreateDiamond(25, 15, new Point());
-                case 5:
-                    return CurveFactory.CreateOctagon(25, 15, new Point());
-                case 6:
-                    return CurveFactory.CreateInteriorTriangle(30, 20, new Point());
-                case 7:
-                    return CurveFactory.CreateStar(33, new Point());
-            }
-
-            return null;
         }
     }
 }

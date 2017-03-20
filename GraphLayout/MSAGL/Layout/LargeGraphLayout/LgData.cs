@@ -341,12 +341,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             return _levels.Last().ZoomLevel;
         }
 
-        internal void PutOffEdgesPassingThroughTheRail(Rail rail) {
-            var railLevel = _levels[(int)Math.Log(rail.ZoomLevel, 2)];
-            var passingEdges = railLevel.GetEdgesPassingThroughRail(rail);
-            UnselectEdges(passingEdges);
-        }
-
         public void UnselectEdges(List<Edge> edgesToPutOff) {
             var edgesToPutoffSet = new Set<Edge>(edgesToPutOff);
             for (int i = _levels.Count - 1; i >= 0; i--)

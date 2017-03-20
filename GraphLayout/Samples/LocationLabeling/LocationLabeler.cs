@@ -28,7 +28,6 @@ namespace LocationLabeling {
         Dictionary<Node, ICurve> nodeToNodeBoundary = new Dictionary<Node, ICurve>();
         Dictionary<Node, Point> nodeToCenter = new Dictionary<Node, Point>();
 
-        Dictionary<Node, Tuple<int, int>> decisionIndex = new Dictionary<Node, Tuple<int, int>>();
         double labelSeparation;
         
         /// <summary>
@@ -95,13 +94,6 @@ namespace LocationLabeling {
 
             RestoreOffsettedCurveBoundaries();
             
-        }
-
-        private bool IsCircle(ICurve iCurve) {
-            Ellipse ellipse = iCurve as Ellipse;
-            if (ellipse == null)
-                return false;
-            return ellipse.AxisA.X==ellipse.AxisB.Y && ellipse.ParStart==0 && ellipse.ParEnd==Math.PI*2;
         }
 
         private void RestoreConfig() {
@@ -226,27 +218,6 @@ namespace LocationLabeling {
                 return t.box.Contains(t.l.box) && t.box.Contains(t.r.box) && CheckTreeOnNode(t.l) &&
                     CheckTreeOnNode(t.r);
         }
-
-        private bool CirclesAreTooClose(Node a, Node b) {
-            var del = a.Center - b.Center;
-            var r = (a.Width + b.Width) / 2;
-            if(del*del<r*r)
-                return true;
-            return false;
-        }
-
-
-       
-
-        private ICurve BoundingBoxCurve(ref Rectangle rectangle) {
-            Curve c = new Curve();
-            c.AddSegment(new LineSegment(rectangle.LeftTop, rectangle.LeftBottom));
-            Curve.ContinueWithLineSegment(c, rectangle.RightBottom);
-            Curve.ContinueWithLineSegment(c, rectangle.RightTop);
-            Curve.CloseCurve(c);
-            return c;
-        }
-
 
         private double GetEnergy() {
             return (from n in labels let p=FindLocationByLabel(n).Center let t=p-n.Center select t*t).Sum();
@@ -398,16 +369,6 @@ namespace LocationLabeling {
            
         }
 
-        private ICurve[] GetCurves() {
-            return
-                (from n in graph.Nodes
-                 select n.BoundaryCurve)
-                 .Concat(
-                 from e in graph.Edges
-                 select e.Curve != null ? e.Curve : new LineSegment(e.Source.Center, e.Target.Center)).ToArray();
-        }
-
-       
         private void RouteEdges() {
 
             //foreach (var edge in graph.Edges) {
@@ -432,20 +393,6 @@ namespace LocationLabeling {
             edge.Curve = edge.Curve.Trim(x.Par1, edge.Curve.ParEnd);
         }
 
-
-        /// <summary>
-        /// we introduce a variable for a node x-coordinate and for node x-coordinate
-        /// decisionIndex[node] is a couple of integers with its firts element corresponding to the Decision for x-coord and its second
-        /// element corresponding to the Decision for y-coordinate
-        /// </summary>
-        private void InitDecisionIndex() {
-            if (decisionIndex.Count == 0) {
-                int i = 0;
-                foreach (var node in graph.Nodes)
-                    this.decisionIndex[node] = new Tuple<int, int>(i++, i++);
-            }
-        }
-     
         private Node FindLocationByLabel(Node node) {
             foreach (var edge in node.OutEdges)
                 return edge.Target;

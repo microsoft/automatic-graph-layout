@@ -15,7 +15,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
     internal class LgPathRouter {
         VisibilityGraph _visGraph; // = new VisibilityGraph();
 
-        internal const double searchEps = 1e-5;
         readonly RTree<VisibilityVertex> _visGraphVerticesTree = new RTree<VisibilityVertex>();
 
         readonly Dictionary<VisibilityEdge,int> _usedEdges = new Dictionary<VisibilityEdge, int>();
@@ -112,26 +111,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             }
         }
 
-        static void SortPointByAngles(LgNodeInfo nodeInfo, Point[] polySplitArray) {
-            var angles = new double[polySplitArray.Length];
-            for (int i = 0; i < polySplitArray.Length; i++)
-                angles[i] = Point.Angle(new Point(1, 0), polySplitArray[i] - nodeInfo.Center);
-            Array.Sort(angles, polySplitArray);
-        }
-
-        VisibilityVertex GlueOrAddToPolylineAndVisGraph(Point[] polySplitArray, int i, VisibilityVertex v, Polyline poly) {
-            var ip = polySplitArray[i];
-            if (ApproximateComparer.Close(v.Point, ip))
-                return v; // gluing ip to the previous point on the polyline
-            if (ApproximateComparer.Close(ip, poly.StartPoint.Point)) {
-                var vv = VisGraph.FindVertex(poly.StartPoint.Point);
-                Debug.Assert(vv != null);
-                return vv;
-            }
-            poly.AddPoint(ip);
-            return VisGraph.AddVertex(ip);
-        }
-
         Dictionary<VisibilityEdge, VisibilityVertex> GetEdgeSnapAtVertexMap(LgNodeInfo nodeInfo) {
             var ret = new Dictionary<VisibilityEdge, VisibilityVertex>();
             var center = nodeInfo.Center;
@@ -184,10 +163,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             if (_visGraph.ContainsVertex(p)) return p;
             AddNewVertex(p);
             return p;
-        }
-
-        internal Point[] GetPortVertices(LgNodeInfo node) {
-            return node.BoundaryOnLayer.PolylinePoints.Select(pp => pp.Point).ToArray();
         }
 
         internal List<Point> GetPath(VisibilityVertex vs, VisibilityVertex vt,
@@ -325,32 +300,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             }
         }
 
-        internal void AssertEdgesPresentAndPassable(List<Point> path) {
-            var vs = VisGraph.FindVertex(path[0]);
-            Debug.Assert(vs != null);
-            var vt = VisGraph.FindVertex(path[path.Count - 2]);
-            Debug.Assert(vt != null);
-
-            vs.IsShortestPathTerminal = vt.IsShortestPathTerminal = true;
-
-            var router = new SingleSourceSingleTargetShortestPathOnVisibilityGraph(_visGraph, vs, vt) {
-                LengthMultiplier = 0.8,
-                LengthMultiplierForAStar = 0.0
-            };
-
-            List<VisibilityEdge> pathEdges = new List<VisibilityEdge>();
-            for (int i = 0; i < path.Count - 1; i++)
-            {
-                var edge = FindEdge(path[i], path[i + 1]);
-                Debug.Assert(edge != null);
-                pathEdges.Add(edge);
-            }
-
-            router.AssertEdgesPassable(pathEdges);
-
-            vs.IsShortestPathTerminal = vt.IsShortestPathTerminal = false;
-        }
-
         internal void SetWeightOfEdgesAlongPathToMin(List<Point> oldPath, double dmin) {
             var edges = GetEdgesOfPath(oldPath);
             foreach (var edge in edges) {
@@ -396,12 +345,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                     RemoveVisGraphVertex(e.SourcePoint);
                 if (e.Target.Degree == 0)
                     RemoveVisGraphVertex(e.TargetPoint);
-            }
-        }
-
-        internal void AddEdges(List<SymmetricSegment> toAdd) {
-            foreach (var e in toAdd) {
-                AddVisGraphEdge(e.A, e.B);
             }
         }
 

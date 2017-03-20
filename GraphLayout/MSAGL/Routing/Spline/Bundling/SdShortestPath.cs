@@ -391,27 +391,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             return e.upperSite.Owner == sourceLoosePoly || e.lowerSite.Owner == sourceLoosePoly || e.upperSite.Owner == targetLoosePoly || e.lowerSite.Owner == targetLoosePoly;
         }
 
-        double GetIdealDistanceBetweenHookUpAnywherePortAndPort(HookUpAnywhereFromInsidePort hookPort, Port port) {
-            var poly = hookPort.LoosePolyline;
-            var point = port.Location;
-            var closestPar = poly.ClosestParameter(point);
-            return (point - poly[closestPar]).Length;
-        }
-
-        double GetIdealDistanceBetweenClusterPortAndPort(ClusterBoundaryPort clsp, Port port) {
-            var poly = clsp.LoosePolyline;
-            var otherClsp = port as ClusterBoundaryPort;
-            if (otherClsp != null) {
-                var polygon0 = new Polygon(poly);
-                var polygon1 = new Polygon(otherClsp.LoosePolyline);
-                return Polygon.Distance(polygon0, polygon1);
-            }
-
-            var point = port.Location;
-            var closestPar = poly.ClosestParameter(point);
-            return (point - poly[closestPar]).Length;
-        }
-
         void SetLengthCoefficient() {
             double idealEdgeLength = GetIdealDistanceBetweenSourceAndTarget(CurrentEdgeGeometry);
             LengthCoefficient = BundlingSettings.PathLengthImportance / idealEdgeLength;

@@ -285,7 +285,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
         static readonly double HalfArrowAngleTan = Math.Tan(ArrowAngle * 0.5 * Math.PI / 180.0);
         static readonly double HalfArrowAngleCos = Math.Cos(ArrowAngle * 0.5 * Math.PI / 180.0);
-        internal byte Transparency = 255;
         const double ArrowAngle = 30.0; //degrees
 
         #region Implementation of IViewerObject
@@ -329,10 +328,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
             SetPathStroke();
             if (VLabel != null)
                 ((IInvalidatable) VLabel).Invalidate();
-        }
-
-        void InvalidateForLgCase() {
-            throw new NotImplementedException();
         }
 
         void SetPathStroke() {

@@ -50,14 +50,8 @@ namespace Microsoft.Msagl.Core.Geometry {
 
 
         internal Directions Dir { get; set; }
-        internal CompassVector Left {
-            get { return new CompassVector(RotateLeft(Dir)); }
-        }
         internal CompassVector Right {
             get { return new CompassVector(RotateRight(Dir)); }
-        }
-        internal CompassVector Opposite {
-            get { return new CompassVector(OppositeDir(Dir)); }
         }
 
         internal static Directions RotateRight(Directions direction) {

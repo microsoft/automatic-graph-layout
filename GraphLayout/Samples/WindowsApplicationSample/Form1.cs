@@ -343,43 +343,6 @@ namespace WindowsApplicationSample {
             this.propertyGrid1.SelectedObject = graph;
         }
 
-        private void ChangeNodeSizes(Graph graph)
-        {
-            Random r = new Random(1);
-            foreach (var n in graph.Nodes)
-            {
-                n.Label.FontSize *= (1 + r.NextDouble());
-            }
-        }
-
-        static IEnumerable<Node> GetThirdLayer(Graph graph) {
-            var layerIds = new[] {"Comments_3", "Attributes_4", "Modifiers_5"};
-            foreach (string id in layerIds)
-                yield return graph.FindGeometryNode(id);
-        }
-
-        static void CreateSourceNode(Microsoft.Msagl.Drawing.Node a) {
-            a.Attr.Shape = Shape.Box;
-            a.Attr.XRadius = 3; 
-            a.Attr.YRadius = 3;
-            a.Attr.FillColor = Color.Green;
-            a.Attr.LineWidth = 10;
-            a.NodeBoundaryDelegate = new DelegateToSetNodeBoundary(StarCurve);
-            a.Attr.Shape = Shape.DrawFromGeometry;
-        }
-
-        static ICurve StarCurve(Microsoft.Msagl.Drawing.Node node) {
-            return CurveFactory.CreateStar(60, new Point());
-        }
-
-        void CreateTargetNode(Microsoft.Msagl.Drawing.Node a) {
-            a.Attr.Shape = Shape.DoubleCircle;
-            a.Attr.FillColor = Color.LightGray;
-
-            a.Attr.LabelMargin = -4;
-        }
-
-
         void RecalculateLayoutButtonClick(object sender, EventArgs e) {
             gViewer.Graph = propertyGrid1.SelectedObject as Graph;
         }

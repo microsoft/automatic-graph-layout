@@ -203,48 +203,6 @@ namespace Microsoft.Msagl.Layout.Layered {
             return (this.topSite.Point.X < this.topSite.Next.Point.X);
         }
 
-        private void InitLeftmostSites() {
-            if (IsTopToTheLeftOfBottom()) {
-                this.topCorners = Enumerable.Empty<Point>;
-                this.bottomCorners = new Points(CornersToTheLeftOfBottom);
-            } else {
-                this.topCorners = new Points(CornersToTheLeftOfTop);
-                this.bottomCorners = Enumerable.Empty<Point>;
-            }
-        }
-
-        private void InitRightmostSites() {
-            if (IsTopToTheLeftOfBottom()) {
-                this.topCorners = new Points(CornersToTheRightOfTop);
-                this.bottomCorners = Enumerable.Empty<Point>;
-            } else {
-                this.topCorners = Enumerable.Empty<Point>;
-                this.bottomCorners = new Points(CornersToTheRightOfBottom);
-            }
-        }
-
-        private void MoveBundledSites(LayerEdge fromEdge, LayerEdge toEdge) {
-            MoveBundledEdge(anchors[toEdge.Source].X - anchors[fromEdge.Source].X, anchors[toEdge.Target].X - anchors[fromEdge.Target].X);
-        }
-
-        private void MoveBundledEdge(double upperMove, double downMove) {
-            Site site = topSite;
-            //upper move
-            site.Point = new Point(site.Point.X + upperMove, site.Point.Y);
-            site = site.Next;
-
-            //intermediate moves
-            while (site != bottomSite) {
-                double K = (site.Point.Y - bottomSite.Point.Y) / (topSite.Point.Y - bottomSite.Point.Y);
-                site.Point = new Point(site.Point.X + K * upperMove + (1.0 - K) * downMove, site.Point.Y);
-                site = site.Next;
-            }
-
-            //lower move
-            site.Point = new Point(site.Point.X + downMove, site.Point.Y);
-        }
-
-
         IEnumerable<Point> NodeCorners(int node) {
             foreach (Point p in NodeAnchor(node).PolygonalBoundary)
                 yield return p;

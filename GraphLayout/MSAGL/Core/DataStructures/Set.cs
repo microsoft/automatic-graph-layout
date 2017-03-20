@@ -14,9 +14,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
     public class Set<T> : MarshalByRefObject, ICollection<T> {
 #endif
         HashSet<T> hashSet = new HashSet<T>();
-        internal HashSet<T> HashSet {
-            get { return this.hashSet; }
-        }
         /// <summary>
         /// inserts an element into the set
         /// </summary>

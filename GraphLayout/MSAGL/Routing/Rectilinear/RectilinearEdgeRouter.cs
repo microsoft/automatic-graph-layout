@@ -421,25 +421,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             RouteEdges();
         }
 
-// ReSharper disable UnusedMember.Local
-// ReSharper disable InconsistentNaming
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Conditional("TEST_MSAGL")]
-        private void Test_ShowVisibilityGraph() {
-            StaticGraphUtility.Test_ShowVisibilityGraph(this.ObstacleTree, VisibilityGraph);
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Conditional("TEST_MSAGL")]
-        private void Test_ShowPathsBeforeNudging(IEnumerable<Path> edgePaths) {
-            StaticGraphUtility.Test_ShowPathsBeforeNudging(this.ObstacleTree, edgePaths);
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Conditional("TEST_MSAGL")]
-        private void Test_ShowPathsAfterNudging(IEnumerable<Path> edgePaths) {
-            StaticGraphUtility.Test_ShowPathsAfterNudging(this.ObstacleTree, edgePaths);
-        }
-// ReSharper restore InconsistentNaming
-// ReSharper restore UnusedMember.Local
-
         internal Dictionary<EdgeGeometry, IEnumerable<Path>> edgeGeomsToSplittedEdgePaths;
 
         /// <summary>
@@ -777,14 +758,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         private static void CalculateArrowheads(EdgeGeometry edgeGeom)
         {
             Arrowheads.TrimSplineAndCalculateArrowheads(edgeGeom, edgeGeom.SourcePort.Curve, edgeGeom.TargetPort.Curve, edgeGeom.Curve, true, false);
-        }
-
-        private static ICurve GetSourceBoundary(EdgeGeometry edgeGeom){
-            return edgeGeom.SourcePort.Curve;            
-        }
-
-        private static ICurve GetTargetBoundary(EdgeGeometry edgeGeom) {
-            return edgeGeom.TargetPort.Curve;
         }
 
         #region Private functions

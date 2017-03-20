@@ -278,16 +278,6 @@ namespace Microsoft.Msagl.UnitTests {
             TestDist(pa, pb, dist);
         }
 
-        static double TestPolygonDistLocal(Polygon a,Polygon b) {
-            double ret = double.PositiveInfinity,u,v;
-            for(int i = 0;i < a.Count;i++)
-                for(int j = 0;j < b.Count;j++)
-                    ret = Math.Min(ret,LineSegment.MinDistBetweenLineSegments(a.Pnt(i),a.Pnt(i + 1),b.Pnt(j),
-                                                                                b.Pnt(j + 1),out u,out v));
-
-            return ret;
-        }
-
         static void TestDist(Polygon a, Polygon b, double dist) {
             double u, v;
             for (int i = 0; i < a.Count; i++)

@@ -23,9 +23,6 @@ namespace TestGraphmaps
          static readonly RoutedUICommand reloadCommand = new RoutedUICommand("Reload File...", "ReloadCommand",
                                                                                    typeof(App));
 
-         static readonly RoutedUICommand saveImageCommand = new RoutedUICommand("Save Image...", "SaveImageCommand",
-                                                                                   typeof(App));
-
          static readonly RoutedUICommand saveMsaglCommand = new RoutedUICommand("Save Msagl...", "SaveMsaglCommand",
                                                                                    typeof(App));
 
@@ -155,8 +152,6 @@ namespace TestGraphmaps
          static readonly RoutedUICommand runMdsCommand = new RoutedUICommand("Run Mds", "RunMds", typeof(App));
 
          static readonly RoutedUICommand magnifyNodesUniformlyLevelGeqCommand = new RoutedUICommand("Magnify Nodes Uniformly Level Geq", "MagnifyNodesUniformlyLevelGeq", typeof(App));
-
-         static readonly RoutedUICommand updateMinPassingEdgeZoomLevelsCommand = new RoutedUICommand("Update Min Passing Edge ZoomLevels", "UpdateMinPassingEdgeZoomLevels", typeof(App));
 
          static readonly RoutedUICommand takeScreenShotCommand = new RoutedUICommand("Take ScreenShot", "TakeScreenShot", typeof(App));
 

@@ -101,13 +101,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         }
 
         /// <summary>
-        /// Gain of 'ink' function
-        /// </summary>
-        internal double QGain(Station node, Point newPosition) {
-            return InkGain(node, newPosition) + PathLengthsGain(node, newPosition);
-        }
-
-        /// <summary>
         /// Gain of ink
         /// </summary>
         internal double InkGain(Station node, Point newPosition) {

@@ -363,31 +363,6 @@ namespace Microsoft.Msagl.Core.Layout {
         }
 
         /// <summary>
-        /// Routes a self edge inside the given "howMuchToStickOut" parameter
-        /// </summary>
-        /// <param name="boundaryCurve"></param>
-        /// <param name="howMuchToStickOut"></param>
-        /// <returns></returns>
-        static internal ICurve RouteSelfEdgeAtSide(ICurve boundaryCurve, double howMuchToStickOut)
-        {
-            //we just need to find the box of the corresponding node
-            var w = boundaryCurve.BoundingBox.Width;
-            var h = boundaryCurve.BoundingBox.Height;
-            var center = boundaryCurve.BoundingBox.Center;
-
-            var p0 = new Point(center.X, center.Y - h / 4);
-            var p1 = new Point(center.X - w / 2 - howMuchToStickOut, center.Y - h / 4);
-            var p2 = new Point(center.X - w / 2 - howMuchToStickOut, center.Y);
-            var p3 = new Point(center.X - w / 2 - howMuchToStickOut, center.Y + h / 4);
-            var p4 = new Point(center.X, center.Y + h / 4);
-
-            var curve = new Curve();
-            curve.AddSegment(new CubicBezierSegment(p0, p1, p1, p2));
-            curve.AddSegment(new CubicBezierSegment(p2, p3, p3, p4));
-            return curve;
-        }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="newValue"></param>

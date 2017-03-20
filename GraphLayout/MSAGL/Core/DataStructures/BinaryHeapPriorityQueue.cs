@@ -46,10 +46,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
             }
         }
 
-        internal bool IsEmpty() {
-            return heapSize == 0;
-        }
-
         void PutAtI(int i, int h) {
             _heap[i] = h;
             _reverse_heap[h] = i;

@@ -849,12 +849,5 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             foreach (var point in points)
                 AddPoint(point);
         }
-
-        internal PolylinePoint GetPolylinePoint(int i) {
-            for (var p = startPoint; p != null; p = p.Next,i--)
-                if (i == 0)
-                    return p;
-            return null;
-        }
     }
 }

@@ -167,13 +167,14 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
         }
 #endif // COMPARE_RECURSIVE_DFDV
 
-        [Conditional("DEBUG")]
+#if DEBUG
         void DebugVerifyFinalDfDvValue(double dfdv, string message)
         {
             // Account for rounding.
             double divisor = Math.Max(this.sumAd, Math.Max(this.sumAb, this.sumA2));
             Debug.Assert((Math.Abs(dfdv) / divisor) < 0.001, message);
         }
+#endif
 
         // The dummy parent node that saves us from having to do null testing.
         DfDvNode dfDvDummyParentNode;

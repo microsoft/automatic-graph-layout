@@ -19,7 +19,6 @@ namespace Microsoft.Msagl.Layout.Layered {
         int numberOfNodesOfProperGraph;
         readonly Database database;
         double[][] xPositions;
-        double[][] xPositionsClone;
         int[][] yetBestLayers;
 
         readonly List<IntEdge> verticalEdges = new List<IntEdge>();
@@ -43,10 +42,6 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         double NodeSeparation() {
             return settings.NodeSeparation;
-        }
-
-        double GetNodeWidth(int p) {
-            return database.anchors[p].Width;
         }
 
         internal ConstrainedOrdering(
@@ -107,21 +102,6 @@ namespace Microsoft.Msagl.Layout.Layered {
             return new ConstrainedOrderMeasure(Ordering.GetCrossingsTotal(ProperLayeredGraph, LayerArrays));
         }
 
-        double GetDeviationFromConstraints() {
-            return horizontalConstraints.VerticalInts.Sum(c => VerticalDeviationOfCouple(c)) +
-                   horizontalConstraints.LeftRighInts.Sum(c => LeftRightConstraintDeviation(c));
-        }
-
-        double LeftRightConstraintDeviation(Tuple<int, int> couple) {
-            var l = XPosition(couple.Item1);
-            var r = XPosition(couple.Item2);
-            return Math.Max(0, l - r);
-        }
-
-        double VerticalDeviationOfCouple(Tuple<int, int> couple) {
-            return Math.Abs(XPosition(couple.Item1) - XPosition(couple.Item2));
-        }
-
         bool HasCrossWeights() {
             return ProperLayeredGraph.Edges.Any(le => le.CrossingWeight != 1);
         }
@@ -134,12 +114,6 @@ namespace Microsoft.Msagl.Layout.Layered {
             xPositions = new double[NumberOfLayers][];
             for (int i = 0; i < NumberOfLayers; i++)
                 xPositions[i] = new double[LayerArrays.Layers[i].Length];
-        }
-
-        double BlockWidth(int blockRoot) {
-            return GetNodeWidth(blockRoot) +
-                   horizontalConstraints.BlockRootToBlock[blockRoot].Sum(
-                       l => GetNodeWidth(l) + settings.NodeSeparation);
         }
 
         void Order() {
@@ -386,50 +360,6 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 #endif
 
-        void AverageXPositions() {
-            for (int i = 0; i < LayerArrays.Layers.Length; i++) {
-                int[] layer = LayerArrays.Layers[i];
-                double[] xPos = xPositions[i];
-                double[] xPosClone = xPositionsClone[i];
-                for (int j = 0; j < layer.Length; j++)
-                    database.Anchors[layer[j]].X = (xPos[j] + xPosClone[j]) / 2;
-            }
-        }
-
-
-        void SwitchXPositions() {
-            if (xPositionsClone == null)
-                AllocateXPositionsClone();
-            double[][] xPositionsSaved = xPositions;
-            xPositions = xPositionsClone;
-            xPositionsClone = xPositionsSaved;
-        }
-
-        void AllocateXPositionsClone() {
-            xPositionsClone = new double[xPositions.Length][];
-            for (int i = 0; i < xPositions.Length; i++)
-                xPositionsClone[i] = new double[xPositions[i].Length];
-        }
-
-
-        double GetBaricenterAbove(int v) {
-            int inEdgesCount = ProperLayeredGraph.InEdgesCount(v);
-            Debug.Assert(inEdgesCount > 0);
-            return (from edge in ProperLayeredGraph.InEdges(v) select XPosition(edge.Source)).Sum() / inEdgesCount;
-        }
-
-
-        double XPosition(int node) {
-            return database.Anchors[node].X;
-        }
-
-        double GetBaricenterBelow(int v) {
-            int outEdgesCount = ProperLayeredGraph.OutEdgesCount(v);
-            Debug.Assert(outEdgesCount > 0);
-
-            return (from edge in ProperLayeredGraph.OutEdges(v) select XPosition(edge.Target)).Sum() / outEdgesCount;
-        }
-
 #if TEST_MSAGL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.Write(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledCode")]
         static void PrintPositions(double[] positions) {
@@ -456,92 +386,9 @@ namespace Microsoft.Msagl.Layout.Layered {
         const double ConstrainedVarWeight = 10e6;
         const double PositionOverBaricenterWeight = 5;
 
-        double GetGapFromClonedXPositions(int l, int r) {
-            int layerIndex = LayerArrays.Y[l];
-            int li = LayerArrays.X[l];
-            int ri = LayerArrays.X[r];
-            var layerXPositions = xPositionsClone[layerIndex];
-            var gap = layerXPositions[ri] - layerXPositions[li];
-            Debug.Assert(gap > 0);
-            return gap;
-        }
-
-    
-        void AddSeparationConstraintsForFlatEdges(LayerInfo layerInfo, ISolverShell solver) {
-            if (layerInfo != null) {
-                foreach (var p in layerInfo.flatEdges) {
-                    int left, right;
-                    if (LayerArrays.X[p.Item1] < LayerArrays.X[p.Item2]) {
-                        left = p.Item1;
-                        right = p.Item2;
-                    } else {
-                        left = p.Item2;
-                        right = p.Item1;
-                    }
-                    if (left == right) continue;
-                    double gap = GetGap(left, right);
-                    foreach (IntEdge edge in database.GetMultiedge(p.Item1, p.Item2))
-                        solver.AddLeftRightSeparationConstraint(left, right,
-                                                                gap + NodeSeparation() +
-                                                                (edge.Edge.Label != null ? edge.Edge.Label.Width : 0));
-                }
-            }
-        }
-
-        void ExtractPositionsFromSolver(int[] layer, ISolverShell solver, double[] positions) {
-            solver.Solve();
-            for (int i = 0; i < layer.Length; i++)
-                database.Anchors[layer[i]].X = positions[i] = solver.GetVariableResolvedPosition(layer[i]);
-        }
-
-        static IEnumerable<int> AddBlocksToLayer(IEnumerable<int> collapsedSortedLayer,
-                                                        Dictionary<int, List<int>> blockRootToList) {
-            foreach (int i in collapsedSortedLayer) {
-                yield return i;
-                List<int> list;
-                if (blockRootToList !=null &&  blockRootToList.TryGetValue(i, out list))
-                    foreach (int j in list)
-                        yield return j;
-            }
-        }
-
-
         static int NodeToBlockRootSoftOnLayerInfo(LayerInfo layerInfo, int node) {
             int root;
             return layerInfo.nodeToBlockRoot.TryGetValue(node, out root) ? root : node;
-        }
-
-
-        //at the moment we only are looking for the order of nodes in the layer
-        void FillSolverWithoutKnowingLayerOrder(IEnumerable<int> layer, LayerInfo layerInfo, ISolverShell solver,
-                                                       SweepMode sweepMode) {
-            foreach (int v in layer)
-                if (layerInfo.neigBlocks.ContainsKey(v)) {
-                    //v is a block root
-                    int blockNode = GetFixedBlockNode(v, layerInfo, sweepMode);
-                    if (blockNode != -1)
-                        solver.AddVariableWithIdealPosition(v, FixedNodePosition(blockNode, sweepMode),
-                                                            ConstrainedVarWeight);
-                    else {
-                        IEnumerable<int> t = from u in layerInfo.neigBlocks[v].Concat(new[] { v })
-                                             where IsConnectedToPrevLayer(u, sweepMode)
-                                             select u;
-                        if (t.Any()) {
-                            blockNode = t.First();
-                            solver.AddVariableWithIdealPosition(v, GetBaricenterOnPrevLayer(blockNode, sweepMode));
-                        }
-                    }
-                } else if (!BelongsToNeighbBlock(v, layerInfo)) {
-                    if (NodeIsConstrained(v, sweepMode, layerInfo))
-                        solver.AddVariableWithIdealPosition(v, FixedNodePosition(v, sweepMode), ConstrainedVarWeight);
-                    else if (IsConnectedToPrevLayer(v, sweepMode))
-                        solver.AddVariableWithIdealPosition(v, GetBaricenterOnPrevLayer(v, sweepMode));
-                }
-
-            AddGoalToKeepFlatEdgesShortOnBlockLevel(layerInfo, solver);
-
-            foreach (var p in layerInfo.leftRight)
-                solver.AddLeftRightSeparationConstraint(p.Item1, p.Item2, GetGapBetweenBlockRoots(p.Item1, p.Item2));
         }
 
         static void AddGoalToKeepFlatEdgesShortOnBlockLevel(LayerInfo layerInfo, ISolverShell solver) {
@@ -553,60 +400,6 @@ namespace Microsoft.Msagl.Layout.Layered {
                         solver.AddGoalTwoVariablesAreClose(sourceBlockRoot, targetBlockRoot);
                 }
         }
-
-        bool IsConnectedToPrevLayer(int v, SweepMode sweepMode) {
-            return sweepMode == SweepMode.ComingFromAbove && ProperLayeredGraph.InEdgesCount(v) > 0 ||
-                   sweepMode == SweepMode.ComingFromBelow && ProperLayeredGraph.OutEdgesCount(v) > 0;
-        }
-
-        double FixedNodePosition(int v, SweepMode sweepMode) {
-            Debug.Assert(sweepMode != SweepMode.Starting);
-            LayerInfo layerInfo = layerInfos[LayerArrays.Y[v]];
-            return sweepMode == SweepMode.ComingFromAbove
-                       ? XPosition(layerInfo.constrainedFromAbove[v])
-                       : XPosition(layerInfo.constrainedFromBelow[v]);
-        }
-
-
-        double GetBaricenterOnPrevLayer(int v, SweepMode sweepMode) {
-            Debug.Assert(sweepMode != SweepMode.Starting);
-            return sweepMode == SweepMode.ComingFromAbove ? GetBaricenterAbove(v) : GetBaricenterBelow(v);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="blockRoot"></param>
-        /// <param name="layerInfo"></param>
-        /// <param name="sweepMode"></param>
-        /// <returns>-1 if no node is constrained</returns>
-        static int GetFixedBlockNode(int blockRoot, LayerInfo layerInfo, SweepMode sweepMode) {
-            if (sweepMode == SweepMode.Starting)
-                return -1;
-
-            if (sweepMode == SweepMode.ComingFromBelow)
-                return GetFixedBlockNodeFromBelow(blockRoot, layerInfo);
-            return GetFixedBlockNodeFromAbove(blockRoot, layerInfo);
-        }
-
-        static int GetFixedBlockNodeFromBelow(int blockRoot, LayerInfo layerInfo) {
-            if (layerInfo.constrainedFromBelow.ContainsKey(blockRoot))
-                return blockRoot;
-            foreach (int v in layerInfo.neigBlocks[blockRoot])
-                if (layerInfo.constrainedFromBelow.ContainsKey(v))
-                    return v;
-            return -1;
-        }
-
-        static int GetFixedBlockNodeFromAbove(int blockRoot, LayerInfo layerInfo) {
-            if (layerInfo.constrainedFromAbove.ContainsKey(blockRoot))
-                return blockRoot;
-            foreach (int v in layerInfo.neigBlocks[blockRoot])
-                if (layerInfo.constrainedFromAbove.ContainsKey(v))
-                    return v;
-            return -1;
-        }
-
 
         static bool NodeIsConstrainedBelow(int v, LayerInfo layerInfo) {
             if (layerInfo == null)
@@ -625,46 +418,12 @@ namespace Microsoft.Msagl.Layout.Layered {
             //p is a root of the block
         }
 
-        double GetGapBetweenBlockRoots(int leftBlockRoot, int rightBlockRoot) {
-            double lw = GetBlockWidth(leftBlockRoot);
-            double rw = GetNodeWidth(rightBlockRoot);
-            return settings.NodeSeparation + 0.5 * (lw + rw);
-        }
-
-        double GetBlockWidth(int leftBlockRoot) {
-            if (horizontalConstraints.BlockRootToBlock.ContainsKey(leftBlockRoot))
-                return BlockWidth(leftBlockRoot);
-            return GetNodeWidth(leftBlockRoot);
-        }
-
-        double GetGap(int leftNode, int rightNode) {
-            int layerIndex = LayerArrays.Y[leftNode];
-            LayerInfo layerInfo = layerInfos[layerIndex];
-            if (layerInfo == null)
-                return SimpleGapBetweenTwoNodes(leftNode, rightNode);
-            double gap = 0;
-            if (NodesAreConstrainedAbove(leftNode, rightNode, layerInfo))
-                gap = GetGapFromNodeNodesConstrainedAbove(leftNode, rightNode, layerInfo, layerIndex);
-            if (NodesAreConstrainedBelow(leftNode, rightNode, layerInfo))
-                gap = Math.Max(GetGapFromNodeNodesConstrainedBelow(leftNode, rightNode, layerInfo, layerIndex), gap);
-            if (gap > 0)
-                return gap;
-            return SimpleGapBetweenTwoNodes(leftNode, rightNode);
-        }
-
         static bool NodesAreConstrainedBelow(int leftNode, int rightNode, LayerInfo layerInfo) {
             return NodeIsConstrainedBelow(leftNode, layerInfo) && NodeIsConstrainedBelow(rightNode, layerInfo);
         }
 
         static bool NodesAreConstrainedAbove(int leftNode, int rightNode, LayerInfo layerInfo) {
             return NodeIsConstrainedAbove(leftNode, layerInfo) && NodeIsConstrainedAbove(rightNode, layerInfo);
-        }
-
-        static bool NodeIsConstrained(int v, SweepMode sweepMode, LayerInfo layerInfo) {
-            if (sweepMode == SweepMode.Starting)
-                return false;
-            return sweepMode == SweepMode.ComingFromAbove && NodeIsConstrainedAbove(v, layerInfo) ||
-                   sweepMode == SweepMode.ComingFromBelow && NodeIsConstrainedBelow(v, layerInfo);
         }
 
         double GetGapFromNodeNodesConstrainedBelow(int leftNode, int rightNode, LayerInfo layerInfo,

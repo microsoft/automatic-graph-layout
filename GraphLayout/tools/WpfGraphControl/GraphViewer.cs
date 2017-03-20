@@ -183,16 +183,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
             OnMouseUp(e);
         }
 
-        
-        void ToggleNodeEdgesSlidingZoom(VNode vnode) {
-            var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
-            if (lgSettings != null)
-                foreach (var ei in vnode.Node.GeometryNode.Edges.Select(e => lgSettings.GeometryEdgesToLgEdgeInfos[e]))
-                    ei.SlidingZoomLevel = ei.SlidingZoomLevel <= 1 ? double.PositiveInfinity : 1;
-            ViewChangeEvent(null, null);
-        }
-
-        
         void HandleClickForEdge(VEdge vEdge) {
             //todo : add a hook
             var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
@@ -467,10 +457,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
             if (ViewChangeEvent != null)
                  ViewChangeEvent(null, null);
-        }
-
-        WpfPoint MousePositionOnScreen(MouseEventArgs mouseEventArgs) {
-            return mouseEventArgs.GetPosition((FrameworkElement) _graphCanvas.Parent);
         }
 
 //        [System.Runtime.InteropServices.DllImportAttribute("user32.dll", EntryPoint = "SetCursorPos")]
@@ -894,36 +880,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 }
         */
 
-
-        void RemoveVNode(Drawing.Node drawingNode) {
-            lock (this) {
-                //            foreach (var outEdge in drawingNode.OutEdges) {
-                //                graph.Edges.Remove(outEdge);
-                //                outEdge.TargetNode.RemoveInEdge(outEdge);
-                //            }
-                //            foreach (var inEdge in drawingNode.InEdges) {
-                //                graph.Edges.Remove(inEdge);
-                //                inEdge.SourceNode.RemoveOutEdge(inEdge);
-                //            }
-                //            var selfEdges = drawingNode.SelfEdges.ToArray();
-                //            foreach (var selfEdge in selfEdges)
-                //                drawingNode.RemoveSelfEdge(selfEdge);
-                //
-                //            foreach (var edge in drawingNode.Edges.Concat(selfEdges)) {
-                //                IViewerObject vedge;
-                //                if (!drawingObjectsToIViewerObjects.TryGetValue(edge, out vedge)) continue;
-                //                
-                //                graphCanvas.Children.Remove(((VEdge)vedge).Path);
-                //                drawingObjectsToIViewerObjects.Remove(edge);
-                //            }
-                var vnode = (VNode) drawingObjectsToIViewerObjects[drawingNode];
-                foreach (var fe in vnode.FrameworkElements)
-                    _graphCanvas.Children.Remove(fe);
-                drawingObjectsToIViewerObjects.Remove(drawingNode);
-                drawingObjectsToFrameworkElements.Remove(drawingNode);
-            }
-        }
-
         /// <summary>
         /// creates a viewer node
         /// </summary>
@@ -1292,14 +1248,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
         public FrameworkElement CreateAndRegisterFrameworkElementOfDrawingNode(Drawing.Node node) {
             lock (this)
                 return drawingObjectsToFrameworkElements[node] = CreateTextBlockForDrawingObj(node);
-        }
-
-
-        LgNodeInfo GetCorrespondingLgNode(Drawing.Node node) {
-            var lgGraphBrowsingSettings = _drawingGraph.LayoutAlgorithmSettings as LgLayoutSettings;
-            return lgGraphBrowsingSettings == null
-                       ? null
-                       : lgGraphBrowsingSettings.GeometryNodesToLgNodeInfos[node.GeometryNode];
         }
 
         void CreateAndPositionGraphBackgroundRectangle() {

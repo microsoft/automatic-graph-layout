@@ -16,9 +16,5 @@
         static public bool operator >(ConstrainedOrderMeasure a, ConstrainedOrderMeasure b) {
             return b < a;
         }
-
-        internal bool Perfect() {
-            return numberOfCrossings == 0;
-        }
     }
 }
