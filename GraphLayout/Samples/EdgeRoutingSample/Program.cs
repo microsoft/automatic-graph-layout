@@ -40,7 +40,10 @@ namespace EdgeRoutingSample {
 
             DemoRoutingFromPortToPort(graph);
 
-            var router = new SplineRouter(graph, 3, 3, Math.PI / 6, null);
+            var bundlingSettings = new BundlingSettings(); 
+            // set bundling settings to null to disable the bundling of the edges
+
+            var router = new SplineRouter(graph, 3, 3, Math.PI / 6, bundlingSettings);
 
 
             router.Run();
