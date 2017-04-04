@@ -19,10 +19,10 @@ Some important features of the viewer are:
 * Ability to configure tooltips and highlighting of graph entities.
 * Ability to search for and focus on entities of the graph.
 
-#Code Samples
+# Code Samples
 The code snippet demonstrates the basic usage of the viewer. It uses the C# language.
 
-##The Viewer sample
+## The Viewer sample
 ![Drawing of the graph from the sampleDrawing of the graph from the sample](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/msagl-abc.jpg)
 
 *Drawing of the graph from the sampleDrawing of the graph from the sample*
@@ -64,7 +64,7 @@ class ViewerSample {
 [More code
 samples can be found here…](https://www.microsoft.com/en-us/research/project/microsoft-automatic-graph-layout/#code-samples)
 
-#GraphMaps
+# GraphMaps
 This functionality allows viewing a large graph in the
 online map fashion. Here is a [video](https://1drv.ms/v/s!AhsA76T-agdHgUBKXzpdOHeVNmq9) demoing
 GraphMaps. To see the system in action please open Lg.sln, build it,
@@ -76,7 +76,7 @@ composers.msagl and the tiles directory composers.msagl_tiles will be
 regenerated. GraphMaps ideas, design, and the mathematics are described in a
 [paper](http://arxiv.org/pdf/1506.06745v1.pdf).
 
-#Layouts Created by MSAGL
+# Layouts Created by MSAGL
 ![](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/msagl-195f1b23116b4f049b6e5dc815d96c89.png)
 ![](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/msagl-195f1b23116b4f049b6e5dc815d96c89.png)
 ![](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/msagl-c34826a5e3af4cecbd8165fabc947b36.jpg)
