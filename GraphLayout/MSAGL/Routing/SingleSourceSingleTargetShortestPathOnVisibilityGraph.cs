@@ -67,14 +67,6 @@ namespace Microsoft.Msagl.Routing {
                 : CalculatePath(shrinkEdgeLength);
         }
 
-        internal void AssertEdgesPassable(List<VisibilityEdge> path)
-        {
-            foreach (var edge in path)
-            {
-                Debug.Assert(PassableOutEdge(edge) || PassableInEdge(edge));
-            }
-        }
-
         bool PassableOutEdge(VisibilityEdge e) {
             return e.Source == _source || e.Target == _target || !IsForbidden(e);
         }

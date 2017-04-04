@@ -36,21 +36,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             internal int Length {
                 get { return this.vector.Length; }
             }
-
-            /// <summary>
-            /// The first item in the vector.
-            /// </summary>
-            internal ScanSegmentVectorItem FirstSlot {
-                get { return this.vector[0]; }
-            }
-
-            /// <summary>
-            /// The last item in the vector
-            /// </summary>
-            internal ScanSegmentVectorItem LastSlot {
-                get { return this.vector[this.vector.Length - 1]; }
-            }
-
+            
             /// <summary>
             /// The item at the index of the scan segment vector we're appending to on the ScanSegment-generation sweep.
             /// </summary>

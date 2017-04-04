@@ -15,7 +15,6 @@ namespace PhyloTreeFromGeometrySample
     public partial class FormOfPhyloTreeFromGeometrySample : Form
     {
         GeometryGraph _geometryGraph;
-        static readonly Random r = new Random(1);
         public FormOfPhyloTreeFromGeometrySample()
         {
             //   Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();

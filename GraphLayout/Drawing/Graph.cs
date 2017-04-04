@@ -64,21 +64,6 @@ namespace Microsoft.Msagl.Drawing {
             set { layoutAlgorithm = value; }
         }
 
-        static void WriteNodeCollection(TextWriter sw, IEnumerable nodeLabels) {
-            int i = 0;
-
-            sw.Write(" ");
-
-            foreach (string s in nodeLabels) {
-                sw.Write(s);
-                sw.Write(" ");
-                i = (i + 1)%6;
-
-                if (i == 0)
-                    sw.WriteLine("");
-            }
-        }
-
         void WriteNodes(TextWriter sw) {
             sw.WriteLine("//nodes");
             foreach (Node node in nodeMap.Values)

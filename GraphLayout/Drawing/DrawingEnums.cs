@@ -84,19 +84,6 @@ namespace Microsoft.Msagl.Drawing {
         public static string ConcatWithLineEnd(params string[] s) {
             return ConcatWithDelimeter("\r\n", s);
         }
-
-        static string ConcatTwoWithDelimeter(string delimeter, string s0, string s1) {
-
-            if (String.IsNullOrEmpty(s0))
-                return s1;
-
-            if (String.IsNullOrEmpty(s0))
-                return s0;
-
-            return s0 + delimeter + s1;
-        }
-
-
     }
 
 

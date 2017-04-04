@@ -68,11 +68,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         Ellipse _sourcePortCircle;
 
         // roman: control points for editing rail
-        List<Ellipse> _ctrlPoints = new List<Ellipse>();
-        List<WPolyline> _ctrlPolylines = new List<WPolyline>();
-
-        Set<Ellipse> _selectedCtrlPoints = new Set<Ellipse>();
-
         Set<Rail> _selectedRails = new Set<Rail>();
 
         // Set<VNode> _selectedVnodes = new Set<VNode>();
@@ -1288,10 +1283,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             get { return _lgLayoutSettings.NodeDotWidthInInches*DpiX/CurrentScale; } //ZoomFactor;
         }
 
-        internal double GetZoomFactorToTheGraph() {
-            return _lgLayoutSettings.Interactor.GetZoomFactorToTheGraph();
-        }
-
         void InvalidateNodesOfRailGraph(Set<Node> nodesFromVectorTiles) {
             double zf = ZoomFactor;
 
@@ -2433,10 +2424,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             ViewChangeEvent(null, null);
         }
 
-        bool getLgSettings(out LgLayoutSettings settings) {
-            settings = _drawingGraph.LayoutAlgorithmSettings as LgLayoutSettings;
-            return settings != null;
-        }
         /// <summary>
         /// generate and load tiles
         /// </summary>
@@ -2503,18 +2490,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             }
             return new FileStream(fname + ".png", FileMode.CreateNew);
         }
-        StreamWriter CreateTileStreamWriter(GridTraversal grid, int ix, int iy) {
-            var splitName = grid.SplitTileNameOnDirectories(ix, iy);
-            string fname = TileDirectory;
-            for (int i = splitName.Count - 1; i >= 0; i--) {
-                fname = System.IO.Path.Combine(fname, splitName[i]);
-                if (i > 0) {
-                    if (!Directory.Exists(fname))
-                        Directory.CreateDirectory(fname);
-                }
-            }
-            return new StreamWriter(fname + ".list");
-        }
+
         static List<Tuple<int, int>> SwapTileLists(List<Tuple<int, int>> tileList, ref List<Tuple<int, int>> nextLevelTileList) {
             tileList.Clear();
             var ttt = tileList;

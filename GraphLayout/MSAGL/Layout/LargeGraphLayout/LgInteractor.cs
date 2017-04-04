@@ -805,26 +805,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             }
         }
 
-        void DecreaseWeightsAlongOldTrajectories(int i, LgSkeletonLevel skeletonLevel) {
-            foreach (var tuple in skeletonLevel.EdgeTrajectories) {
-                // debug
-                if (!EdgeIsNew(tuple.Key.A, tuple.Key.B, i)) {
-                    List<Point> oldPath = tuple.Value;
-                    double iEdgeLevel = Math.Log(Math.Max(tuple.Key.A.ZoomLevel, tuple.Key.B.ZoomLevel), 2);
-                    //double newWeight = //(iEdgeLevel < 1 ? 0.3 : (iEdgeLevel < 2 ? 0.6 : 1));                    
-                    //    0.4 + iEdgeLevel/(Math.Max(i - 1.0, 1.0))*0.2;
-                    //newWeight = Math.Max(0.4, newWeight);
-                    //newWeight = Math.Min(0.6, newWeight);
-
-                    double newWeight = (iEdgeLevel < 1 ? 0.1 : (iEdgeLevel < 2 ? 0.2 : 0.6));                    
-                    newWeight = Math.Max(0.1, newWeight);
-                    newWeight = Math.Min(0.6, newWeight);
-
-                    skeletonLevel.PathRouter.DecreaseWeightOfEdgesAlongPath(oldPath, newWeight);
-                }
-            }
-        }
-
         void DecreaseWeightsAlongOldTrajectoriesFromSource(int i, LgSkeletonLevel skeletonLevel, LgNodeInfo s) {
 
             IOrderedEnumerable<LgNodeInfo> neighb = GetNeighborsOnLevel(s, i).OrderBy(n => n.ZoomLevel);
@@ -850,24 +830,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 }                
 
             }
-        }
-
-        List<LineSegment> GetSegmentsOnOldTrajectoriesFromSource(int i, LgSkeletonLevel skeletonLevel, LgNodeInfo s) {
-            var pc = new List<LineSegment>();
-
-            IOrderedEnumerable<LgNodeInfo> neighb = GetNeighborsOnLevel(s, i).OrderBy(n => n.ZoomLevel);
-
-            foreach (var t in neighb) {
-                var tuple = new SymmetricTuple<LgNodeInfo>(s, t);
-                List<Point> path;
-                skeletonLevel.EdgeTrajectories.TryGetValue(tuple, out path);
-                if (path != null) {
-                    for (int j = 0; j < path.Count - 1; j++) {
-                        pc.Add(new LineSegment(path[j], path[j + 1]));
-                    }
-                }
-            }
-            return pc;
         }
 
         void SetWeightsAlongOldTrajectoriesFromSourceToMin(int i, LgSkeletonLevel skeletonLevel, LgNodeInfo s, double wmin) {
@@ -1052,28 +1014,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 #endif
         }
 
-        static void ShowNodesAndSegmentsForOverlapRemoval(IEnumerable<LgNodeInfo> fixedNodes,
-            IEnumerable<LgNodeInfo> moveableNodes, SymmetricSegment[] fixedSegments) {
-#if DEBUG && !SILVERLIGHT && !SHARPKIT
-            var l = new List<DebugCurve>();
-            if (fixedNodes != null && fixedNodes.Any()) {
-                foreach (var node in fixedNodes) {
-                    l.Add(new DebugCurve(200, 0.1, "red", node.BoundaryCurve));
-                }
-            }
-            if (fixedSegments != null && fixedSegments.Any()) {
-                foreach (var seg in fixedSegments) {
-                    var ls = new LineSegment(seg.A, seg.B);
-                    l.Add(new DebugCurve(100, 0.1, "magenta", ls));
-                }
-            }
-            foreach (var node in moveableNodes) {
-                l.Add(new DebugCurve(200, 0.1, "green", node.BoundaryCurve));
-            }
-            LayoutAlgorithmSettings.ShowDebugCurves(l.ToArray());
-#endif
-        }
-
         void ClearLevels(int num) {
             _lgData.Levels.Clear();
             _lgData.SkeletonLevels.Clear();
@@ -1086,18 +1026,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 _lgData.SkeletonLevels.Add(new LgSkeletonLevel {ZoomLevel = zoomLevel});
 
                 zoomLevel *= 2;
-            }
-        }
-
-        void UpdateNodeInfoZoomLayers() {
-            int level = 1;
-            int j = 0;
-            for (int i = 0; i < _lgData.SortedLgNodeInfos.Count; i++) {
-                while (j < _lgData.LevelNodeCounts.Count && i == _lgData.LevelNodeCounts[j]) {
-                    j++;
-                    level *= 2;
-                }
-                _lgData.SortedLgNodeInfos[i].ZoomLevel = level;
             }
         }
 
@@ -1194,6 +1122,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 #endif
 
+#if DEBUG
         static VisibilityEdge FindRailInVisGraph(Rail rail, LgSkeletonLevel skeletonLevel) {
             Point s, t;
             rail.GetStartEnd(out s, out t);
@@ -1205,8 +1134,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             rail.GetStartEnd(out s, out t);
             return new LineSegment(s, t);
         }
-
-
+#endif
 
         /*
         var rect = new Rectangle(a, b);
@@ -1537,19 +1465,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             }
         }
 
-        void TestRailsForTrajectories(int iLevel) {
-            foreach (var path in _lgData.SkeletonLevels[iLevel].EdgeTrajectories.Values) {
-                for (int i = 0; i < path.Count - 1; i++) {
-                    Rail rail = _lgData.Levels[iLevel].FindRail(path[i], path[i + 1]);
-                    //lgData.Levels[iLevel].AddRailToDictionary(rail);
-                    //lgData.Levels[iLevel].AddRailToRtree(rail);
-                    if (rail == null) {
-                        Console.WriteLine("Rail not found for trajectory!");
-                    }
-                }
-            }
-        }
-
         void UpdateRoutesAfterSimplification(int i) {
             var skeletonLevel = _lgData.SkeletonLevels[i];
             foreach (Edge edge in _lgData.Levels[i]._railsOfEdges.Keys) {
@@ -1660,6 +1575,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             }
         }
 
+#if DEBUG
         void TestAllEdgesConsistency() {
             foreach (Edge edge in _mainGeometryGraph.Edges) {
                 LgNodeInfo s = _lgData.GeometryNodesToLgNodeInfos[edge.Source];
@@ -1679,6 +1595,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 }
             }
         }
+#endif
 
 /*
         bool TestEdgeConsistency(Edge edge) {

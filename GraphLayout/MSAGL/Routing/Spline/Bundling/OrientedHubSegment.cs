@@ -17,10 +17,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
         internal Point this[double t] { get { return Reversed ? Segment[Segment.ParEnd - t] : Segment[t]; } }
 
-        internal Point Start { get { return !Reversed ? Segment.Start : Segment.End; } }
-
-        internal Point End { get { return Reversed ? Segment.Start : Segment.End; } }
-
         internal OrientedHubSegment Other { get; set; }
     }
 }

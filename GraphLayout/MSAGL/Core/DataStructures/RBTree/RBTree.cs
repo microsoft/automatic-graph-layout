@@ -238,10 +238,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
             return Find(root, i);
         }
 
-        internal bool Contains(T i) {
-            return Find(i) != null;
-        }
-
         void DeleteFixup(RBNode<T> x) {
             while (x != root && x.color == RBColor.Black) {
                 if (x == x.parent.left) {
@@ -483,19 +479,5 @@ namespace Microsoft.Msagl.Core.DataStructures {
         }
 
         #endregion
-
-        internal void AddCollection(IEnumerable<T> enumerable) {
-            foreach (var p in enumerable)
-                Insert(p);
-        }
-
-        internal RBNode<T> InsertUnique(T item) {
-            var node = Find(item);
-
-            if (node != null)
-                return node;
-
-            return Insert(item);
-        }
     }
 }

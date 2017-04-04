@@ -1016,51 +1016,6 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             return string.Format("{0} on line {1}: {2}", details, this.currentLineNumber, this.currentLine);
         }
 
-        internal static string[] GetCommandLineArgs(string fileName, out string commandLine)
-        {
-            // First line is the commented command line.
-            using (var reader = new StreamReader(fileName))
-            {
-                // This line starts with "// ".
-                commandLine = reader.ReadLine();
-                if (string.IsNullOrEmpty(commandLine))
-                {
-                    Validate.Fail("Cannot find command line in file");
-                    return null; // Validate.Fail isn't recognized as preventing possible nullref on following line
-                }
-                commandLine = commandLine.Substring(3).Trim();
-                return SplitCommandLineArgs(commandLine);
-            }
-        }
-
-        internal static string[] SplitCommandLineArgs(string cmdLine)
-        {
-            // Simple parser for -updatefile, since we don't do much complicated arg stuff.
-            var args = new List<string>();
-            var builder = new StringBuilder();
-            bool inQuotes = false;
-            foreach (char c in cmdLine)
-            {
-                if ('"' == c)
-                {
-                    inQuotes = !inQuotes;
-                    continue;
-                }
-                if ((' ' == c) && !inQuotes)
-                {
-                    args.Add(builder.ToString());
-                    builder.Clear();
-                    continue;
-                }
-                builder.Append(c);
-            }
-            if (0 != builder.Length) 
-            {
-                args.Add(builder.ToString());
-            }
-            return args.ToArray();
-        }
-
         #region IDisposable Members
 
         public void Dispose() 

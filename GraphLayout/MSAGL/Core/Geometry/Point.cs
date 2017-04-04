@@ -581,13 +581,6 @@ namespace Microsoft.Msagl.Core.Geometry {
                    (x - bOrig) * bDirection / bDirection.L1 > ApproximateComparer.DistanceEpsilon;
         }
 
-        static internal bool RayIntersectsRay(Point aOrig, Point aDirection, Point bOrig, Point bDirection, out Point x) {
-            return Point.LineLineIntersection(aOrig, aOrig + aDirection,
-                                              bOrig, bOrig + bDirection, out x) &&
-                   (x - aOrig) * aDirection >= -ApproximateComparer.Tolerance &&
-                   (x - bOrig) * bDirection >= -ApproximateComparer.Tolerance;
-        }
-
         /// <summary>
         /// projects a point to an infinite line
         /// </summary>

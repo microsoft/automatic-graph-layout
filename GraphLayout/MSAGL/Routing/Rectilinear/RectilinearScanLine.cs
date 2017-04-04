@@ -80,10 +80,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return succ;
         }
 
-        internal RBNode<BasicObstacleSide> Next(Directions dir, BasicObstacleSide side) {
-            return Next(dir, Find(side));
-        }
-
         internal RBNode<BasicObstacleSide> Next(Directions dir, RBNode<BasicObstacleSide> sideNode) {
             var succ = (StaticGraphUtility.IsAscending(dir)) ? SideTree.Next(sideNode) : SideTree.Previous(sideNode);
             return succ;
@@ -94,12 +90,11 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return SideTree.TreeMinimum();
         }
 
-        [Conditional("DEVTRACE")]
+#if DEVTRACE
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 // ReSharper disable InconsistentNaming
         internal void DevTrace_VerifyConsistency(string descFormat, params object[] descArgs) {
 // ReSharper restore InconsistentNaming
-#if DEVTRACE
             bool retval = true;
             if (scanLineVerify.IsLevel(1)) {
                 DevTraceInfo(2, "ScanLineConsistencyCheck LinePos = {0}", this.linePositionAtLastInsertOrRemove);
@@ -117,9 +112,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                 }
             }
             Assert(retval, "Sides are not strictly increasing");
-#endif // DEVTRACE
         }
-
+#endif // DEVTRACE
         #region IComparer<BasicObstacleSide>
         /// <summary>
         /// For ordering lines along the scanline at segment starts/ends.
@@ -226,22 +220,13 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         #endregion // DevTrace
 
         #region DebugCurves
-        [Conditional("TEST_MSAGL")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-// ReSharper disable InconsistentNaming
-        internal void Test_ShowScanLine() {
-#if TEST_MSAGL
-            LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(Test_GetScanLineDebugCurves());
-#endif // TEST
-        }
 
-        [Conditional("TEST_MSAGL")]
+#if TEST_MSAGL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         internal void Test_DumpScanLine() {
-#if TEST_MSAGL
             DebugCurveCollection.WriteToFile(Test_GetScanLineDebugCurves(), StaticGraphUtility.GetDumpFileName("ScanLine"));
-#endif // TEST
         }
+#endif // TEST
 
 #if TEST_MSAGL
         internal List<DebugCurve> Test_GetScanLineDebugCurves() {

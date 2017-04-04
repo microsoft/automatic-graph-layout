@@ -49,10 +49,6 @@ namespace TestConstraints
         // We output to files with {N:F5} so keep that precision level constant.
         internal const int FileOutputDigitsOfPrecision = 5; // Not customizable
         internal static int RandomSeed;                // Set in arg list if reproducibility desired
-        internal static double RoundPrec(double dbl)
-        {
-            return Math.Round(dbl, FileOutputDigitsOfPrecision);
-        }
         internal static double RoundRand(Random rng, int iMax)
         {
             // Returns 0.0 if iMax == 0

@@ -99,13 +99,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         }
 
         /// <summary>
-        /// number of real edges passing the node
-        /// </summary>
-        internal int RealEdgeCount(Station node) {
-            return node.MetroNodeInfos.Count;
-        }
-
-        /// <summary>
         /// number of real edges passing the edge uv
         /// </summary>
         internal int RealEdgeCount(Station u, Station v) {
@@ -181,13 +174,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             width += count > 0 ? (count - 1) * edgeSeparation : 0;
             Debug.Assert(ApproximateComparer.GreaterOrEqual(width, 0));
             return width;
-        }
-
-        /// <summary>
-        /// Initialize data
-        /// </summary>
-        internal void Initialize() {
-            Initialize(true);
         }
 
         /// <summary>

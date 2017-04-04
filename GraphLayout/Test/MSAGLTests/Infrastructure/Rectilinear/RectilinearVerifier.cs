@@ -212,18 +212,6 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         //// Utilities
         ////
 
-        internal void SetFreeRelativePortToShapeMap(Dictionary<Port, Shape> newMap)
-        {
-            this.FreeRelativePortToShapeMap.Clear();
-            if (null != newMap)
-            {
-                foreach (var kvp in newMap)
-                {
-                    FreeRelativePortToShapeMap[kvp.Key] = kvp.Value;
-                }
-            }
-        }
-
         /// <summary>
         /// This is the function that instantiates the router wrapper, overridden by TestRectilinear if not
         /// called from MSTest.
@@ -577,31 +565,6 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             }
         }
 
-        // Called from TestRectilinear so we don't have to expose SourceOrdinals and TargetOrdinals.
-        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "CA doesn't understand Validate.IsTrue.")]
-        protected int FillObstacleOrdinalList(bool isSource, int startArg, string[] args)
-        {
-            // require at least one value
-            Validate.IsTrue(startArg < (args.Length - 1), "Missing ordinal(s) for -" + args[startArg]);
-            var ordinals = isSource ? this.SourceOrdinals : this.TargetOrdinals;
-            int currentArg = startArg + 1;
-            for (; (currentArg < args.Length) && !args[currentArg].StartsWith("-", StringComparison.CurrentCulture); ++currentArg)
-            {
-                AddObstacleOrdinal(ordinals, int.Parse(args[currentArg]));
-            }
-            Validate.IsTrue(currentArg > startArg + 1, "Missing ordinal(s) for -" + args[startArg]);
-            this.DefaultWantPorts = true;
-
-            // Return the number of arguments used (including arg name).
-            return currentArg - startArg;
-        }
-
-        // Called from TestRectilinear so we don't have to expose SourceOrdinals and TargetOrdinals.
-        protected void AddObstacleOrdinal(bool isSource, int ordinal)
-        {
-            AddObstacleOrdinal(isSource ? this.SourceOrdinals : this.TargetOrdinals, ordinal);
-        }
-
         private static void FinalizeObstacleOrdinals(List<int> ordinals, int idxObstacle, int obstacleCount)
         {
             if (idxObstacle >= 0)
@@ -644,7 +607,6 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         #region Overridden by TestRectilinear.
         internal virtual void ShowGraph(RectilinearEdgeRouterWrapper router) { }
         internal virtual void ShowIncrementalGraph(RectilinearEdgeRouterWrapper router) { }
-        internal virtual void ShowInitialObstacles(RectilinearEdgeRouterWrapper router) { }
         internal virtual void ShowShapes(IEnumerable<Shape> obstacles) { }
         #endregion // Overridden by TestRectilinear.
 

@@ -218,17 +218,6 @@ namespace Microsoft.Msagl.Core.Geometry {
             }
         }
 
-
-        /// <summary>
-        /// Returns all leaves whose intervals intersect hitInterval (or all leaves before hitTest returns false).
-        /// </summary>
-        /// <param name="hitTest"></param>
-        /// <param name="hitInterval"></param>
-        /// <returns></returns>
-        internal void VisitTree(Func<TData, HitTestBehavior> hitTest, Interval hitInterval) {
-            VisitTreeStatic(this, hitTest, hitInterval);
-        }
-
         static HitTestBehavior VisitTreeStatic(IntervalNode<TData> intervalNode, Func<TData, HitTestBehavior> hitTest, Interval hitInterval) {
             if (intervalNode.Interval.Intersects(hitInterval)) {
                 if (hitTest(intervalNode.UserData) == HitTestBehavior.Continue) {
@@ -302,10 +291,6 @@ namespace Microsoft.Msagl.Core.Geometry {
 
         internal IEnumerable<IntervalNode<TData>> GetAllLeafNodes() {
             return EnumIntervalNodes(true /*leafOnly*/);
-        }
-
-        internal IEnumerable<IntervalNode<TData>> GetAllNodes() {
-            return EnumIntervalNodes(false /*leafOnly*/);
         }
 
         IEnumerable<IntervalNode<TData>> EnumIntervalNodes(bool leafOnly) {

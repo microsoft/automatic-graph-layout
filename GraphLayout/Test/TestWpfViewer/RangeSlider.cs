@@ -302,10 +302,6 @@ namespace TestWpfViewer {
         
         }
 
-        void rect_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
-            throw new NotImplementedException();
-        }
-
         void AddRightArrowToMaxButton() {
             var rightArrow = new Polygon {Fill = Brushes.Black, Stretch = Stretch.Uniform, Margin = new Thickness(bWidth/5)};
             rightArrow.Points.Add(new Point(0, 0));

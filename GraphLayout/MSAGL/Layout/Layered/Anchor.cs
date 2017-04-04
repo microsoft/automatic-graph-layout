@@ -469,11 +469,6 @@ namespace Microsoft.Msagl.Layout.Layered {
             this.Y += p.Y;
         }
 
-        internal void MoveTo(Point p) {
-            this.X = p.X;
-            this.Y = p.Y;
-        }
-
 #if TEST_MSAGL
 
         /// <summary>

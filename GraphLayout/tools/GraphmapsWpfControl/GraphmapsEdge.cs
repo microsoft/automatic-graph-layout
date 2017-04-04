@@ -260,7 +260,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
         static readonly double HalfArrowAngleTan = Math.Tan(ArrowAngle * 0.5 * Math.PI / 180.0);
         static readonly double HalfArrowAngleCos = Math.Cos(ArrowAngle * 0.5 * Math.PI / 180.0);
-        internal byte Transparency = 0; //255; //test
         const double ArrowAngle = 30.0; //degrees
 
         #region Implementation of IViewerObject

@@ -88,18 +88,6 @@ namespace Microsoft.Msagl.Core.Layout {
             GeometryParent = parentPar;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ICurve CreateBoundary() {
-            double w = Width/2;
-            double h = Height/2;
-            Curve curve = new Curve();
-            Curve.AddLineSegment(curve, Center.X - w, Center.Y - h, Center.X - w, Center.Y + h);
-            Curve.ContinueWithLineSegment(curve, Center.X + w, Center.Y + h);
-            Curve.ContinueWithLineSegment(curve, Center.X + w, Center.Y - h);
-            Curve.CloseCurve(curve);
-            return curve;
-        }
-
         Point attachmentSegmentStart;
 
         /// <summary>

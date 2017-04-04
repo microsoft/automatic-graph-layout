@@ -122,7 +122,6 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
         {
             this.Left = this.Right = variable;
         }
-        internal bool IsDummy { get { return this.Left == this.Right; } }
 
         /// <summary>
         /// Generates a string representation of the Constraint.

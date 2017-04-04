@@ -109,11 +109,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear{
             return segmentAndCrossings.Item1.End;
         }
 
-        // Splits an existing Edge to splice in this.Vertex.
-        internal void SpliceIntoEdge(TransientGraphUtility transUtil, VisibilityEdge edge) {
-            transUtil.SplitEdge(edge, this.Vertex);
-        }
-
         internal void AddOobEdgesFromGraphCorner(TransientGraphUtility transUtil, Point cornerPoint) {
             Directions dirs = PointComparer.GetDirections(cornerPoint, Vertex.Point);
             VisibilityVertex cornerVertex = transUtil.VisGraph.FindVertex(cornerPoint);
