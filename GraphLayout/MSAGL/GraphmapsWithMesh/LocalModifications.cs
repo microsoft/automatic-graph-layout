@@ -45,6 +45,14 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                                 modificationList.Add(id);
                             }                            
                         }
+                        //check whether it is safe to modify the graph
+                        bool safetomodify = true;
+                        if (g.DegList[w.Id] + modificationList.Count >= g.maxDeg) continue;
+                        foreach (var x in modificationList)
+                            if (g.DegList[x] + 1 >= g.maxDeg) 
+                                safetomodify = false;
+                        if (!safetomodify) continue;
+
                         //add edges between w and the neighbor's neighbor
                         foreach (var x in modificationList)
                         {

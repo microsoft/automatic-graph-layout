@@ -542,7 +542,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         {
              
 
-            Boolean loaded = LoadNodeLocationsFromFile();
+            //Boolean loaded = LoadNodeLocationsFromFile();
             _mainGeometryGraph.UpdateBoundingBox();
             _lgLayoutSettings._geometryGraph = _mainGeometryGraph;
 
@@ -564,7 +564,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
  
             
             LevelCalculator.RankGraph(_lgData, _mainGeometryGraph);
-            if(!loaded) LayoutTheWholeGraph();
+            //if(!loaded) 
+                LayoutTheWholeGraph();
             
             
 
@@ -673,6 +674,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         public bool loadBipartiteData()
         {
             String line = _mainGeometryGraph.directory;
+            if (line == null) return false;
             line = line.Replace(".tiles", "");
             try
             {

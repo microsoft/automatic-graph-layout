@@ -437,12 +437,13 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             Console.WriteLine("Mesh Created");
         }
 
-        static Dictionary<double, List<OrthogonalEdge>> HVEdges = new Dictionary<double, List<OrthogonalEdge>>();
-        static Dictionary<double, List<OrthogonalEdge>> VHEdges = new Dictionary<double, List<OrthogonalEdge>>();
+        private  static Dictionary<double, List<OrthogonalEdge>> HVEdges;
+        private  static Dictionary<double, List<OrthogonalEdge>> VHEdges;
 
         public static void FastCompetitionMesh(Tiling g, Dictionary<int, Node> idToNode, int maxX, int maxY, Dictionary<Point, int> locationtoNode)
         {
-
+            HVEdges = new Dictionary<double, List<OrthogonalEdge>>();
+            VHEdges = new Dictionary<double, List<OrthogonalEdge>>();
 
             double[] Px = new double[g.N];
             double[] Py = new double[g.N];

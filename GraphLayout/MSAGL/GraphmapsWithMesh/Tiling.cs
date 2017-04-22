@@ -24,6 +24,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         public Vertex[] VList;
         public Edge[,] EList;
         public double Maxweight;
+        public int maxDeg;
         public int N;
         Component _sNet;
         readonly double[] _edgeNodeSeparation;
@@ -40,7 +41,8 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             thinness = 2;
             _angularResolution = 0.3;
             NumOfnodes = N = nodeCount;
-            EList = new Edge[10 * N, 10];
+            maxDeg = 15;
+            EList = new Edge[10 * N, maxDeg];
             VList = new Vertex[10 * N];
             DegList = new int[10 * N];
             _edgeNodeSeparation = new double[20];
