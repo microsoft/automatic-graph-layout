@@ -13,34 +13,42 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         {
             int unit = (int)_lgLayoutSettings.NodeSeparation ;
 
+            //for all vertices that are not real vertices
             for (int index = g.N; index < g.NumOfnodesBeforeDetour; index++)
             {
+                //current vertex is w
                 Vertex w = g.VList[index];
 
-                int numNeighbors = 0;
-
+                //for each neighbor of w
                 for (int k = 0; k < g.DegList[w.Id]; k++)
                 {                    
                     Vertex neighbor = g.VList[g.EList[w.Id, k].NodeId];
+
+                    //if neighbor is a real vertex then continue
                     if(neighbor.Id<g.N) continue;
+
                     //else check whether the edge is short
                     double l = g.GetEucledianDist(w.Id,neighbor.Id);
+
+                    //if the length is short engough then short-cut
                     if (l < unit)
                     {
                         //shortcut this edge
-                        List<int> ModificationList = new List<int>();
+                        //take all the neighbors of the 'neighbor' into the modification list
+                        List<int> modificationList = new List<int>();
                         for (int j = 0; j < g.DegList[neighbor.Id]; j++)
                         {
                             int id = g.EList[neighbor.Id, j].NodeId;
+
                             if (id != w.Id) 
                             {                                
-                                ModificationList.Add(id);
+                                modificationList.Add(id);
                             }                            
                         }
-                        foreach (var x in ModificationList)
+                        //add edges between w and the neighbor's neighbor
+                        foreach (var x in modificationList)
                         {
-                            g.AddEdge(w.Id,x);
-                            g.RemoveEdge(w.Id, x);
+                            g.AddEdge(w.Id,x);                            
                         }
                         
                         g.RemoveEdge(w.Id, neighbor.Id);    

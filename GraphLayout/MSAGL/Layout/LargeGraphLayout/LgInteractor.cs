@@ -639,18 +639,18 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 g.MsaglRemoveDeg2(idToNode);
                 stopwatch.Stop();
                 Console.WriteLine("Deg 2 removal Time = " + stopwatch.ElapsedMilliseconds);
-
+                
                 stopwatch.Start();
                 PlanarGraphUtilities.TransformToGeometricPlanarGraph(g);
                 stopwatch.Stop();
                 Console.WriteLine("Planar Graph Building Time = " + stopwatch.ElapsedMilliseconds);
-
+                
                 stopwatch.Start();
                 PlanarGraphUtilities.RemoveLongEdgesFromThinFaces(g);
                 stopwatch.Stop();
                 Console.WriteLine("Thin Face Removal Time = " + stopwatch.ElapsedMilliseconds);
                 
-
+                
                 //Move the points towards median
                 //Console.WriteLine("Moving junctions to minimize ink");
                 stopwatch.Start();
@@ -659,9 +659,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 stopwatch.Stop();
                 Console.WriteLine("Ink Minimization Time = " + stopwatch.ElapsedMilliseconds);
 
+                
                 LocalModifications.MsaglShortcutShortEdges(g, idToNode, _lgLayoutSettings);
+                
                 g.MsaglRemoveDeg2(idToNode);
                 LocalModifications.MsaglMoveToMedian(g, idToNode, _lgLayoutSettings);
+                
             }
 
             return g;

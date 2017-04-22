@@ -575,13 +575,13 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                         if (CurrentVertex.YLoc == Neighbor.YLoc)
                         {
 
-
+                            
                             //find the rightmost point of the neighbor
                             Vertex rightNeighbor;
 
                             do
                             {
-                                rightNeighbor = Neighbor;
+                                rightNeighbor = Neighbor ;
                                 for (int j = 0; j < g.DegList[Neighbor.Id]; j++)
                                 {
                                     Vertex Candidate = g.VList[g.EList[Neighbor.Id, j].NodeId];
@@ -591,14 +591,14 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                                         break;
                                     }
                                 }
-                            } while (rightNeighbor.Id != rightNeighbor.Id);
+                            } while (rightNeighbor.Id != Neighbor.Id);
                             if (rightNeighbor.XLoc >= CurrentVertex.XLoc) continue;
                             //dont need to find left neighbor since this is the first time ray is growing
 
 
                             g.AddEdge(CurrentVertex.Id, rightNeighbor.Id);
                             if (!VHEdges.ContainsKey(CurrentVertex.YLoc))
-                                VHEdges[CurrentVertex.YLoc] = new List<OrthogonalEdge>();
+                                VHEdges[CurrentVertex.YLoc] = new List<OrthogonalEdge>();                            
                             VHEdges[CurrentVertex.YLoc].Add(new OrthogonalEdge(CurrentVertex, rightNeighbor));
 
                         }
@@ -653,8 +653,10 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                                 g.AddEdge(r.b.Id, a);
                                 g.AddEdge(CurrentVertex.Id, a);
 
-                                if (!HVEdges.ContainsKey(Neighbor.XLoc)) HVEdges[Neighbor.XLoc] = new List<OrthogonalEdge>();
-                                if (!VHEdges.ContainsKey(CurrentVertex.YLoc)) VHEdges[CurrentVertex.YLoc] = new List<OrthogonalEdge>();
+                                if (!HVEdges.ContainsKey(Neighbor.XLoc)) 
+                                    HVEdges[Neighbor.XLoc] = new List<OrthogonalEdge>();
+                                if (!VHEdges.ContainsKey(CurrentVertex.YLoc))
+                                    VHEdges[CurrentVertex.YLoc] = new List<OrthogonalEdge>();
                                 HVEdges[Neighbor.XLoc].Remove(r);
                                 HVEdges[Neighbor.XLoc].Add(new OrthogonalEdge(r.a, g.VList[a]));
                                 HVEdges[Neighbor.XLoc].Add(new OrthogonalEdge(r.b, g.VList[a]));
@@ -666,8 +668,10 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                                 g.AddEdge(CurrentVertex.Id, a);
                                 g.AddEdge(ClosestVertex.Id, a);
 
-                                if (!HVEdges.ContainsKey(Neighbor.XLoc)) HVEdges[Neighbor.XLoc] = new List<OrthogonalEdge>();
-                                if (!VHEdges.ContainsKey(CurrentVertex.YLoc)) VHEdges[CurrentVertex.YLoc] = new List<OrthogonalEdge>();
+                                if (!HVEdges.ContainsKey(Neighbor.XLoc)) 
+                                    HVEdges[Neighbor.XLoc] = new List<OrthogonalEdge>();
+                                if (!VHEdges.ContainsKey(CurrentVertex.YLoc)) 
+                                    VHEdges[CurrentVertex.YLoc] = new List<OrthogonalEdge>();
                                 VHEdges[CurrentVertex.YLoc].Add(new OrthogonalEdge(CurrentVertex, g.VList[a]));
                                 HVEdges[ClosestVertex.XLoc].Add(new OrthogonalEdge(ClosestVertex, g.VList[a]));
 
@@ -700,7 +704,8 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             {
                 foreach (var edge in hEdges)
                 {
-                    E.Add(edge);
+                    if (edge.a == null) continue;
+                    E.Add(edge);                    
                     Y.Add(edge.a.YLoc);
                 }
             }
@@ -855,6 +860,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             {
                 foreach (var edge in hEdges)
                 {
+                    if(edge.a == null) continue;
                     E.Add(edge);
                     Y.Add(-edge.a.YLoc);
                 }
@@ -1670,7 +1676,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         public OrthogonalEdge(Vertex p, Vertex q)
         {
 
-
+            
             if (p.XLoc == q.XLoc)
             {
                 if (p.YLoc <= q.YLoc)
