@@ -106,7 +106,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         public static void RemoveLongEdgesFromThinFaces(Tiling gPlanar)
         {
             Console.WriteLine("Removing Thin Faces");
-            bool searchFurther = true;
+            //bool searchFurther = true;
             //while (searchFurther)
             //{
             //you need to handle face one after another - since you are changing the adjacency list

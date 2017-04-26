@@ -15,6 +15,7 @@ using Microsoft.Msagl.Core.GraphAlgorithms;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTree;
 using Microsoft.Msagl.Core.Routing;
+using Microsoft.Msagl.DebugHelpers;
 using Microsoft.Msagl.GraphmapsWithMesh;
 using Microsoft.Msagl.Layout.Incremental;
 using Microsoft.Msagl.Layout.Initial;
@@ -407,7 +408,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             //until all edges are added create a layer and add vertices one after another
             int layer = 0;
-            int plottedNodeCount = 0;
+            //int plottedNodeCount = 0;
             List<Node> nodes = new List<Node>();
             _lgData.Levels.Clear();
              
@@ -680,7 +681,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             {
                 System.IO.StreamReader file = new System.IO.StreamReader(line + ".set");
                 Dictionary<string, int> nametoset = new Dictionary<string, int>();
-                int count = 0;
+                //int count = 0;
                 while ((line = file.ReadLine()) != null)
                 {
                     string[] words = line.Split(',');
@@ -697,6 +698,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 Console.WriteLine("May not be a Bipartite Graph");
                 return false;
             }
@@ -723,7 +725,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             {
                 System.IO.StreamReader file = new System.IO.StreamReader(line+".loc");
                 Dictionary<string, Point> nametopoint = new Dictionary<string, Point>();
-                int count = 0;
                 while ((line = file.ReadLine()) != null)
                 {
                     string[] words = line.Split(',');
@@ -754,6 +755,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             }
             catch (Exception e)
             {                
+                Console.WriteLine(e.Message);
                 Console.WriteLine("No prespecified location found.");
                 return false;
             }
@@ -1006,7 +1008,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
         public Dictionary<SymmetricSegment, Rail> Segs = new Dictionary<SymmetricSegment, Rail>();
 
-        GreedyNodeRailLevelCalculator calc;
+        //GreedyNodeRailLevelCalculator calc;
 
         public int[] graphLayer = new int[100];
 
@@ -1387,7 +1389,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         /// </summary>
         public void Run()
         {
-            Dictionary<Node, int> nodeToIndex;
+            //Dictionary<Node, int> nodeToIndex;
 
 
             Console.WriteLine("dot graph");
@@ -2171,7 +2173,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             var skeletonLevel = _lgData.SkeletonLevels[0];
             skeletonLevel.ClearSavedTrajectoriesAndUsedEdges();
             Console.Write("\nRouting edges");
-            int numRouted = 0;
+            //int numRouted = 0;
 
             foreach (LgNodeInfo ni in GetNodeInfosOnLevelLeq(0))
             {

@@ -532,7 +532,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         public static void ProcessLeftRays(Tiling g, Dictionary<int, int> Neighbors4, Dictionary<int, int> Neighbors5, int maxX, int maxY, Dictionary<Point, int> locationtoNode)
         {
             int a;
-            LineSegment l;
+            //LineSegment l;
             for (int i = 0; i < g.N; i++)
             {
                 Vertex CurrentVertex = g.VList[i];
@@ -695,7 +695,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         public static void ProcessUpwardRays(Tiling g, int maxX, int maxY, Dictionary<Point, int> locationtoNode)
         {
             int a;
-            LineSegment l;
+            //LineSegment l;
 
             //sort all horizontal segments according to the y coordinates
             List<double> Y = new List<double>();
@@ -851,7 +851,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         public static void ProcessDownwardRays(Tiling g, int maxX, int maxY, Dictionary<Point, int> locationtoNode)
         {
             int a;
-            LineSegment l;
+            //LineSegment l;
 
             //sort all horizontal segments according to the -y coordinates
             List<double> Y = new List<double>();
@@ -997,7 +997,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         public static void ProcessRightRays(Tiling g, Dictionary<int, int> Neighbors1, Dictionary<int, int> Neighbors8, int maxX, int maxY, Dictionary<Point, int> locationtoNode)
         {
             int a;
-            LineSegment l;
+            //LineSegment l;
             for (int i = 0; i < g.N; i++)
             {
                 Vertex CurrentVertex = g.VList[i];

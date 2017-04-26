@@ -7,7 +7,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
     {
         public Stack<Tuple> Edgelist = new Stack<Tuple>();
         public List<Twin> SpanningTree = new List<Twin>();
-        ComponentCollection _compCollection;
+        //ComponentCollection _compCollection;
  
 
     }

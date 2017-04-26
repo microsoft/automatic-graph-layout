@@ -287,7 +287,6 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                     Vertex w = VList[index];
 
                     int numNeighbors = 0;
-                    double cost = 100000;
                     double profit = 0;
 
                     for (int k = 0; k < DegList[w.Id]; k++)
@@ -330,7 +329,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                                 break;
                             }
 
-                            ///*try to maximize min angle
+                            // *try to maximize min angle
                             d[counter] = 3.1416;
                             for (int l = 1; l <= numNeighbors; l++)
                             {
@@ -350,7 +349,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                             //*/
 
                         }
-                        ///*try to maximize min angle
+                        // *try to maximize min angle
                         if (profit < d[counter])
                         {
                             profit = d[counter]; mincostA = a; mincostB = b;

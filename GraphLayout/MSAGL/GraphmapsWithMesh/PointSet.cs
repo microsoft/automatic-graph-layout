@@ -53,7 +53,6 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
         public bool exists(int x, int y, int n)
         {
-            double d;
             for (int i = NumPoints - 1; i > n; i--)
             {
                 if (Pt[i].X == x && Pt[i].Y == y) return true;
