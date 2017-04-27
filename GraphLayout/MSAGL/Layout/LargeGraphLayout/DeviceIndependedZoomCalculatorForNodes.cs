@@ -54,7 +54,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 if (zoomLevel == 2) gridSize /= 2.5;
                 if (zoomLevel == 4) gridSize /= 2;
                 if (zoomLevel == 8) gridSize /= 1.5;
-                if (zoomLevel >= 8) gridSize /= 1.25; 
+                if (zoomLevel >= 8) gridSize /= 1.25;
+                if (zoomLevel >= 256) gridSize /= 10; 
                 //gridSize /= 2;  //jyoti changed it from 2 to make smooth transition between levels
             }
         }

@@ -48,6 +48,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             var nodeZoomLevelCalculator =
                 new DeviceIndependendZoomCalculatorForNodes(node => lgData.GeometryNodesToLgNodeInfos[node],
                                                             mainGeometryGraph, lgLayoutSettings, lgLayoutSettings.MaxNumberOfNodesPerTile);
+            //jyoti this is the place where you might want to bound the theoretical zoom level
             nodeZoomLevelCalculator.Run();
             lgData.SortedLgNodeInfos = nodeZoomLevelCalculator.SortedLgNodeInfos;
             lgData.LevelNodeCounts = nodeZoomLevelCalculator.LevelNodeCounts;

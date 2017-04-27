@@ -157,6 +157,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     }
                 }
 
+                //try lev's code for shortest path here
                 foreach (Edge edge in _mainGeometryGraph.Edges)
                 {
                     int sourceZoomLevel = g.VList[nodeToId[edge.Source]].ZoomLevel;
@@ -180,7 +181,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                             graph.pathList[edge] = OldGraphHolder.pathList[edge];
                             continue;
                         }
-                        else graph.pathList[edge] = new List<int>();
+                        
+                        graph.pathList[edge] = new List<int>();
                         List<int> pathvertices = dijkstra.MSAGLAstarShortestPath(g.VList, g.EList, g.DegList, nodeToId[edge.Source], nodeToId[edge.Target], g.NumOfnodes);
                         //List<int> pathvertices = dijkstra.MSAGLAstarShortestPath(g.VList, g.EList, g.DegList, nodeToId[edge.Source], nodeToId[edge.Target], g.NumOfnodes);
 
