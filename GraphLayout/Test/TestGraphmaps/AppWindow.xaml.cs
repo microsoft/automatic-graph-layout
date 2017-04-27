@@ -41,6 +41,7 @@ namespace TestGraphmaps
         //        int x = 10;
         //    }
         //}
+        //Find node operation on 'Enter'
         void OnKeyDownHandler(object sender, KeyEventArgs e) {
             if (e.Key == Key.Return) {
                 GraphViewer.FindNodeAndSelectIt(_searchBox.Text);

@@ -1603,10 +1603,47 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
         void ClearSelection()
         {
-            ClearNodesSelection();
-            ClearRailSelection();
-            ClearEdgeSelection();
+            ClearNodesSelection();            
+            //ClearEdgeSelection();
+            //ClearRailSelection();
         }
+
+
+
+        void DeselectNode(GraphmapsNode vnode)
+        {
+
+
+                //jyoti assigned colors
+                var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
+                if (lgSettings == null) return;
+                var nodeInfo = lgSettings.GeometryNodesToLgNodeInfos[vnode.Node.GeometryNode];
+
+                var c = nodeInfo.Color;
+                List<SolidColorBrush> ColorSet = new List<SolidColorBrush>();
+                addColorsToSet(ColorSet);
+
+                foreach (LgNodeInfo vinfo in SelectedNodeSet)
+                {
+                    ColorSet.Remove(vinfo.Color);
+                }
+
+                if (ColorSet.Count > 0)
+                    nodeInfo.Color = ColorSet.First();
+                else
+                    nodeInfo.Color = Brushes.Red;
+
+
+
+
+                SelectColoredEdgesIncidentTo(vnode, c);
+                SelectUnselectNode(vnode.LgNodeInfo, !IsSelected(vnode));
+                vnode.Invalidate();
+
+
+                
+        }
+
 
         void ClearEdgeSelection()
         {
@@ -1617,18 +1654,23 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
         void ClearNodesSelection()
         {
+            /*
             var nodesToDeselect = SelectedNodeInfos.Clone();
             foreach (LgNodeInfo ni in nodesToDeselect)
             {
                 SelectColoredEdgesIncidentTo(ni, null);
                 SelectUnselectNode(ni, false);                
-            }
+            }*/
+            //jyoti fixed the 'End' operation by deselecting colored nodes
             foreach (var o in _drawingObjectsToIViewerObjects.Values)
             {
                 var vNode = o as GraphmapsNode;
-                if (vNode != null)
-                    vNode.Invalidate();
+                if (vNode != null && vNode.LgNodeInfo.Color != null)
+                {
+                    DeselectNode(vNode); //vNode.Invalidate();    
+                }
             }
+            
         }
 
         void ClearRailSelection()
@@ -3412,15 +3454,19 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 ZoomToNodeInfo(nodeInfo);
         }
 
+        //textbox: find node operation on 'Enter'
         void ZoomToNodeInfo(LgNodeInfo nodeInfo)
         {
-            nodeInfo.Selected = true;
-            _lgLayoutSettings.Interactor.SelectedNodeInfos.Insert(nodeInfo);
+            //jyoti commented out all the node update 
+            //since the node updates will mess up with the node selection colors
+
+            //nodeInfo.Selected = true;
+            //_lgLayoutSettings.Interactor.SelectedNodeInfos.Insert(nodeInfo);
             var scale = Math.Max(CurrentScale, nodeInfo.LabelVisibleFromScale);
             var vp = new Rectangle(new Point(0, 0),
                 new Point(_graphCanvas.RenderSize.Width, _graphCanvas.RenderSize.Height));
             SetTransformOnViewport(scale, nodeInfo.Center, vp);
-            var drobject = nodeInfo.GeometryNode.UserData as DrawingObject;
+            /*var drobject = nodeInfo.GeometryNode.UserData as DrawingObject;
             if (drobject != null)
             {
                 IViewerObject ttt;
@@ -3428,7 +3474,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 {
                     this.Invalidate(ttt);
                 }
-            }
+            }*/
         }
     }
 

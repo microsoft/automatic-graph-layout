@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Layout.LargeGraphLayout;
@@ -13,56 +14,71 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         {
             int unit = (int)_lgLayoutSettings.NodeSeparation ;
 
-            //for all vertices that are not real vertices
-            for (int index = g.N; index < g.NumOfnodesBeforeDetour; index++)
+            int shortcutcount = 1;
+            int iteration = 1;
+
+            Console.WriteLine();
+            Console.WriteLine("Minimize the number of railes for quick interaction? (Y/N)");
+            string input = Console.ReadLine();
+            if (input.StartsWith("Y") || input.StartsWith("y"))
+                iteration = 10;
+            while (shortcutcount>0 && iteration>0)
             {
-                //current vertex is w
-                Vertex w = g.VList[index];
+                iteration--;
+                //for all vertices that are not real vertices
+                for (int index = g.N; index < g.NumOfnodesBeforeDetour; index++)
+                {
+                    //current vertex is w
+                    Vertex w = g.VList[index];
 
-                //for each neighbor of w
-                for (int k = 0; k < g.DegList[w.Id]; k++)
-                {                    
-                    Vertex neighbor = g.VList[g.EList[w.Id, k].NodeId];
-
-                    //if neighbor is a real vertex then continue
-                    if(neighbor.Id<g.N) continue;
-
-                    //else check whether the edge is short
-                    double l = g.GetEucledianDist(w.Id,neighbor.Id);
-
-                    //if the length is short engough then short-cut
-                    if (l < unit)
+                    //for each neighbor of w
+                    for (int k = 0; k < g.DegList[w.Id]; k++)
                     {
-                        //shortcut this edge
-                        //take all the neighbors of the 'neighbor' into the modification list
-                        List<int> modificationList = new List<int>();
-                        for (int j = 0; j < g.DegList[neighbor.Id]; j++)
-                        {
-                            int id = g.EList[neighbor.Id, j].NodeId;
+                        Vertex neighbor = g.VList[g.EList[w.Id, k].NodeId];
 
-                            if (id != w.Id) 
-                            {                                
-                                modificationList.Add(id);
-                            }                            
-                        }
-                        //check whether it is safe to modify the graph
-                        bool safetomodify = true;
-                        if (g.DegList[w.Id] + modificationList.Count >= g.maxDeg) continue;
-                        foreach (var x in modificationList)
-                            if (g.DegList[x] + 1 >= g.maxDeg) 
-                                safetomodify = false;
-                        if (!safetomodify) continue;
+                        //if neighbor is a real vertex then continue
+                        if (neighbor.Id < g.N) continue;
 
-                        //add edges between w and the neighbor's neighbor
-                        foreach (var x in modificationList)
+                        //else check whether the edge is short
+                        double l = g.GetEucledianDist(w.Id, neighbor.Id);
+
+                        //if the length is short engough then short-cut
+                        if (l < unit)
                         {
-                            g.AddEdge(w.Id,x);                            
+                            //shortcut this edge
+                            //take all the neighbors of the 'neighbor' into the modification list
+                            List<int> modificationList = new List<int>();
+                            for (int j = 0; j < g.DegList[neighbor.Id]; j++)
+                            {
+                                int id = g.EList[neighbor.Id, j].NodeId;
+
+                                if (id != w.Id)
+                                {
+                                    modificationList.Add(id);
+                                }
+                            }
+                            //check whether it is safe to modify the graph
+                            bool safetomodify = true;
+                            if (g.DegList[w.Id] + modificationList.Count >= g.maxDeg) continue;
+                            foreach (var x in modificationList)
+                                if (g.DegList[x] + 1 >= g.maxDeg)
+                                    safetomodify = false;
+                            if (!safetomodify) continue;
+
+                            //add edges between w and the neighbor's neighbor
+                            foreach (var x in modificationList)
+                            {
+                                g.AddEdge(w.Id, x);
+                            }
+
+                            g.RemoveEdge(w.Id, neighbor.Id);
+                            shortcutcount++;
                         }
-                        
-                        g.RemoveEdge(w.Id, neighbor.Id);    
                     }
                 }
+                unit *= 2;
             }
+            Console.WriteLine("Shortcut made for " + shortcutcount + " edges");
         }
 
         public static void MsaglMoveToMedian(Tiling g, Dictionary<int, Node> idToNodes, LgLayoutSettings _lgLayoutSettings)

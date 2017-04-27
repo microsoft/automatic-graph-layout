@@ -3358,6 +3358,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                         reselectEdges[edge] = _lgData.GeometryNodesToLgNodeInfos[edge.Target].Color;
                     else reselectEdges[edge] = _lgData.GeometryNodesToLgNodeInfos[edge.Source].Color;
                 }
+                
+                 
 
 
                 filteredEdges.Add(edge);
