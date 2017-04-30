@@ -561,7 +561,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             }
             return true;
         }
-<<<<<<< HEAD
+ 
 
         public bool Crossings(int p, int q)
         {
@@ -597,7 +597,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             }
             return false;
         }
-=======
+ 
         /*
 >>>>>>> 50b7df0a5f086cbcf64800427a62fc46763c4204
         public void MoveToMedian(WeightedPoint[] pt, int numPoints)
