@@ -94,6 +94,12 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
         public static void MsaglMoveToMedian(Tiling g, Dictionary<int, Node> idToNodes, LgLayoutSettings _lgLayoutSettings, bool hugeGraph)
         {
+
+            //foreach point first produce the crossing candidates.
+            g.buildCrossingCandidates();
+
+
+            //now proceess the movement
             int[,] listNeighbors = new int[20, 3];
             double[] d = new double[10];
             int a = 0, b = 0;
@@ -181,7 +187,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                             w.YLoc += mincostB;
                             if (g.GetNodeExceptTheGivenNode(w, w.XLoc, w.YLoc, 5) >= 0 ||
                                 g.MsaglGoodResolution(w, listNeighbors, numNeighbors, 5) == false
-                                || g.noCrossingsHeuristics(w) == false
+                                || g.noCrossingsHeuristics(w, index) == false
                                 )
                             {
                                 w.XLoc -= mincostA;

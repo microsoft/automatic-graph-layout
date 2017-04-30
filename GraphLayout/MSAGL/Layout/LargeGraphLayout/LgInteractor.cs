@@ -160,8 +160,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 } 
                  
 
+<<<<<<< HEAD
                 //create the edges of the new graph
                 //for each edge (s,t), if both s and t are below ith zoomlevel, then find a s-t path
+=======
+                //try lev's code for shortest path here
+>>>>>>> 50b7df0a5f086cbcf64800427a62fc46763c4204
                 foreach (Edge edge in _mainGeometryGraph.Edges)
                 {
                     int sourceZoomLevel = g.VList[nodeToId[edge.Source]].ZoomLevel;
@@ -186,8 +190,14 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                             continue;
                         }
                         
+<<<<<<< HEAD
                         newG.pathList[edge] = new List<int>();
                         List<int> pathvertices = dijkstra.MSAGLAstarShortestPath(g.VList, g.EList, g.DegList, nodeToId[edge.Source], nodeToId[edge.Target], g.NumOfnodes);                        
+=======
+                        graph.pathList[edge] = new List<int>();
+                        List<int> pathvertices = dijkstra.MSAGLAstarShortestPath(g.VList, g.EList, g.DegList, nodeToId[edge.Source], nodeToId[edge.Target], g.NumOfnodes);
+                        //List<int> pathvertices = dijkstra.MSAGLAstarShortestPath(g.VList, g.EList, g.DegList, nodeToId[edge.Source], nodeToId[edge.Target], g.NumOfnodes);
+>>>>>>> 50b7df0a5f086cbcf64800427a62fc46763c4204
 
                         foreach (int vertexId in pathvertices)                        
                             newG.pathList[edge].Add(vertexId); 

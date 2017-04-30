@@ -266,6 +266,22 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             return Math.Sqrt((VList[a].XLoc - VList[b].XLoc) * (VList[a].XLoc - VList[b].XLoc) + (VList[a].YLoc - VList[b].YLoc) * (VList[a].YLoc - VList[b].YLoc));
         }
 
+        private Dictionary<int, int[]> allcandidates;
+
+        public void buildCrossingCandidates()
+        {
+            allcandidates = new Dictionary<int, int[]>();
+            for (int index = N; index < NumOfnodesBeforeDetour; index++)
+            {
+                Vertex w = VList[index];
+                var p1 = new Microsoft.Msagl.Core.Geometry.Point(w.XLoc - 15, w.YLoc - 15);
+                var p2 = new Microsoft.Msagl.Core.Geometry.Point(w.XLoc + 15, w.YLoc + 15);
+                Microsoft.Msagl.Core.Geometry.Rectangle queryRectangle = new Microsoft.Msagl.Core.Geometry.Rectangle(
+                    p1, p2);
+                int[] candidateList = nodeTree.GetAllIntersecting(queryRectangle);
+                allcandidates.Add(index, candidateList);
+            }
+        }
 
         public void MsaglMoveToMaximizeMinimumAngle()
         {
@@ -389,13 +405,16 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         }
 
 
-        public bool noCrossingsHeuristics(Vertex w)
+        public bool noCrossingsHeuristics(Vertex w, int index)
         {             
+            /*
             var p1 = new Point(w.XLoc-5, w.YLoc-5);
             var p2 = new Point(w.XLoc+5, w.YLoc+5);
             Rectangle queryRectangle = new Rectangle(p1, p2);
-            int[] candidateList = nodeTree.GetAllIntersecting(queryRectangle);
-
+            int[] candidateList = nodeTree.GetAllIntersecting(queryRectangle));*/
+            int[] candidateList;
+            allcandidates.TryGetValue(index, out candidateList);
+            if (candidateList.Length == 0) return true;
             
             for (int q = 0; q < candidateList.Length; q++)
             {
@@ -542,6 +561,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             }
             return true;
         }
+<<<<<<< HEAD
 
         public bool Crossings(int p, int q)
         {
@@ -577,6 +597,9 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             }
             return false;
         }
+=======
+        /*
+>>>>>>> 50b7df0a5f086cbcf64800427a62fc46763c4204
         public void MoveToMedian(WeightedPoint[] pt, int numPoints)
         {
             int[,] listNeighbors = new int[20, 3];
@@ -676,6 +699,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 }
             }
         }
+         */
         public bool MsaglGoodResolution(Vertex w, int[,] listNeighbors, int numNeighbors, int offset)
         {
             for (int i = 1; i < numNeighbors; i++)
