@@ -499,11 +499,19 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         {
             Vertex w1 = VList[p];
             Vertex w2 = VList[q];
-            Microsoft.Msagl.Core.Geometry.Point c = new Microsoft.Msagl.Core.Geometry.Point(w1.XLoc, w1.YLoc);
-            Microsoft.Msagl.Core.Geometry.Point d = new Microsoft.Msagl.Core.Geometry.Point(w2.XLoc, w2.YLoc);
+            Point c = new Point(w1.XLoc, w1.YLoc);
+            Point d = new Point(w2.XLoc, w2.YLoc);
 
-            for (int i = 0; i < NumOfnodes; i++)
+                        
+            Rectangle queryRectangle = new Rectangle(c, d);
+            int[] candidateList = nodeTree.GetAllIntersecting(queryRectangle);
+
+            for (int k  = 0; k < candidateList.Length; k++)
             {
+                int i = candidateList[k];
+            
+            //for (int i = 0; i < NumOfnodes; i++)
+            //{
                 int index = 0;
                 for (; index < r.Length; index++)
                     if (r[index] == i) break;
@@ -521,18 +529,53 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                     if (index < r.Length || w1.Id == k1 || w2.Id == k1) continue;
 
 
-                    Microsoft.Msagl.Core.Geometry.Point a = new Microsoft.Msagl.Core.Geometry.Point(VList[i].XLoc, VList[i].YLoc);
-                    Microsoft.Msagl.Core.Geometry.Point b = new Microsoft.Msagl.Core.Geometry.Point(VList[k1].XLoc, VList[k1].YLoc);
+                    Point a = new Point(VList[i].XLoc, VList[i].YLoc);
+                    Point b = new Point(VList[k1].XLoc, VList[k1].YLoc);
 
 
-                    Microsoft.Msagl.Core.Geometry.Point interestionPoint;
+                    Point interestionPoint;
 
-                    if (Microsoft.Msagl.Core.Geometry.Point.SegmentSegmentIntersection(a, b, c, d, out interestionPoint))
+                    if (Point.SegmentSegmentIntersection(a, b, c, d, out interestionPoint))
                         return false;
 
                 }
             }
             return true;
+        }
+
+        public bool Crossings(int p, int q)
+        {
+            Vertex w1 = VList[p];
+            Vertex w2 = VList[q];
+            Point c = new Point(w1.XLoc, w1.YLoc);
+            Point d = new Point(w2.XLoc, w2.YLoc);
+
+
+            Rectangle queryRectangle = new Rectangle(c, d);
+            int[] candidateList = nodeTree.GetAllIntersecting(queryRectangle);
+
+            for (int k = 0; k < candidateList.Length; k++)
+            {
+                int i = candidateList[k];
+                 
+                if( i == p || i == q) continue;
+
+                for (int j = 0; j < DegList[i]; j++)
+                {
+                    int k1 = EList[i, j].NodeId;
+                    
+                    if (p == k1 || q == k1) continue;
+
+                    Point a = new Point(VList[i].XLoc, VList[i].YLoc);
+                    Point b = new Point(VList[k1].XLoc, VList[k1].YLoc);
+
+                    Point interestionPoint;
+                    if (Point.SegmentSegmentIntersection(a, b, c, d, out interestionPoint))
+                        return true;
+
+                }
+            }
+            return false;
         }
         public void MoveToMedian(WeightedPoint[] pt, int numPoints)
         {
@@ -1245,7 +1288,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             }
 
             edgeTree.Clear();
-
+            /*
             for (int index = 0; index < NumOfnodes; index++)
             {
                 for (int j = 0; j < DegList[index]; j++)
@@ -1258,7 +1301,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
                     edgeTree.Add(new Rectangle(a, b), EList[index, j].EdgeId);
                 }
-            }
+            }*/
         }
 
         public void ComputeDetourAroundVertex(WeightedPoint[] pt, int numPoints)

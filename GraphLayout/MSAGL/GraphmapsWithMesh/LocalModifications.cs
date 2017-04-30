@@ -10,18 +10,22 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
     {
 
         public static void MsaglShortcutShortEdges(Tiling g, Dictionary<int, Node> idToNodes,
-            LgLayoutSettings _lgLayoutSettings)
+            LgLayoutSettings _lgLayoutSettings, bool hugeGraph)
         {
             int unit = (int)_lgLayoutSettings.NodeSeparation ;
 
             int shortcutcount = 1;
-            int iteration = 1;
+            int iteration = 10;
 
-            Console.WriteLine();
-            Console.WriteLine("Minimize the number of railes for quick interaction? (Y/N)");
-            string input = Console.ReadLine();
-            if (input.StartsWith("Y") || input.StartsWith("y"))
-                iteration = 10;
+            //Console.WriteLine();
+            //Console.WriteLine("Minimize the number of railes for quick interaction? (Y/N)");
+            //string input = Console.ReadLine();
+            if (hugeGraph)
+            {
+                iteration = 1;
+                unit *= 5;
+            }
+
             while (shortcutcount>0 && iteration>0)
             {
                 iteration--;
@@ -63,6 +67,13 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                             foreach (var x in modificationList)
                                 if (g.DegList[x] + 1 >= g.maxDeg)
                                     safetomodify = false;
+
+                            foreach (var x in modificationList)
+                            {
+                                if (g.Crossings(w.Id, x))
+                                    safetomodify = false;
+                            }
+                            
                             if (!safetomodify) continue;
 
                             //add edges between w and the neighbor's neighbor
@@ -81,7 +92,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             Console.WriteLine("Shortcut made for " + shortcutcount + " edges");
         }
 
-        public static void MsaglMoveToMedian(Tiling g, Dictionary<int, Node> idToNodes, LgLayoutSettings _lgLayoutSettings)
+        public static void MsaglMoveToMedian(Tiling g, Dictionary<int, Node> idToNodes, LgLayoutSettings _lgLayoutSettings, bool hugeGraph)
         {
             int[,] listNeighbors = new int[20, 3];
             double[] d = new double[10];
@@ -89,8 +100,14 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             Core.Geometry.Point[] p = new Core.Geometry.Point[10];
             bool localRefinementsFound = true;
             int iteration = 10;
-            int offset = iteration * 2;
+            //int offset = iteration * 2;
             int unit = (int)_lgLayoutSettings.NodeSeparation/2;
+
+            if (hugeGraph)
+            {
+                iteration = 3;
+                unit = (int)_lgLayoutSettings.NodeSeparation;
+            }
 
             while (localRefinementsFound && iteration > 0)
             {
