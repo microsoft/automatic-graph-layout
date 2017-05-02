@@ -363,8 +363,52 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             return allGraphs;
         }
+
+        public void testflow()
+        {
+            MinCostMaxFlow flow = new MinCostMaxFlow();
+            int[,] cap =
+            {
+                {0, 3, 4, 5, 0},
+                {0, 0, 2, 0, 0},
+                {0, 0, 0, 4, 1},
+                {0, 0, 0, 0, 10},
+                {0, 0, 0, 0, 0}
+            };
+
+            int[,] cost1 =
+            {
+                {0, 1, 0, 0, 0},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0}
+            };
+
+            int[,] cost2 =
+            {
+                {0, 0, 1, 0, 0},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0}
+            };
+
+            // should print out:
+            //   10 1
+            //   10 3
+
+            int[] ret1 = flow.getMaxFlow(cap, cost1, 0, 4);
+            int[] ret2 = flow.getMaxFlow(cap, cost2, 0, 4);
+
+            Console.WriteLine(ret1[0] + " " + ret1[1]);
+            Console.WriteLine(ret2[0] + " " + ret2[1]);
+        }
         public void RunForMsaglFiles()
         {
+
+            testflow();
+
             Console.WriteLine();
             Console.WriteLine("Loading a huge graph? (Y/N)");
             string input = Console.ReadLine();
