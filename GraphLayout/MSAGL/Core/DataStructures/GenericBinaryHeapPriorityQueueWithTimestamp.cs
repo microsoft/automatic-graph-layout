@@ -49,11 +49,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
         internal int Count { get { return heapSize; } }
         int heapSize;
 
-        internal bool ContainsElement(T key) {
-            return cache.ContainsKey(key);
-        }
-
-
         internal GenericBinaryHeapPriorityQueueWithTimestamp() {
             cache = new Dictionary<T, GenericHeapElementWithTimestamp<T>>();
             A = new GenericHeapElementWithTimestamp<T>[InitialHeapCapacity + 1];
@@ -86,10 +81,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
             System.Diagnostics.Debug.Assert(A[i] == h);
             A[i] = h;
 
-        }
-
-        internal bool IsEmpty() {
-            return heapSize == 0;
         }
 
         void PutAtI(int i, GenericHeapElementWithTimestamp<T> h) {
@@ -129,15 +120,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
 
             return ret;
 
-        }
-
-        internal T Dequeue(out double priority) {
-            if (heapSize == 0) throw new InvalidOperationException();
-
-            var ret = A[1].v;
-            priority = A[1].priority;
-            MoveQueueOneStepForward(ret);
-            return ret;
         }
 
         void MoveQueueOneStepForward(T ret) {

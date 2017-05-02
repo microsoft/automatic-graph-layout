@@ -280,14 +280,6 @@ namespace Microsoft.Msagl.Core.Layout {
         }
 
         /// <summary>
-        ///     Translates the cluster's contents into the rectangle.
-        /// </summary>
-        internal void DeepContentsTranslation(Rectangle rectangle) {
-            Point delta = rectangle.LeftBottom - BoundingBox.LeftBottom;
-            DeepContentsTranslation(delta, true);
-        }
-
-        /// <summary>
         ///     Translates the cluster's contents by the delta.
         /// </summary>
         public void DeepContentsTranslation(Point delta, bool translateEdges) {

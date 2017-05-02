@@ -17,7 +17,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
     internal class Metroline {
 #endif
         internal double Width;
-        internal int Count { get { return Polyline.Count; } }
         internal double Length { get; set; }
 
         internal double IdealLength { get; set; }

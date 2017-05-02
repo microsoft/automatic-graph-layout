@@ -145,16 +145,6 @@ namespace Microsoft.Msagl.Core.Geometry {
             return rootNode == null || Count == 0 ? new TData[0] : rootNode.GetNodeItemsIntersectingInterval(queryRegion);
         }
 
-
-        /// <summary>
-        /// Get all leaf nodes with rectangles intersecting the specified rectangular region
-        /// </summary>
-        /// <param name="queryRegion"></param>
-        /// <returns></returns>
-        internal IEnumerable<IntervalNode<TData>> GetAllLeavesIntersectingInterval(Interval queryRegion) {
-            return rootNode == null || Count == 0 ? new IntervalNode<TData>[0] : rootNode.GetLeafIntervalNodesIntersectingInterval(queryRegion);
-        }
-
         /// <summary>
         /// Does minimal work to determine if any objects in the tree intersect with the query region
         /// </summary>

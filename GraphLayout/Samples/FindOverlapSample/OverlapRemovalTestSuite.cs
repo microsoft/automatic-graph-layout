@@ -139,55 +139,6 @@ namespace OverlapGraphExperiments
             return statIterations;
         }
 
-        private void DumpGraphNodesAsTxt(GeometryGraph geomGraph, string filename) {
-            using (var stream = new StreamWriter(filename+".txt", true)) {
-                foreach (var n in geomGraph.Nodes) {
-                    DumpNodeToStream(n, stream);
-                }
-            }
-        }
-
-        private void DumpNodeToStream(Microsoft.Msagl.Core.Layout.Node node, StreamWriter stream) {
-            stream.WriteLine("x={0}, y={1}, width={2}, height={3}",node.Center.X, node.Center.Y, node.Width, node.Height);
-        }
-
-        private static void DumpScatterPlotOfDelaunayFacesAreaChange(string graphName, HashSet<Tuple<int, int, int>> proximityTriangles,
-            GeometryGraph geomGraphOld, GeometryGraph geomGraph, string nameAddon) {
-            Graph scatterPlot = new Graph();
-            for (int i = 0; i < proximityTriangles.Count; i++)
-                scatterPlot.AddNode(i.ToString());
-
-            scatterPlot.CreateGeometryGraph();
-            int k = 0;
-            foreach (var triangle in proximityTriangles) {
-                Point a = geomGraphOld.Nodes[triangle.Item1].Center;
-                Point b = geomGraphOld.Nodes[triangle.Item2].Center;
-                Point c = geomGraphOld.Nodes[triangle.Item3].Center;
-
-                Point d = geomGraph.Nodes[triangle.Item1].Center;
-                Point e = geomGraph.Nodes[triangle.Item2].Center;
-                Point f = geomGraph.Nodes[triangle.Item3].Center;
-
-                double signOld = Point.SignedDoubledTriangleArea(a, b, c);
-                double signNew = Point.SignedDoubledTriangleArea(d, e, f);
-                var node = scatterPlot.FindNode(k.ToString());
-                k++;
-                node.GeometryNode.BoundaryCurve = CurveFactory.CreateCircle(1, new Point(signOld, signNew));
-                if (signNew < 0)
-                    node.Attr.FillColor = node.Attr.Color = Color.Red;
-            }
-
-            scatterPlot.GeometryGraph.UpdateBoundingBox();
-            double w = scatterPlot.GeometryGraph.BoundingBox.Width;
-            double h = scatterPlot.GeometryGraph.BoundingBox.Height;
-            PlaneTransformation p = new PlaneTransformation(
-                200/w, 0, 0,
-                0, 200/h, 0);
-            scatterPlot.GeometryGraph.Transform(p);
-            scatterPlot.GeometryGraph.UpdateBoundingBox();
-            SvgGraphWriter.Write(scatterPlot, "cdt_area_change_" + graphName + nameAddon + ".svg");
-        }
-
         private void DumpProximityCdtToSvg(string svgFileName, Graph graph, HashSet<Tuple<int, int>> proximityEdges) {
             return; 
             SvgGraphWriter writer=new SvgGraphWriter(File.Create(svgFileName), graph);
@@ -370,35 +321,6 @@ namespace OverlapGraphExperiments
             }
         }
 
-        private ProximityOverlapRemoval RunOverlapRemoval(GeometryGraph graphCopy, GeometryGraph graphOriginal, HashSet<Tuple<int, int>> proximityEdges,
-                                       HashSet<Tuple<int, int, int>> proximityTriangles, List<Tuple<string, double>> statistics, OverlapRemovalSettings settings) {
-            ProximityOverlapRemoval prism = new ProximityOverlapRemoval(graphCopy);
-            prism.Settings = settings;
-            Timer timer = new Timer();
-            timer.Start();
-            prism.RemoveOverlaps();
-            timer.Stop();
-            var cpuTimeSpan = TimeSpan.FromSeconds(timer.Duration);
-            var statCpuTime = Tuple.Create("CPUTime", cpuTimeSpan.TotalSeconds);
-            var statIterations = Tuple.Create("Iterations", (double)prism.LastRunIterations);
-
-            var statEdgeLength = Statistics.Statistics.RotationAngleMean(graphOriginal, graphCopy, proximityEdges);
-            var statProcrustes =
-                Statistics.Statistics.ProcrustesStatistics(graphOriginal.Nodes.Select(v => v.Center).ToList(),
-                                                                  graphCopy.Nodes.Select(v => v.Center).ToList());
-            var statTriangleOrient = Statistics.Statistics.TriangleOrientation(graphOriginal, graphCopy, proximityTriangles);
-            var statArea = Statistics.Statistics.Area(graphCopy);
-
-
-            statistics.Add(statCpuTime);
-            statistics.Add(statIterations);
-            statistics.Add(statEdgeLength);
-            statistics.Add(statProcrustes);
-            statistics.Add(statArea);
-            statistics.Add(statTriangleOrient);
-            return prism;
-        }
-
         private void WriteHeader(List<Tuple<string, double>> statistics) {
             lock (resultWriter) {
                 if (!HeaderWritten) {
@@ -548,15 +470,6 @@ namespace OverlapGraphExperiments
                 return new Tuple<String, Action<GeometryGraph>>[] {
                 new Tuple<String, Action<GeometryGraph>>("ident", geometryGraph => {geometryGraph.Edges.Clear(); })
             };
-        }
-
-        private String ActionName<T> (Expression<Action<T>> method) {
-            
-                var info = (MethodCallExpression)method.Body;
-                string name = info.Method.Name;
-            
-            return name;
-            
         }
 
         /// <summary>

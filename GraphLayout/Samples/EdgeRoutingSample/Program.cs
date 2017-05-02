@@ -40,7 +40,10 @@ namespace EdgeRoutingSample {
 
             DemoRoutingFromPortToPort(graph);
 
-            var router = new SplineRouter(graph, 3, 3, Math.PI / 6, null);
+            var bundlingSettings = new BundlingSettings(); 
+            // set bundling settings to null to disable the bundling of the edges
+
+            var router = new SplineRouter(graph, 3, 3, Math.PI / 6, bundlingSettings);
 
 
             router.Run();
@@ -91,16 +94,6 @@ namespace EdgeRoutingSample {
                                                          spline, true,
                                                          false);
 
-        }
-
-
-        private static IEnumerable<ICurve> ArrowHeadCurves(EdgeGeometry edgeGeom) {
-            var start = edgeGeom.Curve.End;
-            var end = edgeGeom.TargetArrowhead.TipPosition;
-            var ang = Math.PI / 12;
-            var leftTip = end + (start - end).Rotate(ang);
-            var rightTip = end + (start - end).Rotate(-ang);
-            return new List<ICurve> { new LineSegment(leftTip, end), new LineSegment(rightTip, end) };
         }
     }
 }

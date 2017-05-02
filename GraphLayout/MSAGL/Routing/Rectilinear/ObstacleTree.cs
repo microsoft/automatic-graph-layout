@@ -90,11 +90,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         /// <summary>
-        /// The number of obstacles.
-        /// </summary>
-        internal int Count { get { return this.shapeIdToObstacleMap.Count; } }
-
-        /// <summary>
         /// Create the root with overlapping non-rectangular obstacles converted to their convex hulls, for more reliable calculations.
         /// </summary>
         private void CreateRoot() {

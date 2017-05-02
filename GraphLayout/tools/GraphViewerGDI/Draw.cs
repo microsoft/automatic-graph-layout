@@ -579,8 +579,6 @@ namespace Microsoft.Msagl.GraphViewerGdi{
                 DrawArrowAtTheEndWithControlPoints(g, edge, edgeColor, myPen);
         }
 
-        const float toDegrees = 180/(float) Math.PI;
-
         static void DrawArrowAtTheEndWithControlPoints(Graphics g, DrawingEdge edge, Color edgeColor, Pen myPen){
             if(edge.EdgeCurve != null)
                 if(edge.Attr.ArrowheadAtTarget == ArrowStyle.None)
@@ -697,25 +695,11 @@ namespace Microsoft.Msagl.GraphViewerGdi{
                                 (float)sweepAngle);
         }
 
-        static GraphicsPath CreateControlPointPolygon(Tuple<double, double> t, CubicBezierSegment cubic){
-            var gp = new GraphicsPath();
-            gp.AddLines(new[]{PP(cubic.B(0)), PP(cubic.B(1)), PP(cubic.B(2)), PP(cubic.B(3))});
-            return gp;
-        }
-
+#if DEBUG || DEVTRACE
         static PointF PP(P2 point){
             return new PointF((float) point.X, (float) point.Y);
         }
-
-        static GraphicsPath CreatePathOnCurvaturePoint(Tuple<double, double> t, CubicBezierSegment cubic){
-            var gp = new GraphicsPath();
-            P2 center = cubic[t.Item1];
-            int radius = 10;
-            gp.AddEllipse((float) (center.X - radius), (float) (center.Y - radius),
-                          (2*radius), (2*radius));
-
-            return gp;
-        }
+#endif
 
         static bool NeedToFill(Color fillColor){
             return fillColor.A != 0; //the color is not transparent

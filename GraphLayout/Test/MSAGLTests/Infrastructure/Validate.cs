@@ -136,54 +136,6 @@ namespace Microsoft.Msagl.UnitTests
         }
 
         [DebuggerStepThrough]
-        internal static void AreNotEqual<T>(double notExpected, double actual, double delta, string message)
-        {
-            try
-            {
-                Assert.AreNotEqual(notExpected, actual, delta, message);
-            }
-            catch (UnitTestAssertException ex)
-            {
-                if (!RaiseInteractiveAssert(ex))
-                {
-                    throw;
-                }
-            }
-        }
-
-        [DebuggerStepThrough]
-        internal static void AreNotEqual<T>(string notExpected, string actual, bool ignoreCase, CultureInfo culture, string message)
-        {
-            try
-            {
-                Assert.AreNotEqual(notExpected, actual, ignoreCase, culture, message);
-            }
-            catch (UnitTestAssertException ex)
-            {
-                if (!RaiseInteractiveAssert(ex))
-                {
-                    throw;
-                }
-            }
-        }
-
-        [DebuggerStepThrough]
-        internal static void AreNotSame(object notExpected, object actual, string message)
-        {
-            try
-            {
-                Assert.AreNotSame(notExpected, actual, message);
-            }
-            catch (UnitTestAssertException ex)
-            {
-                if (!RaiseInteractiveAssert(ex))
-                {
-                    throw;
-                }
-            }
-        }
-
-        [DebuggerStepThrough]
         internal static void AreSame(object expected, object actual, string message)
         {
             try
@@ -213,19 +165,6 @@ namespace Microsoft.Msagl.UnitTests
         }
 
         [DebuggerStepThrough]
-        internal static void Inconclusive(string message)
-        {
-            if (InteractiveMode)
-            {
-                Debug.Assert(false, "Inconclusive Test result: " + message);
-            }
-            else
-            {
-                Assert.Inconclusive(message);
-            }
-        }
-
-        [DebuggerStepThrough]
         internal static void IsFalse(bool condition, string message)
         {
             if (InteractiveMode)
@@ -235,38 +174,6 @@ namespace Microsoft.Msagl.UnitTests
             else
             {
                 Assert.IsFalse(condition, message);
-            }
-        }
-
-        [DebuggerStepThrough]
-        internal static void IsInstanceOfType(object value, Type expectedType, string message)
-        {
-            try
-            {
-                Assert.IsInstanceOfType(value, expectedType, message);
-            }
-            catch (UnitTestAssertException ex)
-            {
-                if (!RaiseInteractiveAssert(ex))
-                {
-                    throw;
-                }
-            }
-        }
-
-        [DebuggerStepThrough]
-        internal static void IsNotInstanceOfType(object value, Type wrongType, string message)
-        {
-            try
-            {
-                Assert.IsNotInstanceOfType(value, wrongType, message);
-            }
-            catch (UnitTestAssertException ex)
-            {
-                if (!RaiseInteractiveAssert(ex))
-                {
-                    throw;
-                }
             }
         }
 

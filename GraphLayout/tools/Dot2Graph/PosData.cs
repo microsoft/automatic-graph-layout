@@ -38,19 +38,6 @@ namespace Dot2Graph {
     /// </summary>
     [Serializable]
     internal class PosData {
-/// <summary>
-/// the edge start point
-/// </summary>
-        internal Point StartPoint {
-            get { return controlPoints != null ? controlPoints[0] : this.edgeCurve.Start; }
-        }
-
-        /// <summary>
-        /// the edge end point
-        /// </summary>
-        internal Point Endpoint {
-            get { return controlPoints != null ? controlPoints[controlPoints.Count-1] : this.edgeCurve.End; }
-        }
 
         /// <summary>
         /// Control points of consequent Bezier segments.

@@ -203,12 +203,6 @@ namespace Microsoft.Msagl.Routing.Visibility {
 #endif
         }
 
-        internal void AddVertex(VisibilityVertex vertex) {
-            Debug.Assert(!PointToVertexMap.ContainsKey(vertex.Point), "A vertex already exists at this location");
-            PointToVertexMap[vertex.Point] = vertex;
-            
-        }
-
         internal bool ContainsVertex(Point point) {
             return PointToVertexMap.ContainsKey(point);
         }

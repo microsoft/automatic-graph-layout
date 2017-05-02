@@ -19,12 +19,6 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner
         //double coneAngle = Math.PI / 4;// 45 degrees
         //double coneAngle = Math.PI / 2;// 90 degrees!
 
-        internal double ConeAngle {
-            get { return coneAngle; }
-            set { coneAngle = value; }
-        }
-
-
         internal ConeSpannerForPortLocations(IEnumerable<Polyline> obstacles, VisibilityGraph visibilityGraph,
             IEnumerable<Point> portLocationsPointSet) {
             PortLocations = portLocationsPointSet;

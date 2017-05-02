@@ -274,45 +274,6 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
         //        static int count;
         //        static bool db { get { return count == 125; }}
 
-        internal IEnumerable<CdtEdge> ThreadEdgeThroughTriangles(CdtSite startSite, Point end) {
-            CdtEdge piercedEdge;
-            var triangle = FindFirstPiercedTriangle(startSite, end, out piercedEdge);
-            if (triangle == null)
-                yield break;
-
-            var start = startSite.Point;
-            foreach (var cdtEdge in ThreadThroughTriangles(start, end, triangle, piercedEdge))
-                yield return cdtEdge;
-        }
-
-        IEnumerable<CdtEdge> ThreadThroughTriangles(Point start, Point end, CdtTriangle triangle, CdtEdge piercedEdge) {
-            var ret = new List<CdtEdge>();
-            do {
-                if (piercedEdge.upperSite.Owner != piercedEdge.lowerSite.Owner)
-                    ret.Add(piercedEdge);
-            }
-            while (FindNextPierced(start, end, ref triangle, ref piercedEdge));
-            return ret;
-        }
-
-        bool FindNextPierced(Point start, Point end, ref CdtTriangle t, ref CdtEdge piercedEdge) {
-            t = piercedEdge.GetOtherTriangle(t);
-            if (t == null)
-                return false;
-            var i = t.Edges.Index(piercedEdge);
-            for (int j = i + 1; j <= i + 2; j++) {
-                var pe = t.Edges[j];
-                piercedEdge = PiercedEdgeQuery(pe, start, end, t);
-                if (piercedEdge != null) {
-                    //                    CdtSweeper.ShowFront(trs, null, 
-                    //                        new []{new LineSegment(e.SourcePoint,e.TargetPoint)}, new []{new LineSegment(pe.upperSite.Point,pe.lowerSite.Point)});
-                    break;
-                }
-            }
-            return !PointIsInsideOfTriangle(end, t);
-        }
-
-
         /*
                 static CdtEdge GetPiercedEdge(Point a, Point b, CdtTriangle triangle) {
                     Debug.Assert(!triangle.Sites.Any(s=>ApproximateComparer.Close(a, s.Point)));
@@ -355,46 +316,6 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
                     return false;
             }
             return true;
-        }
-
-        CdtTriangle FindFirstPiercedTriangle(CdtSite startSite, Point target, out CdtEdge piercedEdge) {
-            if (startSite != null) {
-                foreach (var t in startSite.Triangles) {
-                    piercedEdge = GetPiercedEdgeInSiteTriangle(t, startSite, target);
-                    if (piercedEdge != null)
-                        if (!PointIsInsideOfTriangle(target, t))
-                            return t;
-                }
-            }
-
-            piercedEdge = null;
-            return null;
-        }
-
-        CdtEdge GetPiercedEdgeInSiteTriangle(CdtTriangle t, CdtSite site, Point target) {
-            var e = t.OppositeEdge(site);
-            return PiercedEdgeQuery(e, site.Point, target, t);
-        }
-
-        internal static bool EdgeIsPierced(CdtEdge e, Point source, Point target, CdtTriangle cdtTriangle) {
-            var area0 = Point.SignedDoubledTriangleArea(e.upperSite.Point, source, target);
-            var area1 = Point.SignedDoubledTriangleArea(e.lowerSite.Point, source, target);
-            if (ApproximateComparer.Sign(area0) * ApproximateComparer.Sign(area1) > 0)
-                return false;
-            area0 = Point.SignedDoubledTriangleArea(e.upperSite.Point, e.lowerSite.Point, source);
-            area1 = Point.SignedDoubledTriangleArea(e.upperSite.Point, e.lowerSite.Point, target);
-            if (ApproximateComparer.Sign(area0) * ApproximateComparer.Sign(area1) > 0)
-                return false;
-            var otherT = e.GetOtherTriangle(cdtTriangle);
-            if (otherT == null)
-                return true;
-            var otherSite = otherT.OppositeSite(e);
-            area0 = Point.SignedDoubledTriangleArea(e.upperSite.Point, e.lowerSite.Point, otherSite.Point);
-            return (ApproximateComparer.Sign(area0) * ApproximateComparer.Sign(area1) >= 0);
-        }
-
-        CdtEdge PiercedEdgeQuery(CdtEdge e, Point source, Point target, CdtTriangle cdtTriangle) {
-            return EdgeIsPierced(e, source, target, cdtTriangle) ? e : null;
         }
 
         RectangleNode<CdtTriangle> cdtTree = null;

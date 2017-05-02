@@ -61,10 +61,6 @@ namespace TestGraphmaps {
             XmlRead();
         }
 
-        void MoveToAttribute(int i) {
-            _xmlReader.MoveToAttribute(i);
-        }
-
         string GetAttr(string attr) {
             var s = _xmlReader.GetAttribute(attr);
             if (s == null) {
