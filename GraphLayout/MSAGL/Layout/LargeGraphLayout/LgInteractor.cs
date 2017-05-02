@@ -135,6 +135,10 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             List<Tiling> graphs = new List<Tiling>();
             Tiling OldGraphHolder = null;
             DijkstraAlgo dijkstra = new DijkstraAlgo();
+            
+            g.pathList = new Dictionary<Edge, List<int>>();
+            Dictionary<Edge,List<VertexNeighbor>> ssp  = new Dictionary<Edge, List<VertexNeighbor>>();
+
             for (int i = 1; i <= g.maxTheoreticalZoomLevel; i *= 2)
             {
                 //create a new graph and copy the vertex properties of the basic graph
@@ -192,14 +196,24 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                         
 
                         newG.pathList[edge] = new List<int>();
-                        List<int> pathvertices = dijkstra.MSAGLAstarShortestPath(g.VList, g.EList, g.DegList, nodeToId[edge.Source], nodeToId[edge.Target], g.NumOfnodes);                        
+                        List<int> pathvertices;
+                        if (!ssp.ContainsKey(edge))
+                        {
+                            pathvertices = dijkstra.MSAGLAstarShortestPath(g.VList, g.EList, g.DegList,
+                                nodeToId[edge.Source], nodeToId[edge.Target], g.NumOfnodes);
+                            g.pathList.Add(edge, pathvertices);
+                            ssp.Add(edge, dijkstra.Edgelist);                          
+                        }
 
-                        foreach (int vertexId in pathvertices)                        
+                        
+                        foreach (int vertexId in g.pathList[edge])                        
                             newG.pathList[edge].Add(vertexId); 
                         
-                        //this is necessary, new edges are being created here
-                        foreach (VertexNeighbor vn in dijkstra.Edgelist)
+                        foreach (VertexNeighbor vn in ssp[edge])
                             newG.AddEdge(vn.A, g.EList[vn.A, vn.Neighbor].NodeId, g.EList[vn.A, vn.Neighbor].Selected, g.EList[vn.A, vn.Neighbor].Used);
+                        //this is necessary, new edges are being created here
+                        //foreach (VertexNeighbor vn in dijkstra.Edgelist)
+                        //    newG.AddEdge(vn.A, g.EList[vn.A, vn.Neighbor].NodeId, g.EList[vn.A, vn.Neighbor].Selected, g.EList[vn.A, vn.Neighbor].Used);
                           
                     }
                 }
