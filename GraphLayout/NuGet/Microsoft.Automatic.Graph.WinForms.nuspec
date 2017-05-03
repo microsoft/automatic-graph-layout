@@ -1,6 +1,6 @@
 ﻿<package>
   <metadata>
-    <id>Microsoft.Automatic.Graph.Layout</id>
+    <id>Microsoft.Automatic.Graph.WinForms</id>
     <version>2.0.0</version>
     <authors>Microsoft</authors>
     <owners>Microsoft</owners>
@@ -14,12 +14,15 @@
     <language>en-US</language>
     <tags>MSAGL Graph Layout</tags>
     <dependencies>
+      <dependency id="Microsoft.Automatic.Graph.Layout" version="2.0.0" />
     </dependencies>
     <frameworkAssemblies>
     </frameworkAssemblies>
   </metadata>
   <files>
-    <file src="..\MSAGL\bin\debug\Microsoft.Msagl.dll" target="lib\net40" />
-    <file src="..\MSAGL\bin\debug\Microsoft.Msagl.xml" target="lib\net40" />
+    <file src="..\Drawing\bin\debug\Microsoft.Msagl.Drawing.dll" target="lib\net40" />
+    <file src="..\Drawing\bin\debug\Microsoft.Msagl.Drawing.xml" target="lib\net40" />
+    <file src="..\tools\GraphViewerGDI\bin\Debug\Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net40" />
+    <file src="..\tools\GraphViewerGDI\bin\Debug\Microsoft.Msagl.GraphViewerGdi.xml" target="lib\net40" />
   </files>
 </package>
