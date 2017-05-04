@@ -1759,7 +1759,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 var vNode = o as GraphmapsNode;
                 if (vNode == null) continue;
                 tooltiptext = "";
-
+                
                 incidentColorSet = new List<System.Windows.Media.SolidColorBrush>();
 
                 foreach (var w in coloredNodeList)
@@ -1768,7 +1768,8 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                     {
                         if (vNode.Node.GeometryNode == edge.Target)
                         {
-                            tooltiptext = tooltiptext+ "\n" + w.Node.LabelText;                                                        
+                            if(!tooltiptext.Contains(w.Node.LabelText))
+                                tooltiptext = tooltiptext+ "\n" + w.Node.LabelText;                                                        
                             incidentColorSet.Add(w.LgNodeInfo.Color);
                         }
                     }
@@ -1776,13 +1777,14 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                     {
                         if (vNode.Node.GeometryNode == edge.Source)
                         {
-                            tooltiptext = tooltiptext + "\n" + w.Node.LabelText;
+                            if (!tooltiptext.Contains(w.Node.LabelText))
+                                tooltiptext = tooltiptext + "\n" + w.Node.LabelText;
                             incidentColorSet.Add(w.LgNodeInfo.Color);
                         }
                     }   
                 }
                 if (tooltiptext.Length > 0)
-                {
+                {                    
                     tooltiptext = "\nSelected Neighbors:" + tooltiptext;                    
                 }
 

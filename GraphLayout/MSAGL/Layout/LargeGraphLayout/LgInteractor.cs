@@ -571,25 +571,56 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
              
         }
 
-        void dynamicProgram(int root, int Q, int cQ, int [, , ,  ,] costTree, int[, , , ,] resultTree)
+        int dynamicProgram(int root, int S, int cQ, int [, , ] costTree, int[, ,] resultTree)
         {
-            for (int q = 0; q < Q; q++)
-            {
-                for (int k1 = 0; k1 < Q; k1++)
-                {
-                    for (int k2 = 0; k2 < Q; k2++)
-                    {
-                        for (int k3 = 0; k3 < Q; k3++)
-                        {
-                            int k4 = Q - (k1 + k2 + k3);
-                            if (k4 < 0) break;
 
-                            //dynamicProgram(0, k1, k2, k3, k4, quota);
-                            //dynamicProgram(0, k1, k2, k3, k4, quota);
+            for (int rootsum = cQ; rootsum <= _lgLayoutSettings.MaxNumberOfNodesPerTile; rootsum++)
+            {
+
+                int cost = 0;
+                int mincost = -1;
+
+                for (int k1 = 0; k1 <= rootsum; k1++)
+                {
+                    for (int k2 = 0; k2 <= rootsum; k2++)
+                    {
+                        for (int k3 = 0; k3 <= rootsum; k3++)
+                        {
+                            for (int k4 = 0; k4 <= rootsum; k4++)
+                            {
+
+
+                                int sum = (k1 + k2 + k3 + k4); //total visible in this layer                                       
+                                if (sum != rootsum) continue; //distribution is not correct
+                                int newvis = rootsum - cQ; //newly visible nodes
+
+                                /*process if leaf*/
+
+                                cost = newvis*newvis;
+
+                                int c1 = dynamicProgram(4*root + 1, sum, k1, costTree, resultTree);
+                                if (c1 < 0) continue; //no solution 
+                                int c2 = dynamicProgram(4*root + 2, sum, k2, costTree, resultTree);
+                                if (c2 < 0) continue; //no solution 
+                                int c3 = dynamicProgram(4*root + 3, sum, k3, costTree, resultTree);
+                                if (c3 < 0) continue; //no solution 
+                                int c4 = dynamicProgram(4*root + 4, sum, k4, costTree, resultTree);
+                                if (c4 < 0) continue; //no solution 
+
+                                
+                                cost += (c1 + c2 + c3 + c4);
+                                if (mincost > cost) mincost = cost;
+                            }
                         }
                     }
                 }
+
+                
+                costTree[root, rootsum, cQ] = mincost;
+                
             }
+            
+            return 0;
         }
         private Tiling TryCompetitionMeshApproach(out Dictionary<Node, int> nodeToId, bool huge_graph)
         {
@@ -665,10 +696,10 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             }
             //calculatezoomlevel
             int Q = 40;
-            int[,,,,] costTree = new int[(int)Math.Pow(4,maxZoom),Q,Q,Q,Q];
-            int[,,,,] resultTree = new int[(int)Math.Pow(4, maxZoom), Q, Q, Q, Q];
+            int[,,] costTree = new int[(int)Math.Pow(4,maxZoom),Q, Q];
+            int[,,] resultTree = new int[(int)Math.Pow(4, maxZoom), Q, Q];
 
-            dynamicProgram(0, Q, Q, costTree, resultTree);
+            //dynamicProgram(0, Q, Q, costTree, resultTree);
             /*
             for (int k1 = 0; k1 < Q; k1++)
             {
