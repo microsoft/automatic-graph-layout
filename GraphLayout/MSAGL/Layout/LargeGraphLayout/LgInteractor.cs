@@ -570,8 +570,27 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             
              
         }
-         
 
+        void dynamicProgram(int root, int Q, int cQ, int [, , ,  ,] costTree, int[, , , ,] resultTree)
+        {
+            for (int q = 0; q < Q; q++)
+            {
+                for (int k1 = 0; k1 < Q; k1++)
+                {
+                    for (int k2 = 0; k2 < Q; k2++)
+                    {
+                        for (int k3 = 0; k3 < Q; k3++)
+                        {
+                            int k4 = Q - (k1 + k2 + k3);
+                            if (k4 < 0) break;
+
+                            //dynamicProgram(0, k1, k2, k3, k4, quota);
+                            //dynamicProgram(0, k1, k2, k3, k4, quota);
+                        }
+                    }
+                }
+            }
+        }
         private Tiling TryCompetitionMeshApproach(out Dictionary<Node, int> nodeToId, bool huge_graph)
         {
             
@@ -605,6 +624,67 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             int maxY;
             var maxX = CreateNodePositions(g, nodeToId, idToNode, out maxY);
+
+
+            //**/
+            //calculateZoomLevel
+            int maxZoom = 8;
+            Rectangle [,]tiles = new Rectangle[maxZoom,maxZoom];
+            Dictionary<IntPair, List<int>> tileNodes = new Dictionary<IntPair, List<int>>();
+            for (int i = 0; i < maxZoom; i++) {
+                for (int j = 0; j < maxZoom; j++)
+                {
+                    double unitx = maxX/Math.Pow(2, maxZoom);
+                    double unity = maxY / Math.Pow(2, maxZoom);
+                    tiles[i, j] = new Rectangle(j * unitx, i * unity, (j + 1) * unitx, (i+1) * unity);
+                    //Console.WriteLine(tiles[i,j].ToString());
+                }
+            }
+            //nodecount on tiles
+            for (int index = 0; index < g.N; index++)
+            {
+                int x = g.VList[index].XLoc;
+                int y = g.VList[index].YLoc;
+                for (int i = 0; i < maxZoom; i++) {
+                    for (int j = 0; j < maxZoom; j++)
+                    {
+                        if (tiles[i, j].Contains(new Point(x, y)))
+                        {
+                            var pair = new IntPair(i,j);
+                            if (tileNodes.ContainsKey(pair))
+                                tileNodes[pair].Add(index);
+                            else
+                            {
+                                tileNodes[pair] = new List<int>();
+                                tileNodes[pair].Add(index);
+                            }
+                            i = j = maxZoom; //break
+                        }                            
+                    }
+                }                
+            }
+            //calculatezoomlevel
+            int Q = 40;
+            int[,,,,] costTree = new int[(int)Math.Pow(4,maxZoom),Q,Q,Q,Q];
+            int[,,,,] resultTree = new int[(int)Math.Pow(4, maxZoom), Q, Q, Q, Q];
+
+            dynamicProgram(0, Q, Q, costTree, resultTree);
+            /*
+            for (int k1 = 0; k1 < Q; k1++)
+            {
+                for (int k2 = 0; k2 < Q; k2++)
+                {
+                    for (int k3 = 0; k3 < Q; k3++)
+                    {
+                        int k4 = Q - (k1 + k2 + k3);
+                        if(k4 < 0) break;
+
+                        dynamicProgram(0,k1,k2,k3,k4,quota);
+                    }
+                }
+            }
+            */
+
             stopwatch.Stop();
             Console.WriteLine("Conected Graph and MDS Time = " + stopwatch.ElapsedMilliseconds);
 

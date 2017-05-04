@@ -64,7 +64,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         {
             var dx = point.X - graphLeftBottom.X;
             var dy = point.Y - graphLeftBottom.Y;
-
+            
             return new Tuple<int, int>((int)(dx / gridSize), (int)(dy / gridSize));
         }
 
