@@ -407,13 +407,14 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         public void RunForMsaglFiles()
         {
 
-            testflow();
-
+            //testflow();
+            /*
             Console.WriteLine();
             Console.WriteLine("Loading a huge graph? (Y/N)");
             string input = Console.ReadLine();
             bool hugeGraph = (input.StartsWith("Y") || input.StartsWith("y"));
-                
+            */
+            bool hugeGraph = true;
             _lgLayoutSettings.MaxNumberOfNodesPerTile = 40;
             //_lgLayoutSettings.MaxNumberOfRailsPerTile = 1000;
             Dictionary<Node, int> nodeToId;
@@ -571,56 +572,103 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
              
         }
 
-        int dynamicProgram(int root, int S, int cQ, int [, , ] costTree, int[, ,] resultTree)
+        Dictionary<int, List<int>> tileNodes = new Dictionary<int, List<int>>();     
+        //(7,21845) (5,1365)
+        private int maxdepth = 5;
+        private int maxtiles = 1365;
+        private int immediatemaxtiles = 341;
+        private int[] tileNodeCount = new int[1365];
+        int[] tileDepth = new int[1365];
+        private int id;
+        Rectangle[] tiles = new Rectangle[1365];
+
+
+        private void buildTiles( double l, double t,  double r, double b, int depth, int pid, int kid)
+        {
+            if (depth > maxdepth) return;
+            int index = 4*pid;
+            tiles[pid] = new Rectangle(l,t,r,b);
+            tileDepth[pid] = depth;
+            
+            double centerx = l + (r - l) / 2;
+            double centery = t +  (b - t) / 2;
+            buildTiles(l,          t,       centerx,    centery    , depth + 1, index+1 , 1);
+            buildTiles(centerx,    t,             r,    centery, depth + 1, index+2, 2);
+            buildTiles(l,      centery,     centerx,          b, depth + 1,index+3 , 3);
+            buildTiles(centerx, centery,       r,              b, depth + 1,index+4, 4);
+
+        } 
+
+        int dynamicProgram(int root, int alreadyVisible, int [,] costTree, int[,] resultTree)
         {
 
-            for (int rootsum = cQ; rootsum <= _lgLayoutSettings.MaxNumberOfNodesPerTile; rootsum++)
+            //processing for leafnode
+            if (immediatemaxtiles <= root && root <= maxtiles)
             {
-
-                int cost = 0;
-                int mincost = -1;
-
-                for (int k1 = 0; k1 <= rootsum; k1++)
-                {
-                    for (int k2 = 0; k2 <= rootsum; k2++)
-                    {
-                        for (int k3 = 0; k3 <= rootsum; k3++)
-                        {
-                            for (int k4 = 0; k4 <= rootsum; k4++)
-                            {
-
-
-                                int sum = (k1 + k2 + k3 + k4); //total visible in this layer                                       
-                                if (sum != rootsum) continue; //distribution is not correct
-                                int newvis = rootsum - cQ; //newly visible nodes
-
-                                /*process if leaf*/
-
-                                cost = newvis*newvis;
-
-                                int c1 = dynamicProgram(4*root + 1, sum, k1, costTree, resultTree);
-                                if (c1 < 0) continue; //no solution 
-                                int c2 = dynamicProgram(4*root + 2, sum, k2, costTree, resultTree);
-                                if (c2 < 0) continue; //no solution 
-                                int c3 = dynamicProgram(4*root + 3, sum, k3, costTree, resultTree);
-                                if (c3 < 0) continue; //no solution 
-                                int c4 = dynamicProgram(4*root + 4, sum, k4, costTree, resultTree);
-                                if (c4 < 0) continue; //no solution 
-
-                                
-                                cost += (c1 + c2 + c3 + c4);
-                                if (mincost > cost) mincost = cost;
-                            }
-                        }
-                    }
-                }
-
-                
-                costTree[root, rootsum, cQ] = mincost;
-                
+                if (tileNodeCount[root] < alreadyVisible) return int.MaxValue;
+                return (tileNodeCount[root] - alreadyVisible) * (tileNodeCount[root] - alreadyVisible);
             }
-            
-            return 0;
+
+            //process non-leaf nodes 
+            int cost;
+            int mincost = int.MaxValue;
+            int minrootsum = int.MaxValue;
+            int delta = 1; //control speed and approximation
+            //I can choose the rootsome anything between current visible and nodequota
+            for (int rootsum = alreadyVisible; rootsum <= _lgLayoutSettings.MaxNumberOfNodesPerTile; rootsum += delta)
+            {                
+
+                //distribute the rootsum among the kids approximately
+                for (int k1 = 0; k1 <= rootsum; k1 += delta)
+                {
+                    for (int k2 = 0; k2 <= rootsum; k2 += delta)
+                    {
+                        if (rootsum < (k1 + k2)) break;
+                        for (int k3 = 0; k3 <= rootsum; k3 += delta)
+                        {
+                            int k4 = rootsum - (k1 + k2 + k3);
+                            if (k4 < 0) break;
+                            //computation of a distribution ends here
+
+                            int sum = (k1 + k2 + k3 + k4);
+                            //total visible in this layer                                                                   
+                            if (sum != rootsum) continue; //distribution is not correct
+                            int newvis = rootsum - alreadyVisible; //newly visible nodes                            
+
+                            bool solutionexists = true;
+                            int []c = new int[5];
+                            int[] k = new int[5];
+                            k[1] = k1;
+                            k[2] = k2;
+                            k[3] = k3;
+                            k[4] = k4;
+                            for (int i = 1; i <= 4; i++)
+                            {
+                                c[i] = costTree[4*root + i, k[i]];
+                                if (c[i] == -1)
+                                {
+                                    c[i] = dynamicProgram(4*root + i, k[i], costTree, resultTree);
+                                    costTree[4*root + i, k[i]] = c[i];
+                                }
+                                if (c[i] == int.MaxValue) solutionexists = false; //no solution 
+                            }
+                            if (solutionexists == false) continue;  
+                            
+                            cost = newvis*newvis; //cost for newly visible nodes
+                            if (root == 0) cost = 0;
+                            cost += (c[1] + c[2] + c[3] + c[4]);
+                            if (mincost > cost)
+                            {
+                                mincost = cost;
+                                minrootsum = rootsum;
+                            }
+                        }                        
+                    }
+                }                
+                costTree[root, alreadyVisible] = mincost;
+                resultTree[root, alreadyVisible] = minrootsum;                
+            }            
+            return mincost;
         }
         private Tiling TryCompetitionMeshApproach(out Dictionary<Node, int> nodeToId, bool huge_graph)
         {
@@ -657,64 +705,57 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             var maxX = CreateNodePositions(g, nodeToId, idToNode, out maxY);
 
 
-            //**/
-            //calculateZoomLevel
-            int maxZoom = 8;
-            Rectangle [,]tiles = new Rectangle[maxZoom,maxZoom];
-            Dictionary<IntPair, List<int>> tileNodes = new Dictionary<IntPair, List<int>>();
-            for (int i = 0; i < maxZoom; i++) {
-                for (int j = 0; j < maxZoom; j++)
-                {
-                    double unitx = maxX/Math.Pow(2, maxZoom);
-                    double unity = maxY / Math.Pow(2, maxZoom);
-                    tiles[i, j] = new Rectangle(j * unitx, i * unity, (j + 1) * unitx, (i+1) * unity);
-                    //Console.WriteLine(tiles[i,j].ToString());
-                }
-            }
-            //nodecount on tiles
+
+
+
+
+
+
+            id = 0;
+            buildTiles(0, 0, maxX, maxY, 0, 0, 0);
+            Console.WriteLine("Number of tiles =" + id);
+
+            id = 0;
+            int count = 0;
+            RTree<int> TreeOfNodes = new RTree<int>();
             for (int index = 0; index < g.N; index++)
             {
-                int x = g.VList[index].XLoc;
-                int y = g.VList[index].YLoc;
-                for (int i = 0; i < maxZoom; i++) {
-                    for (int j = 0; j < maxZoom; j++)
-                    {
-                        if (tiles[i, j].Contains(new Point(x, y)))
-                        {
-                            var pair = new IntPair(i,j);
-                            if (tileNodes.ContainsKey(pair))
-                                tileNodes[pair].Add(index);
-                            else
-                            {
-                                tileNodes[pair] = new List<int>();
-                                tileNodes[pair].Add(index);
-                            }
-                            i = j = maxZoom; //break
-                        }                            
-                    }
-                }                
+                TreeOfNodes.Add(new Rectangle(new Point(g.VList[index].XLoc, g.VList[index].YLoc)), index);
             }
-            //calculatezoomlevel
-            int Q = 40;
-            int[,,] costTree = new int[(int)Math.Pow(4,maxZoom),Q, Q];
-            int[,,] resultTree = new int[(int)Math.Pow(4, maxZoom), Q, Q];
-
-            //dynamicProgram(0, Q, Q, costTree, resultTree);
-            /*
-            for (int k1 = 0; k1 < Q; k1++)
+            //nodecount on tiles            
+            for (int i = immediatemaxtiles; i < maxtiles; i++)
             {
-                for (int k2 = 0; k2 < Q; k2++)
+                if (tileDepth[i] < maxdepth) continue;
+                int[] candidateList = TreeOfNodes.GetAllIntersecting(tiles[i]);
+                for (int index = 0; index < candidateList.Length; index++)
                 {
-                    for (int k3 = 0; k3 < Q; k3++)
-                    {
-                        int k4 = Q - (k1 + k2 + k3);
-                        if(k4 < 0) break;
-
-                        dynamicProgram(0,k1,k2,k3,k4,quota);
-                    }
+                    if (!tileNodes.ContainsKey(i)) tileNodes.Add(i, new List<int>());
+                    tileNodes[i].Add(candidateList[index]);
                 }
+                count += candidateList.Length;
+                tileNodeCount[i] = candidateList.Length;
             }
-            */
+
+            Console.WriteLine("Total Nodes =" + g.N + " Nodes Found " + count);
+
+            _lgLayoutSettings.MaxNumberOfNodesPerTile = 20;
+            int quota = _lgLayoutSettings.MaxNumberOfNodesPerTile;
+            int[,] costTree = new int[maxtiles, quota + 1];
+            int[,] resultTree = new int[maxtiles, quota + 1];
+            for (int i = 0; i < maxtiles; i++)
+                for (int j = 0; j <= quota; j++) costTree[i, j] = -1;
+            dynamicProgram(0, 0, costTree, resultTree);
+
+
+
+
+
+
+
+
+
+
+
 
             stopwatch.Stop();
             Console.WriteLine("Conected Graph and MDS Time = " + stopwatch.ElapsedMilliseconds);
@@ -751,6 +792,16 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             g.CreateNodeTreeEdgeTree();
             stopwatch.Stop();
             Console.WriteLine("Detour Creation Time = " + stopwatch.ElapsedMilliseconds);
+
+
+
+
+
+
+
+
+
+
 
             //Compute the EdgeList for each vertex
             //var AdjacencyList = BuildAdjacencyListFromEdgeList();
