@@ -1,23 +1,31 @@
 # Microsoft Automatic Graph Layout
-A set of tools for graph layout and viewing
+**MSAGL** is a .NET library and tool for graph layout and viewing. 
 
-The simplest way to start with MSAGL in C# is to open GraphLayout.sln in Visual Studio 2013, and have a look at Samples there.
+MSAFL was developed in Microsoft by Lev Nachmanson, Sergey Pupyrev, Tim Dwyer, Ted Hart, and Roman Prutkin.
 
-MSAGL is a .NET tool for graph layout and viewing. It was developed in Microsoft by Lev Nachmanson, Sergey Pupyrev, Tim Dwyer, Ted Hart, and Roman Prutkin.
+## Getting Started
 
-## The Distribution Content and Important Features
-The package contains the following:
+The simplest way to start with MSAGL in C# is to open GraphLayout.sln in Visual Studio, and and look at the Samples folder.
 
-* Layout engine (Microsoft.MSAGL.dll) - The core layout functionality. This component can be used directly in cases when visualization is handled by a tool other than MSAGL.
-* Drawing module (Microsoft.MSAGL.Drawing.dll) - The Definitions of different drawing attributes like colors, line styles, etc. It also contains definitions of a node class, an edge class, and a graph class. By using these classes a user can create a graph object and use it later for layout, and rendering.
-* Viewer control (Microsoft.MSAGL.GraphViewerGDIGraph.dll) - The viewer control, and  some other rendering functionality.
+## MSAGL Modules
 
-Some important features of the viewer are:
+### The Core Layout engine (Microsoft.MSAGL.dll) - [NuGet package](https://www.nuget.org/packages/Microsoft.Automatic.Graph.Layout/)
+This .NET asssembly contains the core layout functionality. Use this library if you just want MSAGL to perform the layout only and afterwards you will use a separate tool to perform the rendering and visalization.
 
-* Pan and Zoom of the graph.
-* Forward and Backward navigation.
-* Ability to configure tooltips and highlighting of graph entities.
-* Ability to search for and focus on entities of the graph.
+* Assembly: Microsoft.MSAGL.dll
+* NuGet: https://www.nuget.org/packages/Microsoft.Automatic.Graph.Layout/
+
+### The **Drawing module** (Microsoft.MSAGL.Drawing.dll) - [NuGet package](https://www.nuget.org/packages/Microsoft.Automatic.Graph.Drawing/)
+The Definitions of different drawing attributes like colors, line styles, etc. It also contains definitions of a node class, an edge class, and a graph class. By using these classes a user can create a graph object and use it later for layout, and rendering.
+
+### A **Viewer control** (Microsoft.MSAGL.GraphViewerGDIGraph.dll)
+The viewer control lets you visualize graphs and has and some other rendering functionality.
+
+Key features:
+* Pan and Zoom.
+* Navigate Forward and Backward
+* Configure tooltips and highlighting of graph entities.
+* Search for and focus on graph entities.
 
 # Code Samples
 The code snippet demonstrates the basic usage of the viewer. It uses the C# language.
@@ -83,5 +91,5 @@ regenerated. GraphMaps ideas, design, and the mathematics are described in a
 ![](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/msagl-44a7b11774a54cab92a3f75a9501601b.png)
 
 
-
+# Code of Conduct
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
