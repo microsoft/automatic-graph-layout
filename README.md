@@ -12,9 +12,6 @@ The simplest way to start with MSAGL in C# is to open GraphLayout.sln in Visual 
 ### The Core Layout engine (Microsoft.MSAGL.dll) - [NuGet package](https://www.nuget.org/packages/Microsoft.Automatic.Graph.Layout/)
 This .NET asssembly contains the core layout functionality. Use this library if you just want MSAGL to perform the layout only and afterwards you will use a separate tool to perform the rendering and visalization.
 
-* Assembly: Microsoft.MSAGL.dll
-* NuGet: https://www.nuget.org/packages/Microsoft.Automatic.Graph.Layout/
-
 ### The **Drawing module** (Microsoft.MSAGL.Drawing.dll) - [NuGet package](https://www.nuget.org/packages/Microsoft.Automatic.Graph.Drawing/)
 The Definitions of different drawing attributes like colors, line styles, etc. It also contains definitions of a node class, an edge class, and a graph class. By using these classes a user can create a graph object and use it later for layout, and rendering.
 
