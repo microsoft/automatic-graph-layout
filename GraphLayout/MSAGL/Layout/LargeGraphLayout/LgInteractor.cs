@@ -578,6 +578,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         private int maxtiles = 1365;
         private int immediatemaxtiles = 341;
         private int[] tileNodeCount = new int[1365];
+        private int[] tileEdgeFlow = new int[1365];
         int[] tileDepth = new int[1365];
         private int id;
         Rectangle[] tiles = new Rectangle[1365];
@@ -597,9 +598,30 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             buildTiles(l,      centery,     centerx,          b, depth + 1,index+3 , 3);
             buildTiles(centerx, centery,       r,              b, depth + 1,index+4, 4);
 
-        } 
+        }
 
-        int dynamicProgram(int root, int alreadyVisible, int [,] costTree, int[,] resultTree)
+        bool computeEdgeFlow(int root, int alreadyVisible, int[,] costTree, Dictionary<IntPair, List<int>> resultTree)
+        {
+            if (immediatemaxtiles <= root && root <= maxtiles) return true;
+
+            IntPair p = new IntPair(root,alreadyVisible);            
+            int[] result = resultTree[p].ToArray();
+            if (result.Length == 0) //no feasible solution
+                return false;
+
+            tileEdgeFlow[4 * root + 1] = result[1];
+            tileEdgeFlow[4 * root + 2] = result[2];
+            tileEdgeFlow[4 * root + 3] = result[3];
+            tileEdgeFlow[4 * root + 4] = result[4];
+
+            bool a = computeEdgeFlow(4 * root + 1, result[1], costTree, resultTree);
+            bool b = computeEdgeFlow(4 * root + 2, result[2], costTree, resultTree);
+            bool c = computeEdgeFlow(4 * root + 3, result[3], costTree, resultTree);
+            bool d = computeEdgeFlow(4 * root + 4, result[4], costTree, resultTree);
+            return a & b & c & d;
+        }
+
+        int dynamicProgram(int root, int alreadyVisible, int[,] costTree, Dictionary<IntPair, List<int>> resultTree)
         {
 
             //processing for leafnode
@@ -611,6 +633,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             //process non-leaf nodes 
             int cost;
+            int mink1=0, mink2=0, mink3=0, mink4=0;
             int mincost = int.MaxValue;
             int minrootsum = int.MaxValue;
             int delta = 1; //control speed and approximation
@@ -661,14 +684,90 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                             {
                                 mincost = cost;
                                 minrootsum = rootsum;
+                                mink1 = k1; mink2 = k2; mink3 = k3; mink4 = k4;
                             }
                         }                        
                     }
                 }                
                 costTree[root, alreadyVisible] = mincost;
-                resultTree[root, alreadyVisible] = minrootsum;                
+                var p = new IntPair(root, alreadyVisible);
+                if(!resultTree.ContainsKey(p)) resultTree[p] = new List<int>(); 
+                else resultTree[p] = new List<int>(){minrootsum,mink1,mink2,mink3,mink4};
             }            
             return mincost;
+        }
+
+        void distributeNodes(int root, int[,] costTree, Dictionary<IntPair, List<int>> resultTree, Dictionary<int, Node> idToNode)
+        {
+            //processing for a leafnode
+            if (immediatemaxtiles <= root && root <= maxtiles) return;
+
+            distributeNodes(4 * root + 1, costTree, resultTree, idToNode);
+            distributeNodes(4 * root + 2, costTree, resultTree, idToNode);
+            distributeNodes(4 * root + 3, costTree, resultTree, idToNode);
+            distributeNodes(4 * root + 4, costTree, resultTree, idToNode);
+            
+
+            List<int> L = new List<int>();
+            List<double> R = new List<double>();
+            foreach (var x in tileNodes[4*root + 1])
+            {
+                L.Add(x);
+                R.Add(_lgData.GeometryNodesToLgNodeInfos[idToNode[x]].Rank);
+            }
+            foreach (var x in tileNodes[4 * root + 2])
+            {
+                L.Add(x);
+                R.Add(_lgData.GeometryNodesToLgNodeInfos[idToNode[x]].Rank);
+            }
+            foreach (var x in tileNodes[4 * root + 3])
+            {
+                L.Add(x);
+                R.Add(_lgData.GeometryNodesToLgNodeInfos[idToNode[x]].Rank);
+            }
+            foreach (var x in tileNodes[4 * root + 4])
+            {
+                L.Add(x);
+                R.Add(_lgData.GeometryNodesToLgNodeInfos[idToNode[x]].Rank);
+            }
+            int []LA =  L.ToArray();
+            double [] RA = R.ToArray();
+            Array.Sort(RA,LA);
+            tileNodes[root] = new List<int>();
+
+            //assign values of ks
+            int k1= tileEdgeFlow[4 * root + 1];
+            int k2 = tileEdgeFlow[4 * root + 2];
+            int k3 = tileEdgeFlow[4 * root + 3];
+            int k4 = tileEdgeFlow[4 * root + 4];
+            //shift nodes into layers
+            for (int i = 0; i < LA.Length; i++)
+            {
+                if (tileNodes[4*root + 1].Contains(LA[i]) && k1 > 0)
+                {
+                    tileNodes[root].Add(LA[i]);
+                    tileNodes[4*root + 1].Remove(LA[i]);
+                    k1--;
+                }
+                else if (tileNodes[4 * root + 2].Contains(LA[i]) && k2 > 0)
+                {
+                    tileNodes[root].Add(LA[i]);
+                    tileNodes[4 * root + 2].Remove(LA[i]);
+                    k2--;
+                }
+                else if (tileNodes[4 * root + 3].Contains(LA[i]) && k3 > 0)
+                {
+                    tileNodes[root].Add(LA[i]);
+                    tileNodes[4 * root + 3].Remove(LA[i]);
+                    k3--;
+                }
+                else if (tileNodes[4 * root + 4].Contains(LA[i]) && k4 > 0)
+                {
+                    tileNodes[root].Add(LA[i]);
+                    tileNodes[4 * root + 4].Remove(LA[i]);
+                    k4--;
+                }
+            }
         }
         private Tiling TryCompetitionMeshApproach(out Dictionary<Node, int> nodeToId, bool huge_graph)
         {
@@ -726,10 +825,11 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             for (int i = immediatemaxtiles; i < maxtiles; i++)
             {
                 if (tileDepth[i] < maxdepth) continue;
+                tileNodes.Add(i, new List<int>());
                 int[] candidateList = TreeOfNodes.GetAllIntersecting(tiles[i]);
                 for (int index = 0; index < candidateList.Length; index++)
                 {
-                    if (!tileNodes.ContainsKey(i)) tileNodes.Add(i, new List<int>());
+                    //if (!tileNodes.ContainsKey(i)) tileNodes.Add(i, new List<int>());
                     tileNodes[i].Add(candidateList[index]);
                 }
                 count += candidateList.Length;
@@ -738,15 +838,34 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             Console.WriteLine("Total Nodes =" + g.N + " Nodes Found " + count);
 
-            _lgLayoutSettings.MaxNumberOfNodesPerTile = 20;
+            _lgLayoutSettings.MaxNumberOfNodesPerTile =40;
             int quota = _lgLayoutSettings.MaxNumberOfNodesPerTile;
             int[,] costTree = new int[maxtiles, quota + 1];
-            int[,] resultTree = new int[maxtiles, quota + 1];
+            Dictionary<IntPair,List<int>> resultTree = new Dictionary<IntPair,List<int>>();
             for (int i = 0; i < maxtiles; i++)
                 for (int j = 0; j <= quota; j++) costTree[i, j] = -1;
-            dynamicProgram(0, 0, costTree, resultTree);
+            
+            dynamicProgram(0, Math.Min(g.N,quota), costTree, resultTree);
+            bool flowfound = computeEdgeFlow(0, Math.Min(g.N,quota), costTree, resultTree);
+            Console.WriteLine("A feasible flow found with "+ maxdepth +"layers" );
+            distributeNodes(0, costTree, resultTree, idToNode);
 
-
+            g.maxTheoreticalZoomLevel = 0;
+            for (int i = 0; i < maxtiles; i++)
+            {
+                foreach (var x in tileNodes[i])
+                {
+                    g.VList[x].ZoomLevel = 1;//(int) Math.Pow(2, tileDepth[i]);
+                    _lgData.GeometryNodesToLgNodeInfos[idToNode[x]].ZoomLevel = g.VList[x].ZoomLevel;
+                    if (g.maxTheoreticalZoomLevel < g.VList[x].ZoomLevel)
+                        g.maxTheoreticalZoomLevel = g.VList[x].ZoomLevel;
+                }
+            }
+            foreach (var node in _lgData.SortedLgNodeInfos)
+            {
+                var x = nodeToId[node.GeometryNode];
+                node.ZoomLevel = g.VList[x].ZoomLevel;
+            }
 
 
 
