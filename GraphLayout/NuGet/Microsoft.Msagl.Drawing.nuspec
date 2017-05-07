@@ -1,20 +1,20 @@
 ﻿<package>
   <metadata>
     <id>Microsoft.Msagl.Drawing</id>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <authors>Microsoft</authors>
     <owners>Microsoft</owners>
     <licenseUrl>https://github.com/Microsoft/automatic-graph-layout/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/Microsoft/automatic-graph-layout</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>MSAGL is a .NET tool for graph layout and viewing.</description>
+    <description>The Definitions of different drawing attributes like colors, line styles, etc. It also contains definitions of a node class, an edge class, and a graph class. By using these classes a user can create a graph object and use it later for layout, and rendering.</description>
     <releaseNotes>
     </releaseNotes>
     <copyright>Copyright © Microsoft Corporation</copyright>
     <language>en-US</language>
     <tags>MSAGL Graph Layout</tags>
     <dependencies>
-      <dependency id="Microsoft.Msagl" version="1.0.0" />
+      <dependency id="Microsoft.Msagl" version="1.0.2" />
     </dependencies>
     <frameworkAssemblies>
     </frameworkAssemblies>
