@@ -2285,15 +2285,29 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
         }
 
+        public bool forthefirsttime = true;
         void AddVisibleRailsAndNodes()
         {
             _railGraph.Rails.Clear();
             var level = _lgData.GetCurrentLevelByScale(CurrentZoomLevel);
             //Console.WriteLine(level.ZoomLevel+" ???");
-
+            
             _railGraph.Rails.InsertRange(level.GetRailsIntersectingRect(_visibleRectangle));
+            
+            
             //jyoti: this needs to be fixed - generate labels of top label nodes
             //_railGraph.Nodes.InsertRange(level.GetNodesIntersectingRect(_visibleRectangle));
+            /* //attempt for fix
+            if (forthefirsttime)
+            {
+                foreach (var e in level._railsOfEdges.Keys)
+                {
+                    _railGraph.Nodes.Insert(e.Source);    
+                    _railGraph.Nodes.Insert(e.Target);    
+                }
+                forthefirsttime = false;
+            }*/
+
 
             _railGraph.Edges.Clear();
             _railGraph.Edges.InsertRange(

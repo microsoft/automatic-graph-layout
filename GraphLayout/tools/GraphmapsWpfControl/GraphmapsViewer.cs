@@ -1734,13 +1734,16 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                     vNode.Node.LabelText = ""+vNode.LgNodeInfo.ZoomLevel;
 
                     if (vNode.LgNodeInfo.LabelVisibleFromScale >= 0 &&
-                        vNode.LgNodeInfo.LabelVisibleFromScale <= zf)
+                        vNode.LgNodeInfo.LabelVisibleFromScale <= zf
+                        || vNode.LgNodeInfo.ZoomLevel == 0 //jyoti: added this for always getting the top labels
+                        )
                     {
                         var offset = Point.Scale(nodeLabelWidth + NodeDotWidth * 1.01, nodeLabelHeight + NodeDotWidth * 1.01,
                             vNode.LgNodeInfo.LabelOffset);
                         vNode.InvalidateNodeLabel(nodeLabelHeight, nodeLabelWidth, offset);
                     }
-                    else if (_lgLayoutSettings.Interactor.SelectedNodeLabels.ContainsKey(vNode.LgNodeInfo))
+                    else if (_lgLayoutSettings.Interactor.SelectedNodeLabels.ContainsKey(vNode.LgNodeInfo)                        
+                        )
                     {
 
                         var pos = _lgLayoutSettings.Interactor.SelectedNodeLabels[vNode.LgNodeInfo];
