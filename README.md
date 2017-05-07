@@ -9,13 +9,14 @@ The simplest way to start with MSAGL in C# is to open GraphLayout.sln in Visual 
 
 ## MSAGL Modules
 
-**The Core Layout engine (Microsoft.MSAGL.dll)** - [NuGet package](https://www.nuget.org/packages/Microsoft.Automatic.Graph.Layout/)
+**The Core Layout engine (Microsoft.MSAGL.dll)** - [NuGet package](https://www.nuget.org/packages/Microsoft.Msagl/)
 This .NET asssembly contains the core layout functionality. Use this library if you just want MSAGL to perform the layout only and afterwards you will use a separate tool to perform the rendering and visalization.
 
-** The **Drawing module** (Microsoft.MSAGL.Drawing.dll)** - [NuGet package](https://www.nuget.org/packages/Microsoft.Automatic.Graph.Drawing/)
+**The Drawing module (Microsoft.MSAGL.Drawing.dll)** - [NuGet package](https://www.nuget.org/packages/Microsoft.Msagl.Drawing/)
 The Definitions of different drawing attributes like colors, line styles, etc. It also contains definitions of a node class, an edge class, and a graph class. By using these classes a user can create a graph object and use it later for layout, and rendering.
 
-**A **Viewer control** (Microsoft.MSAGL.GraphViewerGDIGraph.dll)** The viewer control lets you visualize graphs and has and some other rendering functionality. Key features: (1) Pan and Zoom (2) Navigate Forward and Backward (3) tooltips and highlighting on graph entities (4) Search for and focus on graph entities.
+**A Viewer control** (Microsoft.MSAGL.GraphViewerGDIGraph.dll)** - [NuGet package](https://www.nuget.org/packages/Microsoft.Msagl.GraphViewerGDI/)
+The viewer control lets you visualize graphs and has and some other rendering functionality. Key features: (1) Pan and Zoom (2) Navigate Forward and Backward (3) tooltips and highlighting on graph entities (4) Search for and focus on graph entities.
 
 # Code Samples
 The code snippets demonstrate the basic usage of the viewer. It uses the C# language.
