@@ -1,7 +1,7 @@
 ﻿<package>
   <metadata>
     <id>Microsoft.Msagl</id>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <authors>Microsoft</authors>
     <owners>Microsoft</owners>
     <licenseUrl>https://github.com/Microsoft/automatic-graph-layout/blob/master/LICENSE</licenseUrl>
