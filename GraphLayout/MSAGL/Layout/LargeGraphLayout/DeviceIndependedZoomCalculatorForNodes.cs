@@ -41,36 +41,25 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         public void RunAfterFlow( LgData _lgData)
         {
             
-            sortedLgNodeInfos = GetSortedLgNodeInfos();
+            sortedLgNodeInfos = GetSortedLgNodeInfos2();
             Graph.UpdateBoundingBox();
             
             double gridSize = Math.Max(Graph.Width, Graph.Height);
 
-            foreach (var node in _lgData.SortedLgNodeInfos)
-            {
-                zoomLevel = (int)node.ZoomLevel;
-                if (zoomLevel == 2) gridSize /= 2.5;
-                if (zoomLevel == 4) gridSize /= 2;
-                if (zoomLevel == 8) gridSize /= 1.5;
-                if (zoomLevel >= 8) gridSize /= 1.25;
-                if (zoomLevel >= 256) gridSize /= 10;
-                DrawNodesOnLevel(gridSize, zoomLevel);
-            }
-            /*
             zoomLevel = 1;
 
             while (SomeNodesAreNotAssigned())
             {
                 Console.WriteLine("zoom level = {0} with the grid size = {1}", zoomLevel, gridSize);
-                DrawNodesOnLevel(gridSize, zoomLevel);
+                DrawNodesOnLevel2(gridSize, zoomLevel);
                 zoomLevel *= 2;
-                if (zoomLevel == 2) gridSize /= 2.5;
+                if (zoomLevel == 2) gridSize /= 2;
                 if (zoomLevel == 4) gridSize /= 2;
-                if (zoomLevel == 8) gridSize /= 1.5;
-                if (zoomLevel >= 8) gridSize /= 1.25;
+                if (zoomLevel == 8) gridSize /= 2;
+                if (zoomLevel >= 8) gridSize /= 2;
                 if (zoomLevel >= 256) gridSize /= 10;
                 //gridSize /= 2;  //jyoti changed it from 2 to make smooth transition between levels
-            }*/
+            }
         }
         /// <summary>
         /// We expect that the node Ranks are set before the method call.
@@ -103,6 +92,56 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         }
 
 
+        void DrawNodesOnLevel2(double gridSize, int currentLevel)
+        {
+            int[] nodeBoundPerLevel = new int[530];
+            nodeBoundPerLevel[1] = 40;
+            nodeBoundPerLevel[2] = 30;
+            nodeBoundPerLevel[4] = 20;
+            nodeBoundPerLevel[8] = 10;
+            nodeBoundPerLevel[16] = 5;
+            nodeBoundPerLevel[32] = 5;
+            nodeBoundPerLevel[64] = 5;
+            nodeBoundPerLevel[128] = 20;
+            nodeBoundPerLevel[256] = 1000;
+
+
+            var tileTable = new Dictionary<Tuple<int, int>, int>();
+            for (int i = 0; i < sortedLgNodeInfos.Count; i++)
+            {
+                var ni = sortedLgNodeInfos[i];
+                var tuple = PointToTuple(Graph.LeftBottom, ni.Center, gridSize);
+                if (!tileTable.ContainsKey(tuple))
+                    tileTable[tuple] = 0;
+
+                int countForTile = tileTable[tuple]++ + 1;
+                //if (countForTile > nodeBoundPerLevel[currentLevel])
+                if (countForTile > maxAmountPerTile)
+                {
+                    _levelNodeCounts.Add(i);
+                    break;
+                }
+
+                if (ni.ZoomLevel == zoomLevel)
+                {
+                    //ni.ZoomLevel = zoomLevel;
+                    unassigned--;
+                }
+
+                if (unassigned == 0)
+                {
+                    _levelNodeCounts.Add(i + 1);
+                    break;
+                }
+
+                if (zoomLevel > 32)
+                {
+                    unassigned = 0;
+                    break;
+                }
+            }
+
+        }
         void DrawNodesOnLevel(double gridSize, int currentLevel) {
             int []nodeBoundPerLevel = new int[530];
             nodeBoundPerLevel[1] = 40;
@@ -182,6 +221,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             return ret;
         }
 
+        List<LgNodeInfo> GetSortedLgNodeInfos2()
+        {
+            var ret = Graph.Nodes.Select(n => NodeToLgNodeInfo(n)).ToList();
+            ret.Sort((a, b) => b.ZoomLevel.CompareTo(a.ZoomLevel));
+            return ret;
+        }
 
 #if DEBUG
 

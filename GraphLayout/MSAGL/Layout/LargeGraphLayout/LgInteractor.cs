@@ -138,8 +138,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             
             g.pathList = new Dictionary<Edge, List<int>>();
             Dictionary<Edge,List<VertexNeighbor>> ssp  = new Dictionary<Edge, List<VertexNeighbor>>();
-
-            for (int i = 1; i <= g.maxTheoreticalZoomLevel; i *= 2)
+            //for (int i = g.maxTheoreticalZoomLevel; i >= 1; i /= 2)
+            for (int i = 1; i <= g.maxTheoreticalZoomLevel; i *= 2)            
             {
                 //create a new graph and copy the vertex properties of the basic graph
                 Tiling newG = new Tiling(g.NumOfnodes, true);                
@@ -177,6 +177,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     if (sourceZoomLevel <= i && targetZoomLevel <= i)
                     {
 
+                        //if the edge is already in top level then copy it
                         if (sourceZoomLevel < i && targetZoomLevel < i)
                         {
                             /* 
@@ -201,6 +202,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                         {
                             pathvertices = dijkstra.MSAGLAstarShortestPath(g.VList, g.EList, g.DegList,
                                 nodeToId[edge.Source], nodeToId[edge.Target], g.NumOfnodes);
+                            if(pathvertices.Count ==0 ) Console.WriteLine("missing path!");
                             g.pathList.Add(edge, pathvertices);
                             ssp.Add(edge, dijkstra.Edgelist);                          
                         }
@@ -228,115 +230,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
 
 
-            Console.WriteLine("Starting Path Simplicfication");
-            stopwatch.Start();
-            foreach (Tiling graph in graphs)
-            {
-                //find all degree two vertices.
-                List<int> Deg2Vertices = new List<int>();
-                for (int j = graph.N; j < graph.NumOfnodes; j++)
-                {
-                    if (graph.DegList[j] == 2) Deg2Vertices.Add(j);
-                    graph.VList[j].Visited = false;
-                }
-                foreach (int w in Deg2Vertices)
-                {
-                    if (graph.VList[w].Visited) continue;
-                    //find the one end of the path
-                    int currentVertexId = w;
-                    int oldVertexId = -1;
-                    while (graph.DegList[currentVertexId] == 2 && currentVertexId >= g.N)
-                    {
-                        int neighbor1 = graph.EList[currentVertexId, 0].NodeId; ;
-                        int neighbor2 = graph.EList[currentVertexId, 1].NodeId; ;
-                        if (oldVertexId != neighbor1) { oldVertexId = currentVertexId; currentVertexId = neighbor1; }
-                        else if (oldVertexId != neighbor2) { oldVertexId = currentVertexId; currentVertexId = neighbor2; }
-                    }
-
-                    //find the path from this end 
-                    var tempId = oldVertexId;
-                    oldVertexId = currentVertexId;
-                    currentVertexId = tempId;
-
-                    List<int> path = new List<int>();
-                    path.Add(oldVertexId);
-                    path.Add(currentVertexId);
-                    graph.VList[oldVertexId].Visited = true;
-                    graph.VList[currentVertexId].Visited = true;
-
-                    //find the path and add it into a list
-                    while (graph.DegList[currentVertexId] == 2 && currentVertexId >= g.N)
-                    {
-                        int neighbor1 = graph.EList[currentVertexId, 0].NodeId; ;
-                        int neighbor2 = graph.EList[currentVertexId, 1].NodeId; ;
-                        if (oldVertexId != neighbor1) { oldVertexId = currentVertexId; currentVertexId = neighbor1; }
-                        else if (oldVertexId != neighbor2) { oldVertexId = currentVertexId; currentVertexId = neighbor2; }
-                        path.Add(currentVertexId);
-                        graph.VList[currentVertexId].Visited = true;
-                    }
-
-                    int[] pathVertices = path.ToArray();
-                    Point[] PointList = new Point[path.Count];
-                    int q = 0;
-                    foreach (int vertex in path)
-                    {
-                        PointList[q++] = new Point(graph.VList[vertex].XLoc, graph.VList[vertex].YLoc);
-                        //if (MsaglUtilities.EucledianDistance(99, 60, graph.VList[vertex].XLoc, graph.VList[vertex].YLoc) < 2)
-                            //Console.WriteLine();
-                    }
-                    LocalModifications.PolygonalChainSimplification(PointList, 0, PointList.Length - 1, 1000);
-
-                    //Modify graph according to the simplified path
-                    for (int currentPoint = 0; currentPoint < PointList.Length - 1; )
-                    {
-                        int nextPoint = currentPoint + 1;
-                        for (; nextPoint < PointList.Length; nextPoint++)
-                        {
-                            if (PointList[nextPoint].X == -1)
-                            {
-                                //jyoti: RemoveEdge was added to make things fast 
-                                graph.RemoveEdge(pathVertices[nextPoint], pathVertices[nextPoint-1]);
-                                continue;
-                            }
-                            //jyoti: RemoveEdge was added to make things fast 
-                            graph.RemoveEdge(pathVertices[nextPoint], pathVertices[nextPoint - 1]);
-                            break;                            
-                        }
-                        if (nextPoint < PointList.Length)
-                        {
-                            //////graph.AddEdge(pathVertices[nextPoint], pathVertices[currentPoint]);
-                            int left = currentPoint;
-                            int right = nextPoint;
-                            while (graph.noCrossings(pathVertices, pathVertices[left], pathVertices[right]) == false && left < right)
-                            {
-                                left++; right--;
-                            }
-                            if (left < right)
-                            {
-                                //connect each path vertrex in between to this path
-                                for (int index = left + 1; index < right; index++)
-                                {
-                                    Vertex intermediateVertex = graph.VList[pathVertices[index]];
-                                    Vertex leftVertex = graph.VList[pathVertices[left]];
-                                    Vertex rightVertex = graph.VList[pathVertices[right]];
-                                    Point p = PointToSegmentDistance.getClosestPoint
-                                                     (leftVertex, rightVertex, intermediateVertex);
-                                    intermediateVertex.PreciseX = p.X;
-                                    intermediateVertex.PreciseY = p.Y;
-
-                                    intermediateVertex.LeftX = leftVertex.XLoc;
-                                    intermediateVertex.LeftY = leftVertex.YLoc;
-                                    intermediateVertex.RightX = rightVertex.XLoc;
-                                    intermediateVertex.RightY = rightVertex.YLoc;
-
-                                   
-                                }
-                            }
-                            currentPoint = nextPoint;
-                        }
-                    }
-                }
-            }
+            ComputePathSimplification(g, stopwatch, graphs);
 
             Tiling[] allGraphs = graphs.ToArray();
 
@@ -362,6 +256,139 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             Console.WriteLine("Done Simplification = " + stopwatch.ElapsedMilliseconds);
 
             return allGraphs;
+        }
+
+        private static void ComputePathSimplification(Tiling g, Stopwatch stopwatch, List<Tiling> graphs)
+        {
+            Console.WriteLine("Starting Path Simplicfication");
+            stopwatch.Start();
+            foreach (Tiling graph in graphs)
+            {
+                //find all degree two vertices.
+                List<int> Deg2Vertices = new List<int>();
+                for (int j = graph.N; j < graph.NumOfnodes; j++)
+                {
+                    if (graph.DegList[j] == 2) Deg2Vertices.Add(j);
+                    graph.VList[j].Visited = false;
+                }
+                foreach (int w in Deg2Vertices)
+                {
+                    if (graph.VList[w].Visited) continue;
+                    //find the one end of the path
+                    int currentVertexId = w;
+                    int oldVertexId = -1;
+                    while (graph.DegList[currentVertexId] == 2 && currentVertexId >= g.N)
+                    {
+                        int neighbor1 = graph.EList[currentVertexId, 0].NodeId;
+                        ;
+                        int neighbor2 = graph.EList[currentVertexId, 1].NodeId;
+                        ;
+                        if (oldVertexId != neighbor1)
+                        {
+                            oldVertexId = currentVertexId;
+                            currentVertexId = neighbor1;
+                        }
+                        else if (oldVertexId != neighbor2)
+                        {
+                            oldVertexId = currentVertexId;
+                            currentVertexId = neighbor2;
+                        }
+                    }
+
+                    //find the path from this end 
+                    var tempId = oldVertexId;
+                    oldVertexId = currentVertexId;
+                    currentVertexId = tempId;
+
+                    List<int> path = new List<int>();
+                    path.Add(oldVertexId);
+                    path.Add(currentVertexId);
+                    graph.VList[oldVertexId].Visited = true;
+                    graph.VList[currentVertexId].Visited = true;
+
+                    //find the path and add it into a list
+                    while (graph.DegList[currentVertexId] == 2 && currentVertexId >= g.N)
+                    {
+                        int neighbor1 = graph.EList[currentVertexId, 0].NodeId;
+                        ;
+                        int neighbor2 = graph.EList[currentVertexId, 1].NodeId;
+                        ;
+                        if (oldVertexId != neighbor1)
+                        {
+                            oldVertexId = currentVertexId;
+                            currentVertexId = neighbor1;
+                        }
+                        else if (oldVertexId != neighbor2)
+                        {
+                            oldVertexId = currentVertexId;
+                            currentVertexId = neighbor2;
+                        }
+                        path.Add(currentVertexId);
+                        graph.VList[currentVertexId].Visited = true;
+                    }
+
+                    int[] pathVertices = path.ToArray();
+                    Point[] PointList = new Point[path.Count];
+                    int q = 0;
+                    foreach (int vertex in path)
+                    {
+                        PointList[q++] = new Point(graph.VList[vertex].XLoc, graph.VList[vertex].YLoc);
+                        //if (MsaglUtilities.EucledianDistance(99, 60, graph.VList[vertex].XLoc, graph.VList[vertex].YLoc) < 2)
+                        //Console.WriteLine();
+                    }
+                    LocalModifications.PolygonalChainSimplification(PointList, 0, PointList.Length - 1, 1000);
+
+                    //Modify graph according to the simplified path
+                    for (int currentPoint = 0; currentPoint < PointList.Length - 1;)
+                    {
+                        int nextPoint = currentPoint + 1;
+                        for (; nextPoint < PointList.Length; nextPoint++)
+                        {
+                            if (PointList[nextPoint].X == -1)
+                            {
+                                //jyoti: RemoveEdge was added to make things fast 
+                                graph.RemoveEdge(pathVertices[nextPoint], pathVertices[nextPoint - 1]);
+                                continue;
+                            }
+                            //jyoti: RemoveEdge was added to make things fast 
+                            graph.RemoveEdge(pathVertices[nextPoint], pathVertices[nextPoint - 1]);
+                            break;
+                        }
+                        if (nextPoint < PointList.Length)
+                        {
+                            //////graph.AddEdge(pathVertices[nextPoint], pathVertices[currentPoint]);
+                            int left = currentPoint;
+                            int right = nextPoint;
+                            while (graph.noCrossings(pathVertices, pathVertices[left], pathVertices[right]) == false &&
+                                   left < right)
+                            {
+                                left++;
+                                right--;
+                            }
+                            if (left < right)
+                            {
+                                //connect each path vertrex in between to this path
+                                for (int index = left + 1; index < right; index++)
+                                {
+                                    Vertex intermediateVertex = graph.VList[pathVertices[index]];
+                                    Vertex leftVertex = graph.VList[pathVertices[left]];
+                                    Vertex rightVertex = graph.VList[pathVertices[right]];
+                                    Point p = PointToSegmentDistance.getClosestPoint
+                                        (leftVertex, rightVertex, intermediateVertex);
+                                    intermediateVertex.PreciseX = p.X;
+                                    intermediateVertex.PreciseY = p.Y;
+
+                                    intermediateVertex.LeftX = leftVertex.XLoc;
+                                    intermediateVertex.LeftY = leftVertex.YLoc;
+                                    intermediateVertex.RightX = rightVertex.XLoc;
+                                    intermediateVertex.RightY = rightVertex.YLoc;
+                                }
+                            }
+                            currentPoint = nextPoint;
+                        }
+                    }
+                }
+            }
         }
 
         public void testflow()
@@ -447,7 +474,10 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             _lgData.Levels.Clear();
              
             foreach (var node in _mainGeometryGraph.Nodes)
-                _lgData.GeometryNodesToLgNodeInfos[node].ZoomLevel = 100;
+                _lgData.GeometryNodesToLgNodeInfos[node].ZoomLevel = maxdepth;
+
+            //foreach (var node in _mainGeometryGraph.Nodes)
+            //    _lgData.GeometryNodesToLgNodeInfos[node].ZoomLevel = Math.Log(_lgData.GeometryNodesToLgNodeInfos[node].ZoomLevel, 2);
 
             
             for (int i = 0; i < g.Length; i++)
@@ -462,9 +492,11 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 for (int j = 0; j < g[i].N; j++)
                 {
                     if (g[i].DegList[j] > 0)
+                    //if (_lgData.GeometryNodesToLgNodeInfos[idToNode[j]].ZoomLevel<= layer)
                     {
+                        //count++
                         Node nd = idToNode[g[i].VList[j].Id];
-                        if (_lgData.GeometryNodesToLgNodeInfos[nd].ZoomLevel == 100)
+                        if (_lgData.GeometryNodesToLgNodeInfos[nd].ZoomLevel == maxdepth)
                         {
                             count++;
                             _lgData.GeometryNodesToLgNodeInfos[nd].ZoomLevel = layer;
@@ -472,10 +504,10 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                         }
                         else count++;
                     }
-                    else  //jyoti - added this in case all top level nodes are of degree 0 - bipartite graph
-                        if (g[i].VList[j].ZoomLevel <= i+1) count++;
+                    //else  //jyoti - added this in case all top level nodes are of degree 0 - bipartite graph
+                      //  if (g[i].VList[j].ZoomLevel <= i+1) count++;
                 }
-                
+
 
                 _lgData.LevelNodeCounts[layer] = count;
                
@@ -677,7 +709,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                             }
                             if (solutionexists == false) continue;  
                             
-                            cost = newvis*newvis; //cost for newly visible nodes
+                            cost = (int) (1+Math.Log(root+1,4)) * newvis*newvis; //cost for newly visible nodes
                             if (root == 0) cost = 0;
                             cost += (c[1] + c[2] + c[3] + c[4]);
                             if (mincost > cost)
@@ -697,7 +729,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             resultTree[p] = new List<int>() { minrootsum, mink1, mink2, mink3, mink4 };
             return mincost;
         }
-
         void distributeNodes(int root, int[,] costTree, Dictionary<IntPair, List<int>> resultTree, Dictionary<int, Node> idToNode)
         {
             //processing for a leafnode
@@ -707,6 +738,95 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             distributeNodes(4 * root + 2, costTree, resultTree, idToNode);
             distributeNodes(4 * root + 3, costTree, resultTree, idToNode);
             distributeNodes(4 * root + 4, costTree, resultTree, idToNode);
+
+
+            List<int> L = new List<int>();
+            List<double> R = new List<double>();
+            foreach (var x in tileNodes[4 * root + 1])
+            {
+                L.Add(x);
+                R.Add(_lgData.GeometryNodesToLgNodeInfos[idToNode[x]].ZoomLevel);
+            }
+            foreach (var x in tileNodes[4 * root + 2])
+            {
+                L.Add(x);
+                R.Add(_lgData.GeometryNodesToLgNodeInfos[idToNode[x]].ZoomLevel);
+            }
+            foreach (var x in tileNodes[4 * root + 3])
+            {
+                L.Add(x);
+                R.Add(_lgData.GeometryNodesToLgNodeInfos[idToNode[x]].ZoomLevel);
+            }
+            foreach (var x in tileNodes[4 * root + 4])
+            {
+                L.Add(x);
+                R.Add(_lgData.GeometryNodesToLgNodeInfos[idToNode[x]].ZoomLevel);
+            }
+
+            if (root == 0)
+                Console.Write("");
+            int[] LA = L.ToArray();
+            double[] RA = R.ToArray();
+            Array.Sort(RA, LA);
+            tileNodes[root] = new List<int>();
+
+            //assign values of ks
+            int k1 = tileEdgeFlow[4 * root + 1];
+            int k2 = tileEdgeFlow[4 * root + 2];
+            int k3 = tileEdgeFlow[4 * root + 3];
+            int k4 = tileEdgeFlow[4 * root + 4];
+
+            //if (k1 + k2 + k3 + k4 == 0) return;
+
+            //shift nodes into layers
+            for (int i = 0; i < LA.Length; i++)
+            {
+                if (RA[i]<=Math.Pow(2,tileDepth[root]))
+                {
+                    tileNodes[root].Add(LA[i]);
+                    if(tileNodes[4 * root + 1].Remove(LA[i]))k1--;
+                    if (tileNodes[4 * root + 2].Remove(LA[i])) k2--;
+                    if (tileNodes[4 * root + 3].Remove(LA[i])) k3--;
+                    if (tileNodes[4 * root + 4].Remove(LA[i])) k4--;
+                    continue;
+
+                }
+                if (tileNodes[4 * root + 1].Contains(LA[i]) && k1 > 0)
+                {
+                    tileNodes[root].Add(LA[i]);
+                    tileNodes[4 * root + 1].Remove(LA[i]);
+                    k1--;
+                }
+                else if (tileNodes[4 * root + 2].Contains(LA[i]) && k2 > 0)
+                {
+                    tileNodes[root].Add(LA[i]);
+                    tileNodes[4 * root + 2].Remove(LA[i]);
+                    k2--;
+                }
+                else if (tileNodes[4 * root + 3].Contains(LA[i]) && k3 > 0)
+                {
+                    tileNodes[root].Add(LA[i]);
+                    tileNodes[4 * root + 3].Remove(LA[i]);
+                    k3--;
+                }
+                else if (tileNodes[4 * root + 4].Contains(LA[i]) && k4 > 0)
+                {
+                    tileNodes[root].Add(LA[i]);
+                    tileNodes[4 * root + 4].Remove(LA[i]);
+                    k4--;
+                }
+            }
+        }
+
+        void distributeNodesOld(int root, int[,] costTree, Dictionary<IntPair, List<int>> resultTree, Dictionary<int, Node> idToNode)
+        {
+            //processing for a leafnode
+            if (immediatemaxtiles <= root && root <= maxtiles) return;
+
+            distributeNodesOld(4 * root + 1, costTree, resultTree, idToNode);
+            distributeNodesOld(4 * root + 2, costTree, resultTree, idToNode);
+            distributeNodesOld(4 * root + 3, costTree, resultTree, idToNode);
+            distributeNodesOld(4 * root + 4, costTree, resultTree, idToNode);
             
 
             List<int> L = new List<int>();
@@ -714,23 +834,26 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             foreach (var x in tileNodes[4*root + 1])
             {
                 L.Add(x);
-                R.Add(_lgData.GeometryNodesToLgNodeInfos[idToNode[x]].Rank);
+                R.Add(_lgData.GeometryNodesToLgNodeInfos[idToNode[x]].ZoomLevel);
             }
             foreach (var x in tileNodes[4 * root + 2])
             {
                 L.Add(x);
-                R.Add(_lgData.GeometryNodesToLgNodeInfos[idToNode[x]].Rank);
+                R.Add(_lgData.GeometryNodesToLgNodeInfos[idToNode[x]].ZoomLevel);
             }
             foreach (var x in tileNodes[4 * root + 3])
             {
                 L.Add(x);
-                R.Add(_lgData.GeometryNodesToLgNodeInfos[idToNode[x]].Rank);
+                R.Add(_lgData.GeometryNodesToLgNodeInfos[idToNode[x]].ZoomLevel);
             }
             foreach (var x in tileNodes[4 * root + 4])
             {
                 L.Add(x);
-                R.Add(_lgData.GeometryNodesToLgNodeInfos[idToNode[x]].Rank);
+                R.Add(_lgData.GeometryNodesToLgNodeInfos[idToNode[x]].ZoomLevel);
             }
+
+            if (root == 0)
+                Console.Write("");
             int []LA =  L.ToArray();
             double [] RA = R.ToArray();
             Array.Sort(RA,LA);
@@ -807,88 +930,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             int maxY;
             var maxX = CreateNodePositions(g, nodeToId, idToNode, out maxY);
 
-
-
-
-
-
-
-
-            id = 0;
-            buildTiles(0, 0, maxX, maxY, 0, 0, 0);
-            Console.WriteLine("Number of tiles =" + id);
-
-            id = 0;
-            int count = 0;
-            RTree<int> TreeOfNodes = new RTree<int>();
-            for (int index = 0; index < g.N; index++)
-            {
-                TreeOfNodes.Add(new Rectangle(new Point(g.VList[index].XLoc, g.VList[index].YLoc)), index);
-            }
-            //nodecount on tiles            
-            for (int i = immediatemaxtiles; i < maxtiles; i++)
-            {
-                if (tileDepth[i] < maxdepth) continue;
-                tileNodes.Add(i, new List<int>());
-                int[] candidateList = TreeOfNodes.GetAllIntersecting(tiles[i]);
-                for (int index = 0; index < candidateList.Length; index++)
-                {
-                    //if (!tileNodes.ContainsKey(i)) tileNodes.Add(i, new List<int>());
-                    tileNodes[i].Add(candidateList[index]);
-                }
-                count += candidateList.Length;
-                tileNodeCount[i] = candidateList.Length;
-            }
-
-            Console.WriteLine("Total Nodes =" + g.N + " Nodes Found " + count);
-
-            _lgLayoutSettings.MaxNumberOfNodesPerTile =40;
-            int quota = _lgLayoutSettings.MaxNumberOfNodesPerTile;
-            int[,] costTree = new int[maxtiles, quota + 1];
-            Dictionary<IntPair,List<int>> resultTree = new Dictionary<IntPair,List<int>>();
-            for (int i = 0; i < maxtiles; i++)
-                for (int j = 0; j <= quota; j++) costTree[i, j] = -1;
-            
-            dynamicProgram(0, Math.Min(g.N,quota), costTree, resultTree);
-            bool flowfound = computeEdgeFlow(0, Math.Min(g.N,quota), costTree, resultTree);
-            if(flowfound)
-                Console.WriteLine("A feasible flow found with "+ maxdepth +" layers" );
-            distributeNodes(0, costTree, resultTree, idToNode);
-
-            g.maxTheoreticalZoomLevel = 0;
-            for (int i = 0; i < maxtiles; i++)
-            {
-                foreach (var x in tileNodes[i])
-                {
-                    g.VList[x].ZoomLevel = (int) Math.Pow(2, tileDepth[i]);
-                    _lgData.GeometryNodesToLgNodeInfos[idToNode[x]].ZoomLevel = g.VList[x].ZoomLevel;
-                    if (g.maxTheoreticalZoomLevel < g.VList[x].ZoomLevel)
-                        g.maxTheoreticalZoomLevel = g.VList[x].ZoomLevel;
-                }
-            }
-            
-            foreach (var node in _lgData.SortedLgNodeInfos)
-            {
-                var x = nodeToId[node.GeometryNode];
-                node.ZoomLevel = g.VList[x].ZoomLevel;
-            }
-
-            
-            foreach (var edge in _mainGeometryGraph.Edges){
-                var sourceNodeInfo = _lgData.GeometryNodesToLgNodeInfos[edge.Source];
-                var targetNodeInfo = _lgData.GeometryNodesToLgNodeInfos[edge.Target];
-                _lgData.GeometryEdgesToLgEdgeInfos[edge].Rank = sourceNodeInfo.Rank + targetNodeInfo.Rank;
-                _lgData.GeometryEdgesToLgEdgeInfos[edge].ZoomLevel = Math.Min(sourceNodeInfo.ZoomLevel, targetNodeInfo.ZoomLevel);
-            }
-            /*
-            LevelCalculator.SetEdgesOnLevels(_lgData, _mainGeometryGraph, _lgLayoutSettings);
-            _lgData.Levels.Clear();
-
-            _mainGeometryGraph.UpdateBoundingBox();
-            */
-
-
-
+            ComputeZoomLevelviaFlow(nodeToId, maxX, maxY);
 
 
             stopwatch.Stop();
@@ -998,7 +1040,85 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             return g;
         }
-        
+
+        private void ComputeZoomLevelviaFlow(Dictionary<Node, int> nodeToId, int maxX, int maxY)
+        {
+            id = 0;
+            buildTiles(0, 0, maxX, maxY, 0, 0, 0);
+            Console.WriteLine("Number of tiles =" + id);
+
+            id = 0;
+            int count = 0;
+            RTree<int> TreeOfNodes = new RTree<int>();
+            for (int index = 0; index < g.N; index++)
+            {
+                TreeOfNodes.Add(new Rectangle(new Point(g.VList[index].XLoc, g.VList[index].YLoc)), index);
+            }
+            //nodecount on tiles            
+            for (int i = immediatemaxtiles; i < maxtiles; i++)
+            {
+                if (tileDepth[i] < maxdepth) continue;
+                tileNodes.Add(i, new List<int>());
+                int[] candidateList = TreeOfNodes.GetAllIntersecting(tiles[i]);
+                for (int index = 0; index < candidateList.Length; index++)
+                {
+                    //if (!tileNodes.ContainsKey(i)) tileNodes.Add(i, new List<int>());
+                    tileNodes[i].Add(candidateList[index]);
+                }
+                count += candidateList.Length;
+                tileNodeCount[i] = candidateList.Length;
+            }
+
+            Console.WriteLine("Total Nodes =" + g.N + " Nodes Found " + count);
+
+            _lgLayoutSettings.MaxNumberOfNodesPerTile = 40;
+            int quota = _lgLayoutSettings.MaxNumberOfNodesPerTile;
+            int[,] costTree = new int[maxtiles, quota + 1];
+            Dictionary<IntPair, List<int>> resultTree = new Dictionary<IntPair, List<int>>();
+            for (int i = 0; i < maxtiles; i++)
+                for (int j = 0; j <= quota; j++) costTree[i, j] = -1;
+
+            dynamicProgram(0, Math.Min(g.N, quota), costTree, resultTree);
+            bool flowfound = computeEdgeFlow(0, Math.Min(g.N, quota), costTree, resultTree);
+            if (flowfound)
+                Console.WriteLine("A feasible flow found with " + maxdepth + " layers");
+            distributeNodes(0, costTree, resultTree, idToNode);
+
+            
+            g.maxTheoreticalZoomLevel = 0;
+            for (int i = 0; i < maxtiles; i++)
+            {
+                foreach (var x in tileNodes[i])
+                {                    
+                    //Console.WriteLine("prev,new" + g.VList[x].ZoomLevel + " " + (int)Math.Pow(2, tileDepth[i]));
+                    g.VList[x].ZoomLevel = (int) Math.Pow(2, tileDepth[i]);                    
+                    _lgData.GeometryNodesToLgNodeInfos[idToNode[x]].ZoomLevel = g.VList[x].ZoomLevel;
+                    if (g.maxTheoreticalZoomLevel < g.VList[x].ZoomLevel)
+                        g.maxTheoreticalZoomLevel = g.VList[x].ZoomLevel;
+                }
+            }
+
+            id = 0;            
+            foreach (var e in _mainGeometryGraph.Edges)
+            {
+                if (g.VList[nodeToId[e.Source]].ZoomLevel == 1 &&
+                    g.VList[nodeToId[e.Target]].ZoomLevel == 1) id++;
+            }
+            Console.WriteLine("Number of edges in level 1 =" + id);
+            /*
+            foreach (var node in _lgData.SortedLgNodeInfos)
+            {
+                var x = nodeToId[node.GeometryNode];
+                node.ZoomLevel = g.VList[x].ZoomLevel;
+            }
+            */
+            LevelCalculator.SetEdgesOnLevels(_lgData, _mainGeometryGraph, _lgLayoutSettings);
+            _lgData.Levels.Clear();
+            /*
+            _mainGeometryGraph.UpdateBoundingBox();
+            */
+        }
+
 
         public bool loadBipartiteData()
         {
@@ -2170,8 +2290,11 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             _railGraph.Rails.Clear();
             var level = _lgData.GetCurrentLevelByScale(CurrentZoomLevel);
             //Console.WriteLine(level.ZoomLevel+" ???");
+
             _railGraph.Rails.InsertRange(level.GetRailsIntersectingRect(_visibleRectangle));
-            _railGraph.Nodes.InsertRange(level.GetNodesIntersectingRect(_visibleRectangle));
+            //jyoti: this needs to be fixed - generate labels of top label nodes
+            //_railGraph.Nodes.InsertRange(level.GetNodesIntersectingRect(_visibleRectangle));
+
             _railGraph.Edges.Clear();
             _railGraph.Edges.InsertRange(
                 _railGraph.Rails.Select(r => r.TopRankedEdgeInfoOfTheRail.Edge).Where(IsEdgeVisibleAtCurrentLevel));

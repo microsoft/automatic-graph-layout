@@ -30,7 +30,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         //public double NodeDotWidthInInches = 0.1;
         public double NodeDotWidthInInches = 0.08; //jyoti made it small
         public double NodeDotWidthInInchesMinInImage = 0.06;
-        public double NodeLabelHeightInInches = 0.22;
+        //public double NodeLabelHeightInInches = 0.22;
+        public double NodeLabelHeightInInches = 0.14; //jyoti made it small
 
         /// <summary>
         /// Func giving the maximal arrowhead length for the current viewport

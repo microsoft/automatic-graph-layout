@@ -1730,6 +1730,9 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                     double nodeLabelHeight = _lgLayoutSettings.NodeLabelHeightInInches * DpiY / CurrentScale;
                     double nodeLabelWidth = nodeLabelHeight * vNode.LgNodeInfo.LabelWidthToHeightRatio;
 
+                    //DEBUG: jyoti: Only show zoomlabels
+                    vNode.Node.LabelText = ""+vNode.LgNodeInfo.ZoomLevel;
+
                     if (vNode.LgNodeInfo.LabelVisibleFromScale >= 0 &&
                         vNode.LgNodeInfo.LabelVisibleFromScale <= zf)
                     {
