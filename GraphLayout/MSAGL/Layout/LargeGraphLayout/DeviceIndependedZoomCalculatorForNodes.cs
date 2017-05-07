@@ -38,6 +38,40 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             unassigned = graph.Nodes.Count;
         }
 
+        public void RunAfterFlow( LgData _lgData)
+        {
+            
+            sortedLgNodeInfos = GetSortedLgNodeInfos();
+            Graph.UpdateBoundingBox();
+            
+            double gridSize = Math.Max(Graph.Width, Graph.Height);
+
+            foreach (var node in _lgData.SortedLgNodeInfos)
+            {
+                zoomLevel = (int)node.ZoomLevel;
+                if (zoomLevel == 2) gridSize /= 2.5;
+                if (zoomLevel == 4) gridSize /= 2;
+                if (zoomLevel == 8) gridSize /= 1.5;
+                if (zoomLevel >= 8) gridSize /= 1.25;
+                if (zoomLevel >= 256) gridSize /= 10;
+                DrawNodesOnLevel(gridSize, zoomLevel);
+            }
+            /*
+            zoomLevel = 1;
+
+            while (SomeNodesAreNotAssigned())
+            {
+                Console.WriteLine("zoom level = {0} with the grid size = {1}", zoomLevel, gridSize);
+                DrawNodesOnLevel(gridSize, zoomLevel);
+                zoomLevel *= 2;
+                if (zoomLevel == 2) gridSize /= 2.5;
+                if (zoomLevel == 4) gridSize /= 2;
+                if (zoomLevel == 8) gridSize /= 1.5;
+                if (zoomLevel >= 8) gridSize /= 1.25;
+                if (zoomLevel >= 256) gridSize /= 10;
+                //gridSize /= 2;  //jyoti changed it from 2 to make smooth transition between levels
+            }*/
+        }
         /// <summary>
         /// We expect that the node Ranks are set before the method call.
         /// </summary>

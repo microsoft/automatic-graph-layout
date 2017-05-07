@@ -627,7 +627,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             //processing for leafnode
             if (immediatemaxtiles <= root && root <= maxtiles)
             {
-                if (tileNodeCount[root] < alreadyVisible) return int.MaxValue;
+                if (tileNodeCount[root] < alreadyVisible) return 0;//int.MaxValue;
                 return (tileNodeCount[root] - alreadyVisible) * (tileNodeCount[root] - alreadyVisible);
             }
 
@@ -636,11 +636,11 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             int mink1=0, mink2=0, mink3=0, mink4=0;
             int mincost = int.MaxValue;
             int minrootsum = int.MaxValue;
-            int delta = 1; //control speed and approximation
+            int delta = (int)(_lgLayoutSettings.MaxNumberOfNodesPerTile/15)+1; //control speed and approximation
             //I can choose the rootsome anything between current visible and nodequota
             for (int rootsum = alreadyVisible; rootsum <= _lgLayoutSettings.MaxNumberOfNodesPerTile; rootsum += delta)
             {                
-
+            
                 //distribute the rootsum among the kids approximately
                 for (int k1 = 0; k1 <= rootsum; k1 += delta)
                 {
@@ -689,11 +689,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                         }                        
                     }
                 }                
-                costTree[root, alreadyVisible] = mincost;
-                var p = new IntPair(root, alreadyVisible);
-                if(!resultTree.ContainsKey(p)) resultTree[p] = new List<int>(); 
-                else resultTree[p] = new List<int>(){minrootsum,mink1,mink2,mink3,mink4};
-            }            
+            }
+
+            costTree[root, alreadyVisible] = mincost;           
+            var p = new IntPair(root, alreadyVisible);
+            if (!resultTree.ContainsKey(p)) resultTree[p] = new List<int>();
+            resultTree[p] = new List<int>() { minrootsum, mink1, mink2, mink3, mink4 };
             return mincost;
         }
 
@@ -740,6 +741,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             int k2 = tileEdgeFlow[4 * root + 2];
             int k3 = tileEdgeFlow[4 * root + 3];
             int k4 = tileEdgeFlow[4 * root + 4];
+
+            if(k1+k2+k3+k4 == 0) return;
+
             //shift nodes into layers
             for (int i = 0; i < LA.Length; i++)
             {
@@ -847,7 +851,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             
             dynamicProgram(0, Math.Min(g.N,quota), costTree, resultTree);
             bool flowfound = computeEdgeFlow(0, Math.Min(g.N,quota), costTree, resultTree);
-            Console.WriteLine("A feasible flow found with "+ maxdepth +"layers" );
+            if(flowfound)
+                Console.WriteLine("A feasible flow found with "+ maxdepth +" layers" );
             distributeNodes(0, costTree, resultTree, idToNode);
 
             g.maxTheoreticalZoomLevel = 0;
@@ -855,22 +860,32 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             {
                 foreach (var x in tileNodes[i])
                 {
-                    g.VList[x].ZoomLevel = 1;//(int) Math.Pow(2, tileDepth[i]);
+                    g.VList[x].ZoomLevel = (int) Math.Pow(2, tileDepth[i]);
                     _lgData.GeometryNodesToLgNodeInfos[idToNode[x]].ZoomLevel = g.VList[x].ZoomLevel;
                     if (g.maxTheoreticalZoomLevel < g.VList[x].ZoomLevel)
                         g.maxTheoreticalZoomLevel = g.VList[x].ZoomLevel;
                 }
             }
+            
             foreach (var node in _lgData.SortedLgNodeInfos)
             {
                 var x = nodeToId[node.GeometryNode];
                 node.ZoomLevel = g.VList[x].ZoomLevel;
             }
 
+            
+            foreach (var edge in _mainGeometryGraph.Edges){
+                var sourceNodeInfo = _lgData.GeometryNodesToLgNodeInfos[edge.Source];
+                var targetNodeInfo = _lgData.GeometryNodesToLgNodeInfos[edge.Target];
+                _lgData.GeometryEdgesToLgEdgeInfos[edge].Rank = sourceNodeInfo.Rank + targetNodeInfo.Rank;
+                _lgData.GeometryEdgesToLgEdgeInfos[edge].ZoomLevel = Math.Min(sourceNodeInfo.ZoomLevel, targetNodeInfo.ZoomLevel);
+            }
+            /*
+            LevelCalculator.SetEdgesOnLevels(_lgData, _mainGeometryGraph, _lgLayoutSettings);
+            _lgData.Levels.Clear();
 
-
-
-
+            _mainGeometryGraph.UpdateBoundingBox();
+            */
 
 
 
@@ -983,6 +998,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             return g;
         }
+        
 
         public bool loadBipartiteData()
         {
@@ -1994,7 +2010,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 // todo: currently implemented as if there is only one component
                 LayoutHelpers.CalculateLayout(component, GetMdsLayoutSettings(), _cancelToken);
                 RemoveOverlapsForLgLayout(component);
-
             }
             Rectangle box = component.BoundingBox;
             box.Pad(_lgLayoutSettings.NodeSeparation / 2);

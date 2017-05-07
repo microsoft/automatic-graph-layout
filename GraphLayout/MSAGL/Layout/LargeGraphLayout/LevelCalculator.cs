@@ -40,6 +40,22 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 
 
+        internal static void SetEdgesOnLevels(
+            LgData lgData,
+            GeometryGraph mainGeometryGraph,
+            LgLayoutSettings lgLayoutSettings)
+        {
+            
+            var nodeZoomLevelCalculator =
+                new DeviceIndependendZoomCalculatorForNodes(node => lgData.GeometryNodesToLgNodeInfos[node],
+                                                            mainGeometryGraph, lgLayoutSettings, lgLayoutSettings.MaxNumberOfNodesPerTile);
+
+            nodeZoomLevelCalculator.RunAfterFlow(lgData);
+            lgData.SortedLgNodeInfos = nodeZoomLevelCalculator.SortedLgNodeInfos;
+            lgData.LevelNodeCounts = nodeZoomLevelCalculator.LevelNodeCounts;
+            AssignEdges(lgData, nodeZoomLevelCalculator);
+        }
+
         internal static void SetNodeZoomLevelsAndRouteEdgesOnLevels(
             LgData lgData,
             GeometryGraph mainGeometryGraph,
