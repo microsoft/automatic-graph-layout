@@ -12,6 +12,7 @@ if (!(test-path $targetNugetExe))
 }
 
 Push-Location $PSScriptRoot 
-&$targetNugetExe pack Microsoft.Automatic.Graph.Layout.nuspec
-&$targetNugetExe pack Microsoft.Automatic.Graph.Drawing.nuspec
+&$targetNugetExe pack Microsoft.Msagl.nuspec
+&$targetNugetExe pack Microsoft.Msagl.Drawing.nuspec
+&$targetNugetExe pack Microsoft.Msagl.GraphViewerGDI.nuspec
 Pop-Location
