@@ -364,7 +364,17 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         public IEnumerable<Node> GetNodesIntersectingRect(Rectangle visibleRectangle) {
             return NodeInfoTree.GetAllIntersecting(visibleRectangle).Select(n => n.GeometryNode);
         }
+        public IEnumerable<Node> GetNodesIntersectingRectLabelzero(Rectangle visibleRectangle, double l)
+        {
+            var x =  NodeInfoTree.GetAllIntersecting(visibleRectangle);//.Select(n => n.GeometryNode);
+            List<Node> r = new List<Node>();
+            foreach (var y in x)
+            {
+                if(y.ZoomLevel <= l) r.Add(y.GeometryNode);
 
+            }
+            return r;
+        }
         public bool RectIsEmptyOnLevel(Rectangle tileBox) {
             LgNodeInfo lg;
             return !NodeInfoTree.OneIntersecting(tileBox, out lg);

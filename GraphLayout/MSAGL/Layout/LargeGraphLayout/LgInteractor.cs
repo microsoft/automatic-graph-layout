@@ -435,13 +435,13 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         {
 
             //testflow();
-            /*
+            
             Console.WriteLine();
             Console.WriteLine("Loading a huge graph? (Y/N)");
             string input = Console.ReadLine();
             bool hugeGraph = (input.StartsWith("Y") || input.StartsWith("y"));
-            */
-            bool hugeGraph = true;
+            
+            //bool hugeGraph = true;
             _lgLayoutSettings.MaxNumberOfNodesPerTile = 40;
             //_lgLayoutSettings.MaxNumberOfRailsPerTile = 1000;
             Dictionary<Node, int> nodeToId;
@@ -604,16 +604,16 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
              
         }
 
-        Dictionary<int, List<int>> tileNodes = new Dictionary<int, List<int>>();     
-        //(7,21845) (5,1365)
-        private int maxdepth = 5;
-        private int maxtiles = 1365;
-        private int immediatemaxtiles = 341;
-        private int[] tileNodeCount = new int[1365];
-        private int[] tileEdgeFlow = new int[1365];
-        int[] tileDepth = new int[1365];
+        Dictionary<int, List<int>> tileNodes = new Dictionary<int, List<int>>();
+        //(7,5460,21845) (5,341,1365)
+        private int maxdepth = 7;
+        private int maxtiles = 21845;
+        private int immediatemaxtiles = 5461;
+        private int[] tileNodeCount = new int[21845];
+        private int[] tileEdgeFlow = new int[21845];
+        int[] tileDepth = new int[21845];
         private int id;
-        Rectangle[] tiles = new Rectangle[1365];
+        Rectangle[] tiles = new Rectangle[21845];
 
 
         private void buildTiles( double l, double t,  double r, double b, int depth, int pid, int kid)
@@ -652,6 +652,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             bool d = computeEdgeFlow(4 * root + 4, result[4], costTree, resultTree);
             return a & b & c & d;
         }
+
 
         int dynamicProgram(int root, int alreadyVisible, int[,] costTree, Dictionary<IntPair, List<int>> resultTree)
         {
@@ -781,39 +782,50 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             //shift nodes into layers
             for (int i = 0; i < LA.Length; i++)
             {
-                if (RA[i]<=Math.Pow(2,tileDepth[root]))
+                if (RA[i] <= Math.Pow(2, tileDepth[root]))
                 {
                     tileNodes[root].Add(LA[i]);
-                    if(tileNodes[4 * root + 1].Remove(LA[i]))k1--;
-                    if (tileNodes[4 * root + 2].Remove(LA[i])) k2--;
-                    if (tileNodes[4 * root + 3].Remove(LA[i])) k3--;
-                    if (tileNodes[4 * root + 4].Remove(LA[i])) k4--;
+                    if (tileNodes[4*root + 1].Remove(LA[i])) k1--;
+                    if (tileNodes[4*root + 2].Remove(LA[i])) k2--;
+                    if (tileNodes[4*root + 3].Remove(LA[i])) k3--;
+                    if (tileNodes[4*root + 4].Remove(LA[i])) k4--;
                     continue;
 
                 }
+            }
+            k1 *= 1+(int)Math.Log(root, 4);
+            k2 *= 1 + (int)Math.Log(root, 4);
+            k3 *= 1 + (int)Math.Log(root, 4);
+            k4 *= 1 + (int)Math.Log(root, 4);
+            for (int i = 0; i < LA.Length; i++)
+            {
                 if (tileNodes[4 * root + 1].Contains(LA[i]) && k1 > 0)
                 {
                     tileNodes[root].Add(LA[i]);
                     tileNodes[4 * root + 1].Remove(LA[i]);
                     k1--;
+                    Console.Write(".");
                 }
                 else if (tileNodes[4 * root + 2].Contains(LA[i]) && k2 > 0)
                 {
                     tileNodes[root].Add(LA[i]);
                     tileNodes[4 * root + 2].Remove(LA[i]);
                     k2--;
+                    Console.Write(".");
                 }
                 else if (tileNodes[4 * root + 3].Contains(LA[i]) && k3 > 0)
                 {
                     tileNodes[root].Add(LA[i]);
                     tileNodes[4 * root + 3].Remove(LA[i]);
                     k3--;
+                    Console.Write(".");
                 }
                 else if (tileNodes[4 * root + 4].Contains(LA[i]) && k4 > 0)
                 {
                     tileNodes[root].Add(LA[i]);
                     tileNodes[4 * root + 4].Remove(LA[i]);
                     k4--;
+                    Console.Write(".");
                 }
             }
         }
@@ -875,30 +887,39 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     tileNodes[root].Add(LA[i]);
                     tileNodes[4*root + 1].Remove(LA[i]);
                     k1--;
+                    Console.Write(".");
                 }
                 else if (tileNodes[4 * root + 2].Contains(LA[i]) && k2 > 0)
                 {
                     tileNodes[root].Add(LA[i]);
                     tileNodes[4 * root + 2].Remove(LA[i]);
                     k2--;
+                    Console.Write(".");
                 }
                 else if (tileNodes[4 * root + 3].Contains(LA[i]) && k3 > 0)
                 {
                     tileNodes[root].Add(LA[i]);
                     tileNodes[4 * root + 3].Remove(LA[i]);
                     k3--;
+                    Console.Write(".");
                 }
                 else if (tileNodes[4 * root + 4].Contains(LA[i]) && k4 > 0)
                 {
                     tileNodes[root].Add(LA[i]);
                     tileNodes[4 * root + 4].Remove(LA[i]);
                     k4--;
+                    Console.Write(".");
                 }
             }
         }
         private Tiling TryCompetitionMeshApproach(out Dictionary<Node, int> nodeToId, bool huge_graph)
         {
-            
+
+
+            Console.WriteLine();
+            Console.WriteLine("Use Flow to assign nodes on layers? (Y/N)");
+            string input = Console.ReadLine();
+            bool flow = (input.StartsWith("Y") || input.StartsWith("y"));
 
             //Boolean loaded = LoadNodeLocationsFromFile();
             _mainGeometryGraph.UpdateBoundingBox();
@@ -930,7 +951,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             int maxY;
             var maxX = CreateNodePositions(g, nodeToId, idToNode, out maxY);
 
-            ComputeZoomLevelviaFlow(nodeToId, maxX, maxY);
+            if(flow)
+                ComputeZoomLevelviaFlow(nodeToId, maxX, maxY);
 
 
             stopwatch.Stop();
@@ -1098,6 +1120,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 }
             }
 
+            /*
             id = 0;            
             foreach (var e in _mainGeometryGraph.Edges)
             {
@@ -1105,6 +1128,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     g.VList[nodeToId[e.Target]].ZoomLevel == 1) id++;
             }
             Console.WriteLine("Number of edges in level 1 =" + id);
+             * */
             /*
             foreach (var node in _lgData.SortedLgNodeInfos)
             {
@@ -2290,14 +2314,15 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         {
             _railGraph.Rails.Clear();
             var level = _lgData.GetCurrentLevelByScale(CurrentZoomLevel);
-            //Console.WriteLine(level.ZoomLevel+" ???");
+            Console.WriteLine("current zoomlevel = " +level.ZoomLevel);
             
             _railGraph.Rails.InsertRange(level.GetRailsIntersectingRect(_visibleRectangle));
             
             
             //jyoti: this needs to be fixed - generate labels of top label nodes
             //_railGraph.Nodes.InsertRange(level.GetNodesIntersectingRect(_visibleRectangle));
-            /* //attempt for fix
+            _railGraph.Nodes.InsertRange(level.GetNodesIntersectingRectLabelzero(_visibleRectangle, Math.Pow(2, level.ZoomLevel)));
+            /* //attempt for fix             
             if (forthefirsttime)
             {
                 foreach (var e in level._railsOfEdges.Keys)

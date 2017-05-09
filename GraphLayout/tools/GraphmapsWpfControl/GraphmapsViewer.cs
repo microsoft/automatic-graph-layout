@@ -1418,6 +1418,8 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             CreateOrInvalidateFrameworksElementForVisibleRails(railGraph);
             InvalidateNodesOfRailGraph(nodesFromVectorTiles);
 
+            //DEBUG: jyoti added this to get more labels
+            InvalidateNodesOfRailGraph(requiredNodes);
             /*
             foreach (LgNodeInfo nodeInfo in SelectedNodeSet)
             {
@@ -1731,11 +1733,11 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                     double nodeLabelWidth = nodeLabelHeight * vNode.LgNodeInfo.LabelWidthToHeightRatio;
 
                     //DEBUG: jyoti: Only show zoomlabels
-                    vNode.Node.LabelText = ""+vNode.LgNodeInfo.ZoomLevel;
+                    //vNode.Node.LabelText = ""+vNode.LgNodeInfo.ZoomLevel;
 
                     if (vNode.LgNodeInfo.LabelVisibleFromScale >= 0 &&
                         vNode.LgNodeInfo.LabelVisibleFromScale <= zf
-                        || vNode.LgNodeInfo.ZoomLevel == 0 //jyoti: added this for always getting the top labels
+                        //|| vNode.LgNodeInfo.ZoomLevel == 0 //jyoti: added this for always getting the top labels
                         )
                     {
                         var offset = Point.Scale(nodeLabelWidth + NodeDotWidth * 1.01, nodeLabelHeight + NodeDotWidth * 1.01,
