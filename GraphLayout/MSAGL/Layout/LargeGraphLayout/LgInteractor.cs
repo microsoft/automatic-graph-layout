@@ -260,6 +260,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
         private static void ComputePathSimplification(Tiling g, Stopwatch stopwatch, List<Tiling> graphs)
         {
+            Dictionary<int,int> cycle = new Dictionary<int, int>();
+
             Console.WriteLine("Starting Path Simplicfication");
             stopwatch.Start();
             foreach (Tiling graph in graphs)
@@ -277,6 +279,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     //find the one end of the path
                     int currentVertexId = w;
                     int oldVertexId = -1;
+                    cycle.Add(w,1);
                     while (graph.DegList[currentVertexId] == 2 && currentVertexId >= g.N)
                     {
                         int neighbor1 = graph.EList[currentVertexId, 0].NodeId;
@@ -293,7 +296,14 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                             oldVertexId = currentVertexId;
                             currentVertexId = neighbor2;
                         }
+                        if (cycle.ContainsKey(currentVertexId))
+                        {
+                            cycle.Clear();
+                            break;
+                        }
+                        cycle.Add(currentVertexId, 1);
                     }
+                    if (cycle.Count == 0) continue;
 
                     //find the path from this end 
                     var tempId = oldVertexId;
