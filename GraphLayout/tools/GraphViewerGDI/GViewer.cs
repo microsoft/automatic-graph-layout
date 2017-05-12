@@ -1752,8 +1752,13 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         /// Zooms in
         /// </summary>
         public void ZoomInPressed() {
+            double zoomFractionLocal = ZoomF * ZoomFactor();
+            var scale = CurrentScale * zoomFractionLocal;
+            var d = OriginalGraph != null ? OriginalGraph.BoundingBox.Diagonal : 0;
+            if (d * scale < 5 || d * scale > HugeDiagonal)
+                return;
             ZoomF *= ZoomFactor();
-        }
+    }
 
         /// <summary>
         /// Zooms out
