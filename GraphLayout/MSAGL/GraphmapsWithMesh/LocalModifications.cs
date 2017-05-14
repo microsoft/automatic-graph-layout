@@ -10,7 +10,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
     {
 
         public static void MsaglShortcutShortEdges(Tiling g, Dictionary<int, Node> idToNodes,
-            LgLayoutSettings _lgLayoutSettings, bool hugeGraph)
+            LgLayoutSettings _lgLayoutSettings)
         {
             int unit = (int)_lgLayoutSettings.NodeSeparation ;
 
@@ -20,7 +20,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             //Console.WriteLine();
             //Console.WriteLine("Minimize the number of railes for quick interaction? (Y/N)");
             //string input = Console.ReadLine();
-            if (hugeGraph)
+            if (_lgLayoutSettings.hugeGraph)
             {
                 iteration = 1;
                 unit *= 5;
@@ -92,7 +92,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             Console.WriteLine("Shortcut made for " + shortcutcount + " edges");
         }
 
-        public static void MsaglMoveToMedian(Tiling g, Dictionary<int, Node> idToNodes, LgLayoutSettings _lgLayoutSettings, bool hugeGraph)
+        public static void MsaglMoveToMedian(Tiling g, Dictionary<int, Node> idToNodes, LgLayoutSettings _lgLayoutSettings)
         {
 
             //foreach point first produce the crossing candidates.
@@ -109,7 +109,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             //int offset = iteration * 2;
             int unit = (int)_lgLayoutSettings.NodeSeparation/2;
 
-            if (hugeGraph)
+            if (_lgLayoutSettings.hugeGraph)
             {
                 iteration = 3;
                 unit = (int)_lgLayoutSettings.NodeSeparation;

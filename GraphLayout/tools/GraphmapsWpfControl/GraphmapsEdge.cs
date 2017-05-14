@@ -378,10 +378,15 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             }
             else
             {
+                //jyoti: changed rail colors
                 if (rail.MinPassingEdgeZoomLevel <= 1) brush = Brushes.LightSkyBlue.Color; //Brushes.DimGray.Color;
                 else if (rail.MinPassingEdgeZoomLevel <= 2)
+                    brush = Brushes.LightSteelBlue.Color; //Brushes.SlateGray.Color;
+                else if (rail.MinPassingEdgeZoomLevel <= 3)
                     brush = Brushes.LightGoldenrodYellow.Color; //Brushes.SlateGray.Color;
-                else brush = Brushes.WhiteSmoke.Color; //Brushes.Gray.Color;
+                else if (rail.MinPassingEdgeZoomLevel <= 4)
+                    brush = Brushes.WhiteSmoke.Color; //Brushes.SlateGray.Color;
+                else brush = Brushes.LightGray.Color; //Brushes.Gray.Color;
             }
 
             brush.A = 100;

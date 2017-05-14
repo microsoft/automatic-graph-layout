@@ -49,8 +49,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         readonly LgData _lgData;
         readonly LgLayoutSettings _lgLayoutSettings;
         readonly CancelToken _cancelToken;
-        readonly GeometryGraph _mainGeometryGraph;
-
+        readonly GeometryGraph _mainGeometryGraph;        
         public Tiling g;
 
         Dictionary<Point, int> PointToId = new Dictionary<Point, int>();
@@ -401,64 +400,49 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             }
         }
 
-        public void testflow()
+        public bool PromptUserforGraphSize()
         {
-            MinCostMaxFlow flow = new MinCostMaxFlow();
-            int[,] cap =
-            {
-                {0, 3, 4, 5, 0},
-                {0, 0, 2, 0, 0},
-                {0, 0, 0, 4, 1},
-                {0, 0, 0, 0, 10},
-                {0, 0, 0, 0, 0}
-            };
-
-            int[,] cost1 =
-            {
-                {0, 1, 0, 0, 0},
-                {0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0}
-            };
-
-            int[,] cost2 =
-            {
-                {0, 0, 1, 0, 0},
-                {0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0}
-            };
-
-            // should print out:
-            //   10 1
-            //   10 3
-
-            int[] ret1 = flow.getMaxFlow(cap, cost1, 0, 4);
-            int[] ret2 = flow.getMaxFlow(cap, cost2, 0, 4);
-
-            Console.WriteLine(ret1[0] + " " + ret1[1]);
-            Console.WriteLine(ret2[0] + " " + ret2[1]);
-        }
-        public void RunForMsaglFiles()
-        {
-
-            //testflow();
-            
             Console.WriteLine();
             Console.WriteLine("Loading a huge graph? (Y/N)");
             string input = Console.ReadLine();
-            bool hugeGraph = (input.StartsWith("Y") || input.StartsWith("y"));
-            
-            //bool hugeGraph = true;
+            return (input.StartsWith("Y") || input.StartsWith("y"));            
+        }
+        public bool PromptUserforFlow()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Use Flow to assign nodes on layers? (Y/N)");
+            string input = Console.ReadLine();
+            return (input.StartsWith("Y") || input.StartsWith("y"));            
+        }
+
+        void SetControlVariables()
+        {
+            //control the density at each label
             _lgLayoutSettings.MaxNumberOfNodesPerTile = 40;
-            //_lgLayoutSettings.MaxNumberOfRailsPerTile = 1000;
+            //delta = 1 (higher than 1) will give exact (fast approximate) flow 
+            //control speed and approximation
+            _lgLayoutSettings.delta = (_lgLayoutSettings.MaxNumberOfNodesPerTile / 15) + 1;             
+
+        }
+             
+        public void RunForMsaglFiles()
+        {
+           
+            //ask user
+            _lgLayoutSettings.hugeGraph = PromptUserforGraphSize();
+            _lgLayoutSettings.flow = PromptUserforFlow();
+
+            //set control variables
+            SetControlVariables();
+            
+            
             Dictionary<Node, int> nodeToId;
-            var g = TryCompetitionMeshApproach(out nodeToId, hugeGraph);
+            var g = TryCompetitionMeshApproach(out nodeToId);
 
             var stopwatch = new Stopwatch();
-            Tiling[] graphs = calculateGraphsForEachZoomLevel(g, nodeToId, hugeGraph);
+            Tiling[] graphs = calculateGraphsForEachZoomLevel(g, nodeToId, _lgLayoutSettings.hugeGraph);
+            
+            
             stopwatch.Start();
             DrawAtEachLevelQuotaBounded(graphs, nodeToId);
             //DrawAtEachLevelQuotaSatisfied(graphs, nodeToId);
@@ -466,14 +450,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             Console.WriteLine("Time for DrawAtEachLevelQuotaBounded = " + stopwatch.ElapsedMilliseconds);
             Console.WriteLine("Total Number of Rails = " + _lgData.Levels[_lgData.Levels.Count-1].RailDictionary.Values.Count);
 
-
-
             //g = graphs[0];
             //RenderGraph( g,   nodeToId);
 
         }
 
-        ///*
+ 
         public void DrawAtEachLevelQuotaBounded(Tiling[] g, Dictionary<Node, int> nodeToId)
         {
 
@@ -546,7 +528,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             Console.WriteLine("MAX Num of Level " + layer);
             
         }
-        //*/
+  
          
         public void DrawAtEachLevelQuotaSatisfied(Tiling[] g, Dictionary<Node, int> nodeToId)
         {
@@ -679,18 +661,17 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             int mink1=0, mink2=0, mink3=0, mink4=0;
             int mincost = int.MaxValue;
             int minrootsum = int.MaxValue;
-            int delta = (int)(_lgLayoutSettings.MaxNumberOfNodesPerTile/15)+1; //control speed and approximation
             //I can choose the rootsome anything between current visible and nodequota
-            for (int rootsum = alreadyVisible; rootsum <= _lgLayoutSettings.MaxNumberOfNodesPerTile; rootsum += delta)
+            for (int rootsum = alreadyVisible; rootsum <= _lgLayoutSettings.MaxNumberOfNodesPerTile; rootsum += _lgLayoutSettings.delta)
             {                
             
                 //distribute the rootsum among the kids approximately
-                for (int k1 = 0; k1 <= rootsum; k1 += delta)
+                for (int k1 = 0; k1 <= rootsum; k1 += _lgLayoutSettings.delta)
                 {
-                    for (int k2 = 0; k2 <= rootsum; k2 += delta)
+                    for (int k2 = 0; k2 <= rootsum; k2 += _lgLayoutSettings.delta)
                     {
                         if (rootsum < (k1 + k2)) break;
-                        for (int k3 = 0; k3 <= rootsum; k3 += delta)
+                        for (int k3 = 0; k3 <= rootsum; k3 += _lgLayoutSettings.delta)
                         {
                             int k4 = rootsum - (k1 + k2 + k3);
                             if (k4 < 0) break;
@@ -922,14 +903,10 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 }
             }
         }
-        private Tiling TryCompetitionMeshApproach(out Dictionary<Node, int> nodeToId, bool huge_graph)
+        private Tiling TryCompetitionMeshApproach(out Dictionary<Node, int> nodeToId)
         {
 
 
-            Console.WriteLine();
-            Console.WriteLine("Use Flow to assign nodes on layers? (Y/N)");
-            string input = Console.ReadLine();
-            bool flow = (input.StartsWith("Y") || input.StartsWith("y"));
 
             //Boolean loaded = LoadNodeLocationsFromFile();
             _mainGeometryGraph.UpdateBoundingBox();
@@ -961,7 +938,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             int maxY;
             var maxX = CreateNodePositions(g, nodeToId, idToNode, out maxY);
 
-            if(flow)
+            if (_lgLayoutSettings.flow)
                 ComputeZoomLevelviaFlow(nodeToId, maxX, maxY);
 
 
@@ -1015,8 +992,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             //var AdjacencyList = BuildAdjacencyListFromEdgeList();
             //Dictionary<Node, List<Edge>> AdjacencyList = null; // BuildAdjacencyListFromEdgeList();
 
-            for (int iteration = 1; iteration < 2; iteration++)
-            {
+            //for (int iteration = 1; iteration < 2; iteration++)
+            //{
 
 
 
@@ -1058,23 +1035,25 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 //Console.WriteLine("Moving junctions to minimize ink");
                 stopwatch.Start();
                 //LocalModifications.MsaglStretchAccordingToZoomLevel(g, idToNode);
-                LocalModifications.MsaglMoveToMedian(g, idToNode, _lgLayoutSettings, huge_graph);
+                LocalModifications.MsaglMoveToMedian(g, idToNode, _lgLayoutSettings);
                 stopwatch.Stop();
                 Console.WriteLine("Ink Minimization Time = " + stopwatch.ElapsedMilliseconds);
 
-                LocalModifications.MsaglShortcutShortEdges(g, idToNode, _lgLayoutSettings, huge_graph);                
+                LocalModifications.MsaglShortcutShortEdges(g, idToNode, _lgLayoutSettings);                
 
                 g.MsaglRemoveDeg2(idToNode);
 
-                LocalModifications.MsaglMoveToMedian(g, idToNode, _lgLayoutSettings, huge_graph);
+                LocalModifications.MsaglMoveToMedian(g, idToNode, _lgLayoutSettings);
                 
-            }
+            //}
 
             return g;
         }
 
         private void ComputeZoomLevelviaFlow(Dictionary<Node, int> nodeToId, int maxX, int maxY)
         {
+
+            Console.WriteLine("Assign Nodes to zoomlevels via Flow. Increase delta for faster computation.");
             id = 0;
             buildTiles(0, 0, maxX, maxY, 0, 0, 0);
             Console.WriteLine("Number of tiles =" + id);
@@ -1103,7 +1082,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             Console.WriteLine("Total Nodes =" + g.N + " Nodes Found " + count);
 
-            _lgLayoutSettings.MaxNumberOfNodesPerTile = 40;
             int quota = _lgLayoutSettings.MaxNumberOfNodesPerTile;
             int[,] costTree = new int[maxtiles, quota + 1];
             Dictionary<IntPair, List<int>> resultTree = new Dictionary<IntPair, List<int>>();

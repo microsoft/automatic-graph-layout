@@ -19,6 +19,10 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         public double mainGeometryGraphWidth;
         public double mainGeometryGraphHeight;
         public GeometryGraph _geometryGraph;
+        public bool hugeGraph;
+        public bool flow;
+        public int delta;
+
 
         internal readonly Func<PlaneTransformation> TransformFromGraphToScreen;
         internal readonly double DpiX;
