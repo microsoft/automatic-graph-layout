@@ -599,6 +599,21 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             }
         }
 
+        void zoomout(double x)
+        {
+            SetInitialTransform();
+            return;
+            if (Graph == null || searchnode == null) return;
+            LgNodeInfo nodeInfo = _stringFinder.Find(searchnode);
+            if (nodeInfo != null)
+                ZoomToNodeInfo(nodeInfo);
+
+            var scale = Math.Min(CurrentScale, x);
+            var vp = new Rectangle(new Point(0, 0),
+                new Point(_graphCanvas.RenderSize.Width, _graphCanvas.RenderSize.Height));
+            SetTransformOnViewport(scale, nodeInfo.Center, vp);            
+        }
+
         void GraphCanvasKeyDown(object sender, KeyEventArgs e)
         {
             // make sure _graphViewer has focus by calling Keyboard.Focus(_graphCanvas) OnMouseDown
@@ -620,6 +635,41 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             else if (e.Key == Key.End)
             {
                 ClearSelection();
+                ViewChangeEvent(null, null);
+            }
+            else if (e.Key == Key.Space)
+            {
+                zoomout(.5);
+                ViewChangeEvent(null, null);
+            }
+            else if (e.Key == Key.NumPad1)
+            {
+                zoomout(1);
+                ViewChangeEvent(null, null);
+            }
+            else if (e.Key == Key.NumPad2)
+            {
+                zoomout(2);
+                ViewChangeEvent(null, null);
+            }
+            else if (e.Key == Key.NumPad3)
+            {
+                zoomout(3);
+                ViewChangeEvent(null, null);
+            }
+            else if (e.Key == Key.NumPad4)
+            {
+                zoomout(4);
+                ViewChangeEvent(null, null);
+            }
+            else if (e.Key == Key.NumPad5)
+            {
+                zoomout(5);
+                ViewChangeEvent(null, null);
+            }
+            else if (e.Key == Key.NumPad6)
+            {
+                zoomout(6);
                 ViewChangeEvent(null, null);
             }
             else if (e.Key == Key.Q)
@@ -3455,8 +3505,10 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             return grids;
         }
 
+        public string searchnode;
         public void FindNodeAndSelectIt(string text)
         {
+            searchnode = text;
             //MessageBox.Show(String.Format("I am searching for {0}", text));
             if (Graph == null) return;
             LgNodeInfo nodeInfo = _stringFinder.Find(text);

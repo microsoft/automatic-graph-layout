@@ -418,10 +418,16 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         void SetControlVariables()
         {
             //control the density at each label
-            _lgLayoutSettings.MaxNumberOfNodesPerTile = 40;
+            if(_mainGeometryGraph.Edges.Count>= 5000)
+                _lgLayoutSettings.MaxNumberOfNodesPerTile = 20;
+            else if (_mainGeometryGraph.Edges.Count >= 3000)
+                _lgLayoutSettings.MaxNumberOfNodesPerTile = 30;
+            else
+                _lgLayoutSettings.MaxNumberOfNodesPerTile = 40;
+
             //delta = 1 (higher than 1) will give exact (fast approximate) flow 
             //control speed and approximation
-            _lgLayoutSettings.delta = (_lgLayoutSettings.MaxNumberOfNodesPerTile / 15) + 1;             
+            _lgLayoutSettings.delta = (_lgLayoutSettings.MaxNumberOfNodesPerTile / 8) + 1;             
 
         }
              
@@ -429,8 +435,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         {
            
             //ask user
-            _lgLayoutSettings.hugeGraph = PromptUserforGraphSize();
-            _lgLayoutSettings.flow = PromptUserforFlow();
+            Console.WriteLine("Running in Default Settings - Enable UserPrompt in LgInteractor if needed.");
+            _lgLayoutSettings.hugeGraph = true; //PromptUserforGraphSize();
+            _lgLayoutSettings.flow = true;// PromptUserforFlow();
 
             //set control variables
             SetControlVariables();

@@ -338,11 +338,19 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             double thickness = 1.0;
             if (rail.TopRankedEdgeInfoOfTheRail != null)
             {
-                thickness = Math.Max(5 - Math.Log(rail.MinPassingEdgeZoomLevel, 2), 1);
+                thickness = Math.Max(5 - Math.Log(rail.MinPassingEdgeZoomLevel, 1.5), 1);
             }
 
             path.StrokeThickness = thickness * PathStrokeThickness / 2; // todo : figure out a way to do it nicer than dividing by 2
 
+            //jyoti added this to make the selected edges prominent
+            if (rail.IsHighlighted)
+            {
+                thickness = 2.5;
+                path.StrokeThickness = thickness * PathStrokeThickness / 2;
+            }
+            /////////////////
+            
             foreach (var style in Edge.Attr.Styles) {
                 if (style == Drawing.Style.Dotted) {
                     path.StrokeDashArray = new DoubleCollection {1, 1};
@@ -373,8 +381,19 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
             if (lgSettings != null)
             {
+                /*
                 var col = lgSettings.GetColorForZoomLevel(rail.MinPassingEdgeZoomLevel);
                 brush = ((SolidColorBrush)(new BrushConverter().ConvertFrom(col))).Color;
+                 */
+                //jyoti: changed rail colors
+                if (rail.MinPassingEdgeZoomLevel <= 1) brush = Brushes.LightSkyBlue.Color; //Brushes.DimGray.Color;
+                else if (rail.MinPassingEdgeZoomLevel <= 2)
+                    brush = Brushes.LightSkyBlue.Color; //Brushes.SlateGray.Color;
+                else if (rail.MinPassingEdgeZoomLevel <= 3)
+                    brush = Brushes.LightGoldenrodYellow.Color; //Brushes.SlateGray.Color;
+                else if (rail.MinPassingEdgeZoomLevel <= 4)
+                    brush = Brushes.WhiteSmoke.Color; //Brushes.SlateGray.Color;
+                else brush = Brushes.LightGray.Color; //Brushes.Gray.Color;
             }
             else
             {
