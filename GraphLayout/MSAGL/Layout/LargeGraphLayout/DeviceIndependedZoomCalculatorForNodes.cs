@@ -38,6 +38,29 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             unassigned = graph.Nodes.Count;
         }
 
+        public void RunAfterFlow( LgData _lgData)
+        {
+            
+            sortedLgNodeInfos = GetSortedLgNodeInfos2();
+            Graph.UpdateBoundingBox();
+            
+            double gridSize = Math.Max(Graph.Width, Graph.Height);
+
+            zoomLevel = 1;
+
+            while (SomeNodesAreNotAssigned())
+            {
+                Console.WriteLine("zoom level = {0} with the grid size = {1}", zoomLevel, gridSize);
+                DrawNodesOnLevel2(gridSize, zoomLevel);
+                zoomLevel *= 2;
+                if (zoomLevel == 2) gridSize /= 2.5;
+                if (zoomLevel == 4) gridSize /= 2;
+                if (zoomLevel == 8) gridSize /= 1.5;
+                if (zoomLevel >= 8) gridSize /= 1.25;
+                if (zoomLevel >= 256) gridSize /= 10;
+                //gridSize /= 2;  //jyoti changed it from 2 to make smooth transition between levels
+            }
+        }
         /// <summary>
         /// We expect that the node Ranks are set before the method call.
         /// </summary>
@@ -49,9 +72,14 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             while ( SomeNodesAreNotAssigned()) {
                 Console.WriteLine("zoom level = {0} with the grid size = {1}", zoomLevel, gridSize);
-                DrawNodesOnLevel(gridSize);
+                DrawNodesOnLevel(gridSize, zoomLevel);
                 zoomLevel *= 2;
-                gridSize /= 2;
+                if (zoomLevel == 2) gridSize /= 2.5;
+                if (zoomLevel == 4) gridSize /= 2;
+                if (zoomLevel == 8) gridSize /= 1.5;
+                if (zoomLevel >= 8) gridSize /= 1.25;
+                if (zoomLevel >= 256) gridSize /= 10; 
+                //gridSize /= 2;  //jyoti changed it from 2 to make smooth transition between levels
             }
         }
 
@@ -59,12 +87,74 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         {
             var dx = point.X - graphLeftBottom.X;
             var dy = point.Y - graphLeftBottom.Y;
-
+            
             return new Tuple<int, int>((int)(dx / gridSize), (int)(dy / gridSize));
         }
 
 
-        void DrawNodesOnLevel(double gridSize) {
+        void DrawNodesOnLevel2(double gridSize, int currentLevel)
+        {
+            int[] nodeBoundPerLevel = new int[530];
+            nodeBoundPerLevel[1] = 40;
+            nodeBoundPerLevel[2] = 30;
+            nodeBoundPerLevel[4] = 20;
+            nodeBoundPerLevel[8] = 10;
+            nodeBoundPerLevel[16] = 5;
+            nodeBoundPerLevel[32] = 5;
+            nodeBoundPerLevel[64] = 5;
+            nodeBoundPerLevel[128] = 20;
+            nodeBoundPerLevel[256] = 1000;
+
+
+            var tileTable = new Dictionary<Tuple<int, int>, int>();
+            for (int i = 0; i < sortedLgNodeInfos.Count; i++)
+            {
+                var ni = sortedLgNodeInfos[i];
+                var tuple = PointToTuple(Graph.LeftBottom, ni.Center, gridSize);
+                if (!tileTable.ContainsKey(tuple))
+                    tileTable[tuple] = 0;
+
+                int countForTile = tileTable[tuple]++ + 1;
+                //if (countForTile > nodeBoundPerLevel[currentLevel])
+                if (countForTile > maxAmountPerTile)
+                {
+                    _levelNodeCounts.Add(i);
+                    break;
+                }
+
+                if (ni.ZoomLevel == zoomLevel)
+                {
+                    //ni.ZoomLevel = zoomLevel;
+                    unassigned--;
+                }
+
+                if (unassigned == 0)
+                {
+                    _levelNodeCounts.Add(i + 1);
+                    break;
+                }
+
+                if (zoomLevel > 32)
+                {
+                    unassigned = 0;
+                    break;
+                }
+            }
+
+        }
+        void DrawNodesOnLevel(double gridSize, int currentLevel) {
+            int []nodeBoundPerLevel = new int[530];
+            nodeBoundPerLevel[1] = 40;
+            nodeBoundPerLevel[2] = 30;
+            nodeBoundPerLevel[4] = 20;
+            nodeBoundPerLevel[8] = 10;
+            nodeBoundPerLevel[16] = 5;
+            nodeBoundPerLevel[32] = 5;
+            nodeBoundPerLevel[64] = 5;
+            nodeBoundPerLevel[128] = 20;
+            nodeBoundPerLevel[256] = 1000;
+ 
+
             var tileTable = new Dictionary<Tuple<int, int>, int>();
             for (int i = 0; i < sortedLgNodeInfos.Count; i++) {
                 var ni = sortedLgNodeInfos[i];
@@ -73,7 +163,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     tileTable[tuple] = 0;
 
                 int countForTile = tileTable[tuple]++ + 1;
-                if (countForTile > maxAmountPerTile) {
+                //if (countForTile > nodeBoundPerLevel[currentLevel])
+                if (countForTile > maxAmountPerTile)
+                    {
                     _levelNodeCounts.Add(i);
                     break;
                 }
@@ -113,6 +205,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             return ret;
         }
 
+        List<LgNodeInfo> GetSortedLgNodeInfos2()
+        {
+            var ret = Graph.Nodes.Select(n => NodeToLgNodeInfo(n)).ToList();
+            ret.Sort((a, b) => b.ZoomLevel.CompareTo(a.ZoomLevel));
+            return ret;
+        }
 
 #if DEBUG
 

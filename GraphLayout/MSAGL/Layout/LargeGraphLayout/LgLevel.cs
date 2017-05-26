@@ -177,11 +177,170 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             _railDictionary.Remove(new SymmetricSegment(p0, p1));
         }
 
+        internal bool PrintQuota(IEnumerable<Node> nodes, int NodeQuota, int RailQuota)
+        {
+            //Console.WriteLine("running stats "+nodes.Count());
+            tileTableForStatistic.Clear();
+            foreach (var rail in _railDictionary.Values)
+                if (rail.ZoomLevel == ZoomLevel)
+                    CreateStatisticsForRail(rail);
+
+            RunStatisticsForNodes(nodes);
+
+
+            int maxVerticesPerTile = 0;
+            int maxRailsPerTile = 0;
+
+            foreach (var tileStatistic in tileTableForStatistic.Values)
+            {
+                if (maxRailsPerTile < tileStatistic.rails)
+                    maxRailsPerTile = tileStatistic.rails;
+                if (maxVerticesPerTile < tileStatistic.vertices)
+                    maxVerticesPerTile = tileStatistic.vertices;
+            }
+
+            Console.WriteLine("max rails per tile {0}\n" + "max verts per tile {1}.\n", maxRailsPerTile, maxVerticesPerTile);
+
+            if (maxVerticesPerTile <= NodeQuota && maxRailsPerTile <= RailQuota) return true;
+            //if ( maxRailsPerTile <= RailQuota) return true;
+            return false;
+        }
+
+        internal bool QuotaSatisfied(IEnumerable<Node> nodes, int NodeQuota, int RailQuota)
+        {
+            //Console.WriteLine("running stats "+nodes.Count());
+            tileTableForStatistic.Clear();
+            foreach (var rail in _railDictionary.Values)
+                if (rail.ZoomLevel == ZoomLevel)
+                    CreateStatisticsForRail(rail);
+ 
+            RunStatisticsForNodes(nodes);
+
+ 
+            int maxVerticesPerTile = 0;
+            int maxRailsPerTile = 0;
+ 
+            foreach (var tileStatistic in tileTableForStatistic.Values)
+            {
+                 if (maxRailsPerTile < tileStatistic.rails)
+                    maxRailsPerTile = tileStatistic.rails;
+                if (maxVerticesPerTile < tileStatistic.vertices)
+                    maxVerticesPerTile = tileStatistic.vertices;
+             }
+             
+            
+
+            //if (maxVerticesPerTile <= NodeQuota && maxRailsPerTile <= RailQuota) return true;
+            if ( maxRailsPerTile <= RailQuota) 
+                return true;
+            
+            Console.WriteLine("max rails per tile {0}\n" + "max verts per tile {1}.\n", maxRailsPerTile, maxVerticesPerTile);
+            return false;
+        }
+
         #region Statistics
+
+        internal void RunLevelStatistics(IEnumerable<Node> nodes) {
+            Console.WriteLine("running stats");
+
+            foreach (var rail in _railDictionary.Values)
+                CreateStatisticsForRail(rail);
+
+            RunStatisticsForNodes(nodes);
+
+            double numberOfTiles = (double) ZoomLevel*ZoomLevel;
+            double averageRailsForTile = 0;
+            double averageVerticesForTile = 0;
+
+            int maxVerticesPerTile = 0;
+            int maxRailsPerTile = 0;
+            int maxTotalPerTile = 0;
+
+            foreach (var tileStatistic in tileTableForStatistic.Values) {
+                averageVerticesForTile += tileStatistic.vertices/numberOfTiles;
+                averageRailsForTile += tileStatistic.rails/numberOfTiles;
+                if (maxRailsPerTile < tileStatistic.rails)
+                    maxRailsPerTile = tileStatistic.rails;
+                if (maxVerticesPerTile < tileStatistic.vertices)
+                    maxVerticesPerTile = tileStatistic.vertices;
+                if (maxTotalPerTile < tileStatistic.vertices + tileStatistic.rails)
+                    maxTotalPerTile = tileStatistic.vertices + tileStatistic.rails;
+            }
+
+            Console.WriteLine("level {0}: average rails per tile {1}\n" +
+                              "average verts per tile {2}, total average per tile {1}.\n", ZoomLevel,
+                averageRailsForTile, averageVerticesForTile);
+
+            Console.WriteLine("max rails per tile {0}\n" +
+                              "max verts per tile {1}, total max per tile {2}.\n", maxRailsPerTile,
+                maxVerticesPerTile, maxTotalPerTile);
+
+            Console.WriteLine("done with stats");
+        }
+ 
+
+        void RunStatisticsForNodes(IEnumerable<Node> nodes) {
+            foreach (var node in nodes)
+            {
+                CreateStatisticsForNode(node);
+            }
+        }
+
+        void CreateStatisticsForNode(Node node) {
+            foreach (var tile in GetCurveTiles(node.BoundaryCurve))
+                tile.vertices++;
+
+        }
+
+        void CreateStatisticsForRail(Rail rail) {
+            var arrowhead = rail.Geometry as Arrowhead;
+            if (arrowhead != null)
+                CreateStatisticsForArrowhead(arrowhead);
+            else
+                foreach (var t in GetCurveTiles(rail.Geometry as ICurve))
+                    t.rails++;
+        }
+
+        void CreateStatisticsForArrowhead(Arrowhead arrowhead) {
+            TileStatistic tile = GetOrCreateTileStatistic(arrowhead.TipPosition);
+            tile.rails++;
+        }
+
+        TileStatistic GetOrCreateTileStatistic(Point p) {
+            Tuple<int, int> t = DeviceIndependendZoomCalculatorForNodes.PointToTuple(_geomGraph.LeftBottom, p,
+                GetGridSize());
+            TileStatistic ts;
+            if (tileTableForStatistic.TryGetValue(t, out ts))
+                return ts;
+
+            tileTableForStatistic[t] = ts = new TileStatistic {rails = 0, vertices = 0};
+            return ts;
+        }
+
+        IEnumerable<TileStatistic> GetCurveTiles(ICurve curve) {
+            var tiles = new Set<TileStatistic>();
+            const int n = 64;
+            var s = curve.ParStart;
+            var e = curve.ParEnd;
+            var d = (e - s)/(n - 1);
+            for (int i = 0; i < 64; i++) {
+                var t = s + i*d;
+                var ts = GetOrCreateTileStatistic(curve[t]);
+                tiles.Insert(ts);
+            }
+            return tiles;
+        }
 
         class TileStatistic {
             public int vertices;
             public int rails;
+        }
+        readonly Dictionary<Tuple<int, int>, TileStatistic> tileTableForStatistic =
+           new Dictionary<Tuple<int, int>, TileStatistic>();
+
+        double GetGridSize()
+        {
+            return Math.Max(_geomGraph.Width, _geomGraph.Height) / ZoomLevel;
         }
 
         #endregion
@@ -205,7 +364,17 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         public IEnumerable<Node> GetNodesIntersectingRect(Rectangle visibleRectangle) {
             return NodeInfoTree.GetAllIntersecting(visibleRectangle).Select(n => n.GeometryNode);
         }
+        public IEnumerable<Node> GetNodesIntersectingRectLabelzero(Rectangle visibleRectangle, double l)
+        {
+            var x =  NodeInfoTree.GetAllIntersecting(visibleRectangle);//.Select(n => n.GeometryNode);
+            List<Node> r = new List<Node>();
+            foreach (var y in x)
+            {
+                if(y.ZoomLevel <= l) r.Add(y.GeometryNode);
 
+            }
+            return r;
+        }
         public bool RectIsEmptyOnLevel(Rectangle tileBox) {
             LgNodeInfo lg;
             return !NodeInfoTree.OneIntersecting(tileBox, out lg);

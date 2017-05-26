@@ -16,12 +16,14 @@ using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Layout.Layered;
 using Microsoft.Msagl.Layout.MDS;
 
-namespace  Microsoft.Msagl.DebugHelpers.Persistence {
+namespace Microsoft.Msagl.DebugHelpers.Persistence
+{
     /// <summary>
     /// writes a GeometryGraph to a stream
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "GraphWriter")]
-    public class GeometryGraphWriter {
+    public class GeometryGraphWriter
+    {
         const string FileExtension = ".msagl.geom";
         Dictionary<Node, string> nodeIds = new Dictionary<Node, string>();
         Dictionary<Edge, int> edgeIds = new Dictionary<Edge, int>();
@@ -39,11 +41,12 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
         /// <param name="streamPar">the stream to write the graph into</param>
         /// <param name="graphP">the graph</param>
         /// <param name="settings">The settings to be written.</param>
-        public GeometryGraphWriter(Stream streamPar, GeometryGraph graphP, LayoutAlgorithmSettings settings) {
+        public GeometryGraphWriter(Stream streamPar, GeometryGraph graphP, LayoutAlgorithmSettings settings)
+        {
             stream = streamPar;
             Graph = graphP;
             Settings = settings;
-            var xmlWriterSettings = new XmlWriterSettings {Indent = true};
+            var xmlWriterSettings = new XmlWriterSettings { Indent = true };
             XmlWriter = XmlWriter.Create(stream, xmlWriterSettings);
             EdgeEnumeration = graphP.Edges;
         }
@@ -51,21 +54,23 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
         /// <summary>
         /// an empty constructor
         /// </summary>
-        public GeometryGraphWriter() {}
+        public GeometryGraphWriter() { }
 
         /// <summary>
         /// if set to true then the XmlWriter will be closed after the graph writing
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly")]
-        public bool NeedToCloseXmlWriter {
-             get { return needToCloseXmlWriter; }
+        public bool NeedToCloseXmlWriter
+        {
+            get { return needToCloseXmlWriter; }
             set { needToCloseXmlWriter = value; }
         }
 
         /// <summary>
         /// the stream to write the graph into
         /// </summary>
-        public Stream Stream {
+        public Stream Stream
+        {
             get { return stream; }
             set { stream = value; }
         }
@@ -74,12 +79,13 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
         /// 
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly")]
-        public XmlWriter XmlWriter {  get; set; }
+        public XmlWriter XmlWriter { get; set; }
 
         /// <summary>
         /// the graph
         /// </summary>
-        public GeometryGraph Graph {
+        public GeometryGraph Graph
+        {
             get { return graph; }
             set { graph = value; }
         }
@@ -92,7 +98,8 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
         /// <summary>
         /// saves the graph to a file
         /// </summary>
-        public static void Write(GeometryGraph graph, string fileName) {
+        public static void Write(GeometryGraph graph, string fileName)
+        {
             Write(graph, null, fileName);
         }
 
@@ -103,13 +110,15 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
             MessageId = "System.String.EndsWith(System.String,System.StringComparison)"),
          SuppressMessage("Microsoft.Globalization", "CA1309:UseOrdinalStringComparison",
              MessageId = "System.String.EndsWith(System.String,System.Boolean,System.Globalization.CultureInfo)")]
-        public static void Write(GeometryGraph graph, LayoutAlgorithmSettings settings, string fileName) {
+        public static void Write(GeometryGraph graph, LayoutAlgorithmSettings settings, string fileName)
+        {
             if (fileName == null) return;
-            
+
             if (!fileName.EndsWith(FileExtension, StringComparison.InvariantCultureIgnoreCase))
                 fileName += FileExtension;
 
-            using (Stream stream = File.Open(fileName, FileMode.Create)) {
+            using (Stream stream = File.Open(fileName, FileMode.Create))
+            {
                 var graphWriter = new GeometryGraphWriter(stream, graph, settings);
                 graphWriter.Write();
             }
@@ -118,10 +127,12 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
         /// <summary>
         /// Writes the graph to a file
         /// </summary>
-        public void Write() {
+        public void Write()
+        {
             var currentCulture = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            try {
+            try
+            {
                 Open();
                 WriteLayoutSettings();
 
@@ -132,19 +143,22 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
                 WriteLayers();
                 Close();
             }
-            finally {
+            finally
+            {
                 Thread.CurrentThread.CurrentCulture = currentCulture;
             }
         }
 
-         void WriteLayers() {
+        void WriteLayers()
+        {
             if (graph.LgData == null) return;
             WriteStartElement(GeometryToken.LgLevels);
             WriteLgEdgeInfos();
             WriteSortedLgInfos();
             Dictionary<Rail, int> railIds = CreateRailIds();
-            
-            for (int i = 0; i < graph.LgData.Levels.Count;i++) {
+
+            for (int i = 0; i < graph.LgData.Levels.Count; i++)
+            {
                 WriteLevel(graph.LgData.Levels[i], railIds, graph.LgData.LevelNodeCounts[i]);
             }
             WriteEndElement();
@@ -155,12 +169,14 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
                 WriteSkeletonLevel(graph.LgData.SkeletonLevels[i], railIds);
             }
             WriteEndElement();
-            
+
         }
 
-        void WriteLgEdgeInfos() {
+        void WriteLgEdgeInfos()
+        {
             WriteStartElement(GeometryToken.LgEdgeInfos);
-            foreach (var t in graph.LgData.GeometryEdgesToLgEdgeInfos) {
+            foreach (var t in graph.LgData.GeometryEdgesToLgEdgeInfos)
+            {
                 var edge = t.Key;
                 var ei = t.Value;
                 WriteLgEdgeInfo(edge, ei);
@@ -168,7 +184,8 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
             WriteEndElement();
         }
 
-        void WriteLgEdgeInfo(Edge edge, LgEdgeInfo ei) {
+        void WriteLgEdgeInfo(Edge edge, LgEdgeInfo ei)
+        {
             WriteStartElement(GeometryToken.LgEdgeInfo);
             WriteAttribute(GeometryToken.EdgeId, edgeIds[edge]);
             WriteAttribute(GeometryToken.Rank, ei.Rank);
@@ -176,7 +193,8 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
             WriteEndElement();
         }
 
-        void WriteLevel(LgLevel level, Dictionary<Rail, int> railsToIds, int nodeCountOnLevel) {
+        void WriteLevel(LgLevel level, Dictionary<Rail, int> railsToIds, int nodeCountOnLevel)
+        {
             WriteStartElement(GeometryToken.Level);
             WriteAttribute(GeometryToken.NodeCountOnLevel, nodeCountOnLevel);
             WriteAttribute(GeometryToken.Zoomlevel, level.ZoomLevel);
@@ -192,36 +210,42 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
             WriteEndElement();
         }
 
-        void WriteLevelRails(LgLevel level, Dictionary<Rail, int> railIds) {
+        void WriteLevelRails(LgLevel level, Dictionary<Rail, int> railIds)
+        {
             WriteStartElement(GeometryToken.RailsPerEdge);
-            foreach (var t in level._railsOfEdges) {
+            foreach (var t in level._railsOfEdges)
+            {
                 WriteEdgeRails(t.Key, t.Value, railIds);
             }
             WriteEndElement();
             WriteRailsGeometry(level, railIds);
         }
 
-        void WriteRailsGeometry(LgLevel level, Dictionary<Rail, int> railIds) {
+        void WriteRailsGeometry(LgLevel level, Dictionary<Rail, int> railIds)
+        {
             WriteStartElement(GeometryToken.Rails);
             foreach (var rail in level._railDictionary.Values)
                 WriteRail(rail, railIds[rail]);
             WriteEndElement();
         }
 
-        void WriteRail(Rail rail, int railId) {
+        void WriteRail(Rail rail, int railId)
+        {
             WriteStartElement(GeometryToken.Rail);
             WriteAttribute(GeometryToken.Id, railId);
             WriteAttribute(GeometryToken.Zoomlevel, rail.ZoomLevel);
             if (rail.MinPassingEdgeZoomLevel != Double.MaxValue)
                 WriteAttribute(GeometryToken.MinPassingEdgeZoomLevel, rail.MinPassingEdgeZoomLevel);
             Arrowhead ah = rail.Geometry as Arrowhead;
-            if (ah != null) {
+            if (ah != null)
+            {
                 WriteStartElement(GeometryToken.Arrowhead);
                 WriteAttribute(GeometryToken.ArrowheadPosition, ah.TipPosition);
                 WriteAttribute(GeometryToken.CurveAttachmentPoint, rail.CurveAttachmentPoint);
                 WriteEndElement();
             }
-            else {
+            else
+            {
                 ICurve curve = rail.Geometry as ICurve;
                 if (curve != null)
                     WriteICurve(curve);
@@ -231,11 +255,13 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
             WriteEndElement();
         }
 
-        void WriteEdgeRails(Edge edge, Set<Rail> rails, Dictionary<Rail, int> railIds) {
+        void WriteEdgeRails(Edge edge, Set<Rail> rails, Dictionary<Rail, int> railIds)
+        {
             WriteStartElement(GeometryToken.EdgeRails);
             WriteAttribute(GeometryToken.EdgeId, edgeIds[edge]);
             List<string> railIdStrings = new List<string>();
-            foreach (var rail in rails) {
+            foreach (var rail in rails)
+            {
                 railIdStrings.Add(railIds[rail].ToString());
             }
 
@@ -244,12 +270,16 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
         }
 
 
-        Dictionary<Rail, int> CreateRailIds() {
+        Dictionary<Rail, int> CreateRailIds()
+        {
             var ret = new Dictionary<Rail, int>();
             int id = 0;
-            foreach (var level in graph.LgData.Levels) {
-                foreach (var rail in level._railDictionary.Values) {
-                    if (ret.ContainsKey(rail)) {
+            foreach (var level in graph.LgData.Levels)
+            {
+                foreach (var rail in level._railDictionary.Values)
+                {
+                    if (ret.ContainsKey(rail))
+                    {
                         continue;
                     }
                     ret[rail] = id++;
@@ -258,18 +288,21 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
             return ret;
         }
 
-        void WriteSortedLgInfos() {
+        void WriteSortedLgInfos()
+        {
             WriteStartElement(GeometryToken.LgNodeInfos);
-            foreach (var lgNodeInfo in graph.LgData.SortedLgNodeInfos) {
+            foreach (var lgNodeInfo in graph.LgData.SortedLgNodeInfos)
+            {
                 WriteLgNodeInfo(lgNodeInfo);
             }
             WriteEndElement();
         }
 
-        void WriteLgNodeInfo(LgNodeInfo lgNodeInfo) {
+        void WriteLgNodeInfo(LgNodeInfo lgNodeInfo)
+        {
             WriteStartElement(GeometryToken.LgNodeInfo);
             WriteAttribute(GeometryToken.Id, nodeIds[lgNodeInfo.GeometryNode]);
-            WriteAttribute(GeometryToken.Rank, lgNodeInfo.Rank );
+            WriteAttribute(GeometryToken.Rank, lgNodeInfo.Rank);
             WriteAttribute(GeometryToken.Zoomlevel, lgNodeInfo.ZoomLevel);
             WriteAttribute(GeometryToken.LabelVisibleFromScale, lgNodeInfo.LabelVisibleFromScale);
             WriteAttribute(GeometryToken.LabelOffset, lgNodeInfo.LabelOffset);
@@ -277,7 +310,8 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
             WriteEndElement();
         }
 
-        void InitEdgeIds() {
+        void InitEdgeIds()
+        {
             int id = 0;
             foreach (var e in graph.Edges)
                 edgeIds[e] = id++;
@@ -303,11 +337,12 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
             }
         }
 
-        void WriteClusters() {
+        void WriteClusters()
+        {
             if (graph.RootCluster == null) return;
 
             WriteStartElement(GeometryToken.Clusters);
-            
+
             MapClustersToIds(graph.RootCluster);
 
             foreach (var cluster in graph.RootCluster.AllClustersDepthFirstExcludingSelf())
@@ -315,7 +350,8 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
             WriteEndElement();
         }
 
-        void WriteCluster(Cluster cluster, string clusterId) {
+        void WriteCluster(Cluster cluster, string clusterId)
+        {
             WriteStartElement(GeometryToken.Cluster);
             WriteAttribute(GeometryToken.Id, clusterId);
             WriteAttribute(GeometryToken.Barycenter, cluster.Barycenter);
@@ -323,11 +359,12 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
             WriteChildNodes(cluster);
             if (cluster.BoundaryCurve != null)
                 WriteICurve(cluster.BoundaryCurve);
-            WriteClusterRectBoundary(cluster.RectangularBoundary);            
+            WriteClusterRectBoundary(cluster.RectangularBoundary);
             WriteEndElement();
         }
 
-        void WriteClusterRectBoundary(RectangularClusterBoundary recClBnd) {
+        void WriteClusterRectBoundary(RectangularClusterBoundary recClBnd)
+        {
             if (recClBnd == null) return;
             WriteStartElement(GeometryToken.RectangularClusterBoundary);
 
@@ -335,14 +372,15 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
             WriteAttribute(GeometryToken.RightMargin, recClBnd.RightMargin);
             WriteAttribute(GeometryToken.TopMargin, recClBnd.TopMargin);
             WriteAttribute(GeometryToken.BottomMargin, recClBnd.BottomMargin);
-            if (recClBnd.DefaultMarginIsSet) {
+            if (recClBnd.DefaultMarginIsSet)
+            {
                 WriteAttribute(GeometryToken.DefaultLeftMargin, recClBnd.DefaultLeftMargin);
                 WriteAttribute(GeometryToken.DefaultRightMargin, recClBnd.DefaultRightMargin);
                 WriteAttribute(GeometryToken.DefaultTopMargin, recClBnd.DefaultTopMargin);
                 WriteAttribute(GeometryToken.DefaultBottomMargin, recClBnd.DefaultBottomMargin);
             }
             WriteAttribute(GeometryToken.GenerateFixedConstraints, recClBnd.GenerateFixedConstraints);
-            WriteAttribute(GeometryToken.GenerateFixedConstraintsDefault, 
+            WriteAttribute(GeometryToken.GenerateFixedConstraintsDefault,
                 recClBnd.GenerateFixedConstraintsDefault);
             WriteAttribute(GeometryToken.MinNodeHeight, recClBnd.MinHeight);
             WriteAttribute(GeometryToken.MinNodeWidth, recClBnd.MinWidth);
@@ -354,7 +392,8 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
             WriteEndElement();
         }
 
-        void WriteBorderInfo(GeometryToken token, BorderInfo borderInfo) {
+        void WriteBorderInfo(GeometryToken token, BorderInfo borderInfo)
+        {
             WriteStartElement(token);
             WriteAttribute(GeometryToken.InnerMargin, borderInfo.InnerMargin);
             WriteAttribute(GeometryToken.FixedPosition, borderInfo.FixedPosition);
@@ -362,24 +401,29 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
             WriteEndElement();
         }
 
-        void WriteChildNodes(Cluster cluster) {
+        void WriteChildNodes(Cluster cluster)
+        {
             WriteAttribute(GeometryToken.ChildNodes,
                 string.Join(" ",
                 cluster.nodes.Select(child => nodeIds[child].ToString(CultureInfo.InvariantCulture))));
         }
 
-        void WriteChildClusters(Cluster cluster) {
+        void WriteChildClusters(Cluster cluster)
+        {
             WriteAttribute(GeometryToken.ChildClusters,
-            String.Join(" ", cluster.Clusters.Select(child => NodeToIds[child])));            
+            String.Join(" ", cluster.Clusters.Select(child => NodeToIds[child])));
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Int32.ToString"
             )]
-        void MapClustersToIds(Cluster cluster) {
+        void MapClustersToIds(Cluster cluster)
+        {
             string id;
             var setOfIds = new Set<string>(nodeIds.Values);
-            foreach (Cluster child in cluster.AllClustersDepthFirst()) {
-                if (!nodeIds.TryGetValue(child, out id)) {
+            foreach (Cluster child in cluster.AllClustersDepthFirst())
+            {
+                if (!nodeIds.TryGetValue(child, out id))
+                {
                     id = FindNewId(setOfIds);
                     nodeIds[child] = id;
                     setOfIds.Insert(id);
@@ -389,9 +433,11 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
 
 
 
-        string FindNewId(Set<string> setOfIds) {
+        string FindNewId(Set<string> setOfIds)
+        {
             int i = nodeIds.Count;
-            do {
+            do
+            {
                 var s = i.ToString();
                 if (!setOfIds.Contains(s))
                     return s;
@@ -401,49 +447,57 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
 
 
         [SuppressMessage("Microsoft.Globalization", "CA1304:SpecifyCultureInfo", MessageId = "System.String.ToLower")]
-        void Open() {
+        void Open()
+        {
             XmlWriter.WriteStartElement(GeometryToken.Graph.ToString().ToLower());
             WriteAttribute(GeometryToken.Margins, this.graph.Margins);
         }
 
-        void Close() {
+        void Close()
+        {
             XmlWriter.WriteEndElement();
-            if (NeedToCloseXmlWriter) {
+            if (NeedToCloseXmlWriter)
+            {
                 XmlWriter.WriteEndDocument();
                 XmlWriter.Flush();
                 XmlWriter.Close();
             }
         }
 
-        void WriteEdges() {
+        void WriteEdges()
+        {
             WriteStartElement(GeometryToken.Edges);
             foreach (Edge edge in EdgeEnumeration)
                 WriteEdge(edge);
             WriteEndElement();
         }
 
-        string NodeOrClusterId(Node node) {
-            return nodeIds[node];    
+        string NodeOrClusterId(Node node)
+        {
+            return nodeIds[node];
         }
 
-        void WriteEdge(Edge edge) {
+        void WriteEdge(Edge edge)
+        {
             WriteStartElement(GeometryToken.Edge);
             WriteAttribute(GeometryToken.Id, edgeIds[edge]);
-            WriteAttribute(GeometryToken.S,NodeOrClusterId(edge.Source).ToString(CultureInfo.InvariantCulture));
+            WriteAttribute(GeometryToken.S, NodeOrClusterId(edge.Source).ToString(CultureInfo.InvariantCulture));
             WriteAttribute(GeometryToken.T, NodeOrClusterId(edge.Target).ToString(CultureInfo.InvariantCulture));
             if (edge.LineWidth != 1)
                 WriteAttribute(GeometryToken.LineWidth, edge.LineWidth);
-            if (edge.ArrowheadAtSource) {
+            if (edge.ArrowheadAtSource)
+            {
                 WriteAttribute(GeometryToken.As, edge.EdgeGeometry.SourceArrowhead.TipPosition);
                 WriteDefaultDouble(GeometryToken.Asl, edge.EdgeGeometry.SourceArrowhead.Length,
                                    Arrowhead.DefaultArrowheadLength);
             }
-            if (edge.ArrowheadAtTarget){
-                WriteAttribute(GeometryToken.At, edge.EdgeGeometry.TargetArrowhead.TipPosition);          
+            if (edge.ArrowheadAtTarget)
+            {
+                WriteAttribute(GeometryToken.At, edge.EdgeGeometry.TargetArrowhead.TipPosition);
                 WriteDefaultDouble(GeometryToken.Atl, edge.EdgeGeometry.TargetArrowhead.Length,
                                    Arrowhead.DefaultArrowheadLength);
             }
-  
+
             if (edge.Weight != 1)
                 WriteAttribute(GeometryToken.Weight, edge.Weight);
             if (edge.Separation != 1)
@@ -454,49 +508,55 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
             WriteEndElement();
         }
 
-        void WriteDefaultDouble(GeometryToken geometryToken, double val, double defaultValue) {
+        void WriteDefaultDouble(GeometryToken geometryToken, double val, double defaultValue)
+        {
             if (val != defaultValue)
                 WriteAttribute(geometryToken, DoubleToString(val));
         }
 
-        void WriteAttribute(GeometryToken attrKind, object val) {
+        void WriteAttribute(GeometryToken attrKind, object val)
+        {
             var attrString = FirstCharToLower(attrKind);
             if (val is Point)
-                XmlWriter.WriteAttributeString(attrString, PointToString((Point) val));
+                XmlWriter.WriteAttributeString(attrString, PointToString((Point)val));
             else if (val is Double)
-                XmlWriter.WriteAttributeString(attrString, DoubleToString((double) val));
+                XmlWriter.WriteAttributeString(attrString, DoubleToString((double)val));
             else
                 XmlWriter.WriteAttributeString(attrString, val.ToString());
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
-        static internal string FirstCharToLower(GeometryToken attrKind) {
-            var attrString =  attrKind.ToString();
+        static internal string FirstCharToLower(GeometryToken attrKind)
+        {
+            var attrString = attrKind.ToString();
             attrString = attrString.Substring(0, 1).ToLower(CultureInfo.InvariantCulture) + attrString.Substring(1, attrString.Length - 1);
             return attrString;
         }
 
-        string PointToString(Point start) {
-            return DoubleToString(start.X) +" " + DoubleToString(start.Y);
+        string PointToString(Point start)
+        {
+            return DoubleToString(start.X) + " " + DoubleToString(start.Y);
         }
 
         string formatForDoubleString = "#.###########";
 
-        int precision=11;
+        int precision = 11;
         IEnumerable<Edge> edgeEnumeration;
 
         ///<summary>
         ///</summary>
-        public int Precision {
+        public int Precision
+        {
             get { return precision; }
-            set {
-                precision = Math.Max(1,value);
+            set
+            {
+                precision = Math.Max(1, value);
                 var s = new char[precision + 2];
                 s[0] = '#';
                 s[1] = '.';
                 for (int i = 0; i < precision; i++)
                     s[2 + i] = '#';
-                formatForDoubleString=new string(s);
+                formatForDoubleString = new string(s);
             }
 
         }
@@ -505,7 +565,7 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
         /// a mapping from nodes to their ids
         ///</summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        
+
         public Dictionary<Node, string> NodeToIds
         {
             get { return nodeIds; }
@@ -515,59 +575,64 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
         /// <summary>
         /// this enumeration is used in a combination with GraphWriter, to dictate the order of edges
         /// </summary>
-        public IEnumerable<Edge> EdgeEnumeration {
+        public IEnumerable<Edge> EdgeEnumeration
+        {
             get { return edgeEnumeration; }
             set { edgeEnumeration = value; }
         }
 
-        string DoubleToString(double d) {
+        string DoubleToString(double d)
+        {
             return (Math.Abs(d) < 1e-11) ? "0" : d.ToString(formatForDoubleString, CultureInfo.InvariantCulture);
         }
 
-        void WriteLabel(Label label) {
+        void WriteLabel(Label label)
+        {
             WriteAttribute(GeometryToken.Label, LabelToString(label));
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object,System.Object,System.Object)")]
-        string LabelToString(Label label) {
+        string LabelToString(Label label)
+        {
             return String.Format("{0} {1} {2}", PointToString(label.Center), DoubleToString(label.Width), DoubleToString(label.Height));
         }
 
-/*
-        void WriteUnderlyingPolyline(SmoothedPolyline polylinePointsCollection) {
-            WriteStartElement(GeometryToken.UnderlyingPolyline);
-            if (polylinePointsCollection == null)
-                WriteStringElement(GeometryToken.UnderlyingPolylineIsNull, true);
-            else {
-                WriteStringElement(GeometryToken.UnderlyingPolylineIsNull, false);
-                WritePolylineSites(polylinePointsCollection);
-            }
-            WriteEndElement();
-        }
-*/
+        /*
+                void WriteUnderlyingPolyline(SmoothedPolyline polylinePointsCollection) {
+                    WriteStartElement(GeometryToken.UnderlyingPolyline);
+                    if (polylinePointsCollection == null)
+                        WriteStringElement(GeometryToken.UnderlyingPolylineIsNull, true);
+                    else {
+                        WriteStringElement(GeometryToken.UnderlyingPolylineIsNull, false);
+                        WritePolylineSites(polylinePointsCollection);
+                    }
+                    WriteEndElement();
+                }
+        */
 
-/*
-        void WritePolylineSites(SmoothedPolyline polylinePointsCollection) {
-            Site site = polylinePointsCollection.HeadSite;
-            do {
-                WritePolylineSite(site);
-                site = site.Next;
-            } while (site != null);
-        }
-*/
+        /*
+                void WritePolylineSites(SmoothedPolyline polylinePointsCollection) {
+                    Site site = polylinePointsCollection.HeadSite;
+                    do {
+                        WritePolylineSite(site);
+                        site = site.Next;
+                    } while (site != null);
+                }
+        */
 
-/*
-        void WritePolylineSite(Site site) {
-            WriteStartElement(GeometryToken.PolylineSite);
-            WriteStringElement(GeometryToken.SiteK, site.PreviousBezierSegmentFitCoefficient);
-            WriteStringElement(GeometryToken.SiteK, site.NextBezierSegmentFitCoefficient);
-            WritePointElement(GeometryToken.SiteV, site.Point);
-            WriteEndElement();
-        }
-*/
+        /*
+                void WritePolylineSite(Site site) {
+                    WriteStartElement(GeometryToken.PolylineSite);
+                    WriteStringElement(GeometryToken.SiteK, site.PreviousBezierSegmentFitCoefficient);
+                    WriteStringElement(GeometryToken.SiteK, site.NextBezierSegmentFitCoefficient);
+                    WritePointElement(GeometryToken.SiteV, site.Point);
+                    WriteEndElement();
+                }
+        */
 
 
-        void WriteNodes() {
+        void WriteNodes()
+        {
             WriteStartElement(GeometryToken.Nodes);
             foreach (Node node in Graph.Nodes)
                 WriteNode(node);
@@ -581,7 +646,8 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Int32.ToString")]
-        void WriteNode(Node node) {
+        void WriteNode(Node node)
+        {
             string id;
             if (!nodeIds.TryGetValue(node, out id))
                 nodeIds[node] = id = nodeIds.Count.ToString();
@@ -616,36 +682,43 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
             XmlWriter.WriteEndElement();
         }
 
-        void WriteICurve(ICurve iCurve) {
+        void WriteICurve(ICurve iCurve)
+        {
             if (iCurve == null) return;
             var rect = iCurve as RoundedRect;
             if (rect != null)
                 WriteRect(rect.BoundingBox.Left, rect.BoundingBox.Bottom, rect.BoundingBox.Width,
                           rect.BoundingBox.Height, rect.RadiusX, rect.RadiusY);
-            else {
+            else
+            {
                 var c = iCurve as Curve;
                 if (c != null)
                     WriteCurveInSvgStyle(c);
-                else {
+                else
+                {
                     var ellipse = iCurve as Ellipse;
                     if (ellipse != null)
                         WriteEllipseInSvgStyle(ellipse);
-                    else {
+                    else
+                    {
                         var poly = iCurve as Polyline;
                         if (poly != null)
                             WritePolylineInSvgStyle(poly);
-                        else {
+                        else
+                        {
                             var ls = iCurve as LineSegment;
                             if (ls != null)
                                 WriteLineSeg(ls);
-                            else {
+                            else
+                            {
                                 var bs = iCurve as CubicBezierSegment;
-                                if (bs != null) {
+                                if (bs != null)
+                                {
                                     WriteBezierSegment(bs);
                                 }
-                            else
-                                throw new InvalidOperationException();
-                        }
+                                else
+                                    throw new InvalidOperationException();
+                            }
                         }
 
                     }
@@ -653,7 +726,8 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
             }
         }
 
-        void WriteBezierSegment(CubicBezierSegment bs) {
+        void WriteBezierSegment(CubicBezierSegment bs)
+        {
             WriteStartElement(GeometryToken.CubicBezierSegment);
             WriteAttribute(GeometryToken.Points, PointsToString(bs.B(0), bs.B(1), bs.B(2), bs.B(3)));
             WriteEndElement();
@@ -670,7 +744,8 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
         }
 
 
-        void WriteRect(double x, double y, double width, double height, double rx, double ry) {
+        void WriteRect(double x, double y, double width, double height, double rx, double ry)
+        {
             WriteStartElement(GeometryToken.Rect);
             WriteAttribute(GeometryToken.X, x);
             WriteAttribute(GeometryToken.Y, y);
@@ -686,36 +761,39 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
         void WriteRectIpe(double x, double y, double width, double height, double rx, double ry)
         {
             XmlWriter.WriteStartElement("path");
-            XmlWriter.WriteString("\n"+x+" "+y+" m\n");
-            XmlWriter.WriteString( (x+width) + " " + y + " l\n");
-            XmlWriter.WriteString( (x + width) + " " + (y+height) + " l\n");
-            XmlWriter.WriteString( x  + " " + (y + height) + " l\nh\n");
+            XmlWriter.WriteString("\n" + x + " " + y + " m\n");
+            XmlWriter.WriteString((x + width) + " " + y + " l\n");
+            XmlWriter.WriteString((x + width) + " " + (y + height) + " l\n");
+            XmlWriter.WriteString(x + " " + (y + height) + " l\nh\n");
             XmlWriter.WriteEndElement();
 
-//48 832 m
-//48 752 l
-//144 752 l
-//144 832 l
-//h
+            //48 832 m
+            //48 752 l
+            //144 752 l
+            //144 832 l
+            //h
         }
-        
-        
-        void WritePolylineInSvgStyle(Polyline poly) {
-            WriteStartElement( poly.Closed? GeometryToken.Polygon: GeometryToken.Polyline);
+
+
+        void WritePolylineInSvgStyle(Polyline poly)
+        {
+            WriteStartElement(poly.Closed ? GeometryToken.Polygon : GeometryToken.Polyline);
             WriteAttribute(GeometryToken.Points, PointsToString(poly.ToArray()));
             WriteEndElement();
         }
 
 
-        void WriteEllipseInSvgStyle( Ellipse ellipse) {
-            if( ApproximateComparer.Close(ellipse.ParStart,0) && ApproximateComparer.Close(ellipse.ParEnd, 2*Math.PI)) { WriteFullEllipse(ellipse); }
+        void WriteEllipseInSvgStyle(Ellipse ellipse)
+        {
+            if (ApproximateComparer.Close(ellipse.ParStart, 0) && ApproximateComparer.Close(ellipse.ParEnd, 2 * Math.PI)) { WriteFullEllipse(ellipse); }
             else
             {
                 WriteEllepticalArc(ellipse);
             }
         }
 
-        void WriteFullEllipse(Ellipse ellipse) {
+        void WriteFullEllipse(Ellipse ellipse)
+        {
             WriteStartElement(GeometryToken.Ellipse);
             WriteAttribute(GeometryToken.Cx, ellipse.Center.X);
             WriteAttribute(GeometryToken.Cy, ellipse.Center.Y);
@@ -725,32 +803,38 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
         }
 
 
-// ReSharper disable UnusedParameter.Local
+        // ReSharper disable UnusedParameter.Local
         [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "ellipse")]
-        static void WriteEllepticalArc(Ellipse ellipse) {
-// ReSharper restore UnusedParameter.Local
+        static void WriteEllepticalArc(Ellipse ellipse)
+        {
+            // ReSharper restore UnusedParameter.Local
             throw new NotImplementedException();
         }
 
-        void WriteCurveInSvgStyle(Curve curve) {
+        void WriteCurveInSvgStyle(Curve curve)
+        {
             WriteStartElement(GeometryToken.Curve);
-            WriteAttribute( GeometryToken.CurveData, CurveString(curve));   
+            WriteAttribute(GeometryToken.CurveData, CurveString(curve));
             WriteEndElement();
         }
-        string CurveString(ICurve iCurve) {
+        string CurveString(ICurve iCurve)
+        {
             return String.Join(" ", CurveStringTokens(iCurve));
         }
-        IEnumerable<string> CurveStringTokens(ICurve iCurve) {
+        IEnumerable<string> CurveStringTokens(ICurve iCurve)
+        {
             yield return "M";
             yield return PointToString(iCurve.Start);
             var curve = iCurve as Curve;
             var previousInstruction = 'w'; //a character that is not used by the SVG curve
             if (curve != null)
-                for (int i = 0; i < curve.Segments.Count; i++) {
+                for (int i = 0; i < curve.Segments.Count; i++)
+                {
                     var segment = curve.Segments[i];
                     if (i != curve.Segments.Count - 1)
                         yield return SegmentString(segment, ref previousInstruction);
-                    else { //it is the last seg
+                    else
+                    { //it is the last seg
                         if (segment is LineSegment && ApproximateComparer.Close(segment.End, iCurve.Start))
                             yield return "Z";
                         else
@@ -759,21 +843,25 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
                 }
         }
 
-        string SegmentString(ICurve segment, ref char previousInstruction) {
+        string SegmentString(ICurve segment, ref char previousInstruction)
+        {
             var ls = segment as LineSegment;
-            if (ls != null) {
+            if (ls != null)
+            {
                 var str = LineSegmentString(ls, previousInstruction);
                 previousInstruction = 'L';
                 return str;
             }
             var cubic = segment as CubicBezierSegment;
-            if (cubic != null) {
+            if (cubic != null)
+            {
                 var str = CubicBezierSegmentToString(cubic, previousInstruction);
                 previousInstruction = 'C';
                 return str;
             }
             var ellipseArc = segment as Ellipse;
-            if (ellipseArc != null) {
+            if (ellipseArc != null)
+            {
                 previousInstruction = 'A';
                 return EllipticalArcToString(ellipseArc);
 
@@ -782,43 +870,50 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Int32.ToString")]
-        string EllipticalArcToString(Ellipse ellipse) {
+        string EllipticalArcToString(Ellipse ellipse)
+        {
             /*
              * rx ry x-axis-rotation large-arc-flag sweep-flag x y
              * */
             //In general in an Msagl ellipse the axes don't have to be orthogonal: we have a possible bug here
-            var rx = "A"+DoubleToString(ellipse.AxisA.Length);
+            var rx = "A" + DoubleToString(ellipse.AxisA.Length);
             var ry = DoubleToString(ellipse.AxisB.Length);
-            var xAxisRotation = DoubleToString(180*Point.Angle(new Point(1, 0), ellipse.AxisA)/Math.PI);
+            var xAxisRotation = DoubleToString(180 * Point.Angle(new Point(1, 0), ellipse.AxisA) / Math.PI);
             var largeArcFlag = Math.Abs(ellipse.ParEnd - ellipse.ParStart) >= Math.PI ? "1" : "0";
             var sweepFlagInt = ellipse.ParEnd > ellipse.ParStart ? 1 : 0; //it happens because of the y-axis orientation down in SVG
-            if (AxesSwapped(ellipse.AxisA, ellipse.AxisB)) {
+            if (AxesSwapped(ellipse.AxisA, ellipse.AxisB))
+            {
                 sweepFlagInt = sweepFlagInt == 1 ? 0 : 1;
             }
-            var endPoint=PointToString(ellipse.End);
-            return string.Join(" ", new[] {rx, ry, xAxisRotation, largeArcFlag, sweepFlagInt.ToString(), endPoint});
+            var endPoint = PointToString(ellipse.End);
+            return string.Join(" ", new[] { rx, ry, xAxisRotation, largeArcFlag, sweepFlagInt.ToString(), endPoint });
         }
 
-        static bool AxesSwapped(Point axisA, Point axisB) {
+        static bool AxesSwapped(Point axisA, Point axisB)
+        {
             return axisA.X * axisB.Y - axisB.X * axisA.Y < 0;
         }
 
-        string CubicBezierSegmentToString(CubicBezierSegment cubic, char previousInstruction) {
+        string CubicBezierSegmentToString(CubicBezierSegment cubic, char previousInstruction)
+        {
             var str = PointsToString(cubic.B(1), cubic.B(2), cubic.B(3));
-            return previousInstruction=='C'?str:"C"+str;
+            return previousInstruction == 'C' ? str : "C" + str;
         }
 
 
-        string PointsToString(params Point[] points) {
+        string PointsToString(params Point[] points)
+        {
             return String.Join(" ", points.Select(PointToString));
         }
 
-        string LineSegmentString(LineSegment ls, char previousInstruction) {
-            var str= PointToString(ls.End);
+        string LineSegmentString(LineSegment ls, char previousInstruction)
+        {
+            var str = PointToString(ls.End);
             return previousInstruction == 'L' ? str : "L" + str;
         }
 
-        void WriteLineSeg(LineSegment ls) {
+        void WriteLineSeg(LineSegment ls)
+        {
             WriteStartElement(GeometryToken.LineSegment);
             WriteAttribute(GeometryToken.Points, PointsToString(ls.Start, ls.End));
             WriteEndElement();
@@ -826,7 +921,8 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
 
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters",
             MessageId = "System.Xml.XmlWriter.WriteComment(System.String)")]
-        void WriteTransformation(PlaneTransformation transformation) {
+        void WriteTransformation(PlaneTransformation transformation)
+        {
             WriteStartElement(GeometryToken.Transform);
             XmlWriter.WriteComment("the order of elements is [0,0],[0,1],[0,2],[1,0],[1,1],[1,2]");
             for (int i = 0; i < 2; i++)
@@ -835,7 +931,8 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
             WriteEndElement();
         }
 
-        void WriteTransformationElement(double t) {
+        void WriteTransformationElement(double t)
+        {
             WriteStringElement(GeometryToken.TransformElement, t);
         }
 
@@ -844,8 +941,9 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
         /// writes the starte element with the token
         /// </summary>
         /// <param name="token"></param>
-        void WriteStartElement(GeometryToken token) {
-            XmlWriter.WriteStartElement( FirstCharToLower( token));
+        void WriteStartElement(GeometryToken token)
+        {
+            XmlWriter.WriteStartElement(FirstCharToLower(token));
         }
 
         //static  void WriteStartElement(XmlWriter writer, Tokens token) {
@@ -857,33 +955,39 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
         /// </summary>
         /// <param name="tokens"></param>
         /// <param name="element"></param>
-        void WriteStringElement(GeometryToken tokens, double element) {
+        void WriteStringElement(GeometryToken tokens, double element)
+        {
             XmlWriter.WriteElementString(tokens.ToString(), XmlConvert.ToString(element));
         }
 
         /// <summary>
         /// writes the end element
         /// </summary>
-        void WriteEndElement() {
+        void WriteEndElement()
+        {
             XmlWriter.WriteEndElement();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        void WriteLayoutSettings() {
-            if (Settings != null) {
+        void WriteLayoutSettings()
+        {
+            if (Settings != null)
+            {
                 LayoutAlgorithmSettings settings = Settings;
                 EdgeRoutingSettings routingSettings = settings.EdgeRoutingSettings;
 
                 WriteStartElement(GeometryToken.LayoutAlgorithmSettings);
-                WriteAttribute(GeometryToken.EdgeRoutingMode, (int) routingSettings.EdgeRoutingMode);
-                
+                WriteAttribute(GeometryToken.EdgeRoutingMode, (int)routingSettings.EdgeRoutingMode);
+
                 var sugiyama = settings as SugiyamaLayoutSettings;
                 if (sugiyama != null) WriteSugiyamaSettings(sugiyama);
-                else {
+                else
+                {
                     var mds = settings as MdsLayoutSettings;
-                    if (mds != null) {
+                    if (mds != null)
+                    {
                         WriteAttribute(GeometryToken.LayoutAlgorithmType, GeometryToken.MdsLayoutSettings);
 #if REPORTING
                         WriteAttribute(GeometryToken.Reporting, mds.Reporting);
@@ -901,7 +1005,8 @@ namespace  Microsoft.Msagl.DebugHelpers.Persistence {
             }
         }
 
-        void WriteSugiyamaSettings(SugiyamaLayoutSettings sugiyama) {
+        void WriteSugiyamaSettings(SugiyamaLayoutSettings sugiyama)
+        {
             WriteAttribute(GeometryToken.LayoutAlgorithmType, GeometryToken.SugiyamaLayoutSettings);
             WriteAttribute(GeometryToken.MinNodeWidth, sugiyama.MinNodeWidth);
             WriteAttribute(GeometryToken.MinNodeHeight, sugiyama.MinNodeHeight);

@@ -14,12 +14,14 @@ namespace Microsoft.Msagl.Core.Layout {
     public class LgNodeInfo : LgInfoBase {
         //these needed for shortest path calculations
         internal bool Processed;
+        public int PartiteSet;
         /// <summary>
         /// underlying geometry node
         /// </summary>
         public Node GeometryNode { get; set; }
 
         public bool Selected;
+        public int SelectedNeighbor = 0;
 
         public ICurve BoundaryCurve {
             get { return BoundaryOnLayer; }
@@ -60,6 +62,7 @@ namespace Microsoft.Msagl.Core.Layout {
         public double LabelWidthToHeightRatio = 1.0;
 
         public LabelPlacement LabelPosition = LabelPlacement.Top;
+        public System.Windows.Media.SolidColorBrush Color;
 
         public enum LabelPlacement
         {

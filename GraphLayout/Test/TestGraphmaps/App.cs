@@ -171,7 +171,7 @@ namespace TestGraphmaps {
                 Title = "Graphmaps browser",
                 Width = SystemParameters.WorkArea.Width - 300,
                 Height = SystemParameters.WorkArea.Height,
-                GraphViewer=_graphViewer,
+                GraphViewer=_graphViewer,                
                 //Content = dockPanel,
                 //WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 //WindowState = WindowState.Normal

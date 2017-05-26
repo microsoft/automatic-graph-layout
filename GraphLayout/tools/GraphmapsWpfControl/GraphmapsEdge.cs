@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.AccessControl;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -336,11 +337,19 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             double thickness = 1.0;
             if (rail.TopRankedEdgeInfoOfTheRail != null)
             {
-                thickness = Math.Max(5 - Math.Log(rail.MinPassingEdgeZoomLevel, 2), 1);
+                thickness = Math.Max(5 - Math.Log(rail.MinPassingEdgeZoomLevel, 1.5), 1);
             }
 
             path.StrokeThickness = thickness * PathStrokeThickness / 2; // todo : figure out a way to do it nicer than dividing by 2
 
+            //jyoti added this to make the selected edges prominent
+            if (rail.IsHighlighted)
+            {
+                thickness = 2.5;
+                path.StrokeThickness = thickness * PathStrokeThickness / 2;
+            }
+            /////////////////
+            
             foreach (var style in Edge.Attr.Styles) {
                 if (style == Drawing.Style.Dotted) {
                     path.StrokeDashArray = new DoubleCollection {1, 1};
@@ -370,25 +379,88 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
             if (lgSettings != null)
             {
-                String col;
-                col = !rail.IsHighlighted ? lgSettings.GetColorForZoomLevel(rail.MinPassingEdgeZoomLevel) : lgSettings.GetSelColorForZoomLevel(rail.MinPassingEdgeZoomLevel);
-                brush = ((SolidColorBrush)(new BrushConverter().ConvertFrom(col))).Color;                
+                /*
+                var col = lgSettings.GetColorForZoomLevel(rail.MinPassingEdgeZoomLevel);
+                brush = ((SolidColorBrush)(new BrushConverter().ConvertFrom(col))).Color;
+                 */
+                //jyoti: changed rail colors
+                if (rail.MinPassingEdgeZoomLevel <= 1) brush = Brushes.LightSkyBlue.Color; //Brushes.DimGray.Color;
+                else if (rail.MinPassingEdgeZoomLevel <= 2)
+                    brush = Brushes.LightSkyBlue.Color; //Brushes.SlateGray.Color;
+                else if (rail.MinPassingEdgeZoomLevel <= 3)
+                    brush = Brushes.LightGoldenrodYellow.Color; //Brushes.SlateGray.Color;
+                else if (rail.MinPassingEdgeZoomLevel <= 4)
+                    brush = Brushes.WhiteSmoke.Color; //Brushes.SlateGray.Color;
+                else brush = Brushes.LightGray.Color; //Brushes.Gray.Color;
             }
             else
             {
-                if (!rail.IsHighlighted)
+                //jyoti: changed rail colors
+                if (rail.MinPassingEdgeZoomLevel <= 1) brush = Brushes.LightSkyBlue.Color; //Brushes.DimGray.Color;
+                else if (rail.MinPassingEdgeZoomLevel <= 2)
+                    brush = Brushes.LightSteelBlue.Color; //Brushes.SlateGray.Color;
+                else if (rail.MinPassingEdgeZoomLevel <= 3)
+                    brush = Brushes.LightGoldenrodYellow.Color; //Brushes.SlateGray.Color;
+                else if (rail.MinPassingEdgeZoomLevel <= 4)
+                    brush = Brushes.WhiteSmoke.Color; //Brushes.SlateGray.Color;
+                else brush = Brushes.LightGray.Color; //Brushes.Gray.Color;
+            }
+
+            brush.A = 100;
+            if (rail.IsHighlighted)
+            {
+                //jyoti changed edge selection color 
+               
+                //this is a garbage rail
+                if (rail.Color == null || rail.Color.Count == 0)
                 {
-                    if (rail.MinPassingEdgeZoomLevel <= 1) brush = Brushes.LightSkyBlue.Color; //Brushes.DimGray.Color;
-                    else if (rail.MinPassingEdgeZoomLevel <= 2)
-                        brush = Brushes.LightGoldenrodYellow.Color; //Brushes.SlateGray.Color;
-                    else brush = Brushes.WhiteSmoke.Color; //Brushes.Gray.Color;
+                    rail.IsHighlighted = false;
                 }
                 else
                 {
-                    if (rail.MinPassingEdgeZoomLevel <= 1) brush = new WpfColor { A = 255, R = 255, G = 0, B = 0 };
-                    else if (rail.MinPassingEdgeZoomLevel <= 2) brush = new WpfColor { A = 255, R = 235, G = 48, B = 68 };
-                    else brush = new WpfColor { A = 255, R = 229, G = 92, B = 127 };            
+                    int Ax = 0, Rx = 0, Gx = 0, Bx = 0;
+                    foreach (var c in rail.Color)
+                    {
+                        Ax += c.Color.A;
+                        Rx += c.Color.R;
+                        Gx += c.Color.G;
+                        Bx += c.Color.B;
+                    }
+                    byte Ay = 0, Ry = 0, Gy = 0, By = 0;
+                    Ay = (Byte) ((int) (Ax/rail.Color.Count));
+                    Ry = (Byte) ((int) (Rx/rail.Color.Count));
+                    Gy = (Byte) ((int) (Gx/rail.Color.Count));
+                    By = (Byte) ((int) (Bx/rail.Color.Count));
+
+                    brush = new System.Windows.Media.Color
+                    {
+                        A = Ay,
+                        R = Ry,
+                        G = Gy,
+                        B = By
+                    };
+
+                 
                 }
+
+                //jyoti changed edge selection color 
+
+
+
+                //if (rail.MinPassingEdgeZoomLevel <= 1) brush = Brushes.Red.Color;
+                //else if (rail.MinPassingEdgeZoomLevel <= 2) brush = new WpfColor{A = 255, R=235, G=48, B=68};
+                //else brush = new WpfColor { A = 255, R = 229, G = 92, B = 127 };
+            }
+
+            if (rail.Weight == 0 && !rail.IsHighlighted )
+            {
+                brush = new System.Windows.Media.Color
+                {
+                    A = 0,
+                    R = 0,
+                    G = 0,
+                    B = 255
+                };
             }
 
             return new SolidColorBrush(brush);

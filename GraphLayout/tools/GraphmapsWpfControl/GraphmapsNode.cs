@@ -26,7 +26,7 @@ using WpfLineSegment = System.Windows.Media.LineSegment;
 namespace Microsoft.Msagl.GraphmapsWpfControl {
     public class GraphmapsNode : IViewerNode, IInvalidatable {
         readonly LgLayoutSettings lgSettings;
-        internal Path BoundaryPath;
+        public Path BoundaryPath;
         internal FrameworkElement FrameworkElementOfNodeForLabel;
         readonly Func<Edge, GraphmapsEdge> funcFromDrawingEdgeToVEdge;
         internal LgNodeInfo LgNodeInfo;
@@ -37,6 +37,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         Path collapseSymbolPath;
         Brush collapseSymbolPathInactive = Brushes.Silver;
         
+
         internal int ZIndex {
             get {
                 var geomNode = Node.GeometryNode;
@@ -71,6 +72,30 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             PathStrokeThicknessFunc = pathStrokeThicknessFunc;
             LgNodeInfo = lgNodeInfo;
             Node = node;
+            FrameworkElementOfNodeForLabel = frameworkElementOfNodeForLabelOfLabel;
+
+            this.funcFromDrawingEdgeToVEdge = funcFromDrawingEdgeToVEdge;
+
+            CreateNodeBoundaryPath();
+            if (FrameworkElementOfNodeForLabel != null)
+            {
+                FrameworkElementOfNodeForLabel.Tag = this; //get a backpointer to the VNode 
+                Common.PositionFrameworkElement(FrameworkElementOfNodeForLabel, node.GeometryNode.Center, 1);
+                Panel.SetZIndex(FrameworkElementOfNodeForLabel, Panel.GetZIndex(BoundaryPath) + 1);
+            }
+            SetupSubgraphDrawing();
+            Node.GeometryNode.BeforeLayoutChangeEvent += GeometryNodeBeforeLayoutChangeEvent;
+            Node.Attr.VisualsChanged += (a, b) => Invalidate();
+
+        }
+
+        internal GraphmapsNode(Node node, LgNodeInfo lgNodeInfo, FrameworkElement frameworkElementOfNodeForLabelOfLabel,
+            Func<Edge, GraphmapsEdge> funcFromDrawingEdgeToVEdge, Func<double> pathStrokeThicknessFunc)
+        {
+            PathStrokeThicknessFunc = pathStrokeThicknessFunc;
+            LgNodeInfo = lgNodeInfo;
+            Node = node;
+            
             FrameworkElementOfNodeForLabel = frameworkElementOfNodeForLabelOfLabel;
 
             this.funcFromDrawingEdgeToVEdge = funcFromDrawingEdgeToVEdge;
@@ -259,7 +284,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         }
 
         internal Func<double> PathStrokeThicknessFunc;
-        double PathStrokeThickness
+        public double PathStrokeThickness
         {
             get
             {
@@ -269,16 +294,29 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         }
 
         
-        void SetFillAndStroke() {
-            BoundaryPath.Stroke = Common.BrushFromMsaglColor(node.Attr.Color);
+        void SetFillAndStroke()
+        {
+            BoundaryPath.Stroke = Common.BrushFromMsaglColor(Drawing.Color.Black);
+            //jyoti changed node color
+            //BoundaryPath.Stroke = Common.BrushFromMsaglColor(node.Attr.Color);
+
             SetBoundaryFill();
-            BoundaryPath.StrokeThickness = PathStrokeThickness;
+
+            //BoundaryPath.StrokeThickness = PathStrokeThickness;
+            //jyoti changed strokethickness
+            BoundaryPath.StrokeThickness = PathStrokeThickness / 2;
+            if (LgNodeInfo != null && LgNodeInfo.PartiteSet == 1)                
+                BoundaryPath.StrokeThickness = (PathStrokeThickness*1.5);
+
+            
 
             var textBlock = FrameworkElementOfNodeForLabel as TextBlock;
             if (textBlock != null)
             {
-                var col = Node.Label.FontColor;
-                textBlock.Foreground = Common.BrushFromMsaglColor(new Drawing.Color(col.A, col.R, col.G, col.B));
+                textBlock.Foreground = Common.BrushFromMsaglColor(Drawing.Color.Black);
+                //jyoti changed node color
+                //var col = Node.Label.FontColor;
+                //textBlock.Foreground = Common.BrushFromMsaglColor(new Drawing.Color(col.A, col.R, col.G, col.B));
             }
            
 
@@ -286,6 +324,19 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
 
         void SetBoundaryFill() {
+
+            //jyoti changed all node colors
+
+                          
+            BoundaryPath.Fill = Brushes.DarkGray;
+            if (LgNodeInfo != null && LgNodeInfo.Selected)
+                BoundaryPath.Fill = LgNodeInfo.Color;//Brushes.Red;
+            else if (LgNodeInfo != null && LgNodeInfo.SelectedNeighbor>0)
+            {
+                BoundaryPath.Fill = Brushes.Yellow;                
+            }  
+            return;
+
             if (LgNodeInfo == null) {
                 BoundaryPath.Fill = Brushes.Blue;
                 return;
@@ -314,20 +365,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             }
         }
 
-        private Brush GetSelBrushColor()
-        {
-            if (lgSettings != null)
-            {
-                var col = lgSettings.GetNodeSelColor();
-                var brush = (SolidColorBrush)(new BrushConverter().ConvertFrom(col));
-                return brush;
-            }
-            else
-            {
-                return Brushes.Red;
-            }
-        }
-
+        
         public static void DrawFigure(StreamGeometryContext ctx, PathFigure figure)
         {
             ctx.BeginFigure(figure.StartPoint, figure.IsFilled, figure.IsClosed);
@@ -455,7 +493,20 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         {
             return (byte)(b/3);
         }
-
+        
+        private Brush GetSelBrushColor()
+        {
+            if (lgSettings != null)
+            {
+                var col = lgSettings.GetNodeSelColor();
+                var brush = (SolidColorBrush)(new BrushConverter().ConvertFrom(col));
+                return brush;
+            }
+            else
+            {
+                return Brushes.Red;
+            }
+        }
         internal void SetLowTransparency()
         {
             if (BoundaryPath != null) {
