@@ -387,10 +387,21 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
         {
             ColorSet.Add(Brushes.Red);
             ColorSet.Add(Brushes.Blue);
+            ColorSet.Add(Brushes.LawnGreen);
+            ColorSet.Add(Brushes.Violet);
+            ColorSet.Add(Brushes.Aqua);
             ColorSet.Add(Brushes.Green);
-            ColorSet.Add(Brushes.Coral);
-            ColorSet.Add(Brushes.BlueViolet);
-            ColorSet.Add(Brushes.HotPink);
+            ColorSet.Add(Brushes.Tomato);
+            ColorSet.Add(Brushes.Gold);
+            ColorSet.Add(Brushes.Fuchsia);
+            ColorSet.Add(Brushes.GreenYellow);
+            //ColorSet.Add(Brushes.LightSteelBlue);
+            //ColorSet.Add(Brushes.Pink);
+            //ColorSet.Add(Brushes.PaleGreen);
+            //ColorSet.Add(Brushes.MediumPurple);
+            
+            //ColorSet.Add(Brushes.IndianRed);
+            //ColorSet.Add(Brushes.CornflowerBlue);
         }
 
         void SelectColoredEdgesIncidentTo(LgNodeInfo nodeInfo, SolidColorBrush c)

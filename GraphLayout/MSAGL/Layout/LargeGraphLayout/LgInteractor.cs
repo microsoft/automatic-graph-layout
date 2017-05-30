@@ -1006,6 +1006,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
                 stopwatch.Start();
                 g = ComputeEdgeRoutes(g, nodeToId);
+             
                 //RouteByLayers();
                 stopwatch.Stop();
                 Console.WriteLine("Lev's = " + stopwatch.ElapsedMilliseconds);
