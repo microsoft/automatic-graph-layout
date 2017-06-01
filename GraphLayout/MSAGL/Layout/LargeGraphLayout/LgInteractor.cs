@@ -278,7 +278,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     //find the one end of the path
                     int currentVertexId = w;
                     int oldVertexId = -1;
-                    cycle.Add(w,1);
+                    cycle[w] = 1;
                     while (graph.DegList[currentVertexId] == 2 && currentVertexId >= g.N)
                     {
                         int neighbor1 = graph.EList[currentVertexId, 0].NodeId;
@@ -4028,9 +4028,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             Point offset = Point.Scale(labelWidth + nodeDotWidth * 1.01, labelHeight + nodeDotWidth * 1.01,
                 nodeInfo.LabelOffset);
 
-            var d = new Point(0.5 * labelWidth, 0.5 * labelHeight);
-
-            return new Rectangle(nodeInfo.Center + offset - d, nodeInfo.Center + offset + d);
+            double overlapScale = 0.7;
+            var d = new Point(0.5 * labelWidth, 0.5 * labelHeight) * overlapScale;
+return new Rectangle(nodeInfo.Center + offset - d, nodeInfo.Center + offset + d);
         }
 
         Rectangle GetLabelRectForScale(LgNodeInfo nodeInfo, LgNodeInfo.LabelPlacement placement, double scale)

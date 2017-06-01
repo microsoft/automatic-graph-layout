@@ -841,21 +841,26 @@ namespace TestGraphmaps {
                 MessageBox.Show("cannot load " + fileName);
         }
 
-        void ProcessDot(string fileName) {
+        bool ProcessDot(string fileName)
+        {
             int line, column;
             string msg;
             Graph gwgraph = Parser.Parse(fileName, out line, out column, out msg);
 
             Debug.Assert(NodeMapOfGraphIsOk(gwgraph));
 
-            if (gwgraph != null && (gwgraph.NodeCount > 0 || gwgraph.EdgeCount > 0)) {
+            if (gwgraph != null && (gwgraph.NodeCount > 0 || gwgraph.EdgeCount > 0))
+            {
                 PassGraphToGraphViewer(gwgraph, fileName);
+                return true;
             }
-            else 
-                Console.WriteLine("Cannot parse {3} {2} line {0} column {1}", line, column, msg, fileName);
+            Console.WriteLine("Cannot parse {3} {2} line {0} column {1}", line, column, msg, fileName);
+            return false;
         }
 
-        void SaveMsaglAndTiles(string fileName) {
+        void SaveMsaglAndTiles(string fileName)
+        {
+            if (_graphViewer.Graph == null) return;
             string rootName = FileNameWithoutExtension(fileName);
             string msaglFileName = rootName + ".msagl";
             Console.WriteLine("saving to {0}", msaglFileName);

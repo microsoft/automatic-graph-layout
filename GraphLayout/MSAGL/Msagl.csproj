@@ -262,6 +262,7 @@
     <Compile Include="DebugHelpers\Persistence\CurveStreamElement.cs" />
     <Compile Include="DebugHelpers\Persistence\DoubleStreamElement.cs" />
     <Compile Include="GraphmapsWithMesh\DijkstraAlgo.cs" />
+    <Compile Include="GraphmapsWithMesh\MSAGLPriorityQueue.cs" />
     <Compile Include="GraphmapsWithMesh\Network.cs" />
     <Compile Include="GraphmapsWithMesh\Tiling.cs" />
     <Compile Include="Layout\Incremental\Relayout.cs" />
