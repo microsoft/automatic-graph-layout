@@ -3516,24 +3516,28 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
         //textbox: find node operation on 'Enter'
         void ZoomToNodeInfo(LgNodeInfo nodeInfo)
         {
-            //jyoti commented out all the node update 
+            //jyoti commented out all the node update : 
             //since the node updates will mess up with the node selection colors
+            
+            // LN. I enabled it, and it does mess up the colors and the selected nodes.
+            // However, without these lines the nodes that are found remain invisible and it is very frustrating.
+            // Jyoti, can you fix the selection? I can look at it tomorrow. todo
 
-            //nodeInfo.Selected = true;
-            //_lgLayoutSettings.Interactor.SelectedNodeInfos.Insert(nodeInfo);
+            nodeInfo.Selected = true;
+            _lgLayoutSettings.Interactor.SelectedNodeInfos.Insert(nodeInfo);
             var scale = Math.Max(CurrentScale, nodeInfo.LabelVisibleFromScale);
             var vp = new Rectangle(new Point(0, 0),
                 new Point(_graphCanvas.RenderSize.Width, _graphCanvas.RenderSize.Height));
             SetTransformOnViewport(scale, nodeInfo.Center, vp);
-            /*var drobject = nodeInfo.GeometryNode.UserData as DrawingObject;
+            var drobject = nodeInfo.GeometryNode.UserData as DrawingObject;
             if (drobject != null)
             {
                 IViewerObject ttt;
                 if (_drawingObjectsToIViewerObjects.TryGetValue(drobject, out ttt))
                 {
-                    this.Invalidate(ttt);
+                    Invalidate(ttt);
                 }
-            }*/
+            }
         }
     }
 
