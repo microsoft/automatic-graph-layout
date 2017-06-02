@@ -1402,7 +1402,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
             var largestScale = Math.Max(nodeScale, maximalZoomLevelForEdges) * 2;
             var fitFactor = FitFactor;
-            lgSettings.ScaleInterval = new Interval(fitFactor / 10, fitFactor * largestScale);
+            lgSettings.ScaleInterval = new Interval(fitFactor / 10, fitFactor * largestScale);            
 
         }
 
@@ -2387,7 +2387,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             var vp = new Rectangle(new Point(0, 0),
                 new Point(_graphCanvas.RenderSize.Width, _graphCanvas.RenderSize.Height));
             SetTransformOnViewport(scale, graphCenter, vp);
-            SetScaleRangeForLgLayoutSettings();
+            // SetScaleRangeForLgLayoutSettings();
 
         }
 
