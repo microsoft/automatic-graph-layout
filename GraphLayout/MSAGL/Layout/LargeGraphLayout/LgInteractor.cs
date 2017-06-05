@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -441,8 +442,29 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             //set control variables
             SetControlVariables();
-            
-            
+
+            /*
+            //generate dot from msagl
+            string mydocpath =
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            using (StreamWriter outputFile = new StreamWriter("D:/MSIntern/New Folder/mytest/composers.dot"))
+            {
+                outputFile.WriteLine("digraph composers {");
+                String a, b;
+                foreach (Edge e in _mainGeometryGraph.Edges)
+                {
+                    a = e.Source.ToString().Split('\"')[1];
+                    b = e.Target.ToString().Split('\"')[1];
+
+                    outputFile.WriteLine("\"" + a + "\"" + " -> " +
+                        "\"" + b + "\"");
+                }
+                outputFile.WriteLine("}");
+                outputFile.Close();
+            }
+
+            //*/
             Dictionary<Node, int> nodeToId;
             var g = TryCompetitionMeshApproach(out nodeToId);
 
