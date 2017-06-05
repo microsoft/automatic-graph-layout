@@ -69,11 +69,12 @@ namespace Microsoft.Msagl.WpfGraphControl {
         CancelToken _cancelToken = new CancelToken();
         BackgroundWorker _backgroundWorker;
         Point _mouseDownPositionInGraph;
-       
+        bool _mouseDownPositionInGraph_initialized;
+
         Ellipse _sourcePortCircle;
         protected Ellipse TargetPortCircle { get; set; }
 
-		WpfPoint _objectUnderMouseDetectionLocation;
+        WpfPoint _objectUnderMouseDetectionLocation;
         public event EventHandler LayoutStarted;
         public event EventHandler LayoutComplete;
 
@@ -182,16 +183,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
             OnMouseUp(e);
         }
 
-        
-        void ToggleNodeEdgesSlidingZoom(VNode vnode) {
-            var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
-            if (lgSettings != null)
-                foreach (var ei in vnode.Node.GeometryNode.Edges.Select(e => lgSettings.GeometryEdgesToLgEdgeInfos[e]))
-                    ei.SlidingZoomLevel = ei.SlidingZoomLevel <= 1 ? double.PositiveInfinity : 1;
-            ViewChangeEvent(null, null);
-        }
-
-        
         void HandleClickForEdge(VEdge vEdge) {
             //todo : add a hook
             var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
@@ -319,6 +310,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
             if (e.Handled) return;
             _mouseDownPositionInGraph = Common.MsaglPoint(e.GetPosition(_graphCanvas));
+            _mouseDownPositionInGraph_initialized = true;
         }
 
         
@@ -330,7 +322,15 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
 
             if (Mouse.LeftButton == MouseButtonState.Pressed && (!LayoutEditingEnabled || _objectUnderMouseCursor == null))
+            {
+                if (!_mouseDownPositionInGraph_initialized)
+                {
+                    _mouseDownPositionInGraph = Common.MsaglPoint(e.GetPosition(_graphCanvas));
+                    _mouseDownPositionInGraph_initialized = true;
+                }
+
                 Pan(e);
+            }
             else {
                 // Retrieve the coordinate of the mouse position.
                 WpfPoint mouseLocation = e.GetPosition(_graphCanvas);
@@ -459,10 +459,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
                  ViewChangeEvent(null, null);
         }
 
-        WpfPoint MousePositionOnScreen(MouseEventArgs mouseEventArgs) {
-            return mouseEventArgs.GetPosition((FrameworkElement) _graphCanvas.Parent);
-        }
-
 //        [System.Runtime.InteropServices.DllImportAttribute("user32.dll", EntryPoint = "SetCursorPos")]
 //        [return: System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.Bool)]
 //        public static extern bool SetCursorPos(int X, int Y);   
@@ -538,7 +534,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
         public IViewerObject ObjectUnderMouseCursor {
             get {
                 // this function can bring a stale object
-				var location = Mouse.GetPosition(_graphCanvas);
+                var location = Mouse.GetPosition(_graphCanvas);
                 if (!(_objectUnderMouseDetectionLocation == location))
                     UpdateWithWpfHitObjectUnderMouseOnLocation(location, MyHitTestResultCallbackWithNoCallbacksToTheUser);
                 return GetIViewerObjectFromObjectUnderCursor(_objectUnderMouseCursor);
@@ -883,36 +879,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
                     }
                 }
         */
-
-
-        void RemoveVNode(Drawing.Node drawingNode) {
-            lock (this) {
-                //            foreach (var outEdge in drawingNode.OutEdges) {
-                //                graph.Edges.Remove(outEdge);
-                //                outEdge.TargetNode.RemoveInEdge(outEdge);
-                //            }
-                //            foreach (var inEdge in drawingNode.InEdges) {
-                //                graph.Edges.Remove(inEdge);
-                //                inEdge.SourceNode.RemoveOutEdge(inEdge);
-                //            }
-                //            var selfEdges = drawingNode.SelfEdges.ToArray();
-                //            foreach (var selfEdge in selfEdges)
-                //                drawingNode.RemoveSelfEdge(selfEdge);
-                //
-                //            foreach (var edge in drawingNode.Edges.Concat(selfEdges)) {
-                //                IViewerObject vedge;
-                //                if (!drawingObjectsToIViewerObjects.TryGetValue(edge, out vedge)) continue;
-                //                
-                //                graphCanvas.Children.Remove(((VEdge)vedge).Path);
-                //                drawingObjectsToIViewerObjects.Remove(edge);
-                //            }
-                var vnode = (VNode) drawingObjectsToIViewerObjects[drawingNode];
-                foreach (var fe in vnode.FrameworkElements)
-                    _graphCanvas.Children.Remove(fe);
-                drawingObjectsToIViewerObjects.Remove(drawingNode);
-                drawingObjectsToFrameworkElements.Remove(drawingNode);
-            }
-        }
 
         /// <summary>
         /// creates a viewer node
@@ -1284,14 +1250,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 return drawingObjectsToFrameworkElements[node] = CreateTextBlockForDrawingObj(node);
         }
 
-
-        LgNodeInfo GetCorrespondingLgNode(Drawing.Node node) {
-            var lgGraphBrowsingSettings = _drawingGraph.LayoutAlgorithmSettings as LgLayoutSettings;
-            return lgGraphBrowsingSettings == null
-                       ? null
-                       : lgGraphBrowsingSettings.GeometryNodesToLgNodeInfos[node.GeometryNode];
-        }
-
         void CreateAndPositionGraphBackgroundRectangle() {
             CreateGraphBackgroundRect();
             SetBackgroundRectanglePositionAndSize();
@@ -1447,7 +1405,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 text,
                 System.Globalization.CultureInfo.CurrentCulture,
                 FlowDirection.LeftToRight,
-                new Typeface(family, new FontStyle(), FontWeights.Regular, FontStretches.Normal),
+                new Typeface(family, new System.Windows.FontStyle(), FontWeights.Regular, FontStretches.Normal),
                 size,
                 Brushes.Black,
                 null);

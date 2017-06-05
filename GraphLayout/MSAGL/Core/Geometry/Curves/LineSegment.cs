@@ -107,8 +107,13 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         /// <param name="start"></param>
         /// <param name="end"></param>
         public LineSegment(Point start, Point end) {
+#if SHARPKIT
+            a = start.Clone();
+            b = end.Clone();
+#else
             a = start;
             b = end;
+#endif
         }
 
         /// <summary>
@@ -390,7 +395,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             return (a - x) * (b - x) <= ApproximateComparer.DistanceEpsilon;
         }
 
-        #region ICurve Members
+#region ICurve Members
 
         /// <summary>
         /// 
@@ -419,7 +424,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             throw new NotImplementedException();
         }
 
-        #endregion
+#endregion
 
         /// <summary>
         /// [a,b] and [c,d] are the segments. u and v are the corresponding closest point params

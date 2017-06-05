@@ -73,10 +73,6 @@ namespace Microsoft.Msagl.Routing.Visibility {
             return Math.Abs((a - b) * SweepDirection) > ApproximateComparer.DistanceEpsilon;
         }
 
-        protected bool SegmentIsHorizontal(Point a, Point b) {
-            return Math.Abs((a - b) * SweepDirection) <= ApproximateComparer.DistanceEpsilon;
-        }
-
         protected void RemoveLeftSide(LeftObstacleSide side) {
             ObstacleSideComparer.SetOperand(side);
             LeftObstacleSideTree.Remove(side);

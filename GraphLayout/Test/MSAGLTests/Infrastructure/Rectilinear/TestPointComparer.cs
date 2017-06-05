@@ -84,11 +84,6 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             return 0 == Compare(x, y);
         }
 
-        internal bool IsEqual(LineSegment a, LineSegment b) 
-        {
-            return IsEqual(a.Start, b.Start) && IsEqual(a.End, b.End);
-        }
-
         internal int Compare(double lhs, double rhs) 
         {
             double c = Round(lhs) - Round(rhs);
@@ -112,35 +107,6 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         internal bool IsClose(LineSegment a, LineSegment b) 
         {
             return IsClose(a.Start, b.Start) && IsClose(a.End, b.End);
-        }
-
-        internal int CompareClose(Point a, Point b) 
-        {
-            if (IsClose(a, b))
-            {
-                return 0;
-            }
-            int cmp = CompareClose(a.X, b.X);
-            if (0 == cmp) 
-            {
-                cmp = CompareClose(a.Y, b.Y);
-            }
-            return cmp;
-        }
-
-        internal int CompareClose(double a, double b) 
-        {
-            return IsClose(a, b) ? 0 : a.CompareTo(b);
-        }
-
-        internal int CompareClose(LineSegment a, LineSegment b) 
-        {
-            var cmp = CompareClose(a.Start, b.Start);
-            if (0 == cmp) 
-            {
-                cmp = CompareClose(a.End, b.End);
-            }
-            return cmp;
         }
     }
 } // end namespace TestRectilinear

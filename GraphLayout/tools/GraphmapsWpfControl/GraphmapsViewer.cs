@@ -75,11 +75,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
         Ellipse _sourcePortCircle;
 
         // roman: control points for editing rail
-        List<Ellipse> _ctrlPoints = new List<Ellipse>();
-        List<WPolyline> _ctrlPolylines = new List<WPolyline>();
-
-        Set<Ellipse> _selectedCtrlPoints = new Set<Ellipse>();
-
         Set<Rail> _selectedRails = new Set<Rail>();
 
 
@@ -1418,7 +1413,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
             var largestScale = Math.Max(nodeScale, maximalZoomLevelForEdges) * 2;
             var fitFactor = FitFactor;
-            lgSettings.ScaleInterval = new Interval(fitFactor / 10, fitFactor * largestScale);
+            lgSettings.ScaleInterval = new Interval(fitFactor / 10, fitFactor * largestScale);            
 
         }
 
@@ -2403,7 +2398,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             var vp = new Rectangle(new Point(0, 0),
                 new Point(_graphCanvas.RenderSize.Width, _graphCanvas.RenderSize.Height));
             SetTransformOnViewport(scale, graphCenter, vp);
-            SetScaleRangeForLgLayoutSettings();
+            // SetScaleRangeForLgLayoutSettings();
 
         }
 
@@ -2918,7 +2913,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 text,
                 CultureInfo.CurrentCulture,
                 FlowDirection.LeftToRight,
-                new Typeface(family, new FontStyle(), FontWeights.Regular, FontStretches.Normal),
+                new Typeface(family, new System.Windows.FontStyle(), FontWeights.Regular, FontStretches.Normal),
                 size,
                 Brushes.Black,
                 null);
@@ -3328,6 +3323,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             settings = _drawingGraph.LayoutAlgorithmSettings as LgLayoutSettings;
             return settings != null;
         }
+
         /// <summary>
         /// generate and load tiles
         /// </summary>
@@ -3404,6 +3400,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             }
             return new FileStream(fname + ".png", FileMode.CreateNew);
         }
+
         StreamWriter CreateTileStreamWriter(GridTraversal grid, int ix, int iy)
         {
             var splitName = grid.SplitTileNameOnDirectories(ix, iy);
@@ -3530,24 +3527,28 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
         //textbox: find node operation on 'Enter'
         void ZoomToNodeInfo(LgNodeInfo nodeInfo)
         {
-            //jyoti commented out all the node update 
+            //jyoti commented out all the node update : 
             //since the node updates will mess up with the node selection colors
+            
+            // LN. I enabled it, and it does mess up the colors and the selected nodes.
+            // However, without these lines the nodes that are found remain invisible and it is very frustrating.
+            // Jyoti, can you fix the selection? I can look at it tomorrow. todo
 
-            //nodeInfo.Selected = true;
-            //_lgLayoutSettings.Interactor.SelectedNodeInfos.Insert(nodeInfo);
+            nodeInfo.Selected = true;
+            _lgLayoutSettings.Interactor.SelectedNodeInfos.Insert(nodeInfo);
             var scale = Math.Max(CurrentScale, nodeInfo.LabelVisibleFromScale);
             var vp = new Rectangle(new Point(0, 0),
                 new Point(_graphCanvas.RenderSize.Width, _graphCanvas.RenderSize.Height));
             SetTransformOnViewport(scale, nodeInfo.Center, vp);
-            /*var drobject = nodeInfo.GeometryNode.UserData as DrawingObject;
+            var drobject = nodeInfo.GeometryNode.UserData as DrawingObject;
             if (drobject != null)
             {
                 IViewerObject ttt;
                 if (_drawingObjectsToIViewerObjects.TryGetValue(drobject, out ttt))
                 {
-                    this.Invalidate(ttt);
+                    Invalidate(ttt);
                 }
-            }*/
+            }
         }
     }
 

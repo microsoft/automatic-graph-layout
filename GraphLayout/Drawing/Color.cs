@@ -113,7 +113,7 @@ namespace Microsoft.Msagl.Drawing {
 /// </summary>
 /// <returns></returns>
         public override string ToString() {
-            return "\"#" + Xex(A) + Xex(R) + Xex(G) + Xex(B) + "\"";
+            return "\"#" + Xex(R) + Xex(G) + Xex(B) + (this.A == 255 ? "" : Xex(A)) + "\"";
         }
 /// <summary>
 /// 

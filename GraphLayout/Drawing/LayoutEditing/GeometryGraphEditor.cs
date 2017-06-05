@@ -303,101 +303,11 @@ namespace Microsoft.Msagl.Drawing {
             GraphBoundingBoxGetsExtended = box != graph.BoundingBox;
         }
 
-
-        Rectangle GetUpdatedRegionAndCleanUpAffectedObjects() {
-
-            Rectangle rect = Rectangle.CreateAnEmptyBox();
-            var affectedObjectList = new List<IViewerObject>(CurrentUndoAction.AffectedObjects);
-
-            foreach (var ivObj in affectedObjectList) {
-                var inode = ivObj as IViewerNode;
-                if (inode == null) continue;
-                var node = (GeomNode) inode.DrawingObject.GeometryObject;
-                NodeRestoreData nrd = (NodeRestoreData) CurrentUndoAction.GetRestoreData(node);
-                var oldBoundingBox = nrd.BoundaryCurve.BoundingBox;
-                if (!oldBoundingBox.Equals(node.BoundingBox)) {
-                    rect.Add(node.BoundingBox);
-                    rect.Add(oldBoundingBox);
-                }
-                else CurrentUndoAction.RemoveAffectedObject(ivObj);
-            }
-
-            foreach (var e in edgesDraggedWithSource.Concat(edgesDraggedWithTarget))
-                rect.Add(e.BoundingBox);
-
-            rect.Pad(layoutSettings.EdgeRoutingSettings.Padding);
-            return rect;
-        }
-
-
-
-        internal static ICurve CreateBaseSegmentForDraggingEdgeWithTarget(Point delta, GeomEdge edge,
-            EdgeRestoreData edgeRestoreData,
-            Dictionary<GeomEdge, double> offsets) {
-            double offset;
-            ICurve seg;
-            Point a = edgeRestoreData.UnderlyingPolyline.HeadSite.Point;
-            Point b = edgeRestoreData.UnderlyingPolyline.LastSite.Point + delta;
-            if (offsets.TryGetValue(edge, out offset) && offset != 0) {
-                Point ab = b - a;
-                Point abOrtog = ab.Normalize().Rotate(-Math.PI/2)*offset;
-
-                seg = CreateBaseSegOnSourceTargetAndOrth(ref a, ref b, ref abOrtog);
-                //        SugiyamaLayoutSettings.Show(seg, edge.Curve, edge.Source.BoundaryCurve);
-            }
-            else
-                seg = new LineSegment(a, b);
-            return seg;
-        }
-
-        static ICurve CreateBaseSegOnSourceTargetAndOrth(ref Point a, ref Point b, ref Point abOrtog) {
-            ICurve seg = new CubicBezierSegment(a, a*3.0/4 + b/4 + abOrtog, b*3.0/4.0 + a/4.0 + abOrtog, b);
-            return seg;
-        }
-
-        internal static ICurve CreateBaseSegmentForDraggingEdgeWithSource(Point delta, GeomEdge edge,
-            EdgeRestoreData edgeRestoreData,
-            Dictionary<GeomEdge, double> offsets) {
-            double offset;
-            ICurve seg;
-            Point a = edgeRestoreData.UnderlyingPolyline.HeadSite.Point + delta;
-            Point b = edgeRestoreData.UnderlyingPolyline.LastSite.Point;
-            if (offsets.TryGetValue(edge, out offset) && offset != 0) {
-                Point ab = b - a;
-                Point abOrtog = ab.Normalize().Rotate(Math.PI/2)*offset;
-                seg = CreateBaseSegOnSourceTargetAndOrth(ref a, ref b, ref abOrtog);
-                //        SugiyamaLayoutSettings.Show(seg, edge.Curve, edge.Source.BoundaryCurve);
-            }
-            else
-                seg = new LineSegment(a, b);
-
-            return seg;
-        }
-
-
         void DragEdgeEdit(Point lastMousePosition, Point delta) {
             EditedEdge.RaiseLayoutChangeEvent(delta);
             Site site = FindClosestCornerForEdit(EditedEdge.UnderlyingPolyline, lastMousePosition);
             site.Point += delta;
             CreateCurveOnChangedPolyline(EditedEdge);
-        }
-
-
-        internal static void DragEdge(Point delta, GeomEdge e, EdgeRestoreData edgeRestoreData,
-            Set<GeometryObject> objectsMarkedToDrag) {
-            Site site = null;
-
-            if (objectsMarkedToDrag.Contains(e.Source)) {
-                if (!objectsMarkedToDrag.Contains(e.Target))
-                    site = e.UnderlyingPolyline.HeadSite;
-            }
-            else
-                site = e.UnderlyingPolyline.LastSite;
-
-            if (site == null)
-                TranslateEdge(e, delta, edgeRestoreData);
-            else
-                DragEdgeWithSite(delta, e, site);
         }
 
         /// <summary>
@@ -458,24 +368,6 @@ namespace Microsoft.Msagl.Drawing {
         //            return curve;
         //        }
 
-        static void TranslateEdge(GeomEdge e, Point delta, EdgeRestoreData edgeRestoreData) {
-            if (edgeRestoreData.Curve != null) {
-                e.Curve = edgeRestoreData.Curve.Clone();
-                e.Curve.Translate(delta);
-            }
-            if (e.UnderlyingPolyline != null)
-                for (Site s = e.UnderlyingPolyline.HeadSite, s0 = edgeRestoreData.UnderlyingPolyline.HeadSite;
-                    s != null;
-                    s = s.Next, s0 = s0.Next)
-                    s.Point = s0.Point + delta;
-            if (e.EdgeGeometry.SourceArrowhead != null)
-                e.EdgeGeometry.SourceArrowhead.TipPosition = edgeRestoreData.ArrowheadAtSourcePosition + delta;
-            if (e.EdgeGeometry.TargetArrowhead != null)
-                e.EdgeGeometry.TargetArrowhead.TipPosition = edgeRestoreData.ArrowheadAtTargetPosition + delta;
-            if (e.Label != null)
-                e.Label.Center = edgeRestoreData.LabelCenter + delta;
-        }
-
         /// <summary>
         ///     prepares for node dragging
         /// </summary>
@@ -535,7 +427,11 @@ namespace Microsoft.Msagl.Drawing {
             }
             var p = new Point(-Graph.Margins, Graph.Margins);
 
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
+            Rectangle bounds = Graph.BoundingBox.Clone();
+#else
             Rectangle bounds = Graph.BoundingBox;
+#endif
             GraphBoundingBoxGetsExtended |= bounds.AddWithCheck(bBox.LeftTop + p);
             GraphBoundingBoxGetsExtended |= bounds.AddWithCheck(bBox.RightBottom - p);
             Graph.BoundingBox = bounds;

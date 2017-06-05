@@ -467,10 +467,5 @@ namespace Microsoft.Msagl.WpfGraphControl {
             if (FrameworkElementOfNodeForLabel != null)
                 graphCanvas.Children.Remove(FrameworkElementOfNodeForLabel);
         }
-
-
-        byte Low(byte b) {
-            return (byte) (b/3);
-        }
     }
 }

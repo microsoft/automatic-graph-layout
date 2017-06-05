@@ -141,7 +141,11 @@ namespace Microsoft.Msagl.Routing {
             var nodeBoundaries = new Set<ICurve>();
             var eg = egs[0];
             var c = GetPortCurve(eg.SourcePort);
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
+            var rect = c.BoundingBox.Clone();
+#else
             var rect = c.BoundingBox;
+#endif
             nodeBoundaries.Insert(c);
             nodeBoundaries.Insert(eg.TargetPort.Curve);
             rect.Add(eg.TargetPort.Curve.BoundingBox);

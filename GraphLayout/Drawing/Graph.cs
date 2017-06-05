@@ -64,57 +64,13 @@ namespace Microsoft.Msagl.Drawing {
             set { layoutAlgorithm = value; }
         }
 
-        static void WriteNodeCollection(TextWriter sw, IEnumerable nodeLabels) {
-            int i = 0;
-
-            sw.Write(" ");
-
-            foreach (string s in nodeLabels) {
-                sw.Write(s);
-                sw.Write(" ");
-                i = (i + 1)%6;
-
-                if (i == 0)
-                    sw.WriteLine("");
-            }
-        }
-
         void WriteNodes(TextWriter sw) {
             sw.WriteLine("//nodes");
             foreach (Node node in nodeMap.Values)
                 sw.WriteLine(node.ToString());
         }
-
-        void WriteMinLayer(TextWriter sw) {
-            if (MinLayer != null) {
-                WriteLayer(sw, "min", MinLayer);
-            }
-        }
-
-        void WriteMaxLayer(TextWriter sw) {
-            if (MaxLayer != null) {
-                WriteLayer(sw, "max", MaxLayer);
-            }
-        }
-
-        void WriteSameLayers(TextWriter sw) {
-            foreach (IEnumerable i in SameLayers)
-                WriteLayer(sw, "same", i);
-        }
-
-        static void WriteLayer(TextWriter sw, string tag, IEnumerable layer) {
-            sw.Write("{layer=" + tag);
-            WriteNodeCollection(sw, layer);
-            sw.WriteLine("}");
-        }
-
-        void WriteLayers(TextWriter sw) {
-            WriteMinLayer(sw);
-            WriteMaxLayer(sw);
-            WriteSameLayers(sw);
-        }
-
-
+        
+        
         /// <summary>
         /// Prints Microsoft.Msagl.Drawing in the DOT format - has side effects!
         /// </summary>
@@ -124,7 +80,7 @@ namespace Microsoft.Msagl.Drawing {
         public override string ToString() {
             var sw = new StringWriter();
 
-            sw.WriteLine("digraph \"" + Label + "\" {");
+            sw.WriteLine("digraph \"" + (string.IsNullOrEmpty(Label.Text)? "noname":Label.Text) + "\" {");
 
             WriteStms(sw);
 
@@ -138,14 +94,13 @@ namespace Microsoft.Msagl.Drawing {
 
         void WriteEdges(TextWriter tw) {
             foreach (Edge edge in Edges) {
-                tw.WriteLine(edge.ToString());
+                tw.WriteLine(edge.ToDotGeometry());
             }
         }
 
         void WriteStms(TextWriter sw) {
             sw.WriteLine(attr.ToString(Label.Text));
             WriteNodes(sw);
-            WriteLayers(sw);
             WriteEdges(sw);
         }
 
@@ -417,58 +372,9 @@ namespace Microsoft.Msagl.Drawing {
         public virtual Edge AddEdge(string source, string target) {
             return AddEdge(source, null, target);
         }
-
-
+        
         /// <summary>
-        /// Nodes having minimal layering
-        /// </summary>
-        IEnumerable minLayer;
-
-        /// <summary>
-        /// for future use
-        /// </summary>
-        public IEnumerable MinLayer {
-            get { return minLayer; }
-            set { minLayer = value; }
-        }
-
-        /// <summary>
-        /// Nodes to have maximal layering
-        /// </summary>
-        IEnumerable maxLayer;
-
-        /// <summary>
-        /// for future use
-        /// </summary>
-        public IEnumerable MaxLayer {
-            get { return maxLayer; }
-            set { maxLayer = value; }
-        }
-
-
-        /// <summary>
-        /// Nodes having the same layering: different calls generate different groups with the same layer
-        /// </summary>
-        /// <param name="nodeLabels">collection of strings - node labels</param>
-        public void AddSameLayer(IEnumerable nodeLabels) {
-            SameLayers.Add(nodeLabels);
-        }
-
-
-        /// <summary>
-        /// Collections of same layers nodes
-        /// </summary>
-        ArrayList sameLayers = new ArrayList();
-
-        /// <summary>
-        /// for future use
-        /// </summary>
-        public ArrayList SameLayers {
-            get { return sameLayers; }
-        }
-
-        /// <summary>
-        /// Very strangely, but layouts look not so good if I use Dictionary ovet string, Node
+        /// It is very strange, but the layouts don't look not so good if I use Dictionary over strings
         /// </summary>
         internal Hashtable nodeMap = new Hashtable();
 

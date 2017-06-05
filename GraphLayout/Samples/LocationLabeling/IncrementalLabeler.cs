@@ -38,7 +38,6 @@ namespace LocationLabeling {
         Dictionary<Node, ICurve> nodeToNodeBoundary = new Dictionary<Node, ICurve>();
         Dictionary<Node, Point> nodeToCenter = new Dictionary<Node, Point>();
 
-        Dictionary<Node, Tuple<int, int>> decisionIndex = new Dictionary<Node, Tuple<int, int>>();
         double labelSeparation;
 
        
@@ -74,13 +73,6 @@ namespace LocationLabeling {
             } while (numberOfUnseccsesfulAttemptsInARow < giveUpNumber);
 
         
-        }
-
-        private bool IsCircle(ICurve iCurve) {
-            Ellipse ellipse = iCurve as Ellipse;
-            if (ellipse == null)
-                return false;
-            return ellipse.AxisA.X == ellipse.AxisB.Y && ellipse.ParStart == 0 && ellipse.ParEnd == Math.PI * 2;
         }
 
         private void RestoreConfig() {
@@ -202,15 +194,6 @@ namespace LocationLabeling {
                     CheckTreeOnNode(t.r);
         }
 
-        private bool CirclesAreTooClose(Node a, Node b) {
-            var del = a.Center - b.Center;
-            var r = (a.Width + b.Width) / 2;
-            if (del * del < r * r)
-                return true;
-            return false;
-        }
-
-
         private void FillList(List<ICurve> listOfTreeCurves, TreeNode treeNode) {
             listOfTreeCurves.Add(BoundingBoxCurve(ref treeNode.box));
             if (treeNode.node != null)
@@ -233,16 +216,6 @@ namespace LocationLabeling {
 
         private double GetEnergy() {
             return (from n in liveLabels let p = FindLocationByLabel(n).Center let t = p - n.Center select t * t).Sum();
-        }
-
-        private void RestoreOffsettedCurveBoundaries() {
-            ////restore node boundary curves
-            //foreach (var node in this.locations)
-            //    node.BoundaryCurve = node.BoundaryCurve.OffsetCurve(this.locationRadius / 2,
-            //        node.Center + new Point(node.Width, 0));
-
-            //foreach (var node in this.labels)
-            //    node.BoundaryCurve = node.BoundaryCurve.OffsetCurve(this.locationRadius / 2, node.Center);
         }
 
         Rectangle Pad(Rectangle box, double padding) {
@@ -278,17 +251,6 @@ namespace LocationLabeling {
             FillNodeToTreeNodeMap(tn.l);
             FillNodeToTreeNodeMap(tn.r);
         }
-
-        private void UpdateTree(TreeNode tn) {
-            tn.box = Pad(tn.node.BoundingBox, labelSeparation / 2);
-            tn = tn.parent;
-            while (tn != null) {
-                tn.box = tn.l.box;
-                tn.box.Add(tn.r.box);
-                tn = tn.parent;
-            }
-        }
-
 
         private void AddNodeToTree(TreeNode tn, Node node, Rectangle box) {
             AddNodeToTreeWithoutOverlaps(tn, ref box, node);
@@ -342,8 +304,6 @@ namespace LocationLabeling {
 
         }
 
-        private static Rectangle CreateNodeRect(Node node) { return node.BoundingBox; }
-
         private void RemoveIntersectionsOfStems() {
             while (RemoveIntersections(liveLabels.ToArray())) ; //can take a while
         }
@@ -378,21 +338,12 @@ namespace LocationLabeling {
             foreach (var node in this.liveLabels.Concat(fixedLabels))
                 g.Nodes.Add(node);
 
-            Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTree.OverlapRemoval.RemoveOverlaps(g.Nodes.ToArray(), NodeSeparation);
+            Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTree.GTreeOverlapRemoval.RemoveOverlaps(g.Nodes.ToArray(), NodeSeparation);
 
         }
 
         IEnumerable<Node> AllLabels() {
             return liveLabels.Concat(fixedLabels).Concat(locations);
-        }
-
-
-        private ICurve[] GetCurves() {
-            return
-                (from n in AllLabels()
-                 select n.BoundaryCurve)
-                 .Concat(from l in locations select l.BoundaryCurve).Concat(
-                 from e in Edges() select e.Curve != null ? e.Curve : new LineSegment(e.Source.Center, e.Target.Center)).ToArray();
         }
 
         IEnumerable<Edge> Edges() {
@@ -444,15 +395,6 @@ namespace LocationLabeling {
 
         }
 
-    
-        private Rectangle ExtendedBoundingBoxOfNode(Node n) {
-            var del = new Point(this.locationRadius, -this.locationRadius);
-            var bb = n.BoundingBox;
-            bb.Add(bb.LeftTop - del);
-            bb.Add(bb.RightBottom + del);
-            return bb;
-        }
-
         internal IncrementalLabeler(double radius, bool route, double labelSep) {
             this.labelSeparation = labelSep;
             this.routeEdges = route;
@@ -467,14 +409,6 @@ namespace LocationLabeling {
             label.AddOutEdge(new Edge(label, loc));
             this.locations.Insert(loc);
             AddNodeToTree(fixedTree, loc, Pad(loc.BoundingBox, this.labelSeparation / 2 + this.locationRadius));
-        }
-
-        internal void RemoveNode(Node label) {
-            throw new NotImplementedException();
-            //var loc = FindLocationByLabel(label);
-            //this.locations.Remove(loc);
-            //liveLabels.Remove(label);
-            //fixedLabels.Remove(label);
         }
 
         internal void Layout() {
@@ -498,10 +432,6 @@ namespace LocationLabeling {
                 labelById[node.UserData] = node;
 
             liveLabels.Clear();
-        }
-
-        internal IEnumerable<Node> Labels() {
-            return this.liveLabels.Concat(fixedLabels);
         }
 
         /// <summary>

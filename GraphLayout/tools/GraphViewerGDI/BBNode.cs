@@ -26,13 +26,14 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-using System;
-using System.Windows.Forms;
+
+using System.Collections.Generic;
 using Microsoft.Msagl.Drawing;
 using BBox = Microsoft.Msagl.Core.Geometry.Rectangle;
 using P2=Microsoft.Msagl.Core.Geometry.Point;
 
-namespace Microsoft.Msagl.GraphViewerGdi {
+namespace Microsoft.Msagl.GraphViewerGdi
+{
 
     /// <summary>
     /// a delegate type for filtering in the :  returns false on filtered entities and only on them
@@ -44,14 +45,18 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// Summary description for BBNode.
     /// </summary>
-    internal class BBNode {
+    internal class BBNode
+    {
         internal BBNode left;
         internal BBNode right;
         internal BBNode parent;
         internal BBox bBox;
         internal Geometry geometry;
-        internal BBox Box {
-            get {
+
+        internal BBox Box
+        {
+            get
+            {
                 if (geometry != null)
                     return geometry.bBox;
 
@@ -60,39 +65,50 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         }
 
 
-
-        internal BBNode() { }
-
         //when we check for inclusion we expand the box by slack
-        internal Geometry Hit(P2 p, double slack, EntityFilterDelegate filter) {
-            if (filter != null && this.geometry != null)
+        internal Geometry Hit(P2 p, double slack, EntityFilterDelegate filter, List<Geometry> subgraphCandidates)
+        {
+            if (filter != null && geometry != null)
                 if (filter(geometry.dObject) == false)
                     return null;
             if (left == null)
-                if (Box.Contains(p, slack)) {
+                if (Box.Contains(p, slack))
+                {
                     Line line = geometry as Line;
 
-                    if (line != null) {
-                        if (Tessellator.DistToSegm(p, line.start, line.end) < slack + line.LineWidth / 2)
+                    if (line != null)
+                    {
+                        if (Tessellator.DistToSegm(p, line.start, line.end) < slack + line.LineWidth/2)
                             return line;
                         return null;
 
-                    } else if (Box.Contains(p))
-                        return geometry;
+                    }
+                    if (Box.Contains(p))
+                    {
+                        var subg = geometry.dObject.DrawingObject as Subgraph;
+                        if (subg != null)
+                            subgraphCandidates.Add(geometry);
+                        else
+                            return geometry;
+                    }
 
                     return null;
-                } else
+                }
+                else
                     return null;
 
-            if (left.Box.Contains(p, slack)) {
-                Geometry g = left.Hit(p, slack, filter);
-                if (g != null) {
+            if (left.Box.Contains(p, slack))
+            {
+                Geometry g = left.Hit(p, slack, filter, subgraphCandidates);
+                if (g != null)
+                {
                     return g;
                 }
             }
 
-            if (right.Box.Contains(p, slack)) {
-                Geometry g = right.Hit(p, slack, filter);
+            if (right.Box.Contains(p, slack))
+            {
+                Geometry g = right.Hit(p, slack, filter, subgraphCandidates);
                 if (g != null)
                     return g;
             }

@@ -303,10 +303,6 @@ namespace Microsoft.Msagl.Core.Geometry {
             return EnumRectangleNodes(true /*leafOnly*/);
         }
 
-        internal IEnumerable<RectangleNode<TData>> GetAllNodes() {
-            return EnumRectangleNodes(false /*leafOnly*/);
-        }
-
         IEnumerable<RectangleNode<TData>> EnumRectangleNodes(bool leafOnly) {
             var stack = new Stack<RectangleNode<TData>>();
             stack.Push(this);

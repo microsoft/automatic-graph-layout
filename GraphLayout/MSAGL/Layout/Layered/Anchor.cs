@@ -360,7 +360,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             Point u = first.Point;
             Point v = second.Point;
             Point w = third.Point;
-            System.Diagnostics.Debug.Assert(Point.GetTriangleOrientation(u, v, w) == TriangleOrientation.Clockwise);
+            // System.Diagnostics.Debug.Assert(Point.GetTriangleOrientation(u, v, w) == TriangleOrientation.Clockwise);
             
             Point uvPerp = (v - u).Rotate(Math.PI / 2).Normalize();
             ////uvPerp has to look outside of the curve
@@ -467,11 +467,6 @@ namespace Microsoft.Msagl.Layout.Layered {
         internal void Move(Point p){
             this.X += p.X;
             this.Y += p.Y;
-        }
-
-        internal void MoveTo(Point p) {
-            this.X = p.X;
-            this.Y = p.Y;
         }
 
 #if TEST_MSAGL

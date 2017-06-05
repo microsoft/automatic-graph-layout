@@ -82,6 +82,7 @@ namespace TestGraphmaps {
         const string BackgroundColorOption = "-bgcolor";
         const string RailColorsOption = "-railcolors";
         const string IncreaseNodeQuotaOption = "-inq";
+        const string SelectionColorsOption = "-selcolors";
 
         public static readonly RoutedUICommand OpenFileCommand = new RoutedUICommand("Open File...", "OpenFileCommand",
             typeof (App));
@@ -129,8 +130,6 @@ namespace TestGraphmaps {
         string _lastFileName;
         static ArgsParser.ArgsParser _argsParser;
         TextBox _statusTextBox;
-        Timer _fileListTimer;
-        const int FileListDelay = 8000;
         string _currentFileNameFromList;
         //RangeSlider edgeRangeSlider;
 
@@ -239,76 +238,6 @@ namespace TestGraphmaps {
 //            }
         }
 
-
-        Microsoft.Msagl.Core.Geometry.Point MousePositionToGraph() {
-            var pos = Mouse.GetPosition(_graphViewer.GraphCanvas);
-            return new Microsoft.Msagl.Core.Geometry.Point(pos.X, pos.Y);
-        }
-
-        Node CreateDrawingNodeByUsingDialog() {
-            RichTextBox richBox;
-            var window = CreateNodeDialog(out richBox);
-            window.ShowDialog();
-
-            var r = new Random();
-            var i = r.Next();
-
-            var createdNode = new Node(i.ToString());
-            var s = new TextRange(richBox.Document.ContentStart, richBox.Document.ContentEnd).Text;
-            createdNode.LabelText = s.Trim('\r', '\n', ' ', '\t');
-            return createdNode;
-        }
-
-        Window CreateNodeDialog(out RichTextBox richBox) {
-            var window = new Window {Width = 200, Height = 200};
-            var mp = Mouse.GetPosition(_dockPanel);
-            window.Left = mp.X;
-            window.Top = mp.Y;
-            var panel = new DockPanel();
-
-            window.Content = panel;
-
-            var textBox = new TextBox {Text = "Please modify the node label:"};
-
-            DockPanel.SetDock(textBox, Dock.Top);
-            panel.Children.Add(textBox);
-
-            richBox = new RichTextBox();
-            richBox.FontSize *= 1.5;
-            richBox.AppendText("Label");
-            richBox.FontFamily = new FontFamily("Consoles");
-            richBox.Width = window.Width;
-            DockPanel.SetDock(richBox, Dock.Top);
-            panel.Children.Add(richBox);
-            panel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            panel.Width = textBox.Width;
-            var button = new Button {Content = "OK"};
-            button.Click += (a, b) => window.Close();
-            DockPanel.SetDock(button, Dock.Bottom);
-            button.IsDefault = true;
-            button.Width = 40;
-            button.Height = 40;
-            panel.Children.Add(button);
-            panel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            window.SizeToContent = SizeToContent.WidthAndHeight;
-            return window;
-        }
-
-
-        Tuple<string, VoidDelegate>[] ChangeColorDialog(AttributeBase attr) {
-            return new[] {ColorChangeMenuTuple(attr)};
-        }
-
-        static Tuple<string, VoidDelegate> ColorChangeMenuTuple(AttributeBase attr) {
-            return new Tuple<string, VoidDelegate>("set color", () => {
-                var dialog = new ColorDialog();
-                if (dialog.ShowDialog() == DialogResult.OK) {
-                    var color = dialog.Color;
-                    attr.Color = new Color(color.A, color.R, color.G, color.B);
-                }
-            });
-        }
-
         public static object CreateMenuItem(string title, VoidDelegate voidVoidDelegate) {
             var menuItem = new MenuItem {Header = title};
             menuItem.Click += (RoutedEventHandler) (delegate { voidVoidDelegate(); });
@@ -371,6 +300,7 @@ namespace TestGraphmaps {
             CheckNodeQuota();
             CheckRailQuota();
             CheckRailColors();
+            CheckSelectionColors();
             CheckIncreaseNodeQuota();
         }
 
@@ -379,6 +309,13 @@ namespace TestGraphmaps {
             if (railColors != null)
             {
                 _graphViewer.DefaultLargeLayoutSettings.RailColors = railColors.Split(',');
+            }
+        }
+
+        void CheckSelectionColors() {
+            string selColors = _argsParser.GetValueOfOptionWithAfterString(SelectionColorsOption);
+            if (selColors != null) {
+                _graphViewer.DefaultLargeLayoutSettings.SelectionColors = selColors.Split(',');
             }
         }
 
@@ -488,21 +425,6 @@ namespace TestGraphmaps {
             }
         }
 
-        bool SetupNextRun(StreamReader sr, string fileListDir) {
-            _currentFileNameFromList = ReadNextFileName(sr, fileListDir);
-            if (_currentFileNameFromList == null) {
-                sr.Close();
-                return false;
-            }
-            _fileListTimer = new Timer(FileListDelay);
-            _fileListTimer.Elapsed += (c, d) => {
-                _fileListTimer.Stop();
-                CreateAndLayoutGraph(_currentFileNameFromList);
-            };
-            _fileListTimer.Start();
-            return true;
-        }
-
         string ReadNextFileName(StreamReader sr, string fileListDir) {
             var fn = sr.ReadLine();
             if (fn == null)
@@ -537,6 +459,8 @@ namespace TestGraphmaps {
     "sets the background color for the large layout viewer");
             _argsParser.AddOptionWithAfterStringWithHelp(RailColorsOption,
 "sets the rail colors for the large layout viewer");
+            _argsParser.AddOptionWithAfterStringWithHelp(SelectionColorsOption,
+"sets the selected rail colors for the large layout viewer");
 
             _argsParser.AddOptionWithAfterStringWithHelp(MaxNodesPerTileOption,
                 "sets the max nodes per tile for large layout");
@@ -685,14 +609,6 @@ namespace TestGraphmaps {
             lgSettings.Interactor.RunMds();
         }
 
-        void InitEdgesOfLevels(object sender, ExecutedRoutedEventArgs e) {
-            LgLayoutSettings lgSettings;
-            if (!GetLgSettings(out lgSettings)) return;
-            lgSettings.Interactor.InitEdgesOfLevels();
-        }
-
-        
-        
         void SimplifyRoutes(object sender, ExecutedRoutedEventArgs e) {
             LgLayoutSettings lgSettings;
             int iLevel;
@@ -841,7 +757,7 @@ namespace TestGraphmaps {
                         n.Attr.XRadius = n.Attr.YRadius = 3;
 
                 if (_argsParser.OptionIsUsed(RunRemoveOverlapsOption)) {
-                    OverlapRemoval.RemoveOverlaps(graph.GeometryGraph.Nodes.ToArray(),
+                    GTreeOverlapRemoval.RemoveOverlaps(graph.GeometryGraph.Nodes.ToArray(),
                         graph.LayoutAlgorithmSettings.NodeSeparation);
                 }
             }
@@ -925,21 +841,26 @@ namespace TestGraphmaps {
                 MessageBox.Show("cannot load " + fileName);
         }
 
-        void ProcessDot(string fileName) {
+        bool ProcessDot(string fileName)
+        {
             int line, column;
             string msg;
             Graph gwgraph = Parser.Parse(fileName, out line, out column, out msg);
 
             Debug.Assert(NodeMapOfGraphIsOk(gwgraph));
 
-            if (gwgraph != null && (gwgraph.NodeCount > 0 || gwgraph.EdgeCount > 0)) {
+            if (gwgraph != null && (gwgraph.NodeCount > 0 || gwgraph.EdgeCount > 0))
+            {
                 PassGraphToGraphViewer(gwgraph, fileName);
+                return true;
             }
-            else 
-                Console.WriteLine("Cannot parse {3} {2} line {0} column {1}", line, column, msg, fileName);
+            Console.WriteLine("Cannot parse {3} {2} line {0} column {1}", line, column, msg, fileName);
+            return false;
         }
 
-        void SaveMsaglAndTiles(string fileName) {
+        void SaveMsaglAndTiles(string fileName)
+        {
+            if (_graphViewer.Graph == null) return;
             string rootName = FileNameWithoutExtension(fileName);
             string msaglFileName = rootName + ".msagl";
             Console.WriteLine("saving to {0}", msaglFileName);
@@ -980,7 +901,7 @@ namespace TestGraphmaps {
                         ProximityOverlapRemoval.RemoveOverlaps(compGraph, gwgraph.LayoutAlgorithmSettings.NodeSeparation);
                         break;
                     case OverlapRemovalMethod.MinimalSpanningTree:
-                        OverlapRemoval.RemoveOverlaps(compGraph.Nodes.ToArray(),
+                        GTreeOverlapRemoval.RemoveOverlaps(compGraph.Nodes.ToArray(),
                             gwgraph.LayoutAlgorithmSettings.NodeSeparation);
                         break;
                     default:

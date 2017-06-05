@@ -65,14 +65,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
         /// Node positions.
         /// </summary>
          Point[] nodePositions;
-
-        /// <summary>
-        /// Current Node Positions
-        /// </summary>
-        public Point[] NodePositions {
-            get { return nodePositions; }
-        }
-
+        
         /// <summary>
         /// Current Node Boxes
         /// </summary>
@@ -113,8 +106,8 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="settings"></param>
-        public ProximityOverlapRemoval(OverlapRemovalSettings settings) {
+        public ProximityOverlapRemoval(OverlapRemovalSettings settings, GeometryGraph graph) {
+            Graph = graph;
             Settings = settings;
         }
 
@@ -573,51 +566,36 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
         /// Scale the graph, such that the average edge length corresponds to a predefined size.
         /// </summary>
          void DoInitialScaling() {
-            var edges = _nodes.SelectMany(n => n.OutEdges).ToArray();
-            if (edges.Length == 0) return;
+            return;
+//            var edges = _nodes.SelectMany(n => n.OutEdges).ToArray();
+//            if (edges.Length == 0) return;
 
-            var avgEdgeLength = AvgEdgeLength(edges);
+//            var avgEdgeLength = AvgEdgeLength(edges);
 
-            double goalLength;
-            if (Settings.InitialScaling == InitialScaling.Inch72Pixel)
-                goalLength = 72;
-            else if (Settings.InitialScaling == InitialScaling.AvgNodeSize)
-                goalLength = nodeSizes.Average(box => (box.Width + box.Height)/2);
-            else return;
+//            double goalLength;
+//            if (Settings.InitialScaling == InitialScaling.Inch72Pixel)
+//                goalLength = 72;
+//            else if (Settings.InitialScaling == InitialScaling.AvgNodeSize)
+//                goalLength = nodeSizes.Average(box => (box.Width + box.Height)/2);
+//            else return;
 
-            double scaling = goalLength/avgEdgeLength;
-#if DEBUG
-            Console.WriteLine("AvgEdgeLength Scaling Method: {0}, ScaleFactor={1:F2}", Settings.InitialScaling, scaling);
-#endif
-            for (int j = 0; j < nodePositions.Length; j++) {
-                nodePositions[j] *= scaling;                
-            }
+//            double scaling = goalLength/avgEdgeLength;
+//#if DEBUG
+//            Console.WriteLine("AvgEdgeLength Scaling Method: {0}, ScaleFactor={1:F2}", Settings.InitialScaling, scaling);
+//#endif
+//            for (int j = 0; j < nodePositions.Length; j++) {
+//                nodePositions[j] *= scaling;                
+//            }
 
 
-            if (Settings.WorkInInches) {
-                //change to inches, to match with GraphViz algorithm
-                for (int i = 0; i < nodePositions.Length; i++) {
-                    nodePositions[i] /= 72;
-                    nodeSizes[i] /= 72;
-                }
-            }
+//            if (Settings.WorkInInches) {
+//                //change to inches, to match with GraphViz algorithm
+//                for (int i = 0; i < nodePositions.Length; i++) {
+//                    nodePositions[i] /= 72;
+//                    nodeSizes[i] /= 72;
+//                }
+//            }
         }
-
-        double AvgEdgeLength(Edge[] edges) {
-            Debug.Assert(edges.Length > 0);
-            int i = 0;
-            double avgEdgeLength = 0;
-            foreach (Edge edge in edges) {
-                Point sPoint = edge.Source.Center;
-                Point tPoint = edge.Target.Center;
-                double euclid = (sPoint - tPoint).Length;
-                avgEdgeLength += euclid;
-                i++;
-            }
-            avgEdgeLength /= i;
-            return avgEdgeLength;
-        }
-
 
         internal static Point[] InitNodePositionsAndBoxes(OverlapRemovalSettings overlapRemovalSettings,
                                                           Node[] nodes, out Point[] nodePositions,
@@ -671,7 +649,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             return numCrossings;
         }
 
-
+#if DEBUG
          int CountCrossingsWithRTree(Size[] nodeSizes) {
             RectangleNode<int> rootNode =
                 RectangleNode<int>.CreateRectangleNodeOnEnumeration(
@@ -685,6 +663,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
 
             return numCrossings;
         }
+#endif
 
          static Size[] GetNodeSizesByPaddingWithHalfSeparation(Node[] nodes, double nodeSeparation) {
             if (nodes == null) return null;

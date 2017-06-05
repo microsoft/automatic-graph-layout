@@ -347,13 +347,13 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             if (!Node.Attr.Color.Equals(colBlack))
             {
                 BoundaryPath.Fill = LgNodeInfo.Selected
-                ? Brushes.Red
+                ? GetSelBrushColor()
                 : Common.BrushFromMsaglColor(Node.Attr.Color);
                 return;
             }
 
             BoundaryPath.Fill = LgNodeInfo.Selected
-                ? Brushes.Red
+                ? GetSelBrushColor()
                 : (LgNodeInfo != null && LgNodeInfo.SlidingZoomLevel == 0
                     ? Brushes.Aqua
                     : Common.BrushFromMsaglColor(Node.Attr.FillColor));
@@ -365,115 +365,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             }
         }
 
-
-        Geometry DoubleCircle() {
-            var box = Node.BoundingBox;
-            double w = box.Width;
-            double h = box.Height;
-            var pathGeometry = new PathGeometry();
-            var r = new Rect(box.Left, box.Bottom, w, h);
-            pathGeometry.AddGeometry(new EllipseGeometry(r));
-            var inflation = Math.Min(5.0, Math.Min(w/3, h/3));
-            r.Inflate(-inflation, -inflation);
-            pathGeometry.AddGeometry(new EllipseGeometry(r));
-            return pathGeometry;
-        }
-
         
-        StreamGeometry CreateStreamGeometryFromNodeBoundary()
-        {
-            StreamGeometry geometry = null;
-            switch (Node.Attr.Shape)
-            {
-                case Shape.Box:
-                case Shape.House:
-                case Shape.InvHouse:
-                case Shape.Diamond:
-                case Shape.Octagon:
-                case Shape.Hexagon:
-
-                    geometry = CreateStreamGeometryFromMsaglCurve(Node.GeometryNode.BoundaryCurve);
-                    break;
-
-                default:
-                    geometry = GetEllipseStreamGeometry();
-                    break;
-            }
-
-            return geometry;
-        }
-
-        // test streamgeometry
-        StreamGeometry CreateStreamGeometryFromMsaglCurve(ICurve iCurve)
-        {
-            var geometry = new StreamGeometry();
-            var pathFigure = new PathFigure
-            {
-                IsClosed = true,
-                IsFilled = true,
-                StartPoint = Common.WpfPoint(iCurve.Start)
-            };
-
-            var curve = iCurve as Curve;
-            if (curve != null)
-            {
-                AddCurve(pathFigure, curve);
-            }
-            else
-            {
-                var rect = iCurve as RoundedRect;
-                if (rect != null)
-                    AddCurve(pathFigure, rect.Curve);
-                else
-                {
-                    var ellipse = iCurve as Ellipse;
-                    if (ellipse != null)
-                    {
-                        var ellGeom = new EllipseGeometry(Common.WpfPoint(ellipse.Center), ellipse.AxisA.Length,
-                            ellipse.AxisB.Length);
-                        pathFigure = PathGeometry.CreateFromGeometry(ellGeom).Figures[0];
-                    }
-                    var poly = iCurve as Polyline;
-                    if (poly != null)
-                    {
-                        var p = poly.StartPoint.Next;
-                        do
-                        {
-                            pathFigure.Segments.Add(new System.Windows.Media.LineSegment(Common.WpfPoint(p.Point),
-                                true));
-
-                            p = p.NextOnPolyline;
-                        } while (p != poly.StartPoint);
-                    }
-                }
-            }
-
-            using (var ctx = geometry.Open())
-            {
-                DrawFigure(ctx, pathFigure);
-            }
-            geometry.Freeze();
-            return geometry;
-        }
-
-        static void AddCurve(PathFigure pathFigure, Curve curve) {
-            foreach (ICurve seg in curve.Segments) {
-                var ls = seg as LineSegment;
-                if (ls != null)
-                    pathFigure.Segments.Add(new System.Windows.Media.LineSegment(Common.WpfPoint(ls.End), true));
-                else {
-                    var ellipse = seg as Ellipse;
-                    pathFigure.Segments.Add(new ArcSegment(Common.WpfPoint(ellipse.End),
-                        new Size(ellipse.AxisA.Length, ellipse.AxisB.Length),
-                        Point.Angle(new Point(1, 0), ellipse.AxisA),
-                        ellipse.ParEnd - ellipse.ParEnd >= Math.PI,
-                        !ellipse.OrientedCounterclockwise()
-                            ? SweepDirection.Counterclockwise
-                            : SweepDirection.Clockwise, true));
-                }
-            }
-        }
-
         public static void DrawFigure(StreamGeometryContext ctx, PathFigure figure)
         {
             ctx.BeginFigure(figure.StartPoint, figure.IsFilled, figure.IsClosed);
@@ -502,11 +394,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             }
         }
 
-        Geometry GetEllipseGeometry() {
-            return new EllipseGeometry(Common.WpfPoint(Node.BoundingBox.Center), Node.BoundingBox.Width/2,
-                Node.BoundingBox.Height/2);
-        }
-
         Geometry GetNodeDotEllipseGeometry(double nodeDotWidth) {
             return new EllipseGeometry(Common.WpfPoint(Node.BoundingBox.Center), nodeDotWidth / 2,
                 nodeDotWidth / 2);
@@ -516,19 +403,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             var geometry = new StreamGeometry();
             using (var ctx = geometry.Open()) {
                 var ellipse = GetNodeDotEllipseGeometry(nodeDotWidth);
-                var figure = PathGeometry.CreateFromGeometry(ellipse).Figures[0];
-                DrawFigure(ctx, figure);
-            }
-            geometry.Freeze();
-            return geometry;
-        }
-
-        StreamGeometry GetEllipseStreamGeometry()
-        {
-            var geometry = new StreamGeometry();
-            using (var ctx = geometry.Open())
-            {
-                var ellipse = GetEllipseGeometry();
                 var figure = PathGeometry.CreateFromGeometry(ellipse).Figures[0];
                 DrawFigure(ctx, figure);
             }
@@ -619,7 +493,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         {
             return (byte)(b/3);
         }
-
+        
         private Brush GetSelBrushColor()
         {
             if (lgSettings != null)

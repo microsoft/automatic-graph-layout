@@ -114,10 +114,16 @@ namespace Microsoft.Msagl.Drawing {
         /// </summary>
         /// <returns></returns>
         public override string ToString() {
-            return Id;
-//            if (Label == null)
-//                return "";
-//            return Utils.Quote(Label.Text) + "[" + Attr.ToString() + "]";
+            string label_text = Label == null ? Id : Label.Text;
+            return Utils.Quote(label_text) + "[" + Attr.ToString() + ","+ GeomDataString() + "]";
+        }
+
+        string HeightString() { return "height=" + GeometryNode.Height; }
+        string WidthString() { return "width=" + GeometryNode.Width; }
+        string CenterString() { return "pos=" + string.Format("\"{0},{1}\"", GeometryNode.Center.X, GeometryNode.Center.Y); }
+        string GeomDataString()
+        {
+            return Utils.ConcatWithComma(HeightString(), CenterString(), WidthString());
         }
 /// <summary>
 /// the node ID

@@ -159,11 +159,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             Assert_Rounded(second.Point);
             return GetPureDirection(first.Point, second.Point);
         }
-        static internal Directions GetDirections(VisibilityVertex first, VisibilityVertex second) {
-            Assert_Rounded(first.Point);
-            Assert_Rounded(second.Point);
-            return GetDirections(first.Point, second.Point);
-        }
  
         #endregion // Direction_Utilities
     }

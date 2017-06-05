@@ -34,7 +34,8 @@ using Microsoft.Msagl.DebugHelpers.Persistence;
 using Microsoft.Msagl.Miscellaneous;
 using Microsoft.Msagl.GraphViewerGdi;
 using System.IO;
-using Microsoft.Msagl.Drawing;
+﻿using Microsoft.Msagl.Core.Geometry.Curves;
+﻿using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.Layout.Layered;
 using Microsoft.Msagl.Layout.MDS;
 using Microsoft.Security.Application;
@@ -68,6 +69,7 @@ namespace Agl {
             DisplayGeometryGraph.SetShowFunctions();
 #endif
             argsParser = new ArgsParser.ArgsParser(args);
+            argsParser.AddAllowedOptionWithHelpString("-nolayout", "do not run layout if the geometry is there");
             argsParser.AddOptionWithAfterString(FileOption);
             argsParser.AddAllowedOption(MsaglOutputOption);
             argsParser.AddAllowedOption(PrintOutOption);
@@ -79,9 +81,14 @@ namespace Agl {
             argsParser.AddOptionWithAfterString(OutputDirOption);
             argsParser.AddAllowedOption(NoArrowheads);
             argsParser.AddAllowedOption(NoUrls);
+            argsParser.AddOptionWithAfterStringWithHelp("-orient", "one of options  TB, LR, BT, RL");
+            argsParser.AddAllowedOptionWithHelpString("-bw", "black white colors in SVG");
+            argsParser.AddAllowedOption("-noedges");
+            argsParser.AddOptionWithAfterStringWithHelp("-scaleNodesBy", "scale node only if the geometry is given");
+            argsParser.AddOptionWithAfterStringWithHelp("-nblw", "node boundary line width");
         }
 
-        
+
         static int Main(string[] args) {
             var p = new Dot2SvgMain(args);
             return p.DoJob();
@@ -89,8 +96,8 @@ namespace Agl {
 
         int DoJob() {
             if (!argsParser.Parse()) {
-                var s = String.Format("Wrong arguments. Usage \"graphRendererSample foo.dot  bar.dot [-f listOfDotFile] [-printOut] [-svg] [-xml] [-precision number] [{0}] [{1}] ",
-                    NoLabelsOption, PrintProcessedFileNameOption);
+                var s = String.Format("{2}. Wrong arguments. Usage \"graphRendererSample foo.dot  bar.dot [-f listOfDotFile] [-printOut] [-svg] [-xml] [-precision number] [{0}] [{1}] ", 
+                    NoLabelsOption, PrintProcessedFileNameOption, argsParser.ErrorMessage);
 
                 return -1;
             }
@@ -209,20 +216,31 @@ namespace Agl {
 
         int ProcessDotFile(string inputFile) {
             Graph graph;
-            int i=CreateGraphFromDotFile(inputFile, out graph);
+            int i = CreateGraphFromDotFile(inputFile, out graph);
+            graph.Attr.LayerDirection = GetLayerDirection();
 
             if (i != 0)
                 return i;
-            graph.LayoutAlgorithmSettings = PickLayoutAlgorithmSettings(graph.EdgeCount, graph.NodeCount);
-            if (argsParser.OptionIsUsed(NoArrowheads))
-                RemoveArrowheadsFromGraph(graph);
-            EnlargeLabelMargins(graph);
-            SetConsolasFontAndSize(graph, 13);
-
-            // rendering
-            var renderer = new GraphRenderer(graph);
-            renderer.CalculateLayout();
-            SetBoxRadiuses(graph);
+            if (argsParser.OptionIsUsed("-nolayout") && GeometryIsPresent(graph)) {
+                double nodeScale;
+                bool scaling = argsParser.GetDoubleOptionValue("-scaleNodesBy", out nodeScale);
+                if (scaling) {
+                    foreach (var node in graph.GeometryGraph.Nodes) {
+                       node.BoundaryCurve = node.BoundaryCurve.Transform(PlaneTransformation.ScaleAroundCenterTransformation(nodeScale,
+                            node.Center));
+                    }
+                    graph.GeometryGraph.UpdateBoundingBox();
+                }
+                double nodeLineWidth;
+                if (argsParser.GetDoubleOptionValue("-nblw", out nodeLineWidth)) {
+                    foreach (var node in graph.Nodes) {
+                        node.Attr.LineWidth = nodeLineWidth;
+                    }
+                    graph.GeometryGraph.UpdateBoundingBox();
+                }
+            }
+            else
+                PrepareForOutput(graph);
 
             var outputFile = Path.ChangeExtension(inputFile, ".svg");
             string outputDir = argsParser.GetValueOfOptionWithAfterString(OutputDirOption);
@@ -236,13 +254,18 @@ namespace Agl {
             SetConsolasFontAndSize(graph, 11);
             if (argsParser.OptionIsUsed(NoLabelsOption))
                 RemoveLabelsFromGraph(graph);
-
-            var svgWriter = new SvgGraphWriter(File.Create(outputFile), graph) 
-            { NodeSanitizer = AntiXss.HtmlAttributeEncode, AttrSanitizer = AntiXss.HtmlAttributeEncode,
-                Precision = precision, AllowedToWriteUri = !argsParser.OptionIsUsed(NoUrls)};
-            svgWriter.Write();
-            DumpFileToConsole(outputFile);
-
+            using (var stream = File.Create(outputFile)) {
+                var svgWriter = new SvgGraphWriter(stream, graph) {
+                    BlackAndWhite = argsParser.OptionIsUsed("-bw"),
+                    NodeSanitizer = AntiXss.HtmlAttributeEncode,
+                    AttrSanitizer = AntiXss.HtmlAttributeEncode,
+                    Precision = precision,
+                    AllowedToWriteUri = !argsParser.OptionIsUsed(NoUrls),
+                    IgnoreEdges = argsParser.OptionIsUsed("-noedges")
+                };
+                svgWriter.Write();
+                DumpFileToConsole(outputFile);
+            }
 
             if(msaglOutput) {
                 outputFile = SetMsaglOutputFileName(inputFile);
@@ -250,6 +273,42 @@ namespace Agl {
                 WriteGeomGraph(outputFile, geomGraph);
             }
             return 0;
+        }
+
+        private bool GeometryIsPresent(Graph graph) {
+            return graph.BoundingBox.Width > 0;
+        }
+
+        private void PrepareForOutput(Graph graph) {
+            graph.LayoutAlgorithmSettings = PickLayoutAlgorithmSettings(graph.EdgeCount, graph.NodeCount);
+            if (argsParser.OptionIsUsed(NoArrowheads))
+                RemoveArrowheadsFromGraph(graph);
+            EnlargeLabelMargins(graph);
+            SetConsolasFontAndSize(graph, 13);
+            // rendering
+            var renderer = new GraphRenderer(graph);
+            renderer.CalculateLayout();
+            SetBoxRadiuses(graph);
+        }
+
+        private LayerDirection GetLayerDirection()
+        {
+            string orientOption = argsParser.GetValueOfOptionWithAfterString("-orient");
+            if (orientOption == null)
+                return LayerDirection.TB;
+            switch (orientOption)
+            {
+                case "LR":
+                    return LayerDirection.LR;
+                case "TB":
+                    return LayerDirection.TB;
+                case "BT":
+                    return LayerDirection.BT;
+                case "RL":
+                    return LayerDirection.RL;
+                default:return LayerDirection.TB;
+            }
+
         }
 
         static void RemoveArrowheadsFromGraph(Graph graph) {

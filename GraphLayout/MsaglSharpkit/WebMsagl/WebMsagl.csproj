@@ -20,11 +20,12 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
-    <TypeScriptToolsVersion>1.4</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,52 +45,55 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="css\idd.css" />
-    <Content Include="css\jquery.svg.css" />
-    <Content Include="index.html" />
-    <Content Include="MSAGL\jsclr.js" />
-    <Content Include="MSAGL\Microsoft.Msagl.js" />
-    <Content Include="MSAGL\Microsoft.Msagl.min.js">
-      <DependentUpon>Microsoft.Msagl.js</DependentUpon>
-    </Content>
-    <Content Include="MSAGL\sharpkit_post.js" />
-    <Content Include="MSAGL\sharpkit_pre.js" />
-    <Content Include="MSAGL\workerBoot.js" />
-    <Content Include="Scripts\Components\RequireJS\i18n.js" />
-    <Content Include="Scripts\Components\RequireJS\require.js" />
-    <Content Include="Scripts\Components\RequireJS\text.js" />
-    <Content Include="Scripts\idd-1.0.2.min.js" />
-    <Content Include="Scripts\idd.js" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="Scripts\jquery-2.1.3.intellisense.js" />
-    <Content Include="Scripts\jquery-2.1.3.js" />
-    <Content Include="Scripts\jquery-2.1.3.min.js" />
-    <Content Include="Scripts\jquery-ui-1.11.2.js" />
-    <Content Include="Scripts\rx.jQuery.js" />
-    <Content Include="Scripts\rx.js" />
+    <Content Include="Samples\BigGraph\index.html" />
+    <Content Include="Samples\BigGraph\styles.css" />
+    <Content Include="Samples\CustomLabels\index.html" />
+    <Content Include="Samples\CustomLabels\styles.css" />
+    <Content Include="Samples\GraphFromJson\index.html" />
+    <Content Include="Samples\GraphFromJson\styles.css" />
+    <Content Include="Samples\HiddenRendering\index.html" />
+    <Content Include="Samples\HiddenRendering\styles.css" />
+    <Content Include="Samples\Interactivity\index.html" />
+    <Content Include="Samples\Interactivity\styles.css" />
+    <Content Include="Samples\Options\index.html" />
+    <Content Include="Samples\Options\styles.css" />
+    <Content Include="Samples\samples.css" />
+    <Content Include="Scripts\src\jsclr.js" />
+    <Content Include="Scripts\src\Microsoft.Msagl.js" />
+    <Content Include="Scripts\src\sharpkit_post.js" />
+    <Content Include="Scripts\src\sharpkit_pre.js" />
+    <Content Include="Scripts\src\workerBoot.js" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="index.ts" />
-    <TypeScriptCompile Include="MSAGL\cgraph.ts" />
-    <TypeScriptCompile Include="MSAGL\contextgraph.ts" />
-    <TypeScriptCompile Include="MSAGL\ggraph.ts" />
-    <TypeScriptCompile Include="MSAGL\htmlsvggraph.ts" />
-    <TypeScriptCompile Include="MSAGL\iddgraph.ts" />
-    <TypeScriptCompile Include="MSAGL\iddsvggraph.ts" />
-    <TypeScriptCompile Include="MSAGL\msaglWorker.ts" />
-    <TypeScriptCompile Include="MSAGL\svggraph.ts" />
-    <TypeScriptCompile Include="samples.ts" />
+    <TypeScriptCompile Include="Samples\BigGraph\app.ts" />
+    <TypeScriptCompile Include="Samples\BigGraph\boot.ts" />
+    <TypeScriptCompile Include="Samples\config.ts" />
+    <TypeScriptCompile Include="Samples\CustomLabels\app.ts" />
+    <TypeScriptCompile Include="Samples\CustomLabels\boot.ts" />
+    <TypeScriptCompile Include="Samples\GraphFromJson\app.ts" />
+    <TypeScriptCompile Include="Samples\GraphFromJson\boot.ts" />
+    <TypeScriptCompile Include="Samples\HiddenRendering\app.ts" />
+    <TypeScriptCompile Include="Samples\HiddenRendering\boot.ts" />
+    <TypeScriptCompile Include="Samples\Interactivity\app.ts" />
+    <TypeScriptCompile Include="Samples\Interactivity\boot.ts" />
+    <TypeScriptCompile Include="Samples\Options\app.ts" />
+    <TypeScriptCompile Include="Samples\Options\boot.ts" />
+    <TypeScriptCompile Include="Scripts\src\contextgraph.ts" />
+    <TypeScriptCompile Include="Scripts\src\ggraph.ts" />
+    <TypeScriptCompile Include="Scripts\src\iddgraph.ts" />
+    <TypeScriptCompile Include="Scripts\src\iddsvggraph.ts" />
+    <TypeScriptCompile Include="Scripts\src\messages.ts" />
+    <TypeScriptCompile Include="Scripts\src\msaglWorker.ts" />
+    <TypeScriptCompile Include="Scripts\src\svggraph.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\requirejs\require.d.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MSAGL\Microsoft.Msagl.min.js.map">
-      <DependentUpon>Microsoft.Msagl.min.js</DependentUpon>
-    </Content>
-    <Content Include="Scripts\jquery-2.1.3.min.map" />
+    <Content Include="Samples\Options\samplegraph1.json" />
+    <Content Include="Samples\Options\samplegraph2.json" />
+    <Content Include="Samples\GraphFromJson\samplegraph.json" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -133,7 +137,8 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PreBuildEvent>xcopy /y "$(SolutionDir)MsaglSharpKit\res\Microsoft.Msagl.js" "$(ProjectDir)Msagl\"</PreBuildEvent>
+    <PreBuildEvent>xcopy /y "$(SolutionDir)MsaglSharpKit\res\Microsoft.Msagl.js" "$(ProjectDir)Scripts\src\"
+xcopy /y "$(SolutionDir)MsaglDrawingSharpkit\res\Microsoft.Msagl.Drawing.js" "$(ProjectDir)Scripts\src\"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

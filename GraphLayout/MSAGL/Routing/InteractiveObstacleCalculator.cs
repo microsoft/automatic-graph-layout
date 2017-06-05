@@ -479,8 +479,12 @@ namespace Microsoft.Msagl.Routing {
         internal static double FindMaxPaddingForTightPolyline(RectangleNode<Polyline> hierarchy, Polyline polyline, double desiredPadding ) {
             var dist = desiredPadding;
             var polygon = new Polygon(polyline);
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
+            var boundingBox = polyline.BoundingBox.Clone();
+#else
             var boundingBox = polyline.BoundingBox;
-            boundingBox.Pad(2.0*desiredPadding);
+#endif
+            boundingBox.Pad(2.0 * desiredPadding);
             foreach (var poly in hierarchy.GetNodeItemsIntersectingRectangle(boundingBox).Where(p=>p!=polyline)) {
                 var separation = Polygon.Distance(polygon, new Polygon(poly));
                 dist = Math.Min(dist, separation/LooseDistCoefficient);
@@ -522,20 +526,6 @@ namespace Microsoft.Msagl.Routing {
         /// <returns></returns>
         static bool Inside(ICurve curveUnderTest, ICurve curve) {
             return Curve.PointRelativeToCurveLocation(curve.Start, curveUnderTest) == PointLocation.Inside;
-        }
-        
-        //internal void HideTightPolylineContainingPoint(Point sourcePortLocation) {
-        //    //the source polyline should not participate in 
-        //    sourceTightNode = InteractiveEdgeRouter.GetFirstHitRectangleNode(sourcePortLocation, this.RootOfTightHierararchy);
-        //    sourceTightNode.rectangle = new Rectangle(double.PositiveInfinity, double.PositiveInfinity, double.PositiveInfinity, double.PositiveInfinity); //need to restore it when edge routing is done
-        //}
-        internal void ScaleLooseObstacles(double coefficient) {
-            LooseObstacles.Clear();
-            foreach (var tightPolyline in TightObstacles)
-                LooseObstacles.Add(LoosePolylineWithFewCorners(tightPolyline,
-                                                               tightPolylinesToLooseDistances[tightPolyline]*coefficient));
-            RootOfLooseHierarchy = CalculateHierarchy(LooseObstacles);
-            Debug.Assert(GetOverlappedPairSet(RootOfLooseHierarchy).Count == 0, "Overlaps are found in LooseObstacles");
         }
     }
 }

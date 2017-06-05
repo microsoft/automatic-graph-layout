@@ -16,26 +16,6 @@ namespace Microsoft.Msagl.Drawing {
             _minLayerOfDrawingGraph.Insert(node);
         }
 
-        /// <summary>
-        /// unpins a node from max layer
-        /// </summary>
-        /// <param name="node"></param>
-        internal void UnpinNodeFromMaxLayer(Node node)
-        {
-            _maxLayerOfDrawingGraph.Remove(node);
-        }
-
-        
-        /// <summary>
-        /// unpins a node from min layer
-        /// </summary>
-        /// <param name="node"></param>
-        internal void UnpinNodeFromMinLayer(Node node)
-        {
-            _minLayerOfDrawingGraph.Remove(node);
-        }
-
-
         internal Set<Tuple<Node, Node>> SameLayerConstraints = new Set<Tuple<Node, Node>>();
         internal readonly Set<Tuple<Node, Node>> UpDownConstraints = new Set<Tuple<Node, Node>>();
         public void Clear() {

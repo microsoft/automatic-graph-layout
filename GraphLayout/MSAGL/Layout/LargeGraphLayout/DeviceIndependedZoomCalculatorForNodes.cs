@@ -187,22 +187,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             return unassigned > 0;
         }
 
-        static internal double GetDistBetweenBoundingBoxes(Node source, Node target)
-        {
-            var sb = source.BoundingBox;
-            var tb = target.BoundingBox;
-            if (sb.Intersects(tb)) return 0;
-            var spolygon = PolygonFromBox(sb);
-            var tpolygon = PolygonFromBox(tb);
-            return Polygon.Distance(spolygon, tpolygon);
-        }
-
-        static Polygon PolygonFromBox(Rectangle sb)
-        {
-            var spolygon =
-                new Polygon(new Polyline(sb.LeftBottom, sb.LeftTop, sb.RightTop, sb.RightBottom) { Closed = true });
-            return spolygon;
-        }
         /*
                 void DebugShow(LgNodeInfo[] lgNodeInfoArray) {
                     var delx = 1000.0/lgNodeInfoArray.Length;

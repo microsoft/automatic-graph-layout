@@ -217,82 +217,6 @@ namespace Editing {
             gViewer.Invalidate();
         }
 
-
-        internal static PointF PointF(Point p) {
-            return new PointF((float) p.X, (float) p.Y);
-        }
-
-        static void AddSegmentToPath(ICurve seg, ref GraphicsPath p) {
-            const float radiansToDegrees = (float) (180.0/Math.PI);
-            var line = seg as LineSegment;
-            if (line != null)
-                p.AddLine(PointF(line.Start), PointF(line.End));
-            else {
-                var cb = seg as CubicBezierSegment;
-                if (cb != null)
-                    p.AddBezier(PointF(cb.B(0)), PointF(cb.B(1)), PointF(cb.B(2)), PointF(cb.B(3)));
-                else {
-                    var ellipse = seg as Ellipse;
-                    if (ellipse != null)
-                        p.AddArc((float) (ellipse.Center.X - ellipse.AxisA.Length),
-                                 (float) (ellipse.Center.Y - ellipse.AxisB.Length), (float) (2*ellipse.AxisA.Length),
-                                 (float) (2*ellipse.AxisB.Length), (float) (ellipse.ParStart*radiansToDegrees),
-                                 (float) ((ellipse.ParEnd - ellipse.ParStart)*radiansToDegrees));
-                }
-            }
-        }
-
-        internal bool DrawNode(DrawingNode node, object graphics) {
-            var g = (Graphics) graphics;
-
-            //flip the image around its center
-            using (Matrix m = g.Transform) {
-                using (Matrix saveM = m.Clone()) {
-                    var clipNow = g.Clip;
-                    g.Clip = new Region(Draw.CreateGraphicsPath(node.GeometryNode.BoundaryCurve));
-                    var geomNode = node.GeometryNode;
-                    var leftTop = geomNode.BoundingBox.LeftTop;
-                    var scale =
-                        (float)
-                        Math.Min(node.BoundingBox.Height/treeImage.Height, node.BoundingBox.Width/treeImage.Width);
-                    using (var m2 = new Matrix(scale, 0, 0, -scale, (float) leftTop.X, (float) leftTop.Y)) {
-                        m.Multiply(m2);
-                        g.Transform = m;
-                        g.DrawImage(treeImage, 0, 0);
-                        g.Transform = saveM;
-                        g.Clip = clipNow;
-                    }
-                }
-            }
-            return false; //returning false would enable the default rendering
-
-        }
-
-
-        /// <summary>
-        /// Inserts a new node at the selected point, using the node type with the specified name.
-        /// </summary>
-        /// <param name="center">The location of the node on the graph</param>
-        /// <param name="nodetype">The name of the node type</param>
-        /// <param name="id">The id for the node</param>
-        /// <returns>The new node</returns>
-        internal virtual DrawingNode InsertNode(Point center, string nodetype, string id) {
-            foreach (NodeTypeEntry nte in m_NodeTypes)
-                if (nte.Name == nodetype)
-                    return InsertNode(center, nte, id);
-            return null;
-        }
-
-        /// <summary>
-        /// Inserts a new node at the selected point, using the node type with the specified name.
-        /// </summary>
-        /// <param name="center">The location of the node on the graph</param>
-        /// <param name="nodetype">The name of the node type</param>
-        /// <returns>The new node</returns>
-        internal virtual DrawingNode InsertNode(Point center, string nodetype) {
-            return InsertNode(center, nodetype, GetNewId());
-        }
-
         /// <summary>
         /// Inserts a new node at the selected point, with standard attributes, and displays it.
         /// </summary>
@@ -451,19 +375,6 @@ namespace Editing {
                 CloseEditorDelegate();
             }
         }
-
-        /// <summary>
-        /// Clears the editor and resets it to a default size.
-        /// </summary>
-        internal void ClearAll() {
-            CloseEditorDelegate();
-            var g = new Graph();
-            g.GeometryGraph = new GeometryGraph();
-            g.GeometryGraph.BoundingBox = new Microsoft.Msagl.Core.Geometry.Rectangle(0, 0, 200, 100);
-            gViewer.Graph = g;
-            gViewer.Refresh();
-        }
-
 
         /// <summary>
         /// Overloaded. Adds a new node type to the list. If the parameter contains an image, a button with that image will be added to the toolbar.

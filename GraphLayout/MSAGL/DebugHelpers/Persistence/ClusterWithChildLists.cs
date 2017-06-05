@@ -14,7 +14,5 @@ namespace Microsoft.Msagl.DebugHelpers {
         internal ClusterWithChildLists(Cluster cl) {
             Cluster = cl;
         }
-        internal void AddCluster(string clusterIndex){ChildClusters.Add(clusterIndex);}
-        internal void AddNode(string nodeId) { ChildNodes.Add(nodeId); }
     }
 }

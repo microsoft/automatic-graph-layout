@@ -9,26 +9,12 @@ namespace Microsoft.Msagl.Core.DataStructures {
     internal class BinaryHeapPriorityQueue {
         //indexing for A starts from 1
 
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        //internal void Clear()
-        //{
-        //    if(heapSize>0)
-        //    {
-        //        for(int i=0;i<cache.Length;i++)
-        //            this.cache[i]=null;
-
-        //        heapSize=0; 
-        //    }
-        //}
-
-
-// ReSharper disable InconsistentNaming
-        readonly HeapElem[] A;//array of heap elements
-// ReSharper restore InconsistentNaming
+        readonly int[] _heap;//array of heap elements
+        readonly int[] _reverse_heap; // the map from [0,..., n-1] to their places in heap
         /// <summary>
-        /// cache[k]=A[cache[k].indexToA] this is the invariant
+        /// the array of priorities
         /// </summary>
-        readonly HeapElem[] cache;
+        readonly double[] _priors;
         internal int Count { get { return heapSize; } }
         int heapSize;
         /// <summary>
@@ -37,50 +23,33 @@ namespace Microsoft.Msagl.Core.DataStructures {
         /// </summary>
         /// <param name="n">it is the number of different integers that will be inserted into the queue </param>
         internal BinaryHeapPriorityQueue(int n) {
-            cache = new HeapElem[n];
-            A = new HeapElem[n + 1];//because indexing for A starts from 1
+            _priors = new double[n];
+            _heap = new int[n + 1];//because indexing for A starts from 1
+            _reverse_heap = new int[n];
         }
 
 
         void SwapWithParent(int i) {
-            HeapElem parent = A[i >> 1];
-
-            PutAtI(i >> 1, A[i]);
+            int parent = _heap[i >> 1];
+            PutAtI(i >> 1, _heap[i]);
             PutAtI(i, parent);
         }
 
         internal void Enqueue(int o, double priority) {
-            //System.Diagnostics.Debug.WriteLine("insert "+ o.ToString() + " with pr "+ priority.ToString());
-
             heapSize++;
             int i = heapSize;
-       
-            System.Diagnostics.Debug.Assert(cache[o] == null);
-            A[i] = cache[o] =new HeapElem(i, priority, o);
-            while (i > 1 && A[i >> 1].priority.CompareTo(priority) > 0) {
+            _priors[o] = priority;
+            _heap[i] = o;
+            while (i > 1 && _priors[_heap[i >> 1]] > priority) {
                 SwapWithParent(i);
                 i >>= 1;
             }
-       
         }
 
-        internal bool IsEmpty() {
-            return heapSize == 0;
+        void PutAtI(int i, int h) {
+            _heap[i] = h;
+            _reverse_heap[h] = i;
         }
-
-        void PutAtI(int i, HeapElem h) {
-            A[i] = h;
-            h.indexToA = i;
-        }
-
-        ///// <summary>
-        ///// return the first element of the queue without removing it
-        ///// </summary>
-        ///// <returns></returns>
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        //internal int Peek() {
-        //    return A[1].v;
-        //}
 
         /// <summary>
         /// return the first element of the queue and removes it from the queue
@@ -89,27 +58,22 @@ namespace Microsoft.Msagl.Core.DataStructures {
         internal int Dequeue() {
             if (heapSize == 0)
                 throw new InvalidOperationException();
-
-            int ret = A[1].v;
-
-            cache[ret] = null;
-
-            //			System.Diagnostics.Debug.WriteLine("del_min "+ ret.ToString()+" with prio "+A[1].priority.ToString() );
+            int ret = _heap[1];
             if (heapSize > 1)
             {
-                PutAtI(1, A[heapSize]);
+                PutAtI(1, _heap[heapSize]);
                 int i = 1;
                 while (true)
                 {
                     int smallest = i;
                     int l = i << 1;
 
-                    if (l <= heapSize && A[l].priority.CompareTo(A[i].priority) < 0)
+                    if (l <= heapSize && _priors[_heap[l]] <_priors[ _heap[i]])
                         smallest = l;
 
                     int r = l + 1;
 
-                    if (r <= heapSize && A[r].priority.CompareTo(A[smallest].priority) < 0)
+                    if (r <= heapSize && _priors[_heap[r]] < _priors[_heap[smallest]])
                         smallest = r;
 
                     if (smallest != i)
@@ -123,7 +87,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
             }
             heapSize--;
             return ret;
-
         }
 
         /// <summary>
@@ -134,11 +97,10 @@ namespace Microsoft.Msagl.Core.DataStructures {
 
             //System.Diagnostics.Debug.WriteLine("delcrease "+ o.ToString()+" to "+ newPriority.ToString());
 
-            HeapElem h = cache[o];
-            h.priority = newPriority;
-            int i = h.indexToA;
+            _priors[o] = newPriority;
+            int i = _reverse_heap[o];
             while (i > 1) {
-                if (A[i].priority.CompareTo(A[i >> 1].priority) < 0)
+                if (_priors[_heap[i]] < _priors[_heap[i >> 1]])
                     SwapWithParent(i);
                 else
                     break;

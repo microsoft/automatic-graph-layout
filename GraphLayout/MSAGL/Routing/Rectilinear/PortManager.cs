@@ -882,7 +882,11 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             ObstaclePort oport;
             obstaclePortMap.TryGetValue(port, out oport);
             if (null != oport) {
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
+                return (oport.Obstacle.VisibilityBoundingBox).Clone();
+#else
                 return (oport.Obstacle.VisibilityBoundingBox);
+#endif
             }
 
             // FreePoint.

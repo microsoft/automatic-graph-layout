@@ -24,12 +24,12 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             this.end = end;
         }
 
-    
-        
+#if DEBUG || DEVTRACE
         internal IEnumerable<CdtTriangle> Triangles() {
             while(MoveNext())
                 yield return CurrentTriangle;
         }
+#endif
 
         internal CdtEdge FindFirstPiercedEdge() {
             Debug.Assert(PointLocationForTriangle(start, currentTriangle) != PointLocation.Outside);

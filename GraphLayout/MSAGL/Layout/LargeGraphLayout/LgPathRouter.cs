@@ -127,6 +127,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             }
         }
 
+
         static void SortPointByAngles(LgNodeInfo nodeInfo, Point[] polySplitArray)
         {
             var angles = new double[polySplitArray.Length];
@@ -214,6 +215,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         {
             return node.BoundaryOnLayer.PolylinePoints.Select(pp => pp.Point).ToArray();
         }
+
         internal List<Point> GetPath(VisibilityVertex vs, VisibilityVertex vt,
             bool shrinkDistances)
         {
@@ -496,28 +498,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 AddVisGraphEdge(e.A, e.B);
             }
         }
-
-        //        internal VisibilityVertex GetExistingVvCloseBy(Point p) {
-        //            var rect = new Rectangle(p);
-        //            rect.Pad(searchEps);
-        //            VisibilityVertex v=null;
-        //            
-        //
-        //            var crossed = _visGraphVerticesTree.GetAllIntersecting(rect);
-        //            if (crossed.Length == 0) {
-        //                return null;
-        //            }
-        //            double dist = double.PositiveInfinity;
-        //            for (int i = 0; i < crossed.Length; i++) {
-        //                var vv = crossed[i];
-        //                var vvDist = (vv.Point - p).LengthSquared;
-        //                if (vvDist < dist) {
-        //                    dist = vvDist;
-        //                    v = vv;
-        //                }
-        //            }
-        //            return v;
-        //        }
 
         void RegisterInTree(VisibilityVertex vv)
         {

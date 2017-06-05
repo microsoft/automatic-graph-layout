@@ -220,7 +220,7 @@ namespace Microsoft.Msagl.Layout.MDS {
                         ProximityOverlapRemoval.RemoveOverlaps(compGraph, settings.NodeSeparation);
                         break;
                     case OverlapRemovalMethod.MinimalSpanningTree:
-                        OverlapRemoval.RemoveOverlaps(compGraph.Nodes.ToArray(), settings.NodeSeparation);
+                        GTreeOverlapRemoval.RemoveOverlaps(compGraph.Nodes.ToArray(), settings.NodeSeparation);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

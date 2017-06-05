@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -180,6 +180,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\version.cs">
+      <Link>version.cs</Link>
+    </Compile>
     <Compile Include="GraphmapsWithMesh\Angle.cs" />
     <Compile Include="GraphmapsWithMesh\ComponentCollection.cs" />
     <Compile Include="Core\AlgorithmBase.cs" />
@@ -268,7 +271,6 @@
     <Compile Include="Layout\LargeGraphLayout\DeviceIndependedZoomCalculatorForNodes.cs" />
     <Compile Include="Layout\LargeGraphLayout\EdgePicker.cs" />
     <Compile Include="Layout\LargeGraphLayout\IZoomLevelCalculator.cs" />
-    <Compile Include="Layout\LargeGraphLayout\LayerInfo.cs" />
     <Compile Include="Layout\LargeGraphLayout\LgCellInfo.cs" />
     <Compile Include="Layout\LargeGraphLayout\LgData.cs" />
     <Compile Include="Layout\LargeGraphLayout\LgEdgeInfo.cs" />
@@ -289,7 +291,7 @@
     <Compile Include="Layout\Layered\LayeredLayoutEngine.cs" />
     <Compile Include="Layout\Layered\RecoveryLayerCalculator.cs" />
     <Compile Include="Layout\Layered\RecoveryLayeredLayoutEngine.cs" />
-    <Compile Include="Core\Layout\ProximityOverlapRemoval\MST\OverlapRemoval.cs" />
+    <Compile Include="Core\Layout\ProximityOverlapRemoval\MST\GTreeOverlapRemoval.cs" />
     <Compile Include="Core\Layout\ProximityOverlapRemoval\OverlapRemovalMethod.cs" />
     <Compile Include="Layout\OverlapRemovalFixedSegments\FakeBitmap.cs" />
     <Compile Include="Layout\OverlapRemovalFixedSegments\OverlapRemovalFixedSegmentsBitmap.cs" />
@@ -369,7 +371,6 @@
     <Compile Include="Routing\Spline\Bundling\BundleInfo.cs" />
     <Compile Include="Routing\Spline\Bundling\BundleRouter.cs" />
     <Compile Include="Routing\Spline\Bundling\BundlingStatus.cs" />
-    <Compile Include="Routing\Spline\Bundling\CdtGeneralPolylineTracer.cs" />
     <Compile Include="Routing\Spline\Bundling\CdtIntersections.cs" />
     <Compile Include="Routing\Spline\Bundling\ChannelFlag.cs" />
     <Compile Include="Routing\Spline\Bundling\EdgeNudger.cs" />
@@ -448,7 +449,6 @@
     <Compile Include="Core\Layout\GeometryGraph.cs" />
     <Compile Include="Core\Layout\GeometryObject.cs" />
     <Compile Include="Core\DataStructures\GenericHeapElement.cs" />
-    <Compile Include="Core\DataStructures\HeapElement.cs" />
     <Compile Include="Layout\Layered\HorizontalConstraintsForSugiyama.cs" />
     <Compile Include="Core\GraphAlgorithms\IEdge.cs" />
     <Compile Include="Core\Layout\ILabeledObject.cs" />

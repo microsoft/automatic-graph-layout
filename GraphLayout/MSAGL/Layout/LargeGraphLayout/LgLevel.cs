@@ -335,12 +335,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             public int vertices;
             public int rails;
         }
-
         readonly Dictionary<Tuple<int, int>, TileStatistic> tileTableForStatistic =
-            new Dictionary<Tuple<int, int>, TileStatistic>();
+           new Dictionary<Tuple<int, int>, TileStatistic>();
 
-        double GetGridSize() {
-            return Math.Max(_geomGraph.Width, _geomGraph.Height)/ZoomLevel;
+        double GetGridSize()
+        {
+            return Math.Max(_geomGraph.Width, _geomGraph.Height) / ZoomLevel;
         }
 
         #endregion

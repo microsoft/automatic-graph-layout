@@ -9,14 +9,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
     /// </summary>
     public class CollectionUtilities {
         /// <summary>
-        /// Add	key,value to dictionary if the key is not yet presented
-        /// </summary>
-        internal static void SafeAdd<T, TC>(Dictionary<T, TC> dictionary, T key, TC value) {
-            if (!dictionary.ContainsKey(key))
-                dictionary.Add(key, value);
-        }
-
-        /// <summary>
         /// Add	value to dictionary
         /// </summary>
         internal static void AddToMap<TS, T, TC>(Dictionary<T, TC> dictionary, T key, TS value)

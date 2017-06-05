@@ -211,7 +211,11 @@ namespace Microsoft.Msagl.Core.Layout {
             foreach (Edge e in Edges) {
                 if (e.UnderCollapsedCluster()) continue;
                 if (e.Curve != null) {
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
+                    var cb = e.Curve.BoundingBox.Clone();
+#else
                     var cb = e.Curve.BoundingBox;
+#endif
                     cb.Pad(e.LineWidth);
                     b.Add(cb);
                 }
@@ -238,7 +242,7 @@ namespace Microsoft.Msagl.Core.Layout {
             if(DebugCurves!=null)
                 foreach (var debugCurve in DebugCurves.Where(d => d.Curve != null))
                     b.Add(debugCurve.Curve.BoundingBox);
-#endif 
+#endif
         }
 
         /// <summary>

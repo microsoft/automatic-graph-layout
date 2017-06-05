@@ -15,7 +15,11 @@ namespace Microsoft.Msagl.Core.Layout {
         /// <param name="curve">the port curve, can be null</param>
         public FloatingPort(ICurve curve, Point location){
             this.curve = curve;
+#if SHARPKIT
+            this.location = location.Clone();
+#else
             this.location = location;
+#endif
         }
 
 

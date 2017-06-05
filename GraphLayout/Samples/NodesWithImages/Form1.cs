@@ -69,7 +69,7 @@ namespace NodesWithImages {
                     g.DrawImage(image, new PointF((float)(node.GeometryNode.Center.X - node.GeometryNode.Width / 2),
                         (float)(node.GeometryNode.Center.Y - node.GeometryNode.Height / 2)));
                     g.Transform = saveM;
-
+                    g.ResetClip();
                 }
             }
 
@@ -135,10 +135,21 @@ namespace NodesWithImages {
             drawingGraph.AddEdge(leavesId, treeId);
             drawingGraph.AddEdge(leavesId, wId);
 
-            foreach (DrawingNode node in drawingGraph.Nodes) {
-                node.Attr.Shape = Shape.DrawFromGeometry;
-                node.DrawNodeDelegate = new DelegateToOverrideNodeRendering(DrawNode);
-                node.NodeBoundaryDelegate = new DelegateToSetNodeBoundary(GetNodeBoundary);
+            drawingGraph.AddEdge("uno", "otro");
+            foreach (DrawingNode node in drawingGraph.Nodes)
+            {
+                if (!node.Id.Equals("uno"))
+                {
+                    node.Attr.Shape = Shape.DrawFromGeometry;
+                    node.DrawNodeDelegate = new DelegateToOverrideNodeRendering(DrawNode);
+                    node.NodeBoundaryDelegate = new DelegateToSetNodeBoundary(GetNodeBoundary);
+                }
+                else
+                {
+                    node.LabelText = "node with a diamond shape";
+                    node.Attr.Shape = Shape.Diamond;
+                }
+
             }
 
             double width = leaves.Width;
@@ -151,6 +162,6 @@ namespace NodesWithImages {
                 e.Attr.ArrowheadLength = (float)arrowHeadLenght;
             drawingGraph.LayoutAlgorithmSettings = new SugiyamaLayoutSettings();
             viewer.Graph = drawingGraph;
-        }
+         }
     }
 }

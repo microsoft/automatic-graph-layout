@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-﻿using System.Runtime.InteropServices;
+ using System.Runtime.InteropServices;
 ﻿using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
@@ -332,10 +332,6 @@ namespace TestWpfViewer {
             return window;
         }
 
-
-        Tuple<string, VoidDelegate>[] ChangeColorDialog(AttributeBase attr) {
-            return new[] {ColorChangeMenuTuple(attr)};
-        }
 
         static Tuple<string, VoidDelegate> ColorChangeMenuTuple(AttributeBase attr) {
             return new Tuple<string, VoidDelegate>("set color", () => {
@@ -767,8 +763,8 @@ namespace TestWpfViewer {
 
         void ProcessGraphml(string fileName) {
             var parser = new GraphmlParser(fileName);
-            Microsoft.Msagl.Drawing.Graph graph = parser.Parse();
-            GiveGraphToControl(graph);
+            Graph graph = parser.Parse();
+            PassGraphToControl(graph);
         }
 
         void ProcessMsagl(string fileName) {
@@ -778,7 +774,7 @@ namespace TestWpfViewer {
                 if (argsParser.OptionIsUsed(PrintMaxNodeDegreeOption)) {
                     Console.WriteLine("max node degree {0}",
                         graph.Nodes.Max(n => n.OutEdges.Count() + n.InEdges.Count() + n.SelfEdges.Count()));
-                    System.Environment.Exit(0);
+                    Environment.Exit(0);
                 }
 
 
@@ -787,7 +783,7 @@ namespace TestWpfViewer {
                         n.Attr.XRadius = n.Attr.YRadius = 3;
 
                 if (argsParser.OptionIsUsed(RunRemoveOverlapsOption)) {
-                    OverlapRemoval.RemoveOverlaps(graph.GeometryGraph.Nodes.ToArray(),
+                    GTreeOverlapRemoval.RemoveOverlaps(graph.GeometryGraph.Nodes.ToArray(),
                         graph.LayoutAlgorithmSettings.NodeSeparation);
                 }
             }
@@ -874,15 +870,15 @@ namespace TestWpfViewer {
             int line, column;
             string msg;
             Graph gwgraph = Parser.Parse(fileName, out line, out column, out msg);
-            TestGraph(gwgraph);
             if (gwgraph != null) {
-                GiveGraphToControl(gwgraph);
+                TestGraph(gwgraph);
+                PassGraphToControl(gwgraph);
             }
             else
                 MessageBox.Show(msg + String.Format(" line {0} column {1}", line, column));
         }
 
-        void GiveGraphToControl(Graph gwgraph) {
+        void PassGraphToControl(Graph gwgraph) {
             if (argsParser.OptionIsUsed(RoundedCornersOption))
                 foreach (var n in gwgraph.Nodes) {
                     n.Attr.Shape = Shape.Box;
@@ -899,7 +895,7 @@ namespace TestWpfViewer {
                         ProximityOverlapRemoval.RemoveOverlaps(compGraph, gwgraph.LayoutAlgorithmSettings.NodeSeparation);
                         break;
                     case OverlapRemovalMethod.MinimalSpanningTree:
-                        OverlapRemoval.RemoveOverlaps(compGraph.Nodes.ToArray(), gwgraph.LayoutAlgorithmSettings.NodeSeparation);
+                        GTreeOverlapRemoval.RemoveOverlaps(compGraph.Nodes.ToArray(), gwgraph.LayoutAlgorithmSettings.NodeSeparation);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

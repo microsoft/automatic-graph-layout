@@ -79,18 +79,6 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
                 edge.CwTriangle = this;
         }
 
-        internal Point getCenter() {
-            return (Sites[0].Point + Sites[1].Point + Sites[2].Point) / 3.0;
-        }
-
-        internal bool EdgeIsReversed(int i) {
-            return Edges[i].CwTriangle == this;
-        }
-
-        internal bool EdgeIsReversed(CdtEdge edge) {
-            return edge.CwTriangle == this;
-        }
-
         /// <summary>
         /// here a,b,c comprise a ccw triangle
         /// </summary>

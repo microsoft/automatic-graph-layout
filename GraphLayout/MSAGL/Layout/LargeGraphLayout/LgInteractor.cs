@@ -279,7 +279,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     //find the one end of the path
                     int currentVertexId = w;
                     int oldVertexId = -1;
-                    cycle.Add(w,1);
+                    cycle[w] = 1;
                     while (graph.DegList[currentVertexId] == 2 && currentVertexId >= g.N)
                     {
                         int neighbor1 = graph.EList[currentVertexId, 0].NodeId;
@@ -2173,7 +2173,11 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 LayoutHelpers.CalculateLayout(component, GetMdsLayoutSettings(), _cancelToken);
                 RemoveOverlapsForLgLayout(component);
             }
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
+            Rectangle box = component.BoundingBox.Clone();
+#else
             Rectangle box = component.BoundingBox;
+#endif
             box.Pad(_lgLayoutSettings.NodeSeparation / 2);
             component.BoundingBox = box;
         }
@@ -2186,7 +2190,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             List<int> approxLayerCounts = GetApproximateLayerCounts(componentNodes);
             Size[] sizes = GetApproxSizesForOverlapRemoval(approxLayerCounts, _lgLayoutSettings.NodeSeparation * 3,
                 componentNodes);
-            OverlapRemoval.RemoveOverlapsForLayers(componentNodes, sizes);
+            GTreeOverlapRemoval.RemoveOverlapsForLayers(componentNodes, sizes);
         }
 
         Size[] GetApproxSizesForOverlapRemoval(List<int> approxLayerCounts, double w, Node[] componentNodes)
@@ -2866,6 +2870,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             }
         }
 
+
         List<LineSegment> GetSegmentsOnOldTrajectoriesFromSource(int i, LgSkeletonLevel skeletonLevel, LgNodeInfo s)
         {
             var pc = new List<LineSegment>();
@@ -2890,7 +2895,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
         void SetWeightsAlongOldTrajectoriesFromSourceToMin(int i, LgSkeletonLevel skeletonLevel, LgNodeInfo s, double wmin)
         {
-
             IOrderedEnumerable<LgNodeInfo> neighb = GetNeighborsOnLevel(s, i).OrderBy(n => n.ZoomLevel);
 
             foreach (var t in neighb)
@@ -3292,8 +3296,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             rail.GetStartEnd(out s, out t);
             return new LineSegment(s, t);
         }
-
-
 
         /*
         var rect = new Rectangle(a, b);
@@ -4049,9 +4051,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             Point offset = Point.Scale(labelWidth + nodeDotWidth * 1.01, labelHeight + nodeDotWidth * 1.01,
                 nodeInfo.LabelOffset);
 
-            var d = new Point(0.5 * labelWidth, 0.5 * labelHeight);
-
-            return new Rectangle(nodeInfo.Center + offset - d, nodeInfo.Center + offset + d);
+            double overlapScale = 0.7;
+            var d = new Point(0.5 * labelWidth, 0.5 * labelHeight) * overlapScale;
+return new Rectangle(nodeInfo.Center + offset - d, nodeInfo.Center + offset + d);
         }
 
         Rectangle GetLabelRectForScale(LgNodeInfo nodeInfo, LgNodeInfo.LabelPlacement placement, double scale)
@@ -4161,6 +4163,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             var labelRTree = new RTree<LgNodeInfo>();
 
+            var skippedRTree = new RTree<LgNodeInfo>();
+
 
             // insert all nodes inserted before
             foreach (LgNodeInfo node in nodes)
@@ -4205,10 +4209,27 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     }
                 }
 
+                // uncomment: insert no labels until Johann Sebastian Bach can be labeled
+                if (!couldPlace) break;
+
+                // finally, test if inserting would overlap too much important skipped nodes
+                if (couldPlace)
+                {
+                    var overlappedSkipped = skippedRTree.GetAllIntersecting(labelRect);
+                    if (overlappedSkipped.Any())
+                    {
+                        if (DoesOverlapTooManyImportant(node, overlappedSkipped))
+                        {
+                            couldPlace = false;
+                        }
+                    }                    
+                }
 
                 if (!couldPlace)
                 {
                     node.LabelVisibleFromScale = 0;
+
+                    skippedRTree.Add(labelRect, node);
                 }
                 else
                 {
@@ -4222,8 +4243,18 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             return labeledNodes;
         }
 
-        class RankComparer : IComparer<Node>
+        private bool DoesOverlapTooManyImportant(LgNodeInfo node, IEnumerable<LgNodeInfo> overlappedNodes)
         {
+            // rank high == important
+
+            double nodeWeight = node.Rank;
+            double overlappedWeight = overlappedNodes.Sum(n => n.Rank);
+
+            return nodeWeight * 20.0 < overlappedWeight;
+
+        }
+
+        class RankComparer : IComparer<Node> {
             readonly Dictionary<Node, LgNodeInfo> _table;
 
             public RankComparer(Dictionary<Node, LgNodeInfo> geometryNodesToLgNodeInfos)

@@ -138,6 +138,7 @@ namespace Microsoft.Msagl.Drawing {
                 WriteStringElement(Tokens.Text, label.Text);
                 WriteStringElement(Tokens.FontName, label.FontName);
                 WriteColorElement(Tokens.FontColor, label.FontColor);
+                WriteStringElement(Tokens.FontStyle, (int)label.FontStyle);
                 WriteStringElement(Tokens.FontSize, label.FontSize);
                 WriteStringElement(Tokens.Width, label.Width);
                 WriteStringElement(Tokens.Height, label.Height);

@@ -23,16 +23,6 @@ using SymmetricSegment = Microsoft.Msagl.Core.DataStructures.SymmetricTuple<Micr
 namespace Microsoft.Msagl.DebugHelpers.Persistence
 {
 
-#if SILVERLIGHT
-    public class InvalidDataException : Exception
-    {
-        public InvalidDataException(string s)
-            : base(s)
-        {
-        }
-    }
-#endif
-
     /// <summary>
     /// reads the GeometryGraph from a file
     /// </summary>
@@ -933,6 +923,9 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
                         ReadEndElement();
                         breakTheLoop = true;
                         break;
+                    case GeometryToken.CubicBezierSegment:
+                        edge.Curve = ReadCubucBezierSegment();
+                        break;
                     case GeometryToken.Polyline:
 
                         break;
@@ -946,6 +939,17 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
             //XmlReader.Skip();
         }
 
+        CubicBezierSegment ReadCubucBezierSegment() {
+            var str = GetAttribute(GeometryToken.Points);
+            var ss = str.Split(' ');
+
+            var nonEmptySs = ss.Where(s => !string.IsNullOrEmpty(s)).ToList();
+            if (nonEmptySs.Count != 8)
+                Error("wrong number of points in LineSegment");
+
+            var ds = nonEmptySs.Select(ParseDouble).ToArray();
+            return new CubicBezierSegment(new Point(ds[0], ds[1]), new Point(ds[2], ds[3]), new Point(ds[4], ds[5]), new Point(ds[6], ds[7]) );
+        }
 
 
         void ReadArrowheadAtSource(Edge edge)

@@ -65,6 +65,7 @@ namespace GraphControlTest
             dgraph.AddEdgeBetweenNodes(dgraph.NodeMap["A0"], dgraph.NodeMap["A2"]);
             dgraph.AddEdgeBetweenNodes(dgraph.NodeMap["A2"], dgraph.NodeMap["A1"]);
             dgraph.AddEdgeBetweenNodes(dgraph.NodeMap["A0"], dgraph.NodeMap["A3"]);
+            dgraph.AddEdgeBetweenNodes(dgraph.NodeMap["A3"], dgraph.NodeMap["A0"]);
             nodeA3.Label = new DTextLabel(nodeA3, new Microsoft.Msagl.Drawing.Label()) { Text = "Node A3" };
             edgeA0A1.Label = new DTextLabel(edgeA0A1, new Microsoft.Msagl.Drawing.Label()) { Text = "Edge A0->A1" };
             dgraph.Graph.Attr.LayerDirection = Microsoft.Msagl.Drawing.LayerDirection.RL;

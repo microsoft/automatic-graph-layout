@@ -8,8 +8,8 @@
     <ProjectGuid>{76C7B926-D1C1-405F-AB40-41914FEC3E89}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DrawingFromGleeGraph</RootNamespace>
-    <AssemblyName>DrawingFromGleeGraph</AssemblyName>
+    <RootNamespace>DrawingFromGeometryGraphSample</RootNamespace>
+    <AssemblyName>DrawingFromFromGeometryGraphSample</AssemblyName>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
@@ -373,22 +373,20 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="DrawingFromGeometryGraphForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="DrawingFromGeometryGraphForm.Designer.cs">
+      <DependentUpon>DrawingFromGeometryGraphForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="DrawingFromGeometryGraphForm.resx">
+      <DependentUpon>DrawingFromGeometryGraphForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -409,6 +407,10 @@
     <Content Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\CommonDrawingUtilsForSamples\CommonDrawingUtilsForSamples\CommonDrawingUtilsForSamples.csproj">
+      <Project>{f8d4bd63-4cfe-4ab8-bd60-078a04e9fccf}</Project>
+      <Name>CommonDrawingUtilsForSamples</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Drawing\drawing.csproj">
       <Project>{B76F8F71-4B00-4242-BE36-C9F0732511F7}</Project>
       <Name>drawing</Name>

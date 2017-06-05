@@ -50,13 +50,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
             return ret;
         }
 
-        internal T Peak {
-            get {
-                Debug.Assert(heapSize > 0);
-                return A[1];
-            }
-        }
-
         internal void ChangeMinimum(T candidate) {
             A[1] = candidate;
 

@@ -16,7 +16,6 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
     class BlockVector
     {
         internal List<Block> Vector { get; private set; }
-        internal bool IsEmpty { get { return 0 == Vector.Count; } }
         internal int Count { get { return Vector.Count; } }
         internal Block this[int index] { get { return Vector[index]; } }
 
@@ -45,15 +44,6 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                     "Inconsistent swapBlock.VectorIndex");
             Debug.Assert((0 == Vector.Count) || (Vector[Vector.Count - 1].VectorIndex == (Vector.Count - 1)),
                     "Inconsistent finalBlock.VectorIndex");
-        }
-
-        [Conditional("DEBUG")]
-        private void Debug_AssertConsistency()
-        {
-            for (int ii = 0; ii < Vector.Count; ++ii)
-            {
-                Debug.Assert(ii == Vector[ii].VectorIndex, "Inconsistent Vector[ii].VectorIndex");
-            }
         }
 
         /// <summary>

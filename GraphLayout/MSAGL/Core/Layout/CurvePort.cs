@@ -42,7 +42,11 @@ namespace Microsoft.Msagl.Core.Layout {
         /// 
         /// </summary>
         public override Point Location {
+#if SHARPKIT
+            get { return Curve[parameter].Clone(); }
+#else
             get { return Curve[parameter]; }
+#endif
         }
     }
 }

@@ -1368,7 +1368,11 @@ namespace Microsoft.Msagl.Routing {
             if (!activeRectangle.Contains(takenOutTargetPortLocation) ||
                 !activeRectangle.Contains(TargetLoosePolyline.BoundingBox)) {
                 if (activeRectangle.IsEmpty) {
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
+                    activeRectangle = TargetLoosePolyline.BoundingBox.Clone();
+#else
                     activeRectangle = TargetLoosePolyline.BoundingBox;
+#endif
                     activeRectangle.Add(SourcePort.Location);
                     activeRectangle.Add(StartPointOfEdgeRouting);
                     activeRectangle.Add(takenOutTargetPortLocation);
@@ -1753,16 +1757,6 @@ namespace Microsoft.Msagl.Routing {
             return VisibilityGraph;
         }
 
-        ///<summary>
-        ///</summary>
-        ///<param name="portLocationsPointSet"></param>
-        internal void CalculatePortVisibilityGraph(Set<Point> portLocationsPointSet) {
-            var coneSpanner = new ConeSpannerForPortLocations(
-                ObstacleCalculator.LooseObstacles, VisibilityGraph, portLocationsPointSet)
-                              {ConeAngle = ConeSpannerAngle};
-            coneSpanner.Run();
-        }
-
         //        internal void CalculateVisibilityGraph(IEnumerable<EdgeGeometry> edgeGeometries, bool qualityAtPorts)
         //        {
         //            CalculateWholeTangentVisibilityGraph();
@@ -1770,7 +1764,7 @@ namespace Microsoft.Msagl.Routing {
         //                CalculatePortVisibilityGraph(GetPortLocationsPointSet(edgeGeometries));
         //        }
 
-#if DEBUG_MSAGL && ! SILVERLIGHT
+#if DEBUG_MSAGL && !SILVERLIGHT
         internal void ShowObstaclesAndVisGraph()
         {
             var obs = this.obstacleCalculator.LooseObstacles.Select(o => new DebugCurve(100, 1, "blue", o));

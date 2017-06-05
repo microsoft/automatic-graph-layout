@@ -237,8 +237,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
         private String[] _selectionColors;
 
-        public string[] SelectionColors
-        {
+        public string[] SelectionColors {
             get { return _selectionColors; }
             set { _selectionColors = value; }
         }
@@ -283,8 +282,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             return RailColors[logZoomLevel];
         }
 
-        public String GetSelColorForZoomLevel(double zoomLevel)
-        {
+
+        public String GetSelColorForZoomLevel(double zoomLevel) {
             int logZoomLevel = (int)Math.Log(zoomLevel, 2.0);
             logZoomLevel = Math.Min(logZoomLevel, SelectionColors.Count() - 1);
             logZoomLevel = Math.Max(logZoomLevel, 0);

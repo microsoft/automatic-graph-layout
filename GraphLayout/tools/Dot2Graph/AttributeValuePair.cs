@@ -748,8 +748,9 @@ namespace Dot2Graph {
                     case AttributeTypeEnum.Style:
                         AddStyles(edgeAttr, attrVal.val);
                         break;
-                    case AttributeTypeEnum.EdgeDirection: 
-                        //edgeAttr.Dir=(EdgeDirection) attrVal.val;
+                    case AttributeTypeEnum.EdgeDirection:
+                        if ((EdgeDirection)attrVal.val == EdgeDirection.Both)
+                            edgeAttr.ArrowheadAtSource = ArrowStyle.Normal;
                         break;
                     case AttributeTypeEnum.Weight: 
                         if(attrVal.val is String)
@@ -777,7 +778,7 @@ namespace Dot2Graph {
                 }
             }
 
-            edge.Attr = edge.Attr;
+            edge.Attr = edgeAttr;
             if (!String.IsNullOrEmpty(label.Text))
                 edge.Label = new Label(label.Text) { Owner = edge };
             
@@ -918,7 +919,7 @@ namespace Dot2Graph {
             if (width == 0 || height == 0)
                 return null;
            
-            var curve = CreateCurveByShape(72*width, 72*height, center, nodeAttr);
+            var curve = CreateCurveByShape(width, height, center, nodeAttr);
             if (curve != null)
                 return new Node(curve);
             return null;

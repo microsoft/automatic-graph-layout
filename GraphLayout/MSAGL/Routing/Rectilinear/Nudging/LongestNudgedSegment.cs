@@ -79,8 +79,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                 end = p;
         }
 
-        protected CompassVector DirectionPerp { get; set; }
-
         bool isFixed;
 
         /// <summary>

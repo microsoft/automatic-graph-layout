@@ -162,6 +162,10 @@ namespace Microsoft.Msagl.Layout.Layered {
                 foreach (IntEdge e in IntGraph.Edges)
                     database.RegisterOriginalEdgeInMultiedges(e);
 
+#if REPORTING
+                if (sugiyamaSettings.Reporting && SugiyamaLayoutLogger == null)
+                    SugiyamaLayoutLogger = new SugiyamaLayoutLogger();
+#endif
                 CycleRemoval();
             }
         }
@@ -1260,13 +1264,6 @@ namespace Microsoft.Msagl.Layout.Layered {
             }
 #endif
         }
-
-        internal double GetNodeWidth(int i) {
-            Node node = IntGraph.Nodes[i];
-            double a = 0, b = 0, c = 0;
-            return node.Width + WidthOfSelfEdge(database, i, ref a, ref b, ref c, sugiyamaSettings);
-        }
-
 
         internal static void CalculateAnchorSizes(Database database, out Anchor[] anchors,
                                                   ProperLayeredGraph properLayeredGraph, GeometryGraph originalGraph,

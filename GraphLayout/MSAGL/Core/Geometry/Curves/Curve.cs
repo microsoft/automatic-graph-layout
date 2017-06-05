@@ -1542,7 +1542,11 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             get {
                 if (Segments.Count == 0)
                     return new Rectangle(0, 0, -1, -1);
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
+                Rectangle b = Segments[0].BoundingBox.Clone();
+#else
                 Rectangle b = Segments[0].BoundingBox;
+#endif
                 for (int i = 1; i < Segments.Count; i++)
                     b.Add(Segments[i].BoundingBox);
 
@@ -2100,16 +2104,6 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             p.AddPoint(rectangle.LeftBottom);
             p.Closed = true;
             return p;
-        }
-
-        /// <summary>
-        /// Convert points to line curve
-        /// </summary>
-        internal static Curve CreateLineCurve(List<Point> route) {
-            ValidateArg.IsNotNull(route, "route");
-            var curve = new Curve(route.Count);
-            for (int i = 0; i + 1 < route.Count; i++) curve.AddSegment(new LineSegment(route[i], route[i + 1]));
-            return curve;
         }
     }
 }

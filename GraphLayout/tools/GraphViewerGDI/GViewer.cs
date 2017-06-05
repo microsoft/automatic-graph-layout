@@ -1,31 +1,3 @@
-/*
-Microsoft Automatic Graph Layout,MSAGL 
-
-Copyright (c) Microsoft Corporation
-
-All rights reserved. 
-
-MIT License 
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-""Software""), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -1029,7 +1001,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         void CreateNodeGeometry(DrawingNode node, Point center)
         {
             double width, height;
-            StringMeasure.MeasureWithFont(node.Label.Text, new Font(node.Label.FontName, (float)node.Label.FontSize), out width,
+            StringMeasure.MeasureWithFont(node.Label.Text, new Font(node.Label.FontName, (float)node.Label.FontSize, (System.Drawing.FontStyle)(int)node.Label.FontStyle), out width,
                                           out height);
 
             if (node.Label != null)
@@ -1177,9 +1149,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                                 EventResetMode.AutoReset);
 
         PlaneTransformation transformation;
-
-        const double ScrollMaxF = ScrollMax;
-
+        
         /// <summary>
         /// Whether asynchronous layouting is enabled. Defaults to false.
         /// </summary>
@@ -1298,20 +1268,35 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             if (bBNode == null && DGraph != null)
                 bBNode = DGraph.BBNode;
             if (bBNode != null) {
-                Geometry geometry = bBNode.Hit(ScreenToSource(point), GetHitSlack(), filter);
-
+                var subgraphs=new List<Geometry>();
+                Geometry geometry = bBNode.Hit(ScreenToSource(point), GetHitSlack(), filter, subgraphs) ??
+                                    PickSubgraph(subgraphs, ScreenToSource(point));
                 selectedDObject = geometry == null ? null : geometry.dObject;
-
-
-                if (old != selectedDObject) {
-                    SetSelectedObject(selectedDObject);
-                    if (ObjectUnderMouseCursorChanged != null) {
-                        var changedArgs = new ObjectUnderMouseCursorChangedEventArgs((IViewerObject) old,
-                                                                                     selectedDObject);
-                        ObjectUnderMouseCursorChanged(this, changedArgs);
-                    }
+                if (old == selectedDObject) return;
+                SetSelectedObject(selectedDObject);
+                if (ObjectUnderMouseCursorChanged != null) {
+                    var changedArgs = new ObjectUnderMouseCursorChangedEventArgs((IViewerObject) old,
+                        selectedDObject);
+                    ObjectUnderMouseCursorChanged(this, changedArgs);
                 }
             }
+        }
+
+        Geometry PickSubgraph(List<Geometry> subgraphs, Point screenToSource)
+        {
+            if (subgraphs.Count == 0) return null;
+            double area = subgraphs[0].dObject.DrawingObject.BoundingBox.Area;
+            int ret = 0;
+            for (int i = 1; i < subgraphs.Count; i++)
+            {
+                double a = subgraphs[i].dObject.DrawingObject.BoundingBox.Area;
+                if (a < area)
+                {
+                    area = a;
+                    ret = i;
+                }
+            }
+            return subgraphs[ret];
         }
 
         /// <summary>
@@ -1358,12 +1343,6 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             return new PointF((float) p2.X, (float) p2.Y);
         }
 
-
-        void ScrollHandler(object o, ScrollEventArgs args) {
-            //    if(args.Type==  ScrollEventType.EndScroll)
-            panel.Invalidate();
-        }
-
         /// <summary>
         /// Maps a point from the screen to the graph surface
         /// </summary>
@@ -1382,11 +1361,6 @@ namespace Microsoft.Msagl.GraphViewerGdi {
 
         internal Point ScreenToSource(int x, int y) {
             return ScreenToSource(new System.Drawing.Point(x, y));
-        }
-
-
-        static int Int(double f) {
-            return (int) (f + 0.5);
         }
 
 
@@ -1758,11 +1732,11 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             BBNode bn = BbNode;
             if (bn == null)
                 return null;
-            Geometry g = bn.Hit(ScreenToSource(new System.Drawing.Point(x, y)), GetHitSlack(), EntityFilterDelegate);
-            if (g == null)
-                return null;
+            List<Geometry> subgraphs=new List<Geometry>();
+            Geometry g = bn.Hit(ScreenToSource(new System.Drawing.Point(x, y)), GetHitSlack(), EntityFilterDelegate, subgraphs) ??
+                         PickSubgraph(subgraphs, ScreenToSource(new System.Drawing.Point(x, y)));
 
-            return g.dObject;
+            return g == null ? null : g.dObject;
         }
 
         /// <summary>
@@ -2309,7 +2283,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             double height = 0;
             string label = node.Label.Text;
             if (String.IsNullOrEmpty(label) == false) {
-                var f = new Font(node.Label.FontName, (int)node.Label.FontSize);
+                var f = new Font(node.Label.FontName, (int)node.Label.FontSize, (System.Drawing.FontStyle)(int)node.Label.FontStyle);
                 StringMeasure.MeasureWithFont(label, f, out width, out height);
             }
             node.Label.Size = new Size((float) width, (float) height);

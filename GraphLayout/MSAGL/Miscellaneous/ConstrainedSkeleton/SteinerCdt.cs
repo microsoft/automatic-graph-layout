@@ -286,10 +286,8 @@ namespace Microsoft.Msagl.Miscellaneous.ConstrainedSkeleton
             return !badSegs.Any();
         }
 
-
-        private void ShowInputSegments(List<SymmetricTuple<int>> badSegs, Point[] indexToPoints)
-        {
 #if TEST_MSAGL
+        private void ShowInputSegments(List<SymmetricTuple<int>> badSegs, Point[] indexToPoints) {
             var l = new List<DebugCurve>();
             foreach (var seg in _segments)
             {
@@ -306,8 +304,8 @@ namespace Microsoft.Msagl.Miscellaneous.ConstrainedSkeleton
             //    l.Add(new DebugCurve(200, 0.1, "black", CurveFactory.CreateCircle(0.1, p)));
             //}
             LayoutAlgorithmSettings.ShowDebugCurves(l.ToArray());
-#endif
         }
+#endif
 
         /*
                 void AddSegsHandlingOverlaps(SymmetricTuple<int> seg, RTree<Point> tree, Point[] indexToPoints) {

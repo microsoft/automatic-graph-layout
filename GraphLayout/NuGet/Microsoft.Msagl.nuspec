@@ -1,0 +1,25 @@
+﻿<package>
+  <metadata>
+    <id>Microsoft.Msagl</id>
+    <version>1.0.2</version>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <licenseUrl>https://github.com/Microsoft/automatic-graph-layout/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/Microsoft/automatic-graph-layout</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>This .NET asssembly contains the core MSAGL layout functionality. Use this library if you just want MSAGL to perform the layout only and afterwards you will use a separate tool to perform the rendering and visalization.</description>
+    <releaseNotes>
+    </releaseNotes>
+    <copyright>Copyright © Microsoft Corporation</copyright>
+    <language>en-US</language>
+    <tags>MSAGL Graph Layout</tags>
+    <dependencies>
+    </dependencies>
+    <frameworkAssemblies>
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="..\MSAGL\bin\debug\Microsoft.Msagl.dll" target="lib\net40" />
+    <file src="..\MSAGL\bin\debug\Microsoft.Msagl.xml" target="lib\net40" />
+  </files>
+</package>

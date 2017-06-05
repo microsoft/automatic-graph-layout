@@ -261,7 +261,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
 
         static readonly double HalfArrowAngleTan = Math.Tan(ArrowAngle * 0.5 * Math.PI / 180.0);
         static readonly double HalfArrowAngleCos = Math.Cos(ArrowAngle * 0.5 * Math.PI / 180.0);
-        internal byte Transparency = 0; //255; //test
         const double ArrowAngle = 30.0; //degrees
 
         #region Implementation of IViewerObject
@@ -375,7 +374,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             //           })
             //           : Brushes.Red;
 
-            
             brush = rail.IsHighlighted ? Brushes.Red.Color : Brushes.SlateGray.Color;
             if (rail.TopRankedEdgeInfoOfTheRail == null) return new SolidColorBrush(brush);
 

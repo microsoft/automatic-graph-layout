@@ -301,17 +301,6 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 #endif
 
-        Curve CreatePolyTest() {
-            Curve c = new Curve();
-            IEnumerator<Point> e = new PointNodesList(this.headSite);
-            e.MoveNext();
-            Point p = e.Current;
-            while (e.MoveNext()) {
-                Curve.AddLineSegment(c, p, e.Current);
-                p = e.Current;
-            }
-            return c;
-        }
         #endregion
 
         internal SmoothedPolyline GetPolyline {

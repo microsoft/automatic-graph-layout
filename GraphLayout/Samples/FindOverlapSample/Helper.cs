@@ -9,7 +9,7 @@ using Microsoft.Msagl.Routing;
 using Edge = Microsoft.Msagl.Core.Layout.Edge;
 using Node = Microsoft.Msagl.Core.Layout.Node;
 
-namespace FindOverlapSample {
+namespace OverlapGraphExperiments {
     class Helper {
         public static GeometryGraph CopyGraph(GeometryGraph graph) {
             if (graph == null) return null;
@@ -18,7 +18,7 @@ namespace FindOverlapSample {
             Dictionary<Node,Node> nodeCopy=new Dictionary<Node, Node>(graph.Nodes.Count);
 
             foreach (Node node in graph.Nodes) {
-                var c = new Node();
+                var c = new Node() {UserData = node.UserData};
                 copy.Nodes.Add(c);
                 nodeCopy[node] = c;
                 c.BoundaryCurve = node.BoundaryCurve.Clone();
