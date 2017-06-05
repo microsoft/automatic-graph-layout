@@ -611,23 +611,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
         void GraphCanvasKeyDown(object sender, KeyEventArgs e)
         {
-            // make sure _graphViewer has focus by calling Keyboard.Focus(_graphCanvas) OnMouseDown
-            if (e.Key == Key.R)
-            {
-                ToggleSelectRailUnderCursor();
-            }
-            else if (e.Key == Key.T)
-            {
-                Common.MsaglPoint(Mouse.GetPosition(_graphCanvas));
-                SelectRailsUnderMouse(true, true);
-                ViewChangeEvent(null, null);
-            }
-            else if (e.Key == Key.I)
-            {
-                var info = _hitTestHandler.GetOneInfoInsideRect(GetUnderMouseRectGeom(2));
-                MessageBox.Show(info.Tag.ToString());
-            }
-            else if (e.Key == Key.End)
+             if (e.Key == Key.End)
             {
                 ClearSelection();
                 ViewChangeEvent(null, null);
