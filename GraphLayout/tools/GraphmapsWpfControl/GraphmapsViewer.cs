@@ -82,7 +82,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
 
         //jyoti controller
-        private double pathThicknessController = 0.01 ;
+        private double pathThicknessController = 0.012;
         private int BackGroundEdgeWeight = 1;
 
 
@@ -382,11 +382,12 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
         {
             ColorSet.Add(Brushes.Red);
             ColorSet.Add(Brushes.Blue);
-            ColorSet.Add(Brushes.LawnGreen);
+            
             ColorSet.Add(Brushes.Violet);
             ColorSet.Add(Brushes.Aqua);
             ColorSet.Add(Brushes.Green);
             ColorSet.Add(Brushes.Tomato);
+            ColorSet.Add(Brushes.LawnGreen);
             ColorSet.Add(Brushes.Gold);
             ColorSet.Add(Brushes.Fuchsia);
             ColorSet.Add(Brushes.GreenYellow);
@@ -2382,7 +2383,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             var vp = new Rectangle(new Point(0, 0),
                 new Point(_graphCanvas.RenderSize.Width, _graphCanvas.RenderSize.Height));
             SetTransformOnViewport(scale, graphCenter, vp);
-            // SetScaleRangeForLgLayoutSettings();
+            SetScaleRangeForLgLayoutSettings();
 
         }
 
@@ -3507,7 +3508,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             if (nodeInfo != null)
                 ZoomToNodeInfo(nodeInfo);
         }
-
+        /*
         //textbox: find node operation on 'Enter'
         void ZoomToNodeInfo(LgNodeInfo nodeInfo)
         {
@@ -3533,6 +3534,14 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                     Invalidate(ttt);
                 }
             }
+        }
+    }*/
+    void ZoomToNodeInfo(LgNodeInfo nodeInfo)
+        {
+            var scale = Math.Max(CurrentScale, nodeInfo.LabelVisibleFromScale);
+            var vp = new Rectangle(new Point(0, 0),
+                new Point(_graphCanvas.RenderSize.Width, _graphCanvas.RenderSize.Height));
+            SetTransformOnViewport(scale, nodeInfo.Center, vp);
         }
     }
 

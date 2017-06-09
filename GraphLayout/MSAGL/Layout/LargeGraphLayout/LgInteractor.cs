@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -418,16 +419,18 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         void SetControlVariables()
         {
             //control the density at each label
-            if(_mainGeometryGraph.Edges.Count>= 5000)
+            if (_mainGeometryGraph.Edges.Count >= 15000)
                 _lgLayoutSettings.MaxNumberOfNodesPerTile = 20;
-            else if (_mainGeometryGraph.Edges.Count >= 3000)
+            else if (_mainGeometryGraph.Edges.Count >= 10000)
                 _lgLayoutSettings.MaxNumberOfNodesPerTile = 30;
             else
                 _lgLayoutSettings.MaxNumberOfNodesPerTile = 40;
 
+            if (_mainGeometryGraph.Nodes.Count >= 1000 && _mainGeometryGraph.Edges.Count <= 15000)
+                _lgLayoutSettings.MaxNumberOfNodesPerTile = 40;
             //delta = 1 (higher than 1) will give exact (fast approximate) flow 
             //control speed and approximation
-            _lgLayoutSettings.delta = (_lgLayoutSettings.MaxNumberOfNodesPerTile / 8) + 1;             
+            _lgLayoutSettings.delta = (_lgLayoutSettings.MaxNumberOfNodesPerTile / 8) + 1;
 
         }
              
@@ -437,12 +440,33 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             //ask user
             Console.WriteLine("Running in Default Settings - Enable UserPrompt in LgInteractor if needed.");
             _lgLayoutSettings.hugeGraph = true; //PromptUserforGraphSize();
-            _lgLayoutSettings.flow = true;// PromptUserforFlow();
+            _lgLayoutSettings.flow = false;//true;// PromptUserforFlow();
 
             //set control variables
             SetControlVariables();
-            
-            
+
+            /*
+            //generate dot from msagl
+            string mydocpath =
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            using (StreamWriter outputFile = new StreamWriter("D:/MSIntern/New Folder/mytest/composers.dot"))
+            {
+                outputFile.WriteLine("digraph composers {");
+                String a, b;
+                foreach (Edge e in _mainGeometryGraph.Edges)
+                {
+                    a = e.Source.ToString().Split('\"')[1];
+                    b = e.Target.ToString().Split('\"')[1];
+
+                    outputFile.WriteLine("\"" + a + "\"" + " -> " +
+                        "\"" + b + "\"");
+                }
+                outputFile.WriteLine("}");
+                outputFile.Close();
+            }
+
+            //*/
             Dictionary<Node, int> nodeToId;
             var g = TryCompetitionMeshApproach(out nodeToId);
 
@@ -915,7 +939,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
 
 
-            //Boolean loaded = LoadNodeLocationsFromFile();
+            Boolean loaded = LoadNodeLocationsFromFile();
             _mainGeometryGraph.UpdateBoundingBox();
             _lgLayoutSettings._geometryGraph = _mainGeometryGraph;
 
@@ -927,19 +951,20 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             idToNode = new Dictionary<int, Node>();
             nodeToId = new Dictionary<Node, int>();
 
-            
-            
+
+
             var stopwatch = new Stopwatch();
 
             stopwatch.Start();
             CreateConnectedGraphs();
             FillGeometryNodeToLgInfosTables();
- 
-            
+
+
             LevelCalculator.RankGraph(_lgData, _mainGeometryGraph);
-            //if(!loaded) 
+            if (!loaded)
                 LayoutTheWholeGraph();
             
+
             
 
             int maxY;
@@ -1004,54 +1029,54 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
 
 
-                stopwatch.Start();
-                g = ComputeEdgeRoutes(g, nodeToId);
-             
-                //RouteByLayers();
-                stopwatch.Stop();
-                Console.WriteLine("Lev's = " + stopwatch.ElapsedMilliseconds);
+            stopwatch.Start();
+            g = ComputeEdgeRoutes(g, nodeToId);
 
-                /*
-                //UPDATE ACCORDING TO DIJKSTRA            
-                Console.WriteLine("Computing Edge Routes");
-                stopwatch.Start();
-                var g1 = ComputeEdgeRoutes(g, nodeToId, AdjacencyList);
-                stopwatch.Stop();
-                Console.WriteLine("Edge Routing Time = " + stopwatch.ElapsedMilliseconds);               
-                g = g1;
-                */
+            //RouteByLayers();
+            stopwatch.Stop();
+            Console.WriteLine("Lev's = " + stopwatch.ElapsedMilliseconds);
 
-                Console.WriteLine("Removing Deg 2 junctions");
-                //Remove Deg 2 Nodes when possible //less than a minute for 1500 vertices and 5000 edges
-                stopwatch.Start();
-                g.MsaglRemoveDeg2(idToNode);
-                stopwatch.Stop();
-                Console.WriteLine("Deg 2 removal Time = " + stopwatch.ElapsedMilliseconds);
-                
-                stopwatch.Start();
-                PlanarGraphUtilities.TransformToGeometricPlanarGraph(g);
-                stopwatch.Stop();
-                Console.WriteLine("Planar Graph Building Time = " + stopwatch.ElapsedMilliseconds);
-                
-                stopwatch.Start();
-                PlanarGraphUtilities.RemoveLongEdgesFromThinFaces(g);
-                stopwatch.Stop();
-                Console.WriteLine("Thin Face Removal Time = " + stopwatch.ElapsedMilliseconds);
-                
-                
-                //Move the points towards median
-                //Console.WriteLine("Moving junctions to minimize ink");
-                stopwatch.Start();
-                //LocalModifications.MsaglStretchAccordingToZoomLevel(g, idToNode);
-                LocalModifications.MsaglMoveToMedian(g, idToNode, _lgLayoutSettings);
-                stopwatch.Stop();
-                Console.WriteLine("Ink Minimization Time = " + stopwatch.ElapsedMilliseconds);
+            /*
+            //UPDATE ACCORDING TO DIJKSTRA            
+            Console.WriteLine("Computing Edge Routes");
+            stopwatch.Start();
+            var g1 = ComputeEdgeRoutes(g, nodeToId, AdjacencyList);
+            stopwatch.Stop();
+            Console.WriteLine("Edge Routing Time = " + stopwatch.ElapsedMilliseconds);               
+            g = g1;
+            */
 
-                LocalModifications.MsaglShortcutShortEdges(g, idToNode, _lgLayoutSettings);                
+            Console.WriteLine("Removing Deg 2 junctions");
+            //Remove Deg 2 Nodes when possible //less than a minute for 1500 vertices and 5000 edges
+            stopwatch.Start();
+            g.MsaglRemoveDeg2(idToNode);
+            stopwatch.Stop();
+            Console.WriteLine("Deg 2 removal Time = " + stopwatch.ElapsedMilliseconds);
 
-                g.MsaglRemoveDeg2(idToNode);
+            stopwatch.Start();
+            PlanarGraphUtilities.TransformToGeometricPlanarGraph(g);
+            stopwatch.Stop();
+            Console.WriteLine("Planar Graph Building Time = " + stopwatch.ElapsedMilliseconds);
 
-                LocalModifications.MsaglMoveToMedian(g, idToNode, _lgLayoutSettings);
+            stopwatch.Start();
+            PlanarGraphUtilities.RemoveLongEdgesFromThinFaces(g);
+            stopwatch.Stop();
+            Console.WriteLine("Thin Face Removal Time = " + stopwatch.ElapsedMilliseconds);
+
+
+            //Move the points towards median
+            //Console.WriteLine("Moving junctions to minimize ink");
+            stopwatch.Start();
+            //LocalModifications.MsaglStretchAccordingToZoomLevel(g, idToNode);
+            LocalModifications.MsaglMoveToMedian(g, idToNode, _lgLayoutSettings);
+            stopwatch.Stop();
+            Console.WriteLine("Ink Minimization Time = " + stopwatch.ElapsedMilliseconds);
+
+            LocalModifications.MsaglShortcutShortEdges(g, idToNode, _lgLayoutSettings);
+
+            g.MsaglRemoveDeg2(idToNode);
+
+            LocalModifications.MsaglMoveToMedian(g, idToNode, _lgLayoutSettings);
                 
             //}
 
@@ -1174,61 +1199,45 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         public bool LoadNodeLocationsFromFile()
         {
             //OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            
+
             String line = _mainGeometryGraph.directory;
             line = line.Replace(".tiles", "");
-
-            /*
-            openFileDialog1.DefaultExt = "loc";
-            openFileDialog1.Filter = "Text files (*.loc)|*.loc|All files (*.*)|*.*";
-
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                line = openFileDialog1.FileName;
-            }
-             */
 
 
             try
             {
-                System.IO.StreamReader file = new System.IO.StreamReader(line+".loc");
+                System.IO.StreamReader file = new System.IO.StreamReader(line + ".loc");
                 Dictionary<string, Point> nametopoint = new Dictionary<string, Point>();
                 while ((line = file.ReadLine()) != null)
                 {
                     string[] words = line.Split(',');
                     //if (count++ > 200) break;
-                    Point p = new Point(Double.Parse(words[1]), Double.Parse(words[2]));
+                    Point p = new Point(Double.Parse(words[1]) * 5, Double.Parse(words[2]) * 5);
                     nametopoint[words[0]] = p;
                 }
                 List<Node> remove = new List<Node>();
+
+
                 foreach (Node w in _mainGeometryGraph.Nodes)
                 {
-                    if (!nametopoint.ContainsKey(w.ToString()))
+                    String s = w.ToString();//.Split('\"')[1];
+                    if (!nametopoint.ContainsKey(s))
                     {
                         remove.Add(w);
                     }
                     else
-                        w.Center = nametopoint[w.ToString()];
+                        w.Center = nametopoint[s];
                 }
-
-
-                List<Edge> removeE = new List<Edge>();
-                foreach (Edge e in _mainGeometryGraph.Edges)
-                {
-                    if (remove.Contains(e.Source) || remove.Contains(e.Target))
-                        removeE.Add(e);
-                }
-                file.Close();
                 return true;
             }
             catch (Exception e)
-            {                
+            {
                 Console.WriteLine(e.Message);
                 Console.WriteLine("No prespecified location found.");
                 return false;
             }
 
-            
+
         }
 
         public void RouteByLayers()//int maxNodesPerTile, int maxSegmentsPerTile, double increaseNodeQuota)
@@ -2314,24 +2323,14 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         {
             _railGraph.Rails.Clear();
             var level = _lgData.GetCurrentLevelByScale(CurrentZoomLevel);
-            Console.WriteLine("current zoomlevel = " +level.ZoomLevel);
-            
+            Console.WriteLine("current zoomlevel = " + level.ZoomLevel);
             _railGraph.Rails.InsertRange(level.GetRailsIntersectingRect(_visibleRectangle));
-            
-            
-            //jyoti: this needs to be fixed - generate labels of top label nodes
-            //_railGraph.Nodes.InsertRange(level.GetNodesIntersectingRect(_visibleRectangle));
-            _railGraph.Nodes.InsertRange(level.GetNodesIntersectingRectLabelzero(_visibleRectangle, Math.Pow(2, level.ZoomLevel)));
-            /* //attempt for fix             
+
+            //jyoti: only show the top level nodes for the first time   
             if (forthefirsttime)
-            {
-                foreach (var e in level._railsOfEdges.Keys)
-                {
-                    _railGraph.Nodes.Insert(e.Source);    
-                    _railGraph.Nodes.Insert(e.Target);    
-                }
-                forthefirsttime = false;
-            }*/
+                _railGraph.Nodes.InsertRange(level.GetNodesIntersectingRectLabelzero(_visibleRectangle, 1));
+            else
+                _railGraph.Nodes.InsertRange(level.GetNodesIntersectingRectLabelzero(_visibleRectangle, Math.Pow(2, level.ZoomLevel)));
 
 
             _railGraph.Edges.Clear();
