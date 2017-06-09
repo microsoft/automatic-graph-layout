@@ -12,7 +12,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         public static void MsaglShortcutShortEdges(Tiling g, Dictionary<int, Node> idToNodes,
             LgLayoutSettings _lgLayoutSettings)
         {
-            int unit = (int)_lgLayoutSettings.NodeSeparation ;
+            int unit = (int)_lgLayoutSettings.NodeSeparation;
 
             int shortcutcount = 1;
             int iteration = 10;
@@ -26,7 +26,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 unit *= 5;
             }
 
-            while (shortcutcount>0 && iteration>0)
+            while (shortcutcount > 0 && iteration > 0)
             {
                 iteration--;
                 //for all vertices that are not real vertices
@@ -73,7 +73,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                                 if (g.Crossings(w.Id, x))
                                     safetomodify = false;
                             }
-                            
+
                             if (!safetomodify) continue;
 
                             //add edges between w and the neighbor's neighbor
@@ -107,7 +107,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             bool localRefinementsFound = true;
             int iteration = 10;
             //int offset = iteration * 2;
-            int unit = (int)_lgLayoutSettings.NodeSeparation/2;
+            int unit = (int)_lgLayoutSettings.NodeSeparation / 2;
 
             if (_lgLayoutSettings.hugeGraph)
             {
@@ -135,7 +135,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                     }
 
                     if (numNeighbors <= 1) continue;
-                    
+
                     for (int counter = 1; counter <= 9; counter++)
                     {
                         d[counter] = 0;
@@ -169,7 +169,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
                         }
 
-                    
+
                         p[counter] = new Core.Geometry.Point(a, b);
 
 

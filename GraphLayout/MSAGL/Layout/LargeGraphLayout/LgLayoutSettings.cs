@@ -237,7 +237,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
         private String[] _selectionColors;
 
-        public string[] SelectionColors {
+        public string[] SelectionColors
+        {
             get { return _selectionColors; }
             set { _selectionColors = value; }
         }
@@ -265,7 +266,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             _selectionColors[0] = "#E60000";
             _selectionColors[1] = "#E60000";
             _selectionColors[2] = "#E60000";
-            
+
             //jyoti changed colors
             //_selectionColors[0] = "#FF0000";
             //_selectionColors[1] = "#EB3044";
@@ -282,8 +283,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             return RailColors[logZoomLevel];
         }
 
-
-        public String GetSelColorForZoomLevel(double zoomLevel) {
+        public String GetSelColorForZoomLevel(double zoomLevel)
+        {
             int logZoomLevel = (int)Math.Log(zoomLevel, 2.0);
             logZoomLevel = Math.Min(logZoomLevel, SelectionColors.Count() - 1);
             logZoomLevel = Math.Max(logZoomLevel, 0);
