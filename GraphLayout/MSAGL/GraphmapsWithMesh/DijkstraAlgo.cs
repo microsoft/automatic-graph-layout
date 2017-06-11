@@ -127,7 +127,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         public List<int> MSAGLAstarShortestPath(Vertex[] vList, Edge[,] eList, int[] degList, int source, int target, int n)
         {
 
-            MSAGLPriorityQueue q = new MSAGLPriorityQueue(n);
+            var q = new BinaryHeapPriorityQueue(n);
 
 
             vList[source].Dist = 0;
@@ -155,7 +155,8 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
             while (q.Count > 0)
             {
-                Vertex u = vList[q.Dequeue()];
+                var deq = q.Dequeue();
+                Vertex u = vList[deq];
                 u.Visited = true;
                 if (u == null || u.Invalid) return new List<int>();
                 for (int neighb = 0; neighb < degList[u.Id]; neighb++)
@@ -285,7 +286,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             int NofNodesBeforeDetour, int n, Tiling g, Tiling g1)
         {
 
-            MSAGLPriorityQueue q = new MSAGLPriorityQueue(n);
+            var q = new BinaryHeapPriorityQueue(n);
 
              
 
@@ -308,7 +309,8 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
             while (q.Count > 0)
             {
-                Vertex u = vList[q.Dequeue()];
+                var deq = q.Dequeue();
+                Vertex u = vList[deq];
                 u.Visited = true;
                 if (u == null || u.Invalid) return;
                 for (int neighb = 0; neighb < degList[u.Id]; neighb++)
