@@ -67,7 +67,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
             CreateNodeBoundaryPath();
             if (FrameworkElementOfNodeForLabel != null) {
-                FrameworkElementOfNodeForLabel.Tag = this; //get a backpointer to the VNode 
+                FrameworkElementOfNodeForLabel.Tag = this; //get a backpointer to the VNode
                 Common.PositionFrameworkElement(FrameworkElementOfNodeForLabel, node.GeometryNode.Center, 1);
                 Panel.SetZIndex(FrameworkElementOfNodeForLabel, Panel.GetZIndex(BoundaryPath) + 1);
             }
@@ -169,7 +169,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
         void InvokeIsCollapsedChanged() {
             if (IsCollapsedChanged != null)
-                IsCollapsedChanged(this);            
+                IsCollapsedChanged(this);
         }
 
 
@@ -402,7 +402,31 @@ namespace Microsoft.Msagl.WpfGraphControl {
             get { return Node; }
         }
 
-        public bool MarkedForDragging { get; set; }
+        bool markedForDragging;
+
+        /// <summary>
+        /// Implements a property of an interface IEditViewer
+        /// </summary>
+        public bool MarkedForDragging
+        {
+            get
+            {
+                return markedForDragging;
+            }
+            set
+            {
+                markedForDragging = value;
+                if (value)
+                {
+                    MarkedForDraggingEvent?.Invoke(this, null);
+                }
+                else
+                {
+                    UnmarkedForDraggingEvent?.Invoke(this, null);
+                }
+            }
+        }
+
         public event EventHandler MarkedForDraggingEvent;
         public event EventHandler UnmarkedForDraggingEvent;
 
@@ -434,7 +458,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
             }
 
             BoundaryPath.Data = CreatePathFromNodeBoundary();
-            
+
             Common.PositionFrameworkElement(FrameworkElementOfNodeForLabel, Node.BoundingBox.Center, 1);
 
 
