@@ -341,7 +341,7 @@ namespace TestForGdi {
                 if (showForm) {
                     gViewer = new GViewer();
                     gViewer.MouseMove += Draw.GviewerMouseMove;
-                    var form = FormStuff.CreateForm(gViewer);
+                    var form = FormStuff.CreateOrAttachForm(gViewer, new Form2(false));
                     Application.Run(form);
                 }
             }

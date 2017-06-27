@@ -40,9 +40,10 @@ namespace TestFormForGViewer {
         static string lastFileName;
         public static GViewer GViewer;
 
-        public static Form CreateForm(GViewer gviewer) {
+        public static Form CreateOrAttachForm(GViewer gviewer, Form form) {
             GViewer=gviewer;
-            var form = new Form();
+            if (form == null)
+                form = new Form();
             form.SuspendLayout();
             form.Controls.Add(gviewer);
             gviewer.Dock = DockStyle.Fill;

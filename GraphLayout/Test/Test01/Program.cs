@@ -524,7 +524,7 @@ namespace Test01 {
             string fileName;
             string dir = Path.GetDirectoryName(listOfFilesFile);
             var gviewer = new GViewer();
-            Form form = FormStuff.CreateForm(gviewer);
+            Form form = FormStuff.CreateOrAttachForm(gviewer, null);
             int nOfBugs = 0;
             while ((fileName = sr.ReadLine()) != null) {
                 if (String.IsNullOrEmpty(fileName)) continue;
@@ -581,7 +581,7 @@ namespace Test01 {
         }
 
         static Form CreateForm(Graph graph, GViewer gviewer) {
-            Form form = FormStuff.CreateForm(gviewer);
+            Form form = FormStuff.CreateOrAttachForm(gviewer, null);
             form.SuspendLayout();
             SetEdgeSeparationBar(form);
 

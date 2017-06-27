@@ -1690,34 +1690,14 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             Pan(point.X, point.Y);
         }
 
-        /// <summary>
-        /// centers the view to the point (x,y)
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "y"),
-         SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "x")]
-        public void CenterToPoint(double x, double y) {
-            Zoom(x, y, ZoomF);
-            //int cx = ScaleFromSrcXToScroll(x);
-            //int cy = ScaleFromSrcYToScroll(y);
-
-            //int curCx = (int)(hVal + hLargeChangeF * 0.5f + 0.5f);
-            //int curCy = (int)(vVal + vLargeChangeF * 0.5f + 0.5f);
-
-
-            //hVal += cx - curCx;
-            //vVal += cy - curCy;
-
-            //panel.Invalidate();
-        }
+      
 
         /// <summary>
         /// Centers the view to the point p
         /// </summary>
         /// <param name="point"></param>
         public void CenterToPoint(Point point) {
-            CenterToPoint(point.X, point.Y);
+            SetTransformOnScaleAndCenter(ZoomF, point);
         }
 
         /// <summary>
