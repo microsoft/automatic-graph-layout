@@ -395,16 +395,24 @@ namespace Microsoft.Msagl.Drawing
                 {
                     var poly = iCurve as Polyline;
                     if (poly != null)
-                        WritePolyline(poly, attr);
+                        WriteCurve(CreateCurveFromPolyline(poly), node);
                     else
                         throw new NotImplementedException();
                 }
             }
         }
 
-        void WritePolyline(Polyline poly, NodeAttr attr)
+        Curve CreateCurveFromPolyline(Polyline poly)
         {
-            throw new NotImplementedException();
+            Curve c = new Curve();
+            foreach (PolylinePoint p in poly.PolylinePoints)
+            {
+                if (p.Next != null)
+                    Curve.AddLineSegment(c, p.Point, p.Next.Point);
+            }
+            if (poly.Closed)
+                Curve.AddLineSegment(c, c.End, poly.Start);
+            return c;
         }
 
         void WriteFillAndStroke(NodeAttr attr)
