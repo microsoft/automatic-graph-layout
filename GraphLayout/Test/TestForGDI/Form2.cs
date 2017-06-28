@@ -426,9 +426,6 @@ namespace TestForGdi {
                     Label label = n != null ? n.Label : ((Edge) t).Label;
 
                     if (label != null && label.Text.ToLower().Contains(s)) {
-                        double x = 0.8*Math.Min(GViewer.Graph.Width/label.Width, GViewer.Graph.Height/label.Size.Height);
-                        if (GViewer.ZoomF < x)
-                            GViewer.ZoomF = x;
                         GViewer.CenterToGroup(t);
                         searchButton.Text = "Next";
                         textFound = true;

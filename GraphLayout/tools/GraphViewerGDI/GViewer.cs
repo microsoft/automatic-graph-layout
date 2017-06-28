@@ -1621,7 +1621,10 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             Core.Geometry.Rectangle bb = BBoxOfObjs(graphElements);
 
             if (!bb.IsEmpty)
-                CenterToPoint(0.5f*(bb.LeftTop + bb.RightBottom));
+            {
+                CenterToPoint(0.5f * (bb.LeftTop + bb.RightBottom));
+            }
+
         }
 
 
@@ -1697,7 +1700,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         /// </summary>
         /// <param name="point"></param>
         public void CenterToPoint(Point point) {
-            SetTransformOnScaleAndCenter(ZoomF, point);
+            SetTransformOnScaleAndCenter(CurrentScale, point);
+            panel.Invalidate();
         }
 
         /// <summary>
