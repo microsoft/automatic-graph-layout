@@ -1103,9 +1103,9 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             SetTransformOnScaleAndCenter(scale, sourceCenter);
         }
 
-        internal void SetTransformOnScaleAndCenter(double scale, Point sourceCenter) {
-
-            if (OriginalGraph!=null && OriginalGraph.BoundingBox.Diagonal * scale < 5) //less than 5 pixels
+        internal void SetTransformOnScaleAndCenter(double scale, Point sourceCenter)
+        {
+            if (!ScaleIsAcceptable(scale))
                 return;
                 
             var dx = PanelWidth/2.0 - scale*sourceCenter.X;
@@ -1732,14 +1732,17 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             return GetObjectAt(point.X, point.Y);
         }
 
+        internal bool ScaleIsAcceptable(double scale)
+        {
+            var d = OriginalGraph != null ? OriginalGraph.BoundingBox.Diagonal : 0;
+            return !(d * scale < 5) && !(d * scale > HugeDiagonal);
+        }
         /// <summary>
         /// Zooms in
         /// </summary>
         public void ZoomInPressed() {
             double zoomFractionLocal = ZoomF * ZoomFactor();
-            var scale = CurrentScale * zoomFractionLocal;
-            var d = OriginalGraph != null ? OriginalGraph.BoundingBox.Diagonal : 0;
-            if (d * scale < 5 || d * scale > HugeDiagonal)
+            if (!ScaleIsAcceptable(CurrentScale * zoomFractionLocal))
                 return;
             ZoomF *= ZoomFactor();
     }
