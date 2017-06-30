@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--SvgWriter version 3.0.0.0-->
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="1619.53" height="299.438" id="svg2" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(22.7649731636047,799.438455581665)">
+    <!--Edges-->
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 923.463 -754.996 L 922.705 -754.011 C917.387 -747.099 858.887 -738.245 747.205 -727.449 L 565.384 -709.872" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="565.171 -712.079 555.431 -708.91 565.598 -707.666" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 887.483 -754.949 L 886.764 -754.011 C881.47 -747.099 827.47 -738.245 724.764 -727.449 L 565.376 -710.694" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="565.144 -712.899 555.431 -709.649 565.608 -708.489" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 851.507 -754.894 L 850.834 -754.011 C845.568 -747.099 796.068 -738.245 702.334 -727.449 L 565.365 -711.673" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="565.111 -713.875 555.431 -710.528 565.619 -709.47" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 815.304 -755.503 C801.94 -746.593 742.683 -735.443 637.535 -722.051 L 565.351 -712.857" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="565.071 -715.056 555.431 -711.594 565.631 -710.658" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 781.886 -753.163 C773.539 -741.844 719.707 -730.298 620.388 -718.524 L 565.361 -712" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="565.1 -714.202 555.431 -710.823 565.622 -709.799" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 745.725 -753.187 C736.922 -742.214 689.179 -730.785 602.494 -718.899 L 565.338 -713.805" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="565.037 -716.001 555.431 -712.446 565.639 -711.608" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 709.477 -753.24 C700.299 -742.691 658.673 -731.405 584.601 -719.383 L 563.928 -716.027" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="563.573 -718.216 554.057 -714.425 564.283 -713.839" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 673.106 -753.364 C663.685 -743.331 628.213 -732.217 566.692 -720.022 L 557.111 -718.123" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="556.68 -720.297 547.302 -716.178 557.542 -715.948" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 636.562 -753.653 C627.123 -744.249 597.844 -733.329 548.727 -720.895 L 548.499 -720.837" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="547.954 -722.986 538.804 -718.383 549.043 -718.688" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 599.825 -754.357 C591.297 -746.235 570.48 -736.283 537.376 -724.502" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="536.644 -726.595 527.936 -721.203 538.107 -722.41" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 563.235 -756.335 C555.83 -749.267 541.232 -739.781 519.442 -727.879" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="518.392 -729.832 510.635 -723.143 520.492 -725.927" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 527.235 -758.733 L 498.187 -730.156" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="496.633 -731.736 491.059 -723.143 499.742 -728.576" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 547.697 -684.841 L 692.54 -656.457 C816.659 -632.135 891.489 -614.049 917.03 -602.201" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="915.867 -600.314 925.543 -596.954 918.193 -604.088" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 544.593 -684.035 L 674.601 -656.16 C787.614 -631.928 856.371 -613.938 880.874 -602.188" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="879.703 -600.306 889.365 -596.906 882.045 -604.071" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 541.158 -683.144 L 656.658 -655.809 C758.607 -631.682 821.283 -613.798 844.686 -602.16" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="843.504 -600.284 853.147 -596.83 845.867 -604.036" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 537.338 -682.153 L 638.704 -655.393 C729.653 -631.383 786.239 -613.62 808.461 -602.104" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="807.266 -600.237 816.883 -596.712 809.656 -603.971" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 533.068 -681.045 L 620.727 -654.892 C700.77 -631.011 751.261 -613.382 772.2 -602.004" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="770.985 -600.15 780.567 -596.528 773.414 -603.859" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 528.268 -679.8 L 602.712 -654.283 C671.985 -630.538 716.383 -613.053 735.907 -601.829" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="734.667 -599.991 744.196 -596.235 737.147 -603.666" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 522.843 -678.392 L 584.624 -653.534 C643.338 -629.91 681.665 -612.571 699.605 -601.517" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="698.328 -599.705 707.782 -595.761 700.881 -603.33" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 514.653 -677.773 L 566.407 -652.608 C614.909 -629.025 647.229 -611.802 663.369 -600.94" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="662.042 -599.164 671.379 -594.954 664.696 -602.716" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 505.025 -677.773 L 547.96 -651.468 C586.905 -627.607 613.411 -610.363 627.476 -599.737" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="626.077 -598.017 635.235 -593.429 628.874 -601.457" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 495.527 -677.773 L 529.1 -650.106 C559 -625.466 579.883 -607.995 591.751 -597.694" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="590.28 -596.035 599.235 -591.062 593.221 -599.353" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 488.152 -677.773 L 556.594 -600.732" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="554.936 -599.259 563.235 -593.256 558.251 -602.204" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 481.435 -677.773 L 524.238 -605.5" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="522.331 -604.371 529.334 -596.896 526.146 -606.63" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 474.717 -677.773 L 495.787 -606.623" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="493.661 -605.993 498.626 -597.034 497.912 -607.252" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 468 -677.773 L 468 -607.034" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="465.783 -607.034 468 -597.034 470.217 -607.034" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 461.283 -677.773 L 440.213 -606.623" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="438.088 -607.252 437.374 -597.034 442.339 -605.993" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 454.565 -677.773 L 411.762 -605.5" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="409.854 -606.63 406.666 -596.896 413.669 -604.371" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 447.848 -677.773 L 379.406 -600.732" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="377.749 -602.204 372.765 -593.256 381.064 -599.259" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 440.473 -677.773 L 406.9 -650.106 C377 -625.466 356.117 -607.995 344.249 -597.694" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="342.779 -599.353 336.765 -591.062 345.72 -596.035" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 430.975 -677.773 L 388.04 -651.468 C349.095 -627.607 322.589 -610.363 308.524 -599.737" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="307.126 -601.457 300.765 -593.429 309.923 -598.017" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 421.347 -677.773 L 369.593 -652.608 C321.091 -629.025 288.771 -611.802 272.631 -600.94" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="271.304 -602.716 264.621 -594.954 273.958 -599.164" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 413.157 -678.392 L 351.376 -653.534 C292.662 -629.91 254.335 -612.571 236.395 -601.517" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="235.119 -603.33 228.218 -595.761 237.672 -599.705" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 407.732 -679.8 L 333.288 -654.283 C264.015 -630.538 219.617 -613.053 200.093 -601.829" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="198.853 -603.666 191.804 -596.235 201.333 -599.991" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 402.932 -681.045 L 315.273 -654.892 C235.23 -631.011 184.739 -613.382 163.8 -602.004" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="162.586 -603.859 155.433 -596.528 165.015 -600.15" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 398.662 -682.153 L 297.296 -655.393 C206.347 -631.383 149.761 -613.62 127.539 -602.104" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="126.344 -603.971 119.117 -596.712 128.734 -600.237" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 394.842 -683.144 L 279.342 -655.809 C177.393 -631.682 114.717 -613.798 91.314 -602.16" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="90.133 -604.036 82.853 -596.83 92.496 -600.284" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 391.407 -684.035 L 261.399 -656.16 C148.386 -631.928 79.629 -613.938 55.126 -602.188" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="53.955 -604.071 46.635 -596.906 56.297 -600.306" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 494.777 -753.143 L 484.06 -732.058" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="482.084 -733.062 479.529 -723.143 486.036 -731.053" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 468 -753.143 L 468 -733.143" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="465.783 -733.143 468 -723.143 470.217 -733.143" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 441.223 -753.143 L 451.94 -732.058" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="449.964 -731.053 456.471 -723.143 453.916 -733.062" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 408.765 -758.733 L 437.813 -730.156" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="436.258 -728.576 444.941 -723.143 439.367 -731.736" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 372.765 -756.335 C380.17 -749.267 394.768 -739.781 416.558 -727.879" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="415.508 -725.927 425.365 -723.143 417.608 -729.832" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 336.175 -754.357 C344.703 -746.235 365.52 -736.283 398.624 -724.502" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="397.893 -722.41 408.064 -721.203 399.356 -726.595" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 299.438 -753.653 C308.877 -744.249 338.156 -733.329 387.273 -720.895 L 387.501 -720.837" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="386.957 -718.688 397.196 -718.383 388.046 -722.986" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 262.894 -753.364 C272.315 -743.331 307.787 -732.217 369.308 -720.022 L 378.889 -718.123" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="378.458 -715.948 388.698 -716.178 379.32 -720.297" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 226.523 -753.24 C235.701 -742.691 277.327 -731.405 351.399 -719.383 L 372.072 -716.027" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="371.717 -713.839 381.943 -714.425 372.427 -718.216" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 190.275 -753.187 C199.078 -742.214 246.821 -730.785 333.506 -718.899 L 370.662 -713.805" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="370.361 -711.608 380.569 -712.446 370.963 -716.001" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 154.114 -753.163 C162.461 -741.844 216.293 -730.298 315.612 -718.524 L 370.639 -712" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="370.378 -709.799 380.569 -710.823 370.9 -714.202" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 120.696 -755.503 C134.06 -746.593 193.317 -735.443 298.465 -722.051 L 370.649 -712.857" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="370.369 -710.658 380.569 -711.594 370.929 -715.056" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 84.493 -754.894 L 85.166 -754.011 C90.432 -747.099 139.932 -738.245 233.666 -727.449 L 370.635 -711.673" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="370.381 -709.47 380.569 -710.528 370.889 -713.875" />
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 48.517 -754.949 L 49.236 -754.011 C54.53 -747.099 108.53 -738.245 211.236 -727.449 L 370.624 -710.694" />
+    <polygon stroke="#000000" stroke-opacity="1" stroke-width="1" fill="#000000" fill-opacity="1" points="370.392 -708.489 380.569 -709.649 370.856 -712.899" />
+    <!--nodes-->
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="23.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="31.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">Z</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="95.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="103.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">X</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="59.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="67.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">Y</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="1561.235" y="-647.773" width="25.53" height="137.773" rx="2.553" ry="2.553" />
+    <text x="1569.235" y="-538.296" font-family="Arial" font-size="16" fill="#000000">a&#10;b&#10;c&#10;d&#10;e&#10;f</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="311.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="319.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">R</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="275.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="283.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">S</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="383.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="391.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">P</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="347.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="355.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">Q</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="167.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="175.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">V</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="131.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="139.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">W</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="239.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="247.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">T</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="203.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="211.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">U</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="599.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="607.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">J</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="563.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="571.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">K</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="671.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="679.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">H</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="635.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="643.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">I</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="455.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="463.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">N</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="419.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="427.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">O</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="527.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="535.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">L</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="491.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="499.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">M</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="887.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="895.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">B</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="851.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="859.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">C</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="923.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="931.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">A</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="743.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="751.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">F</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="707.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="715.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">G</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="815.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="823.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">D</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="779.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="787.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">E</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="923.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="931.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">z</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="887.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="895.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">x</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="851.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="859.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">y</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="1525.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="1533.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">m</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="1317.466" y="-637.626" width="197.069" height="117.478" rx="11.748" ry="11.748" />
+    <text x="1325.466" y="-545.061" font-family="Arial" font-size="16" fill="#000000">This&#32;is&#32;a&#32;test&#10;of&#32;a&#32;multiline&#10;label&#32;in&#32;an&#10;octagon&#32;with&#32;approx&#10;square&#32;aspect</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="815.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="823.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">r</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="779.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="787.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">s</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="743.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="751.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">p</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="707.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="715.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">q</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="671.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="679.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">v</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="635.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="643.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">w</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="599.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="607.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">t</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="563.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="571.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">u</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="527.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="535.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">j</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="1281.235" y="-597.034" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="1289.235" y="-572.122" font-family="Arial" font-size="16" fill="#000000">m</text>
+    <path fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" d="M 555.431 -714.069 L 520.458 -723.143 L 415.542 -723.143 L 380.569 -714.069 L 380.569 -686.847 L 415.542 -677.773 L 520.458 -677.773 L 555.431 -686.847 L 555.431 -714.069" />
+    <text x="406.055" y="-693.693" font-family="Arial" font-size="16" fill="#000000">Parallelogram</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="491.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="499.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">i</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="455.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="463.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">n</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="419.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="427.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">o</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="383.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="391.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">l</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="959.286" y="-597.034" width="311.428" height="36.296" rx="3.63" ry="3.63" />
+    <text x="967.286" y="-572.122" font-family="Arial" font-size="16" fill="#000000">a&#32;-----&#32;long&#32;thin&#32;parallelogram</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="347.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="355.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">b</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="311.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="319.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">c</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="275.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="283.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">a</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="239.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="247.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">f</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="203.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="211.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">g</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="167.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="175.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">d</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="131.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="139.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">e</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="95.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="103.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">m</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="59.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="67.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">k</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="23.235" y="-789.438" width="25.53" height="36.296" rx="2.553" ry="2.553" />
+    <text x="31.235" y="-764.525" font-family="Arial" font-size="16" fill="#000000">h</text>
+    <rect fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" x="-12.765" y="-647.773" width="25.53" height="137.773" rx="2.553" ry="2.553" />
+    <text x="-4.765" y="-538.296" font-family="Arial" font-size="16" fill="#000000">a&#10;b&#10;c&#10;d&#10;e&#10;f</text>
+    <!--end of nodes-->
+  </g>
+</svg>

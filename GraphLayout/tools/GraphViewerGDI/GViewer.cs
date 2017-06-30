@@ -1339,7 +1339,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                 (int) Math.Ceiling(pts[1].Y) + 1);
         }
 
-        static PointF Pf(Point p2) {
+        internal static PointF Pf(Point p2) {
             return new PointF((float) p2.X, (float) p2.Y);
         }
 
