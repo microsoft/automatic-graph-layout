@@ -147,17 +147,14 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                     if (f > gViewer.ZoomWindowThreshold && zoomWindow) {
                         mouseUpPoint = new Point(args.X, args.Y);
                         if (ClientRectangle.Contains(mouseUpPoint)) {
-                            var r = GViewer.RectFromPoints(mouseDownPoint, mouseUpPoint);
-                            r.Intersect(gViewer.DestRect);
+                            //var r = GViewer.RectFromPoints(mouseDownPoint, mouseUpPoint);
+                            //r.Intersect(gViewer.DestRect);
                             if (GViewer.ModifierKeyWasPressed() == false) {
-                                mouseDownPoint.X = r.Left;
-                                mouseDownPoint.Y = r.Top;
-                                mouseUpPoint.X = r.Right;
-                                mouseUpPoint.Y = r.Bottom;
+                              
                                 P2 p1 = gViewer.ScreenToSource(mouseDownPoint);
                                 P2 p2 = gViewer.ScreenToSource(mouseUpPoint);
-                                double sc = Math.Min((double) ClientRectangle.Width/r.Width,
-                                                     ClientRectangle.Height/(double) r.Height);
+                                double sc = Math.Min(gViewer.OriginalGraph.Width / Math.Abs(p1.X - p2.X),
+                                    gViewer.OriginalGraph.Height / Math.Abs(p1.Y - p2.Y));
                                 P2 center = 0.5f*(p1 + p2);
                                 gViewer.SetTransformOnScaleAndCenter(sc, center);
                                 Invalidate();
