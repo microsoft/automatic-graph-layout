@@ -153,8 +153,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                               
                                 P2 p1 = gViewer.ScreenToSource(mouseDownPoint);
                                 P2 p2 = gViewer.ScreenToSource(mouseUpPoint);
-                                double sc = Math.Min(gViewer.OriginalGraph.Width / Math.Abs(p1.X - p2.X),
-                                    gViewer.OriginalGraph.Height / Math.Abs(p1.Y - p2.Y));
+                                double sc = Math.Min(Width / Math.Abs(p1.X - p2.X),
+                                    Height / Math.Abs(p1.Y - p2.Y));
                                 P2 center = 0.5f*(p1 + p2);
                                 gViewer.SetTransformOnScaleAndCenter(sc, center);
                                 Invalidate();
