@@ -7,7 +7,7 @@ Write-Host $targetNugetExe
 
 if (!(test-path $targetNugetExe))
 {
-    Write-Host coudl not find nuget locally. Downloading...
+    Write-Host could not find nuget locally. Downloading...
     Invoke-WebRequest $sourceNugetExe -OutFile $targetNugetExe
 }
 
