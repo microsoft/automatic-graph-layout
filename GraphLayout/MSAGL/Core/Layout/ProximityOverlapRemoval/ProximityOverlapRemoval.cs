@@ -505,7 +505,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
                                                        Point[] nodePositions, List<Point> newPositions,
                                                        List<Tuple<int, int, double, double>> proximityEdgesWithDistance,
                                                        Point[] finalGridVectors) {
-#if DEBUG && ! SILVERLIGHT && !SHARPKIT
+#if DEBUG && ! SILVERLIGHT && !SHARPKIT && !NETCORE
             if (DebugMode && currentIteration%1 == 0) {
                 List<DebugCurve> curveList = new List<DebugCurve>();
                 var nodeBoxes = new Rectangle[nodeSizes.Length];

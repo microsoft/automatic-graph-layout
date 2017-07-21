@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <DefineConstants>NET4;NETCORE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="../MSAGL/**/*.cs" />
+    <Compile Remove="../MSAGL/obj/**/*.cs" />
+  </ItemGroup>
+  
+</Project>
