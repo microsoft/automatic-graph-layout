@@ -184,36 +184,36 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(l);
         }
 #endif
-        //        void RemoveDimmedRailsFromLowerLevels(Set<Rail> dimmedRails) {
-        //            foreach(var rail in dimmedRails)
-        //                RemoveDimmedRailFromLowerLevels(rail);
-        //        }
-        //
-        //        void RemoveDimmedRailFromLowerLevels(Rail rail) {
-        //            Debug.Assert(rail.IsHighlighted==0);
-        //            for (int i = 0; i < levels.Count; i++) {
-        //                var level = levels[i];
-        //                if (level.ZoomLevel < rail.ZoomLevel) {
-        //                    //the rail does not belong to this level
-        //                    var railTuple = rail.PointTuple();
-        //                    var rect = new Rectangle(railTuple.Item1, railTuple.Item2);
-        //                    level._railTree.Remove(rect, rail);                    
-        //                }
-        //                else break;
-        //            }
-        //
-        //        }
+//        void RemoveDimmedRailsFromLowerLevels(Set<Rail> dimmedRails) {
+//            foreach(var rail in dimmedRails)
+//                RemoveDimmedRailFromLowerLevels(rail);
+//        }
+//
+//        void RemoveDimmedRailFromLowerLevels(Rail rail) {
+//            Debug.Assert(rail.IsHighlighted==0);
+//            for (int i = 0; i < levels.Count; i++) {
+//                var level = levels[i];
+//                if (level.ZoomLevel < rail.ZoomLevel) {
+//                    //the rail does not belong to this level
+//                    var railTuple = rail.PointTuple();
+//                    var rect = new Rectangle(railTuple.Item1, railTuple.Item2);
+//                    level._railTree.Remove(rect, rail);                    
+//                }
+//                else break;
+//            }
+//
+//        }
 
-        //        static void DiminishHighlightAndCollectDimmedRailOnLevel(Edge edge, Level level, Set<Rail> dimmedRails) {
-        //            Set<Rail> railsOfEdge;
-        //            if (!level._railsOfEdges.TryGetValue(edge, out railsOfEdge)) return;
-        //            foreach (var rail in railsOfEdge) {
-        //                if (rail.IsHighlighted == 0) continue;
-        //                rail.IsHighlighted--;
-        //                if (rail.IsHighlighted == 0)
-        //                    dimmedRails.Insert(rail);
-        //            }
-        //        }
+//        static void DiminishHighlightAndCollectDimmedRailOnLevel(Edge edge, Level level, Set<Rail> dimmedRails) {
+//            Set<Rail> railsOfEdge;
+//            if (!level._railsOfEdges.TryGetValue(edge, out railsOfEdge)) return;
+//            foreach (var rail in railsOfEdge) {
+//                if (rail.IsHighlighted == 0) continue;
+//                rail.IsHighlighted--;
+//                if (rail.IsHighlighted == 0)
+//                    dimmedRails.Insert(rail);
+//            }
+//        }
 
 
 #if !NETCORE
