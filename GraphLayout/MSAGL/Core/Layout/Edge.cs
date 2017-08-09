@@ -2,7 +2,9 @@ using System;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using System.Collections.Generic;
+#if !NETCORE
 using System.Windows.Media;
+#endif
 
 namespace Microsoft.Msagl.Core.Layout {
     /// <summary>
@@ -229,7 +231,9 @@ namespace Microsoft.Msagl.Core.Layout {
 
 
         EdgeGeometry edgeGeometry = new EdgeGeometry();
+#if !NETCORE
         public SolidColorBrush Color;
+#endif
 
         /// <summary>
         /// Gets or sets the edge geometry: the curve, the arrowhead positions and the underlying polyline

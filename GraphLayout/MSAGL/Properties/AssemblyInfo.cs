@@ -9,6 +9,7 @@ using System;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
+#if !NETCORE
 [assembly: AssemblyTitle("Msagl")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
@@ -17,6 +18,7 @@ using System;
 [assembly: AssemblyCopyright("Copyright © MS 2005")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+#endif
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

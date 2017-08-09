@@ -6,8 +6,10 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+#if !NETCORE
 using System.Windows.Forms;
 using System.Windows.Media;
+#endif
 using Microsoft.Msagl.Core;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
@@ -29,14 +31,18 @@ using Microsoft.Msagl.Miscellaneous.ConstrainedSkeleton;
 using Microsoft.Msagl.Miscellaneous.RegularGrid;
 using Microsoft.Msagl.Miscellaneous.Routing;
 using Microsoft.Msagl.Routing.Visibility;
+#if !NETCORE
 using Brushes = System.Windows.Media.Brushes;
+#endif
 using Edge = Microsoft.Msagl.Core.Layout.Edge;
 using LineSegment = Microsoft.Msagl.Core.Geometry.Curves.LineSegment;
 using Point = Microsoft.Msagl.Core.Geometry.Point;
 using Rectangle = Microsoft.Msagl.Core.Geometry.Rectangle;
 using Size = Microsoft.Msagl.Core.DataStructures.Size;
 using SymmetricSegment = Microsoft.Msagl.Core.DataStructures.SymmetricTuple<Microsoft.Msagl.Core.Geometry.Point>;
+#if !NETCORE
 using Timer = Microsoft.Msagl.DebugHelpers.Timer;
+#endif
 
 namespace Microsoft.Msagl.Layout.LargeGraphLayout
 {
@@ -1890,7 +1896,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             FillGeometryNodeToLgInfosTables();
             LevelCalculator.RankGraph(_lgData, _mainGeometryGraph);
             LayoutTheWholeGraph();
-#if !SILVERLIGHT && !SHARPKIT
+#if !SILVERLIGHT && !SHARPKIT && !NETCORE
             var timer = new Timer();
             timer.Start();
 #endif
@@ -1900,7 +1906,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             _railGraph = new RailGraph();
             LayoutAndRouteByLayers(_lgLayoutSettings.MaxNumberOfNodesPerTile, _lgLayoutSettings.MaxNumberOfRailsPerTile,
                 _lgLayoutSettings.IncreaseNodeQuota);
-#if !SILVERLIGHT && !SHARPKIT
+#if !SILVERLIGHT && !SHARPKIT && !NETCORE
             timer.Stop();
             Console.WriteLine("levels calculated for {0}", timer.Duration);
             if (_lgLayoutSettings.ExitAfterInit)
@@ -3072,7 +3078,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         static void ShowNodesAndSegmentsForOverlapRemoval(IEnumerable<LgNodeInfo> fixedNodes,
             IEnumerable<LgNodeInfo> moveableNodes, SymmetricSegment[] fixedSegments)
         {
-#if DEBUG && !SILVERLIGHT && !SHARPKIT
+#if DEBUG && !SILVERLIGHT && !SHARPKIT && !NETCORE
             var l = new List<DebugCurve>();
             if (fixedNodes != null && fixedNodes.Any())
             {
@@ -3219,7 +3225,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         }
 
 
-#if DEBUG && !SILVERLIGHT && !SHARPKIT
+#if DEBUG && !SILVERLIGHT && !SHARPKIT && !NETCORE
         static void ShowOldNewIntersected(Set<Rail> oldIntersected, Set<Rail> newIntersected, Point a, Point shortcutted,
             Point b, LgSkeletonLevel skeletonLevel)
         {
@@ -3246,7 +3252,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         }
 #endif
 
-#if DEBUG && !SILVERLIGHT && !SHARPKIT
+#if DEBUG && !SILVERLIGHT && !SHARPKIT && !NETCORE
         private static void ShowOldTrajectories(LgSkeletonLevel skeletonLevel)
         {
             if (skeletonLevel.ZoomLevel <= 1.0) return;
@@ -3820,7 +3826,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     return true;
                 }
         */
-
+#if !NETCORE
         public void SelectAllColoredEdgesIncidentTo(LgNodeInfo nodeInfo, SolidColorBrush c)
         {
             List<Edge> edges = nodeInfo.GeometryNode.Edges.ToList();
@@ -3922,7 +3928,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             }
                 
         }
- 
+
         public void UpdateVisibleEdgesIncidentTo(LgNodeInfo nodeInfo, int currentLayer)
         {
             List<Edge> edges = nodeInfo.GeometryNode.Edges.ToList();
@@ -4015,6 +4021,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             Edge edge = edges.OrderByDescending(e => _lgData.GeometryEdgesToLgEdgeInfos[e].Rank).First();
             SelectEdge(_lgData.GeometryEdgesToLgEdgeInfos[edge]);
         }
+
+#endif
 
         Rectangle GetLabelRectForScale(LgNodeInfo nodeInfo, double scale)
         {
@@ -4293,6 +4301,8 @@ return new Rectangle(nodeInfo.Center + offset - d, nodeInfo.Center + offset + d)
             return null;
         }
 
+#if !NETCORE
+
         public void AnalyzeClick(Point mouseDownPositionInGraph, int downCount)
         {
             var closest = FindClosestNodeInfoForMouseClickBelowCurrentLevel(mouseDownPositionInGraph);
@@ -4319,6 +4329,7 @@ return new Rectangle(nodeInfo.Center + offset - d, nodeInfo.Center + offset + d)
             RunOnViewChange();
             return closest.GeometryNode;
         }
+#endif
 
 
         public bool NumberOfNodesOfLastLayerIntersectedRectIsLessThanBound(int iLevel, Rectangle rect, int bound)

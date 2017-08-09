@@ -405,7 +405,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
             return euclid;
         }
 
-#if DEBUG && !SILVERLIGHT && !SHARPKIT
+#if DEBUG && !SILVERLIGHT && !SHARPKIT && !NETCORE
 
     /// <summary>
     /// Shows the current state of the algorithm for debug purposes.
