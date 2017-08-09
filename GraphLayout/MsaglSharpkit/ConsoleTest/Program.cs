@@ -167,7 +167,7 @@ namespace ConsoleTest
                 WriteMessage(string.Format("{0}: {1} {2}", node.UserData, node.Center.X, node.Center.Y));
             }
 
-            /*var canvas = HtmlContext.document.getElementById("drawing").As<HtmlCanvasElement>();
+            var canvas = HtmlContext.document.getElementById("drawing").As<HtmlCanvasElement>();
             var ctx = canvas.getContext("2d").As<CanvasRenderingContext2D>();
 
             var canvasHeight = canvas.height;
