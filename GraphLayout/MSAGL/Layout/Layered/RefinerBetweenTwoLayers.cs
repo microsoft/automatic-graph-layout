@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Routing;
+using Microsoft.Msagl.Core.Geometry.Curves;
 
 namespace Microsoft.Msagl.Layout.Layered {
     //  internal delegate bool Direction(ref Point a, ref Point b, ref Point c);
@@ -62,7 +63,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         void Refine() {
             Init();
-            while (InsertSites()) ;
+            while (InsertSites());
         }
 
 #if DEBUGGLEE
@@ -107,14 +108,18 @@ namespace Microsoft.Msagl.Layout.Layered {
             Point mainSeg = currentBottomSite.Point - currentTopSite.Point;
             double cotan = AbsCotan(mainSeg);
             Point vOfNewSite = new Point();//to silence the compiler
+            bool someBottomCorners = false;
             foreach (Point p in this.bottomCorners()) {
                 double cornerCotan = AbsCotan(p - currentBottomSite.Point);
                 if (cornerCotan < cotan) {
                     cotan = cornerCotan;
                     vOfNewSite = p;
+                    someBottomCorners = true;
                 }
             }
 
+            if (!someBottomCorners)
+                return false;
             if (!ApproximateComparer.Close(cotan, AbsCotan(mainSeg))) {
                 currentBottomSite = new Site(currentTopSite, FixCorner(currentTopSite.Point, vOfNewSite, currentBottomSite.Point), currentBottomSite);//consider a different FixCorner
                 return true;
@@ -133,14 +138,17 @@ namespace Microsoft.Msagl.Layout.Layered {
             Point mainSeg = currentBottomSite.Point - currentTopSite.Point;
             double cotan = AbsCotan(mainSeg);
             Point vOfNewSite = new Point();//to silence the compiler
+            bool someTopCorners = false;
             foreach (Point p in this.topCorners()) {
                 double cornerCotan = AbsCotan(p - currentTopSite.Point);
                 if (cornerCotan < cotan) {
                     cotan = cornerCotan;
                     vOfNewSite = p;
+                    someTopCorners = true;
                 }
             }
-
+            if (!someTopCorners)
+                return false;
             if (!ApproximateComparer.Close(cotan, AbsCotan(mainSeg))) {
                 currentTopSite = new Site(currentTopSite,
                     FixCorner(currentTopSite.Point, vOfNewSite, currentBottomSite.Point),

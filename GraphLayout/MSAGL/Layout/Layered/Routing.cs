@@ -72,7 +72,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             Parallel.ForEach<List<IntEdge>>(this.Database.RegularMultiedges, options, (intEdgeList) =>
             {
 #else
-            foreach (var intEdgeList in Database.RegularMultiedges) {
+foreach (var intEdgeList in Database.RegularMultiedges) {
 #endif
                 //Here we try to optimize multi-edge routing
                 int m = intEdgeList.Count;
@@ -150,7 +150,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                 {
                     es.UpdateEdgeLabelPosition(Database.Anchors);
                     Arrowheads.TrimSplineAndCalculateArrowheads(es.Edge.EdgeGeometry, es.Edge.Source.BoundaryCurve,
-                                                                     es.Edge.Target.BoundaryCurve, es.Curve, true, 
+                                                                     es.Edge.Target.BoundaryCurve, es.Curve, true,
                                                                      settings.EdgeRoutingSettings.KeepOriginalSpline);
                 }
             }
