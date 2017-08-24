@@ -230,18 +230,6 @@ namespace Microsoft.Msagl.UnitTests
             LayoutAndValidate(graph, settings, settings.NodeSeparation, settings.LayerSeparation, direction);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        private static void LayoutAndValidate(GeometryGraph graph, SugiyamaLayoutSettings settings, double nodeSeparation)
-        {
-            LayoutAndValidate(graph, settings, nodeSeparation, LayerDirection.TopToBottom);
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        private static void LayoutAndValidate(GeometryGraph graph, SugiyamaLayoutSettings settings, double nodeSeparation, LayerDirection direction)
-        {
-            LayoutAndValidate(graph, settings, nodeSeparation, settings.LayerSeparation, direction);
-        }
-
         private static void LayoutAndValidate(GeometryGraph graph, SugiyamaLayoutSettings settings, double nodeSeparation, double layerSeparation)
         {
             LayoutAndValidate(graph, settings, nodeSeparation, layerSeparation, LayerDirection.TopToBottom);

@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Routing;
+using Microsoft.Msagl.Core.Geometry.Curves;
 
 namespace Microsoft.Msagl.Layout.Layered {
     //  internal delegate bool Direction(ref Point a, ref Point b, ref Point c);
@@ -62,7 +63,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         void Refine() {
             Init();
-            while (InsertSites()) ;
+            while (InsertSites());
         }
 
 #if DEBUGGLEE
@@ -107,14 +108,18 @@ namespace Microsoft.Msagl.Layout.Layered {
             Point mainSeg = currentBottomSite.Point - currentTopSite.Point;
             double cotan = AbsCotan(mainSeg);
             Point vOfNewSite = new Point();//to silence the compiler
+            bool someBottomCorners = false;
             foreach (Point p in this.bottomCorners()) {
                 double cornerCotan = AbsCotan(p - currentBottomSite.Point);
                 if (cornerCotan < cotan) {
                     cotan = cornerCotan;
                     vOfNewSite = p;
+                    someBottomCorners = true;
                 }
             }
 
+            if (!someBottomCorners)
+                return false;
             if (!ApproximateComparer.Close(cotan, AbsCotan(mainSeg))) {
                 currentBottomSite = new Site(currentTopSite, FixCorner(currentTopSite.Point, vOfNewSite, currentBottomSite.Point), currentBottomSite);//consider a different FixCorner
                 return true;
@@ -133,14 +138,17 @@ namespace Microsoft.Msagl.Layout.Layered {
             Point mainSeg = currentBottomSite.Point - currentTopSite.Point;
             double cotan = AbsCotan(mainSeg);
             Point vOfNewSite = new Point();//to silence the compiler
+            bool someTopCorners = false;
             foreach (Point p in this.topCorners()) {
                 double cornerCotan = AbsCotan(p - currentTopSite.Point);
                 if (cornerCotan < cotan) {
                     cotan = cornerCotan;
                     vOfNewSite = p;
+                    someTopCorners = true;
                 }
             }
-
+            if (!someTopCorners)
+                return false;
             if (!ApproximateComparer.Close(cotan, AbsCotan(mainSeg))) {
                 currentTopSite = new Site(currentTopSite,
                     FixCorner(currentTopSite.Point, vOfNewSite, currentBottomSite.Point),
@@ -202,48 +210,6 @@ namespace Microsoft.Msagl.Layout.Layered {
         private bool IsTopToTheLeftOfBottom() {
             return (this.topSite.Point.X < this.topSite.Next.Point.X);
         }
-
-        private void InitLeftmostSites() {
-            if (IsTopToTheLeftOfBottom()) {
-                this.topCorners = Enumerable.Empty<Point>;
-                this.bottomCorners = new Points(CornersToTheLeftOfBottom);
-            } else {
-                this.topCorners = new Points(CornersToTheLeftOfTop);
-                this.bottomCorners = Enumerable.Empty<Point>;
-            }
-        }
-
-        private void InitRightmostSites() {
-            if (IsTopToTheLeftOfBottom()) {
-                this.topCorners = new Points(CornersToTheRightOfTop);
-                this.bottomCorners = Enumerable.Empty<Point>;
-            } else {
-                this.topCorners = Enumerable.Empty<Point>;
-                this.bottomCorners = new Points(CornersToTheRightOfBottom);
-            }
-        }
-
-        private void MoveBundledSites(LayerEdge fromEdge, LayerEdge toEdge) {
-            MoveBundledEdge(anchors[toEdge.Source].X - anchors[fromEdge.Source].X, anchors[toEdge.Target].X - anchors[fromEdge.Target].X);
-        }
-
-        private void MoveBundledEdge(double upperMove, double downMove) {
-            Site site = topSite;
-            //upper move
-            site.Point = new Point(site.Point.X + upperMove, site.Point.Y);
-            site = site.Next;
-
-            //intermediate moves
-            while (site != bottomSite) {
-                double K = (site.Point.Y - bottomSite.Point.Y) / (topSite.Point.Y - bottomSite.Point.Y);
-                site.Point = new Point(site.Point.X + K * upperMove + (1.0 - K) * downMove, site.Point.Y);
-                site = site.Next;
-            }
-
-            //lower move
-            site.Point = new Point(site.Point.X + downMove, site.Point.Y);
-        }
-
 
         IEnumerable<Point> NodeCorners(int node) {
             foreach (Point p in NodeAnchor(node).PolygonalBoundary)

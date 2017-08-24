@@ -58,8 +58,6 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         bool zoomWindow;
         PlaneTransformation mouseDownTransform;
 
-        bool NeedToEraseRubber { get; set; }
-
         internal GViewer GViewer {
             private get { return gViewer; }
             set { gViewer = value; }
@@ -136,18 +134,12 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         }
 
 
-        void DrawXorFrame() {
-            ControlPaint.DrawReversibleFrame(rubberRect, rubberRectColor, RubberRectStyle);
-            NeedToEraseRubber = !NeedToEraseRubber;
-        }
-
+        
         protected override void OnMouseUp(MouseEventArgs args) {
             base.OnMouseUp(args);
             MsaglMouseEventArgs iArgs = CreateMouseEventArgs(args);
             gViewer.RaiseMouseUpEvent(iArgs);
-            if (NeedToEraseRubber)
-                DrawXorFrame();
-
+            
             if (!iArgs.Handled) {
                 if (gViewer.OriginalGraph != null && MouseDraggingMode == DraggingMode.WindowZoom) {
                     var p = mouseDownPoint;
@@ -155,17 +147,14 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                     if (f > gViewer.ZoomWindowThreshold && zoomWindow) {
                         mouseUpPoint = new Point(args.X, args.Y);
                         if (ClientRectangle.Contains(mouseUpPoint)) {
-                            var r = GViewer.RectFromPoints(mouseDownPoint, mouseUpPoint);
-                            r.Intersect(gViewer.DestRect);
+                            //var r = GViewer.RectFromPoints(mouseDownPoint, mouseUpPoint);
+                            //r.Intersect(gViewer.DestRect);
                             if (GViewer.ModifierKeyWasPressed() == false) {
-                                mouseDownPoint.X = r.Left;
-                                mouseDownPoint.Y = r.Top;
-                                mouseUpPoint.X = r.Right;
-                                mouseUpPoint.Y = r.Bottom;
+                              
                                 P2 p1 = gViewer.ScreenToSource(mouseDownPoint);
                                 P2 p2 = gViewer.ScreenToSource(mouseUpPoint);
-                                double sc = Math.Min((double) ClientRectangle.Width/r.Width,
-                                                     ClientRectangle.Height/(double) r.Height);
+                                double sc = Math.Min(Width / Math.Abs(p1.X - p2.X),
+                                    Height / Math.Abs(p1.Y - p2.Y));
                                 P2 center = 0.5f*(p1 + p2);
                                 gViewer.SetTransformOnScaleAndCenter(sc, center);
                                 Invalidate();
@@ -208,8 +197,10 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                     SetCursor(args);
                     if (MouseDraggingMode == DraggingMode.Pan)
                         ProcessPan(args);
-                    else if (zoomWindow) //the user is holding the left button
-                        DrawZoomWindow(args);
+                    else if (zoomWindow)
+                    {
+                        //the user is holding the left button, do nothing
+                    }
                     else
                         HitIfBbNodeIsNotNull(args);
                 }
@@ -241,20 +232,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                 Cursor = cur;
         }
 
-
-        void DrawZoomWindow(MouseEventArgs args) {
-            mouseUpPoint.X = args.X;
-            mouseUpPoint.Y = args.Y;
-
-            if (NeedToEraseRubber)
-                DrawXorFrame();
-
-            if (ClientRectangle.Contains(PointToClient(MousePosition))) {
-                rubberRect = GViewer.RectFromPoints(PointToScreen(mouseDownPoint), PointToScreen(mouseUpPoint));
-                DrawXorFrame();
-            }
-        }
-
+        
         void ProcessPan(MouseEventArgs args) {
             if (ClientRectangle.Contains(args.X, args.Y)) {
                 if (args.Button == MouseButtons.Left) {

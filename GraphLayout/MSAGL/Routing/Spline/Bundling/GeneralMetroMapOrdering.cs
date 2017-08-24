@@ -17,9 +17,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         readonly List<Metroline> Metrolines;
         Dictionary<PointPair, PointPairOrder> bundles;
 
-        internal Metroline GetMetroline(int metroEdgeIndex) {
-            return Metrolines[metroEdgeIndex];
-        }
         /// <summary>
         /// Initialize bundle graph and build the ordering
         /// </summary>
@@ -49,14 +46,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                 for (int i = orderedMetrolineListForUv.Count - 1; i >= 0; i--)
                     yield return orderedMetrolineListForUv[i];
             }
-        }
-
-
-        /// <summary>
-        /// Get the number of lines passing through edge (u->v)
-        /// </summary>
-        internal int GetLineCount(Point u, Point v) {
-            return bundles[new PointPair(u, v)].Count;
         }
 
         /// <summary>

@@ -18,7 +18,9 @@ namespace Microsoft.Msagl.Core.Layout {
 #if TEST_MSAGL
     [Serializable]
 #endif
-    public class GeometryGraph : GeometryObject {
+    public class GeometryGraph : GeometryObject
+    {
+         public String directory;
          IList<Node> nodes;
          EdgeCollection edges;
 #if TEST_MSAGL

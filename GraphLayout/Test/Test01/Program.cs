@@ -246,17 +246,6 @@ namespace Test01 {
 
         }
 
-        static void MoveN0ToTheLeft(Node n0, GeometryGraph graph, FastIncrementalLayoutSettings settings) {
-            n0.Center += new Point(-10,0);
-            LockPosition lockPosition = settings.CreateLock(n0,n0.BoundingBox);
-
-            settings.IncrementalRun(graph);
-            RouteEdges(graph,settings);
-            //LayoutAlgorithmSettings.ShowGraph(graph);
-            settings.ClearLocks();
-            settings.RemoveLock(lockPosition);
-        }
-
         static GeometryGraph CreateGeometryGraphForFD() {
             var g = new GeometryGraph();
             
@@ -535,7 +524,7 @@ namespace Test01 {
             string fileName;
             string dir = Path.GetDirectoryName(listOfFilesFile);
             var gviewer = new GViewer();
-            Form form = FormStuff.CreateForm(gviewer);
+            Form form = FormStuff.CreateOrAttachForm(gviewer, null);
             int nOfBugs = 0;
             while ((fileName = sr.ReadLine()) != null) {
                 if (String.IsNullOrEmpty(fileName)) continue;
@@ -592,7 +581,7 @@ namespace Test01 {
         }
 
         static Form CreateForm(Graph graph, GViewer gviewer) {
-            Form form = FormStuff.CreateForm(gviewer);
+            Form form = FormStuff.CreateOrAttachForm(gviewer, null);
             form.SuspendLayout();
             SetEdgeSeparationBar(form);
 
@@ -803,15 +792,6 @@ namespace Test01 {
         static ICurve CreateEllipse() {
             return CurveFactory.CreateEllipse(20, 10, new Point());
         }
-
-        static ICurve CreateRectangle() {
-            return CurveFactory.CreateRectangle(20, 10, new Point());
-        }
-
-        static ICurve CreateDot() {
-            return CurveFactory.CreateRectangle(5, 5, new Point());
-        }
-
 
         static void TestGraphWithConstraints() {
             var graph = new GeometryGraph();

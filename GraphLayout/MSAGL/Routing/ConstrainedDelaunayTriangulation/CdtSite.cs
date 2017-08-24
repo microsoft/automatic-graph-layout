@@ -22,19 +22,6 @@ namespace Microsoft.Msagl.Routing
         /// </summary>
         public object Owner { get; set; }
 
-        internal IEnumerable<CdtEdge> AllEdges
-        {
-            get
-            {
-                if (Edges != null)
-                    foreach (var e in Edges)
-                        yield return e;
-                if (InEdges != null)
-                    foreach (var e in InEdges)
-                        yield return e;
-            }
-        }
-
         ///<summary>
         ///</summary>
         public Point Point;

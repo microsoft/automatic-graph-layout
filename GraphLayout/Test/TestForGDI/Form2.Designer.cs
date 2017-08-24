@@ -464,23 +464,6 @@ namespace TestForGdi {
         private Microsoft.Msagl.GraphViewerGdi.GViewer gViewer;
         private System.Windows.Forms.NumericUpDown coneAngleNumericUpDown;
 
-        internal static GeometryGraph GetTestGeomGraph(string fileName) {
-            GeometryGraph geomGraph = null;
-            if (File.Exists(fileName)) {
-                int line, column;
-                bool msaglFile;
-                var dotGraph = CreateDrawingGraphFromFile(fileName, out line, out column, out msaglFile);
-
-                var viewer = new Microsoft.Msagl.GraphViewerGdi.GViewer();
-                viewer.Graph = dotGraph;
-                geomGraph = dotGraph.GeometryGraph;
-            }
-            else {
-                Console.WriteLine("Cannot find file '{0}'", fileName);
-            }
-            return geomGraph;
-        }
-
         private CheckBox showVisGraphCheckBox;
         private ToolStripMenuItem routingToolStripMenuItem;
         private ToolStripMenuItem routingSettingsToolStripMenuItem;

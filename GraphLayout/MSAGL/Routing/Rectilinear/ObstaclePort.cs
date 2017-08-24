@@ -45,11 +45,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 #endif
         }
 
-        internal void Clear() {
-            RemoveFromGraph();
-            PortEntrances.Clear();
-        }
-
         internal void ClearVisibility() {
             // Most of the retained PortEntrance stuff is about precalculated visibility.
             this.PortEntrances.Clear();

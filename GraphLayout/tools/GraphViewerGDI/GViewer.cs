@@ -1103,9 +1103,9 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             SetTransformOnScaleAndCenter(scale, sourceCenter);
         }
 
-        internal void SetTransformOnScaleAndCenter(double scale, Point sourceCenter) {
-
-            if (OriginalGraph!=null && OriginalGraph.BoundingBox.Diagonal * scale < 5) //less than 5 pixels
+        internal void SetTransformOnScaleAndCenter(double scale, Point sourceCenter)
+        {
+            if (!ScaleIsAcceptable(scale))
                 return;
                 
             var dx = PanelWidth/2.0 - scale*sourceCenter.X;
@@ -1339,14 +1339,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                 (int) Math.Ceiling(pts[1].Y) + 1);
         }
 
-        static PointF Pf(Point p2) {
+        internal static PointF Pf(Point p2) {
             return new PointF((float) p2.X, (float) p2.Y);
-        }
-
-
-        void ScrollHandler(object o, ScrollEventArgs args) {
-            //    if(args.Type==  ScrollEventType.EndScroll)
-            panel.Invalidate();
         }
 
         /// <summary>
@@ -1367,11 +1361,6 @@ namespace Microsoft.Msagl.GraphViewerGdi {
 
         internal Point ScreenToSource(int x, int y) {
             return ScreenToSource(new System.Drawing.Point(x, y));
-        }
-
-
-        static int Int(double f) {
-            return (int) (f + 0.5);
         }
 
 
@@ -1632,7 +1621,10 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             Core.Geometry.Rectangle bb = BBoxOfObjs(graphElements);
 
             if (!bb.IsEmpty)
-                CenterToPoint(0.5f*(bb.LeftTop + bb.RightBottom));
+            {
+                CenterToPoint(0.5f * (bb.LeftTop + bb.RightBottom));
+            }
+
         }
 
 
@@ -1701,34 +1693,15 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             Pan(point.X, point.Y);
         }
 
-        /// <summary>
-        /// centers the view to the point (x,y)
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "y"),
-         SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "x")]
-        public void CenterToPoint(double x, double y) {
-            Zoom(x, y, ZoomF);
-            //int cx = ScaleFromSrcXToScroll(x);
-            //int cy = ScaleFromSrcYToScroll(y);
-
-            //int curCx = (int)(hVal + hLargeChangeF * 0.5f + 0.5f);
-            //int curCy = (int)(vVal + vLargeChangeF * 0.5f + 0.5f);
-
-
-            //hVal += cx - curCx;
-            //vVal += cy - curCy;
-
-            //panel.Invalidate();
-        }
+      
 
         /// <summary>
         /// Centers the view to the point p
         /// </summary>
         /// <param name="point"></param>
         public void CenterToPoint(Point point) {
-            CenterToPoint(point.X, point.Y);
+            SetTransformOnScaleAndCenter(CurrentScale, point);
+            panel.Invalidate();
         }
 
         /// <summary>
@@ -1759,12 +1732,20 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             return GetObjectAt(point.X, point.Y);
         }
 
+        internal bool ScaleIsAcceptable(double scale)
+        {
+            var d = OriginalGraph != null ? OriginalGraph.BoundingBox.Diagonal : 0;
+            return !(d * scale < 5) && !(d * scale > HugeDiagonal);
+        }
         /// <summary>
         /// Zooms in
         /// </summary>
         public void ZoomInPressed() {
+            double zoomFractionLocal = ZoomF * ZoomFactor();
+            if (!ScaleIsAcceptable(CurrentScale * zoomFractionLocal))
+                return;
             ZoomF *= ZoomFactor();
-        }
+    }
 
         /// <summary>
         /// Zooms out

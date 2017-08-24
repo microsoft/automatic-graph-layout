@@ -301,17 +301,6 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 #endif
 
-        Curve CreatePolyTest() {
-            Curve c = new Curve();
-            IEnumerator<Point> e = new PointNodesList(this.headSite);
-            e.MoveNext();
-            Point p = e.Current;
-            while (e.MoveNext()) {
-                Curve.AddLineSegment(c, p, e.Current);
-                p = e.Current;
-            }
-            return c;
-        }
         #endregion
 
         internal SmoothedPolyline GetPolyline {
@@ -425,9 +414,11 @@ namespace Microsoft.Msagl.Layout.Layered {
             TryToRemoveInflections();
         }
 
-        private void RefineBeetweenNeighborLayers(Site topSite, int topNode, int bottomNode) {
+        private void RefineBeetweenNeighborLayers(Site topSite, int topNode, int bottomNode)
+        {
             RefinerBetweenTwoLayers.Refine(topNode, bottomNode, topSite, this.anchors,
-                                           this.layerArrays, this.layeredGraph, this.originalGraph, this.settings.LayerSeparation);
+                                           this.layerArrays, this.layeredGraph, this.originalGraph,
+                                           this.settings.LayerSeparation);
         }
 
         private void CreateInitialListOfSites() {

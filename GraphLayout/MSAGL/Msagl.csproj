@@ -78,7 +78,7 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
@@ -172,14 +172,19 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\version.cs">
       <Link>version.cs</Link>
     </Compile>
+    <Compile Include="GraphmapsWithMesh\Angle.cs" />
+    <Compile Include="GraphmapsWithMesh\ComponentCollection.cs" />
     <Compile Include="Core\AlgorithmBase.cs" />
     <Compile Include="Core\DataStructures\CollectionUtilities.cs" />
     <Compile Include="Core\DataStructures\GenericBinaryHeapPriorityQueueWithTimestamp.cs" />
@@ -256,6 +261,9 @@
     <Compile Include="DebugHelpers\Persistence\CurveStream.cs" />
     <Compile Include="DebugHelpers\Persistence\CurveStreamElement.cs" />
     <Compile Include="DebugHelpers\Persistence\DoubleStreamElement.cs" />
+    <Compile Include="GraphmapsWithMesh\DijkstraAlgo.cs" />
+    <Compile Include="GraphmapsWithMesh\Network.cs" />
+    <Compile Include="GraphmapsWithMesh\Tiling.cs" />
     <Compile Include="Layout\Incremental\Relayout.cs" />
     <Compile Include="Layout\Initial\InitialLayoutByCluster.cs" />
     <Compile Include="Layout\Initial\InitialLayoutHelpers.cs" />
@@ -289,6 +297,8 @@
     <Compile Include="Layout\OverlapRemovalFixedSegments\OverlapRemovalFixedSegmentsMst.cs" />
     <Compile Include="Layout\OverlapRemovalFixedSegments\PixelPoint.cs" />
     <Compile Include="Layout\OverlapRemovalFixedSegments\RectSegIntersection.cs" />
+    <Compile Include="GraphmapsWithMesh\LocalModifications.cs" />
+    <Compile Include="GraphmapsWithMesh\MeshCreator.cs" />
     <Compile Include="Miscellaneous\ConstrainedSkeleton\SteinerCdt.cs" />
     <Compile Include="Miscellaneous\Constraints\AlignmentConstraint.cs" />
     <Compile Include="Miscellaneous\LayoutEditing\BumperPusher.cs" />
@@ -316,6 +326,10 @@
     <Compile Include="Miscellaneous\RegularGrid\GridTraversal.cs" />
     <Compile Include="Layout\LargeGraphLayout\LgPathRouter.cs" />
     <Compile Include="Miscellaneous\Routing\ShortestPathTree.cs" />
+    <Compile Include="GraphmapsWithMesh\MsaglUtilities.cs" />
+    <Compile Include="GraphmapsWithMesh\PlanarGraphUtilities.cs" />
+    <Compile Include="GraphmapsWithMesh\PointSet.cs" />
+    <Compile Include="GraphmapsWithMesh\PointToSegmentDistance.cs" />
     <Compile Include="Routing\ClusterBoundaryPort.cs" />
     <Compile Include="Routing\ConstrainedDelaunayTriangulation\CdtEdge.cs" />
     <Compile Include="Routing\ConstrainedDelaunayTriangulation\CdtFront.cs" />
@@ -356,7 +370,6 @@
     <Compile Include="Routing\Spline\Bundling\BundleInfo.cs" />
     <Compile Include="Routing\Spline\Bundling\BundleRouter.cs" />
     <Compile Include="Routing\Spline\Bundling\BundlingStatus.cs" />
-    <Compile Include="Routing\Spline\Bundling\CdtGeneralPolylineTracer.cs" />
     <Compile Include="Routing\Spline\Bundling\CdtIntersections.cs" />
     <Compile Include="Routing\Spline\Bundling\ChannelFlag.cs" />
     <Compile Include="Routing\Spline\Bundling\EdgeNudger.cs" />
@@ -680,6 +693,8 @@
     <Compile Include="Routing\Visibility\TangentPair.cs" />
     <Compile Include="Routing\Visibility\TangentVisibilityGraphCalculator.cs" />
     <Compile Include="Layout\Layered\XCoordsWithAlignment.cs" />
+    <Compile Include="GraphmapsWithMesh\SteinerTree.cs" />
+    <Compile Include="GraphmapsWithMesh\MeshGraph.cs" />
     <Compile Include="ValidateArg.cs" />
     <Compile Include="Strings.Designer.cs">
       <AutoGen>True</AutoGen>

@@ -141,6 +141,9 @@ ModelManifest.xml
 #LocalHistory VS plugin
 .localhistory/
 
+# NuGet Packages - these should not be in the source tree
+*.nupkg
+
 # =========================
 # Windows detritus
 # =========================

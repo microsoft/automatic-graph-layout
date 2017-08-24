@@ -1,0 +1,26 @@
+﻿<package>
+  <metadata>
+    <id>Microsoft.Msagl.GraphViewerGDI</id>
+    <version>1.0.2</version>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <licenseUrl>https://github.com/Microsoft/automatic-graph-layout/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/Microsoft/automatic-graph-layout</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>The MSAGL GraphViewerGDI control lets you visualize graphs and has and some other rendering functionality. Key features: (1) Pan and Zoom (2) Navigate Forward and Backward (3) tooltips and highlighting on graph entities (4) Search for and focus on graph entities.</description>
+    <releaseNotes>
+    </releaseNotes>
+    <copyright>Copyright © Microsoft Corporation</copyright>
+    <language>en-US</language>
+    <tags>MSAGL Graph Layout</tags>
+    <dependencies>
+      <dependency id="Microsoft.Msagl.Drawing" version="1.0.2" />
+    </dependencies>
+    <frameworkAssemblies>
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="..\tools\GraphViewerGDI\bin\Debug\Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net40" />
+    <file src="..\tools\GraphViewerGDI\bin\Debug\Microsoft.Msagl.GraphViewerGdi.xml" target="lib\net40" />
+  </files>
+</package>

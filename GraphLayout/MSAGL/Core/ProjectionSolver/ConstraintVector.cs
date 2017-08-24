@@ -18,7 +18,6 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
     {
         internal Constraint[] Vector { get; private set; }
         internal bool IsEmpty { get { return null == Vector; } }
-        internal int Count { get { return IsEmpty ? 0 : Vector.Length; } }
 
         internal void Create(int numConstraints)
         {

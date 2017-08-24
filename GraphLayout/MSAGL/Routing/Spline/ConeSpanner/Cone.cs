@@ -49,11 +49,5 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
                 leftSide.Cone = this;
             }
         }
-
-        internal bool PointIsInside(Point p)
-        {
-            return Point.PointToTheRightOfLineOrOnLine(p, Apex, Apex + LeftSideDirection) &&
-            Point.PointToTheLeftOfLineOrOnLine(p, Apex, Apex + RightSideDirection);
-        }
     }
 }

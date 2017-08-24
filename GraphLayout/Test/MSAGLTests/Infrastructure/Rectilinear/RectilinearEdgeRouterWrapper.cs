@@ -504,48 +504,6 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         }
 
         /// <summary>
-        /// Add an EdgeGeometry's Ports to the visibility graph.  Normally we just add them when
-        /// routing between them; this method lets us inspect the VisibilityGraph. We prefer
-        /// this method (with edgeGeometry) to adding individual ports because this lets us
-        /// pass the opposite port as well.
-        /// </summary>
-        /// <param name="edgeGeom">The EdgeGeometry whose ports are to be added.</param>
-        internal void AddPortsToVisibilityGraph(EdgeGeometry edgeGeom)
-        {
-            PortManager.AddControlPointsToGraph(edgeGeom, ShapeToObstacleMap);
-        }
-
-        internal IEnumerable<Obstacle> GetAllObstacles() 
-        {
-            // This is done because the obstacle tree isn't created yet.
-            return base.ShapeToObstacleMap.Values;
-        }
-
-        /// <summary>
-        /// Add all Port to the visibility graph.  Normally we just add them when
-        /// routing between them; this method lets us inspect the VisibilityGraph.
-        /// </summary>
-        internal void AddAllControlPointsToVisibilityGraph()
-        {
-            // Duplicate Ports should be ignored.
-
-            // EdgeGeometry enumeration is necessary in order to get Free Ports.
-            foreach (var eg in EdgeGeometries)
-            {
-                AddPortsToVisibilityGraph(eg);
-            }
-
-            // Include ObstaclePorts for obstacles that do not have Ports in the EdgeGeometries.
-            foreach (Shape obstacle in Obstacles)
-            {
-                foreach (Port port in obstacle.Ports)
-                {
-                    AddPortToVisibilityGraph(port);
-                }
-            }
-        }
-
-        /// <summary>
         /// Remove all ports from the visibility graph.
         /// </summary>
         internal void RemoveAllControlPointsFromVisibilityGraph()
@@ -1395,45 +1353,6 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             var sourceObstacle = (null == sourceOport) ? null : sourceOport.Obstacle;
             var targetObstacle = (null == targetOport) ? null : targetOport.Obstacle;
             return GetSourceAndTargetString(edgeGeom, sourceObstacle, targetObstacle);
-        }
-
-        internal void WriteToGeometryGraph(string outGeomFileName)
-        {
-            var geometryGraph = new GeometryGraph();
-            foreach (var shape in Obstacles)
-            {
-                geometryGraph.Nodes.Add(NodeFromObstacle(shape));
-            }
-            foreach (var edgeGeometry in EdgeGeometries)
-            {
-                geometryGraph.Edges.Add(EdgeFromEdgeGeom(edgeGeometry, geometryGraph));
-            }
-            GeometryGraphWriter.Write(geometryGraph, outGeomFileName);
-        }
-
-        Edge EdgeFromEdgeGeom(EdgeGeometry edgeGeometry, GeometryGraph geometryGraph)
-        {
-            var edge = new Edge(FindNode(edgeGeometry.SourcePort, geometryGraph), FindNode(edgeGeometry.TargetPort, geometryGraph));
-            return edge;
-        }
-
-        Node FindNode(Port port, GeometryGraph geometryGraph)
-        {
-            var oport = base.PortManager.FindObstaclePort(port);
-            if (oport == null) 
-            {
-                throw new ApplicationException(string.Format("Cannot write non-Obstacle ports (location: {0})", port.Location));
-            }
-            return geometryGraph.FindNodeByUserData(oport.Obstacle.Ordinal);
-        }
-
-        private Node NodeFromObstacle(Shape shape) {
-            var obstacle = base.ShapeToObstacleMap[shape];
-            return new Node(shape.BoundaryCurve, obstacle.Ordinal) 
-#if DEBUG && TEST_MSAGL
-                { DebugId = obstacle.Ordinal }
-#endif 
-                ;
         }
     }
 }

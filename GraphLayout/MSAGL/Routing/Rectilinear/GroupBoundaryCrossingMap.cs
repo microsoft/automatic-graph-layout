@@ -16,8 +16,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         // Note:  Like VisibilityGraph, this does not use PointComparer but assumes already-rounded key values.
         readonly Dictionary<Point, List<GroupBoundaryCrossing>> pointCrossingMap = new Dictionary<Point, List<GroupBoundaryCrossing>>();
 
-        internal int Count { get { return pointCrossingMap.Count; } }
-
         internal GroupBoundaryCrossing AddIntersection(Point intersection, Obstacle group, Directions dirToInside) {
             List<GroupBoundaryCrossing> crossings;
             if (!pointCrossingMap.TryGetValue(intersection, out crossings)) {
@@ -39,12 +37,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             var newCrossing = new GroupBoundaryCrossing(group, dirToInside);
             crossings.Add(newCrossing);
             return newCrossing;
-        }
-
-        internal List<GroupBoundaryCrossing> GetCrossings(Point intersection) {
-            List<GroupBoundaryCrossing> crossings;
-            pointCrossingMap.TryGetValue(intersection, out crossings);
-            return crossings;
         }
 
         internal void Clear() {

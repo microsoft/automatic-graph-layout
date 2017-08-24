@@ -39,15 +39,11 @@ namespace Microsoft.Msagl.Core.DataStructures {
             heapSize++;
             int i = heapSize;
             _priors[o] = priority;
-            _heap[i] = o;
+            PutAtI(i, o);
             while (i > 1 && _priors[_heap[i >> 1]] > priority) {
                 SwapWithParent(i);
                 i >>= 1;
             }
-        }
-
-        internal bool IsEmpty() {
-            return heapSize == 0;
         }
 
         void PutAtI(int i, int h) {

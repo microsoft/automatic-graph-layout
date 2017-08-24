@@ -52,7 +52,6 @@ namespace Microsoft.Msagl.GraphViewerGdi{
     /// Summary description for DOTViewer.
     /// </summary>
     partial class GViewer : IViewer{
-        const int ScrollMax = 0xFFFF;
         const string windowZoomButtonDisabledToolTipText = "Zoom in by dragging a rectangle, is disabled now";
         internal static double Dpi = GetDotsPerInch();
         internal static double dpix;
@@ -123,9 +122,6 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         }
 
       
-
-        internal double LocalScale { get; set; }
-
 
         /*
          * (s, 0,a)(srcRect.X)= (destRect.Left,destRect.Top)
@@ -356,7 +352,6 @@ namespace Microsoft.Msagl.GraphViewerGdi{
 
         const int minimalSizeToDraw = 10;
 
-        Brush imageBackgroungBrush = Brushes.White;
         readonly ViewInfosList listOfViewInfos = new ViewInfosList();
         System.Drawing.Point mousePositonWhenSetSelectedObject;
         internal Cursor originalCursor;
@@ -405,9 +400,6 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         //public static double LocationToFloat(string location) { return LocationToFloat(Int32.Parse(location)); }
 
 
-        internal bool DestRectContainsPoint(System.Drawing.Point p){
-            return destRect.Contains(p);
-        }
 
         #endregion
 
@@ -461,18 +453,6 @@ namespace Microsoft.Msagl.GraphViewerGdi{
             destRect.Width = (int) (CurrentScale*srcRect.Width);
             destRect.Height = (int) (CurrentScale*srcRect.Height);
         }
-
-        void GetSizes(out int panelWidth, out int panelHeight, PrintPageEventArgs printPageEvenArgs) {
-            if (printPageEvenArgs == null) {
-                panelWidth = PanelWidth;
-                panelHeight = PanelHeight;
-              
-            } else {
-                panelWidth =  (int) printPageEvenArgs.PageSettings.PrintableArea.Width;
-                panelHeight = (int) printPageEvenArgs.PageSettings.PrintableArea.Height;
-            }
-        }
-
 
         void CalcRects(PrintPageEventArgs printPageEvenArgs) {
             var w = printPageEvenArgs == null ? PanelWidth : printPageEvenArgs.PageBounds.Width;
@@ -532,10 +512,6 @@ namespace Microsoft.Msagl.GraphViewerGdi{
 
         void ToolBarMouseMoved(object o, MouseEventArgs a){
             Cursor = originalCursor;
-        }
-
-        void vScrollBar_MouseEnter(object o, EventArgs a){
-            ToolBarMouseMoved(null, null);
         }
 
         /// <summary>

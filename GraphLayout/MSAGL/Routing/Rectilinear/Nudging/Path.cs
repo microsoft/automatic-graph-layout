@@ -56,20 +56,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         internal PathEdge LastEdge { get; set; }
 
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        internal void SetIsFixedByFollowingParallelEdges() {
-//            SetIsFixedByFollowingParallelEdgesOnEnumeration(PathEdges);
-//            SetIsFixedByFollowingParallelEdgesOnEnumeration(PathEdgesInReverseOrder());
-            
-            //            if(GetFirstPathEdge().IsFixed)
-//                foreach(var edge in ParallelEdgesStartingFromFirst())
-//                    edge.IsFixed = true;
-//            if (GetLastPathEdge().IsFixed)
-//                foreach (var edge in ParallelEdgesStartingFromLast())
-//                    edge.IsFixed = true;
-
-        }
-
         internal void AddEdge(PathEdge edge) {
             edge.Path = this;
             Debug.Assert(edge.Source == LastEdge.Target);

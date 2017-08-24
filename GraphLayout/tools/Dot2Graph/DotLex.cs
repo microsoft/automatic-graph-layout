@@ -149,7 +149,6 @@ namespace Dot2Graph
         enum Result {accept, noMatch, contextFound};
 
         const int maxAccept = 44;
-        const int initial = 45;
         const int eofNum = 0;
         const int goStart = -1;
         const int INITIAL = 0;
@@ -357,48 +356,8 @@ int NextState() {
 #endif // BACKUP
 
         // ==============================================================
-        // ==== Nested struct to support input switching in scanners ====
-        // ==============================================================
-
-		struct BufferContext {
-            internal ScanBuff buffSv;
-			internal int chrSv;
-			internal int cColSv;
-			internal int lNumSv;
-		}
-
-        // ==============================================================
         // ===== Private methods to save and restore buffer contexts ====
         // ==============================================================
-
-        /// <summary>
-        /// This method creates a buffer context record from
-        /// the current buffer object, together with some
-        /// scanner state values. 
-        /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        BufferContext MkBuffCtx()
-		{
-			BufferContext rslt;
-			rslt.buffSv = this.buffer;
-			rslt.chrSv = this.code;
-			rslt.cColSv = this.cCol;
-			rslt.lNumSv = this.lNum;
-			return rslt;
-		}
-
-        /// <summary>
-        /// This method restores the buffer value and allied
-        /// scanner state from the given context record value.
-        /// </summary>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        void RestoreBuffCtx(BufferContext value)
-		{
-			this.buffer = value.buffSv;
-			this.code = value.chrSv;
-			this.cCol = value.cColSv;
-			this.lNum = value.lNumSv;
-        } 
         // =================== End Nested classes =======================
 
 #if !NOFILES
@@ -455,15 +414,6 @@ int NextState() {
             tokEPos = readPos;
             tokELin = lNum;
             tokECol = cCol;
-        }
-
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        int Peek()
-        {
-            int rslt, codeSv = code, cColSv = cCol, lNumSv = lNum, bPosSv = buffer.Pos;
-            GetCode(); rslt = code;
-            lNum = lNumSv; cCol = cColSv; code = codeSv; buffer.Pos = bPosSv;
-            return rslt;
         }
 
         // ==============================================================
@@ -580,9 +530,6 @@ int NextState() {
         }
         
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        int yypos { get { return tokPos; } }
-        
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         int yyline { get { return tokLin; } }
         
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
@@ -601,38 +548,6 @@ int NextState() {
             }
         }
 
-        /// <summary>
-        /// Discards all but the first "n" codepoints in the recognized pattern.
-        /// Resets the buffer position so that only n codepoints have been consumed;
-        /// yytext is also re-evaluated. 
-        /// </summary>
-        /// <param name="n">The number of codepoints to consume</param>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        void yyless(int n)
-        {
-            buffer.Pos = tokPos;
-            // Must read at least one char, so set before start.
-            cCol = tokCol - 1; 
-            GetCode();
-            // Now ensure that line counting is correct.
-            lNum = tokLin;
-            // And count the rest of the text.
-            for (int i = 0; i < n; i++) GetCode();
-            MarkEnd();
-        }
-       
-        //
-        //  It would be nice to count backward in the text
-        //  but it does not seem possible to re-establish
-        //  the correct column counts except by going forward.
-        //
-        /// <summary>
-        /// Removes the last "n" code points from the pattern.
-        /// </summary>
-        /// <param name="n">The number to remove</param>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        void _yytrunc(int n) { yyless(yyleng - n); }
-        
         //
         // This is painful, but we no longer count
         // codepoints.  For the overwhelming majority 
@@ -676,14 +591,6 @@ int NextState() {
         
         // ============ methods available in actions ==============
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal int YY_START {
-            get { return currentScOrd; }
-            set { currentScOrd = value; 
-                  currentStart = startState[value]; 
-            } 
-        }
-        
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal void BEGIN(int next) {
             currentScOrd = next;
@@ -953,9 +860,6 @@ LoadYylVal();
         }
  #endif // STACK
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal void ECHO() { Console.Out.Write(yytext); }
-        
 #region UserCodeSection
 
 string message = "";

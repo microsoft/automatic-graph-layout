@@ -157,12 +157,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                 return (this.IsHorizontal ? "(H) Y == " : "(V) X == ") + this.Coord;
             }
 
-            // Create a point from the input coordinate which is on the axis that changes along this item's segments
-            // (and is thus the parallel coord of an intersecting segment).
-            internal Point CreatePointFromPerpendicularCoord(double endPerpCoord) {
-                return this.IsHorizontal ? new Point(endPerpCoord, this.Coord) : new Point(this.Coord, endPerpCoord);
-            }
-
             internal void AppendScanSegment(ScanSegment segment) {
                 if (null == this.FirstSegment) {
                     this.FirstSegment = segment;

@@ -2,6 +2,9 @@ using System;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using System.Collections.Generic;
+#if !NETCORE
+using System.Windows.Media;
+#endif
 
 namespace Microsoft.Msagl.Core.Layout {
     /// <summary>
@@ -228,6 +231,9 @@ namespace Microsoft.Msagl.Core.Layout {
 
 
         EdgeGeometry edgeGeometry = new EdgeGeometry();
+#if !NETCORE
+        public SolidColorBrush Color;
+#endif
 
         /// <summary>
         /// Gets or sets the edge geometry: the curve, the arrowhead positions and the underlying polyline
@@ -360,31 +366,6 @@ namespace Microsoft.Msagl.Core.Layout {
             smoothedPolyline = SmoothedPolyline.FromPoints(new[] { p0, p1, p2, p3 });
 
             return smoothedPolyline.CreateCurve();
-        }
-
-        /// <summary>
-        /// Routes a self edge inside the given "howMuchToStickOut" parameter
-        /// </summary>
-        /// <param name="boundaryCurve"></param>
-        /// <param name="howMuchToStickOut"></param>
-        /// <returns></returns>
-        static internal ICurve RouteSelfEdgeAtSide(ICurve boundaryCurve, double howMuchToStickOut)
-        {
-            //we just need to find the box of the corresponding node
-            var w = boundaryCurve.BoundingBox.Width;
-            var h = boundaryCurve.BoundingBox.Height;
-            var center = boundaryCurve.BoundingBox.Center;
-
-            var p0 = new Point(center.X, center.Y - h / 4);
-            var p1 = new Point(center.X - w / 2 - howMuchToStickOut, center.Y - h / 4);
-            var p2 = new Point(center.X - w / 2 - howMuchToStickOut, center.Y);
-            var p3 = new Point(center.X - w / 2 - howMuchToStickOut, center.Y + h / 4);
-            var p4 = new Point(center.X, center.Y + h / 4);
-
-            var curve = new Curve();
-            curve.AddSegment(new CubicBezierSegment(p0, p1, p1, p2));
-            curve.AddSegment(new CubicBezierSegment(p2, p3, p3, p4));
-            return curve;
         }
 
         /// <summary>

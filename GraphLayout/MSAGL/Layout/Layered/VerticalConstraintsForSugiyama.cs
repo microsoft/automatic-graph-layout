@@ -56,16 +56,6 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
         /// <summary>
-        /// unpins a node from max layer
-        /// </summary>
-        /// <param name="node"></param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal void UnpinNodeFromMaxLayer(Node node)
-        {
-            MaxLayerOfGeomGraph.Remove(node);
-        }
-
-        /// <summary>
         /// pins a node to min layer
         /// </summary>
         /// <param name="node"></param>
@@ -73,16 +63,6 @@ namespace Microsoft.Msagl.Layout.Layered {
         {
             System.Diagnostics.Debug.Assert(node != null);
             MinLayerOfGeomGraph.Insert(node);
-        }
-
-        /// <summary>
-        /// unpins a node from min layer
-        /// </summary>
-        /// <param name="node"></param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal void UnpinNodeFromMinLayer(Node node)
-        {
-            MinLayerOfGeomGraph.Remove(node);
         }
 
         internal bool IsEmpty {

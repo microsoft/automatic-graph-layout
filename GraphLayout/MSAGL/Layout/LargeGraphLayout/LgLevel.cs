@@ -177,6 +177,67 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             _railDictionary.Remove(new SymmetricSegment(p0, p1));
         }
 
+        internal bool PrintQuota(IEnumerable<Node> nodes, int NodeQuota, int RailQuota)
+        {
+            //Console.WriteLine("running stats "+nodes.Count());
+            tileTableForStatistic.Clear();
+            foreach (var rail in _railDictionary.Values)
+                if (rail.ZoomLevel == ZoomLevel)
+                    CreateStatisticsForRail(rail);
+
+            RunStatisticsForNodes(nodes);
+
+
+            int maxVerticesPerTile = 0;
+            int maxRailsPerTile = 0;
+
+            foreach (var tileStatistic in tileTableForStatistic.Values)
+            {
+                if (maxRailsPerTile < tileStatistic.rails)
+                    maxRailsPerTile = tileStatistic.rails;
+                if (maxVerticesPerTile < tileStatistic.vertices)
+                    maxVerticesPerTile = tileStatistic.vertices;
+            }
+
+            Console.WriteLine("max rails per tile {0}\n" + "max verts per tile {1}.\n", maxRailsPerTile, maxVerticesPerTile);
+
+            if (maxVerticesPerTile <= NodeQuota && maxRailsPerTile <= RailQuota) return true;
+            //if ( maxRailsPerTile <= RailQuota) return true;
+            return false;
+        }
+
+        internal bool QuotaSatisfied(IEnumerable<Node> nodes, int NodeQuota, int RailQuota)
+        {
+            //Console.WriteLine("running stats "+nodes.Count());
+            tileTableForStatistic.Clear();
+            foreach (var rail in _railDictionary.Values)
+                if (rail.ZoomLevel == ZoomLevel)
+                    CreateStatisticsForRail(rail);
+ 
+            RunStatisticsForNodes(nodes);
+
+ 
+            int maxVerticesPerTile = 0;
+            int maxRailsPerTile = 0;
+ 
+            foreach (var tileStatistic in tileTableForStatistic.Values)
+            {
+                 if (maxRailsPerTile < tileStatistic.rails)
+                    maxRailsPerTile = tileStatistic.rails;
+                if (maxVerticesPerTile < tileStatistic.vertices)
+                    maxVerticesPerTile = tileStatistic.vertices;
+             }
+             
+            
+
+            //if (maxVerticesPerTile <= NodeQuota && maxRailsPerTile <= RailQuota) return true;
+            if ( maxRailsPerTile <= RailQuota) 
+                return true;
+            
+            Console.WriteLine("max rails per tile {0}\n" + "max verts per tile {1}.\n", maxRailsPerTile, maxVerticesPerTile);
+            return false;
+        }
+
         #region Statistics
 
         internal void RunLevelStatistics(IEnumerable<Node> nodes) {
@@ -216,10 +277,13 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
             Console.WriteLine("done with stats");
         }
+ 
 
         void RunStatisticsForNodes(IEnumerable<Node> nodes) {
             foreach (var node in nodes)
+            {
                 CreateStatisticsForNode(node);
+            }
         }
 
         void CreateStatisticsForNode(Node node) {
@@ -271,12 +335,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             public int vertices;
             public int rails;
         }
-
         readonly Dictionary<Tuple<int, int>, TileStatistic> tileTableForStatistic =
-            new Dictionary<Tuple<int, int>, TileStatistic>();
+           new Dictionary<Tuple<int, int>, TileStatistic>();
 
-        double GetGridSize() {
-            return Math.Max(_geomGraph.Width, _geomGraph.Height)/ZoomLevel;
+        double GetGridSize()
+        {
+            return Math.Max(_geomGraph.Width, _geomGraph.Height) / ZoomLevel;
         }
 
         #endregion
@@ -300,7 +364,17 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         public IEnumerable<Node> GetNodesIntersectingRect(Rectangle visibleRectangle) {
             return NodeInfoTree.GetAllIntersecting(visibleRectangle).Select(n => n.GeometryNode);
         }
+        public IEnumerable<Node> GetNodesIntersectingRectLabelzero(Rectangle visibleRectangle, double l)
+        {
+            var x =  NodeInfoTree.GetAllIntersecting(visibleRectangle);//.Select(n => n.GeometryNode);
+            List<Node> r = new List<Node>();
+            foreach (var y in x)
+            {
+                if(y.ZoomLevel <= l) r.Add(y.GeometryNode);
 
+            }
+            return r;
+        }
         public bool RectIsEmptyOnLevel(Rectangle tileBox) {
             LgNodeInfo lg;
             return !NodeInfoTree.OneIntersecting(tileBox, out lg);

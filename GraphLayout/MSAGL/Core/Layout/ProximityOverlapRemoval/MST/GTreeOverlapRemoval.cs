@@ -144,20 +144,6 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
             return t*ab.Length;
         }
 
-
-#if !SILVERLIGHT
-        static void PrintTimeSpan(Stopwatch stopWatch) {
-            // Get the elapsed time as a TimeSpan value.
-            TimeSpan ts = stopWatch.Elapsed;
-            // Format and display the TimeSpan value.
-            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-                ts.Hours, ts.Minutes, ts.Seconds,
-                ts.Milliseconds/10);
-            Console.WriteLine(elapsedTime, "RunTime");
-        }
-
-#endif
-
         static double AvgEdgeLength(Node[] nodes) {
             int i = 0;
             double avgEdgeLength = 0;
@@ -419,7 +405,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
             return euclid;
         }
 
-#if DEBUG && !SILVERLIGHT && !SHARPKIT
+#if DEBUG && !SILVERLIGHT && !SHARPKIT && !NETCORE
 
     /// <summary>
     /// Shows the current state of the algorithm for debug purposes.

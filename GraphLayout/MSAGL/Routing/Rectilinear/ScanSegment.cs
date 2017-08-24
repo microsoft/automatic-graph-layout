@@ -253,10 +253,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return true;
         }
 
-        internal Point GetIntersection(ScanSegment seg) {
-            return StaticGraphUtility.SegmentIntersection(this, seg);
-        }
-
         internal bool IntersectsSegment(ScanSegment seg) {
             return StaticGraphUtility.SegmentsIntersect(this, seg);
         }

@@ -333,10 +333,6 @@ namespace TestWpfViewer {
         }
 
 
-        Tuple<string, VoidDelegate>[] ChangeColorDialog(AttributeBase attr) {
-            return new[] {ColorChangeMenuTuple(attr)};
-        }
-
         static Tuple<string, VoidDelegate> ColorChangeMenuTuple(AttributeBase attr) {
             return new Tuple<string, VoidDelegate>("set color", () => {
                 var dialog = new System.Windows.Forms.ColorDialog();

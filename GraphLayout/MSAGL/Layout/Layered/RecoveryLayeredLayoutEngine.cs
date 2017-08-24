@@ -907,13 +907,6 @@ namespace Microsoft.Msagl.Layout.Layered {
             return p;
         }
 
-        internal double GetNodeWidth(int i) {
-            Node node = IntGraph.Nodes[i];
-            double a = 0, b = 0, c = 0;
-            return node.Width + WidthOfSelfEdge(database, i, ref a, ref b, ref c, sugiyamaSettings);
-        }
-
-
         internal static void CalculateAnchorSizes(Database database, out Anchor[] anchors,
                                                   ProperLayeredGraph properLayeredGraph, GeometryGraph originalGraph,
                                                   BasicGraph<Node, IntEdge> intGraph, SugiyamaLayoutSettings settings) {
@@ -995,62 +988,6 @@ namespace Microsoft.Msagl.Layout.Layered {
             SetFlatEdgesForLayer(database, layerArrays, i, intGraph, settings, ymax);
         }
 
-        /// <summary>
-        /// try to estimate the dimensions of the ensuing layout, useful for determining if we are going
-        /// to go through with it, or try a different layout method (e.g. if the aspect ratio is too wacky)
-        /// </summary>
-        /// <returns>the width and height in X and Y respectively</returns>
-        internal Point CalculateApproximateDimensions() {
-            CreateGluedDagSkeletonForLayering();
-            var ns = new NetworkSimplexForGeneralGraph(GluedDagSkeletonForLayering, null);
-
-            // layers[0] is the layer of the first node, layers[1]: layer of second node, etc...
-            int[] layers = ns.GetLayers();
-
-            // for each layer we need the maximum node height and the sum of all node widths
-            // in order to calculate the total width and height of the graph
-            var layerMap = new Dictionary<int, Point>();
-            double width, height;
-
-            Directions layoutDirection = GetLayoutDirection(sugiyamaSettings);
-            if (layoutDirection == Directions.North || layoutDirection == Directions.South) {
-                for (int i = 0; i < layers.Length; ++i) {
-                    Node v = originalGraph.Nodes[i];
-                    Point size;
-                    int l = layers[i];
-                    layerMap.TryGetValue(l, out size);
-                    layerMap[l] = new Point(
-                        v.BoundingBox.Width + size.X + sugiyamaSettings.NodeSeparation,
-                        Math.Max(v.BoundingBox.Height, size.Y));
-                }
-                width = 0;
-                height = sugiyamaSettings.LayerSeparation * (layerMap.Count - 1);
-
-                foreach (Point size in layerMap.Values) {
-                    width = Math.Max(size.X, width);
-                    height += size.Y;
-                }
-            } else {
-                for (int i = 0; i < layers.Length; ++i) {
-                    Node v = originalGraph.Nodes[i];
-                    Point size;
-                    int l = layers[i];
-                    layerMap.TryGetValue(l, out size);
-                    layerMap[l] = new Point(
-                        Math.Max(v.BoundingBox.Width, size.X),
-                        v.BoundingBox.Height + size.Y + sugiyamaSettings.NodeSeparation);
-                }
-                width = sugiyamaSettings.LayerSeparation * (layerMap.Count - 1);
-                height = 0;
-
-                foreach (Point size in layerMap.Values) {
-                    width += size.X;
-                    height = Math.Max(size.Y, height);
-                }
-            }
-            return new Point(width, height);
-        }
-
         static double SetFlatEdgesForLayer(Database database, LayerArrays layerArrays, int i,
                                            BasicGraph<IntEdge> intGraph, SugiyamaLayoutSettings settings, double ymax) {
             double flatEdgesHeight = 0;
@@ -1069,11 +1006,6 @@ namespace Microsoft.Msagl.Layout.Layered {
                 }
             }
             return flatEdgesHeight;
-        }
-
-        internal static Directions GetLayoutDirection(SugiyamaLayoutSettings settings) {
-            Point dir = settings.Transformation * new Point(0, 1);
-            return dir.CompassDirection;
         }
 
         static double SetFlatEdgesLabelsHeightAndPositionts(IntPair pair, double ymax, double dy, Database database) {
