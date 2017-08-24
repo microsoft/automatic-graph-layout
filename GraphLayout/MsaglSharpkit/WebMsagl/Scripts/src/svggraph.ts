@@ -51,15 +51,34 @@ class SVGGraph {
 
     constructor(container: HTMLElement, graph?: G.GGraph) {
         this.container = container;
+        this.container.style.position = "relative";
         this.graph = graph === undefined ? null : graph;
+
+        var workingText = document.createTextNode("LAYOUT IN PROGRESS");
+        var workingSpan = document.createElement("span");
+        workingSpan.setAttribute("style", "position: absolute; top: 50%; width: 100%; height: 100%; text-align: center");
+        workingSpan.style.visibility = "hidden";
+        workingSpan.appendChild(workingText);
+        this.workingSpan = workingSpan;
+        this.container.appendChild(this.workingSpan);
     }
 
     private edgeRoutingCallback: ((edges: string[]) => void) = null;
+    private layoutStartedCallback: () => void = null;
+    private workStoppedCallback: () => void = null;
+
+    private workingSpan: HTMLSpanElement;
+
     public getGraph(): G.GGraph { return this.graph; }
     public setGraph(graph: G.GGraph) {
-        if (this.graph != null && this.edgeRoutingCallback != null)
+        if (this.graph != null) {
             this.graph.edgeRoutingCallbacks.remove(this.edgeRoutingCallback);
+            this.graph.layoutStartedCallbacks.remove(this.layoutStartedCallback);
+            this.graph.workStoppedCallbacks.remove(this.workStoppedCallback);
+        }
+
         this.graph = graph;
+
         var that = this;
         this.edgeRoutingCallback = edges => {
             if (edges != null)
@@ -67,6 +86,14 @@ class SVGGraph {
                     that.redrawElement(that.renderEdges[edges[e]]);
         };
         this.graph.edgeRoutingCallbacks.add(this.edgeRoutingCallback);
+        this.layoutStartedCallback = () => {
+            that.workingSpan.style.visibility = "visible";
+        };
+        this.graph.layoutStartedCallbacks.add(this.layoutStartedCallback);
+        this.workStoppedCallback = () => {
+            that.workingSpan.style.visibility = "hidden";
+        };
+        this.graph.workStoppedCallbacks.add(this.workStoppedCallback);
     }
 
     public getSVGString(): string {
@@ -207,6 +234,8 @@ class SVGGraph {
             return this.pathEllipse(<G.GEllipse>curve, continuous);
         else if (curve.type === "RoundedRect")
             return this.pathRoundedRect(<G.GRoundedRect>curve, continuous);
+        else
+            throw "unknown curve type: " + curve.type;
     }
 
     /** Set this to draw custom labels. Return true to suppress default label rendering, or false to render as default. Note
@@ -225,7 +254,7 @@ class SVGGraph {
             text.setAttribute("x", label.bounds.x.toString());
             text.setAttribute("y", (label.bounds.y + label.bounds.height).toString());
             text.textContent = label.content;
-            text.setAttribute("style", "fill: " + (label.fill == "" ? "black" : label.fill));
+            text.setAttribute("style", "fill: " + (label.fill == "" ? "black" : label.fill + "; text-anchor: start"));
             g.appendChild(text);
         }
         parent.appendChild(g);
@@ -318,21 +347,23 @@ class SVGGraph {
     }
 
     private drawEdge(parent: Element, edge: G.GEdge): void {
+        var curve: G.GCurve = edge.curve;
+        if (curve == null) {
+            console.log("MSAGL warning: did not receive a curve for edge " + edge.id);
+            return;
+        }
         var g = <SVGGElement>document.createElementNS(SVGGraph.SVGNS, "g");
         var edgeCopy = edge;
         var that = this;
         g.onclick = function () { that.onEdgeClick(edgeCopy); };
-        var curve: G.GCurve = edge.curve;
-        if (curve != null) {
-            var pathString = this.pathCurve(curve, false);
-            var path = document.createElementNS(SVGGraph.SVGNS, "path");
-            path.setAttribute("d", pathString);
-            var style = "stroke: " + edge.stroke + "; stroke-width: " + edge.thickness + "; fill: none"
-            if (edge.dash != null)
-                style += "; stroke-dasharray: " + edge.dash;
-            path.setAttribute("style", style);
-            g.appendChild(path);
-        }
+        var pathString = this.pathCurve(curve, false);
+        var path = document.createElementNS(SVGGraph.SVGNS, "path");
+        path.setAttribute("d", pathString);
+        var style = "stroke: " + edge.stroke + "; stroke-width: " + edge.thickness + "; fill: none"
+        if (edge.dash != null)
+            style += "; stroke-dasharray: " + edge.dash;
+        path.setAttribute("style", style);
+        g.appendChild(path);
         if (edge.arrowHeadAtTarget != null)
             this.drawArrow(g, edge.arrowHeadAtTarget, "stroke: " + edge.stroke + "; stroke-width: " + edge.thickness + "; fill: " + (edge.arrowHeadAtTarget.fill ? edge.stroke : "none"));
         if (edge.arrowHeadAtSource != null)
@@ -368,7 +399,7 @@ class SVGGraph {
             }
     }
 
-    public style: string;
+    public style: string = "text { stroke: black; fill: black; stroke-width: 0; font-size: 15px; font-family: Verdana, Arial, sans-serif }";
 
     private renderNodes: { [id: string]: RenderNode };
     private renderEdges: { [id: string]: RenderEdge };
@@ -415,6 +446,7 @@ class SVGGraph {
         this.populateGraph();
     }
 
+    /** Registers several mouse events on the container, to handle editing. */
     protected hookUpMouseEvents() {
         var that = this;
         // Note: the SVG element does not have onmouseleave, and onmouseout is useless because it fires on moving to children.
@@ -425,6 +457,8 @@ class SVGGraph {
         this.container.ondblclick = function (e) { that.onMouseDblClick(e); };
     }
 
+    /** Returns true if the SVG node contains the specified group as a child. I need this because SVG elements do not seem
+    to have a method to test if they contain a specific child, at least in IE. */
     private containsGroup(g: SVGGElement): boolean {
         if (this.svg.contains != null)
             return this.svg.contains(g);
@@ -434,6 +468,8 @@ class SVGGraph {
         return false;
     }
 
+    /** Redraws a single graph element. Used for editing. This is done by removing the element's group, and making a new
+    one. */
     private redrawElement(el: RenderElement) {
         if (el instanceof RenderNode) {
             var renderNode = <RenderNode>el;
@@ -445,10 +481,12 @@ class SVGGraph {
             var renderEdge = <RenderEdge>el;
             if (this.containsGroup(renderEdge.group))
                 this.svg.removeChild(renderEdge.group);
+            // In the case of edges, I also need to redraw the label.
             var renderLabel = this.renderEdgeLabels[renderEdge.edge.id];
             if (renderLabel != null)
                 this.svg.removeChild(renderLabel.group);
             this.drawEdge(this.svg, renderEdge.edge);
+            // Also, if it is being edited, I'll need to redraw the control points.
             if (this.edgeEditEdge == renderEdge)
                 this.drawPolylineCircles();
         }
@@ -465,7 +503,9 @@ class SVGGraph {
     /** This callback gets invoked when the user clicks on an edge. */
     public onEdgeClick: (e: G.GEdge) => void = function (e) { };
 
+    /** The point where the mouse cursor is at the moment, in graph space. */
     private mousePoint: G.GPoint = null;
+    /** The graph element that's currently under the mouse cursor, if any. */
     private elementUnderMouseCursor: RenderElement = null;
 
     /** Returns the current mouse coordinates, in graph space. If null, the mouse is outside the graph. */
@@ -479,10 +519,14 @@ class SVGGraph {
 
     /** Converts a point from a MouseEvent into graph space coordinates. */
     public getGraphPoint(e: MouseEvent) {
-        var clientPoint = this.svg.createSVGPoint();
+        // I'm using the SVG transformation facilities, to make sure all transformations are
+        // accounted for. First, make a SVG point with the mouse coordinates...
+        var clientPoint: SVGPoint = this.svg.createSVGPoint();
         clientPoint.x = e.clientX;
         clientPoint.y = e.clientY;
+        // Then, reverse the current transformation matrix...
         var matrix = this.svg.getScreenCTM().inverse();
+        // Then, apply the reversed matrix to the point, obtaining the new point in graph space.
         var graphPoint = clientPoint.matrixTransform(matrix);
         return new G.GPoint({ x: graphPoint.x, y: graphPoint.y });
     };
@@ -490,49 +534,68 @@ class SVGGraph {
     // Mouse event handlers.
 
     protected onMouseMove(e: MouseEvent) {
+        // Update the mouse point.
         this.mousePoint = this.getGraphPoint(e);
+        // Do dragging, if needed.
         this.doDrag();
     };
     protected onMouseOut(e: MouseEvent) {
+        // Clear the mouse data.
         this.mousePoint = null;
         this.elementUnderMouseCursor = null;
+        // End dragging, if needed.
         this.endDrag();
     };
     protected onMouseDown(e: MouseEvent) {
+        // Store the point where the mouse went down.
         this.mouseDownPoint = new G.GPoint(this.getGraphPoint(e));
+        // Begin dragging, if needed.
         if (this.allowEditing)
             this.beginDrag();
     };
     protected onMouseUp(e: MouseEvent) {
+        // End dragging, if needed.
         this.endDrag();
     };
     protected onMouseDblClick(e: MouseEvent) {
+        // If an edge is being edited, interpret the double click as an edge corner event. It may be
+        // an insertion or a deletion.
         if (this.edgeEditEdge != null)
-            this.edgeCornerEvent(this.getGraphPoint(e));
+            this.edgeControlPointEvent(this.getGraphPoint(e));
     }
     private onNodeMouseOver(n: RenderNode, e: MouseEvent) {
+        // Update the object under mouse cursor.
         this.elementUnderMouseCursor = n;
     };
     private onNodeMouseOut(n: RenderNode, e: MouseEvent) {
+        // Clear the object under mouse cursor.
         this.elementUnderMouseCursor = null;
     };
     private onEdgeMouseOver(ed: RenderEdge, e: MouseEvent) {
+        // Update the object under mouse cursor.
         this.elementUnderMouseCursor = ed;
+        // If needed, begin editing the edge.
         if (this.allowEditing)
             this.enterEdgeEditMode(ed);
     };
     private onEdgeMouseOut(ed: RenderEdge, e: MouseEvent) {
+        // Start the timeout to exit edge edit mode.
         this.beginExitEdgeEditMode();
+        // Clear the object under mouse cursor.
         this.elementUnderMouseCursor = null;
     };
     private onEdgeLabelMouseOver(l: RenderEdgeLabel, e: MouseEvent) {
+        // Update the object under mouse cursor.
         this.elementUnderMouseCursor = l;
     };
     private onEdgeLabelMouseOut(l: RenderEdgeLabel, e: MouseEvent) {
+        // Clear the object under mouse cursor.
         this.elementUnderMouseCursor = null;
     };
 
+    /** The element currently being dragged. */
     private dragElement: RenderElement;
+    /** The point where the mouse button went down. Used to establish a delta while dragging. */
     private mouseDownPoint: G.GPoint;
 
     /** Returns the object that is currently being dragged (or null if nothing is being dragged). */
@@ -542,8 +605,11 @@ class SVGGraph {
     private beginDrag() {
         if (this.elementUnderMouseCursor == null)
             return;
+        // Get the geometry object being dragged.
         var geometryElement = this.elementUnderMouseCursor.getGeometryElement();
+        // Start a geometry move operation.
         this.graph.startMoveElement(geometryElement, this.mouseDownPoint);
+        // Store the drag element.
         this.dragElement = this.elementUnderMouseCursor;
     };
 
@@ -551,26 +617,38 @@ class SVGGraph {
     private doDrag() {
         if (this.dragElement == null)
             return;
+        // Compute the delta.
         var delta = this.mousePoint.sub(this.mouseDownPoint);
+        // Perform the geometry move operation.
         this.graph.moveElements(delta);
+        // Redraw the affected element.
         this.redrawElement(this.dragElement);
     };
 
     /** Ends the current drag operation, if any. After calling this, further mouse movements will not move any object. */
     private endDrag() {
+        // End the geometry move operation.
         this.graph.endMoveElements();
+        // Clear the drag element.
         this.dragElement = null;
     };
 
+    /** The ID of the Timeout that's currently waiting to exit edge edit mode. */
     private edgeEditModeTimeout: number;
+    /** The edge that's currently being edited. */
     private edgeEditEdge: RenderEdge;
 
+    /** Draws the control points for the edge that is currently being edited. */
     private drawPolylineCircles() {
         if (this.edgeEditEdge == null)
             return;
         var group = this.edgeEditEdge.group;
         var points = this.graph.getPolyline(this.edgeEditEdge.edge.id);
-        var existingCircles = [];
+        // I want to move existing circles in preference to deleting and recreating them. This avoids needless mouseout/mouseover events
+        // as circles disappear and appear right under the cursor. I'll start by getting all of the circles that are currently present.
+        // Note that I am assuming that all Circle elements in the edge group are control point renderings; this should be a safe
+        // assumption. If there are circles as part of a custom labels, they will be in a subgroup.
+        var existingCircles: any[] = [];
         for (var i = 0; i < group.childNodes.length; i++)
             if (group.childNodes[i].nodeName == "circle")
                 existingCircles.push(group.childNodes[i]);
@@ -580,67 +658,101 @@ class SVGGraph {
             c.setAttribute("r", G.GGraph.EdgeEditCircleRadius.toString());
             c.setAttribute("cx", point.x.toString());
             c.setAttribute("cy", point.y.toString());
+            // The fill needs to be explicitly set to transparent. If it is null, the circle will not catch mouse events properly.
             c.setAttribute("style", "stroke: #5555FF; stroke-width: 1px; fill: transparent");
+            // If control points have actually been added, they need to be added to the edge group.
             if (i >= existingCircles.length)
                 group.insertBefore(c, group.childNodes[0]);
         }
+        // If control points have actually been removed, they need to be removed from the edge group.
         for (var i = points.length; i < existingCircles.length; i++)
             group.removeChild(existingCircles[i]);
     }
 
+    /** Removes the control point circles from the edge that's currently being edited. */
     private clearPolylineCircles() {
         if (this.edgeEditEdge == null)
             return;
-        var circles = [];
+        // First, make a list of these circles.
+        var circles: any[] = [];
         var group = this.edgeEditEdge.group;
         for (var i = 0; i < group.childNodes.length; i++)
             if (group.childNodes[i].nodeName == "circle")
                 circles.push(group.childNodes[i]);
+        // Then remove them.
         for (var i = 0; i < circles.length; i++)
             group.removeChild(circles[i]);
     }
 
+    /** Starts editing an edge. */
     private enterEdgeEditMode(ed: RenderEdge) {
         if (this.edgeEditEdge == ed) {
-            console.log("timeout cleared");
+            // I am already editing this edge. I just need to clear the timeout, if any.
             clearTimeout(this.edgeEditModeTimeout);
             this.edgeEditModeTimeout = 0;
         }
+        // If the user is attempting to start editing another edge, I'll stop right here. They need to wait
+        // for the current edge to exit edit mode.
         if (this.edgeEditEdge != null && this.edgeEditEdge != ed)
             return;
+        // Mark this as the edge being edited.
         this.edgeEditEdge = ed;
+        // Show the control point circles.
         this.drawPolylineCircles();
     }
 
+    /** Exit edge editing mode immediately. */
     private exitEdgeEditMode() {
         var ed = this.edgeEditEdge;
         if (ed == null)
             return;
+        // Clear the timeout, it's no longer needed.
         clearTimeout(this.edgeEditModeTimeout);
+        // Get rid of the circles.
         this.clearPolylineCircles();
+        // Reset the edge editing data.
         this.edgeEditModeTimeout = 0;
         this.edgeEditEdge = null;
     }
 
+    /** This is the timeout (in msecs) during which the user can move the mouse away from the edge and still be
+    editing the edge. */
     private static ExitEdgeModeTimeout = 2000;
+    /** Sets a timeout to exit edge edit mode. */
     private beginExitEdgeEditMode() {
         var that = this;
-        console.log("timeout set");
+        // TODO: what if there already is a timeout at this point? Need to test.
         this.edgeEditModeTimeout = setTimeout(() => that.exitEdgeEditMode(), SVGGraph.ExitEdgeModeTimeout);
     }
 
-    private edgeCornerEvent(point: G.GPoint) {
-        var polyline = this.graph.getPolyline(this.edgeEditEdge.edge.id);
-        for (var i = 0; i < polyline.length; i++) {
-            if (point.dist2(polyline[i]) <= G.GGraph.EdgeEditCircleRadius * G.GGraph.EdgeEditCircleRadius) {
-                if (i > 0 && i < polyline.length - 1)
-                    this.graph.delPolylineCorner(this.edgeEditEdge.edge.id, polyline[i]);
-                return;
-            }
+    /** Handles an attempt to insert/remove an edge control point. */
+    private edgeControlPointEvent(point: G.GPoint) {
+        // First, check if the click was right on a control point. 
+        var clickedPoint = this.graph.getControlPointAt(this.edgeEditEdge.edge, point);
+        if (clickedPoint != null) {
+            this.graph.delEdgeControlPoint(this.edgeEditEdge.edge.id, clickedPoint);
+            // Note that at this point the mouse will usually be outside the edge, but no other mouse event will fire
+            // unless the user moves the mouse. So I need to behave as if it had moved outside the edge: clear the
+            // elementUnderMouseCursor, and start the edge editing timeout. Note that, technically, it is possible for
+            // the mouse cursor to still be resting on the edge; however, I think this is the best compromise that
+            // can be done without having to use hit testing. The SVG spec has hit testing, but it does not work in
+            // Mozilla, and at the moment I do not want to reimplement hit testing.
+            this.elementUnderMouseCursor = null;
+            this.beginExitEdgeEditMode();
         }
-        this.graph.addPolylineCorner(this.edgeEditEdge.edge.id, point);
-        clearTimeout(this.edgeEditModeTimeout);
-        this.edgeEditModeTimeout = 0;
+        else {
+            // The click was not inside any control point. Make a new control point.
+            this.graph.addEdgeControlPoint(this.edgeEditEdge.edge.id, point);
+            // Note that at this point the mouse will certainly be inside a control point, which means it will
+            // technically be on the edge. So I should clear the timeout; otherwise, it will still be ticking unless
+            // the user moves the mouse.
+            clearTimeout(this.edgeEditModeTimeout);
+            this.edgeEditModeTimeout = 0;
+            // Set the object under the mouse cursor to be the edge currently being edited. This because it is null
+            // at this point (the user has clicked outside the edge), and it will incorrectly remain null even after
+            // adding the control point, unless the user moves the mouse.
+            this.elementUnderMouseCursor = this.edgeEditEdge;
+        }
     }
 }
 

@@ -11,6 +11,7 @@ var startButton = <HTMLButtonElement>document.getElementById("startButton");
 var stopButton = <HTMLButtonElement>document.getElementById("stopButton");
 var working = document.getElementById("working");
 var elapsed = document.getElementById("elapsed");
+var edgeRoutingSelect = <HTMLSelectElement>document.getElementById("edgeRoutingSelect");
 
 function setGUIToRunning() {
     working.style.display = "inline";
@@ -29,6 +30,7 @@ function run(nodeCount: number, edgeCount: number) {
     graph = new G.GGraph();
     graphControl.setGraph(graph);
     graph.settings.aspectRatio = graphView.offsetWidth / graphView.offsetHeight;
+    graph.settings.routing = edgeRoutingSelect.value;
     for (var i = 1; i <= nodeCount; i++)
         graph.addNode(new G.GNode({ id: "node" + i, label: "Node " + i }));
     for (var i = 1; i <= edgeCount; i++)

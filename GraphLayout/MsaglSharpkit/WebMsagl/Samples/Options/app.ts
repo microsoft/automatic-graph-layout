@@ -70,13 +70,13 @@ function loadGraph(json: string) {
 }
 
 function loadGraph1() {
-    require(["text!Samples/Options/samplegraph1.json"], (sample) => {
+    require(["text!Samples/Options/samplegraph1.json"], (sample: string) => {
         loadGraph(sample);
     });
 }
 
 function loadGraph2() {
-    require(["text!Samples/Options/samplegraph2.json"], (sample) => {
+    require(["text!Samples/Options/samplegraph2.json"], (sample: string) => {
         loadGraph(sample);
     });
 }

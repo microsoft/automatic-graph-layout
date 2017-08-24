@@ -12,14 +12,14 @@ class IDDGraph extends ContextGraph {
     grid: boolean = false;
     gplot: any;
 
-    private static msaglPlot = function (jqDiv, master) {
+    private static msaglPlot: any = function (this: any, jqDiv: any, master: any) {
         this.base = InteractiveDataDisplay.CanvasPlot;
         this.base(jqDiv, master);
         this.aspectRatio = 1.0;
 
-        var _graph;
+        var _graph: IDDGraph;
 
-        this.renderCore = function (plotRect, screenSize) {
+        this.renderCore = function (this: any, plotRect: any, screenSize: any) {
             if (_graph && plotRect.width > 0 && plotRect.height > 0) {
                 var bbox = _graph.graph.boundingBox;
                 var context = this.getContext(true);
@@ -38,9 +38,9 @@ class IDDGraph extends ContextGraph {
             }
         }
 
-        this.setGraph = function (g) { _graph = g };
+        this.setGraph = function (g: IDDGraph) { _graph = g };
 
-        this.computeLocalBounds = function (step, computedBounds) {
+        this.computeLocalBounds = function (step: any, computedBounds: any) {
             return _graph ? { x: 0, y: 0, width: _graph.graph.boundingBox.width, height: _graph.graph.boundingBox.height } : { x: 0, y: 0, width: 1, height: 1 };
         };
     };
@@ -60,7 +60,7 @@ class IDDGraph extends ContextGraph {
         IDDGraph.msaglPlot.prototype = new InteractiveDataDisplay.CanvasPlot;
         this.graph = graph === undefined ? null : graph;
 
-        InteractiveDataDisplay.register(plotID, function (jqDiv, master) { return new IDDGraph.msaglPlot(jqDiv, master); });
+        InteractiveDataDisplay.register(plotID, function (jqDiv: any, master: any) { return new IDDGraph.msaglPlot(jqDiv, master); });
         var chart = InteractiveDataDisplay.asPlot(chartID);
         var gestureSource = InteractiveDataDisplay.Gestures.getGesturesStream($("#" + chartID));
         chart.navigation.gestureSource = gestureSource;

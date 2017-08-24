@@ -1,18 +1,18 @@
 ﻿/// <amd-dependency path="idd"/>
 import G = require('./ggraph');
 import SVGGraph = require('./svggraph');
-declare var InteractiveDataDisplay;
+var InteractiveDataDisplay = require('idd');
 
 /** Renderer that targets an SVG plot inside IDD. Note that the MSAGL coordinate system has inverted Y-axis compared to IDD. */
 class IDDSVGGraph extends SVGGraph {
     /** This is the declaration of the IDD plot for MSAGL. I got this from Sergey and subsequently modified it to have it handle some corner cases.
     This should no longer be necessary after we have SVGPlot as part of IDD. */
-    private static msaglPlot = function (graph: IDDSVGGraph, jqDiv, master) {
+    private static msaglPlot: any = function (this: any, graph: IDDSVGGraph, jqDiv: any, master: any) {
         this.base = InteractiveDataDisplay.Plot;
         this.base(jqDiv, master);
         var that = this;
 
-        var _svgCnt = undefined;
+        var _svgCnt: HTMLElement = undefined;
         var _svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 
         Object.defineProperty(this, "svg", {
@@ -21,13 +21,13 @@ class IDDSVGGraph extends SVGGraph {
             },
         });
 
-        this.computeLocalBounds = function (step, computedBounds) {
+        this.computeLocalBounds = function (step: any, computedBounds: any) {
             if (graph.graph == null)
                 return undefined;
             return { x: graph.graph.boundingBox.x, y: (-graph.graph.boundingBox.y - graph.graph.boundingBox.height), width: graph.graph.boundingBox.width, height: graph.graph.boundingBox.height };
         }
 
-        this.arrange = function (finalRect) {
+        this.arrange = function (this: any, finalRect: any) {
             InteractiveDataDisplay.CanvasPlot.prototype.arrange.call(this, finalRect);
 
             if (_svgCnt === undefined) {
@@ -91,7 +91,7 @@ class IDDSVGGraph extends SVGGraph {
 
         // This looks like it can cause problems if there's more than one IDDSVGGraph on the page. But it should go away after we switch to IDD SVGPlot.
         IDDSVGGraph.msaglPlot.prototype = new InteractiveDataDisplay.Plot;
-        InteractiveDataDisplay.register(plotID, function (jqDiv, master) { return new IDDSVGGraph.msaglPlot(that, jqDiv, master); });
+        InteractiveDataDisplay.register(plotID, function (jqDiv: any, master: any) { return new IDDSVGGraph.msaglPlot(that, jqDiv, master); });
         this.chart = InteractiveDataDisplay.asPlot(chartID);
         this.chart.aspectRatio = 1;
 
@@ -109,7 +109,7 @@ class IDDSVGGraph extends SVGGraph {
     private checkSizeChanged() {
         var rect = this.container.getBoundingClientRect();
         for (var i in rect)
-            if (rect[i] != this.containerRect[i]) {
+            if ((<any>rect)[i] != (<any>this.containerRect)[i]) {
                 InteractiveDataDisplay.updateLayouts($(this.container));
                 break;
             }
@@ -171,26 +171,36 @@ class IDDSVGGraph extends SVGGraph {
         this.hookUpMouseEvents();
     }
 
-    private gestureSource = undefined;
+    /** The IDD gesture source. Used to disable and restore IDD mouse handling. */
+    private gestureSource: any = undefined;
+    /** Disables IDD mouse handling, and stores its required reference for later use. */
     private disableIDDMouseHandling() {
         this.gestureSource = this.chart.navigation.gestureSource;
         this.chart.navigation.gestureSource = undefined;
     }
+    /** Restores IDD mouse handling, if it was disabled. */
     private restoreIDDMouseHandling() {
         if (this.gestureSource != null)
             this.chart.navigation.gestureSource = this.gestureSource;
     }
 
+    /** Prepares to take charge of mouse handling when the user is about to start editing the graph. */
     hookUpMouseEvents() {
+        // Invoke the super. It will hook up mouse events.
         super.hookUpMouseEvents();
+        // Prepare to disable IDD handling when editing.
         var that = this;
         this.container.onmousedown = function (e) {
+            // If we're in edit mode and there is an object under the mouse cursor, disable IDD handling.
             if (that.allowEditing && that.getObjectUnderMouseCursor() != null)
                 that.disableIDDMouseHandling();
+            // Pass the event to the super.
             that.onMouseDown(e);
         };
         this.container.onmouseup = function (e) {
+            // Pass the event to the super.
             that.onMouseUp(e);
+            // If we're in edit mode, make sure that IDD regains mouse control.
             if (that.allowEditing)
                 that.restoreIDDMouseHandling();
         }

@@ -6,13 +6,15 @@ importScripts("Microsoft.Msagl.js");
 importScripts("sharpkit_post.js");
 
 /** Namespace for SharpKit-generated code. */
-declare var Microsoft;
+declare var Microsoft: any;
 /** Name of the SharpKit type test function that exists in jsclr.js. */
-declare var Is;
+declare var Is: any;
 /** Variable that exists in web workers as a reference to the worker. */
-declare var self;
+declare var self: any;
 
 type SetPolylineResult = { curve: G.GCurve, sourceArrowHeadStart: G.GPoint, sourceArrowHeadEnd: G.GPoint, targetArrowHeadStart: G.GPoint, targetArrowHeadEnd: G.GPoint };
+type NodeMap = { [id: string]: { mnode: any, gnode: G.GNode } };
+type EdgeMap = { [id: string]: { medge: any, gedge: G.GEdge } };
 
 /** This class includes code to convert a GGraph to and from MSAGL shape - or, more accurately, the shape that SharpKit outputs on converting the
 MSAGL data structures. It can use this to run a layout operation (synchronously). */
@@ -54,7 +56,7 @@ class LayoutWorker {
         }
         else if (gcurve.type == "Polyline") {
             var gpolyline = <G.GPolyline>gcurve;
-            var points = [];
+            var points: any[] = [];
             for (var i = 0; i < gpolyline.points.length; i++)
                 points.push(this.getMsaglPoint(gpolyline.points[i]));
             return new Microsoft.Msagl.Core.Geometry.Curves.Polyline.ctor$$IEnumerable$1$Point(points);
@@ -70,7 +72,7 @@ class LayoutWorker {
             // In the case of a SegmentedCurve, I actually need to convert each of the sub-curves, and then build a MSAGL
             // object out of them.
             var gsegcurve = <G.GSegmentedCurve>gcurve;
-            var curves = [];
+            var curves: any[] = [];
             for (var i = 0; i < gsegcurve.segments.length; i++)
                 curves.push(this.getMsaglCurve(gsegcurve.segments[i]));
             return new Microsoft.Msagl.Core.Geometry.Curves.Curve.ctor$$List$1$ICurve(curves);
@@ -78,16 +80,16 @@ class LayoutWorker {
         return null;
     }
 
-    private addClusterToMsagl(graph: any, cluster: any, nodeMap: Object, gcluster: G.GCluster) {
+    private addClusterToMsagl(graph: any, cluster: any, nodeMap: NodeMap, gcluster: G.GCluster) {
         for (var i = 0; i < gcluster.children.length; i++) {
             var gnode = gcluster.children[i];
             this.addNodeToMsagl(graph, cluster, nodeMap, gnode);
         }
     }
 
-    private addNodeToMsagl(graph: any, rootCluster: any, nodeMap: Object, gnode: G.GNode) {
+    private addNodeToMsagl(graph: any, rootCluster: any, nodeMap: NodeMap, gnode: G.GNode) {
         var isCluster = (<G.GCluster>gnode).children !== undefined;
-        var node = null;
+        var node: any = null;
         if (isCluster) {
             node = new Microsoft.Msagl.Core.Layout.Cluster.ctor();
             rootCluster.AddCluster(node);
@@ -109,7 +111,7 @@ class LayoutWorker {
         nodeMap[gnode.id] = { mnode: node, gnode: gnode };
     }
 
-    private addEdgeToMsagl(graph: any, nodeMap: Object, edgeMap: Object, gedge: G.GEdge) {
+    private addEdgeToMsagl(graph: any, nodeMap: NodeMap, edgeMap: { [idx: string]: any }, gedge: G.GEdge) {
         var source = nodeMap[gedge.source].mnode;
         var target = nodeMap[gedge.target].mnode;
         var edge = new Microsoft.Msagl.Core.Layout.Edge.ctor$$Node$$Node(source, target);
@@ -130,7 +132,7 @@ class LayoutWorker {
     }
 
     /** Converts a GGraph to a MSAGL geometry graph. The GGraph is stored inside the MSAGL graph, so that it can be retrieved later. */
-    private getMsagl(ggraph: G.GGraph): { graph: any, settings: any, nodeMap: { [id: string]: { mnode: any, gnode: G.GNode } }, edgeMap: { [id: string]: { medge: any, gedge: G.GEdge } }, source: G.GGraph } {
+    private getMsagl(ggraph: G.GGraph): { graph: any, settings: any, nodeMap: NodeMap, edgeMap: EdgeMap, source: G.GGraph } {
         var nodeMap: { [id: string]: { mnode: any, gnode: G.GNode } } = {};
         var edgeMap: { [id: string]: { medge: any, gedge: G.GEdge } } = {};
         var graph = new Microsoft.Msagl.Core.Layout.GeometryGraph.ctor();
@@ -145,7 +147,7 @@ class LayoutWorker {
             this.addEdgeToMsagl(graph, nodeMap, edgeMap, ggraph.edges[i]);
 
         // Set the settings. Different layout algorithm support different settings.
-        var settings;
+        var settings: any;
         if (ggraph.settings.layout == G.GSettings.mdsLayout) {
             settings = new Microsoft.Msagl.Layout.MDS.MdsLayoutSettings.ctor();
         }
@@ -182,20 +184,20 @@ class LayoutWorker {
         return { graph: graph, settings: settings, nodeMap: nodeMap, edgeMap: edgeMap, source: ggraph };
     }
 
-    private getGPoint(point): G.GPoint {
+    private getGPoint(point: any): G.GPoint {
         return new G.GPoint({ x: point.get_X(), y: point.get_Y() });
     }
 
-    private getGRect(rect): G.GRect {
+    private getGRect(rect: any): G.GRect {
         return new G.GRect({ x: rect.get_Left(), y: rect.get_Bottom(), width: rect.get_Width(), height: rect.get_Height() });
     }
 
     /** Converts a MSAGL curve to a TS curve object. */
-    private getGCurve(curve): G.GCurve {
+    private getGCurve(curve: any): G.GCurve {
         var ret: G.GCurve;
         if (Is(curve, Microsoft.Msagl.Core.Geometry.Curves.Curve.ctor)) {
             // The segmented curve is a special case; each of its components need to get converted separately.
-            var segments = [];
+            var segments: G.GCurve[] = [];
             var sEn = curve.get_Segments().GetEnumerator();
             while (sEn.MoveNext())
                 segments.push(this.getGCurve(sEn.get_Current()));
@@ -205,7 +207,7 @@ class LayoutWorker {
             });
         }
         else if (Is(curve, Microsoft.Msagl.Core.Geometry.Curves.Polyline.ctor)) {
-            var points = [];
+            var points: G.GPoint[] = [];
             var pEn = curve.get_PolylinePoints().GetEnumerator();
             while (pEn.MoveNext())
                 points.push(this.getGPoint(pEn.get_Current()));
@@ -255,7 +257,7 @@ class LayoutWorker {
 
     /** Converts a MSAGL graph into a GGraph. More accurately, it gets back the GGraph that was originally used to make the MSAGL
     graph, and sets all of its geometrical elements to the ones that were calculated by MSAGL. */
-    private getGGraph(msagl): G.GGraph {
+    private getGGraph(msagl: any): G.GGraph {
         msagl.source.boundingBox = this.getGRect(msagl.graph.get_BoundingBox());
         // Get the node boundary curves and labels.
         for (var id in msagl.nodeMap) {
@@ -273,20 +275,26 @@ class LayoutWorker {
             var edge = msagl.edgeMap[id].medge;
             var gedge: G.GEdge = msagl.edgeMap[id].gedge;
             var curve = edge.get_Curve();
-            if (gedge.label != null) {
-                var labelbbox = this.getGRect(edge.get_Label().get_BoundingBox());
-                gedge.label.bounds.x = labelbbox.x;
-                gedge.label.bounds.y = labelbbox.y;
+            if (curve == null)
+                console.log("MSAGL warning: layout engine did not create a curve for the edge " + id);
+            else {
+                if (gedge.label != null) {
+                    var labelbbox = this.getGRect(edge.get_Label().get_BoundingBox());
+                    gedge.label.bounds.x = labelbbox.x;
+                    gedge.label.bounds.y = labelbbox.y;
+                }
+                if (gedge.arrowHeadAtSource != null) {
+                    gedge.arrowHeadAtSource.start = this.getGPoint(curve.get_Start());
+                    gedge.arrowHeadAtSource.end = this.getGPoint(edge.get_EdgeGeometry().get_SourceArrowhead().get_TipPosition());
+                }
+                if (gedge.arrowHeadAtTarget != null) {
+                    gedge.arrowHeadAtTarget.start = this.getGPoint(curve.get_End());
+                    gedge.arrowHeadAtTarget.end = this.getGPoint(edge.get_EdgeGeometry().get_TargetArrowhead().get_TipPosition());
+                }
+                gedge.curve = this.getGCurve(curve);
+                if (gedge.curve == null)
+                    console.log("MSAGL warning: failed to translate curve for the edge " + id);
             }
-            if (gedge.arrowHeadAtSource != null) {
-                gedge.arrowHeadAtSource.start = this.getGPoint(curve.get_Start());
-                gedge.arrowHeadAtSource.end = this.getGPoint(edge.get_EdgeGeometry().get_SourceArrowhead().get_TipPosition());
-            }
-            if (gedge.arrowHeadAtTarget != null) {
-                gedge.arrowHeadAtTarget.start = this.getGPoint(curve.get_End());
-                gedge.arrowHeadAtTarget.end = this.getGPoint(edge.get_EdgeGeometry().get_TargetArrowhead().get_TipPosition());
-            }
-            gedge.curve = this.getGCurve(curve);
         }
         return msagl.source;
     }
@@ -321,7 +329,7 @@ class LayoutWorker {
         // Get the MSAGL shape of the GGraph.
         var msagl = this.getMsagl(this.originalGraph);
         // Create an edge set.
-        var edges = [];
+        var edges: any[] = [];
         if (edgeIDs == null || edgeIDs.length == 0)
             for (var id in msagl.edgeMap)
                 edges.push(msagl.edgeMap[id].medge);
@@ -367,7 +375,7 @@ class LayoutWorker {
 }
 
 /** Handles a web worker message (which is always a JSON string representing a GGraph, for which a layout operation should be performed). */
-export function handleMessage(e): void {
+export function handleMessage(e: any): void {
     var message: M.Request = e.data;
     var ggraph = G.GGraph.ofJSON(message.graph);
     var worker = new LayoutWorker(ggraph);
@@ -375,29 +383,48 @@ export function handleMessage(e): void {
     switch (message.type) {
         case "RunLayout":
             {
-                worker.runLayout();
-                answer = { type: "RunLayout", graph: worker.finalGraph.getJSON() };
+                try {
+                    worker.runLayout();
+                    answer = { type: "RunLayout", graph: worker.finalGraph.getJSON() };
+                }
+                catch (e) {
+                    console.log("error in MSAGL.RunLayout: " + JSON.stringify(e));
+                    answer = { type: "Error", error: e };
+                }
                 break;
             }
         case "RouteEdges":
             {
                 var edges: string[] = (<M.Req_RouteEdges>message).edges;
-                worker.runEdgeRouting(edges);
-                answer = { type: "RouteEdges", graph: worker.finalGraph.getJSON(), edges: edges };
+                try {
+                    worker.runEdgeRouting(edges);
+                    answer = { type: "RouteEdges", graph: worker.finalGraph.getJSON(), edges: edges };
+                }
+                catch (e) {
+                    console.log("error in MSAGL.RouteEdges: " + JSON.stringify(e));
+                    answer = { type: "Error", error: e };
+                }
                 break;
             }
         case "SetPolyline":
             {
                 var edge: string = (<M.Req_SetPolyline>message).edge;
                 var points: G.GPoint[] = JSON.parse((<M.Req_SetPolyline>message).polyline);
-                var result = worker.setPolyline(edge, points);
-                answer = {
-                    type: "SetPolyline", edge: edge, curve: JSON.stringify(result.curve),
-                    sourceArrowHeadStart: result.sourceArrowHeadStart == null ? null : JSON.stringify(result.sourceArrowHeadStart),
-                    sourceArrowHeadEnd: result.sourceArrowHeadEnd == null ? null : JSON.stringify(result.sourceArrowHeadEnd),
-                    targetArrowHeadStart: result.targetArrowHeadStart == null ? null : JSON.stringify(result.targetArrowHeadStart),
-                    targetArrowHeadEnd: result.targetArrowHeadEnd == null ? null : JSON.stringify(result.targetArrowHeadEnd)
-                };
+                var result: SetPolylineResult = null;
+                try {
+                    result = worker.setPolyline(edge, points);
+                    answer = {
+                        type: "SetPolyline", edge: edge, curve: JSON.stringify(result.curve),
+                        sourceArrowHeadStart: result.sourceArrowHeadStart == null ? null : JSON.stringify(result.sourceArrowHeadStart),
+                        sourceArrowHeadEnd: result.sourceArrowHeadEnd == null ? null : JSON.stringify(result.sourceArrowHeadEnd),
+                        targetArrowHeadStart: result.targetArrowHeadStart == null ? null : JSON.stringify(result.targetArrowHeadStart),
+                        targetArrowHeadEnd: result.targetArrowHeadEnd == null ? null : JSON.stringify(result.targetArrowHeadEnd)
+                    };
+                }
+                catch (e) {
+                    console.log("error in MSAGL.SetPolyline: " + JSON.stringify(e));
+                    answer = { type: "Error", error: e };
+                }
                 break;
             }
     }

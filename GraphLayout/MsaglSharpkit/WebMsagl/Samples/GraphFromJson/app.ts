@@ -42,6 +42,6 @@ document.getElementById("parseButton").onclick = parseJsonClicked;
 document.getElementById("loadButton").onclick = loadClicked;
 document.getElementById("routeButton").onclick = routeEdgesClicked;
 
-require(["text!Samples/GraphFromJson/samplegraph.json"], (sample) => {
+require(["text!Samples/GraphFromJson/samplegraph.json"], (sample: string) => {
     document.getElementById("jsonInput").textContent = sample;
 });

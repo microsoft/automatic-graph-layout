@@ -10,8 +10,8 @@ var pointsControl = <HTMLInputElement>document.getElementById("points");
 var runButton = <HTMLButtonElement>document.getElementById("runButton");
 var saveButton = <HTMLButtonElement>document.getElementById("saveButton");
 
-var radius = null;
-var points = null;
+var radius = 0;
+var points = 0;
 
 function customDrawLabel(svg: Element, parent: Element, label: G.GLabel, owner: G.IElement) {
     if (label.content != "*")
