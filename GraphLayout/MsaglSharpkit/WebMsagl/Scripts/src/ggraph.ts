@@ -138,7 +138,7 @@ export interface ICurve {
     getStart(): GPoint;
     getEnd(): GPoint;
     getBoundingBox(): GRect;
-    setCenter(p: GPoint);
+    setCenter(p: GPoint): void;
 }
 
 /** A GCurve describes a curve. */
@@ -151,7 +151,7 @@ export abstract class GCurve implements ICurve {
         this.type = type;
     }
     abstract getCenter(): GPoint;
-    abstract setCenter(p: GPoint);
+    abstract setCenter(p: GPoint): void;
     abstract getStart(): GPoint;
     abstract getEnd(): GPoint;
     abstract getBoundingBox(): GRect;
@@ -816,40 +816,59 @@ class GEdgeInternal {
     polyline: GPoint[];
 }
 
+/** A MoveElementToken stores the information needed to perform dragging operations on a geometry element. */
 class MoveElementToken {
 }
 
+/** This token stores the information needed to move a node: a reference to the node, and the original
+coordinates of the node. */
 class MoveNodeToken extends MoveElementToken {
     public node: GNode;
     public originalBoundsCenter: GPoint;
-    public originalLabelCenter: GPoint;
 }
 
+/** This token stores the information needed to move an edge label: a reference to the label, and the original
+coordinates of the label. */
 class MoveEdgeLabelToken extends MoveElementToken {
     public label: GLabel;
     public originalLabelCenter: GPoint;
 }
 
+/** This token stores the information needed to move an edge control point: a reference to the edge, the original
+polyline, and the point on the original polyline that's being edited. */
 class MoveEdgeToken extends MoveElementToken {
     public edge: GEdge;
-    public originalPoint: GPoint;
     public originalPolyline: GPoint[];
+    public originalPoint: GPoint;
 }
 
+/** This class is a simple implementation of a callback set. Note that there are libraries to do this, e.g. jQuery,
+but I'd rather not acquire a dependency on jQuery just for this. */
 export class CallbackSet<T> {
     private callbacks: ((par: T) => void)[] = [];
 
+    /** Adds a callback to the list. If you want to be able to remove the callback later, you'll need to store
+    a reference to it. */
     public add(callback: (par: T) => void) {
+        if (callback == null)
+            return;
         this.callbacks.push(callback);
     }
+    /** Removes a callback from the list. */
     public remove(callback: (par: T) => void) {
+        if (callback == null)
+            return;
         var idx = this.callbacks.indexOf(callback);
         if (idx >= 0)
             this.callbacks.splice(idx);
     }
+    /** Fires all of the callbacks, with the given parameter. */
     public fire(par?: T) {
         for (var i = 0; i < this.callbacks.length; i++)
             this.callbacks[i](par);
+    }
+    public count(): number {
+        return this.callbacks.length;
     }
 }
 
@@ -911,6 +930,8 @@ export class GGraph implements IGraph {
             throw new Error("Undefined node " + edge.source);
         if (this.nodesMap[edge.target] == null)
             throw new Error("Undefined node " + edge.target);
+        if (this.edgesMap[edge.id] != null)
+            throw new Error("Edge " + edge.id + " already exists");
         this.edgesMap[edge.id] = <GEdgeInternal>{ edge: edge, polyline: null };
         this.edges.push(edge);
         if (edge.source == edge.target)
@@ -1215,6 +1236,8 @@ export class GGraph implements IGraph {
         }
     }
 
+    /** Callbacks you can set to be notified when a layout operation is starting. */
+    public layoutStartedCallbacks: CallbackSet<void> = new CallbackSet<void>();
     /** Callbacks you can set to be notified when a layout operation is complete. */
     public layoutCallbacks: CallbackSet<void> = new CallbackSet<void>();
     /** Callbacks you can set to be notified when an edge routing operation is complete. The set of routed edges is passed
@@ -1238,6 +1261,7 @@ export class GGraph implements IGraph {
     public beginLayoutGraph(): void {
         this.ensureWorkerReady();
         this.setWorking(true);
+        this.layoutStartedCallbacks.fire();
         // Serialize the graph.
         var serialisedGraph = this.getJSON();
         // Send the worker the serialized graph to layout.
@@ -1256,7 +1280,8 @@ export class GGraph implements IGraph {
         this.worker.postMessage(msg);
     }
 
-    public beginRebuildEdge(edge: string): void {
+    /** Starts generating an edge from its current control points. The edge routing callback will be invoked when the operation is done. */
+    public beginRebuildEdgeCurve(edge: string): void {
         this.ensureWorkerReady();
         this.setWorking(true);
         var serialisedGraph = this.getJSON();
@@ -1265,10 +1290,15 @@ export class GGraph implements IGraph {
         this.worker.postMessage(msg);
     }
 
+    /** A list of the current move tokens. Note that currently only one object can be moved at the same time. This
+    may change in the future. */
     private moveTokens: MoveElementToken[] = [];
 
-    private getNearestControlPoint(edge: GEdge, point: GPoint): GPoint {
+    /** Returns the control point of the given edge that's within an editing circle radius from the given point. If more than
+    one such points exist, the one which has the closest centre is returned. If no such point exists, returns null. */
+    public getControlPointAt(edge: GEdge, point: GPoint): GPoint {
         var points = this.getPolyline(edge.id);
+        // Iterate over points, comparing the squared distance.
         var ret = points[0];
         var dret = ret.dist2(point);
         for (var i = 1; i < points.length; i++) {
@@ -1278,6 +1308,7 @@ export class GGraph implements IGraph {
                 dret = d;
             }
         }
+        // Compare the closest distance with the edge edit circle radius.
         if (dret > GGraph.EdgeEditCircleRadius * GGraph.EdgeEditCircleRadius)
             ret = null;
         return ret;
@@ -1288,14 +1319,16 @@ export class GGraph implements IGraph {
     move elements between selections (in that case, call endMoveElements and then select them all again). */
     public startMoveElement(el: IElement, mousePoint: GPoint) {
         if (el instanceof GNode) {
+            // In the case of nodes, I need to make a note of the original center location of the node.
             var node = <GNode>el;
             var mnt = new MoveNodeToken();
             mnt.node = node;
             mnt.originalBoundsCenter = node.boundaryCurve.getCenter();
-            mnt.originalLabelCenter = node.label == null ? null : node.label.bounds.getCenter();
             this.moveTokens.push(mnt);
         }
         else if (el instanceof GLabel) {
+            // In the case of labels (which means edge labels, as node labels cannot be moved independently), I need to
+            // make a note of the original center location of the label.
             var label = <GLabel>el;
             var melt = new MoveEdgeLabelToken();
             melt.label = label;
@@ -1303,8 +1336,10 @@ export class GGraph implements IGraph {
             this.moveTokens.push(melt);
         }
         else if (el instanceof GEdge) {
+            // In the case of edges (which means an edge control point, as edges cannot be moved as a whole), I need to
+            // make a note of the original polyline, and the point of that polyline that's being moved.
             var edge = <GEdge>el;
-            var point = this.getNearestControlPoint(edge, mousePoint);
+            var point = this.getControlPointAt(edge, mousePoint);
             if (point != null) {
                 var met = new MoveEdgeToken();
                 met.edge = edge;
@@ -1320,76 +1355,107 @@ export class GGraph implements IGraph {
         for (var i in this.moveTokens) {
             var token = this.moveTokens[i];
             if (token instanceof MoveNodeToken) {
+                // If I'm moving a node, I'll need to apply the delta to the original center, and set it as the
+                // new center.
                 var ntoken = <MoveNodeToken>token;
                 var newBoundaryCenter = ntoken.originalBoundsCenter.add(delta);
                 ntoken.node.boundaryCurve.setCenter(newBoundaryCenter);
-                var newLabelCenter = ntoken.originalLabelCenter.add(delta);
-                ntoken.node.label.bounds.setCenter(newLabelCenter);
+                // The label too, if there is one.
+                if (ntoken.node.label != null) {
+                    var newLabelCenter = ntoken.originalBoundsCenter.add(delta);
+                    ntoken.node.label.bounds.setCenter(newLabelCenter);
+                }
+                // Having moved a node, edge routing is required.
+                this.checkRouteEdges();
             }
             else if (token instanceof MoveEdgeLabelToken) {
+                // If I'm moving an edge, I'll need to apply the delta to the original center, and set it as the
+                // new center.
                 var ltoken = <MoveEdgeLabelToken>token;
                 var newBoundsCenter = ltoken.originalLabelCenter.add(delta);
                 ltoken.label.bounds.setCenter(newBoundsCenter);
             }
             else if (token instanceof MoveEdgeToken) {
+                // If I'm moving a control point, I'll need to apply the delta to the original control point, and
+                // then replace it in the original polyline. The resulting polyline is the new polyline for the
+                // edge.
                 var etoken = <MoveEdgeToken>token;
                 var newPoint = etoken.originalPoint.add(delta);
                 for (var j = 0; j < etoken.originalPolyline.length; j++)
                     if (etoken.originalPolyline[j].equals(etoken.originalPoint)) {
                         var edgeInternal = this.edgesMap[etoken.edge.id];
                         edgeInternal.polyline = etoken.originalPolyline.map((p, k) => k == j ? newPoint : p);
+                        // Having changed the polyline, I'll need to rebuild the actual edge curve.
                         this.checkRebuildEdge(etoken.edge.id);
                         break;
                     }
             }
         }
-        this.checkRouteEdges();
     }
 
+    /** The callback that's waiting to attempt to start edge routing again, if it could not be started immediately. */
     private delayCheckRouteEdges: () => void = null;
+    /** Attempts to begin edge routing on the given edge set. If no edge set is provided, gets the edges that are
+    outdated (i.e. the edges that are being affected by current node move operations). Edge routing cannot be
+    started if the worker is already busy; in this case, a new attempt to start will be made when the worker becomes
+    free again. Multiple calls to this function while an edge routing operation is pending will reset the request. */
     private checkRouteEdges(edgeSet?: string[]) {
-        if (this.delayCheckRouteEdges != null)
-            this.workStoppedCallbacks.remove(this.delayCheckRouteEdges);
-        this.delayCheckRouteEdges = null;
         var edges: string[] = edgeSet == null ? this.getOutdatedEdges() : edgeSet;
         if (edges.length > 0) {
+            // Remove any already existing callback.
+            if (this.delayCheckRouteEdges != null)
+                this.workStoppedCallbacks.remove(this.delayCheckRouteEdges);
+            this.delayCheckRouteEdges = null;
             if (this.working) {
+                // The worker is busy. Register a callback to try again.
                 var that = this;
                 this.delayCheckRouteEdges = () => { that.checkRouteEdges(edges); };
                 this.workStoppedCallbacks.add(this.delayCheckRouteEdges);
             }
             else
+                // The worker is available. Start routing.
                 this.beginEdgeRouting(edges);
         }
     }
 
+    /** The callback that's waiting to attempt to start edge rebuild again, if it could not be started immediately. */
     private delayCheckRebuildEdge: () => void = null;
+    /** Attempts to begin rebuilding the given edge from its polyline. Edge rebuild cannot be started if the worker 
+    is already busy; in this case, a new attempt to start the rebuild will be made when the worker becomes free again.
+    Multiple calls to this function while a rebuild is pending will reset the request. */
     private checkRebuildEdge(edge: string) {
         if (this.delayCheckRebuildEdge != null)
             this.workStoppedCallbacks.remove(this.delayCheckRebuildEdge);
         this.delayCheckRebuildEdge = null;
         if (this.working) {
+            // The worker is busy. Register a callback to try again.
             var that = this;
             this.delayCheckRebuildEdge = () => { that.checkRebuildEdge(edge); };
             this.workStoppedCallbacks.add(this.delayCheckRebuildEdge);
         }
         else
-            this.beginRebuildEdge(edge);
+            // The worker is available. Start routing.
+            this.beginRebuildEdgeCurve(edge);
     }
 
-    /** Build an array of all the edges that were affected by the move. */
+    /** Returns an array of all the edges that are affected by node move operations. */
     private getOutdatedEdges(): string[] {
+        // Prepare a dictionary of affected edges. By doing it this way, I avoid duplicate entries in case two
+        // or more nodes are being moved.
         var affectedEdges: { [id: string]: boolean } = {};
         for (var t in this.moveTokens) {
             var token = this.moveTokens[t];
             if (token instanceof MoveNodeToken) {
+                // Get all of the edges that connect this node.
                 var ntoken = <MoveNodeToken>token;
                 var nEdges = this.getInEdges(ntoken.node.id).concat(this.getOutEdges(ntoken.node.id)).concat(this.getSelfEdges(ntoken.node.id));
+                // Add them to the dictionary.
                 for (var edge in nEdges)
                     affectedEdges[nEdges[edge]] = true;
             }
         }
-        var edges = [];
+        // Convert the dictionary to an array.
+        var edges: string[] = [];
         for (var e in affectedEdges)
             edges.push(e);
         return edges;
@@ -1401,31 +1467,50 @@ export class GGraph implements IGraph {
         this.moveTokens = [];
     }
 
+    /** If the triangle formed by three vertices has an area that's less than this, it's okay to discard the middle
+    vertex for the purpose of building an edge's polyline. */
     private static ColinearityEpsilon: number = 50.00;
+    /** Simplifies a polyline by removing vertexes that are colinear (or nearly so). */
     private removeColinearVertices(polyline: GPoint[]) {
         for (var i = 1; i < polyline.length - 2; i++) {
+            // Get the (signed, doubled) triangle area and compare it with an epsilon.
             var a = GPoint.signedDoubledTriangleArea(polyline[i - 1], polyline[i], polyline[i + 1]);
+            // If it's less than that, remove the vertex. This is an approximation, but it's good enough for
+            // the purpose of not producing a polyline with many useless control points.
             if (a >= -GGraph.ColinearityEpsilon && a <= GGraph.ColinearityEpsilon)
                 polyline.splice(i--, 1);
         }
     }
 
+    /** Creates a polyline for an edge that doesn't have one. Note: generally speaking, this is *not* a round-trip
+    transformation. This is fine. In practice, the polyline will be composed by the start and end points of every
+    segment of the curve, if it is segmented. If it isn't, it'll just be the start and end points. */
     private makePolyline(edge: GEdge): GPoint[] {
-        var points = [];
+        var points: GPoint[] = [];
+        // Push the center of the source node.
         var source = this.nodesMap[edge.source];
         points.push(source.node.boundaryCurve.getCenter());
-        if (edge.curve.type == "SegmentedCurve") {
+        // If the curve is segmented...
+        if (edge.curve != null && edge.curve.type == "SegmentedCurve") {
+            // Push the start of the curve (note that, in general, this is not the same as the center of the
+            // source node, due to trimming.
             var scurve = <GSegmentedCurve>edge.curve;
             points.push(scurve.getStart());
+            // Push the end point of each segment (again, the end point of the last segment will not be the
+            // same as the center of the target node, due to trimming).
             for (var i = 0; i < scurve.segments.length; i++)
                 points.push(scurve.segments[i].getEnd());
         }
+        // Push the center of the target node.
         var target = this.nodesMap[edge.target];
         points.push(target.node.boundaryCurve.getCenter());
+        // At this point, the polyline often has a lot of points due to edge routing algorithms producing
+        // segmented curves with lots of segments. Simplify the polyline.
         this.removeColinearVertices(points);
         return points;
     }
 
+    /** Returns an edge's polyline. Will construct a polyline if not available already. */
     public getPolyline(edgeID: string): GPoint[] {
         var edgeInternal: GEdgeInternal = this.edgesMap[edgeID];
         if (edgeInternal.polyline == null)
@@ -1433,8 +1518,13 @@ export class GGraph implements IGraph {
         return edgeInternal.polyline;
     }
 
-    public addPolylineCorner(edgeID: string, point: GPoint) {
+    /** Adds a control point for an edge, at the given point. The control point will be placed, in the polyline order,
+    between the closest existing control point and the one opposite that. If there is no control point opposing the
+    closest one, it'll be placed right after the closest one. If the closest one is the last one, it'll be placed
+    right before. */
+    public addEdgeControlPoint(edgeID: string, point: GPoint) {
         var edgeInternal: GEdgeInternal = this.edgesMap[edgeID];
+        // Find the closest control point.
         var iclosest = 0;
         var dclosest = edgeInternal.polyline[0].dist2(point);
         for (var i = 0; i < edgeInternal.polyline.length; i++) {
@@ -1444,24 +1534,37 @@ export class GGraph implements IGraph {
                 dclosest = d;
             }
         }
+        // If it's the last one, just put it before (i.e. decrease "iclosest", which at this point will mean "the
+        // index of the control point right before the new one").
         if (iclosest == edgeInternal.polyline.length - 1)
             iclosest--;
         else if (iclosest > 0) {
+            // If it's neither the last one nor the first one, I need to decide which control point, between the next
+            // and the previous, can be considered the "opposite" one. I get the distance from the segment made by the
+            // closest and the previous, as a parameter on the segment. If it is far from the extremes, i.e. it is
+            // somewhere in the middle, that's the one.
             var par = point.closestParameter(edgeInternal.polyline[iclosest - 1], edgeInternal.polyline[iclosest]);
             if (par > 0.1 && par < 0.9)
                 iclosest--;
         }
+        // Put the new point in the polyline, at the specified position.
         edgeInternal.polyline.splice(iclosest + 1, 0, point);
-        this.beginRebuildEdge(edgeID);
+        // Begin rebuilding the curve.
+        this.beginRebuildEdgeCurve(edgeID);
     }
 
-    public delPolylineCorner(edgeID: string, point: GPoint) {
+    /** Removes the specified control point from the edge. The point should be the exact location of an existing
+    control point. You cannot remove the first or last control points. */
+    public delEdgeControlPoint(edgeID: string, point: GPoint) {
         var edgeInternal: GEdgeInternal = this.edgesMap[edgeID];
-        for (var i = 0; i < edgeInternal.polyline.length; i++)
+        // Search for the index of the control point in the polyline.
+        for (var i = 1; i < edgeInternal.polyline.length - 1; i++)
             if (edgeInternal.polyline[i].equals(point)) {
+                // Remove it.
                 edgeInternal.polyline.splice(i, 1);
+                // Begin rebuilding the curve.
+                this.beginRebuildEdgeCurve(edgeID);
                 break;
             }
-        this.beginRebuildEdge(edgeID);
     }
 }

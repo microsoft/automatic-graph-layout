@@ -11,7 +11,7 @@ var mousePointText = document.getElementById("mousePoint");
 var objectUnderCursorText = document.getElementById("objectUnderCursor");
 var dragObjectText = document.getElementById("dragObject");
 
-function appendStatus(text) {
+function appendStatus(text: string) {
     var p = document.createElement("p");
     p.appendChild(document.createTextNode(text));
     statusText.appendChild(p);
@@ -29,7 +29,7 @@ function makeInitialGraph() {
     graph.addNode(new G.GNode({ id: "node3", label: "Node 3", fill: "white" }));
 
     graph.addEdge(new G.GEdge({ id: "edge13", label: "Edge 1-3", source: "node1", target: "node3" }));
-    graph.addEdge(new G.GEdge({ id: "edge31", label: "Edge 3-1", source: "node3", target: "node1" })),
+    graph.addEdge(new G.GEdge({ id: "edge31", label: "Edge 3-1", source: "node3", target: "node1" }));
     graph.addEdge(new G.GEdge({ id: "edge23", label: "Edge 2-3", source: "node2", target: "node3" }));
 
     graph.createNodeBoundariesForSVGInContainer(graphView);

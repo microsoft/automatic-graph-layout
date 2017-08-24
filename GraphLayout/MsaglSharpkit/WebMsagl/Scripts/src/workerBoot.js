@@ -9,7 +9,7 @@ stores the message, so that it can be processed after the AMD modules have been 
 and replaced with a callback that goes directly to the function that does the job. */
 
 // Load RequireJS.
-importScripts("/Lib/requirejs/require.js");
+importScripts("https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js");
 
 /** A queue of messages that have been stored by the temporary callback. */
 var messages = [];
