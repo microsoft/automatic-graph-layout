@@ -428,14 +428,20 @@ namespace Microsoft.Msagl.Drawing {
             if (node != null) {
                 var drawingNode = node.Node;
                 var w = drawingNode.Attr.LineWidth;
-                decoratorRemovalsDict[node] = (() => drawingNode.Attr.LineWidth = w);
+                if (!decoratorRemovalsDict.ContainsKey(node))
+                {
+                    decoratorRemovalsDict[node] = (() => drawingNode.Attr.LineWidth = w);
+                }
                 drawingNode.Attr.LineWidth = (int) Math.Max(viewer.LineThicknessForEditing, w*2);
             } else {
                 var edge = obj as IViewerEdge;
                 if (edge != null) {
                     var drawingEdge = edge.Edge;
                     var w = drawingEdge.Attr.LineWidth;
-                    decoratorRemovalsDict[edge] = (() => drawingEdge.Attr.LineWidth = w);
+                    if (!decoratorRemovalsDict.ContainsKey(edge))
+                    {
+                        decoratorRemovalsDict[edge] = (() => drawingEdge.Attr.LineWidth = w);
+                    }
                     drawingEdge.Attr.LineWidth = (int) Math.Max(viewer.LineThicknessForEditing, w*2);
                 }
             }
