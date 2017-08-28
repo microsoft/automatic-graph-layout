@@ -15,7 +15,7 @@ This .NET asssembly contains the core layout functionality. Use this library if 
 **The Drawing module (Microsoft.MSAGL.Drawing.dll)** - [NuGet package](https://www.nuget.org/packages/Microsoft.Msagl.Drawing/)
 The Definitions of different drawing attributes like colors, line styles, etc. It also contains definitions of a node class, an edge class, and a graph class. By using these classes a user can create a graph object and use it later for layout, and rendering.
 
-**A Viewer control** (Microsoft.MSAGL.GraphViewerGDIGraph.dll)** - [NuGet package](https://www.nuget.org/packages/Microsoft.Msagl.GraphViewerGDI/)
+**A Viewer control (Microsoft.MSAGL.GraphViewerGDIGraph.dll)** - [NuGet package](https://www.nuget.org/packages/Microsoft.Msagl.GraphViewerGDI/)
 The viewer control lets you visualize graphs and has and some other rendering functionality. Key features: (1) Pan and Zoom (2) Navigate Forward and Backward (3) tooltips and highlighting on graph entities (4) Search for and focus on graph entities.
 
 # Code Samples
