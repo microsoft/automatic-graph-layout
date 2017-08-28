@@ -12,6 +12,7 @@ var stopButton = <HTMLButtonElement>document.getElementById("stopButton");
 var working = document.getElementById("working");
 var elapsed = document.getElementById("elapsed");
 var edgeRoutingSelect = <HTMLSelectElement>document.getElementById("edgeRoutingSelect");
+var layeredLayoutCheckBox = <HTMLInputElement>document.getElementById("layeredLayoutCheckBox");
 
 function setGUIToRunning() {
     working.style.display = "inline";
@@ -38,6 +39,7 @@ function run(nodeCount: number, edgeCount: number) {
             id: "edge" + i, source: "node" + Math.floor(Math.random() * nodeCount + 1),
             target: "node" + Math.floor(Math.random() * nodeCount + 1)
         }));
+    graph.settings.layout = layeredLayoutCheckBox.checked ? G.GSettings.sugiyamaLayout : G.GSettings.mdsLayout;
 
     var startTime = new Date();
     graph.createNodeBoundariesForSVGInContainer(graphView);
