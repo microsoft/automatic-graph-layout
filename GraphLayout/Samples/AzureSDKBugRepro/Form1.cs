@@ -52,14 +52,15 @@ namespace SameLayerSample
                 }
             }
 
-            // This one throws index out of bounds exception on my project which uses GeometryGraph. Here I got argument null exception because .GeometryNode parameter on the FindNode does not have valid GeometryNode yet. Is there a way that I can retreive it?
-            // sugiyamaSettings.AddUpDownVerticalConstraints(path.Select(nodeId => graph.FindNode(nodeId).GeometryNode).ToArray());
+            graph.CreateGeometryGraph();
 
-            // This one does not throw in my project which uses GeometryGraph, however in this sample it throws argument null exception as well because of the same issue above.
-            /*for (int i = 0; i < path.Count - 1; i++)
+            // This one throws index out of bounds exception
+            //sugiyamaSettings.AddUpDownVerticalConstraints(path.Select(nodeId => graph.FindNode(nodeId).GeometryNode).ToArray());
+            
+            for (int i = 0; i < path.Count - 1; i++)
             {
                 sugiyamaSettings.AddUpDownConstraint(graph.FindNode(path[i]).GeometryNode, graph.FindNode(path[i + 1]).GeometryNode);
-            }*/
+            }
 
             gViewer.Graph = graph;
 
