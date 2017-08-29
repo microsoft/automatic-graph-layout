@@ -86,6 +86,15 @@ The ideas, design, and the mathematics of GraphMaps are described in [this paper
 ![](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/msagl-c34826a5e3af4cecbd8165fabc947b36.jpg)
 ![](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/msagl-44a7b11774a54cab92a3f75a9501601b.png)
 
+# MSAGL in JavaScript
+
+WebMSAGL is a version of MSAGL that was transcompiled to JavaScript with [SharpKit] (https://github.com/SharpKit/SharpKit/), plus a [TypeScript] (https://www.typescriptlang.org/) wrapper and rendering/interaction layer that provides a friendly TypeScript API. You can create a graph either programmatically or from a JSON object, have MSAGL create a layout for it, and then render it to an HTML Canvas or to an SVG block. All layout operations are run in a web worker, ensuring that your application remains responsive while computation is taking place. Limited interactivity is also supported.
+
+## Using WebMSAGL
+* open WebMsagl.sln and build the solution,
+* set index.html from any of the sample folders as the starting page,
+* run WebMsagl.
+
 
 # Code of Conduct
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
