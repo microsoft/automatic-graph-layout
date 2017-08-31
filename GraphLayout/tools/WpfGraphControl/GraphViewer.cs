@@ -443,6 +443,15 @@ namespace Microsoft.Msagl.WpfGraphControl {
             var scale = CurrentScale;
             SetTransform(scale, screenPoint.X - scale * sourcePoint.X, screenPoint.Y + scale * sourcePoint.Y);
         }
+        /// <summary>
+        /// Moves the point to the center of the viewport
+        /// </summary>
+        /// <param name="sourcePoint"></param>
+        public void PointToCenter(Point sourcePoint)
+        {
+            WpfPoint center = new WpfPoint(_graphCanvas.RenderSize.Width / 2, _graphCanvas.RenderSize.Height / 2);
+            SetTransformFromTwoPoints(center, sourcePoint);
+        }
 
         void Pan(MouseEventArgs e) {
             if (UnderLayout)
