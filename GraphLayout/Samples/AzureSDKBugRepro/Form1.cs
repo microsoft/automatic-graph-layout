@@ -30,7 +30,7 @@ namespace SameLayerSample
             var json = System.IO.File.ReadAllText("fluentGraph.json");
             var typeName = "com.microsoft.azure.management.redis.RedisCache";
 
-            var nodes = JsonConvert.DeserializeObject<List<FluentNode>>(json); 
+            var nodes = JsonConvert.DeserializeObject<List<FluentNode>>(json);
             foreach (var node in nodes)
             {
                 if (node is FluentInterface ||
@@ -57,23 +57,22 @@ namespace SameLayerSample
 
             graph.CreateGeometryGraph();
 
-            foreach(var n in graph.Nodes)
+            foreach (var n in graph.Nodes)
             {
                 CreateBoundaryCurve(n);
             }
 
             // This one throws index out of bounds exception
             sugiyamaSettings.AddUpDownVerticalConstraints(path.Select(nodeId => graph.FindNode(nodeId).GeometryNode).ToArray());
-            
+
             for (int i = 0; i < path.Count - 1; i++)
             {
-                sugiyamaSettings.AddUpDownConstraint(graph.FindNode(path[i]).GeometryNode, graph.FindNode(path[i + 1]).GeometryNode);
                 var u = graph.FindNode(path[i]);
                 var v = graph.FindNode(path[i + 1]);
                 foreach (var e in u.OutEdges)
                 {
                     if (e.TargetNode == v)
-                        e.Attr.Color =Microsoft.Msagl.Drawing. Color.Red;
+                        e.Attr.Color = Microsoft.Msagl.Drawing.Color.Red;
                 }
             }
             LayoutHelpers.CalculateLayout(graph.GeometryGraph, sugiyamaSettings, new Microsoft.Msagl.Core.CancelToken());
@@ -97,7 +96,8 @@ namespace SameLayerSample
         private static void AddNode(Graph graph, FluentNode node)
         {
             var n = graph.AddNode(node.Id);
-            n.LabelText = node.Id.Substring(0, Math.Min(node.Id.Length, 20))+ graph.NodeCount;
+            var labelString = (((FluentUINode)node).Type == "method") ? ((FluentUINode)node).Name : node.Id.Split('.').Last();
+            n.LabelText = $"{labelString} {graph.NodeCount}";
         }
     }
 }
