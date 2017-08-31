@@ -96,7 +96,7 @@ namespace SameLayerSample
         private static void AddNode(Graph graph, FluentNode node)
         {
             var n = graph.AddNode(node.Id);
-            var labelString = (((FluentUINode)node).Type == "method") ? ((FluentUINode)node).Name : node.Id.Split('.').Last();
+            var labelString = (((FluentUINode)node).Type == "method") ? ((FluentUINode)node).Name : (node.Id.Split('.').Last() + " Stage");
             n.LabelText = $"{labelString} {graph.NodeCount}";
         }
     }
