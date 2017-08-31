@@ -235,10 +235,11 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                     Console.WriteLine("rail's A" + rail.A);
                     Console.WriteLine("rail's B" + rail.B);
                     return;
+                    /*
                     if (clickCounter.UpCount == clickCounter.DownCount && clickCounter.UpCount == 2)
                         HandleDoubleClickForRail(rail);
                     else if (clickCounter.UpCount == clickCounter.DownCount && clickCounter.UpCount == 1)
-                        ToggleSelectRailUnderCursor();
+                        ToggleSelectRailUnderCursor();*/
                 }
                 else
                 {
@@ -2707,7 +2708,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             foreach (var node in _drawingGraph.Nodes)
             {
                 //jyoti - for the case of include node position from file
-                if (!_lgLayoutSettings._geometryGraph.Nodes.Contains(node.GeometryNode)) return;
+                if (!_lgLayoutSettings.lgGeometryGraph.Nodes.Contains(node.GeometryNode)) return;
 
 
                 node.IsVisible = true;

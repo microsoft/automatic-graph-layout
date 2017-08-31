@@ -314,9 +314,6 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
 #endif
             // init some things
             InitNodePositionsAndBoxes(Settings, _nodes, out nodePositions, out nodeSizes);
-
-            if (!(Settings.InitialScaling == InitialScaling.None))
-                DoInitialScaling();
             InitStressWithGraph(StressSolver, _nodes, nodePositions);
 #if DEBUG
             //debugging the node movements

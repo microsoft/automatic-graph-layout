@@ -487,7 +487,6 @@ namespace OverlapGraphExperiments
             settings.StopOnMaxIterat = false;
             settings.NodeSeparation = 4;
             settings.RandomizationSeed = 21;
-            settings.InitialScaling=InitialScaling.None;
             settings.WorkInInches = false;
             settings.RandomizeAllPointsOnStart = false;
             settings.RandomizationSeed = 10;

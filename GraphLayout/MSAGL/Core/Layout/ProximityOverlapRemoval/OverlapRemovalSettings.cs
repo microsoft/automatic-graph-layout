@@ -18,8 +18,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
         bool stopOnMaxIterat = false;
         double nodeSeparation = 4;
         int randomizationSeed = 1;
-        InitialScaling initialScaling = InitialScaling.None;
-         bool workInInches;
+        bool workInInches;
 
         /// <summary>
         /// Constructor.
@@ -82,15 +81,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             get { return randomizeAllPointsOnStart; }
             set { randomizeAllPointsOnStart = value; }
         }
-
-        /// <summary>
-        /// Initial Scaling method is used if there is at least one edge.
-        /// </summary>
-        public InitialScaling InitialScaling {
-            get { return initialScaling; }
-            set { initialScaling = value; }
-        }
-
+        
         /// <summary>
         /// Divide the coordinates by 72(Pixels) to work in inches. At the end this transformation is reverted again.
         /// </summary>
@@ -120,7 +111,6 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             settings.NodeSeparation = NodeSeparation;
             settings.RandomizationSeed = RandomizationSeed;
             settings.RandomizeAllPointsOnStart = randomizeAllPointsOnStart;
-            settings.InitialScaling = this.InitialScaling;
             settings.WorkInInches = this.WorkInInches;
        
             settings.StressSettings=new StressMajorizationSettings();

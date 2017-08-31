@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.10
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Msagl", "MSAGL\Msagl.csproj", "{415D3E3F-7105-46C1-84D2-7ECB34213D92}"
 EndProject
@@ -1150,8 +1150,8 @@ Global
 		{0744500E-DBF3-435B-B7D9-085868B8C7A9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{0744500E-DBF3-435B-B7D9-085868B8C7A9}.Debug|x64.ActiveCfg = Debug|x64
 		{0744500E-DBF3-435B-B7D9-085868B8C7A9}.Debug|x64.Build.0 = Debug|x64
-		{0744500E-DBF3-435B-B7D9-085868B8C7A9}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{0744500E-DBF3-435B-B7D9-085868B8C7A9}.Debug|x86.Build.0 = Debug|Any CPU
+		{0744500E-DBF3-435B-B7D9-085868B8C7A9}.Debug|x86.ActiveCfg = Debug|x86
+		{0744500E-DBF3-435B-B7D9-085868B8C7A9}.Debug|x86.Build.0 = Debug|x86
 		{0744500E-DBF3-435B-B7D9-085868B8C7A9}.DebugDevTrace|Any CPU.ActiveCfg = Debug|Any CPU
 		{0744500E-DBF3-435B-B7D9-085868B8C7A9}.DebugDevTrace|Any CPU.Build.0 = Debug|Any CPU
 		{0744500E-DBF3-435B-B7D9-085868B8C7A9}.DebugDevTrace|Itanium.ActiveCfg = Debug|Any CPU
@@ -1180,8 +1180,8 @@ Global
 		{6827BA1E-0922-4223-8A5A-3E2194E229D2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{6827BA1E-0922-4223-8A5A-3E2194E229D2}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{6827BA1E-0922-4223-8A5A-3E2194E229D2}.Debug|x64.Build.0 = Debug|Any CPU
-		{6827BA1E-0922-4223-8A5A-3E2194E229D2}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{6827BA1E-0922-4223-8A5A-3E2194E229D2}.Debug|x86.Build.0 = Debug|Any CPU
+		{6827BA1E-0922-4223-8A5A-3E2194E229D2}.Debug|x86.ActiveCfg = Debug|x86
+		{6827BA1E-0922-4223-8A5A-3E2194E229D2}.Debug|x86.Build.0 = Debug|x86
 		{6827BA1E-0922-4223-8A5A-3E2194E229D2}.DebugDevTrace|Any CPU.ActiveCfg = Debug|Any CPU
 		{6827BA1E-0922-4223-8A5A-3E2194E229D2}.DebugDevTrace|Any CPU.Build.0 = Debug|Any CPU
 		{6827BA1E-0922-4223-8A5A-3E2194E229D2}.DebugDevTrace|Itanium.ActiveCfg = Debug|Any CPU

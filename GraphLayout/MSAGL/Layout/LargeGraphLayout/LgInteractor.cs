@@ -947,7 +947,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             Boolean loaded = LoadNodeLocationsFromFile();
             _mainGeometryGraph.UpdateBoundingBox();
-            _lgLayoutSettings._geometryGraph = _mainGeometryGraph;
+            _lgLayoutSettings.lgGeometryGraph = _mainGeometryGraph;
 
             Console.WriteLine("Nodes = " + _mainGeometryGraph.Nodes.Count + "Edges = " + _mainGeometryGraph.Edges.Count);
 
@@ -1513,7 +1513,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 }
             }
 
-             
+
 
             SymmetricSegment s;
             List<SymmetricSegment> newSegments = new List<SymmetricSegment>();
@@ -1537,32 +1537,30 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 _lgLayoutSettings.MaxNumberOfNodesPerTile,
                 _lgLayoutSettings.MaxNumberOfRailsPerTile))
                 allInserted = false;
-            
+
 
             if (!allInserted && level.ZoomLevel - 1 >= 0)
             {
 
                 //foreach (Edge edge in level._railsOfEdges.Keys)
-                ///{
-                    level._railsOfEdges.Clear();
-                    level._railDictionary.Clear();
-                    level.RailTree.Clear();
-               // }
+                level._railsOfEdges.Clear();
+                level._railDictionary.Clear();
+                level.RailTree.Clear();
                 foreach (SymmetricSegment sg in newSegments)
                     Segs.Remove(sg);
                 foreach (Edge edge in _lgData.Levels[level.ZoomLevel - 1]._railsOfEdges.Keys)
                 {
                     railsOfEdge = _lgData.Levels[level.ZoomLevel - 1]._railsOfEdges[edge];
-                     
+
                     Set<Rail> rails = new Set<Rail>();
                     Set<Rail> oldRails = new Set<Rail>();
 
                     foreach (var r in railsOfEdge)
                     {
-                         
+
                         LineSegment ls = new LineSegment(r.A, r.B);
                         var tuple = new SymmetricSegment(r.A, r.B);
- 
+
                         Rail rail;
                         if (!level._railDictionary.TryGetValue(tuple, out rail))
                         {
@@ -1576,7 +1574,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                             rail.initialB = r.initialB;
                             rail.targetA = r.targetA;
                             rail.targetB = r.targetB;
- 
+
                             if (!RailToEdges.ContainsKey(rail)) RailToEdges[rail] = new List<Edge>();
                             if (!RailToEdges[rail].Contains(edge)) RailToEdges[rail].Add(edge);
 
@@ -1586,18 +1584,18 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
                         }
                         else
-                        {                             
-                            if (!RailToEdges[rail].Contains(edge)) RailToEdges[rail].Add(edge);                            
+                        {
+                            if (!RailToEdges[rail].Contains(edge)) RailToEdges[rail].Add(edge);
                         }
-                         
+
                     }
-                    level._railsOfEdges[edge] = rails; 
+                    level._railsOfEdges[edge] = rails;
                 }
-                 
+
                 return false;
             }
 
-            return true; 
+            return true;
         }
 
         public bool MsaglNodeSuccessfullyPlotted(Tiling g, LgLevel level, int currentGraphLayer, int nodeToBePlotted, IEnumerable<Node> nodes, Dictionary<Node, int> nodeId)
@@ -1885,9 +1883,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             _lgData.CreateLevelNodeTrees(NodeDotWidth(1));
             _railGraph = new RailGraph();
-            return;
-
-
+    
+#if TEST_GRAPHMAPS
 #if DEBUG && TEST_MSAGL
             _mainGeometryGraph.SetDebugIds();
 #endif
@@ -1911,6 +1908,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             Console.WriteLine("levels calculated for {0}", timer.Duration);
             if (_lgLayoutSettings.ExitAfterInit)
                 Environment.Exit(0);
+#endif
 #endif
         }
 

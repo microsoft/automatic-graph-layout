@@ -235,7 +235,6 @@
     <Compile Include="Core\Layout\ProximityOverlapRemoval\ConjugateGradient\SparseMatrix.cs" />
     <Compile Include="Core\Layout\ProximityOverlapRemoval\ConjugateGradient\LinearSystemSolver.cs" />
     <Compile Include="Core\Layout\ProximityOverlapRemoval\ConjugateGradient\Vector.cs" />
-    <Compile Include="Core\Layout\ProximityOverlapRemoval\InitialScaling.cs" />
     <Compile Include="Core\Layout\ProximityOverlapRemoval\IOverlapRemoval.cs" />
     <Compile Include="Core\Layout\ProximityOverlapRemoval\MST\MstLineSweeper.cs" />
     <Compile Include="Core\Layout\ProximityOverlapRemoval\OverlapRemovalSettings.cs" />
