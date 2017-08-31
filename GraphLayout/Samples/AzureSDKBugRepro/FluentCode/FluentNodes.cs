@@ -14,7 +14,7 @@ namespace FluentVisualizer.Models
             protected override FluentNode Create(Type objectType,
               Newtonsoft.Json.Linq.JObject jObject)
             {
-                if ("interface".Equals(jObject.Value<string>("type")))
+                if ("interface".Equals(jObject.Value<string>("Type")))
                 {
                     return new FluentInterface("default", "default");
                 }
