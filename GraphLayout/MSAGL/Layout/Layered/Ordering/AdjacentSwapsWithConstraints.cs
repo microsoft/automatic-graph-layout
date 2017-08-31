@@ -239,18 +239,15 @@ namespace Microsoft.Msagl.Layout.Layered {
             InitArrays();
             int count = 0;
             bool progress = true;
-            Debug.Assert(SPAreCorrect());
             while (progress && count++ < MaxNumberOfAdjacentExchanges) {
                 progress = false;
                 for (int i = 0; i < layers.Length; i++)
                     progress = AdjExchangeLayer(i) || progress;
-                Debug.Assert(SPAreCorrect());
-
+            
                 for (int i = layers.Length - 2; i >= 0; i--)
                     progress = AdjExchangeLayer(i) || progress;
-                Debug.Assert(SPAreCorrect());
-
             }
+            Debug.Assert(SPAreCorrect());
         }
 
         private bool SPAreCorrect()
@@ -422,18 +419,19 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// </summary>
         /// <param name="layer"></param>
         void InitPSArraysForLayer(int[] layer) {
-            foreach (int l in layer) {
-                foreach (int p in properLayeredGraph.Pred(l)) {
+            foreach (int l in layer)
+            {
+                foreach (int p in properLayeredGraph.Pred(l))
+                {
                     Dictionary<int, int> so = SOrder[p];
                     if (so.ContainsKey(l))
                         continue;
-                    Debug.Assert(so.ContainsKey(l) == false);
                     int sHasNow = so.Count;
                     S[p].Add(l); //l takes the first available slot in S[p]
                     so[l] = sHasNow;
                 }
-                Debug.Assert(SPAreCorrect());
-                foreach (int s in properLayeredGraph.Succ(l)) {
+                foreach (int s in properLayeredGraph.Succ(l))
+                {
                     Dictionary<int, int> po = POrder[s];
                     if (po.ContainsKey(l))
                         continue;
@@ -441,7 +439,6 @@ namespace Microsoft.Msagl.Layout.Layered {
                     P[s].Add(l); //l take the first available slot in P[s]
                     po[l] = pHasNow;
                 }
-                Debug.Assert(SPAreCorrect());
             }
         }
 
