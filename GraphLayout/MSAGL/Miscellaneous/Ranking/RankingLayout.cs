@@ -79,8 +79,14 @@ namespace Microsoft.Msagl.Prototype.Ranking {
 
         private void Calculate(GeometryGraph graph)
         {
+            if (graph.Nodes.Count == 0) return;
             SetNodePositionsAndMovedBoundaries(graph);
-            StraightLineEdges.SetStraightLineEdgesWithUnderlyingPolylines(graph);
+            double nodeSeparation = settings.NodeSeparation;
+            if (nodeSeparation <= 0 )
+            {
+                nodeSeparation = 10;
+            }
+            GTreeOverlapRemoval.RemoveOverlaps(graph.Nodes.ToArray(), nodeSeparation);
             SetGraphBoundingBox(graph);
         }
 
