@@ -39,20 +39,23 @@ namespace Microsoft.Msagl.Miscellaneous
         /// <exception cref="System.OperationCanceledException">Thrown when the layout is canceled.</exception>
 #endif
         public static void CalculateLayout(GeometryGraph geometryGraph, LayoutAlgorithmSettings settings, CancelToken cancelToken) {
-            if (settings is RankingLayoutSettings) {
+            if (settings is RankingLayoutSettings)
+            {
                 var rankingLayoutSettings = settings as RankingLayoutSettings;
                 var rankingLayout = new RankingLayout(rankingLayoutSettings, geometryGraph);
                 rankingLayout.Run(cancelToken);
                 RouteAndLabelEdges(geometryGraph, settings, geometryGraph.Edges);
             }
-            else if (settings is MdsLayoutSettings) {
+            else if (settings is MdsLayoutSettings)
+            {
                 var mdsLayoutSettings = settings as MdsLayoutSettings;
                 var mdsLayout = new MdsGraphLayout(mdsLayoutSettings, geometryGraph);
                 mdsLayout.Run(cancelToken);
                 if (settings.EdgeRoutingSettings.EdgeRoutingMode != EdgeRoutingMode.None)
                     RouteAndLabelEdges(geometryGraph, settings, geometryGraph.Edges);
             }
-            else if (settings is FastIncrementalLayoutSettings) {
+            else if (settings is FastIncrementalLayoutSettings)
+            {
                 var incrementalSettings = settings as FastIncrementalLayoutSettings;
                 incrementalSettings.AvoidOverlaps = true;
                 var initialLayout = new InitialLayout(geometryGraph, incrementalSettings);
@@ -61,11 +64,13 @@ namespace Microsoft.Msagl.Miscellaneous
                     RouteAndLabelEdges(geometryGraph, settings, geometryGraph.Edges);
                 //incrementalSettings.IncrementalRun(geometryGraph);
             }
-            else {
+            else
+            {
                 var sugiyamaLayoutSettings = settings as SugiyamaLayoutSettings;
                 if (sugiyamaLayoutSettings != null)
                     ProcessSugiamaLayout(geometryGraph, sugiyamaLayoutSettings, cancelToken);
-                else {
+                else
+                {
                     Debug.Assert(settings is LgLayoutSettings);
                     LayoutLargeGraphWithLayers(geometryGraph, settings, cancelToken);
                 }

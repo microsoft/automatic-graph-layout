@@ -26,7 +26,7 @@ namespace Microsoft.Msagl.Prototype.Ranking {
             this.graph = geometryGraph;
         }
 
-         void SetNodePositionsAndMovedBoundaries() {
+         void SetNodePositionsAndMovedBoundaries(GeometryGraph graph) {
             
             int pivotNumber = Math.Min(graph.Nodes.Count,settings.PivotNumber);
             double scaleX = settings.ScaleX;
@@ -57,13 +57,34 @@ namespace Microsoft.Msagl.Prototype.Ranking {
         /// <summary>
         /// Executes the algorithm.
         /// </summary>
-        protected override void RunInternal() {
-            SetNodePositionsAndMovedBoundaries();
-            StraightLineEdges.SetStraightLineEdgesWithUnderlyingPolylines(graph);
-            SetGraphBoundingBox();
+        protected override void RunInternal()
+        {
+            GeometryGraph[] graphs = GraphConnectedComponents.CreateComponents(graph.Nodes, graph.Edges).ToArray();
+            // layout components, compute bounding boxes
+
+            for (int i = 0; i < graphs.Length; i++)
+            {
+                Console.WriteLine("laying out {0} connected component", i);
+                Calculate(graphs[i]);
+            }
+
+            if (graphs.Length > 1)
+            {
+                Microsoft.Msagl.Layout.MDS.MdsGraphLayout.PackGraphs(graphs, settings);
+                //restore the parents
+                foreach (var node in graphs.SelectMany(g => g.Nodes))
+                    node.GeometryParent = graph;
+            }
         }
 
-         void SetGraphBoundingBox() {
+        private void Calculate(GeometryGraph graph)
+        {
+            SetNodePositionsAndMovedBoundaries(graph);
+            StraightLineEdges.SetStraightLineEdgesWithUnderlyingPolylines(graph);
+            SetGraphBoundingBox(graph);
+        }
+
+        void SetGraphBoundingBox(GeometryGraph graph) {
             graph.BoundingBox = graph.PumpTheBoxToTheGraphWithMargins();
         }
 
