@@ -64,7 +64,7 @@ namespace LayerConstraintsFromGeometrySample
                 DrawingUtilsForSamples.AddNode(id, graph, w, h);
 
             //pinning columns
-                        settings.PinNodesToSameLayer(col0.Select(s => graph.FindNodeByUserData(s)).ToArray());
+            settings.PinNodesToSameLayer(col0.Select(s => graph.FindNodeByUserData(s)).ToArray());
             settings.PinNodesToSameLayer(col1.Select(s => graph.FindNodeByUserData(s)).ToArray());
             settings.PinNodesToSameLayer(col2.Select(s => graph.FindNodeByUserData(s)).ToArray());
             settings.PinNodesToSameLayer(col3.Select(s => graph.FindNodeByUserData(s)).ToArray());
