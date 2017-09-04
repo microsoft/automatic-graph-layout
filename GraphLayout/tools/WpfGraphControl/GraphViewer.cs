@@ -452,19 +452,20 @@ namespace Microsoft.Msagl.WpfGraphControl {
             WpfPoint center = new WpfPoint(_graphCanvas.RenderSize.Width / 2, _graphCanvas.RenderSize.Height / 2);
             SetTransformFromTwoPoints(center, sourcePoint);
         }
-
-        public void NodeToCenter(Drawing.Node node, double scale = double.PositiveInfinity)
+        public void NodeToCenter(Drawing.Node node, double scale)
         {
-            if (double.IsPositiveInfinity(scale))
-            {
-                scale = CurrentScale;
-            }
-
+            if (node.GeometryNode == null) return;
             var screenPoint = new WpfPoint(_graphCanvas.RenderSize.Width / 2, _graphCanvas.RenderSize.Height / 2);
             var sourcePoint = node.BoundingBox.Center;
             SetTransform(scale, screenPoint.X - scale * sourcePoint.X, screenPoint.Y + scale * sourcePoint.Y);
         }
 
+        public void NodeToCenter(Drawing.Node node)
+        {
+            if (node.GeometryNode == null) return;
+            PointToCenter(node.GeometryNode.Center);
+        }
+        
         void Pan(MouseEventArgs e) {
             if (UnderLayout)
                 return;
