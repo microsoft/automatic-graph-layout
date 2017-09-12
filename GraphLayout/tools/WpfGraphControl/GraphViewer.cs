@@ -725,7 +725,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
 //        }
 
 
-        const double DesiredPathThicknessInInches = 0.016;
+        const double DesiredPathThicknessInInches = 0.008;
       
         readonly Dictionary<DrawingObject, Func<DrawingObject, FrameworkElement>> registeredCreators =
             new Dictionary<DrawingObject, Func<DrawingObject, FrameworkElement>>();
@@ -734,7 +734,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
         public string MsaglFileToSave;
 
         double GetBorderPathThickness() {
-            return DesiredPathThicknessInInches*DpiX/CurrentScale;
+            return DesiredPathThicknessInInches*DpiX;
         }
 
         readonly Object _processGraphLock=new object();

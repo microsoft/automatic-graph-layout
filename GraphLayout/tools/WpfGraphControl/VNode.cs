@@ -58,7 +58,8 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
 
         internal VNode(Node node, FrameworkElement frameworkElementOfNodeForLabelOfLabel,
-            Func<Edge, VEdge> funcFromDrawingEdgeToVEdge, Func<double> pathStrokeThicknessFunc) {
+            Func<Edge, VEdge> funcFromDrawingEdgeToVEdge, Func<double> pathStrokeThicknessFunc)
+        {
             PathStrokeThicknessFunc = pathStrokeThicknessFunc;
             Node = node;
             FrameworkElementOfNodeForLabel = frameworkElementOfNodeForLabelOfLabel;
@@ -66,15 +67,18 @@ namespace Microsoft.Msagl.WpfGraphControl {
             _funcFromDrawingEdgeToVEdge = funcFromDrawingEdgeToVEdge;
 
             CreateNodeBoundaryPath();
-            if (FrameworkElementOfNodeForLabel != null) {
+            if (FrameworkElementOfNodeForLabel != null)
+            {
                 FrameworkElementOfNodeForLabel.Tag = this; //get a backpointer to the VNode
                 Common.PositionFrameworkElement(FrameworkElementOfNodeForLabel, node.GeometryNode.Center, 1);
                 Panel.SetZIndex(FrameworkElementOfNodeForLabel, Panel.GetZIndex(BoundaryPath) + 1);
             }
             SetupSubgraphDrawing();
             Node.Attr.VisualsChanged += (a, b) => Invalidate();
-            Node.IsVisibleChanged += obj => {
-                foreach (var frameworkElement in FrameworkElements) {
+            Node.IsVisibleChanged += obj =>
+            {
+                foreach (var frameworkElement in FrameworkElements)
+                {
                     frameworkElement.Visibility = Node.IsVisible ? Visibility.Visible : Visibility.Hidden;
                 }
             };
@@ -239,13 +243,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
                     FrameworkElementOfNodeForLabel
                         .Height + margin);
                 bc.Translate(center);
-                //                if (LgNodeInfo != null) {
-                //                    //LgNodeInfo.OriginalCurveOfGeomNode = bc;
-                //                    Node.GeometryNode.BoundaryCurve =
-                //                        bc.Transform(PlaneTransformation.ScaleAroundCenterTransformation(LgNodeInfo.Scale,
-                //                            Node.GeometryNode.Center))
-                //                            .Clone();
-                //                }
             }
             BoundaryPath = new Path {Data = CreatePathFromNodeBoundary(), Tag = this};
             Panel.SetZIndex(BoundaryPath, ZIndex);
@@ -274,22 +271,18 @@ namespace Microsoft.Msagl.WpfGraphControl {
                     Node.Attr.Color.B));
             SetBoundaryFill();
             BoundaryPath.StrokeThickness = PathStrokeThickness;
-
+            
             var textBlock = FrameworkElementOfNodeForLabel as TextBlock;
             if (textBlock != null) {
                 var col = Node.Label.FontColor;
                 textBlock.Foreground =
                     Common.BrushFromMsaglColor(new Drawing.Color(GetTransparency(col.A), col.R, col.G, col.B));
             }
-
-
         }
-
 
         void SetBoundaryFill() {
             BoundaryPath.Fill = Common.BrushFromMsaglColor(Node.Attr.FillColor);
         }
-
 
         Geometry DoubleCircle() {
             var box = Node.BoundingBox;
@@ -443,13 +436,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
         public IEnumerable<IViewerEdge> SelfEdges {
             get { return Node.SelfEdges.Select(e => _funcFromDrawingEdgeToVEdge(e)); }
         }
-
-        public void SetStrokeFill() {
-            throw new NotImplementedException();
-        }
-
-
-
         public void Invalidate() {
             if (!Node.IsVisible) {
                 foreach (var fe in FrameworkElements)
