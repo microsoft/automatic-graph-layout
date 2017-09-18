@@ -25,6 +25,7 @@ namespace WindowsApplicationSample {
             Load += Form1Load;
             InitializeComponent();
             gViewer.MouseWheel += GViewerMouseWheel;
+            gViewer.AsyncLayout = true;
             toolTip1.Active = true;
             toolTip1.AutoPopDelay = 5000;
             toolTip1.InitialDelay = 1000;

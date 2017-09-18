@@ -508,9 +508,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                         try {
                             if (NeedToCalculateLayout) {
                                 OriginalGraph.GeometryGraph = null;
-                                DGraph dg = LayoutAndCreateDGraph();
+                                LayoutAndCreateDGraph();
                                 InitiateDrawing();
-                                DGraph = dg;
                             }
                             else {
                                 InitiateDrawing();
@@ -1198,7 +1197,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                             if (needToCalc) {
                                 if (AsyncLayoutProgress != null)
                                     AsyncLayoutProgress(this, args);
-                                DGraph = LayoutAndCreateDGraph();
+                                LayoutAndCreateDGraph();
                             }
                             else {
                                 DGraph = DGraph.CreateDGraphFromPrecalculatedDrawingGraph(OriginalGraph, this);
@@ -1411,33 +1410,40 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         }
 
 
-        internal void ProcessOnPaint(Graphics g, PrintPageEventArgs printPageEvenArgs) {
+        internal void ProcessOnPaint(Graphics g, PrintPageEventArgs printPageEvenArgs)
+        {
             if (PanelHeight < minimalSizeToDraw || PanelWidth < minimalSizeToDraw || DGraph == null)
                 return;
-            if (wasMinimized) {
+            if (wasMinimized)
+            {
                 wasMinimized = false;
                 panel.Invalidate();
             }
 
-            if (OriginalGraph != null) {
+            if (OriginalGraph != null)
+            {
                 CalcRects(printPageEvenArgs);
                 HandleViewInfoList();
-                if (printPageEvenArgs == null) {
+                if (printPageEvenArgs == null)
+                {
                     g.FillRectangle(outsideAreaBrush, ClientRectangle);
                     g.FillRectangle(new SolidBrush(Draw.MsaglColorToDrawingColor(OriginalGraph.Attr.BackgroundColor)),
                                     destRect);
                 }
 
-                using (Matrix m = CurrentTransform()) {
+                using (Matrix m = CurrentTransform())
+                {
+                    if (!m.IsInvertible) // just to make sure that the transform is legal
+                        return;
                     g.Transform = m;
-
+                    
                     g.Clip = new Region(SrcRect);
                     if (DGraph == null)
                         return;
 
                     double scale = CurrentScale;
                     foreach (IViewerObject viewerObject in Entities)
-                        ((DObject) viewerObject).UpdateRenderedBox();
+                        ((DObject)viewerObject).UpdateRenderedBox();
 
                     DGraph.DrawGraph(g);
 
@@ -1449,7 +1455,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                                dGraph.DrawingGraph.DebugICurves == null
                            )
 #endif
-                        ) {
+                        )
+                    {
                         DGraph.BuildBBHierarchy();
                         bBNode = DGraph.BbNode;
                     }
@@ -1502,7 +1509,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
-        DGraph LayoutAndCreateDGraph() {
+        void LayoutAndCreateDGraph() {
             switch (CurrentLayoutMethod) {
                 case LayoutMethod.SugiyamaScheme:
                     if (!(OriginalGraph.LayoutAlgorithmSettings is SugiyamaLayoutSettings))
@@ -1531,19 +1538,18 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             }
             OriginalGraph.CreateGeometryGraph();
             GeometryGraph geometryGraph = OriginalGraph.GeometryGraph;
-            DGraph dGraphLocal = DGraph.CreateDGraphAndGeometryInfo(OriginalGraph, geometryGraph, this);
+            DGraph = DGraph.CreateDGraphAndGeometryInfo(OriginalGraph, geometryGraph, this);
             try {
                 LayoutHelpers.CalculateLayout(geometryGraph, originalGraph.LayoutAlgorithmSettings, null);
             }
             catch (OperationCanceledException) {
                 originalGraph = null;
-                return null;
+                DGraph = null;
             }
             TransferGeometryFromMsaglGraphToGraph(geometryGraph);
             if (GraphChanged != null) {
                 GraphChanged(this, null);
             }
-            return dGraphLocal;
         }
 
 #if DEBUG
@@ -2105,7 +2111,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         /// <returns></returns>
         public object CalculateLayout(Graph graph) {
             OriginalGraph = graph;
-            return LayoutAndCreateDGraph();
+            LayoutAndCreateDGraph();
+            return DGraph;
         }
 
         /// <summary>
