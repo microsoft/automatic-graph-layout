@@ -1342,9 +1342,8 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 try
                 {
                     var ls = _drawingGraph.LayoutAlgorithmSettings as LgLayoutSettings;
-                    geometryGraphUnderLayout.directory = this.TileDirectory;
                     LayoutHelpers.CalculateLayout(geometryGraphUnderLayout, _drawingGraph.LayoutAlgorithmSettings,
-                        CancelToken);
+                        CancelToken, TileDirectory);
                 }
                 catch (OperationCanceledException)
                 {
@@ -1353,7 +1352,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             }
             else
                 LayoutHelpers.LayoutLargeGraphWithLayers(geometryGraphUnderLayout, _drawingGraph.LayoutAlgorithmSettings,
-                    CancelToken);
+                    CancelToken, TileDirectory);
 
             _lgLayoutSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
 

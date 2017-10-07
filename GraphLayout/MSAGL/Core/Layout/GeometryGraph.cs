@@ -20,7 +20,6 @@ namespace Microsoft.Msagl.Core.Layout {
 #endif
     public class GeometryGraph : GeometryObject
     {
-         public String directory;
          IList<Node> nodes;
          EdgeCollection edges;
 #if TEST_MSAGL

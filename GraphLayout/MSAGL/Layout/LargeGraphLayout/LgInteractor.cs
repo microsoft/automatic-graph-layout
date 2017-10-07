@@ -440,7 +440,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
         }
              
-        public void RunForMsaglFiles()
+        public void RunForMsaglFiles(string tileDirectory)
         {
            
             //ask user
@@ -474,7 +474,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             //*/
             Dictionary<Node, int> nodeToId;
-            var g = TryCompetitionMeshApproach(out nodeToId);
+            var g = TryCompetitionMeshApproach(out nodeToId, tileDirectory);
 
             var stopwatch = new Stopwatch();
             Tiling[] graphs = calculateGraphsForEachZoomLevel(g, nodeToId, _lgLayoutSettings.hugeGraph);
@@ -940,12 +940,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 }
             }
         }
-        private Tiling TryCompetitionMeshApproach(out Dictionary<Node, int> nodeToId)
+        private Tiling TryCompetitionMeshApproach(out Dictionary<Node, int> nodeToId, string tileDirectory)
         {
 
 
 
-            Boolean loaded = LoadNodeLocationsFromFile();
+            Boolean loaded = LoadNodeLocationsFromFile(tileDirectory);
             _mainGeometryGraph.UpdateBoundingBox();
             _lgLayoutSettings.lgGeometryGraph = _mainGeometryGraph;
 
@@ -974,7 +974,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             
 
             int maxY;
-            var maxX = CreateNodePositions(g, nodeToId, idToNode, out maxY);
+            var maxX = CreateNodePositions(g, nodeToId, idToNode, out maxY, tileDirectory);
 
             if (_lgLayoutSettings.flow)
                 ComputeZoomLevelviaFlow(nodeToId, maxX, maxY);
@@ -1171,9 +1171,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         }
 
 
-        public bool loadBipartiteData()
+        public bool loadBipartiteData(string line)
         {
-            String line = _mainGeometryGraph.directory;
             if (line == null) return false;
             line = line.Replace(".tiles", "");
             try
@@ -1202,12 +1201,11 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 return false;
             }
         }
-        public bool LoadNodeLocationsFromFile()
+        public bool LoadNodeLocationsFromFile(string tileDirectory)
         {
             //OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
-            String line = _mainGeometryGraph.directory;
-            line = line.Replace(".tiles", "");
+            if (tileDirectory == null) return false;
+            string line = tileDirectory.Replace(".tiles", "");
 
 
             try
@@ -1239,7 +1237,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                Console.WriteLine("No prespecified location found.");
+                Console.WriteLine("exiting LoadNodeLocationsFromFile");
                 return false;
             }
 
@@ -1264,7 +1262,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 #endif
         }
 
-        private int CreateNodePositions(Tiling g, Dictionary<Node, int> nodeToId, Dictionary<int, Node> idToNode, out int maxY)
+        private int CreateNodePositions(Tiling g, Dictionary<Node, int> nodeToId, Dictionary<int, Node> idToNode, out int maxY, string tileDirectory)
         {
             //PointSet ps = new PointSet(_mainGeometryGraph.Nodes.Count);
             //find maxX and maxY
@@ -1374,7 +1372,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             //LevelCalculator.RankGraph(_lgData, _mainGeometryGraph);
             LevelCalculator.SetNodeZoomLevelsAndRouteEdgesOnLevels(_lgData, _mainGeometryGraph, _lgLayoutSettings);
             
-            bool bipartite = loadBipartiteData();
+            bool bipartite = loadBipartiteData(tileDirectory);
 
 
             if (bipartite)
@@ -1868,13 +1866,13 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         /// <summary>
         ///     does the initialization
         /// </summary>
-        public void Run()
+        public void Run(string tileDirectory)
         {
             //Dictionary<Node, int> nodeToIndex;
 
 
             Console.WriteLine("dot graph");
-            RunForMsaglFiles();
+            RunForMsaglFiles(tileDirectory);
             //RunForDotFiles();
 
 

@@ -38,7 +38,7 @@ namespace Microsoft.Msagl.Miscellaneous
         /// </summary>
         /// <exception cref="System.OperationCanceledException">Thrown when the layout is canceled.</exception>
 #endif
-        public static void CalculateLayout(GeometryGraph geometryGraph, LayoutAlgorithmSettings settings, CancelToken cancelToken) {
+        public static void CalculateLayout(GeometryGraph geometryGraph, LayoutAlgorithmSettings settings, CancelToken cancelToken, string tileDirectory = null) {
             if (settings is RankingLayoutSettings)
             {
                 var rankingLayoutSettings = settings as RankingLayoutSettings;
@@ -72,7 +72,7 @@ namespace Microsoft.Msagl.Miscellaneous
                 else
                 {
                     Debug.Assert(settings is LgLayoutSettings);
-                    LayoutLargeGraphWithLayers(geometryGraph, settings, cancelToken);
+                    LayoutLargeGraphWithLayers(geometryGraph, settings, cancelToken, tileDirectory);
                 }
             }
         }
@@ -83,11 +83,11 @@ namespace Microsoft.Msagl.Miscellaneous
         /// <param name="geometryGraph"></param>
         /// <param name="settings"></param>
         /// <param name="cancelToken"></param>
-        static public void LayoutLargeGraphWithLayers(GeometryGraph geometryGraph, LayoutAlgorithmSettings settings, CancelToken cancelToken) {
+        static public void LayoutLargeGraphWithLayers(GeometryGraph geometryGraph, LayoutAlgorithmSettings settings, CancelToken cancelToken, string tileDirectory) {
             var largeGraphLayoutSettings = (LgLayoutSettings) settings;
             var largeGraphLayout = new LgInteractor(geometryGraph, largeGraphLayoutSettings, cancelToken);
             largeGraphLayoutSettings.Interactor = largeGraphLayout;
-            largeGraphLayout.Run();
+            largeGraphLayout.Run(tileDirectory);
         }
 
         static public void ComputeNodeLabelsOfLargeGraphWithLayers(GeometryGraph geometryGraph, LayoutAlgorithmSettings settings, List<double> noldeLabelRatios, CancelToken cancelToken) {
