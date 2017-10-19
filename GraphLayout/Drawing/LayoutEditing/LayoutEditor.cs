@@ -877,6 +877,7 @@ namespace Microsoft.Msagl.Drawing {
             else if (Dragging) {
                 if (!InsertingEdge) {
                     geomGraphEditor.OnDragEnd(viewer.ScreenToSource(args) - mouseDownGraphPoint);
+                    viewer.OnDragEnd(dragGroup);
                     InteractiveEdgeRouter = null;
                     looseObstaclesToTheirViewerNodes = null;
                 }
