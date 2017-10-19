@@ -654,12 +654,19 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             remove { iEditViewerMouseUp -= value; }
         }
 
+        public delegate void DragEndEventHandler(IEnumerable<IViewerObject> draggedObjects);
+        /// <summary>
+        /// Event is fired when node drag operation finished
+        /// </summary>
+        public event DragEndEventHandler DragEnded;
+
         /// <summary>
         /// A method of IEditViewer
         /// </summary>
         /// <param name="changedObjects"></param>
         public void OnDragEnd(IEnumerable<IViewerObject> changedObjects) {
             DGraph.UpdateBBoxHierarchy(changedObjects);
+            DragEnded?.Invoke(changedObjects);
         }
 
         void IViewer.Invalidate() {
@@ -1802,6 +1809,11 @@ namespace Microsoft.Msagl.GraphViewerGdi {
 
         }
 
+        public void ShowLayoutSettingsEditor()
+        {
+          LayoutSettingsIsClicked();
+        }
+
 
         void LayoutSettingsIsClicked() {
             var layoutSettingsForm = new LayoutSettingsForm();
@@ -1837,28 +1849,38 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                         if (settings.EdgeRoutingSettings.EdgeRoutingMode == EdgeRoutingMode.SugiyamaSplines)
                             settings.EdgeRoutingSettings.EdgeRoutingMode = EdgeRoutingMode.Spline;
                     if (layoutSettingsForm.Wrapper.RerouteOnly == false)
-                        Graph = Graph; //recalculate the layout
-                    else {
-                        EdgeRoutingSettings ers = settings.EdgeRoutingSettings;
-
-                        if (ers.EdgeRoutingMode == EdgeRoutingMode.SplineBundling) {
-                            var br = new SplineRouter(Graph.GeometryGraph, ers.Padding, ers.PolylinePadding,
-                                                      ers.ConeAngle, ers.BundlingSettings);
-                            br.Run();
-                        }
-                        else {
-                            var sp = new SplineRouter(Graph.GeometryGraph, ers.Padding,
-                                                      ers.PolylinePadding, ers.ConeAngle, ers.BundlingSettings);
-                            sp.Run();
-                        }
-                        foreach (IViewerObject e in Entities.Where(e => e is IViewerEdge))
-                            Invalidate(e);
-                    }
+                      Graph = Graph; //recalculate the layout
+                    else
+                      RerouteGraph();
                 }
             }
             else if (Graph != null)
                 Graph.LayoutAlgorithmSettings = backup;
         }
+
+        /// <summary>
+        /// Re-route edges without layout recalculation
+        /// </summary>
+        public void RerouteGraph()
+        {
+          LayoutAlgorithmSettings settings = Graph.LayoutAlgorithmSettings;
+          EdgeRoutingSettings ers = settings.EdgeRoutingSettings;
+
+          if (ers.EdgeRoutingMode == EdgeRoutingMode.SplineBundling)
+          {
+            var br = new SplineRouter(Graph.GeometryGraph, ers.Padding, ers.PolylinePadding,
+                                      ers.ConeAngle, ers.BundlingSettings);
+            br.Run();
+          }
+          else
+          {
+            var sp = new SplineRouter(Graph.GeometryGraph, ers.Padding,
+                                      ers.PolylinePadding, ers.ConeAngle, ers.BundlingSettings);
+            sp.Run();
+          }
+          foreach (IViewerObject e in Entities.Where(e => e is IViewerEdge))
+            Invalidate(e);
+    }
 
 
         void OnLayoutTypeChange(object o, EventArgs args) {
