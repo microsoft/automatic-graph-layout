@@ -140,7 +140,6 @@ namespace OverlapGraphExperiments
         }
 
         private void DumpProximityCdtToSvg(string svgFileName, Graph graph, HashSet<Tuple<int, int>> proximityEdges) {
-            return; 
             SvgGraphWriter writer=new SvgGraphWriter(File.Create(svgFileName), graph);
             writer.TransformGraphByFlippingY();
             writer.WriteOpening();

@@ -442,7 +442,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
              
         public void RunForMsaglFiles(string tileDirectory)
         {
-           
             //ask user
             Console.WriteLine("Running in Default Settings - Enable UserPrompt in LgInteractor if needed.");
             _lgLayoutSettings.hugeGraph = true; //PromptUserforGraphSize();
@@ -942,9 +941,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         }
         private Tiling TryCompetitionMeshApproach(out Dictionary<Node, int> nodeToId, string tileDirectory)
         {
-
-
-
             Boolean loaded = LoadNodeLocationsFromFile(tileDirectory);
             _mainGeometryGraph.UpdateBoundingBox();
             _lgLayoutSettings.lgGeometryGraph = _mainGeometryGraph;
