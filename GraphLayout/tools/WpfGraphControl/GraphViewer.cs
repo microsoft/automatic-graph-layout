@@ -363,7 +363,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 return HitTestResultBehavior.Continue;
             var tag = frameworkElement.Tag;
             var iviewerObj = tag as IViewerObject;
-            if (iviewerObj != null) {
+            if (iviewerObj != null && iviewerObj.DrawingObject.IsVisible) {
                 if (ObjectUnderMouseCursor is IViewerEdge || ObjectUnderMouseCursor == null
                     ||
                     Panel.GetZIndex(frameworkElement) >
@@ -406,26 +406,34 @@ namespace Microsoft.Msagl.WpfGraphControl {
         }
 
         // Return the result of the hit test to the callback.
-        HitTestResultBehavior MyHitTestResultCallbackWithNoCallbacksToTheUser(HitTestResult result) {
+        HitTestResultBehavior MyHitTestResultCallbackWithNoCallbacksToTheUser(HitTestResult result)
+        {
             var frameworkElement = result.VisualHit as FrameworkElement;
 
             if (frameworkElement == null)
                 return HitTestResultBehavior.Continue;
             object tag = frameworkElement.Tag;
-            if (tag != null) {
+            if (tag != null)
+            {
                 //it is a tagged element
                 var ivo = tag as IViewerObject;
-                if (ivo != null) {
-                    _objectUnderMouseCursor = ivo;
-                    if (tag is VNode || tag is Label)
-                        return HitTestResultBehavior.Stop;
-                }else {
+                if (ivo != null)
+                {
+                    if (ivo.DrawingObject.IsVisible)
+                    {
+                        _objectUnderMouseCursor = ivo;
+                        if (tag is VNode || tag is Label)
+                            return HitTestResultBehavior.Stop;
+                    }
+                }
+                else
+                {
                     System.Diagnostics.Debug.Assert(tag is Rail);
                     _objectUnderMouseCursor = tag;
                     return HitTestResultBehavior.Stop;
                 }
             }
-            
+
             return HitTestResultBehavior.Continue;
         }
 
@@ -1777,7 +1785,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
         /// no layout is done, but the overlap is removed for graphs with geometry
         /// </summary>
         public bool NeedToRemoveOverlapOnly { get; set; }
-
+        
 
         public void DrawRubberLine(Point rubberEnd) {
             if (_rubberLinePath == null) {
