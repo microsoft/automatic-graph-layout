@@ -122,11 +122,11 @@ namespace WindowsApplicationSample {
                 selectedObject = null;
             }
 
-            if (gViewer.SelectedObject == null) {
+            if (gViewer.ObjectUnderMouseCursor == null) {
                 label1.Text = "No object under the mouse";
                 gViewer.SetToolTip(toolTip1, "");
             } else {
-                selectedObject = gViewer.SelectedObject;
+                selectedObject = gViewer.ObjectUnderMouseCursor.DrawingObject;
                 var edge = selectedObject as Edge;
                 if (edge != null) {
                     selectedObjectAttr = edge.Attr.Clone();
