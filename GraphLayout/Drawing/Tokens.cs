@@ -17,6 +17,8 @@ namespace Microsoft.Msagl.Drawing {
         listOfSubgraphs,
         listOfNodes,
         graph,
+        NodeType, NodeTypeName,
+        EdgeType, EdgeTypeName,
         End
     }
 }
