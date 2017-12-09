@@ -277,10 +277,10 @@ namespace Microsoft.Msagl.Drawing
         userData = ReadUserData();
       string srcId = ReadStringElement(Tokens.SourceNodeID);
       string targetId = ReadStringElement(Tokens.TargetNodeID);
-      string edgeTypeName = ReadEdgeType();
       Edge edge = null;
       try
       {
+        string edgeTypeName = ReadEdgeType();
         Type edgeTpye = GetTypeByNameFromAppDomain(edgeTypeName);
         Node srcNode = graph.FindNode(srcId);
         Node targetNode = graph.FindNode(targetId);
@@ -413,6 +413,7 @@ namespace Microsoft.Msagl.Drawing
       catch
       {
         // fall back to Node
+        ReadNodeAttr(nodeAttr);
         node = graph.AddNode(nodeAttr.Id);
       }
       graph.AddNode(node);
