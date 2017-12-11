@@ -28,6 +28,7 @@ namespace Microsoft.Msagl.Drawing
     XmlReader xmlReader;
     Dictionary<string, SubgraphTemplate> subgraphTable = new Dictionary<string, SubgraphTemplate>();
     GeometryGraphReader geometryGraphReader;
+    Dictionary<string, Type> _typeCache;
 
     internal GraphReader(Stream streamP)
     {
@@ -36,6 +37,7 @@ namespace Microsoft.Msagl.Drawing
       readerSettings.IgnoreWhitespace = true;
       readerSettings.IgnoreComments = true;
       xmlReader = XmlReader.Create(stream, readerSettings);
+      InitTypeCache();
     }
 
     /// <summary>
@@ -281,7 +283,7 @@ namespace Microsoft.Msagl.Drawing
       try
       {
         string edgeTypeName = ReadEdgeType();
-        Type edgeTpye = GetTypeByNameFromAppDomain(edgeTypeName);
+        Type edgeTpye = GetTypeByName(edgeTypeName);
         Node srcNode = graph.FindNode(srcId);
         Node targetNode = graph.FindNode(targetId);
         edge = (Edge)Activator.CreateInstance(edgeTpye, new object[] { srcNode, targetNode });
@@ -407,7 +409,7 @@ namespace Microsoft.Msagl.Drawing
       {
         string nodeTypeName = ReadNodeType();
         ReadNodeAttr(nodeAttr);
-        Type nodeType = GetTypeByNameFromAppDomain(nodeTypeName);
+        Type nodeType = GetTypeByName(nodeTypeName);
         node = (Node)Activator.CreateInstance(nodeType, new object[] { nodeAttr.Id });
       }
       catch
@@ -585,32 +587,38 @@ namespace Microsoft.Msagl.Drawing
     }
 
     /// <summary>
-    /// Tries to get Type by name from assemblies loaded to current Appdomain
+    /// Initialize _typeCache for Appdomain for type name lookup
     /// </summary>
-    /// <param name="TypeName"></param>
-    /// <returns></returns>
-    public static Type GetTypeByNameFromAppDomain(string TypeName)
+    private void InitTypeCache()
     {
-      Type result = null;
+      _typeCache = new Dictionary<string, Type>();
       Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+      Type nodeType = typeof(Node);
+      Type edgeType = typeof(Edge);
       foreach (var a in assemblies)
       {
         try
         {
-          foreach (Type t in a.GetTypes())
+          foreach (Type t in a.GetTypes().Where(t => t.IsClass && !t.IsAbstract && (t.IsSubclassOf(nodeType) || t.IsSubclassOf(edgeType))))
           {
-            if (t.Name == TypeName)
-            {
-              result = t;
-              break;
-            }
+            _typeCache.Add(t.FullName, t);
           }
-          if (result != null) break;
         }
         catch (Exception Ex)
         {
         }
       }
+    }
+
+    /// <summary>
+    /// Tries to get Type by name from assemblies loaded to current Appdomain
+    /// </summary>
+    /// <param name="FullTypeName"></param>
+    /// <returns></returns>
+    public Type GetTypeByName(string FullTypeName)
+    {
+      Type result = null;
+      if (_typeCache.ContainsKey(FullTypeName)) result = _typeCache[FullTypeName];
       return result;
     }
   }

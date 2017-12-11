@@ -281,7 +281,7 @@ namespace Microsoft.Msagl.Drawing
     private void WriteEdgeType(Type edgeType)
     {
       WriteStartElement(Tokens.EdgeType);
-      WriteStringElement(Tokens.EdgeTypeName, edgeType.Name);
+      WriteStringElement(Tokens.EdgeTypeName, edgeType.FullName);
       WriteEndElement();
     }
 
@@ -320,7 +320,7 @@ namespace Microsoft.Msagl.Drawing
     private void WriteNodeType(Type nodeType)
     {
       WriteStartElement(Tokens.NodeType);
-      WriteStringElement(Tokens.NodeTypeName, nodeType.Name);
+      WriteStringElement(Tokens.NodeTypeName, nodeType.FullName);
       WriteEndElement();
     }
 

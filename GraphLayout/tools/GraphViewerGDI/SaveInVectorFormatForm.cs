@@ -36,140 +36,154 @@ using System.IO;
 using System.Windows.Forms;
 using Microsoft.Msagl.Drawing;
 
-namespace Microsoft.Msagl.GraphViewerGdi {
-    internal partial class SaveInVectorFormatForm : Form {
-        readonly GViewer gViewer;
+namespace Microsoft.Msagl.GraphViewerGdi
+{
+  public partial class SaveInVectorFormatForm : Form
+  {
+    readonly GViewer gViewer;
 
-        internal SaveInVectorFormatForm(GViewer gViewerControl) {
-            InitializeComponent();
-            saveCurrentView.Checked = gViewerControl.SaveCurrentViewInImage;
-            saveTotalView.Checked = !gViewerControl.SaveCurrentViewInImage;
-            gViewer = gViewerControl;
-            saveCurrentView.CheckedChanged += saveCurrentView_CheckedChanged;
-            toolTip.SetToolTip(saveInTextBox, "The default file format is SVG");
-            Text = "Save in the SVG format";
-            saveInTextBox.Text = "*.svg";
-            AcceptButton=okButton;
-            CancelButton = cancelButton;            
-        }
-
-        string FileName {
-            get { return saveInTextBox.Text; }
-        }
-
-        void saveCurrentView_CheckedChanged(object sender, EventArgs e) {
-            gViewer.SaveCurrentViewInImage = saveCurrentView.Checked;
-        }
-
-
-        void BrowseButtonClick(object sender, EventArgs e) {
-            var saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Svg files(*.svg)|*.svg|EMF Files(*.emf)|*.emf|WMF Files(*.wmf)|*.wmf";
-            saveFileDialog.OverwritePrompt = false;
-            DialogResult dialogResult = saveFileDialog.ShowDialog();
-            if (dialogResult == DialogResult.OK) {
-                saveInTextBox.Text = saveFileDialog.FileName;
-                okButton.Focus(); //to enable hitting the OK button
-            }
-        }
-
-        [SuppressMessage("Microsoft.Globalization", "CA1304:SpecifyCultureInfo", MessageId = "System.String.ToLower"),
-         SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"),
-         SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions"),
-         SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters",
-             MessageId = "System.Windows.Forms.MessageBox.Show(System.String)")]
-        void okButton_Click(object sender, EventArgs e) {
-            if (String.IsNullOrEmpty(saveInTextBox.Text)) {
-                MessageBox.Show("File name is not set");
-                return;
-            }
-
-
-            string ext = Path.GetExtension(FileName).ToLower();
-
-            if (!(ext == ".emf" || ext == ".wmf" || ext == ".svg"))
-                saveInTextBox.Text += ".svg";
-
-            Cursor c = Cursor;
-            Cursor = Cursors.WaitCursor;
-            try {
-                if (ext != ".svg") {
-                    var w = (int) Math.Ceiling(gViewer.SrcRect.Width);
-                    var h = (int) Math.Ceiling(gViewer.SrcRect.Height);
-
-                    DrawVectorGraphics(w, h);
-                } else
-                    SvgGraphWriter.Write(gViewer.Graph, FileName, null, null, 4);
-            }
-            catch (Exception ex) {
-                MessageBox.Show(ex.Message);
-                Cursor = c;
-                return;
-            }
-            Cursor = c;
-            Close();
-        }
-
-        void DrawGeneral(int w, int h, Graphics graphics) {
-            graphics.SmoothingMode = SmoothingMode.HighQuality;
-            graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-            graphics.CompositingQuality = CompositingQuality.HighQuality;
-            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-
-
-            if (saveCurrentView.Checked) DrawCurrent(graphics);
-            else DrawAll(w, h, graphics);
-        }
-
-        void DrawAll(int w, int h, Graphics graphics) {
-            //fill the whole image
-            graphics.FillRectangle(new SolidBrush(Draw.MsaglColorToDrawingColor(gViewer.Graph.Attr.BackgroundColor)),
-                                   new RectangleF(0, 0, w, h));
-
-            //calculate the transform
-            double s = 1;
-            Graph g = gViewer.Graph;
-            double x = 0.5*w - s*(g.Left + 0.5*g.Width);
-            double y = 0.5*h + s*(g.Bottom + 0.5*g.Height);
-
-            graphics.Transform = new Matrix((float) s, 0, 0, (float) -s, (float) x, (float) y);
-            Draw.DrawPrecalculatedLayoutObject(graphics, gViewer.DGraph);
-        }
-
-        void DrawCurrent(Graphics graphics) {
-            graphics.Transform = gViewer.CurrentTransform();
-            graphics.FillRectangle(new SolidBrush(Draw.MsaglColorToDrawingColor(gViewer.Graph.Attr.BackgroundColor)),
-                                   gViewer.SrcRect);
-            graphics.Clip = new Region(gViewer.SrcRect);
-            Draw.DrawPrecalculatedLayoutObject(graphics, gViewer.DGraph);
-        }
-
-        void DrawVectorGraphics(int w, int h) {
-            Graphics graphics = CreateGraphics();
-            IntPtr ipHdc = graphics.GetHdc();
-
-            //Create a new empty metafile from the memory stream 
-
-            Stream outputStream = File.OpenWrite(FileName);
-            var MetafileToDisplay = new Metafile(outputStream, ipHdc, EmfType.EmfOnly);
-
-            //Now that we have a loaded metafile, we get rid of that Graphics object
-
-            graphics.ReleaseHdc(ipHdc);
-
-            graphics.Dispose();
-
-            //Reload the graphics object with the newly created metafile.
-
-            graphics = Graphics.FromImage(MetafileToDisplay);
-
-
-            DrawGeneral(w, h, graphics);
-
-            //Get rid of the graphics object that we created 
-
-            graphics.Dispose();
-            outputStream.Close();
-        }
+    public SaveInVectorFormatForm(GViewer gViewerControl)
+    {
+      InitializeComponent();
+      saveCurrentView.Checked = gViewerControl.SaveCurrentViewInImage;
+      saveTotalView.Checked = !gViewerControl.SaveCurrentViewInImage;
+      gViewer = gViewerControl;
+      saveCurrentView.CheckedChanged += saveCurrentView_CheckedChanged;
+      toolTip.SetToolTip(saveInTextBox, "The default file format is SVG");
+      Text = "Save in the SVG format";
+      saveInTextBox.Text = "*.svg";
+      AcceptButton = okButton;
+      CancelButton = cancelButton;
     }
+
+    string FileName
+    {
+      get { return saveInTextBox.Text; }
+    }
+
+    void saveCurrentView_CheckedChanged(object sender, EventArgs e)
+    {
+      gViewer.SaveCurrentViewInImage = saveCurrentView.Checked;
+    }
+
+
+    void BrowseButtonClick(object sender, EventArgs e)
+    {
+      var saveFileDialog = new SaveFileDialog();
+      saveFileDialog.Filter = "Svg files(*.svg)|*.svg|EMF Files(*.emf)|*.emf|WMF Files(*.wmf)|*.wmf";
+      saveFileDialog.OverwritePrompt = false;
+      DialogResult dialogResult = saveFileDialog.ShowDialog();
+      if (dialogResult == DialogResult.OK)
+      {
+        saveInTextBox.Text = saveFileDialog.FileName;
+        okButton.Focus(); //to enable hitting the OK button
+      }
+    }
+
+    [SuppressMessage("Microsoft.Globalization", "CA1304:SpecifyCultureInfo", MessageId = "System.String.ToLower"),
+     SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"),
+     SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions"),
+     SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters",
+         MessageId = "System.Windows.Forms.MessageBox.Show(System.String)")]
+    void okButton_Click(object sender, EventArgs e)
+    {
+      Cursor c = Cursor;
+      Cursor = Cursors.WaitCursor;
+      SaveGraphToFile(this.FileName);
+      Cursor = c;
+      Close();
+    }
+
+    public void SaveGraphToFile(string fileName)
+    {
+      if (String.IsNullOrEmpty(fileName))
+      {
+        MessageBox.Show("Unable to save. The given filename is invalid.", "Export error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+      }
+      string ext = Path.GetExtension(fileName).ToLower();
+      if (!(ext == ".emf" || ext == ".wmf" || ext == ".svg")) ext = ".svg";
+      fileName = Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) + ext;
+      try
+      {
+        if (ext != ".svg")
+        {
+          var w = (int)Math.Ceiling(gViewer.SrcRect.Width);
+          var h = (int)Math.Ceiling(gViewer.SrcRect.Height);
+          DrawVectorGraphics(w, h);
+        }
+        else SvgGraphWriter.Write(gViewer.Graph, fileName, null, null, 4);
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show("Unfortunately an error occurred while saving image : " + ex.Message, "Export error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    void DrawGeneral(int w, int h, Graphics graphics)
+    {
+      graphics.SmoothingMode = SmoothingMode.HighQuality;
+      graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+      graphics.CompositingQuality = CompositingQuality.HighQuality;
+      graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
+
+      if (saveCurrentView.Checked) DrawCurrent(graphics);
+      else DrawAll(w, h, graphics);
+    }
+
+    void DrawAll(int w, int h, Graphics graphics)
+    {
+      //fill the whole image
+      graphics.FillRectangle(new SolidBrush(Draw.MsaglColorToDrawingColor(gViewer.Graph.Attr.BackgroundColor)),
+                             new RectangleF(0, 0, w, h));
+
+      //calculate the transform
+      double s = 1;
+      Graph g = gViewer.Graph;
+      double x = 0.5 * w - s * (g.Left + 0.5 * g.Width);
+      double y = 0.5 * h + s * (g.Bottom + 0.5 * g.Height);
+
+      graphics.Transform = new Matrix((float)s, 0, 0, (float)-s, (float)x, (float)y);
+      Draw.DrawPrecalculatedLayoutObject(graphics, gViewer.DGraph);
+    }
+
+    void DrawCurrent(Graphics graphics)
+    {
+      graphics.Transform = gViewer.CurrentTransform();
+      graphics.FillRectangle(new SolidBrush(Draw.MsaglColorToDrawingColor(gViewer.Graph.Attr.BackgroundColor)),
+                             gViewer.SrcRect);
+      graphics.Clip = new Region(gViewer.SrcRect);
+      Draw.DrawPrecalculatedLayoutObject(graphics, gViewer.DGraph);
+    }
+
+    void DrawVectorGraphics(int w, int h)
+    {
+      Graphics graphics = CreateGraphics();
+      IntPtr ipHdc = graphics.GetHdc();
+
+      //Create a new empty metafile from the memory stream 
+
+      Stream outputStream = File.OpenWrite(FileName);
+      var MetafileToDisplay = new Metafile(outputStream, ipHdc, EmfType.EmfOnly);
+
+      //Now that we have a loaded metafile, we get rid of that Graphics object
+
+      graphics.ReleaseHdc(ipHdc);
+
+      graphics.Dispose();
+
+      //Reload the graphics object with the newly created metafile.
+
+      graphics = Graphics.FromImage(MetafileToDisplay);
+
+
+      DrawGeneral(w, h, graphics);
+
+      //Get rid of the graphics object that we created 
+
+      graphics.Dispose();
+      outputStream.Close();
+    }
+  }
 }

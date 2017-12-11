@@ -68,7 +68,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         bool zoomWhenMouseWheelScroll = true;
 
         const string panButtonToolTipText = "Pan";
-        RectangleF srcRect = new RectangleF(0, 0, 0, 0);
+        public RectangleF srcRect { get; private set; } = new RectangleF(0, 0, 0, 0);
 
         internal double zoomFraction = 0.5f;
 
@@ -189,7 +189,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         /// capturing the previous user's choice of which veiw to save
         /// </summary>
-        internal bool SaveCurrentViewInImage { get; set; }
+        public bool SaveCurrentViewInImage { get; set; }
 
         /// <summary>
         /// The panel containing GViewer object
