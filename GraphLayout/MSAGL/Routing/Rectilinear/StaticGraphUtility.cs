@@ -18,231 +18,231 @@ using Microsoft.Msagl.Routing.Rectilinear.Nudging;
 using Microsoft.Msagl.Routing.Visibility;
 
 namespace Microsoft.Msagl.Routing.Rectilinear {
-  // Static utilities for the visibility graph.
-  internal static class StaticGraphUtility {
-    // Determine the direction of an edge.
-    static internal Directions EdgeDirection(VisibilityEdge edge) {
-      return EdgeDirection(edge.Source, edge.Target);
-    }
-    static internal Directions EdgeDirection(VisibilityVertex source, VisibilityVertex target) {
-      return PointComparer.GetPureDirection(source.Point, target.Point);
-    }
-
-    static internal VisibilityVertex GetVertex(VisibilityEdge edge, Directions dir) {
-      Directions edgeDir = EdgeDirection(edge);
-      Debug.Assert(0 != (dir & (edgeDir | CompassVector.OppositeDir(edgeDir))), "dir is orthogonal to edge");
-      return (dir == edgeDir) ? edge.Target : edge.Source;
-    }
-
-    static internal VisibilityVertex FindNextVertex(VisibilityVertex vertex, Directions dir) {
-      // This function finds the next vertex in the desired direction relative to the
-      // current vertex, not necessarily the edge orientation, hence it does not use
-      // EdgeDirection().  This is so the caller can operate on a desired movement
-      // direction without having to track whether we're going forward or backward
-      // through the In/OutEdge chain.
-      int cEdges = vertex.InEdges.Count;      // indexing is faster than foreach for Lists
-      for (int ii = 0; ii < cEdges; ++ii) {
-        var edge = vertex.InEdges[ii];
-        if (PointComparer.GetPureDirection(vertex.Point, edge.SourcePoint) == dir) {
-          return edge.Source;
+    // Static utilities for the visibility graph.
+    internal static class StaticGraphUtility {
+        // Determine the direction of an edge.
+        static internal Directions EdgeDirection(VisibilityEdge edge) {
+            return EdgeDirection(edge.Source, edge.Target);
         }
-      }
-
-      // Avoid GetEnumerator overhead.
-      var outEdgeNode = vertex.OutEdges.IsEmpty() ? null : vertex.OutEdges.TreeMinimum();
-      for (; outEdgeNode != null; outEdgeNode = vertex.OutEdges.Next(outEdgeNode)) {
-        var edge = outEdgeNode.Item;
-        if (PointComparer.GetPureDirection(vertex.Point, edge.TargetPoint) == dir) {
-          return edge.Target;
+        static internal Directions EdgeDirection(VisibilityVertex source, VisibilityVertex target) {
+            return PointComparer.GetPureDirection(source.Point, target.Point);
         }
-      }
-      return null;
-    }
 
-    static internal VisibilityEdge FindNextEdge(VisibilityGraph vg, VisibilityVertex vertex, Directions dir) {
-      VisibilityVertex nextVertex = FindNextVertex(vertex, dir);
-      return (null == nextVertex) ? null : vg.FindEdge(vertex.Point, nextVertex.Point);
-    }
+        static internal VisibilityVertex GetVertex(VisibilityEdge edge, Directions dir) {
+            Directions edgeDir = EdgeDirection(edge);
+            Debug.Assert(0 != (dir & (edgeDir | CompassVector.OppositeDir(edgeDir))), "dir is orthogonal to edge");
+            return (dir == edgeDir) ? edge.Target : edge.Source;
+        }
+        
+        static internal VisibilityVertex FindNextVertex(VisibilityVertex vertex, Directions dir) {
+            // This function finds the next vertex in the desired direction relative to the
+            // current vertex, not necessarily the edge orientation, hence it does not use
+            // EdgeDirection().  This is so the caller can operate on a desired movement
+            // direction without having to track whether we're going forward or backward
+            // through the In/OutEdge chain.
+            int cEdges = vertex.InEdges.Count;      // indexing is faster than foreach for Lists
+            for (int ii = 0; ii < cEdges; ++ii) {
+                var edge = vertex.InEdges[ii];
+                if (PointComparer.GetPureDirection(vertex.Point, edge.SourcePoint) == dir) {
+                    return edge.Source;
+                }
+            }
 
-    static internal Point FindBendPointBetween(Point sourcePoint, Point targetPoint, Directions finalEdgeDir) {
-      Directions targetDir = PointComparer.GetDirections(sourcePoint, targetPoint);
-      Debug.Assert(!PointComparer.IsPureDirection(targetDir), "pure direction has no bend");
-      Directions firstDir = targetDir & ~finalEdgeDir;
-      Debug.Assert(PointComparer.IsPureDirection(firstDir), "firstDir is not pure");
+            // Avoid GetEnumerator overhead.
+            var outEdgeNode = vertex.OutEdges.IsEmpty() ? null : vertex.OutEdges.TreeMinimum();
+            for (; outEdgeNode != null; outEdgeNode = vertex.OutEdges.Next(outEdgeNode)) {
+                var edge = outEdgeNode.Item;
+                if (PointComparer.GetPureDirection(vertex.Point, edge.TargetPoint) == dir) {
+                    return edge.Target;
+                }
+            }
+            return null;
+        }
 
-      // Move along the first direction. If the first direction is horizontal then 
-      // targetPoint is at the correct horizontal position, and vice-versa.
-      return IsVertical(firstDir)
-              ? new Point(sourcePoint.X, targetPoint.Y)
-              : new Point(targetPoint.X, sourcePoint.Y);
-    }
+        static internal VisibilityEdge FindNextEdge(VisibilityGraph vg, VisibilityVertex vertex, Directions dir) {
+            VisibilityVertex nextVertex = FindNextVertex(vertex, dir);
+            return (null == nextVertex) ? null : vg.FindEdge(vertex.Point, nextVertex.Point);
+        }
 
-    static internal Point SegmentIntersection(Point first, Point second, Point from) {
-      Directions dir = PointComparer.GetPureDirection(first, second);
-      Point intersect = IsVertical(dir) ? new Point(first.X, from.Y) : new Point(from.X, first.Y);
-      return intersect;
-    }
+        static internal Point FindBendPointBetween(Point sourcePoint, Point targetPoint, Directions finalEdgeDir) {
+            Directions targetDir = PointComparer.GetDirections(sourcePoint, targetPoint);
+            Debug.Assert(!PointComparer.IsPureDirection(targetDir), "pure direction has no bend");
+            Directions firstDir = targetDir & ~finalEdgeDir;
+            Debug.Assert(PointComparer.IsPureDirection(firstDir), "firstDir is not pure");
 
-    static internal Point SegmentIntersection(SegmentBase seg, Point from) {
-      return SegmentIntersection(seg.Start, seg.End, from);
-    }
+            // Move along the first direction. If the first direction is horizontal then 
+            // targetPoint is at the correct horizontal position, and vice-versa.
+            return IsVertical(firstDir)
+                    ? new Point(sourcePoint.X, targetPoint.Y)
+                    : new Point(targetPoint.X, sourcePoint.Y);
+        }
 
-    static internal bool SegmentsIntersect(SegmentBase first, SegmentBase second) {
-      Point intersect;
-      return SegmentsIntersect(first, second, out intersect);
-    }
-    static internal bool SegmentsIntersect(SegmentBase first, SegmentBase second, out Point intersect) {
-      return IntervalsIntersect(first.Start, first.End, second.Start, second.End, out intersect);
-    }
-    static internal bool SegmentsIntersect(LineSegment first, LineSegment second, out Point intersect) {
-      return IntervalsIntersect(first.Start, first.End, second.Start, second.End, out intersect);
-    }
-    static internal Point SegmentIntersection(SegmentBase first, SegmentBase second) {
-      // Caller expects segments to intersect.
-      Point intersect;
-      if (!SegmentsIntersect(first, second, out intersect)) {
-        Debug.Assert(false, "intersect is not on both segments");
-      }
-      return intersect;
-    }
+        static internal Point SegmentIntersection(Point first, Point second, Point from) {
+            Directions dir = PointComparer.GetPureDirection(first, second);
+            Point intersect = IsVertical(dir) ? new Point(first.X, from.Y) : new Point(from.X, first.Y);
+            return intersect;
+        }
 
-    static internal bool IntervalsOverlap(SegmentBase first, SegmentBase second) {
-      return IntervalsOverlap(first.Start, first.End, second.Start, second.End);
-    }
+        static internal Point SegmentIntersection(SegmentBase seg, Point from) {
+            return SegmentIntersection(seg.Start, seg.End, from);
+        }
 
-    static internal bool IntervalsOverlap(Point start1, Point end1, Point start2, Point end2) {
-      return IntervalsAreCollinear(start1, end1, start2, end2)
-          && PointComparer.Compare(start1, end2) != PointComparer.Compare(end1, start2);
-    }
+        static internal bool SegmentsIntersect(SegmentBase first, SegmentBase second) {
+            Point intersect;
+            return SegmentsIntersect(first, second, out intersect);
+        }
+        static internal bool SegmentsIntersect(SegmentBase first, SegmentBase second, out Point intersect) {
+            return IntervalsIntersect(first.Start, first.End, second.Start, second.End, out intersect);
+        }
+        static internal bool SegmentsIntersect(LineSegment first, LineSegment second, out Point intersect) {
+            return IntervalsIntersect(first.Start, first.End, second.Start, second.End, out intersect);
+        }
+        static internal Point SegmentIntersection(SegmentBase first, SegmentBase second) {
+            // Caller expects segments to intersect.
+            Point intersect;
+            if (!SegmentsIntersect(first, second, out intersect)) {
+                Debug.Assert(false, "intersect is not on both segments");
+            }
+            return intersect;
+        }
 
-    static internal bool IntervalsAreCollinear(Point start1, Point end1, Point start2, Point end2) {
-      Debug.Assert(IsVertical(start1, end1) == IsVertical(start2, end2), "segments are not in the same orientation");
-      bool vertical = IsVertical(start1, end1);
-      if (IsVertical(start2, end2) == vertical) {
-        // This handles touching endpoints as well.
-        return vertical ? PointComparer.Equal(start1.X, start2.X) : PointComparer.Equal(start1.Y, start2.Y);
-      }
-      return false;
-    }
-    static internal bool IntervalsAreSame(Point start1, Point end1, Point start2, Point end2) {
-      return PointComparer.Equal(start1, start2) && PointComparer.Equal(end1, end2);
-    }
-    static internal bool IntervalsIntersect(Point firstStart, Point firstEnd, Point secondStart, Point secondEnd, out Point intersect) {
-      Debug.Assert(IsVertical(firstStart, firstEnd) != IsVertical(secondStart, secondEnd), "cannot intersect two parallel segments");
-      intersect = SegmentIntersection(firstStart, firstEnd, secondStart);
-      return PointIsOnSegment(firstStart, firstEnd, intersect)
-          && PointIsOnSegment(secondStart, secondEnd, intersect);
-    }
+        static internal bool IntervalsOverlap(SegmentBase first, SegmentBase second) {
+            return IntervalsOverlap(first.Start, first.End, second.Start, second.End);
+        }
 
-    static internal Point SegmentIntersection(VisibilityEdge edge, Point from) {
-      return SegmentIntersection(edge.SourcePoint, edge.TargetPoint, from);
-    }
+        static internal bool IntervalsOverlap(Point start1, Point end1, Point start2, Point end2) {
+            return IntervalsAreCollinear(start1, end1, start2, end2)
+                && PointComparer.Compare(start1, end2) != PointComparer.Compare(end1, start2);
+        }
 
-    static internal bool PointIsOnSegment(Point first, Point second, Point test) {
-      return PointComparer.Equal(first, test)
-          || PointComparer.Equal(second, test)
-          || (PointComparer.GetPureDirection(first, test) == PointComparer.GetPureDirection(test, second));
-    }
-    static internal bool PointIsOnSegment(SegmentBase seg, Point test) {
-      return PointIsOnSegment(seg.Start, seg.End, test);
-    }
+        static internal bool IntervalsAreCollinear(Point start1, Point end1, Point start2, Point end2) {
+            Debug.Assert(IsVertical(start1, end1) == IsVertical(start2, end2), "segments are not in the same orientation");
+            bool vertical = IsVertical(start1, end1);
+            if (IsVertical(start2, end2) == vertical) {
+                // This handles touching endpoints as well.
+                return vertical ? PointComparer.Equal(start1.X, start2.X) : PointComparer.Equal(start1.Y, start2.Y);
+            }
+            return false;
+        }
+        static internal bool IntervalsAreSame(Point start1, Point end1, Point start2, Point end2) {
+            return PointComparer.Equal(start1, start2) && PointComparer.Equal(end1, end2);
+        }
+        static internal bool IntervalsIntersect(Point firstStart, Point firstEnd, Point secondStart, Point secondEnd, out Point intersect) {
+            Debug.Assert(IsVertical(firstStart, firstEnd) != IsVertical(secondStart, secondEnd), "cannot intersect two parallel segments");
+            intersect = SegmentIntersection(firstStart, firstEnd, secondStart);
+            return PointIsOnSegment(firstStart, firstEnd, intersect)
+                && PointIsOnSegment(secondStart, secondEnd, intersect);
+        }
 
-    static internal bool IsVertical(Directions dir) {
-      return (0 != (dir & (Directions.North | Directions.South)));
-    }
-    static internal bool IsVertical(VisibilityEdge edge) {
-      return IsVertical(PointComparer.GetPureDirection(edge.SourcePoint, edge.TargetPoint));
-    }
-    static internal bool IsVertical(Point first, Point second) {
-      return IsVertical(PointComparer.GetPureDirection(first, second));
-    }
+        static internal Point SegmentIntersection(VisibilityEdge edge, Point from) {
+            return SegmentIntersection(edge.SourcePoint, edge.TargetPoint, from);
+        }
 
-    static internal bool IsVertical(LineSegment seg) {
-      return IsVertical(PointComparer.GetPureDirection(seg.Start, seg.End));
-    }
+        static internal bool PointIsOnSegment(Point first, Point second, Point test) {
+            return PointComparer.Equal(first, test)
+                || PointComparer.Equal(second, test)
+                || (PointComparer.GetPureDirection(first, test) == PointComparer.GetPureDirection(test, second));
+        }
+        static internal bool PointIsOnSegment(SegmentBase seg, Point test) {
+            return PointIsOnSegment(seg.Start, seg.End, test);
+        }
 
-    static internal bool IsAscending(Directions dir) {
-      return (0 != (dir & (Directions.North | Directions.East)));
-    }
+        static internal bool IsVertical(Directions dir) {
+            return (0 != (dir & (Directions.North | Directions.South)));
+        }
+        static internal bool IsVertical(VisibilityEdge edge) {
+            return IsVertical(PointComparer.GetPureDirection(edge.SourcePoint, edge.TargetPoint));
+        }
+        static internal bool IsVertical(Point first, Point second) {
+            return IsVertical(PointComparer.GetPureDirection(first, second));
+        }
 
-    static internal double Slope(Point start, Point end, ScanDirection scanDir) {
-      // Find the slope relative to scanline - how much scan coord changes per sweep change.
-      Point lineDirAsPoint = end - start;
-      return (lineDirAsPoint * scanDir.PerpDirectionAsPoint) / (lineDirAsPoint * scanDir.DirectionAsPoint);
-    }
+        static internal bool IsVertical(LineSegment seg) {
+            return IsVertical(PointComparer.GetPureDirection(seg.Start, seg.End));
+        }
 
-    static internal Tuple<Point, Point> SortAscending(Point a, Point b) {
-      Directions dir = PointComparer.GetDirections(a, b);
-      Debug.Assert((Directions.None == dir) || PointComparer.IsPureDirection(dir), "SortAscending with impure direction");
-      return ((Directions.None == dir) || IsAscending(dir)) ? new Tuple<Point, Point>(a, b) : new Tuple<Point, Point>(b, a);
-    }
+        static internal bool IsAscending(Directions dir) {
+            return (0 != (dir & (Directions.North | Directions.East)));
+        }
 
-    static internal Point RectangleBorderIntersect(Rectangle boundingBox, Point point, Directions dir) {
-      switch (dir) {
-        case Directions.North:
-        case Directions.South:
-          return new Point(point.X, GetRectangleBound(boundingBox, dir));
-        case Directions.East:
-        case Directions.West:
-          return new Point(GetRectangleBound(boundingBox, dir), point.Y);
-        default:
-          throw new InvalidOperationException(
+        static internal double Slope(Point start, Point end, ScanDirection scanDir) {
+            // Find the slope relative to scanline - how much scan coord changes per sweep change.
+            Point lineDirAsPoint = end - start;
+            return (lineDirAsPoint * scanDir.PerpDirectionAsPoint) / (lineDirAsPoint * scanDir.DirectionAsPoint);
+        }
+
+        static internal Tuple<Point, Point> SortAscending(Point a, Point b) {
+            Directions dir = PointComparer.GetDirections(a, b);
+            Debug.Assert((Directions. None == dir) || PointComparer.IsPureDirection(dir), "SortAscending with impure direction");
+            return ((Directions. None == dir) || IsAscending(dir)) ? new Tuple<Point, Point>(a, b) : new Tuple<Point, Point>(b, a);
+        }
+
+        static internal Point RectangleBorderIntersect(Rectangle boundingBox, Point point, Directions dir) {
+            switch (dir) {
+                case Directions.North:
+                case Directions.South:
+                    return new Point(point.X, GetRectangleBound(boundingBox, dir));
+                case Directions.East:
+                case Directions.West:
+                    return new Point(GetRectangleBound(boundingBox, dir), point.Y);
+                default:
+                    throw new InvalidOperationException(
 #if TEST_MSAGL
                             "Invalid direction"
 #endif // TEST
                         );
-      }
-    }
+            }
+        }
 
-    static internal double GetRectangleBound(Rectangle rect, Directions dir) {
-      switch (dir) {
-        case Directions.North:
-          return rect.Top;
-        case Directions.South:
-          return rect.Bottom;
-        case Directions.East:
-          return rect.Right;
-        case Directions.West:
-          return rect.Left;
-        default:
-          throw new InvalidOperationException(
+        static internal double GetRectangleBound(Rectangle rect, Directions dir) {
+            switch (dir) {
+                case Directions.North:
+                    return rect.Top;
+                case Directions.South:
+                    return rect.Bottom;
+                case Directions.East:
+                    return rect.Right;
+                case Directions.West:
+                    return rect.Left;
+                default:
+                    throw new InvalidOperationException(
 #if TEST_MSAGL
                             "Invalid direction"
 #endif // TEST
                         );
-      }
-    }
+            }
+        }
 
-    static internal bool RectangleInteriorsIntersect(Rectangle a, Rectangle b) {
-      return (PointComparer.Compare(a.Bottom, b.Top) < 0)
-          && (PointComparer.Compare(b.Bottom, a.Top) < 0)
-          && (PointComparer.Compare(a.Left, b.Right) < 0)
-          && (PointComparer.Compare(b.Left, a.Right) < 0);
-    }
+        static internal bool RectangleInteriorsIntersect(Rectangle a, Rectangle b) {
+            return (PointComparer.Compare(a.Bottom, b.Top) < 0)
+                && (PointComparer.Compare(b.Bottom, a.Top) < 0)
+                && (PointComparer.Compare(a.Left, b.Right) < 0)
+                && (PointComparer.Compare(b.Left, a.Right) < 0);
+        }
 
-    static internal bool PointIsInRectangleInterior(Point point, Rectangle rect) {
-      return (PointComparer.Compare(point.Y, rect.Top) < 0)
-          && (PointComparer.Compare(rect.Bottom, point.Y) < 0)
-          && (PointComparer.Compare(point.X, rect.Right) < 0)
-          && (PointComparer.Compare(rect.Left, point.X) < 0);
-    }
+        static internal bool PointIsInRectangleInterior(Point point, Rectangle rect) {
+            return (PointComparer.Compare(point.Y, rect.Top) < 0)
+                && (PointComparer.Compare(rect.Bottom, point.Y) < 0)
+                && (PointComparer.Compare(point.X, rect.Right) < 0)
+                && (PointComparer.Compare(rect.Left, point.X) < 0);
+        }
 
-    [Conditional("DEBUG")]
-    static internal void Assert(bool condition, string message, ObstacleTree obstacleTree, VisibilityGraph vg) {
-      if (!condition) {
-        Test_DumpVisibilityGraph(obstacleTree, vg);
-        Debug.Assert(condition, message);
-      }
-    }
+        [Conditional("DEBUG")]
+        static internal void Assert(bool condition, string message, ObstacleTree obstacleTree, VisibilityGraph vg) {
+            if (!condition) {
+                Test_DumpVisibilityGraph(obstacleTree, vg);
+                Debug.Assert(condition, message);
+            }
+        }
 
-    [Conditional("TEST_MSAGL")]
-    static internal void Test_DumpVisibilityGraph(ObstacleTree obstacleTree, VisibilityGraph vg) {
+        [Conditional("TEST_MSAGL")]
+        static internal void Test_DumpVisibilityGraph(ObstacleTree obstacleTree, VisibilityGraph vg) {
 #if TEST_MSAGL
             var debugCurves = Test_GetObstacleDebugCurves(obstacleTree);
             debugCurves.AddRange(Test_GetVisibilityGraphDebugCurves(vg));
             DebugCurveCollection.WriteToFile(debugCurves, GetDumpFileName("VisibilityGraph"));
 #endif // TEST
-    }
+        }
 
 #if DEVTRACE
         static internal void Test_DumpScanSegments(ObstacleTree obstacleTree, ScanSegmentTree hSegs, ScanSegmentTree vSegs) {
@@ -316,7 +316,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return System.IO.Path.GetTempPath() + prefix + ".DebugCurves";
         }
 #endif // TEST
-    // ReSharper restore InconsistentNaming
+// ReSharper restore InconsistentNaming
 
 #if DEBUG
         // Make it easier for floating-point conditional breakpoints in the VS debugger
@@ -328,5 +328,5 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return IsEqualForDebugger(variable.X, wantX) && IsEqualForDebugger(variable.Y, wantY);
         }
 #endif // DEBUG
-  }
+    }
 }

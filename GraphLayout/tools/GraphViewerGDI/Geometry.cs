@@ -33,31 +33,31 @@ using BBox = Microsoft.Msagl.Core.Geometry.Rectangle;
 using DrawingNode = Microsoft.Msagl.Drawing.Node;
 namespace Microsoft.Msagl.GraphViewerGdi {
 
-  /// <summary>
-  /// Summary description for Geometry.
-  /// </summary>
-  internal class Geometry : ObjectWithBox {
-    internal DObject dObject;
+    /// <summary>
+    /// Summary description for Geometry.
+    /// </summary>
+    internal class Geometry: ObjectWithBox {
+        internal DObject dObject;
 
-    internal override BBox Box { get { return bBox; } }
+        internal override BBox Box { get { return bBox; } }
 
-    internal BBox bBox;
+        internal BBox bBox;
 
-    internal Geometry(DObject dObject, BBox box) {
-      this.dObject = dObject;
-      this.bBox = box;
+        internal Geometry(DObject dObject, BBox box) {
+            this.dObject = dObject;
+            this.bBox = box;
+        }
+        internal Geometry(DObject dObject) {
+            this.dObject = dObject;
+
+            DNode dNode = dObject as DNode;
+            if (dNode != null)
+                bBox = dNode.DrawingNode.BoundingBox;
+            else {
+                DLabel dLabel = dObject as DLabel;
+                if (dLabel != null)
+                    bBox = dLabel.DrawingLabel.BoundingBox;
+            }
+        }
     }
-    internal Geometry(DObject dObject) {
-      this.dObject = dObject;
-
-      DNode dNode = dObject as DNode;
-      if (dNode != null)
-        bBox = dNode.DrawingNode.BoundingBox;
-      else {
-        DLabel dLabel = dObject as DLabel;
-        if (dLabel != null)
-          bBox = dLabel.DrawingLabel.BoundingBox;
-      }
-    }
-  }
 }

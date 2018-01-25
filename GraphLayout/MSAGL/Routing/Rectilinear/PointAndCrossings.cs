@@ -7,13 +7,13 @@ using System.Collections.Generic;
 using Microsoft.Msagl.Core.Geometry;
 
 namespace Microsoft.Msagl.Routing.Rectilinear {
-  internal struct PointAndCrossings {
-    internal Point Location { get; private set; }
-    internal List<GroupBoundaryCrossing> Crossings { get; private set; }
+    internal struct PointAndCrossings {
+        internal Point Location { get; private set; }
+        internal List<GroupBoundaryCrossing> Crossings { get; private set; }
 
-    internal PointAndCrossings(Point loc, List<GroupBoundaryCrossing> crossings) : this() {
-      Location = loc;
-      Crossings = crossings;
+        internal PointAndCrossings(Point loc, List<GroupBoundaryCrossing> crossings) : this() {
+            Location = loc;
+            Crossings = crossings;
+        }
     }
-  }
 }

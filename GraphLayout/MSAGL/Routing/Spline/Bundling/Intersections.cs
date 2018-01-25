@@ -11,157 +11,157 @@ using Microsoft.Msagl.Routing.Visibility;
 using Microsoft.Msagl.DebugHelpers;
 
 namespace Microsoft.Msagl.Routing.Spline.Bundling {
-  /// <summary>
-  /// Check intersections between hubs and obstacles with kd-tree
-  /// </summary>
-  internal class Intersections {
-    readonly MetroGraphData metroGraphData;
-    readonly BundlingSettings bundlingSettings;
-    Func<Station, Set<Polyline>> obstaclesToIgnore;
     /// <summary>
-    /// represents loose or tight hierarchy
+    /// Check intersections between hubs and obstacles with kd-tree
     /// </summary>
-    internal RectangleNode<Polyline> obstacleTree { get; set; }
+    internal class Intersections {
+        readonly MetroGraphData metroGraphData;
+        readonly BundlingSettings bundlingSettings;
+        Func<Station, Set<Polyline>> obstaclesToIgnore;
+        /// <summary>
+        /// represents loose or tight hierarchy
+        /// </summary>
+        internal RectangleNode<Polyline> obstacleTree { get; set; }
 
-    public Intersections(MetroGraphData metroGraphData, BundlingSettings bundlingSettings,
-        RectangleNode<Polyline> obstacleTree, Func<Station, Set<Polyline>> obstaclesToIgnore) {
-      this.metroGraphData = metroGraphData;
-      this.obstaclesToIgnore = obstaclesToIgnore;
-      this.bundlingSettings = bundlingSettings;
-      this.obstacleTree = obstacleTree;
-    }
-
-    internal Set<Polyline> ObstaclesToIgnoreForBundle(Station node, Station adj) {
-      if (node != null && adj != null)
-        return obstaclesToIgnore(node) + obstaclesToIgnore(adj);
-
-      if (node == null && adj == null)
-        return new Set<Polyline>();
-
-      if (node != null) return obstaclesToIgnore(node);
-      else return obstaclesToIgnore(adj);
-    }
-
-    #region Intersections with hub
-
-    internal bool HubAvoidsObstacles(Station node, Point center, double upperBound,
-        out List<Tuple<Polyline, Point>> touchedObstacles) {
-      touchedObstacles = new List<Tuple<Polyline, Point>>();
-      double minimalDistance = upperBound;
-      return IntersectCircleWithTree(obstacleTree, center, upperBound, obstaclesToIgnore(node), touchedObstacles, ref minimalDistance);
-    }
-
-    internal bool HubAvoidsObstacles(Point center, double upperBound, Set<Polyline> obstaclesToIgnore) {
-      List<Tuple<Polyline, Point>> touchedObstacles;
-      double minimalDistance;
-      return HubAvoidsObstacles(center, upperBound, obstaclesToIgnore, out touchedObstacles, out minimalDistance);
-    }
-
-    internal double GetMinimalDistanceToObstacles(Station node, Point nodePosition, double upperBound) {
-      List<Tuple<Polyline, Point>> touchedObstacles = new List<Tuple<Polyline, Point>>();
-      double minimalDistance = upperBound;
-      if (!IntersectCircleWithTree(obstacleTree, nodePosition, upperBound, obstaclesToIgnore(node), touchedObstacles, ref minimalDistance))
-        return 0;
-
-      return minimalDistance;
-    }
-
-    bool HubAvoidsObstacles(Point center, double upperBound, Set<Polyline> obstaclesToIgnore,
-        out List<Tuple<Polyline, Point>> touchedObstacles, out double minimalDistance) {
-      touchedObstacles = new List<Tuple<Polyline, Point>>();
-      minimalDistance = upperBound;
-      return IntersectCircleWithTree(obstacleTree, center, upperBound, obstaclesToIgnore, touchedObstacles, ref minimalDistance);
-    }
-
-    /// <summary>
-    /// Computes the intersection between the hub and obstacles
-    /// </summary>
-    /// <param name="node"></param>
-    /// <param name="center"></param>
-    /// <param name="radius"></param>
-    /// <param name="obstaclesToIgnore">these are the obstacles the are ignored by the method</param>
-    /// <param name="touchedObstacles">list of pairs (obstacle, closest point on the obstacle)</param>
-    /// <param name="minimalDistance">min distance from the center to an obstacle</param>
-    /// <returns>false iff center is inside of an obstacle</returns>
-    static bool IntersectCircleWithTree(RectangleNode<Polyline> node, Point center, double radius, Set<Polyline> obstaclesToIgnore,
-        List<Tuple<Polyline, Point>> touchedObstacles, ref double minimalDistance) {
-      if (!node.Rectangle.Contains(center, radius))
-        return true;
-
-      if (node.UserData == null) {
-        bool res = IntersectCircleWithTree(node.Left, center, radius, obstaclesToIgnore, touchedObstacles, ref minimalDistance);
-        if (!res) return false;
-        res = IntersectCircleWithTree(node.Right, center, radius, obstaclesToIgnore, touchedObstacles, ref minimalDistance);
-        if (!res) return false;
-      }
-      else {
-        Polyline obstacle = node.UserData;
-        if (obstaclesToIgnore.Contains(obstacle)) return true;
-
-        PointLocation pl = Curve.PointRelativeToCurveLocation(center, obstacle);
-        if (pl != PointLocation.Outside) return false;
-
-        Point touchPoint = obstacle[obstacle.ClosestParameter(center)];
-        double dist = (touchPoint - center).Length;
-        if (dist <= radius)
-          touchedObstacles.Add(new Tuple<Polyline, Point>(obstacle, touchPoint));
-        minimalDistance = Math.Min(dist, minimalDistance);
-      }
-      return true;
-    }
-
-    #endregion
-
-    /// <summary>
-    /// faster way to check segment-polyline intersection
-    /// NOTE: polyline points should be oriented clockwise
-    /// </summary>
-    internal static bool LineSegmentIntersectPolyline(Point start, Point end, Polyline poly) {
-      Point segDirection = end - start;   // the segment direction vector
-      Debug.Assert(segDirection.Length > ApproximateComparer.DistanceEpsilon);
-
-      double tStart = 0;                  // the maximum entering segment parameter
-      double tEnd = 1;                    // the minimum leaving segment parameter
-
-      foreach (var p in poly.PolylinePoints) {
-        //process one edge
-        var prev = p.PrevOnPolyline;
-        Point e = prev.Point - p.Point;
-        double num = Point.CrossProduct(e, start - p.Point);
-        double den = -Point.CrossProduct(e, segDirection);
-        if (Math.Abs(den) < ApproximateComparer.Tolerance) { // segment is nearly parallel to this edge
-          if (num < 0) return false;
-          continue;
+        public Intersections(MetroGraphData metroGraphData, BundlingSettings bundlingSettings,
+            RectangleNode<Polyline> obstacleTree, Func<Station, Set<Polyline>> obstaclesToIgnore) {
+            this.metroGraphData = metroGraphData;
+            this.obstaclesToIgnore = obstaclesToIgnore;
+            this.bundlingSettings = bundlingSettings;
+            this.obstacleTree = obstacleTree;
         }
 
-        //intersection parameter
-        double t = num / den;
-        if (den < 0) {
-          // segment is entering across this edge
-          tStart = Math.Max(tStart, t);
-          // segment enters after leaving polygon
-          if (tStart > tEnd) return false;
+        internal Set<Polyline> ObstaclesToIgnoreForBundle(Station node, Station adj) {
+            if (node != null && adj != null)
+                return obstaclesToIgnore(node) + obstaclesToIgnore(adj);
+
+            if (node == null && adj == null)
+                return new Set<Polyline>();
+
+            if (node != null) return obstaclesToIgnore(node);
+            else return obstaclesToIgnore(adj);
         }
-        else {
-          // segment is leaving across this edge
-          tEnd = Math.Min(tEnd, t);
-          // segment leaves before entering polygon
-          if (tStart > tEnd) return false;
+
+        #region Intersections with hub
+
+        internal bool HubAvoidsObstacles(Station node, Point center, double upperBound,
+            out List<Tuple<Polyline, Point>> touchedObstacles) {
+            touchedObstacles = new List<Tuple<Polyline, Point>>();
+            double minimalDistance = upperBound;
+            return IntersectCircleWithTree(obstacleTree, center, upperBound, obstaclesToIgnore(node), touchedObstacles, ref minimalDistance);
         }
-      }
 
-      return true;
-    }
+        internal bool HubAvoidsObstacles(Point center, double upperBound, Set<Polyline> obstaclesToIgnore) {
+            List<Tuple<Polyline, Point>> touchedObstacles;
+            double minimalDistance;
+            return HubAvoidsObstacles(center, upperBound, obstaclesToIgnore, out touchedObstacles, out minimalDistance);
+        }
+
+        internal double GetMinimalDistanceToObstacles(Station node, Point nodePosition, double upperBound) {
+            List<Tuple<Polyline, Point>> touchedObstacles = new List<Tuple<Polyline, Point>>();
+            double minimalDistance = upperBound;
+            if (!IntersectCircleWithTree(obstacleTree, nodePosition, upperBound, obstaclesToIgnore(node), touchedObstacles, ref minimalDistance))
+                return 0;
+
+            return minimalDistance;
+        }
+
+        bool HubAvoidsObstacles(Point center, double upperBound, Set<Polyline> obstaclesToIgnore,
+            out List<Tuple<Polyline, Point>> touchedObstacles, out double minimalDistance) {
+            touchedObstacles = new List<Tuple<Polyline, Point>>();
+            minimalDistance = upperBound;
+            return IntersectCircleWithTree(obstacleTree, center, upperBound, obstaclesToIgnore, touchedObstacles, ref minimalDistance);
+        }
+
+        /// <summary>
+        /// Computes the intersection between the hub and obstacles
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="center"></param>
+        /// <param name="radius"></param>
+        /// <param name="obstaclesToIgnore">these are the obstacles the are ignored by the method</param>
+        /// <param name="touchedObstacles">list of pairs (obstacle, closest point on the obstacle)</param>
+        /// <param name="minimalDistance">min distance from the center to an obstacle</param>
+        /// <returns>false iff center is inside of an obstacle</returns>
+        static bool IntersectCircleWithTree(RectangleNode<Polyline> node, Point center, double radius, Set<Polyline> obstaclesToIgnore,
+            List<Tuple<Polyline, Point>> touchedObstacles, ref double minimalDistance) {
+            if (!node.Rectangle.Contains(center, radius))
+                return true;
+
+            if (node.UserData == null) {
+                bool res = IntersectCircleWithTree(node.Left, center, radius, obstaclesToIgnore, touchedObstacles, ref minimalDistance);
+                if (!res) return false;
+                res = IntersectCircleWithTree(node.Right, center, radius, obstaclesToIgnore, touchedObstacles, ref minimalDistance);
+                if (!res) return false;
+            }
+            else {
+                Polyline obstacle = node.UserData;
+                if (obstaclesToIgnore.Contains(obstacle)) return true;
+
+                PointLocation pl = Curve.PointRelativeToCurveLocation(center, obstacle);
+                if (pl != PointLocation.Outside) return false;
+
+                Point touchPoint = obstacle[obstacle.ClosestParameter(center)];
+                double dist = (touchPoint - center).Length;
+                if (dist <= radius)
+                    touchedObstacles.Add(new Tuple<Polyline, Point>(obstacle, touchPoint));
+                minimalDistance = Math.Min(dist, minimalDistance);
+            }
+            return true;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// faster way to check segment-polyline intersection
+        /// NOTE: polyline points should be oriented clockwise
+        /// </summary>
+        internal static bool LineSegmentIntersectPolyline(Point start, Point end, Polyline poly) {
+            Point segDirection = end - start;   // the segment direction vector
+            Debug.Assert(segDirection.Length > ApproximateComparer.DistanceEpsilon);
+
+            double tStart = 0;                  // the maximum entering segment parameter
+            double tEnd = 1;                    // the minimum leaving segment parameter
+
+            foreach (var p in poly.PolylinePoints) {
+                //process one edge
+                var prev = p.PrevOnPolyline;
+                Point e = prev.Point - p.Point;
+                double num = Point.CrossProduct(e, start - p.Point);
+                double den = -Point.CrossProduct(e, segDirection);
+                if (Math.Abs(den) < ApproximateComparer.Tolerance) { // segment is nearly parallel to this edge
+                    if (num < 0) return false;
+                    continue;
+                }
+
+                //intersection parameter
+                double t = num / den;
+                if (den < 0) {
+                    // segment is entering across this edge
+                    tStart = Math.Max(tStart, t);
+                    // segment enters after leaving polygon
+                    if (tStart > tEnd) return false;
+                }
+                else {
+                    // segment is leaving across this edge
+                    tEnd = Math.Min(tEnd, t);
+                    // segment leaves before entering polygon
+                    if (tStart > tEnd) return false;
+                }
+            }
+
+            return true;
+        }
 
 
-    static internal Polyline Create4gon(Point apex, Point baseCenter, double width1, double width2) {
-      var norm = (baseCenter - apex).Normalize();
-      norm = new Point(norm.Y, -norm.X);
-      return new Polyline(apex + norm * width1 / 2, apex - norm * width1 / 2, baseCenter - norm * width2 / 2, baseCenter + norm * width2 / 2) { Closed = true };
-    }
+        static internal Polyline Create4gon(Point apex, Point baseCenter, double width1, double width2) {
+            var norm = (baseCenter - apex).Normalize();
+            norm = new Point(norm.Y, -norm.X);
+            return new Polyline(apex + norm * width1 / 2, apex - norm * width1 / 2, baseCenter - norm * width2 / 2, baseCenter + norm * width2 / 2) { Closed = true };
+        }
 
 
-
+       
 #if DEBUG && TEST_MSAGL
         /// <summary>
         /// check the validness of the drawing:
@@ -257,5 +257,5 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             return crossings.All(intersectionInfo => obstaclesToIgnoreForBundle.Contains((Polyline)intersectionInfo.Segment1));
         }
 #endif
-  }
+    }
 }

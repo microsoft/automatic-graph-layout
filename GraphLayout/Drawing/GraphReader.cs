@@ -12,11 +12,13 @@ using Microsoft.Msagl.DebugHelpers;
 using Microsoft.Msagl.DebugHelpers.Persistence;
 using System.Reflection;
 
-namespace Microsoft.Msagl.Drawing {
+namespace Microsoft.Msagl.Drawing
+{
   /// <summary>
   /// reads a drawing graph from a stream
   /// </summary>
-  public class GraphReader {
+  public class GraphReader
+  {
     /// <summary>
     /// the list of edges, needed to match it with GeometryGraphReader edges
     /// </summary>
@@ -28,7 +30,8 @@ namespace Microsoft.Msagl.Drawing {
     GeometryGraphReader geometryGraphReader;
     Dictionary<string, Type> _typeCache;
 
-    internal GraphReader(Stream streamP) {
+    internal GraphReader(Stream streamP)
+    {
       stream = streamP;
       XmlReaderSettings readerSettings = new XmlReaderSettings();
       readerSettings.IgnoreWhitespace = true;
@@ -41,17 +44,20 @@ namespace Microsoft.Msagl.Drawing {
     /// Reads the graph from a file
     /// </summary>
     /// <returns></returns>
-    internal Graph Read() {
+    internal Graph Read()
+    {
       System.Globalization.CultureInfo currentCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
       System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
-      try {
+      try
+      {
         ReadGraph();
       }
       finally { System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture; }
       return graph;
     }
 
-    private void ReadGraph() {
+    private void ReadGraph()
+    {
       MoveToContent();
       CheckToken(Tokens.MsaglGraph);
       XmlRead();
@@ -60,8 +66,10 @@ namespace Microsoft.Msagl.Drawing {
       ReadAttr();
       ReadLabel(graph);
       bool done = false;
-      do {
-        switch (GetElementTag()) {
+      do
+      {
+        switch (GetElementTag())
+        {
           case Tokens.Nodes:
             ReadNodes();
             break;
@@ -95,8 +103,10 @@ namespace Microsoft.Msagl.Drawing {
 
     }
 
-    void FleshOutSubgraphs() {
-      foreach (var subgraphTemlate in subgraphTable.Values) {
+    void FleshOutSubgraphs()
+    {
+      foreach (var subgraphTemlate in subgraphTable.Values)
+      {
         var subgraph = subgraphTemlate.Subgraph;
         foreach (var id in subgraphTemlate.SubgraphIdList)
           subgraph.AddSubgraph(subgraphTable[id].Subgraph);
@@ -105,7 +115,8 @@ namespace Microsoft.Msagl.Drawing {
       }
       var rootSubgraphSet = new Set<Subgraph>();
       foreach (var subgraph in subgraphTable.Values.Select(c => c.Subgraph))
-        if (subgraph.ParentSubgraph == null) {
+        if (subgraph.ParentSubgraph == null)
+        {
           rootSubgraphSet.Insert(subgraph);
           graph.RootSubgraph.AddSubgraph(subgraph);
         }
@@ -117,7 +128,8 @@ namespace Microsoft.Msagl.Drawing {
           graph.RootSubgraph.AddSubgraph(subgraph);
     }
 
-    void ReadSubgraphs() {
+    void ReadSubgraphs()
+    {
       xmlReader.Read();
       while (TokenIs(Tokens.Subgraph))
         ReadSubgraph();
@@ -127,14 +139,17 @@ namespace Microsoft.Msagl.Drawing {
 
     }
 
-    void ReadSubgraph() {
+    void ReadSubgraph()
+    {
       var listOfSubgraphs = xmlReader.GetAttribute(Tokens.listOfSubgraphs.ToString());
       var subgraphTempl = new SubgraphTemplate();
-      if (!string.IsNullOrEmpty(listOfSubgraphs)) {
+      if (!string.IsNullOrEmpty(listOfSubgraphs))
+      {
         subgraphTempl.SubgraphIdList.AddRange(listOfSubgraphs.Split(' '));
       }
       var listOfNodes = xmlReader.GetAttribute(Tokens.listOfNodes.ToString());
-      if (!string.IsNullOrEmpty(listOfNodes)) {
+      if (!string.IsNullOrEmpty(listOfNodes))
+      {
         subgraphTempl.NodeIdList.AddRange(listOfNodes.Split(' '));
       }
 
@@ -144,7 +159,8 @@ namespace Microsoft.Msagl.Drawing {
       subgraphTable[subgraph.Id] = subgraphTempl;
     }
 
-    private object ReadUserData() {
+    private object ReadUserData()
+    {
       CheckToken(Tokens.UserData);
       XmlRead();
       string typeString = ReadStringElement(Tokens.UserDataType);
@@ -159,12 +175,15 @@ namespace Microsoft.Msagl.Drawing {
       return dcs.ReadObject(xr, true);
     }
 
-    private void ReadLabel(DrawingObject parent) {
+    private void ReadLabel(DrawingObject parent)
+    {
       CheckToken(Tokens.Label);
       bool hasLabel = !this.xmlReader.IsEmptyElement;
-      if (hasLabel) {
+      if (hasLabel)
+      {
         XmlRead();
-        Label label = new Label {
+        Label label = new Label
+        {
           Text = ReadStringElement(Tokens.Text),
           FontName = ReadStringElement(Tokens.FontName),
           FontColor = ReadColorElement(Tokens.FontColor),
@@ -178,10 +197,13 @@ namespace Microsoft.Msagl.Drawing {
 
         ReadEndElement();
       }
-      else {
+      else
+      {
         var node = parent as Node;
-        if (node != null) {//we still need a label!
-          Label label = new Label {
+        if (node != null)
+        {//we still need a label!
+          Label label = new Label
+          {
             Text = node.Id,
             Owner = parent
           };
@@ -191,33 +213,39 @@ namespace Microsoft.Msagl.Drawing {
       }
     }
 
-    void ReadGeomGraph() {
+    void ReadGeomGraph()
+    {
       geometryGraphReader = new GeometryGraphReader();
       geometryGraphReader.SetXmlReader(this.xmlReader);
       GeometryGraph geomGraph = geometryGraphReader.Read();
       BindTheGraphs(this.graph, geomGraph, graph.LayoutAlgorithmSettings);
     }
 
-    void BindTheGraphs(Graph drawingGraph, GeometryGraph geomGraph, LayoutAlgorithmSettings settings) {
+    void BindTheGraphs(Graph drawingGraph, GeometryGraph geomGraph, LayoutAlgorithmSettings settings)
+    {
       drawingGraph.GeometryGraph = geomGraph;
 
-      foreach (Node dn in drawingGraph.NodeMap.Values) {
+      foreach (Node dn in drawingGraph.NodeMap.Values)
+      {
         var geomNode = dn.GeometryNode = geometryGraphReader.FindNodeById(dn.Id);
         geomNode.UserData = dn;
       }
 
-      foreach (var subgraph in drawingGraph.RootSubgraph.AllSubgraphsDepthFirst()) {
+      foreach (var subgraph in drawingGraph.RootSubgraph.AllSubgraphsDepthFirst())
+      {
         var geomNode = subgraph.GeometryNode = geometryGraphReader.FindClusterById(subgraph.Id);
         if (geomNode != null)
           geomNode.UserData = subgraph;
       }
       //  geom edges have to appear in the same order as drawing edges
-      for (int i = 0; i < EdgeList.Count; i++) {
+      for (int i = 0; i < EdgeList.Count; i++)
+      {
         var drawingEdge = EdgeList[i];
         var geomEdge = geometryGraphReader.EdgeList[i];
         drawingEdge.GeometryEdge = geomEdge;
         geomEdge.UserData = drawingEdge;
-        if (drawingEdge.Label != null) {
+        if (drawingEdge.Label != null)
+        {
           drawingEdge.Label.GeometryLabel = geomEdge.Label;
           geomEdge.Label.UserData = drawingEdge.Label;
         }
@@ -226,10 +254,12 @@ namespace Microsoft.Msagl.Drawing {
       drawingGraph.LayoutAlgorithmSettings = settings;
     }
 
-    private void ReadEdges() {
+    private void ReadEdges()
+    {
       CheckToken(Tokens.Edges);
 
-      if (xmlReader.IsEmptyElement) {
+      if (xmlReader.IsEmptyElement)
+      {
         XmlRead();
         return;
       }
@@ -240,7 +270,8 @@ namespace Microsoft.Msagl.Drawing {
       ReadEndElement();
     }
 
-    private void ReadEdge() {
+    private void ReadEdge()
+    {
       CheckToken(Tokens.Edge);
       XmlRead();
       object userData = null;
@@ -249,7 +280,8 @@ namespace Microsoft.Msagl.Drawing {
       string srcId = ReadStringElement(Tokens.SourceNodeID);
       string targetId = ReadStringElement(Tokens.TargetNodeID);
       Edge edge = null;
-      try {
+      try
+      {
         string edgeTypeName = ReadEdgeType();
         Type edgeTpye = GetTypeByName(edgeTypeName);
         Node srcNode = graph.FindNode(srcId);
@@ -257,7 +289,8 @@ namespace Microsoft.Msagl.Drawing {
         edge = (Edge)Activator.CreateInstance(edgeTpye, new object[] { srcNode, targetNode });
         graph.AddPrecalculatedEdge(edge);
       }
-      catch {
+      catch
+      {
         edge = graph.AddEdge(srcId, targetId);
       }
 
@@ -269,7 +302,8 @@ namespace Microsoft.Msagl.Drawing {
       ReadEndElement();
     }
 
-    private string ReadEdgeType() {
+    private string ReadEdgeType()
+    {
       CheckToken(Tokens.EdgeType);
       XmlRead();
       string t = ReadStringElement(Tokens.EdgeTypeName);
@@ -277,7 +311,8 @@ namespace Microsoft.Msagl.Drawing {
       return t;
     }
 
-    Tokens GetElementTag() {
+    Tokens GetElementTag()
+    {
       Tokens token;
       if (xmlReader.ReadState == ReadState.EndOfFile)
         return Tokens.End;
@@ -286,7 +321,8 @@ namespace Microsoft.Msagl.Drawing {
       throw new InvalidOperationException();
     }
 
-    private void ReadEdgeAttr(EdgeAttr edgeAttr) {
+    private void ReadEdgeAttr(EdgeAttr edgeAttr)
+    {
       CheckToken(Tokens.EdgeAttribute);
       XmlRead();
       ReadBaseAttr(edgeAttr);
@@ -299,36 +335,42 @@ namespace Microsoft.Msagl.Drawing {
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "token")]
-    private int ReadIntElement(Tokens token) {
+    private int ReadIntElement(Tokens token)
+    {
       CheckToken(token);
       return ReadElementContentAsInt();
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "token")]
-    private string ReadStringElement(Tokens token) {
+    private string ReadStringElement(Tokens token)
+    {
       CheckToken(token);
       return ReadElementContentAsString();
     }
 
 
-    private int ReadElementContentAsInt() {
+    private int ReadElementContentAsInt()
+    {
       return xmlReader.ReadElementContentAsInt();
     }
 
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "token")]
-    private bool ReadBooleanElement(Tokens token) {
+    private bool ReadBooleanElement(Tokens token)
+    {
       CheckToken(token);
       return ReadElementContentAsBoolean();
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "token")]
-    private double ReadDoubleElement(Tokens token) {
+    private double ReadDoubleElement(Tokens token)
+    {
       CheckToken(token);
       return ReadElementContentAsDouble();
     }
 
-    private void ReadNodes() {
+    private void ReadNodes()
+    {
       CheckToken(Tokens.Nodes);
       XmlRead();
       while (TokenIs(Tokens.Node))
@@ -336,12 +378,14 @@ namespace Microsoft.Msagl.Drawing {
       ReadEndElement();
     }
 
-    private void ReadNode() {
+    private void ReadNode()
+    {
       CheckToken(Tokens.Node);
       ReadNodeContent();
     }
 
-    Subgraph ReadSubgraphContent() {
+    Subgraph ReadSubgraphContent()
+    {
       object userData = null;
       if (TokenIs(Tokens.UserData))
         userData = ReadUserData();
@@ -353,20 +397,23 @@ namespace Microsoft.Msagl.Drawing {
       return subgraph;
     }
 
-    void ReadNodeContent() {
+    void ReadNodeContent()
+    {
       XmlRead();
       object userData = null;
       if (TokenIs(Tokens.UserData))
         userData = ReadUserData();
       var nodeAttr = new NodeAttr();
       Node node = null;
-      try {
+      try
+      {
         string nodeTypeName = ReadNodeType();
         ReadNodeAttr(nodeAttr);
         Type nodeType = GetTypeByName(nodeTypeName);
         node = (Node)Activator.CreateInstance(nodeType, new object[] { nodeAttr.Id });
       }
-      catch {
+      catch
+      {
         // fall back to Node
         ReadNodeAttr(nodeAttr);
         node = graph.AddNode(nodeAttr.Id);
@@ -379,7 +426,8 @@ namespace Microsoft.Msagl.Drawing {
       ReadEndElement();
     }
 
-    private void ReadNodeAttr(NodeAttr na) {
+    private void ReadNodeAttr(NodeAttr na)
+    {
       CheckToken(Tokens.NodeAttribute);
       XmlRead();
       ReadBaseAttr(na);
@@ -392,7 +440,8 @@ namespace Microsoft.Msagl.Drawing {
       ReadEndElement();
     }
 
-    private string ReadNodeType() {
+    private string ReadNodeType()
+    {
       CheckToken(Tokens.NodeType);
       XmlRead();
       string t = ReadStringElement(Tokens.NodeTypeName);
@@ -400,7 +449,8 @@ namespace Microsoft.Msagl.Drawing {
       return t;
     }
 
-    private void ReadBaseAttr(AttributeBase baseAttr) {
+    private void ReadBaseAttr(AttributeBase baseAttr)
+    {
       CheckToken(Tokens.BaseAttr);
       XmlRead();
       ReadStyles(baseAttr);
@@ -410,11 +460,13 @@ namespace Microsoft.Msagl.Drawing {
       ReadEndElement();
     }
 
-    private void ReadStyles(AttributeBase baseAttr) {
+    private void ReadStyles(AttributeBase baseAttr)
+    {
       CheckToken(Tokens.Styles);
       XmlRead();
       bool haveStyles = false;
-      while (TokenIs(Tokens.Style)) {
+      while (TokenIs(Tokens.Style))
+      {
         baseAttr.AddStyle((Style)Enum.Parse(typeof(Style), ReadStringElement(Tokens.Style), false));
         haveStyles = true;
       }
@@ -422,28 +474,34 @@ namespace Microsoft.Msagl.Drawing {
         ReadEndElement();
     }
 
-    private void ReadEndElement() {
+    private void ReadEndElement()
+    {
       xmlReader.ReadEndElement();
     }
 
-    private string ReadElementContentAsString() {
+    private string ReadElementContentAsString()
+    {
       return xmlReader.ReadElementContentAsString();
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)"), System.Diagnostics.Conditional("DEBUGGLEE")]
-    private void CheckToken(Tokens t) {
-      if (!xmlReader.IsStartElement(t.ToString())) {
+    private void CheckToken(Tokens t)
+    {
+      if (!xmlReader.IsStartElement(t.ToString()))
+      {
         throw new InvalidDataException(String.Format("expecting {0}", t));
       }
 
     }
 
-    private bool TokenIs(Tokens t) {
+    private bool TokenIs(Tokens t)
+    {
       return xmlReader.IsStartElement(t.ToString());
     }
 
 
-    private void ReadAttr() {
+    private void ReadAttr()
+    {
       CheckToken(Tokens.GraphAttribute);
       XmlRead();
       ReadBaseAttr(graph.Attr);
@@ -460,21 +518,25 @@ namespace Microsoft.Msagl.Drawing {
       ReadEndElement();
     }
 
-    private void ReadBorder() {
+    private void ReadBorder()
+    {
       graph.Attr.Border = ReadIntElement(Tokens.Border);
     }
 
-    private void ReadMinNodeWidth() {
+    private void ReadMinNodeWidth()
+    {
       this.graph.Attr.MinNodeWidth = ReadDoubleElement(Tokens.MinNodeWidth);
     }
 
-    private void ReadMinNodeHeight() {
+    private void ReadMinNodeHeight()
+    {
       this.graph.Attr.MinNodeHeight = ReadDoubleElement(Tokens.MinNodeHeight);
     }
 
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "token")]
-    Color ReadColorElement(Tokens token) {
+    Color ReadColorElement(Tokens token)
+    {
       CheckToken(token);
       XmlRead();
       Color c = ReadColor();
@@ -482,7 +544,8 @@ namespace Microsoft.Msagl.Drawing {
       return c;
     }
 
-    Color ReadColor() {
+    Color ReadColor()
+    {
       CheckToken(Tokens.Color);
       XmlRead();
       Color c = new Color(ReadByte(Tokens.A), ReadByte(Tokens.R), ReadByte(Tokens.G), ReadByte(Tokens.B));
@@ -490,48 +553,59 @@ namespace Microsoft.Msagl.Drawing {
       return c;
     }
 
-    private byte ReadByte(Tokens token) {
+    private byte ReadByte(Tokens token)
+    {
       return (byte)ReadIntElement(token);
     }
 
-    private void ReadAspectRatio() {
+    private void ReadAspectRatio()
+    {
       CheckToken(Tokens.AspectRatio);
       graph.Attr.AspectRatio = ReadElementContentAsDouble();
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Convert.ToBoolean(System.String)")]
-    private bool ReadElementContentAsBoolean() {
+    private bool ReadElementContentAsBoolean()
+    {
       return Convert.ToBoolean(xmlReader.ReadElementContentAsString());
     }
 
 
-    private double ReadElementContentAsDouble() {
+    private double ReadElementContentAsDouble()
+    {
       return xmlReader.ReadElementContentAsDouble();
     }
 
-    private void MoveToContent() {
+    private void MoveToContent()
+    {
       xmlReader.MoveToContent();
     }
 
-    private void XmlRead() {
+    private void XmlRead()
+    {
       xmlReader.Read();
     }
 
     /// <summary>
     /// Initialize _typeCache for Appdomain for type name lookup
     /// </summary>
-    private void InitTypeCache() {
+    private void InitTypeCache()
+    {
       _typeCache = new Dictionary<string, Type>();
       Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
       Type nodeType = typeof(Node);
       Type edgeType = typeof(Edge);
-      foreach (var a in assemblies) {
-        try {
-          foreach (Type t in a.GetTypes().Where(t => t.IsClass && !t.IsAbstract && (t.IsSubclassOf(nodeType) || t.IsSubclassOf(edgeType)))) {
+      foreach (var a in assemblies)
+      {
+        try
+        {
+          foreach (Type t in a.GetTypes().Where(t => t.IsClass && !t.IsAbstract && (t.IsSubclassOf(nodeType) || t.IsSubclassOf(edgeType))))
+          {
             _typeCache.Add(t.FullName, t);
           }
         }
-        catch (Exception Ex) {
+        catch (Exception Ex)
+        {
         }
       }
     }
@@ -541,7 +615,8 @@ namespace Microsoft.Msagl.Drawing {
     /// </summary>
     /// <param name="FullTypeName"></param>
     /// <returns></returns>
-    public Type GetTypeByName(string FullTypeName) {
+    public Type GetTypeByName(string FullTypeName)
+    {
       Type result = null;
       if (_typeCache.ContainsKey(FullTypeName)) result = _typeCache[FullTypeName];
       return result;

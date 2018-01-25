@@ -10,7 +10,8 @@ using Edge = Microsoft.Msagl.Core.Layout.Edge;
 using ILabeledObject = Microsoft.Msagl.Core.Layout.ILabeledObject;
 using Label = Microsoft.Msagl.Core.Layout.Label;
 
-namespace Microsoft.Msagl.Drawing {
+namespace Microsoft.Msagl.Drawing
+{
   /// <summary>
   /// If this delegate is not null and returns true then no node rendering is done by the viewer, the delegate is supposed to do the job.
   /// </summary>
@@ -29,14 +30,16 @@ namespace Microsoft.Msagl.Drawing {
   /// Node of the Microsoft.Msagl.Drawing.
   /// </summary>
   [Serializable]
-  public class Node : DrawingObject, ILabeledObject {
+  public class Node : DrawingObject, ILabeledObject
+  {
 
 
     Label label;
     /// <summary>
     /// the label of the object
     /// </summary>
-    public Label Label {
+    public Label Label
+    {
       get { return label; }
       set { label = value; }
     }
@@ -48,7 +51,8 @@ namespace Microsoft.Msagl.Drawing {
     /// <summary>
     /// If this delegate is not null and returns true then no node rendering is done
     /// </summary>
-    public DelegateToOverrideNodeRendering DrawNodeDelegate {
+    public DelegateToOverrideNodeRendering DrawNodeDelegate
+    {
       get { return drawNodeDelegate; }
       set { drawNodeDelegate = value; }
     }
@@ -59,7 +63,8 @@ namespace Microsoft.Msagl.Drawing {
     /// If the delegate is not null and returns not a null ICurve then this curve is taken as the node boundary
     /// </summary>
     /// <returns></returns>
-    public DelegateToSetNodeBoundary NodeBoundaryDelegate {
+    public DelegateToSetNodeBoundary NodeBoundaryDelegate
+    {
       get { return nodeBoundaryDelegate; }
       set { nodeBoundaryDelegate = value; }
     }
@@ -67,7 +72,8 @@ namespace Microsoft.Msagl.Drawing {
     /// <summary>
     /// gets the node bounding box
     /// </summary>
-    override public Rectangle BoundingBox {
+    override public Rectangle BoundingBox
+    {
       get { return GeometryNode.BoundaryCurve.BoundingBox; }
     }
 
@@ -79,7 +85,8 @@ namespace Microsoft.Msagl.Drawing {
     /// gets or sets the node attribute
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Attr")]
-    public NodeAttr Attr {
+    public NodeAttr Attr
+    {
       get { return attr; }
       set { attr = value; }
     }
@@ -87,7 +94,8 @@ namespace Microsoft.Msagl.Drawing {
     /// Creates a Node instance
     /// </summary>
     /// <param name="id">node name</param>
-    public Node(string id) {
+    public Node(string id)
+    {
       Label = new Label();
       Label.GeometryLabel = null;
 
@@ -102,7 +110,8 @@ namespace Microsoft.Msagl.Drawing {
     /// <param name="o"></param>
     /// <returns></returns>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "o")]
-    public int CompareTo(object o) {
+    public int CompareTo(object o)
+    {
       Node n = o as Node;
       if (n == null)
         throw new InvalidOperationException();
@@ -113,7 +122,8 @@ namespace Microsoft.Msagl.Drawing {
     /// 
     /// </summary>
     /// <returns></returns>
-    public override string ToString() {
+    public override string ToString()
+    {
       string label_text = Label == null ? Id : Label.Text;
       return Utils.Quote(label_text) + "[" + Attr.ToString() + "," + GeomDataString() + "]";
     }
@@ -121,17 +131,21 @@ namespace Microsoft.Msagl.Drawing {
     string HeightString() { return "height=" + GeometryNode.Height; }
     string WidthString() { return "width=" + GeometryNode.Width; }
     string CenterString() { return "pos=" + string.Format("\"{0},{1}\"", GeometryNode.Center.X, GeometryNode.Center.Y); }
-    string GeomDataString() {
+    string GeomDataString()
+    {
       return Utils.ConcatWithComma(HeightString(), CenterString(), WidthString());
     }
     /// <summary>
     /// the node ID
     /// </summary>
-    public string Id {
-      get {
+    public string Id
+    {
+      get
+      {
         return this.attr.Id;
       }
-      set {
+      set
+      {
         attr.Id = value;
       }
     }
@@ -161,7 +175,8 @@ namespace Microsoft.Msagl.Drawing {
     /// </summary>
     /// <param name="e"></param>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e")]
-    public void AddInEdge(Edge e) {
+    public void AddInEdge(Edge e)
+    {
       inEdges.Insert(e);
     }
 
@@ -170,7 +185,8 @@ namespace Microsoft.Msagl.Drawing {
     /// </summary>
     /// <param name="e"></param>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e")]
-    public void AddOutEdge(Edge e) {
+    public void AddOutEdge(Edge e)
+    {
       outEdges.Insert(e);
     }
 
@@ -179,7 +195,8 @@ namespace Microsoft.Msagl.Drawing {
     /// </summary>
     /// <param name="e"></param>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e")]
-    public void AddSelfEdge(Edge e) {
+    public void AddSelfEdge(Edge e)
+    {
       selfEdges.Insert(e);
     }
 
@@ -187,7 +204,8 @@ namespace Microsoft.Msagl.Drawing {
     /// Removes an in-edge from the node's edge list (this won't remove the edge from the graph).
     /// </summary>
     /// <param name="edge">The edge to be removed</param>
-    public void RemoveInEdge(Edge edge) {
+    public void RemoveInEdge(Edge edge)
+    {
       inEdges.Remove(edge);
     }
 
@@ -195,7 +213,8 @@ namespace Microsoft.Msagl.Drawing {
     /// Removes an out-edge from the node's edge list (this won't remove the edge from the graph).
     /// </summary>
     /// <param name="edge">The edge to be removed</param>
-    public void RemoveOutEdge(Edge edge) {
+    public void RemoveOutEdge(Edge edge)
+    {
       outEdges.Remove(edge);
     }
 
@@ -203,14 +222,16 @@ namespace Microsoft.Msagl.Drawing {
     /// Removes a self-edge from the node's edge list (this won't remove the edge from the graph).
     /// </summary>
     /// <param name="edge">The edge to be removed</param>
-    public void RemoveSelfEdge(Edge edge) {
+    public void RemoveSelfEdge(Edge edge)
+    {
       selfEdges.Remove(edge);
     }
 
     /// <summary>
     /// gets the geometry node
     /// </summary>
-    public override GeometryObject GeometryObject {
+    public override GeometryObject GeometryObject
+    {
       get { return GeometryNode; }
       set { GeometryNode = (Core.Layout.Node)value; }
     }
@@ -218,7 +239,8 @@ namespace Microsoft.Msagl.Drawing {
     /// <summary>
     /// the underlying geometry node
     /// </summary>
-    public Core.Layout.Node GeometryNode {
+    public Core.Layout.Node GeometryNode
+    {
       get { return geometryNode; }
       set { geometryNode = value; }
     }
@@ -230,9 +252,11 @@ namespace Microsoft.Msagl.Drawing {
     /// a shortcut to the node label text
     /// </summary>
 
-    public string LabelText {
+    public string LabelText
+    {
       get { return Label != null ? Label.Text : ""; }
-      set {
+      set
+      {
         if (Label == null)
           Label = new Label();
         Label.Text = value;
@@ -242,8 +266,10 @@ namespace Microsoft.Msagl.Drawing {
     /// <summary>
     /// enumerates over all edges
     /// </summary>
-    public IEnumerable<Edge> Edges {
-      get {
+    public IEnumerable<Edge> Edges
+    {
+      get
+      {
         foreach (Edge e in InEdges)
           yield return e;
         foreach (Edge e in OutEdges)
@@ -256,14 +282,16 @@ namespace Microsoft.Msagl.Drawing {
     /// <summary>
     /// 
     /// </summary>
-    public double Height {
+    public double Height
+    {
       get { return GeometryNode.Height; }
 
     }
     /// <summary>
     /// 
     /// </summary>
-    public double Width {
+    public double Width
+    {
       get { return GeometryNode.Width; }
 
     }
@@ -278,7 +306,8 @@ namespace Microsoft.Msagl.Drawing {
     /// </summary>
     /// <param name="obj"></param>
     /// <returns></returns>
-    public override bool Equals(object obj) {
+    public override bool Equals(object obj)
+    {
       var otherNode = obj as Node;
       if (otherNode == null)
         return false;
@@ -289,17 +318,21 @@ namespace Microsoft.Msagl.Drawing {
     /// 
     /// </summary>
     /// <returns></returns>
-    public override int GetHashCode() {
+    public override int GetHashCode()
+    {
       return Id.GetHashCode();
     }
     /// <summary>
     /// 
     /// </summary>
-    public override bool IsVisible {
-      get {
+    public override bool IsVisible
+    {
+      get
+      {
         return base.IsVisible;
       }
-      set {
+      set
+      {
         base.IsVisible = value;
         if (!value)
           foreach (var e in Edges)

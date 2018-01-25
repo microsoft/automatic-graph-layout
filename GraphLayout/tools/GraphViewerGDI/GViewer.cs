@@ -32,12 +32,14 @@ using Point = Microsoft.Msagl.Core.Geometry.Point;
 using Rectangle = System.Drawing.Rectangle;
 using Size = Microsoft.Msagl.Core.DataStructures.Size;
 
-namespace Microsoft.Msagl.GraphViewerGdi {
+namespace Microsoft.Msagl.GraphViewerGdi
+{
   /// <summary>
   /// Summary description for DOTViewer.
   /// </summary>
   [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-  public sealed partial class GViewer : UserControl {
+  public sealed partial class GViewer : UserControl
+  {
     #region Support for layout editing
 
     double arrowheadLength = 10;
@@ -57,7 +59,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// gets or sets the drawing layout editor
     /// </summary>
-    public LayoutEditor LayoutEditor {
+    public LayoutEditor LayoutEditor
+    {
       get { return layoutEditor; }
       set { layoutEditor = value; }
     }
@@ -66,11 +69,14 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// if is set to true then the mouse left click on a node and dragging the cursor to 
     /// another node will create an edge and add it to the graph
     /// </summary>
-    public bool InsertingEdge {
+    public bool InsertingEdge
+    {
       get { return insertingEdge; }
-      set {
+      set
+      {
         insertingEdge = value;
-        if (LayoutEditor != null) {
+        if (LayoutEditor != null)
+        {
           if (value)
             EntityFilterDelegate = EdgeFilter;
           else
@@ -82,8 +88,10 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// the length of arrowheads for newly inserted edges
     /// </summary>
-    public double ArrowheadLength {
-      get {
+    public double ArrowheadLength
+    {
+      get
+      {
         if (Graph != null && Graph.LayoutAlgorithmSettings is SugiyamaLayoutSettings)
           return Math.Min(arrowheadLength, Graph.Attr.LayerSeparation / 2);
         return arrowheadLength;
@@ -95,11 +103,13 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// creates the port visual if it does not exist, and sets the port location
     /// </summary>
     /// <param name="portLocation"></param>
-    public void SetSourcePortForEdgeRouting(Point portLocation) {
+    public void SetSourcePortForEdgeRouting(Point portLocation)
+    {
       var box = new Core.Geometry.Rectangle(portLocation);
       box.Pad(UnderlyingPolylineCircleRadius);
 
-      if (SourcePortIsPresent) {
+      if (SourcePortIsPresent)
+      {
         var prevBox = new Core.Geometry.Rectangle(SourcePortLocation);
         prevBox.Pad(UnderlyingPolylineCircleRadius);
         box.Add(prevBox);
@@ -118,7 +128,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// 
     /// </summary>
     /// <param name="portLocation"></param>
-    public void SetTargetPortForEdgeRouting(Point portLocation) {
+    public void SetTargetPortForEdgeRouting(Point portLocation)
+    {
       TargetPortIsPresent = true;
       TargetPortLocation = portLocation;
     }
@@ -130,8 +141,10 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// 
     /// </summary>
-    public void RemoveSourcePortEdgeRouting() {
-      if (SourcePortIsPresent) {
+    public void RemoveSourcePortEdgeRouting()
+    {
+      if (SourcePortIsPresent)
+      {
         var prevBox = new Core.Geometry.Rectangle(SourcePortLocation);
         prevBox.Pad(UnderlyingPolylineCircleRadius);
         panel.Invalidate(MapSourceRectangleToScreenRectangle(prevBox));
@@ -141,12 +154,14 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// 
     /// </summary>
-    public void RemoveTargetPortEdgeRouting() {
+    public void RemoveTargetPortEdgeRouting()
+    {
       TargetPortIsPresent = false;
     }
 
 
-    void ClearLayoutEditor() {
+    void ClearLayoutEditor()
+    {
       if (LayoutEditor != null)
         DisableDrawingLayoutEditor();
       InitDrawingLayoutEditor();
@@ -190,7 +205,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// Required method for Designer support - do not modify 
     /// the contents of this method with the code editor.
     /// </summary>
-    void InitializeComponent() {
+    void InitializeComponent()
+    {
       this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GViewer));
       this.imageList = new System.Windows.Forms.ImageList(this.components);
@@ -360,26 +376,31 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// 
     /// </summary>
-    public double CurrentScale {
+    public double CurrentScale
+    {
       get { return Transform[0, 0]; }
     }
 
     /// <summary>
     /// support for mouse selection 
     /// </summary>
-    public bool BuildHitTree {
+    public bool BuildHitTree
+    {
       get { return buildHitTree; }
       set { buildHitTree = value; }
     }
 
-    internal DGraph DGraph {
+    internal DGraph DGraph
+    {
       get { return dGraph; }
       set { dGraph = value; }
     }
 
-    internal Graph OriginalGraph {
+    internal Graph OriginalGraph
+    {
       get { return originalGraph; }
-      set {
+      set
+      {
         originalGraph = value;
         //this.nodeDragger = new DrawingNodeDragger(originalGraph);
       }
@@ -388,14 +409,18 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// If set to false no layout is calculated. It is presumed that the layout is precalculated.
     /// </summary>
-    public bool NeedToCalculateLayout {
+    public bool NeedToCalculateLayout
+    {
       get { return needToCalculateLayout; }
       set { needToCalculateLayout = value; }
     }
 
-    internal BBNode BbNode {
-      get {
-        if (bBNode == null) {
+    internal BBNode BbNode
+    {
+      get
+      {
+        if (bBNode == null)
+        {
           DGraph.BuildBBHierarchy();
           bBNode = DGraph.BbNode;
         }
@@ -407,7 +432,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// the last MSAGL file name used when saving-opening an MSAGL file
     /// </summary>
-    public string FileName {
+    public string FileName
+    {
       get { return fileName; }
       set { fileName = value; }
     }
@@ -415,7 +441,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// Controls the pan button.
     /// </summary>
-    public bool PanButtonPressed {
+    public bool PanButtonPressed
+    {
       get { return panButton.Pushed; }
       set { panButton.Pushed = value; }
     }
@@ -423,7 +450,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// Controls the window zoom button.
     /// </summary>
-    public bool WindowZoomButtonPressed {
+    public bool WindowZoomButtonPressed
+    {
       get { return windowZoomButton.Pushed; }
       set { windowZoomButton.Pushed = value; }
     }
@@ -432,7 +460,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// If the mininal side of the zoom window is shorter than the threshold then zoom 
     /// does not take place
     /// </summary>
-    public double ZoomWindowThreshold {
+    public double ZoomWindowThreshold
+    {
       get { return zoomWindowThreshold; }
       set { zoomWindowThreshold = value; }
     }
@@ -441,7 +470,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// SelectedObject can be detected if the distance in inches between it and 
     /// the cursor is less than MouseHitDistance
     /// </summary>
-    public double MouseHitDistance {
+    public double MouseHitDistance
+    {
       get { return mouseHitDistance; }
       set { mouseHitDistance = value; }
     }
@@ -449,14 +479,16 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// Returns layouted Microsoft.Msagl.Drawing.Graph
     /// </summary>
-    public Graph GraphWithLayout {
+    public Graph GraphWithLayout
+    {
       get { return DGraph.DrawingGraph; }
     }
 
     /// <summary>
     /// 
     /// </summary>
-    public double TightOffsetForRouting {
+    public double TightOffsetForRouting
+    {
       get { return tightOffsetForRouting; }
       set { tightOffsetForRouting = value; }
     }
@@ -464,7 +496,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// 
     /// </summary>
-    public double LooseOffsetForRouting {
+    public double LooseOffsetForRouting
+    {
       get { return looseOffsetForRouting; }
       set { looseOffsetForRouting = value; }
     }
@@ -472,7 +505,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// 
     /// </summary>
-    public double OffsetForRelaxingInRouting {
+    public double OffsetForRelaxingInRouting
+    {
       get { return offsetForRelaxingInRouting; }
       set { offsetForRelaxingInRouting = value; }
     }
@@ -489,7 +523,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// </summary>
     /// <param name="screenPoint"></param>
     /// <returns></returns>
-    public Point ScreenToSource(Point screenPoint) {
+    public Point ScreenToSource(Point screenPoint)
+    {
       return Transform.Inverse * screenPoint;
     }
 
@@ -497,39 +532,50 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// Setting the Graph property shows the graph in the control
     /// </summary>
     /// 
-    public Graph Graph {
+    public Graph Graph
+    {
       get { return OriginalGraph; }
-      set {
+      set
+      {
         DGraph = null;
-        if (value != null) {
+        if (value != null)
+        {
           OriginalGraph = value;
-          if (OriginalGraph.LayoutAlgorithmSettings != null) {
-            switch (OriginalGraph.LayoutAlgorithmSettings) {
+          if (OriginalGraph.LayoutAlgorithmSettings != null)
+          {
+            switch (OriginalGraph.LayoutAlgorithmSettings)
+            {
               case MdsLayoutSettings mds: mdsLayoutSettings = mds; break;
               case SugiyamaLayoutSettings sugi: sugiyamaSettings = sugi; break;
               case RankingLayoutSettings rnk: rankingSettings = rnk; break;
             }
           }
-          if (!asyncLayout) {
-            try {
-              if (NeedToCalculateLayout) {
+          if (!asyncLayout)
+          {
+            try
+            {
+              if (NeedToCalculateLayout)
+              {
                 OriginalGraph.GeometryGraph = null;
                 LayoutAndCreateDGraph();
                 InitiateDrawing();
               }
-              else {
+              else
+              {
                 InitiateDrawing();
                 DGraph = DGraph.CreateDGraphFromPrecalculatedDrawingGraph(OriginalGraph, this);
               }
             }
-            catch (OperationCanceledException) {
+            catch (OperationCanceledException)
+            {
               Graph = null;
             }
           }
           else
             SetGraphAsync(value);
         }
-        else {
+        else
+        {
           OriginalGraph = null;
           DrawingPanel.Invalidate();
         }
@@ -544,8 +590,10 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// returns the object under the cursor
     /// </summary>
-    public IViewerObject ObjectUnderMouseCursor {
-      get {
+    public IViewerObject ObjectUnderMouseCursor
+    {
+      get
+      {
         if (MousePositonWhenSetSelectedObject != MousePosition)
           UnconditionalHit(null, EntityFilterDelegate);
         return selectedDObject;
@@ -559,11 +607,13 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// The radius of a circle around an underlying polyline corner
     /// </summary>
-    public double UnderlyingPolylineCircleRadius {
+    public double UnderlyingPolylineCircleRadius
+    {
       get { return UnderlyingPolylineRadiusWithNoScale / CurrentScale; }
     }
 
-    internal static double UnderlyingPolylineRadiusWithNoScale {
+    internal static double UnderlyingPolylineRadiusWithNoScale
+    {
       get { return dpix * 0.05; }
     }
 
@@ -571,7 +621,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// Forces redraw of objectToInvalidate
     /// </summary>
     /// <param name="objectToInvalidate"></param>
-    public void Invalidate(IViewerObject objectToInvalidate) {
+    public void Invalidate(IViewerObject objectToInvalidate)
+    {
       var dObject = (DObject)objectToInvalidate;
       dObject.Invalidate();
       ClearBoundingBoxHierarchy();
@@ -586,9 +637,12 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// return ModifierKeys
     /// </summary>
-    ModifierKeys IViewer.ModifierKeys {
-      get {
-        switch (ModifierKeys) {
+    ModifierKeys IViewer.ModifierKeys
+    {
+      get
+      {
+        switch (ModifierKeys)
+        {
           case Keys.Control:
           case Keys.ControlKey:
             return Drawing.ModifierKeys.Control;
@@ -608,7 +662,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// </summary>
     /// <param name="e"></param>
     /// <returns></returns>
-    public Point ScreenToSource(MsaglMouseEventArgs e) {
+    public Point ScreenToSource(MsaglMouseEventArgs e)
+    {
       if (e != null)
         return ScreenToSource(e.X, e.Y);
       return new Point();
@@ -617,9 +672,12 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// enumerates over all draggable entities
     /// </summary>
-    public IEnumerable<IViewerObject> Entities {
-      get {
-        if (DGraph != null) {
+    public IEnumerable<IViewerObject> Entities
+    {
+      get
+      {
+        if (DGraph != null)
+        {
           foreach (IViewerObject obj in DGraph.Entities)
             yield return obj;
         }
@@ -629,20 +687,23 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// number of dots per inch horizontally
     /// </summary>
-    public double DpiX {
+    public double DpiX
+    {
       get { return dpix; }
     }
 
     /// <summary>
     /// number of dots per inch vertically
     /// </summary>
-    public double DpiY {
+    public double DpiY
+    {
       get { return dpiy; }
     }
     /// <summary>
     /// 
     /// </summary>
-    event EventHandler<MsaglMouseEventArgs> IViewer.MouseDown {
+    event EventHandler<MsaglMouseEventArgs> IViewer.MouseDown
+    {
       add { iEditViewerMouseDown += value; }
       remove { iEditViewerMouseDown -= value; }
     }
@@ -650,12 +711,14 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// 
     /// </summary>
-    event EventHandler<MsaglMouseEventArgs> IViewer.MouseMove {
+    event EventHandler<MsaglMouseEventArgs> IViewer.MouseMove
+    {
       add { iEditViewerMouseMove += value; }
       remove { iEditViewerMouseMove -= value; }
     }
 
-    event EventHandler<MsaglMouseEventArgs> IViewer.MouseUp {
+    event EventHandler<MsaglMouseEventArgs> IViewer.MouseUp
+    {
       add { iEditViewerMouseUp += value; }
       remove { iEditViewerMouseUp -= value; }
     }
@@ -670,12 +733,14 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// A method of IEditViewer
     /// </summary>
     /// <param name="changedObjects"></param>
-    public void OnDragEnd(IEnumerable<IViewerObject> changedObjects) {
+    public void OnDragEnd(IEnumerable<IViewerObject> changedObjects)
+    {
       DGraph.UpdateBBoxHierarchy(changedObjects);
       DragEnded?.Invoke(changedObjects);
     }
 
-    void IViewer.Invalidate() {
+    void IViewer.Invalidate()
+    {
       panel.Invalidate();
     }
 
@@ -683,7 +748,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// The scale dependent width of an edited curve that should be clearly visible.
     /// Used in the default entity editing.
     /// </summary>
-    public double LineThicknessForEditing {
+    public double LineThicknessForEditing
+    {
       get { return DpiX * VisibleWidth / CurrentScale; }
     }
 
@@ -691,7 +757,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// Pops up a pop up menu with a menu item for each couple, the string is the title and the delegate is the callback
     /// </summary>
     /// <param name="menuItems"></param>
-    public void PopupMenus(params Tuple<string, VoidDelegate>[] menuItems) {
+    public void PopupMenus(params Tuple<string, VoidDelegate>[] menuItems)
+    {
       var contextMenu = new ContextMenu();
       foreach (var menuItem in menuItems)
         contextMenu.MenuItems.Add(CreateMenuItem(menuItem.Item1, menuItem.Item2));
@@ -705,7 +772,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// </summary>
     /// <param name="node"></param>
     /// <param name="registerForUndo"></param>
-    public void AddNode(IViewerNode node, bool registerForUndo) {
+    public void AddNode(IViewerNode node, bool registerForUndo)
+    {
       var dNode = node as DNode;
       DrawingNode drawingNode = dNode.DrawingNode;
 
@@ -715,26 +783,30 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       Graph.AddNode(drawingNode);
       Graph.GeometryGraph.Nodes.Add(drawingNode.GeometryNode);
 
-      foreach (DEdge e in dNode.outEdges) {
+      foreach (DEdge e in dNode.outEdges)
+      {
         e.Target.inEdges.Add(e);
         e.Target.DrawingNode.AddInEdge(e.DrawingEdge);
         e.Target.DrawingNode.GeometryNode.AddInEdge(e.DrawingEdge.GeometryEdge);
       }
-      foreach (DEdge e in dNode.inEdges) {
+      foreach (DEdge e in dNode.inEdges)
+      {
         e.Source.outEdges.Add(e);
         e.Source.DrawingNode.AddOutEdge(e.DrawingEdge);
         e.Source.DrawingNode.GeometryNode.AddOutEdge(e.DrawingEdge.GeometryEdge);
       }
 
       viewer.Invalidate(node);
-      foreach (DEdge e in Edges(dNode)) {
+      foreach (DEdge e in Edges(dNode))
+      {
         DGraph.Edges.Add(e);
         Graph.AddPrecalculatedEdge(e.DrawingEdge);
         Graph.GeometryGraph.Edges.Add(e.DrawingEdge.GeometryEdge);
         viewer.Invalidate(e);
       }
 
-      if (registerForUndo) {
+      if (registerForUndo)
+      {
         layoutEditor.RegisterNodeAdditionForUndo(node);
         Core.Geometry.Rectangle bounds = Graph.GeometryGraph.BoundingBox;
         bounds.Add(drawingNode.BoundingBox.LeftTop);
@@ -754,7 +826,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     ///// <param name="target"></param>
     ///// <param name="registerForUndo"></param>
     ///// <returns></returns>
-    public Drawing.Edge AddEdge(Drawing.Node source, Drawing.Node target, bool registerForUndo) {
+    public Drawing.Edge AddEdge(Drawing.Node source, Drawing.Node target, bool registerForUndo)
+    {
       Debug.Assert(Graph.FindNode(source.Id) == source);
       Debug.Assert(Graph.FindNode(target.Id) == target);
 
@@ -765,7 +838,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
 
       var a = source.GeometryNode.Center;
       var b = target.GeometryNode.Center;
-      if (source == target) {
+      if (source == target)
+      {
         Site start = new Site(a);
         Site end = new Site(b);
         var mid1 = source.GeometryNode.Center;
@@ -784,7 +858,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         geometryEdge.UnderlyingPolyline = new SmoothedPolyline(start);
         geometryEdge.Curve = geometryEdge.UnderlyingPolyline.CreateCurve();
       }
-      else {
+      else
+      {
         Site start = new Site(a);
         Site end = new Site(b);
         Site mids = new Site(a * 0.5 + b * 0.5);
@@ -814,7 +889,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// </summary>
     /// <param name="edge"></param>
     /// <param name="registerForUndo"></param>
-    public void AddEdge(IViewerEdge edge, bool registerForUndo) {
+    public void AddEdge(IViewerEdge edge, bool registerForUndo)
+    {
       if (registerForUndo) layoutEditor.RegisterEdgeAdditionForUndo(edge);
 
       var dEdge = edge as DEdge;
@@ -848,7 +924,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       Debug.Assert(source.selfEdges.Contains(dEdge) == false);
 
 
-      if (source != target) {
+      if (source != target)
+      {
         source.AddOutEdge(dEdge);
         target.AddInEdge(dEdge);
 
@@ -858,7 +935,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         source.DrawingNode.GeometryNode.AddOutEdge(geomEdge);
         target.DrawingNode.GeometryNode.AddInEdge(geomEdge);
       }
-      else {
+      else
+      {
         source.AddSelfEdge(dEdge);
         source.DrawingNode.AddSelfEdge(drawingEdge);
         source.DrawingNode.GeometryNode.AddSelfEdge(geomEdge);
@@ -878,7 +956,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// </summary>
     /// <param name="node"></param>
     /// <param name="registerForUndo"></param>
-    public void RemoveNode(IViewerNode node, bool registerForUndo) {
+    public void RemoveNode(IViewerNode node, bool registerForUndo)
+    {
       if (registerForUndo)
         layoutEditor.RegisterNodeForRemoval(node);
 
@@ -896,7 +975,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// </summary>
     /// <param name="edge"></param>
     /// <param name="registerForUndo"></param>
-    public void RemoveEdge(IViewerEdge edge, bool registerForUndo) {
+    public void RemoveEdge(IViewerEdge edge, bool registerForUndo)
+    {
       var de = edge as DEdge;
 
       if (registerForUndo)
@@ -906,7 +986,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
 
 
       DGraph.Edges.Remove(de);
-      if (de.Source != de.Target) {
+      if (de.Source != de.Target)
+      {
         de.Source.RemoveOutEdge(de);
         de.Target.RemoveInEdge(de);
       }
@@ -928,7 +1009,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// 
     /// </summary>
     /// <param name="startingPoint"></param>
-    public void StartDrawingRubberLine(Point startingPoint) {
+    public void StartDrawingRubberLine(Point startingPoint)
+    {
       panel.MarkTheStartOfRubberLine(startingPoint);
     }
 
@@ -936,7 +1018,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// 
     /// </summary>
     /// <param name="args"></param>
-    public void DrawRubberLine(MsaglMouseEventArgs args) {
+    public void DrawRubberLine(MsaglMouseEventArgs args)
+    {
       panel.DrawRubberLine(args);
     }
 
@@ -944,14 +1027,16 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// 
     /// </summary>
     /// <param name="point"></param>
-    public void DrawRubberLine(Point point) {
+    public void DrawRubberLine(Point point)
+    {
       panel.DrawRubberLine(point);
     }
 
     /// <summary>
     /// 
     /// </summary>
-    public void StopDrawingRubberLine() {
+    public void StopDrawingRubberLine()
+    {
       panel.StopDrawRubberLine();
     }
 
@@ -959,7 +1044,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// routes an edge and returns the corresponding edge of the viewer
     /// </summary>
     /// <returns></returns>
-    public IViewerEdge RouteEdge(DrawingEdge drawingEdge) {
+    public IViewerEdge RouteEdge(DrawingEdge drawingEdge)
+    {
       drawingEdge.Label = new Label();
       Edge geometryEdge = drawingEdge.GeometryEdge = new Edge();
       if (drawingEdge.Attr.ArrowheadAtSource != ArrowStyle.NonSpecified &&
@@ -985,7 +1071,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// gets the visual graph
     /// </summary>
-    public IViewerGraph ViewerGraph {
+    public IViewerGraph ViewerGraph
+    {
       get { return DGraph; }
     }
 
@@ -994,7 +1081,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// </summary>
     /// <param name="drawingNode"></param>
     /// <returns></returns>
-    public IViewerNode CreateIViewerNode(DrawingNode drawingNode) {
+    public IViewerNode CreateIViewerNode(DrawingNode drawingNode)
+    {
       return DGraph.CreateDNodeAndSetNodeBoundaryCurve(Graph,
                                                        DGraph, drawingNode.GeometryNode, drawingNode, this);
     }
@@ -1005,18 +1093,21 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <param name="center"></param>
     /// <param name="visualElement">does not play any role here</param>
     /// <returns></returns>
-    public IViewerNode CreateIViewerNode(DrawingNode drawingNode, Point center, object visualElement) {
+    public IViewerNode CreateIViewerNode(DrawingNode drawingNode, Point center, object visualElement)
+    {
       CreateNodeGeometry(drawingNode, center);
       return CreateIViewerNode(drawingNode);
     }
 
 
-    void CreateNodeGeometry(DrawingNode node, Point center) {
+    void CreateNodeGeometry(DrawingNode node, Point center)
+    {
       double width, height;
       StringMeasure.MeasureWithFont(node.Label.Text, new Font(node.Label.FontName, (float)node.Label.FontSize, (System.Drawing.FontStyle)(int)node.Label.FontStyle), out width,
                                     out height);
 
-      if (node.Label != null) {
+      if (node.Label != null)
+      {
         width += 2 * node.Attr.LabelMargin;
         height += 2 * node.Attr.LabelMargin;
       }
@@ -1040,11 +1131,13 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// </summary>
     /// <param name="edge"></param>
     /// <param name="label"></param>
-    public void SetEdgeLabel(DrawingEdge edge, Label label) {
+    public void SetEdgeLabel(DrawingEdge edge, Label label)
+    {
       //find the edge first
       DEdge de = null;
       foreach (DEdge dEdge in DGraph.Edges)
-        if (dEdge.DrawingEdge == edge) {
+        if (dEdge.DrawingEdge == edge)
+        {
           de = dEdge;
           break;
         }
@@ -1068,8 +1161,10 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// the padding used to route a new inserted edge around the nodes
     /// </summary>        
-    public double PaddingForEdgeRouting {
-      get {
+    public double PaddingForEdgeRouting
+    {
+      get
+      {
         return Graph == null
                    ? paddingForEdgeRouting
                    : Math.Min(paddingForEdgeRouting, Graph.Attr.NodeSeparation / 6);
@@ -1081,22 +1176,26 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// support for edge routing
     /// </summary>
     /// <param name="edgeGeometry"></param>
-    public void DrawRubberEdge(EdgeGeometry edgeGeometry) {
+    public void DrawRubberEdge(EdgeGeometry edgeGeometry)
+    {
       panel.DrawRubberEdge(edgeGeometry);
     }
 
     /// <summary>
     /// support for edge routing
     /// </summary>
-    public void StopDrawingRubberEdge() {
+    public void StopDrawingRubberEdge()
+    {
       panel.StopDrawingRubberEdge();
     }
     /// <summary>
     /// the current transform to the client viewport
     /// </summary>
     public PlaneTransformation
-        Transform {
-      get {
+        Transform
+    {
+      get
+      {
         if (transformation == null)
           InitTransform();
         return transformation;
@@ -1104,8 +1203,10 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       set { transformation = value; }
     }
 
-    void InitTransform() {
-      if (originalGraph == null) {
+    void InitTransform()
+    {
+      if (originalGraph == null)
+      {
         transformation = PlaneTransformation.UnitTransformation;
         return;
       }
@@ -1114,7 +1215,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       SetTransformOnScaleAndCenter(scale, sourceCenter);
     }
 
-    internal void SetTransformOnScaleAndCenter(double scale, Point sourceCenter) {
+    internal void SetTransformOnScaleAndCenter(double scale, Point sourceCenter)
+    {
       if (!ScaleIsAcceptable(scale))
         return;
 
@@ -1131,7 +1233,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// </summary>
     /// <param name="drawingEdge"></param>
     /// <returns></returns>
-    public IViewerEdge CreateEdgeWithGivenGeometry(DrawingEdge drawingEdge) {
+    public IViewerEdge CreateEdgeWithGivenGeometry(DrawingEdge drawingEdge)
+    {
       drawingEdge.Label = new Label();
       Edge geometryEdge = drawingEdge.GeometryEdge;
       Debug.Assert(geometryEdge != null);
@@ -1170,7 +1273,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <see cref="AsyncLayoutProgress"/>, and layouting can be aborted with 
     /// <see cref="AbortAsyncLayout"/>.
     /// </remarks>
-    public bool AsyncLayout {
+    public bool AsyncLayout
+    {
       get { return asyncLayout; }
       set { asyncLayout = value; }
     }
@@ -1185,50 +1289,64 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// Abort an asynchronous layout activity.
     /// </summary>
-    public void AbortAsyncLayout() {
-      if (layoutThread != null) {
+    public void AbortAsyncLayout()
+    {
+      if (layoutThread != null)
+      {
         layoutThread.Abort();
         layoutThread = null;
       }
     }
 
     // Is called from Graph setter.
-    void SetGraphAsync(Graph value) {
-      if (layoutThread != null) {
+    void SetGraphAsync(Graph value)
+    {
+      if (layoutThread != null)
+      {
         layoutThread.Abort();
         layoutThread = null;
       }
-      layoutThread = new Thread((ThreadStart)delegate {
+      layoutThread = new Thread((ThreadStart)delegate
+      {
         var args = new LayoutProgressEventArgs(LayoutProgress.LayingOut, null);
-        lock (value) {
-          try {
+        lock (value)
+        {
+          try
+          {
             bool needToCalc = NeedToCalculateLayout;
             layoutWaitHandle.Set();
             OriginalGraph = value;
-            if (needToCalc) {
+            if (needToCalc)
+            {
               if (AsyncLayoutProgress != null)
                 AsyncLayoutProgress(this, args);
               LayoutAndCreateDGraph();
             }
-            else {
+            else
+            {
               DGraph = DGraph.CreateDGraphFromPrecalculatedDrawingGraph(OriginalGraph, this);
             }
             Invoke(
                 (Invoker)
-                delegate {
-                  if (AsyncLayoutProgress != null) {
+                delegate
+                {
+                  if (AsyncLayoutProgress != null)
+                  {
                     args.progress = LayoutProgress.Rendering;
                     AsyncLayoutProgress(this, args);
                   }
                   InitiateDrawing();
-                  if (AsyncLayoutProgress != null) {
+                  if (AsyncLayoutProgress != null)
+                  {
                     args.progress = LayoutProgress.Finished;
                     AsyncLayoutProgress(this, args);
                   }
                 });
           }
-          catch (ThreadAbortException) {
-            if (AsyncLayoutProgress != null) {
+          catch (ThreadAbortException)
+          {
+            if (AsyncLayoutProgress != null)
+            {
               args.progress = LayoutProgress.Aborted;
               AsyncLayoutProgress(this, args);
             }
@@ -1265,11 +1383,13 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// </summary>
     /// <param name="dObject"></param>
     /// <returns></returns>
-    static bool EdgeFilter(DObject dObject) {
+    static bool EdgeFilter(DObject dObject)
+    {
       return !(dObject is DEdge);
     }
 
-    void UnconditionalHit(MouseEventArgs args, EntityFilterDelegate filter) {
+    void UnconditionalHit(MouseEventArgs args, EntityFilterDelegate filter)
+    {
       System.Drawing.Point point = args != null
                                        ? new System.Drawing.Point(args.X, args.Y)
                                        : DrawingPanel.PointToClient(MousePosition);
@@ -1277,14 +1397,16 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       object old = selectedDObject;
       if (bBNode == null && DGraph != null)
         bBNode = DGraph.BBNode;
-      if (bBNode != null) {
+      if (bBNode != null)
+      {
         var subgraphs = new List<Geometry>();
         Geometry geometry = bBNode.Hit(ScreenToSource(point), GetHitSlack(), filter, subgraphs) ??
                             PickSubgraph(subgraphs, ScreenToSource(point));
         selectedDObject = geometry == null ? null : geometry.dObject;
         if (old == selectedDObject) return;
         SetSelectedObject(selectedDObject);
-        if (ObjectUnderMouseCursorChanged != null) {
+        if (ObjectUnderMouseCursorChanged != null)
+        {
           var changedArgs = new ObjectUnderMouseCursorChangedEventArgs((IViewerObject)old,
               selectedDObject);
           ObjectUnderMouseCursorChanged(this, changedArgs);
@@ -1292,13 +1414,16 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       }
     }
 
-    Geometry PickSubgraph(List<Geometry> subgraphs, Point screenToSource) {
+    Geometry PickSubgraph(List<Geometry> subgraphs, Point screenToSource)
+    {
       if (subgraphs.Count == 0) return null;
       double area = subgraphs[0].dObject.DrawingObject.BoundingBox.Area;
       int ret = 0;
-      for (int i = 1; i < subgraphs.Count; i++) {
+      for (int i = 1; i < subgraphs.Count; i++)
+      {
         double a = subgraphs[i].dObject.DrawingObject.BoundingBox.Area;
-        if (a < area) {
+        if (a < area)
+        {
           area = a;
           ret = i;
         }
@@ -1310,17 +1435,20 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// It should be physically on the screen by one tenth of an inch
     /// </summary>
     /// <returns></returns> 
-    double GetHitSlack() {
+    double GetHitSlack()
+    {
       double inchSlack = MouseHitDistance;
       double slackInPoints = Dpi * inchSlack;
       return slackInPoints / CurrentScale;
     }
 
-    void DrawingPanelMouseClick(object sender, MouseEventArgs e) {
+    void DrawingPanelMouseClick(object sender, MouseEventArgs e)
+    {
       OnMouseClick(e);
     }
 
-    internal static bool ModifierKeyWasPressed() {
+    internal static bool ModifierKeyWasPressed()
+    {
       return ModifierKeys == Keys.Control || ModifierKeys == Keys.Shift;
     }
 
@@ -1329,12 +1457,14 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// </summary>
     /// <param name="rect"></param>
     /// <returns></returns>
-    public Rectangle MapSourceRectangleToScreenRectangle(Core.Geometry.Rectangle rect) {
+    public Rectangle MapSourceRectangleToScreenRectangle(Core.Geometry.Rectangle rect)
+    {
       return CreateScreenRectFromTwoCornersInTheSource(rect.LeftTop, rect.RightBottom);
     }
 
 
-    internal Rectangle CreateScreenRectFromTwoCornersInTheSource(Point leftTop, Point rightBottom) {
+    internal Rectangle CreateScreenRectFromTwoCornersInTheSource(Point leftTop, Point rightBottom)
+    {
       var pts = new[] { Pf(leftTop), Pf(rightBottom) };
 
       CurrentTransform().TransformPoints(pts);
@@ -1346,7 +1476,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
           (int)Math.Ceiling(pts[1].Y) + 1);
     }
 
-    internal static PointF Pf(Point p2) {
+    internal static PointF Pf(Point p2)
+    {
       return new PointF((float)p2.X, (float)p2.Y);
     }
 
@@ -1355,7 +1486,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// </summary>
     /// <param name="point"></param>
     /// <returns></returns>
-    public Point ScreenToSource(System.Drawing.Point point) {
+    public Point ScreenToSource(System.Drawing.Point point)
+    {
       Matrix m = CurrentTransform();
       if (!m.IsInvertible)
         return new Point(0, 0);
@@ -1366,7 +1498,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       return new Point(pf[0].X, pf[0].Y);
     }
 
-    internal Point ScreenToSource(int x, int y) {
+    internal Point ScreenToSource(int x, int y)
+    {
       return ScreenToSource(new System.Drawing.Point(x, y));
     }
 
@@ -1374,12 +1507,16 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary> 
     /// Clean up any resources being used.
     /// </summary>
-    protected override void Dispose(bool disposing) {
-      if (disposing) {
-        if (components != null) {
+    protected override void Dispose(bool disposing)
+    {
+      if (disposing)
+      {
+        if (components != null)
+        {
           components.Dispose();
         }
-        if (ToolTip != null) {
+        if (ToolTip != null)
+        {
           ToolTip.RemoveAll();
           ToolTip.Dispose();
           ToolTip = null;
@@ -1394,8 +1531,10 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       base.Dispose(disposing);
     }
 
-    ViewInfo CurrentViewInfo() {
-      var viewInfo = new ViewInfo {
+    ViewInfo CurrentViewInfo()
+    {
+      var viewInfo = new ViewInfo
+      {
         Transformation = Transform.Clone(),
         leftMouseButtonWasPressed =
                                           MouseButtons == MouseButtons.Left,
@@ -1404,8 +1543,10 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       return viewInfo;
     }
 
-    void HandleViewInfoList() {
-      if (storeViewInfo) {
+    void HandleViewInfoList()
+    {
+      if (storeViewInfo)
+      {
         ViewInfo currentViewInfo = CurrentViewInfo();
         listOfViewInfos.AddNewViewInfo(currentViewInfo);
       }
@@ -1418,24 +1559,29 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     }
 
 
-    internal void ProcessOnPaint(Graphics g, PrintPageEventArgs printPageEvenArgs) {
+    internal void ProcessOnPaint(Graphics g, PrintPageEventArgs printPageEvenArgs)
+    {
       if (PanelHeight < minimalSizeToDraw || PanelWidth < minimalSizeToDraw || DGraph == null)
         return;
-      if (wasMinimized) {
+      if (wasMinimized)
+      {
         wasMinimized = false;
         panel.Invalidate();
       }
 
-      if (OriginalGraph != null) {
+      if (OriginalGraph != null)
+      {
         CalcRects(printPageEvenArgs);
         HandleViewInfoList();
-        if (printPageEvenArgs == null) {
+        if (printPageEvenArgs == null)
+        {
           g.FillRectangle(outsideAreaBrush, ClientRectangle);
           g.FillRectangle(new SolidBrush(Draw.MsaglColorToDrawingColor(OriginalGraph.Attr.BackgroundColor)),
                           destRect);
         }
 
-        using (Matrix m = CurrentTransform()) {
+        using (Matrix m = CurrentTransform())
+        {
           if (!m.IsInvertible) // just to make sure that the transform is legal
             return;
           g.Transform = m;
@@ -1458,7 +1604,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                                dGraph.DrawingGraph.DebugICurves == null
                            )
 #endif
-                        ) {
+                        )
+          {
             DGraph.BuildBBHierarchy();
             bBNode = DGraph.BbNode;
           }
@@ -1471,14 +1618,16 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       //g.Transform.Reset();
     }
 
-    internal Matrix CurrentTransform() {
+    internal Matrix CurrentTransform()
+    {
       return new Matrix((float)Transform[0, 0], (float)Transform[0, 1],
                         (float)Transform[1, 0], (float)Transform[1, 1],
                         (float)Transform[0, 2], (float)Transform[1, 2]);
     }
 
 
-    internal static Rectangle RectFromPoints(System.Drawing.Point p1, System.Drawing.Point p2) {
+    internal static Rectangle RectFromPoints(System.Drawing.Point p1, System.Drawing.Point p2)
+    {
       return new Rectangle(Math.Min(p1.X, p2.X), Math.Min(p1.Y, p2.Y),
                            Math.Abs(p1.X - p2.X), Math.Abs(p1.Y - p2.Y));
     }
@@ -1492,14 +1641,16 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     [SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions"),
      SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters",
          MessageId = "System.Windows.Forms.MessageBox.Show(System.String)")]
-    internal void Zoom(double cx, double cy, double val) {
+    internal void Zoom(double cx, double cy, double val)
+    {
 
       ZoomF = val;
 
       panel.Invalidate();
     }
 
-    void InitiateDrawing() {
+    void InitiateDrawing()
+    {
 
       transformation = null;
 
@@ -1511,8 +1662,10 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     }
 
     [SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
-    void LayoutAndCreateDGraph() {
-      switch (CurrentLayoutMethod) {
+    void LayoutAndCreateDGraph()
+    {
+      switch (CurrentLayoutMethod)
+      {
         case LayoutMethod.SugiyamaScheme:
           if (!(OriginalGraph.LayoutAlgorithmSettings is SugiyamaLayoutSettings))
             OriginalGraph.LayoutAlgorithmSettings = sugiyamaSettings;
@@ -1531,7 +1684,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
           break;
       }
       var localSugiyamaSettings = OriginalGraph.LayoutAlgorithmSettings as SugiyamaLayoutSettings;
-      if (localSugiyamaSettings != null) {
+      if (localSugiyamaSettings != null)
+      {
         // Insert hard coded constraints for tests
 
 #if DEBUG
@@ -1541,15 +1695,18 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       OriginalGraph.CreateGeometryGraph();
       GeometryGraph geometryGraph = OriginalGraph.GeometryGraph;
       DGraph = DGraph.CreateDGraphAndGeometryInfo(OriginalGraph, geometryGraph, this);
-      try {
+      try
+      {
         LayoutHelpers.CalculateLayout(geometryGraph, originalGraph.LayoutAlgorithmSettings, null);
       }
-      catch (OperationCanceledException) {
+      catch (OperationCanceledException)
+      {
         originalGraph = null;
         DGraph = null;
       }
       TransferGeometryFromMsaglGraphToGraph(geometryGraph);
-      if (GraphChanged != null) {
+      if (GraphChanged != null)
+      {
         GraphChanged(this, null);
       }
     }
@@ -1611,7 +1768,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// 
     /// </summary>
-    public void ClearBoundingBoxHierarchy() {
+    public void ClearBoundingBoxHierarchy()
+    {
       bBNode = null;
     }
 
@@ -1619,7 +1777,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// Brings in to the view the object of the group
     /// </summary>
     /// <param name="graphElements"></param>
-    public void ShowGroup(object[] graphElements) {
+    public void ShowGroup(object[] graphElements)
+    {
       Core.Geometry.Rectangle bb = BBoxOfObjs(graphElements);
 
       ShowBBox(bb);
@@ -1629,26 +1788,31 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// Changes the view in a way that the group is at the center
     /// </summary>
     /// <param name="graphElements"></param>
-    public void CenterToGroup(params object[] graphElements) {
+    public void CenterToGroup(params object[] graphElements)
+    {
       Core.Geometry.Rectangle bb = BBoxOfObjs(graphElements);
 
-      if (!bb.IsEmpty) {
+      if (!bb.IsEmpty)
+      {
         CenterToPoint(0.5f * (bb.LeftTop + bb.RightBottom));
       }
 
     }
 
 
-    static Core.Geometry.Rectangle BBoxOfObjs(IEnumerable<object> objs) {
+    static Core.Geometry.Rectangle BBoxOfObjs(IEnumerable<object> objs)
+    {
       var bb = new Core.Geometry.Rectangle(0, 0, 0, 0);
       bool boxIsEmpty = true;
 
-      foreach (object o in objs) {
+      foreach (object o in objs)
+      {
         var node = o as DrawingNode;
         Core.Geometry.Rectangle objectBb;
         if (node != null)
           objectBb = node.BoundingBox;
-        else {
+        else
+        {
           var edge = o as DrawingEdge;
           if (edge != null)
             objectBb = edge.BoundingBox;
@@ -1656,7 +1820,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             continue;
         }
 
-        if (boxIsEmpty) {
+        if (boxIsEmpty)
+        {
           bb = objectBb;
           boxIsEmpty = false;
         }
@@ -1672,8 +1837,10 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// Make the bounding rect fully visible
     /// </summary>
     /// <param name="bb"></param>
-    public void ShowBBox(Core.Geometry.Rectangle bb) {
-      if (bb.IsEmpty == false) {
+    public void ShowBBox(Core.Geometry.Rectangle bb)
+    {
+      if (bb.IsEmpty == false)
+      {
         double sc = Math.Min(OriginalGraph.Width / bb.Width,
                              OriginalGraph.Height / bb.Height);
 
@@ -1690,7 +1857,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <param name="y"></param>
     [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "y"),
      SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "x")]
-    public void Pan(double x, double y) {
+    public void Pan(double x, double y)
+    {
       Transform[0, 2] += x;
       Transform[1, 2] += y;
       panel.Invalidate();
@@ -1700,7 +1868,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// Pans the view by vector point
     /// </summary>
     /// <param name="point"></param>
-    public void Pan(Point point) {
+    public void Pan(Point point)
+    {
       Pan(point.X, point.Y);
     }
 
@@ -1710,7 +1879,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// Centers the view to the point p
     /// </summary>
     /// <param name="point"></param>
-    public void CenterToPoint(Point point) {
+    public void CenterToPoint(Point point)
+    {
       SetTransformOnScaleAndCenter(CurrentScale, point);
       panel.Invalidate();
     }
@@ -1723,7 +1893,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <returns></returns>
     [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "y"),
      SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "x")]
-    public object GetObjectAt(int x, int y) {
+    public object GetObjectAt(int x, int y)
+    {
       BBNode bn = BbNode;
       if (bn == null)
         return null;
@@ -1739,18 +1910,21 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// </summary>
     /// <param name="point"></param>
     /// <returns></returns>
-    public object GetObjectAt(System.Drawing.Point point) {
+    public object GetObjectAt(System.Drawing.Point point)
+    {
       return GetObjectAt(point.X, point.Y);
     }
 
-    internal bool ScaleIsAcceptable(double scale) {
+    internal bool ScaleIsAcceptable(double scale)
+    {
       var d = OriginalGraph != null ? OriginalGraph.BoundingBox.Diagonal : 0;
       return !(d * scale < 5) && !(d * scale > HugeDiagonal);
     }
     /// <summary>
     /// Zooms in
     /// </summary>
-    public void ZoomInPressed() {
+    public void ZoomInPressed()
+    {
       double zoomFractionLocal = ZoomF * ZoomFactor();
       if (!ScaleIsAcceptable(CurrentScale * zoomFractionLocal))
         return;
@@ -1760,15 +1934,18 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// Zooms out
     /// </summary>
-    public void ZoomOutPressed() {
+    public void ZoomOutPressed()
+    {
       ZoomF /= ZoomFactor();
     }
 
-    double ZoomFactor() {
+    double ZoomFactor()
+    {
       return 1.0f + zoomFraction;
     }
 
-    void ToolBarButtonClick(object sender, ToolBarButtonClickEventArgs e) {
+    void ToolBarButtonClick(object sender, ToolBarButtonClickEventArgs e)
+    {
       if (e.Button == zoomin)
         ZoomInPressed();
       else if (e.Button == zoomout)
@@ -1793,31 +1970,37 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         PanButtonIsPressed();
       else if (e.Button == layoutSettingsButton)
         LayoutSettingsIsClicked();
-      else if (e.Button == edgeInsertButton) {
+      else if (e.Button == edgeInsertButton)
+      {
         InsertingEdge = edgeInsertButton.Pushed;
         if (InsertingEdge)
           layoutEditor.PrepareForEdgeDragging();
         else
           layoutEditor.ForgetEdgeDragging();
       }
-      else if (e.Button == homeZoomButton) {
+      else if (e.Button == homeZoomButton)
+      {
         transformation = null;
         panel.Invalidate();
       }
 
     }
 
-    public void ShowLayoutSettingsEditor() {
+    public void ShowLayoutSettingsEditor()
+    {
       LayoutSettingsIsClicked();
     }
 
 
-    void LayoutSettingsIsClicked() {
+    void LayoutSettingsIsClicked()
+    {
       var layoutSettingsForm = new LayoutSettingsForm();
-      var wrapper = new LayoutSettingsWrapper { LayoutSettings = Graph != null ? Graph.LayoutAlgorithmSettings : null };
+      var wrapper = new LayoutSettingsWrapper
+      { LayoutSettings = Graph != null ? Graph.LayoutAlgorithmSettings : null };
       wrapper.LayoutTypeHasChanged += OnLayoutTypeChange;
       wrapper.LayoutMethod = CurrentLayoutMethod;
-      switch (CurrentLayoutMethod) {
+      switch (CurrentLayoutMethod)
+      {
         case LayoutMethod.SugiyamaScheme:
           wrapper.LayoutSettings = sugiyamaSettings;
           break;
@@ -1833,10 +2016,13 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       }
       layoutSettingsForm.PropertyGrid.SelectedObject = wrapper;
       LayoutAlgorithmSettings backup = Graph != null ? Graph.LayoutAlgorithmSettings.Clone() : null;
-      if (layoutSettingsForm.ShowDialog() == DialogResult.OK) {
-        if (Graph != null) {
+      if (layoutSettingsForm.ShowDialog() == DialogResult.OK)
+      {
+        if (Graph != null)
+        {
           LayoutAlgorithmSettings settings = Graph.LayoutAlgorithmSettings;
-          if (settings.EdgeRoutingSettings.EdgeRoutingMode == EdgeRoutingMode.SplineBundling) {
+          if (settings.EdgeRoutingSettings.EdgeRoutingMode == EdgeRoutingMode.SplineBundling)
+          {
             if (settings.EdgeRoutingSettings.BundlingSettings == null)
               settings.EdgeRoutingSettings.BundlingSettings = new BundlingSettings();
           }
@@ -1857,16 +2043,19 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// Re-route edges without layout recalculation
     /// </summary>
-    public void RerouteGraph() {
+    public void RerouteGraph()
+    {
       LayoutAlgorithmSettings settings = Graph.LayoutAlgorithmSettings;
       EdgeRoutingSettings ers = settings.EdgeRoutingSettings;
 
-      if (ers.EdgeRoutingMode == EdgeRoutingMode.SplineBundling) {
+      if (ers.EdgeRoutingMode == EdgeRoutingMode.SplineBundling)
+      {
         var br = new SplineRouter(Graph.GeometryGraph, ers.Padding, ers.PolylinePadding,
                                   ers.ConeAngle, ers.BundlingSettings);
         br.Run();
       }
-      else {
+      else
+      {
         var sp = new SplineRouter(Graph.GeometryGraph, ers.Padding,
                                   ers.PolylinePadding, ers.ConeAngle, ers.BundlingSettings);
         sp.Run();
@@ -1876,9 +2065,11 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     }
 
 
-    void OnLayoutTypeChange(object o, EventArgs args) {
+    void OnLayoutTypeChange(object o, EventArgs args)
+    {
       var wrapper = o as LayoutSettingsWrapper;
-      switch (wrapper.LayoutMethod) {
+      switch (wrapper.LayoutMethod)
+      {
         case LayoutMethod.SugiyamaScheme:
           wrapper.LayoutSettings = sugiyamaSettings;
           break;
@@ -1903,8 +2094,10 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         Graph.LayoutAlgorithmSettings = wrapper.LayoutSettings;
     }
 
-    void PanButtonIsPressed() {
-      if (panButton.Pushed) {
+    void PanButtonIsPressed()
+    {
+      if (panButton.Pushed)
+      {
         panButton.ToolTipText = panButtonToolTipText;
         windowZoomButton.Pushed = false;
         windowZoomButton.ToolTipText = windowZoomButtonDisabledToolTipText;
@@ -1913,8 +2106,10 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         panButton.ToolTipText = panButtonToolTipText;
     }
 
-    void WindowZoomButtonIsPressed() {
-      if (windowZoomButton.Pushed) {
+    void WindowZoomButtonIsPressed()
+    {
+      if (windowZoomButton.Pushed)
+      {
         windowZoomButton.ToolTipText = WindowZoomButtonToolTipText;
         panButton.Pushed = false;
         panButton.ToolTipText = PanButtonDisabledToolTipText;
@@ -1923,12 +2118,14 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         windowZoomButton.ToolTipText = WindowZoomButtonToolTipText;
     }
 
-    void RedoButtonPressed() {
+    void RedoButtonPressed()
+    {
       if (LayoutEditor != null && LayoutEditor.CanRedo)
         LayoutEditor.Redo();
     }
 
-    void UndoButtonPressed() {
+    void UndoButtonPressed()
+    {
       if (LayoutEditor != null && LayoutEditor.CanUndo)
         LayoutEditor.Undo();
     }
@@ -1939,11 +2136,14 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     public event EventHandler GraphLoadingEnded;
 
     [SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
-    void OpenButtonPressed() {
+    void OpenButtonPressed()
+    {
       var openFileDialog = new OpenFileDialog { RestoreDirectory = true, Filter = "MSAGL Files(*.msagl)|*.msagl" };
 
-      try {
-        if (openFileDialog.ShowDialog() == DialogResult.OK) {
+      try
+      {
+        if (openFileDialog.ShowDialog() == DialogResult.OK)
+        {
           FileName = openFileDialog.FileName;
           NeedToCalculateLayout = false;
           Graph = Graph.Read(openFileDialog.FileName);
@@ -1951,10 +2151,12 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             GraphLoadingEnded(this, null);
         }
       }
-      catch (Exception e) {
+      catch (Exception e)
+      {
         MessageBox.Show(e.Message);
       }
-      finally {
+      finally
+      {
         NeedToCalculateLayout = true;
       }
     }
@@ -1962,8 +2164,10 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// Raises a dialog of saving the drawing image to a file
     /// </summary>
-    public void SaveButtonPressed() {
-      if (Graph == null) {
+    public void SaveButtonPressed()
+    {
+      if (Graph == null)
+      {
         return;
       }
 
@@ -1974,48 +2178,59 @@ namespace Microsoft.Msagl.GraphViewerGdi {
 
     [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters",
         MessageId = "System.Windows.Forms.MenuItem.#ctor(System.String)")]
-    MenuItem[] CreateSaveMenuItems() {
+    MenuItem[] CreateSaveMenuItems()
+    {
       var menuItems = new List<MenuItem>();
       MenuItem menuItem;
-      if (SaveAsMsaglEnabled) {
+      if (SaveAsMsaglEnabled)
+      {
         menuItems.Add(menuItem = new MenuItem("Save graph"));
         menuItem.Click += SaveGraphClick;
       }
-      if (SaveAsImageEnabled) {
+      if (SaveAsImageEnabled)
+      {
         menuItems.Add(menuItem = new MenuItem("Save in bitmap format"));
         menuItem.Click += SaveImageClick;
       }
-      if (SaveInVectorFormatEnabled) {
+      if (SaveInVectorFormatEnabled)
+      {
         menuItems.Add(menuItem = new MenuItem("Save in vector format"));
         menuItem.Click += SaveInVectorGraphicsFormatClick;
       }
       return menuItems.ToArray();
     }
 
-    public void SaveAsVectorGraphicsFormat() {
+    public void SaveAsVectorGraphicsFormat()
+    {
       var saveForm = new SaveInVectorFormatForm(this);
       saveForm.ShowDialog();
     }
 
 
-    public void SaveAsImage() {
+    public void SaveAsImage()
+    {
       var saveViewForm = new SaveViewAsImageForm(this);
       saveViewForm.ShowDialog();
     }
 
-    void SaveInVectorGraphicsFormatClick(object sender, EventArgs e) {
+    void SaveInVectorGraphicsFormatClick(object sender, EventArgs e)
+    {
       SaveAsVectorGraphicsFormat();
     }
 
-    void SaveImageClick(object sender, EventArgs e) {
+    void SaveImageClick(object sender, EventArgs e)
+    {
       SaveAsImage();
     }
 
     [SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
-    void SaveGraphClick(object sender, EventArgs e) {
+    void SaveGraphClick(object sender, EventArgs e)
+    {
       var saveFileDialog = new SaveFileDialog { Filter = "MSAGL Files(*.msagl)|*.msagl" };
-      try {
-        if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+      try
+      {
+        if (saveFileDialog.ShowDialog() == DialogResult.OK)
+        {
           FileName = saveFileDialog.FileName;
           if (GraphSavingStarted != null)
             GraphSavingStarted(this, null);
@@ -2024,7 +2239,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             GraphSavingEnded(this, null);
         }
       }
-      catch (Exception ex) {
+      catch (Exception ex)
+      {
         MessageBox.Show(ex.Message);
         throw;
       }
@@ -2033,10 +2249,13 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// Navigates forward in the view history
     /// </summary>
-    public void ForwardButtonPressed() {
+    public void ForwardButtonPressed()
+    {
       if (listOfViewInfos.ForwardAvailable)
-        if (listOfViewInfos.CurrentView.leftMouseButtonWasPressed) {
-          while (listOfViewInfos.ForwardAvailable) {
+        if (listOfViewInfos.CurrentView.leftMouseButtonWasPressed)
+        {
+          while (listOfViewInfos.ForwardAvailable)
+          {
             listOfViewInfos.Forward();
             SetViewFromViewInfo(listOfViewInfos.CurrentView);
 
@@ -2044,7 +2263,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
               break;
           }
         }
-        else {
+        else
+        {
           listOfViewInfos.Forward();
           SetViewFromViewInfo(listOfViewInfos.CurrentView);
           /*
@@ -2065,10 +2285,13 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// Navigates backward in the view history
     /// </summary>
-    public void BackwardButtonPressed() {
+    public void BackwardButtonPressed()
+    {
       if (listOfViewInfos.BackwardAvailable)
-        if (listOfViewInfos.CurrentView.leftMouseButtonWasPressed) {
-          while (listOfViewInfos.BackwardAvailable) {
+        if (listOfViewInfos.CurrentView.leftMouseButtonWasPressed)
+        {
+          while (listOfViewInfos.BackwardAvailable)
+          {
             listOfViewInfos.Backward();
             SetViewFromViewInfo(listOfViewInfos.CurrentView);
 
@@ -2076,7 +2299,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
               break;
           }
         }
-        else {
+        else
+        {
           listOfViewInfos.Backward();
           SetViewFromViewInfo(listOfViewInfos.CurrentView);
         }
@@ -2085,14 +2309,16 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// Prints the graph.
     /// </summary>
-    public void PrintButtonPressed() {
+    public void PrintButtonPressed()
+    {
       var p = new GraphPrinting(this);
       var pd = new PrintDialog { Document = p };
       if (pd.ShowDialog() == DialogResult.OK)
         p.Print();
     }
 
-    void PanelClick(object sender, EventArgs e) {
+    void PanelClick(object sender, EventArgs e)
+    {
       OnClick(e);
     }
 
@@ -2100,11 +2326,14 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// Reacts on some pressed keys
     /// </summary>
     /// <param name="e"></param>
-    public void OnKey(KeyEventArgs e) {
+    public void OnKey(KeyEventArgs e)
+    {
       if (e == null)
         return;
-      if (e.KeyData == (Keys)262181) {
-        if (backwardButton.Enabled) {
+      if (e.KeyData == (Keys)262181)
+      {
+        if (backwardButton.Enabled)
+        {
           BackwardButtonPressed();
         }
       }
@@ -2116,13 +2345,16 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     }
 
 
-    void TransferGeometryFromMsaglGraphToGraph(GeometryGraph gleeGraph) {
-      foreach (Edge gleeEdge in gleeGraph.Edges) {
+    void TransferGeometryFromMsaglGraphToGraph(GeometryGraph gleeGraph)
+    {
+      foreach (Edge gleeEdge in gleeGraph.Edges)
+      {
         var drawingEdge = gleeEdge.UserData as DrawingEdge;
         drawingEdge.GeometryEdge = gleeEdge;
       }
 
-      foreach (Node gleeNode in gleeGraph.Nodes) {
+      foreach (Node gleeNode in gleeGraph.Nodes)
+      {
         DrawingNode drawingNode = (Drawing.Node)gleeNode.UserData;
         drawingNode.GeometryNode = gleeNode;
       }
@@ -2133,7 +2365,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// </summary>
     /// <param name="graph"></param>
     /// <returns></returns>
-    public object CalculateLayout(Graph graph) {
+    public object CalculateLayout(Graph graph)
+    {
       OriginalGraph = graph;
       LayoutAndCreateDGraph();
       return DGraph;
@@ -2144,7 +2377,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// </summary>
     /// <param name="toolTip"></param>
     /// <param name="tip"></param>
-    public void SetToolTip(ToolTip toolTip, string tip) {
+    public void SetToolTip(ToolTip toolTip, string tip)
+    {
       if (toolTip != null)
         toolTip.SetToolTip(DrawingPanel, tip);
     }
@@ -2153,10 +2387,12 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// Just uses the passed object to draw the graph. The method expects DGraph as the argument
     /// </summary>
     /// <param name="entityContainingLayout"></param>
-    public void SetCalculatedLayout(object entityContainingLayout) {
+    public void SetCalculatedLayout(object entityContainingLayout)
+    {
       ClearLayoutEditor();
       DGraph = entityContainingLayout as DGraph;
-      if (DGraph != null) {
+      if (DGraph != null)
+      {
         OriginalGraph = DGraph.DrawingGraph;
         if (GraphChanged != null)
           GraphChanged(this, null);
@@ -2171,7 +2407,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <param name="screenY"></param>
     /// <param name="viewerX"></param>
     /// <param name="viewerY"></param>
-    public void ScreenToSource(float screenX, float screenY, out float viewerX, out float viewerY) {
+    public void ScreenToSource(float screenX, float screenY, out float viewerX, out float viewerY)
+    {
       Point p = ScreenToSource(new System.Drawing.Point((int)screenX, (int)screenY));
       viewerX = (float)p.X;
       viewerY = (float)p.Y;
@@ -2182,23 +2419,27 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// </summary>
     /// <param name="deltaX"></param>
     /// <param name="deltaY"></param>
-    public void Pan(float deltaX, float deltaY) {
+    public void Pan(float deltaX, float deltaY)
+    {
       Pan(new Point(deltaX, deltaY));
     }
 
 
-    internal void RaiseMouseMoveEvent(MsaglMouseEventArgs iArgs) {
+    internal void RaiseMouseMoveEvent(MsaglMouseEventArgs iArgs)
+    {
       if (iEditViewerMouseMove != null)
         iEditViewerMouseMove(this, iArgs);
     }
 
 
-    internal void RaiseMouseDownEvent(MsaglMouseEventArgs iArgs) {
+    internal void RaiseMouseDownEvent(MsaglMouseEventArgs iArgs)
+    {
       if (iEditViewerMouseDown != null)
         iEditViewerMouseDown(this, iArgs);
     }
 
-    internal void RaiseMouseUpEvent(MsaglMouseEventArgs iArgs) {
+    internal void RaiseMouseUpEvent(MsaglMouseEventArgs iArgs)
+    {
       if (iEditViewerMouseUp != null)
         iEditViewerMouseUp(this, iArgs);
     }
@@ -2218,7 +2459,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// Undoes the last edit action
     /// </summary>
-    public void Undo() {
+    public void Undo()
+    {
       if (LayoutEditor.CanUndo)
         LayoutEditor.Undo();
     }
@@ -2226,7 +2468,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// redoes the last undo
     /// </summary>
-    public void Redo() {
+    public void Redo()
+    {
       if (LayoutEditor.CanRedo)
         LayoutEditor.Redo();
     }
@@ -2236,7 +2479,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// returns true if an undo is available
     /// </summary>
     /// <returns></returns>
-    public bool CanUndo() {
+    public bool CanUndo()
+    {
       return LayoutEditor.CanUndo;
     }
 
@@ -2244,18 +2488,21 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// returns true is a redo is available
     /// </summary>
     /// <returns></returns>
-    public bool CanRedo() {
+    public bool CanRedo()
+    {
       return LayoutEditor.CanRedo;
     }
 
 
-    static MenuItem CreateMenuItem(string title, VoidDelegate voidVoidDelegate) {
+    static MenuItem CreateMenuItem(string title, VoidDelegate voidVoidDelegate)
+    {
       var menuItem = new MenuItem { Text = title };
       menuItem.Click += ((sender, e) => voidVoidDelegate());
       return menuItem;
     }
 
-    static IEnumerable<DEdge> Edges(DNode dNode) {
+    static IEnumerable<DEdge> Edges(DNode dNode)
+    {
       foreach (DEdge de in dNode.OutEdges)
         yield return de;
       foreach (DEdge de in dNode.InEdges)
@@ -2268,29 +2515,34 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// makes the node unreachable
     /// </summary>
     /// <param name="node"></param>
-    void RemoveNodeFromAllGraphs(IViewerNode node) {
+    void RemoveNodeFromAllGraphs(IViewerNode node)
+    {
       var drawingNode = node.DrawingObject as DrawingNode;
 
       DGraph.RemoveDNode(drawingNode.Id);
       Graph.NodeMap.Remove(drawingNode.Id);
 
-      if (drawingNode.GeometryNode != null) {
+      if (drawingNode.GeometryNode != null)
+      {
         Graph.GeometryGraph.Nodes.Remove(drawingNode.GeometryNode);
       }
 
-      foreach (DEdge de in Edges(node as DNode)) {
+      foreach (DEdge de in Edges(node as DNode))
+      {
         DGraph.Edges.Remove(de);
         Graph.RemoveEdge(de.DrawingEdge);
         Graph.GeometryGraph.Edges.Remove(de.DrawingEdge.GeometryEdge);
       }
 
-      foreach (DEdge de in node.OutEdges) {
+      foreach (DEdge de in node.OutEdges)
+      {
         de.Target.inEdges.Remove(de);
         de.Target.DrawingNode.RemoveInEdge(de.DrawingEdge);
         de.Target.DrawingNode.GeometryNode.RemoveInEdge(de.DrawingEdge.GeometryEdge);
       }
 
-      foreach (DEdge de in node.InEdges) {
+      foreach (DEdge de in node.InEdges)
+      {
         de.Source.outEdges.Remove(de);
         de.Source.DrawingNode.RemoveOutEdge(de.DrawingEdge);
         de.Source.DrawingNode.GeometryNode.RemoveOutEdge(de.DrawingEdge.GeometryEdge);
@@ -2301,11 +2553,13 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// Sets the size of the node to something appropriate to the label it has to display.
     /// </summary>
     /// <param name="node">The node to be resized</param>
-    public void ResizeNodeToLabel(DrawingNode node) {
+    public void ResizeNodeToLabel(DrawingNode node)
+    {
       double width = 0;
       double height = 0;
       string label = node.Label.Text;
-      if (String.IsNullOrEmpty(label) == false) {
+      if (String.IsNullOrEmpty(label) == false)
+      {
         var f = new Font(node.Label.FontName, (int)node.Label.FontSize, (System.Drawing.FontStyle)(int)node.Label.FontStyle);
         StringMeasure.MeasureWithFont(label, f, out width, out height);
       }
@@ -2330,7 +2584,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     }
 
 
-    internal void RaisePaintEvent(PaintEventArgs e) {
+    internal void RaisePaintEvent(PaintEventArgs e)
+    {
       base.OnPaint(e);
     }
 
@@ -2344,7 +2599,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// </summary>
     public event EventHandler EdgeRemoved;
 
-    void RouteEdge(Edge geometryEdge) {
+    void RouteEdge(Edge geometryEdge)
+    {
       var router = new RouterBetweenTwoNodes(Graph.GeometryGraph, Graph.Attr.NodeSeparation * tightOffsetForRouting,
                                              Graph.Attr.NodeSeparation * looseOffsetForRouting,
                                              Graph.Attr.NodeSeparation * offsetForRelaxingInRouting);
@@ -2358,18 +2614,21 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// 
     /// </summary>
-    public new event MouseEventHandler MouseMove {
+    public new event MouseEventHandler MouseMove
+    {
       add { mouseMove += value; }
       remove { mouseMove -= value; }
     }
 
 
-    internal void RaiseRegularMouseMove(MouseEventArgs args) {
+    internal void RaiseRegularMouseMove(MouseEventArgs args)
+    {
       if (mouseMove != null)
         mouseMove(this, args);
     }
 
-    double GetFitScale() {
+    double GetFitScale()
+    {
       return OriginalGraph == null ? 1 : Math.Min(panel.Width / originalGraph.Width, panel.Height / originalGraph.Height);
     }
   }

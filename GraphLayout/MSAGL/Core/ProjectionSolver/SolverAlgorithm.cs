@@ -7,24 +7,26 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Microsoft.Msagl.Core.ProjectionSolver {
-  /// <summary>
-  /// The algorithm used by the ProjectionSolver.
-  /// </summary>
-  public enum SolverAlgorithm {
+namespace Microsoft.Msagl.Core.ProjectionSolver
+{
     /// <summary>
-    /// Iterative Project/Split only.
+    /// The algorithm used by the ProjectionSolver.
     /// </summary>
-    ProjectOnly,
+    public enum SolverAlgorithm
+    {
+        /// <summary>
+        /// Iterative Project/Split only.
+        /// </summary>
+        ProjectOnly,
 
-    /// <summary>
-    /// Diagonally-scaled gradient projection/Qpsc (Quadratic Programming for Separation Constraints).
-    /// </summary>
-    QpscWithScaling,
+        /// <summary>
+        /// Diagonally-scaled gradient projection/Qpsc (Quadratic Programming for Separation Constraints).
+        /// </summary>
+        QpscWithScaling,
 
-    /// <summary>
-    /// Gradient projection/Qpsc (Quadratic Programming for Separation Constraints) without diagonal scaling.
-    /// </summary>
-    QpscWithoutScaling
-  }
+        /// <summary>
+        /// Gradient projection/Qpsc (Quadratic Programming for Separation Constraints) without diagonal scaling.
+        /// </summary>
+        QpscWithoutScaling
+    }
 }

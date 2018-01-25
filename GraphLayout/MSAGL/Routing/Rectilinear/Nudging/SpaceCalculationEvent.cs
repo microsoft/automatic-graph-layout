@@ -1,4 +1,4 @@
-namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
-  internal class SpaceCalculationEvent {
-  }
+namespace Microsoft.Msagl.Routing.Rectilinear.Nudging{
+    internal class SpaceCalculationEvent{
+    }
 }

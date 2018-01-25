@@ -8,72 +8,76 @@ using Microsoft.Msagl.DebugHelpers;
 using Microsoft.Msagl.Routing;
 using Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation;
 
-namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTree {
-  /// <summary>
-  /// Computes the minimum spanning tree on a triangulation or on a set of edges given by a list of tuple.
-  /// </summary>
-  public class MstOnDelaunayTriangulation {
-
-
+namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTree
+{
     /// <summary>
-    /// Computes the minimum spanning tree on a set of edges
+    /// Computes the minimum spanning tree on a triangulation or on a set of edges given by a list of tuple.
     /// </summary>
-    /// <param name="proximityEdges">list of tuples, each representing an edge with: nodeId1, nodeId2, t(overlapFactor), ideal distance, edge weight.</param>
-    /// <param name="sizeId"></param>
-    /// <returns></returns>
-    static internal List<Tuple<int, int, double, double, double>> GetMstOnTuple(List<Tuple<int, int, double, double, double>> proximityEdges, int sizeId) {
-      if (proximityEdges.Count == 0) {
-        return null;
-      }
-      var intPairs = proximityEdges.Select(t => new IntPair(t.Item1, t.Item2)).ToArray();
-      var weighting = new Dictionary<IntPair, Tuple<int, int, double, double, double>>(intPairs.Count());
-      for (int i = 0; i < proximityEdges.Count; i++) {
-        weighting[intPairs[i]] = proximityEdges[i];
-      }
-      var graph = new BasicGraph<IEdge>(intPairs, sizeId);
+    public class MstOnDelaunayTriangulation
+    {
 
-      var mstOnBasicGraph = new MinimumSpanningTreeByPrim(graph, intPair => weighting[(IntPair)intPair].Item5, intPairs[0].First);
 
-      List<Tuple<int, int, double, double, double>> treeEdges = mstOnBasicGraph.GetTreeEdges().Select(e => weighting[(IntPair)e]).ToList();
-      return treeEdges;
-    }
+        /// <summary>
+        /// Computes the minimum spanning tree on a set of edges
+        /// </summary>
+        /// <param name="proximityEdges">list of tuples, each representing an edge with: nodeId1, nodeId2, t(overlapFactor), ideal distance, edge weight.</param>
+        /// <param name="sizeId"></param>
+        /// <returns></returns>
+        static internal List<Tuple<int, int, double, double, double>> GetMstOnTuple(List<Tuple<int,int,double,double,double>> proximityEdges, int sizeId) {
+            if (proximityEdges.Count == 0)
+            {
+                return null;
+            }
+            var intPairs = proximityEdges.Select(t => new IntPair(t.Item1, t.Item2)).ToArray();
+            var weighting = new Dictionary<IntPair, Tuple<int, int, double, double, double>>(intPairs.Count());
+            for (int i = 0; i < proximityEdges.Count; i++) {
+                weighting[intPairs[i]] = proximityEdges[i];
+            }
+            var graph = new BasicGraph<IEdge>(intPairs, sizeId);
 
-    /// <summary>
-    /// Computes the minimum spanning tree on a DT with given weights.
-    /// </summary>
-    /// <param name="cdt"></param>
-    /// <param name="weights"></param>
-    /// <returns></returns>
-    static internal List<CdtEdge> GetMstOnCdt(Cdt cdt, Func<CdtEdge, double> weights) {
-      var siteArray = cdt.PointsToSites.Values.ToArray();
-      var siteIndex = new Dictionary<CdtSite, int>();
-      for (int i = 0; i < siteArray.Length; i++)
-        siteIndex[siteArray[i]] = i;
+            var mstOnBasicGraph = new MinimumSpanningTreeByPrim(graph, intPair => weighting[(IntPair)intPair].Item5, intPairs[0].First);
 
-      Dictionary<IntPair, CdtEdge> intPairsToCdtEdges = GetEdges(siteArray, siteIndex);
+            List<Tuple<int, int, double, double, double>> treeEdges = mstOnBasicGraph.GetTreeEdges().Select(e => weighting[(IntPair) e]).ToList();
+            return treeEdges;
+        }
 
-      var graph = new BasicGraph<IEdge>(intPairsToCdtEdges.Keys, siteArray.Length);
+        /// <summary>
+        /// Computes the minimum spanning tree on a DT with given weights.
+        /// </summary>
+        /// <param name="cdt"></param>
+        /// <param name="weights"></param>
+        /// <returns></returns>
+        static internal List<CdtEdge> GetMstOnCdt(Cdt cdt, Func<CdtEdge, double> weights) {
+            var siteArray = cdt.PointsToSites.Values.ToArray();
+            var siteIndex = new Dictionary<CdtSite, int>();
+            for (int i = 0; i < siteArray.Length; i++)
+                siteIndex[siteArray[i]] = i;
 
-      var mstOnBasicGraph = new MinimumSpanningTreeByPrim(graph, intPair => weights(intPairsToCdtEdges[(IntPair)intPair]), 0);
+            Dictionary<IntPair, CdtEdge> intPairsToCdtEdges = GetEdges(siteArray, siteIndex);
 
-      return new List<CdtEdge>(mstOnBasicGraph.GetTreeEdges().Select(e => intPairsToCdtEdges[(IntPair)e]));
-    }
+            var graph = new BasicGraph<IEdge>( intPairsToCdtEdges.Keys, siteArray.Length);
 
-    static Dictionary<IntPair, CdtEdge> GetEdges(CdtSite[] siteArray, Dictionary<CdtSite, int> siteIndex) {
-      var d = new Dictionary<IntPair, CdtEdge>();
-      for (int i = 0; i < siteArray.Length; i++) {
-        var site = siteArray[i];
-        var sourceIndex = siteIndex[site];
-        foreach (var e in site.Edges)
-          d[new IntPair(sourceIndex, siteIndex[e.lowerSite])] = e;
-      }
-      return d;
-    }
+            var mstOnBasicGraph = new MinimumSpanningTreeByPrim(graph, intPair => weights(intPairsToCdtEdges[(IntPair)intPair]), 0);
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public static void Test() {
+            return new List<CdtEdge>(mstOnBasicGraph.GetTreeEdges().Select(e=>intPairsToCdtEdges[(IntPair)e]));
+        }
+
+        static Dictionary<IntPair, CdtEdge> GetEdges(CdtSite[] siteArray, Dictionary<CdtSite, int> siteIndex) {
+            var d = new Dictionary<IntPair, CdtEdge>();
+            for (int i = 0; i < siteArray.Length; i++) {
+                var site = siteArray[i];
+                var sourceIndex = siteIndex[site];
+                foreach (var e in site.Edges)
+                    d[new IntPair(sourceIndex, siteIndex[e.lowerSite])] = e;
+            }
+            return d;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static void Test()
+        {
 #if DEBUG && !SILVERLIGHT && !SHARPKIT && !NETCORE
             int count = 100;
             var random = new Random(3);
@@ -96,6 +100,6 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
             }
             LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(l);
 #endif
+        }
     }
-  }
 }

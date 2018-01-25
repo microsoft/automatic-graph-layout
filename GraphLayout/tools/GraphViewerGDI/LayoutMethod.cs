@@ -26,36 +26,36 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-
+﻿
 
 
 namespace Microsoft.Msagl.GraphViewerGdi {
-  /// <summary>
-  /// enumerates through available layout methods
-  /// </summary>
+    /// <summary>
+    /// enumerates through available layout methods
+    /// </summary>
+   
+    public enum LayoutMethod {
+        /// <summary>
+        /// 
+        /// </summary>
+        UseSettingsOfTheGraph,
+        /// <summary>
+        /// 
+        /// </summary>
+        SugiyamaScheme,
+        /// <summary>
+        /// 
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "MDS")]
+        MDS,
+        /// <summary>
+        /// 
+        /// </summary>
+        Ranking,
 
-  public enum LayoutMethod {
-    /// <summary>
-    /// 
-    /// </summary>
-    UseSettingsOfTheGraph,
-    /// <summary>
-    /// 
-    /// </summary>
-    SugiyamaScheme,
-    /// <summary>
-    /// 
-    /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "MDS")]
-    MDS,
-    /// <summary>
-    /// 
-    /// </summary>
-    Ranking,
+        ///<summary>
+        ///</summary>
+        IcrementalLayout,
 
-    ///<summary>
-    ///</summary>
-    IcrementalLayout,
-
-  }
+    }
 }

@@ -12,165 +12,165 @@ using Microsoft.Msagl.DebugHelpers;
 using Microsoft.Msagl.Routing.Visibility;
 
 namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
-  /// <summary>
-  /// following paper "Orthogonal Connector Routing" which is included in the project
-  /// </summary>
+    /// <summary>
+    /// following paper "Orthogonal Connector Routing" which is included in the project
+    /// </summary>
 #if TEST_MSAGL
     public
 #else
-  internal
+        internal
 #endif
     class Nudger {
 
-    bool HasGroups {
-      get { return (null != HierarchyOfGroups) && (HierarchyOfGroups.Count > 0); }
-    }
+        bool HasGroups {
+            get { return (null != HierarchyOfGroups) && (HierarchyOfGroups.Count > 0); }
+        }
 
-    Dictionary<AxisEdge, Polyline> axisEdgesToObstaclesTheyOriginatedFrom;
+        Dictionary<AxisEdge, Polyline> axisEdgesToObstaclesTheyOriginatedFrom;
 
-    List<Path> Paths { get; set; }
+        List<Path> Paths { get; set; }
 
-    IEnumerable<Polyline> Obstacles { get; set; }
-    internal VisibilityGraph PathVisibilityGraph { get; set; }
+        IEnumerable<Polyline> Obstacles { get; set; }
+        internal VisibilityGraph PathVisibilityGraph { get; set; }
 
-    /// <summary>
-    ///  "nudge" paths to decrease the number of intersections and stores the results inside WidePaths of "paths"
-    /// </summary>
-    /// <param name="paths">paths through the graph</param>
-    /// <param name="cornerFitRad">two parallel paths should be separated by this distance if it is feasible</param>
-    /// <param name="obstacles">polygonal convex obstacles organized in a tree; the obstacles here are padded original obstacles</param>
-    /// <param name="ancestorsSets"></param>
-    /// <returns></returns>
-    internal Nudger(IEnumerable<Path> paths, double cornerFitRad, IEnumerable<Polyline> obstacles,
-        Dictionary<Shape, Set<Shape>> ancestorsSets) {
-      AncestorsSets = ancestorsSets;
-      HierarchyOfGroups = RectangleNode<Shape>.CreateRectangleNodeOnEnumeration(
-              ancestorsSets.Keys.Where(shape => shape.IsGroup).Select(group => new RectangleNode<Shape>(group, group.BoundingBox)));
-      Obstacles = obstacles;
-      EdgeSeparation = 2 * cornerFitRad;
-      Paths = new List<Path>(paths);
-      HierarchyOfObstacles =
-          RectangleNode<Polyline>.CreateRectangleNodeOnEnumeration(
-              obstacles.Select(p => new RectangleNode<Polyline>(p, p.BoundingBox)));
-      MapPathsToTheirObstacles();
-    }
+        /// <summary>
+        ///  "nudge" paths to decrease the number of intersections and stores the results inside WidePaths of "paths"
+        /// </summary>
+        /// <param name="paths">paths through the graph</param>
+        /// <param name="cornerFitRad">two parallel paths should be separated by this distance if it is feasible</param>
+        /// <param name="obstacles">polygonal convex obstacles organized in a tree; the obstacles here are padded original obstacles</param>
+        /// <param name="ancestorsSets"></param>
+        /// <returns></returns>
+        internal Nudger(IEnumerable<Path> paths, double cornerFitRad, IEnumerable<Polyline> obstacles, 
+            Dictionary<Shape, Set<Shape>> ancestorsSets) {
+            AncestorsSets = ancestorsSets;
+            HierarchyOfGroups = RectangleNode<Shape>.CreateRectangleNodeOnEnumeration(
+                    ancestorsSets.Keys.Where(shape => shape.IsGroup).Select(group => new RectangleNode<Shape>(group, group.BoundingBox)));
+            Obstacles = obstacles;
+            EdgeSeparation = 2 * cornerFitRad;
+            Paths = new List<Path>(paths);
+            HierarchyOfObstacles =
+                RectangleNode<Polyline>.CreateRectangleNodeOnEnumeration(
+                    obstacles.Select(p => new RectangleNode<Polyline>(p, p.BoundingBox)));
+            MapPathsToTheirObstacles();
+        }
 
-    Dictionary<Shape, Set<Shape>> AncestorsSets { get; set; }
+        Dictionary<Shape, Set<Shape>> AncestorsSets { get; set; }
 
-    void MapPathsToTheirObstacles() {
-      PathToObstacles = new Dictionary<Path, Tuple<Polyline, Polyline>>();
-      foreach (var path in Paths)
-        MapPathToItsObstacles(path);
-    }
+        void MapPathsToTheirObstacles() {
+            PathToObstacles = new Dictionary<Path, Tuple<Polyline, Polyline>>();
+            foreach (var path in Paths)
+                MapPathToItsObstacles(path);
+        }
 
-    void MapPathToItsObstacles(Path path) {
-      var startNode = HierarchyOfObstacles.FirstHitNode(path.PathPoints.First(), ObstacleTest);
-      var endNode = HierarchyOfObstacles.FirstHitNode(path.PathPoints.Last(), ObstacleTest);
-      if ((null != startNode) && (null != endNode)) {
-        PathToObstacles[path] = new Tuple<Polyline, Polyline>(startNode.UserData, endNode.UserData);
-      }
-    }
-
-    static HitTestBehavior ObstacleTest(Point pnt, Polyline polyline) {
-      return (Curve.PointRelativeToCurveLocation(pnt, polyline) !=
-                                             PointLocation.Outside)
-                                                ? HitTestBehavior.Stop
-                                                : HitTestBehavior.Continue;
-    }
-    /// <summary>
-    /// 
-    /// </summary>
-    protected RectangleNode<Polyline> HierarchyOfObstacles { get; set; }
-    /// <summary>
-    /// 
-    /// </summary>
-    protected RectangleNode<Shape> HierarchyOfGroups { get; set; }
-
-    internal void Calculate(Directions direction, bool mergePaths) {
-      NudgingDirection = direction;
-      PathRefiner.RefinePaths(Paths, mergePaths);
-      // ShowPathsDebug(Paths);
-      GetPathOrdersAndPathGraph();
-      MapAxisEdgesToTheirObstacles();
-      DrawPaths();
-      //ShowPathsDebug(Paths);
-    }
-
-    void MapAxisEdgesToTheirObstacles() {
-      axisEdgesToObstaclesTheyOriginatedFrom = new Dictionary<AxisEdge, Polyline>();
-      foreach (var path in Paths)
-        MapPathEndAxisEdgesToTheirObstacles(path);
-
-      //The assignment above was too greedy. An edge belonging to interiour edges of some path can be marked by mistake.
-      foreach (var path in Paths)
-        UmmapPathInteriourFromStrangerObstacles(path);
-    }
-
-    void UmmapPathInteriourFromStrangerObstacles(Path path) {
-      var firstUnmappedEdge = FindFirstUnmappedEdge(path);
-      if (firstUnmappedEdge == null) return;
-      var lastUnmappedEdge = FindLastUnmappedEdge(path);
-      for (var edge = firstUnmappedEdge; edge != null && edge != lastUnmappedEdge; edge = edge.Next)
-        axisEdgesToObstaclesTheyOriginatedFrom.Remove(edge.AxisEdge);
-    }
-
-    PathEdge FindLastUnmappedEdge(Path path) {
-      for (var edge = path.LastEdge; edge != null; edge = edge.Prev)
-        if (edge.AxisEdge.Direction != NudgingDirection)
-          return edge;
-      return null;
-    }
-
-    PathEdge FindFirstUnmappedEdge(Path path) {
-      for (var edge = path.FirstEdge; edge != null; edge = edge.Next)
-        if (edge.AxisEdge.Direction != NudgingDirection)
-          return edge;
-      return null;
-    }
-
-    void MapPathEndAxisEdgesToTheirObstacles(Path path) {
-      Tuple<Polyline, Polyline> coupleOfObstacles;
-      if (PathToObstacles.TryGetValue(path, out coupleOfObstacles)) {
-        ProcessThePathStartToMapAxisEdgesToTheirObstacles(path, coupleOfObstacles.Item1);
-        ProcessThePathEndToMapAxisEdgesToTheirObstacles(path, coupleOfObstacles.Item2);
-      }
-    }
-
-    void ProcessThePathEndToMapAxisEdgesToTheirObstacles(Path path, Polyline endPolyline) {
-      for (var edge = path.LastEdge;
-           edge != null && CompassVector.DirectionsAreParallel(edge.Direction, NudgingDirection);
-           edge = edge.Prev)
-        axisEdgesToObstaclesTheyOriginatedFrom[edge.AxisEdge] = endPolyline;
-    }
-
-    void ProcessThePathStartToMapAxisEdgesToTheirObstacles(Path path, Polyline startPolyline) {
-      for (var edge = path.FirstEdge;
-           edge != null && CompassVector.DirectionsAreParallel(edge.Direction, NudgingDirection);
-           edge = edge.Next)
-        axisEdgesToObstaclesTheyOriginatedFrom[edge.AxisEdge] = startPolyline;
-      //possible bug here because an edge might ignore two obstacles if it connects them
-    }
-
-
-
-    void GetPathOrdersAndPathGraph() {
-      var combinatorialNudger = new CombinatorialNudger(Paths);
-      PathOrders = combinatorialNudger.GetOrder();
-      PathVisibilityGraph = combinatorialNudger.PathVisibilityGraph;
-    }
-
-    /*
-            [Conditional("DEBUG")]
-            void CheckPathsForSwitchbacks() {
-                foreach(var p in Paths)
-                    CheckForSwitchbacks(p.PathPoints.ToArray());
+        void MapPathToItsObstacles(Path path) {
+            var startNode = HierarchyOfObstacles.FirstHitNode(path.PathPoints.First(),ObstacleTest);
+            var endNode = HierarchyOfObstacles.FirstHitNode(path.PathPoints.Last(), ObstacleTest);
+            if ((null != startNode) && (null != endNode)) {
+                PathToObstacles[path] = new Tuple<Polyline, Polyline>(startNode.UserData, endNode.UserData);
             }
-    */
+        }
+
+        static HitTestBehavior ObstacleTest(Point pnt, Polyline polyline) {
+            return (Curve.PointRelativeToCurveLocation(pnt, polyline) !=
+                                                   PointLocation.Outside)
+                                                      ? HitTestBehavior.Stop
+                                                      : HitTestBehavior.Continue;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        protected RectangleNode<Polyline> HierarchyOfObstacles { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        protected RectangleNode<Shape> HierarchyOfGroups { get; set; }
+
+        internal void Calculate(Directions direction, bool mergePaths) {
+            NudgingDirection = direction;
+            PathRefiner.RefinePaths(Paths, mergePaths);
+           // ShowPathsDebug(Paths);
+            GetPathOrdersAndPathGraph();
+            MapAxisEdgesToTheirObstacles();            
+            DrawPaths();
+            //ShowPathsDebug(Paths);
+        }
+
+        void MapAxisEdgesToTheirObstacles() {
+            axisEdgesToObstaclesTheyOriginatedFrom = new Dictionary<AxisEdge, Polyline>();
+            foreach (var path in Paths)
+                MapPathEndAxisEdgesToTheirObstacles(path);
+
+            //The assignment above was too greedy. An edge belonging to interiour edges of some path can be marked by mistake.
+            foreach (var path in Paths)
+                UmmapPathInteriourFromStrangerObstacles(path);
+        }
+
+        void UmmapPathInteriourFromStrangerObstacles(Path path) {
+            var firstUnmappedEdge = FindFirstUnmappedEdge(path);
+            if(firstUnmappedEdge==null) return;
+            var lastUnmappedEdge = FindLastUnmappedEdge(path);
+            for (var edge = firstUnmappedEdge; edge != null && edge != lastUnmappedEdge; edge = edge.Next)
+                axisEdgesToObstaclesTheyOriginatedFrom.Remove(edge.AxisEdge);
+        }
+
+        PathEdge FindLastUnmappedEdge(Path path) {
+            for (var edge = path.LastEdge; edge != null; edge = edge.Prev)
+                if (edge.AxisEdge.Direction != NudgingDirection)
+                    return edge;
+            return null;
+        }
+
+        PathEdge FindFirstUnmappedEdge(Path path) {
+            for (var edge = path.FirstEdge; edge != null; edge = edge.Next)
+                if (edge.AxisEdge.Direction != NudgingDirection)
+                    return edge;
+            return null;
+        }
+
+        void MapPathEndAxisEdgesToTheirObstacles(Path path) {
+            Tuple<Polyline, Polyline> coupleOfObstacles;
+            if (PathToObstacles.TryGetValue(path, out coupleOfObstacles)) {
+                ProcessThePathStartToMapAxisEdgesToTheirObstacles(path, coupleOfObstacles.Item1);
+                ProcessThePathEndToMapAxisEdgesToTheirObstacles(path, coupleOfObstacles.Item2);
+            }            
+        }
+
+        void ProcessThePathEndToMapAxisEdgesToTheirObstacles(Path path, Polyline endPolyline) {
+            for (var edge = path.LastEdge;
+                 edge != null && CompassVector.DirectionsAreParallel(edge.Direction, NudgingDirection);
+                 edge = edge.Prev)
+                axisEdgesToObstaclesTheyOriginatedFrom[edge.AxisEdge] = endPolyline;
+        }
+
+        void ProcessThePathStartToMapAxisEdgesToTheirObstacles(Path path, Polyline startPolyline) {
+            for (var edge = path.FirstEdge;
+                 edge != null && CompassVector.DirectionsAreParallel(edge.Direction, NudgingDirection);
+                 edge = edge.Next)
+                axisEdgesToObstaclesTheyOriginatedFrom[edge.AxisEdge] = startPolyline; 
+            //possible bug here because an edge might ignore two obstacles if it connects them
+        }
 
 
-    Directions NudgingDirection { get; set; }
 
-    #region debugging
+        void GetPathOrdersAndPathGraph() {
+            var combinatorialNudger = new CombinatorialNudger(Paths);
+            PathOrders = combinatorialNudger.GetOrder();
+            PathVisibilityGraph = combinatorialNudger.PathVisibilityGraph;
+        }
+
+        /*
+                [Conditional("DEBUG")]
+                void CheckPathsForSwitchbacks() {
+                    foreach(var p in Paths)
+                        CheckForSwitchbacks(p.PathPoints.ToArray());
+                }
+        */
+
+
+        Directions NudgingDirection { get; set; }
+
+        #region debugging
 #if TEST_MSAGL
         static internal ICurve[] GetCurvesForShow(IEnumerable<Path> paths, IEnumerable<Polyline> obstacles) {
             var ret = new List<ICurve>();
@@ -184,111 +184,111 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             return ret.ToArray();
         }
 #endif
-    #endregion
-    void DrawPaths() {
-      SetWidthsOfArrowheads();
-      CreateLongestNudgedSegments();
-      FindFreeSpaceInDirection(PathVisibilityGraph.Edges.Cast<AxisEdge>());
-      MoveLongestSegsIdealPositionsInsideFeasibleIntervals();
-      PositionShiftedEdges();
-    }
+        #endregion
+        void DrawPaths() {
+            SetWidthsOfArrowheads();
+            CreateLongestNudgedSegments();
+            FindFreeSpaceInDirection(PathVisibilityGraph.Edges.Cast<AxisEdge>());
+            MoveLongestSegsIdealPositionsInsideFeasibleIntervals();
+            PositionShiftedEdges();
+        }
 
 
+        
+        
+        void SetWidthsOfArrowheads() {
+            foreach (Path edgePath in Paths)
+                SetWidthsOfArrowheadsForEdge(edgePath);
+        }
 
+        static void SetWidthsOfArrowheadsForEdge(Path path) {
+            var edgeGeom = path.EdgeGeometry;
+            if (edgeGeom.TargetArrowhead != null) {
+                PathEdge pathEdge = path.LastEdge;
+                pathEdge.Width = Math.Max(edgeGeom.TargetArrowhead.Width, pathEdge.Width);
+            }
+            if (edgeGeom.SourceArrowhead != null) {
+                PathEdge pathEdge = path.FirstEdge;
+                pathEdge.Width = Math.Max(edgeGeom.SourceArrowhead.Width, pathEdge.Width);
+            }
+        }
 
-    void SetWidthsOfArrowheads() {
-      foreach (Path edgePath in Paths)
-        SetWidthsOfArrowheadsForEdge(edgePath);
-    }
+        internal double EdgeSeparation { get; set; }
 
-    static void SetWidthsOfArrowheadsForEdge(Path path) {
-      var edgeGeom = path.EdgeGeometry;
-      if (edgeGeom.TargetArrowhead != null) {
-        PathEdge pathEdge = path.LastEdge;
-        pathEdge.Width = Math.Max(edgeGeom.TargetArrowhead.Width, pathEdge.Width);
-      }
-      if (edgeGeom.SourceArrowhead != null) {
-        PathEdge pathEdge = path.FirstEdge;
-        pathEdge.Width = Math.Max(edgeGeom.SourceArrowhead.Width, pathEdge.Width);
-      }
-    }
+        void PositionShiftedEdges() {
+            //we are using 2*cornerFitRadius for the minimal edge separation
+            Solver = new UniformOneDimensionalSolver(EdgeSeparation);
+            foreach (var segment in LongestNudgedSegs)
+                CreateVariablesOfLongestSegment(segment);
+            CreateConstraintsOfTheOrder();
+            CreateConstraintsBetweenLongestSegments();
+            Solver.Solve();
+            ShiftPathEdges();
+        }
 
-    internal double EdgeSeparation { get; set; }
+        void MoveLongestSegsIdealPositionsInsideFeasibleIntervals() {
+            foreach (var seg in LongestNudgedSegs)
+                MoveLongestSegIdealPositionsInsideFeasibleInterval(seg);
+        }
 
-    void PositionShiftedEdges() {
-      //we are using 2*cornerFitRadius for the minimal edge separation
-      Solver = new UniformOneDimensionalSolver(EdgeSeparation);
-      foreach (var segment in LongestNudgedSegs)
-        CreateVariablesOfLongestSegment(segment);
-      CreateConstraintsOfTheOrder();
-      CreateConstraintsBetweenLongestSegments();
-      Solver.Solve();
-      ShiftPathEdges();
-    }
+        static void MoveLongestSegIdealPositionsInsideFeasibleInterval(LongestNudgedSegment seg) {
+            if (seg.IsFixed) return;
+            var leftBound = seg.GetLeftBound();
+            var rightBound = seg.GetRightBound();
+            if (seg.IdealPosition < leftBound)
+                seg.IdealPosition=leftBound;
+            else if( seg.IdealPosition> rightBound)
+                seg.IdealPosition=rightBound;
+        }
 
-    void MoveLongestSegsIdealPositionsInsideFeasibleIntervals() {
-      foreach (var seg in LongestNudgedSegs)
-        MoveLongestSegIdealPositionsInsideFeasibleInterval(seg);
-    }
+        void ShiftPathEdges() {
+            foreach (var path in Paths)
+                path.PathPoints = GetShiftedPoints(path).ToArray();
+        }
 
-    static void MoveLongestSegIdealPositionsInsideFeasibleInterval(LongestNudgedSegment seg) {
-      if (seg.IsFixed) return;
-      var leftBound = seg.GetLeftBound();
-      var rightBound = seg.GetRightBound();
-      if (seg.IdealPosition < leftBound)
-        seg.IdealPosition = leftBound;
-      else if (seg.IdealPosition > rightBound)
-        seg.IdealPosition = rightBound;
-    }
-
-    void ShiftPathEdges() {
-      foreach (var path in Paths)
-        path.PathPoints = GetShiftedPoints(path).ToArray();
-    }
-
-    IEnumerable<Point> GetShiftedPoints(Path path) {
-      return RemoveSwitchbacksAndMiddlePoints(GetShiftedPointsSimple(path));
-    }
-    /// <summary>
-    /// sometimes we have very small mistakes in the positions that have to be fixed
-    /// </summary>
-    /// <returns></returns>
-    static Point Rectilinearise(Point a, Point b) {
+        IEnumerable<Point> GetShiftedPoints(Path path) {            
+            return RemoveSwitchbacksAndMiddlePoints(GetShiftedPointsSimple(path));
+        }
+        /// <summary>
+        /// sometimes we have very small mistakes in the positions that have to be fixed
+        /// </summary>
+        /// <returns></returns>
+        static Point Rectilinearise(Point a, Point b) {
 #if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
             b = b.Clone();
 #endif
-      if (a.X != b.X && a.Y != b.Y) {
-        var dx = Math.Abs(a.X - b.X);
-        var dy = Math.Abs(a.Y - b.Y);
-        if (dx < dy)
-          b.X = a.X;
-        else
-          b.Y = a.Y;
-      }
-      return b;
-    }
+            if (a.X != b.X && a.Y != b.Y) {
+                var dx = Math.Abs(a.X - b.X);
+                var dy = Math.Abs(a.Y - b.Y);
+                if (dx < dy)
+                    b.X = a.X;
+                else
+                    b.Y = a.Y;
+            }
+            return b;
+        }
 
-    IEnumerable<Point> GetShiftedPointsSimple(Path path) {
-      var edge = path.FirstEdge;
-      yield return ShiftedPoint(edge.Source, edge.LongestNudgedSegment);
-      foreach (var e in path.PathEdges)
-        yield return ShiftedEdgePositionOfTarget(e);
-    }
+        IEnumerable<Point> GetShiftedPointsSimple(Path path) {
+            var edge = path.FirstEdge;
+            yield return ShiftedPoint(edge.Source, edge.LongestNudgedSegment);
+            foreach (var e in path.PathEdges)
+                yield return ShiftedEdgePositionOfTarget(e);
+        }
 
-    Point ShiftedEdgePositionOfTarget(PathEdge e) {
-      return e.LongestNudgedSegment != null || e.Next == null
-                 ? ShiftedPoint(e.Target, e.LongestNudgedSegment)
-                 : ShiftedPoint(e.Next.Source, e.Next.LongestNudgedSegment);
-    }
+        Point ShiftedEdgePositionOfTarget(PathEdge e) {
+            return e.LongestNudgedSegment != null || e.Next == null
+                       ? ShiftedPoint(e.Target, e.LongestNudgedSegment)
+                       : ShiftedPoint(e.Next.Source, e.Next.LongestNudgedSegment);
+        }
 
-    Point ShiftedPoint(Point point, LongestNudgedSegment segment) {
-      if (segment == null)
-        return point;
-      var t = Solver.GetVariablePosition(segment.Id);
-      return NudgingDirection == Directions.North ? new Point(t, point.Y) : new Point(point.X, -t);
-    }
+        Point ShiftedPoint(Point point, LongestNudgedSegment segment) {
+            if (segment == null)
+                return point;
+            var t = Solver.GetVariablePosition(segment.Id);
+            return NudgingDirection == Directions.North ? new Point(t, point.Y) : new Point(point.X, -t);
+        }
 
-    #region debug
+        #region debug
 #if TEST_MSAGL
         internal static void ShowPathsFromPoints(IEnumerable<Path> paths, IEnumerable<Polyline> enumerable) {
             var dd = new List<DebugCurve>();
@@ -507,85 +507,83 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             return debugCurves;
         }
 #endif
-    #endregion
+        #endregion
 
-    void CreateConstraintsBetweenLongestSegments() {
-      foreach (var segment in LongestNudgedSegs)
-        CreateConstraintsBetweenLongestSegmentsForSegment(segment);
-    }
-
-    void CreateConstraintsBetweenLongestSegmentsForSegment(LongestNudgedSegment segment) {
-      var rightNeighbors = new Set<LongestNudgedSegment>();
-      foreach (var pathEdge in segment.Edges) {
-        var axisEdge = pathEdge.AxisEdge;
-        if (axisEdge != null)
-          foreach (var rightNeiAxisEdge in axisEdge.RightNeighbors)
-            foreach (var longSeg in rightNeiAxisEdge.LongestNudgedSegments)
-              rightNeighbors.Insert(longSeg);
-      }
-
-      foreach (var seg in rightNeighbors)
-        ConstraintTwoLongestSegs(segment, seg);
-
-    }
-
-    void CreateConstraintsOfTheOrder() {
-      foreach (var kv in PathOrders)
-        if (ParallelToDirection(kv.Key, NudgingDirection))
-          CreateConstraintsOfThePathOrder(kv.Value);
-    }
-
-    static bool ParallelToDirection(VisibilityEdge edge, Directions direction) {
-      switch (direction) {
-        case Directions.North:
-        case Directions.South:
-          return ApproximateComparer.Close(edge.SourcePoint.X, edge.TargetPoint.X);
-        default:
-          return ApproximateComparer.Close(edge.SourcePoint.Y, edge.TargetPoint.Y);
-      }
-    }
-
-    void CreateConstraintsOfThePathOrder(IEnumerable<PathEdge> pathOrder) {
-      PathEdge prevEdge = null;
-
-      foreach (var pathEdge in pathOrder.Where(p => p.LongestNudgedSegment != null)) {
-        if (prevEdge != null)
-          ConstraintTwoLongestSegs(prevEdge.LongestNudgedSegment, pathEdge.LongestNudgedSegment);
-        prevEdge = pathEdge;
-      }
-    }
-
-    void ConstraintTwoLongestSegs(LongestNudgedSegment prevSeg, LongestNudgedSegment seg) {
-      if (!prevSeg.IsFixed || !seg.IsFixed)
-        Solver.AddConstraint(prevSeg.Id, seg.Id);
-    }
-
-    UniformOneDimensionalSolver Solver { get; set; }
-
-    void CreateVariablesOfLongestSegment(LongestNudgedSegment segment) {
-      if (!segment.IsFixed) {
-        var leftBound = segment.GetLeftBound();
-        var rightBound = segment.GetRightBound();
-        if (leftBound >= rightBound) {//don't move the segment from the way it was generated
-          Solver.AddFixedVariable(segment.Id, SegmentPosition(segment, NudgingDirection));
-          segment.IsFixed = true;
+        void CreateConstraintsBetweenLongestSegments() {
+            foreach (var segment in LongestNudgedSegs)
+                CreateConstraintsBetweenLongestSegmentsForSegment(segment);
         }
-        else {
-          Solver.AddVariable(segment.Id, SegmentPosition(segment, NudgingDirection), segment.IdealPosition, segment.Width);
-          //           Debug.Assert(leftBound + Curve.DistanceEpsilon < rightBound); //this assert does not hold for overlaps
-          if (leftBound != Double.NegativeInfinity)
-            Solver.SetLowBound(leftBound, segment.Id);
-          if (rightBound != Double.PositiveInfinity)
-            Solver.SetUpperBound(segment.Id, rightBound);
-        }
-      }
-      else
-        Solver.AddFixedVariable(segment.Id, SegmentPosition(segment, NudgingDirection));
-    }
 
-    static double SegmentPosition(SegmentBase segment, Directions direction) {
-      return direction == Directions.North ? segment.Start.X : -segment.Start.Y;
-    }
+        void CreateConstraintsBetweenLongestSegmentsForSegment(LongestNudgedSegment segment) {
+            var rightNeighbors = new Set<LongestNudgedSegment>();
+            foreach (var pathEdge in segment.Edges) {
+                var axisEdge = pathEdge.AxisEdge;
+                if (axisEdge != null)
+                    foreach (var rightNeiAxisEdge in axisEdge.RightNeighbors)
+                        foreach (var longSeg in rightNeiAxisEdge.LongestNudgedSegments)
+                            rightNeighbors.Insert(longSeg);
+            }
+
+            foreach (var seg in rightNeighbors)
+                ConstraintTwoLongestSegs(segment, seg);
+
+        }
+
+        void CreateConstraintsOfTheOrder() {
+            foreach (var kv in PathOrders)
+                if (ParallelToDirection(kv.Key, NudgingDirection))
+                    CreateConstraintsOfThePathOrder(kv.Value);
+        }
+
+        static bool ParallelToDirection(VisibilityEdge edge, Directions direction) {
+            switch (direction) {
+                case Directions.North:
+                case Directions.South:
+                    return ApproximateComparer.Close(edge.SourcePoint.X, edge.TargetPoint.X);
+                default:
+                    return ApproximateComparer.Close(edge.SourcePoint.Y, edge.TargetPoint.Y);
+            }
+        }
+
+        void CreateConstraintsOfThePathOrder(IEnumerable<PathEdge> pathOrder) {
+            PathEdge prevEdge = null;
+
+            foreach (var pathEdge in pathOrder.Where(p => p.LongestNudgedSegment != null)) {
+                if (prevEdge != null)
+                    ConstraintTwoLongestSegs(prevEdge.LongestNudgedSegment, pathEdge.LongestNudgedSegment);
+                prevEdge = pathEdge;
+            }
+        }
+
+        void ConstraintTwoLongestSegs(LongestNudgedSegment prevSeg, LongestNudgedSegment seg) {
+            if (!prevSeg.IsFixed || !seg.IsFixed)
+                Solver.AddConstraint(prevSeg.Id, seg.Id);
+        }
+
+        UniformOneDimensionalSolver Solver { get; set; }
+
+        void CreateVariablesOfLongestSegment(LongestNudgedSegment segment) {
+            if (!segment.IsFixed) {
+                var leftBound = segment.GetLeftBound();
+                var rightBound = segment.GetRightBound();
+                if (leftBound >= rightBound) {//don't move the segment from the way it was generated
+                    Solver.AddFixedVariable(segment.Id, SegmentPosition(segment, NudgingDirection));
+                    segment.IsFixed = true;
+                } else {
+                    Solver.AddVariable(segment.Id, SegmentPosition(segment, NudgingDirection), segment.IdealPosition, segment.Width);
+         //           Debug.Assert(leftBound + Curve.DistanceEpsilon < rightBound); //this assert does not hold for overlaps
+                    if (leftBound != Double.NegativeInfinity)
+                        Solver.SetLowBound(leftBound, segment.Id);
+                    if (rightBound != Double.PositiveInfinity)
+                        Solver.SetUpperBound(segment.Id, rightBound);
+                }
+            } else
+                Solver.AddFixedVariable(segment.Id, SegmentPosition(segment, NudgingDirection));
+        }
+
+        static double SegmentPosition(SegmentBase segment, Directions direction) {
+            return direction == Directions.North ? segment.Start.X : -segment.Start.Y;
+        }
 
 #if TEST_MSAGL
         // ReSharper disable UnusedMember.Local
@@ -619,383 +617,378 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         }
 #endif
 
-    List<LongestNudgedSegment> LongestNudgedSegs { get; set; }
+        List<LongestNudgedSegment> LongestNudgedSegs { get; set; }
 
-    Dictionary<AxisEdge, List<PathEdge>> PathOrders { get; set; }
-    /// <summary>
-    /// maps each path to the pair of obstacles; the first element of the pair is 
-    /// where the path starts and the second where the path ends
-    /// </summary>
-    Dictionary<Path, Tuple<Polyline, Polyline>> PathToObstacles { get; set; }
-
-
-    void FindFreeSpaceInDirection(IEnumerable<AxisEdge> axisEdges) {
-      BoundAxisEdgesByRectsKnownInAdvance();
-      var freeSpaceFinder = new FreeSpaceFinder(NudgingDirection, Obstacles,
-                                                axisEdgesToObstaclesTheyOriginatedFrom, PathOrders, axisEdges);
-      freeSpaceFinder.FindFreeSpace();
-    }
-
-    void BoundAxisEdgesByRectsKnownInAdvance() {
-      foreach (var path in Paths) {
-        if (HasGroups)
-          BoundPathByMinCommonAncestors(path);
-        BoundAxisEdgesAdjacentToSourceAndTargetOnEdge(path);
-      }
-    }
-
-    void BoundPathByMinCommonAncestors(Path path) {
-      foreach (var rect in GetMinCommonAncestors(path.EdgeGeometry).Select(sh => sh.BoundingBox))
-        foreach (
-            var edge in
-                path.PathEdges.Select(e => e.AxisEdge).Where(
-                    axisEdge => axisEdge.Direction == NudgingDirection)
-            )
-          BoundAxisEdgeByRect(rect, edge);
-    }
+        Dictionary<AxisEdge, List<PathEdge>> PathOrders { get; set; }
+        /// <summary>
+        /// maps each path to the pair of obstacles; the first element of the pair is 
+        /// where the path starts and the second where the path ends
+        /// </summary>
+        Dictionary<Path, Tuple<Polyline, Polyline>> PathToObstacles { get; set; }
 
 
-    IEnumerable<Shape> GetMinCommonAncestors(EdgeGeometry edgeGeometry) {
-      if (PortToShapes == null)
-        PortToShapes = MapPortsToShapes(AncestorsSets.Keys);
-      var commonAncestors = AncestorsForPort(edgeGeometry.SourcePort) *
-                            AncestorsForPort(edgeGeometry.TargetPort);
-      return commonAncestors.Where(anc => !anc.Children.Any(child => commonAncestors.Contains(child)));
-    }
-    /// <summary>
-    /// 
-    /// </summary>
-    protected Dictionary<Port, Shape> PortToShapes { get; private set; }
-
-    Set<Shape> AncestorsForPort(Port port) {
-      Shape shape;
-      if (PortToShapes.TryGetValue(port, out shape)) {
-        return AncestorsSets[shape];
-      }
-
-      // This is a FreePort or Waypoint; return all spatial parents.
-      return new Set<Shape>(HierarchyOfGroups.AllHitItems(new Rectangle(port.Location, port.Location), null));
-    }
-
-
-    void BoundAxisEdgeAdjacentToObstaclePort(Port port, AxisEdge axisEdge) {
-      if (port is WaypointPort || (port.Curve == null && port.PortEntry == null))
-        BoundAxisByPoint(port.Location, axisEdge);
-      else if (port.PortEntry == null) {
-        if (port.Curve.BoundingBox.Contains(port.Location))
-          BoundAxisEdgeByRect(port.Curve.BoundingBox, axisEdge);
-      }
-      else {
-        var portEntry = port.PortEntry as PortEntryOnCurve;
-        if (portEntry != null) {
-          Rectangle rect;
-          if (FindPortEntryRectCrossingAxisEdge(portEntry, axisEdge, out rect))
-            BoundAxisEdgeByRect(rect, axisEdge);
+        void FindFreeSpaceInDirection(IEnumerable<AxisEdge> axisEdges) {
+            BoundAxisEdgesByRectsKnownInAdvance();
+            var freeSpaceFinder = new FreeSpaceFinder(NudgingDirection, Obstacles,
+                                                      axisEdgesToObstaclesTheyOriginatedFrom, PathOrders, axisEdges);
+            freeSpaceFinder.FindFreeSpace();
         }
-      }
-    }
 
-    void BoundAxisByPoint(Point point, AxisEdge axisEdge) {
-      if (axisEdge != null && axisEdge.Direction == NudgingDirection)
-        if (NudgingDirection == Directions.North) {
-          axisEdge.BoundFromLeft(point.X);
-          axisEdge.BoundFromRight(point.X);
+        void BoundAxisEdgesByRectsKnownInAdvance() {
+            foreach (var path in Paths) {
+                if (HasGroups)
+                    BoundPathByMinCommonAncestors(path);
+                BoundAxisEdgesAdjacentToSourceAndTargetOnEdge(path);               
+            }
         }
-        else {
-          axisEdge.BoundFromLeft(-point.Y);
-          axisEdge.BoundFromRight(-point.Y);
+
+        void BoundPathByMinCommonAncestors(Path path) {
+            foreach (var rect in GetMinCommonAncestors(path.EdgeGeometry).Select(sh => sh.BoundingBox))
+                foreach (
+                    var edge in
+                        path.PathEdges.Select(e => e.AxisEdge).Where(
+                            axisEdge => axisEdge.Direction == NudgingDirection)
+                    )
+                    BoundAxisEdgeByRect(rect, edge);
         }
-    }
 
-    static bool FindPortEntryRectCrossingAxisEdge(PortEntryOnCurve portEntry, AxisEdge axisEdge, out Rectangle rect) {
-      var ar = new Rectangle(axisEdge.SourcePoint, axisEdge.TargetPoint);
-      foreach (Rectangle r in portEntry.AllowedRectangles) {
-        if (r.Intersects(ar)) {
-          rect = r;
-          return true;
+        
+        IEnumerable<Shape> GetMinCommonAncestors(EdgeGeometry edgeGeometry) {
+            if (PortToShapes == null)
+                PortToShapes = MapPortsToShapes(AncestorsSets.Keys);
+            var commonAncestors = AncestorsForPort(edgeGeometry.SourcePort)*
+                                  AncestorsForPort(edgeGeometry.TargetPort);
+            return commonAncestors.Where(anc => !anc.Children.Any(child=>commonAncestors.Contains(child)));
         }
-      }
-      rect = Rectangle.CreateAnEmptyBox();
-      return false;
-    }
+        /// <summary>
+        /// 
+        /// </summary>
+        protected Dictionary<Port, Shape> PortToShapes { get; private set; }
 
-    void BoundAxisEdgesAdjacentToSourceAndTargetOnEdge(Path path) {
-      BoundAxisEdgeAdjacentToObstaclePort(path.EdgeGeometry.SourcePort, path.FirstEdge.AxisEdge);
-      BoundAxisEdgeAdjacentToObstaclePort(path.EdgeGeometry.TargetPort, path.LastEdge.AxisEdge);
-    }
+        Set<Shape> AncestorsForPort(Port port) {
+            Shape shape;
+            if (PortToShapes.TryGetValue(port, out shape)) {
+                return AncestorsSets[shape];
+            }
 
-    void BoundAxisEdgeByRect(Rectangle rectangle, AxisEdge axisEdge) {
-      if (axisEdge != null && axisEdge.Direction == NudgingDirection)
-        if (NudgingDirection == Directions.North) {
-          axisEdge.BoundFromLeft(rectangle.Left);
-          axisEdge.BoundFromRight(rectangle.Right);
+            // This is a FreePort or Waypoint; return all spatial parents.
+            return new Set<Shape>(HierarchyOfGroups.AllHitItems(new Rectangle(port.Location, port.Location), null));
         }
-        else {
-          axisEdge.BoundFromLeft(-rectangle.Top);
-          axisEdge.BoundFromRight(-rectangle.Bottom);
+
+
+        void BoundAxisEdgeAdjacentToObstaclePort(Port port, AxisEdge axisEdge) {
+            if (port is WaypointPort || (port.Curve == null && port.PortEntry == null))
+                BoundAxisByPoint(port.Location, axisEdge);
+            else if (port.PortEntry == null) {
+                if (port.Curve.BoundingBox.Contains(port.Location))
+                    BoundAxisEdgeByRect(port.Curve.BoundingBox, axisEdge);
+            } else {
+                var portEntry = port.PortEntry as PortEntryOnCurve;
+                if (portEntry != null) {
+                    Rectangle rect;
+                    if (FindPortEntryRectCrossingAxisEdge(portEntry, axisEdge, out rect))
+                        BoundAxisEdgeByRect(rect, axisEdge);
+                }
+            }
         }
-    }
 
-
-    void CreateLongestNudgedSegments() {
-      var projectionToPerp =
-          NudgingDirection == Directions.East ? (PointProjection)FreeSpaceFinder.MinusY : FreeSpaceFinder.X;
-
-      LongestNudgedSegs = new List<LongestNudgedSegment>();
-      foreach (var path in Paths)
-        CreateLongestNudgedSegmentsForPath(path, projectionToPerp);
-
-    }
-
-
-    void CreateLongestNudgedSegmentsForPath(Path path, PointProjection projectionToPerp) {
-      //ShowEdgesOfEdgePath(path);
-      GoOverPathAndCreateLongSegs(path);
-      CalculateIdealPositionsForLongestSegs(path, projectionToPerp);
-    }
-
-    static void CalculateIdealPositionsForLongestSegs(Path path, PointProjection projectionToPerp) {
-      LongestNudgedSegment currentLongSeg = null;
-      LongestNudgedSegment ret = null;
-      double prevOffset = projectionToPerp(path.Start);
-      foreach (var edge in path.PathEdges) {
-        if (edge.LongestNudgedSegment != null) {
-          currentLongSeg = edge.LongestNudgedSegment;
-          if (ret != null) {
-            double t;
-            SetIdealPositionForSeg(ret, t = projectionToPerp(ret.Start), prevOffset,
-                                   projectionToPerp(currentLongSeg.Start));
-            prevOffset = t;
-            ret = null;
-          }
+        void BoundAxisByPoint(Point point, AxisEdge axisEdge) {
+            if (axisEdge != null && axisEdge.Direction == NudgingDirection)
+                if (NudgingDirection == Directions.North) {
+                    axisEdge.BoundFromLeft(point.X);
+                    axisEdge.BoundFromRight(point.X);
+                } else {
+                    axisEdge.BoundFromLeft(-point.Y);
+                    axisEdge.BoundFromRight(-point.Y);
+                }
         }
-        else if (currentLongSeg != null) {
-          ret = currentLongSeg;
-          currentLongSeg = null;
+
+        static bool FindPortEntryRectCrossingAxisEdge(PortEntryOnCurve portEntry, AxisEdge axisEdge, out Rectangle rect) {
+            var ar = new Rectangle(axisEdge.SourcePoint, axisEdge.TargetPoint);           
+            foreach (Rectangle r in portEntry.AllowedRectangles) {
+                if(r.Intersects(ar)) {
+                    rect = r;
+                    return true;
+                }                    
+            }
+            rect = Rectangle.CreateAnEmptyBox();
+            return false;
         }
-      }
-      if (ret != null)
-        SetIdealPositionForSeg(ret, projectionToPerp(ret.Start), prevOffset, projectionToPerp(path.End));
-      else if (currentLongSeg != null)
-        currentLongSeg.IdealPosition = projectionToPerp(currentLongSeg.Start);
-    }
 
-    static void SetIdealPositionForSeg(LongestNudgedSegment segment, double segPosition, double offset0, double offset1) {
-      var max = Math.Max(offset0, offset1);
-      var min = Math.Min(offset0, offset1);
-      if (min + ApproximateComparer.DistanceEpsilon < segPosition)
-        if (segPosition < max)
-          segment.IdealPosition = 0.5 * (max + min);
-        else
-          segment.IdealPosition = max;
-      else
-        segment.IdealPosition = min;
+        void BoundAxisEdgesAdjacentToSourceAndTargetOnEdge(Path path) {
+            BoundAxisEdgeAdjacentToObstaclePort(path.EdgeGeometry.SourcePort, path.FirstEdge.AxisEdge);
+            BoundAxisEdgeAdjacentToObstaclePort(path.EdgeGeometry.TargetPort, path.LastEdge.AxisEdge);
+        }
+
+        void BoundAxisEdgeByRect(Rectangle rectangle, AxisEdge axisEdge) {
+            if (axisEdge != null && axisEdge.Direction == NudgingDirection)
+                if (NudgingDirection == Directions.North) {
+                    axisEdge.BoundFromLeft(rectangle.Left);
+                    axisEdge.BoundFromRight(rectangle.Right);
+                } else {
+                    axisEdge.BoundFromLeft(-rectangle.Top);
+                    axisEdge.BoundFromRight(-rectangle.Bottom);
+                }
+        }
+
+     
+        void CreateLongestNudgedSegments() {
+            var projectionToPerp =
+                NudgingDirection == Directions.East ? (PointProjection)FreeSpaceFinder.MinusY : FreeSpaceFinder.X;
+
+            LongestNudgedSegs = new List<LongestNudgedSegment>();
+            foreach (var path in Paths)
+                CreateLongestNudgedSegmentsForPath(path, projectionToPerp);
+
+        }
 
 
-    }
+        void CreateLongestNudgedSegmentsForPath(Path path, PointProjection projectionToPerp) {
+            //ShowEdgesOfEdgePath(path);
+            GoOverPathAndCreateLongSegs(path);
+            CalculateIdealPositionsForLongestSegs(path, projectionToPerp);
+        }
 
-    void GoOverPathAndCreateLongSegs(Path path) {
-      LongestNudgedSegment currentLongestSeg = null;
+        static void CalculateIdealPositionsForLongestSegs(Path path, PointProjection projectionToPerp) {
+            LongestNudgedSegment currentLongSeg = null;
+            LongestNudgedSegment ret = null;
+            double prevOffset = projectionToPerp(path.Start);
+            foreach (var edge in path.PathEdges) {
+                if (edge.LongestNudgedSegment != null) {
+                    currentLongSeg = edge.LongestNudgedSegment;
+                    if (ret != null) {
+                        double t;
+                        SetIdealPositionForSeg(ret, t = projectionToPerp(ret.Start), prevOffset,
+                                               projectionToPerp(currentLongSeg.Start));
+                        prevOffset = t;
+                        ret = null;
+                    }
+                } else if (currentLongSeg != null) {
+                    ret = currentLongSeg;
+                    currentLongSeg = null;
+                }
+            }
+            if (ret != null)
+                SetIdealPositionForSeg(ret, projectionToPerp(ret.Start), prevOffset, projectionToPerp(path.End));
+            else if (currentLongSeg != null)
+                currentLongSeg.IdealPosition = projectionToPerp(currentLongSeg.Start);
+        }
 
-      var oppositeDir = CompassVector.OppositeDir(NudgingDirection);
+        static void SetIdealPositionForSeg(LongestNudgedSegment segment, double segPosition, double offset0, double offset1) {
+            var max = Math.Max(offset0, offset1);
+            var min = Math.Min(offset0, offset1);
+            if (min + ApproximateComparer.DistanceEpsilon < segPosition)
+                if (segPosition < max)
+                    segment.IdealPosition = 0.5 * (max + min);
+                else
+                    segment.IdealPosition = max;
+            else
+                segment.IdealPosition = min;
 
-      foreach (var edge in path.PathEdges) {
-        var edgeDir = edge.Direction;
-        if (edgeDir == NudgingDirection || edgeDir == oppositeDir) {
-          if (currentLongestSeg == null)
+
+        }
+
+        void GoOverPathAndCreateLongSegs(Path path) {
+            LongestNudgedSegment currentLongestSeg = null;
+
+            var oppositeDir = CompassVector.OppositeDir(NudgingDirection);
+
+            foreach (var edge in path.PathEdges) {
+                var edgeDir = edge.Direction;
+                if (edgeDir == NudgingDirection || edgeDir == oppositeDir) {
+                    if (currentLongestSeg == null)
 #if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=368
                     {
                         edge.LongestNudgedSegment = currentLongestSeg = new LongestNudgedSegment(LongestNudgedSegs.Count);
                         LongestNudgedSegs.Add(edge.LongestNudgedSegment);
                     }
 #else
-            LongestNudgedSegs.Add(
-                edge.LongestNudgedSegment =
-                currentLongestSeg = new LongestNudgedSegment(LongestNudgedSegs.Count));
+                        LongestNudgedSegs.Add(
+                            edge.LongestNudgedSegment =
+                            currentLongestSeg = new LongestNudgedSegment(LongestNudgedSegs.Count));
 #endif
-          else
-            edge.LongestNudgedSegment = currentLongestSeg;
+                    else
+                        edge.LongestNudgedSegment = currentLongestSeg;
 
-          if (edge.IsFixed)
-            currentLongestSeg.IsFixed = true;
+                    if (edge.IsFixed)
+                        currentLongestSeg.IsFixed = true;
+                } else {
+                    //the edge is perpendicular to "direction"
+                    edge.LongestNudgedSegment = null;
+                    currentLongestSeg = null;
+                }
+            }
         }
-        else {
-          //the edge is perpendicular to "direction"
-          edge.LongestNudgedSegment = null;
-          currentLongestSeg = null;
-        }
-      }
-    }
 
-    static IEnumerable<Point> BuildPolylineForPath(Path path) {
+        static IEnumerable<Point> BuildPolylineForPath(Path path) {
 #if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369
             var points = path.PathPoints.Select(p=>p.Clone()).ToArray();
 #else
-      var points = path.PathPoints.ToArray();
+            var points = path.PathPoints.ToArray();
 #endif
-      ExtendPolylineToPorts(ref points, path);
-      for (int i = 0; i < points.Length - 1; i++)
-        Debug.Assert(CompassVector.IsPureDirection(points[i], points[i + 1]));
+            ExtendPolylineToPorts(ref points, path);
+            for(int i=0;i<points.Length-1;i++)
+                Debug.Assert(CompassVector.IsPureDirection(points[i], points[i+1]));
 
-      return points;
-    }
-
-    static void ExtendPolylineToPorts(ref Point[] points, Path path) {
-      ExtendPolylineToSourcePort(ref points, path.EdgeGeometry.SourcePort.Location);
-      ExtendPolylineToTargetPort(ref points, path.EdgeGeometry.TargetPort.Location);
-
-      // In some overlapped cases where the source or target vertex used for the path
-      // coincides with the target or source port location, we can end up with a single-point
-      // path.  In that case, we just force a straightline path.
-      if (points.Length < 2) {
-        points = new Point[2];
-        points[0] = path.EdgeGeometry.SourcePort.Location;
-        points[1] = path.EdgeGeometry.TargetPort.Location;
-      }
-    }
-
-    static void ExtendPolylineToTargetPort(ref Point[] points, Point location) {
-      int n = points.Length - 1;
-      var dir = CompassVector.VectorDirection(points[n - 1], points[n]);
-      if (ProjectionsAreClose(points[n - 1], dir, location)) {
-        //it might be that the last point on polyline is at the port already
-        //then we just drop the last point
-        points = points.Take(n).ToArray();
-        return;
-      }
-      if (dir == Directions.East || dir == Directions.West)
-        points[n].X = location.X;
-      else
-        points[n].Y = location.Y;
-    }
-
-    static bool ProjectionsAreClose(Point a, Directions dir, Point b) {
-      if (dir == Directions.East || dir == Directions.West)
-        return ApproximateComparer.Close(a.X, b.X);
-      return ApproximateComparer.Close(a.Y, b.Y);
-    }
-
-    static void ExtendPolylineToSourcePort(ref Point[] points, Point location) {
-      var dir = CompassVector.VectorDirection(points[0], points[1]);
-      if (ProjectionsAreClose(points[1], dir, location)) {
-        //it might be that the second point on polyline is at the port already
-        //then we just drop the first point
-        points = points.Skip(1).ToArray();
-        return;
-      }
-      if (dir == Directions.East || dir == Directions.West)
-        points[0].X = location.X;
-      else
-        points[0].Y = location.Y;
-    }
-
-    static IEnumerable<Point> RemoveSwitchbacksAndMiddlePoints(IEnumerable<Point> points) {
-      var en = points.GetEnumerator();
-      en.MoveNext();
-      var a = en.Current;
-      yield return a;
-      en.MoveNext();
-      var b = en.Current;
-      var prevDir = (b - a).CompassDirection;
-
-      while (en.MoveNext()) {
-        var dir = (en.Current - b).CompassDirection;
-        if (dir == prevDir || CompassVector.OppositeDir(dir) == prevDir || dir == Directions.None) //we continue walking along the same straight line, maybe going backwards!
-          b = en.Current;
-        else {
-          if (!ApproximateComparer.Close(a, b)) {//make sure that we are not returning the same point twice                        
-            yield return a = Rectilinearise(a, b);
-          }
-          b = en.Current;
-          prevDir = dir;
+            return points;
         }
-      }
-      if (!ApproximateComparer.Close(a, b))
-        yield return Rectilinearise(a, b);
-    }
+
+        static void ExtendPolylineToPorts(ref Point[] points, Path path) {
+            ExtendPolylineToSourcePort(ref points, path.EdgeGeometry.SourcePort.Location);
+            ExtendPolylineToTargetPort(ref points, path.EdgeGeometry.TargetPort.Location);
+            
+            // In some overlapped cases where the source or target vertex used for the path
+            // coincides with the target or source port location, we can end up with a single-point
+            // path.  In that case, we just force a straightline path.
+            if (points.Length < 2) {
+                points = new Point[2];
+                points[0] = path.EdgeGeometry.SourcePort.Location;
+                points[1] = path.EdgeGeometry.TargetPort.Location;
+            }
+        }
+
+        static void ExtendPolylineToTargetPort(ref Point[] points, Point location) {
+            int n = points.Length - 1;
+            var dir = CompassVector.VectorDirection(points[n - 1], points[n]);
+            if (ProjectionsAreClose(points[n-1], dir, location)) {
+                //it might be that the last point on polyline is at the port already
+                //then we just drop the last point
+                points = points.Take(n).ToArray();
+                return;
+            }
+            if (dir == Directions.East || dir == Directions.West)
+                points[n].X = location.X;
+            else
+                points[n].Y = location.Y;
+        }
+
+        static bool ProjectionsAreClose(Point a, Directions dir, Point b) {
+            if (dir == Directions.East || dir == Directions.West)
+                return ApproximateComparer.Close(a.X, b.X);
+            return ApproximateComparer.Close(a.Y, b.Y);
+        }
+
+        static void ExtendPolylineToSourcePort(ref Point[] points, Point location) {
+            var dir = CompassVector.VectorDirection(points[0], points[1]);
+            if (ProjectionsAreClose(points[1], dir, location)) {
+                //it might be that the second point on polyline is at the port already
+                //then we just drop the first point
+                points = points.Skip(1).ToArray();
+                return;
+            }
+            if (dir == Directions.East || dir == Directions.West)
+                points[0].X = location.X;
+            else
+                points[0].Y = location.Y;
+        }
+
+        static IEnumerable<Point> RemoveSwitchbacksAndMiddlePoints(IEnumerable<Point> points) {
+            var en = points.GetEnumerator();
+            en.MoveNext();
+            var a = en.Current;
+            yield return a;
+            en.MoveNext();
+            var b = en.Current;
+            var prevDir = (b - a).CompassDirection;
+
+            while (en.MoveNext()) {
+                var dir = (en.Current - b).CompassDirection;
+                if (dir == prevDir || CompassVector.OppositeDir(dir) == prevDir || dir == Directions.None) //we continue walking along the same straight line, maybe going backwards!
+                    b = en.Current;
+                else {
+                    if (!ApproximateComparer.Close(a, b)) {//make sure that we are not returning the same point twice                        
+                        yield return a=Rectilinearise(a, b);
+                    }
+                    b = en.Current;
+                    prevDir = dir;
+                }
+            }
+            if (!ApproximateComparer.Close(a, b))
+                yield return Rectilinearise(a,b);
+        }
 
 
-    /// <summary>
-    /// this function defines the final path coordinates
-    /// </summary>
-    /// <param name="paths">the set of paths, point sequences</param>
-    /// <param name="cornerFitRadius">the radius of the arc inscribed into the path corners</param>
-    /// <param name="paddedObstacles">an enumeration of padded obstacles</param>
-    /// <param name="ancestorsSets"></param>
-    /// <param name="removeStaircases"></param>
-    /// <returns>the mapping of the path to its modified path</returns>
-    internal static void NudgePaths(IEnumerable<Path> paths, double cornerFitRadius, IEnumerable<Polyline> paddedObstacles, Dictionary<Shape, Set<Shape>> ancestorsSets, bool removeStaircases) {
-      if (!paths.Any())
-        return;
-      var nudger = new Nudger(paths, cornerFitRadius, paddedObstacles, ancestorsSets);
-      nudger.Calculate(Directions.North, true);
-      nudger.Calculate(Directions.East, false);
-      nudger.Calculate(Directions.North, false);
-      if (removeStaircases)
-        nudger.RemoveStaircases();
-      foreach (var path in paths)
-        path.EdgeGeometry.Curve = new Polyline(BuildPolylineForPath(path));
-    }
+        /// <summary>
+        /// this function defines the final path coordinates
+        /// </summary>
+        /// <param name="paths">the set of paths, point sequences</param>
+        /// <param name="cornerFitRadius">the radius of the arc inscribed into the path corners</param>
+        /// <param name="paddedObstacles">an enumeration of padded obstacles</param>
+        /// <param name="ancestorsSets"></param>
+        /// <param name="removeStaircases"></param>
+        /// <returns>the mapping of the path to its modified path</returns>
+        internal static void NudgePaths(IEnumerable<Path> paths, double cornerFitRadius, IEnumerable<Polyline> paddedObstacles, Dictionary<Shape, Set<Shape>> ancestorsSets, bool removeStaircases) {
+            if (!paths.Any())
+                return;
+            var nudger = new Nudger(paths, cornerFitRadius, paddedObstacles, ancestorsSets);
+            nudger.Calculate(Directions.North, true);
+            nudger.Calculate(Directions.East, false);
+            nudger.Calculate(Directions.North, false);
+            if (removeStaircases)
+                nudger.RemoveStaircases();
+            foreach (var path in paths)
+                path.EdgeGeometry.Curve = new Polyline(BuildPolylineForPath(path));
+        }
 
-    void RemoveStaircases() {
-      StaircaseRemover.RemoveStaircases(Paths, HierarchyOfObstacles);
+        void RemoveStaircases() {
+            StaircaseRemover.RemoveStaircases(Paths, HierarchyOfObstacles);
+            
+        }
+        /*
+        void RemoveStaircasesFromPath(Path path) {
 
-    }
-    /*
-    void RemoveStaircasesFromPath(Path path) {
+            var points = (Point[]) path.PathPoints;
+            if (points.Length <= 4) return;
+            int i = FindStaircase(points);
+            if (i == -1) return;
+            var linkedList = new LinkedList<Point>(points);
+            var node = linkedList.First;
+            for(int j=0;j<i;j++)
+                node = node.Next; //getting to the i-th node
 
-        var points = (Point[]) path.PathPoints;
-        if (points.Length <= 4) return;
-        int i = FindStaircase(points);
-        if (i == -1) return;
-        var linkedList = new LinkedList<Point>(points);
-        var node = linkedList.First;
-        for(int j=0;j<i;j++)
-            node = node.Next; //getting to the i-th node
-
-        RemoveStaircaseOnNode(node);
-        node = node.Next;
-        while(true) {
-            node = FindStaircaseAfterNode(node);
-            if (node == null) break;
             RemoveStaircaseOnNode(node);
             node = node.Next;
+            while(true) {
+                node = FindStaircaseAfterNode(node);
+                if (node == null) break;
+                RemoveStaircaseOnNode(node);
+                node = node.Next;
+            }
+        }
+
+        LinkedListNode<Point> FindStaircaseAfterNode(LinkedListNode<Point> n) {
+            do {
+                var nn = n.Next;
+                var nnn = nn.Next;
+                var nnnn = nnn.Next;
+                if (nnn.Next == null)
+                    return null;
+                if (IsStaircase(n.Value, nn.Value, nnn.Value, nnnn.Value))
+                    return n;
+                n = nn;
+            } while (true);
+        }
+
+        bool IsStaircase(Point a, Point b, Point c, Point d) {
+
+            return false;
+        }
+
+        void RemoveStaircaseOnNode(LinkedListNode<Point> node) {
+            throw new NotImplementedException();
+        }
+
+        int FindStaircase(Point[] points) {
+            throw new NotImplementedException();
+        }
+         */
+
+        internal static Dictionary<Port, Shape> MapPortsToShapes(IEnumerable<Shape> listOfShapes) {
+            var portToShapes = new Dictionary<Port, Shape>();
+            foreach (Shape shape in listOfShapes)
+                foreach (Port port in shape.Ports)
+                    portToShapes[port] = shape;
+            return portToShapes;
         }
     }
-
-    LinkedListNode<Point> FindStaircaseAfterNode(LinkedListNode<Point> n) {
-        do {
-            var nn = n.Next;
-            var nnn = nn.Next;
-            var nnnn = nnn.Next;
-            if (nnn.Next == null)
-                return null;
-            if (IsStaircase(n.Value, nn.Value, nnn.Value, nnnn.Value))
-                return n;
-            n = nn;
-        } while (true);
-    }
-
-    bool IsStaircase(Point a, Point b, Point c, Point d) {
-
-        return false;
-    }
-
-    void RemoveStaircaseOnNode(LinkedListNode<Point> node) {
-        throw new NotImplementedException();
-    }
-
-    int FindStaircase(Point[] points) {
-        throw new NotImplementedException();
-    }
-     */
-
-    internal static Dictionary<Port, Shape> MapPortsToShapes(IEnumerable<Shape> listOfShapes) {
-      var portToShapes = new Dictionary<Port, Shape>();
-      foreach (Shape shape in listOfShapes)
-        foreach (Port port in shape.Ports)
-          portToShapes[port] = shape;
-      return portToShapes;
-    }
-  }
 }

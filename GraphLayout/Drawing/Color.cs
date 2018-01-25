@@ -2,14 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Microsoft.Msagl.Drawing {
+namespace Microsoft.Msagl.Drawing
+{
 #pragma warning disable 0660, 0661
 
   /// <summary>
   /// Color structure
   /// </summary>
   [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes"), Serializable]
-  public struct Color {
+  public struct Color
+  {
     byte a;
     /// <summary>
     /// constructor with alpha and red, green, bluee components
@@ -19,7 +21,8 @@ namespace Microsoft.Msagl.Drawing {
     /// <param name="g"></param>
     /// <param name="b"></param>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "g"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "a")]
-    public Color(byte a, byte r, byte g, byte b) {
+    public Color(byte a, byte r, byte g, byte b)
+    {
       this.a = a;
       this.r = r;
       this.g = g;
@@ -32,7 +35,8 @@ namespace Microsoft.Msagl.Drawing {
     /// <param name="g"></param>
     /// <param name="b"></param>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "g"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b")]
-    public Color(byte r, byte g, byte b) {
+    public Color(byte r, byte g, byte b)
+    {
       this.a = 255;
       this.r = r;
       this.g = g;
@@ -43,7 +47,8 @@ namespace Microsoft.Msagl.Drawing {
     /// alpha - transparency
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "A")]
-    public byte A {
+    public byte A
+    {
       get { return a; }
       set { a = value; }
 
@@ -55,7 +60,8 @@ namespace Microsoft.Msagl.Drawing {
     /// red
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "R")]
-    public byte R {
+    public byte R
+    {
       get { return r; }
       set { r = value; }
     }
@@ -64,7 +70,8 @@ namespace Microsoft.Msagl.Drawing {
     /// green
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "G")]
-    public byte G {
+    public byte G
+    {
       get { return g; }
       set { g = value; }
     }
@@ -73,7 +80,8 @@ namespace Microsoft.Msagl.Drawing {
     /// blue
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "B")]
-    public byte B {
+    public byte B
+    {
       get { return b; }
       set { b = value; }
     }
@@ -81,7 +89,8 @@ namespace Microsoft.Msagl.Drawing {
     ///</summary>
     ///<param name="i"></param>
     ///<returns></returns>
-    public static string Xex(int i) {
+    public static string Xex(int i)
+    {
       string s = Convert.ToString(i, 16);
       if (s.Length == 1)
         return "0" + s;
@@ -95,7 +104,8 @@ namespace Microsoft.Msagl.Drawing {
     /// <param name="b"></param>
     /// <returns></returns>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "a")]
-    public static bool operator ==(Color a, Color b) {
+    public static bool operator ==(Color a, Color b)
+    {
       return a.a == b.a && a.r == b.r && a.b == b.b && a.g == b.g;
     }
     /// <summary>
@@ -105,14 +115,16 @@ namespace Microsoft.Msagl.Drawing {
     /// <param name="b"></param>
     /// <returns></returns>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "a")]
-    public static bool operator !=(Color a, Color b) {
+    public static bool operator !=(Color a, Color b)
+    {
       return a.a != b.a || a.r != b.r || a.b != b.b || a.g != b.g;
     }
     /// <summary>
     /// ToString
     /// </summary>
     /// <returns></returns>
-    public override string ToString() {
+    public override string ToString()
+    {
       return "\"#" + Xex(R) + Xex(G) + Xex(B) + (this.A == 255 ? "" : Xex(A)) + "\"";
     }
     /// <summary>

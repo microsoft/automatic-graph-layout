@@ -9,11 +9,11 @@ using Microsoft.Msagl.DebugHelpers;
 using Microsoft.Msagl.Core.Routing;
 
 namespace Microsoft.Msagl.Routing.Spline.Bundling {
-  /// <summary>
-  /// this class nudges the edges
-  /// </summary>
-  public class HubDebugger {
-
+    /// <summary>
+    /// this class nudges the edges
+    /// </summary>
+    public class HubDebugger {
+        
 #if DEBUG && TEST_MSAGL
         readonly MetroGraphData mgd;
         readonly BundlingSettings bundlingSettings;
@@ -124,40 +124,40 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         }
 #endif
 
-    /*void SaveAsBitmap(string filename, GViewer gViewer) {
-        int w = (int)Math.Ceiling((double) gViewer.Graph.Width);
-        int h = (int)Math.Ceiling((double) gViewer.Graph.Height);
+        /*void SaveAsBitmap(string filename, GViewer gViewer) {
+            int w = (int)Math.Ceiling((double) gViewer.Graph.Width);
+            int h = (int)Math.Ceiling((double) gViewer.Graph.Height);
 
-        Bitmap bitmap = new Bitmap(w, h, PixelFormat.Format32bppPArgb);
-        using (Graphics graphics = Graphics.FromImage(bitmap))
-            DrawGeneral(w, h, graphics, gViewer);
+            Bitmap bitmap = new Bitmap(w, h, PixelFormat.Format32bppPArgb);
+            using (Graphics graphics = Graphics.FromImage(bitmap))
+                DrawGeneral(w, h, graphics, gViewer);
 
-        bitmap.Save(filename);
+            bitmap.Save(filename);
+        }
+
+        void DrawGeneral(int w, int h, Graphics graphics, GViewer gViewer) {
+            graphics.SmoothingMode = SmoothingMode.HighQuality;
+            graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+            graphics.CompositingQuality = CompositingQuality.HighQuality;
+            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
+            DrawAll(w, h, graphics, gViewer);
+        }
+
+        void DrawAll(int w, int h, Graphics graphics, GViewer gViewer) {
+            //fill the whole image
+            graphics.FillRectangle(new SolidBrush(Draw.MsaglColorToDrawingColor(gViewer.Graph.Attr.BackgroundColor)),
+                                   new RectangleF(0, 0, w, h));
+
+            //calculate the transform
+            double s = 1.0;
+            Graph g = gViewer.Graph;
+            double x = 0.5 * w - s * (g.Left + 0.5 * g.Width);
+            double y = 0.5 * h + s * (g.Bottom + 0.5 * g.Height);
+
+            graphics.Transform = new Matrix((float)s, 0, 0, (float)-s, (float)x, (float)y);
+            Draw.DrawPrecalculatedLayoutObject(graphics, gViewer.DGraph);
+        } */
+
     }
-
-    void DrawGeneral(int w, int h, Graphics graphics, GViewer gViewer) {
-        graphics.SmoothingMode = SmoothingMode.HighQuality;
-        graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-        graphics.CompositingQuality = CompositingQuality.HighQuality;
-        graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-
-        DrawAll(w, h, graphics, gViewer);
-    }
-
-    void DrawAll(int w, int h, Graphics graphics, GViewer gViewer) {
-        //fill the whole image
-        graphics.FillRectangle(new SolidBrush(Draw.MsaglColorToDrawingColor(gViewer.Graph.Attr.BackgroundColor)),
-                               new RectangleF(0, 0, w, h));
-
-        //calculate the transform
-        double s = 1.0;
-        Graph g = gViewer.Graph;
-        double x = 0.5 * w - s * (g.Left + 0.5 * g.Width);
-        double y = 0.5 * h + s * (g.Bottom + 0.5 * g.Height);
-
-        graphics.Transform = new Matrix((float)s, 0, 0, (float)-s, (float)x, (float)y);
-        Draw.DrawPrecalculatedLayoutObject(graphics, gViewer.DGraph);
-    } */
-
-  }
 }

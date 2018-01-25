@@ -17,14 +17,14 @@ using System.Diagnostics;
 #if !SILVERLIGHT
 namespace Microsoft.Msagl.DebugHelpers {
 #if DEVTRACE
-#if !TRACE
-#error TRACE must be defined if DEVTRACE is
-#endif
+    #if !TRACE
+    #error TRACE must be defined if DEVTRACE is
+    #endif
 
-#if !TEST_MSAGL
+    #if !TEST_MSAGL
     // Rectilinear uses some TEST_MSAGL utilities in DEVTRACE
-#error TEST_MSAGL must be defined if DEVTRACE is
-#endif
+    #error TEST_MSAGL must be defined if DEVTRACE is
+    #endif
 #else  // DEVTRACE
     static
 #endif // DEVTRACE

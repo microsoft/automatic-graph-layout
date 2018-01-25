@@ -32,39 +32,39 @@ using System.Text;
 using Microsoft.Msagl.Core.Geometry.Curves;
 
 namespace Microsoft.Msagl.GraphViewerGdi {
-  internal class ViewInfo {
-    public override int GetHashCode() {
-      return 0;
+    internal class ViewInfo {
+        public override int GetHashCode() {
+            return 0;
+        }
+
+        public override bool Equals(object obj) {
+            ViewInfo vi = obj as ViewInfo;
+            if ((vi as object) == null)
+                return false;
+            return Transformation == vi.Transformation;
+
+        }
+
+
+
+
+
+        internal bool leftMouseButtonWasPressed;
+
+        public static bool operator !=(ViewInfo c1, ViewInfo c2) {
+            if ((c1 as object) == null)
+                return (c2 as object) != null;
+
+            return !c1.Equals(c2);
+        }
+
+        public static bool operator ==(ViewInfo c1, ViewInfo c2) {
+            if ((c1 as object) == null)
+                return c2 as object == null;
+            return c1.Equals(c2);
+        }
+
+        internal PlaneTransformation Transformation;
     }
-
-    public override bool Equals(object obj) {
-      ViewInfo vi = obj as ViewInfo;
-      if ((vi as object) == null)
-        return false;
-      return Transformation == vi.Transformation;
-
-    }
-
-
-
-
-
-    internal bool leftMouseButtonWasPressed;
-
-    public static bool operator !=(ViewInfo c1, ViewInfo c2) {
-      if ((c1 as object) == null)
-        return (c2 as object) != null;
-
-      return !c1.Equals(c2);
-    }
-
-    public static bool operator ==(ViewInfo c1, ViewInfo c2) {
-      if ((c1 as object) == null)
-        return c2 as object == null;
-      return c1.Equals(c2);
-    }
-
-    internal PlaneTransformation Transformation;
-  }
 
 }

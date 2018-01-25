@@ -1,18 +1,18 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Microsoft.Msagl.Drawing {
-  /// <summary>
-  /// type of a polyline corner for insertion or deletion
-  /// </summary>
-  [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Polyline")]
-  public enum PolylineCornerType {
+namespace Microsoft.Msagl.Drawing{
     /// <summary>
-    /// a corner to insert
+    /// type of a polyline corner for insertion or deletion
     /// </summary>
-    PreviousCornerForInsertion,
-    /// <summary>
-    /// a corner to delete
-    /// </summary>
-    CornerToDelete
-  }
+    [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Polyline")]
+    public enum PolylineCornerType {
+        /// <summary>
+        /// a corner to insert
+        /// </summary>
+        PreviousCornerForInsertion,
+        /// <summary>
+        /// a corner to delete
+        /// </summary>
+        CornerToDelete
+    }
 }

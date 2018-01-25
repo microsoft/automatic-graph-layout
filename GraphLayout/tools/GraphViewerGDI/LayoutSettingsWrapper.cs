@@ -31,24 +31,24 @@ using System.ComponentModel;
 using Microsoft.Msagl.Core.Layout;
 
 namespace Microsoft.Msagl.GraphViewerGdi {
-  internal class LayoutSettingsWrapper {
-    public EventHandler LayoutTypeHasChanged;
+    internal class LayoutSettingsWrapper {
+        public EventHandler LayoutTypeHasChanged;
 
-    LayoutMethod layoutMethod;
+        LayoutMethod layoutMethod;
 
-    [DisplayName("Layout method")]
-    [Description("Sets the current layout method")]
-    [DefaultValue(LayoutMethod.SugiyamaScheme)]
-    public LayoutMethod LayoutMethod {
-      get { return layoutMethod; }
-      set {
-        layoutMethod = value;
-        if (LayoutTypeHasChanged != null)
-          LayoutTypeHasChanged(this, null);
-      }
+        [DisplayName("Layout method")]
+        [Description("Sets the current layout method")]
+        [DefaultValue(LayoutMethod.SugiyamaScheme)]
+        public LayoutMethod LayoutMethod {
+            get { return layoutMethod; }
+            set {
+                layoutMethod = value;
+                if (LayoutTypeHasChanged != null)
+                    LayoutTypeHasChanged(this, null);
+            }
+        }
+        public bool RerouteOnly { get; set; }
+        public LayoutAlgorithmSettings LayoutSettings { get; set; }
+  
     }
-    public bool RerouteOnly { get; set; }
-    public LayoutAlgorithmSettings LayoutSettings { get; set; }
-
-  }
 }

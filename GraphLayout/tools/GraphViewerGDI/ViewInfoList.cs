@@ -30,17 +30,21 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Microsoft.Msagl.GraphViewerGdi {
-  internal class ViewInfosList {
+namespace Microsoft.Msagl.GraphViewerGdi
+{
+  internal class ViewInfosList
+  {
 
 
     ViewInfoHolder current = new ViewInfoHolder();
 
     internal ViewInfo CurrentView { get { return current.viewInfo; } }
 
-    internal void AddNewViewInfo(ViewInfo viewInfo) {
+    internal void AddNewViewInfo(ViewInfo viewInfo)
+    {
 
-      if (current.viewInfo == null || current.viewInfo != viewInfo) {
+      if (current.viewInfo == null || current.viewInfo != viewInfo)
+      {
 
         //                    Log.W(viewInfo);
 
@@ -52,20 +56,24 @@ namespace Microsoft.Msagl.GraphViewerGdi {
 
     }
 
-    internal bool BackwardAvailable {
+    internal bool BackwardAvailable
+    {
       get { return current.prev != null && current.prev.viewInfo != null; }
     }
 
-    internal void Forward() {
+    internal void Forward()
+    {
       if (ForwardAvailable)
         current = current.next;
     }
-    internal void Backward() {
+    internal void Backward()
+    {
       if (BackwardAvailable)
         current = current.prev;
     }
 
-    internal bool ForwardAvailable {
+    internal bool ForwardAvailable
+    {
       get { return current.next != null && current.next.viewInfo != null; }
     }
   }

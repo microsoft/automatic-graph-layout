@@ -14,57 +14,58 @@ using LineSegment = Microsoft.Msagl.Core.Geometry.Curves.LineSegment;
 namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
 
-  /// <summary>
-  /// keeps a part of EdgeGeometry which is visible
-  /// </summary>
-  public class Rail {
-    public Point A;
-    public Point B;
-    public Point targetA;
-    public Point targetB;
-    public Point initialA;
-    public Point initialB;
-    public Point Left;
-    public Point Right;
-    public int Weight = 1;
-    // public List<int> unnecessaryTransfer = new List<int>();
+    /// <summary>
+    /// keeps a part of EdgeGeometry which is visible
+    /// </summary>
+    public class Rail {
+        public Point A;
+        public Point B;
+        public Point targetA;
+        public Point targetB;
+        public Point initialA;
+        public Point initialB;
+        public Point Left;
+        public Point Right;
+        public int Weight = 1;
+       // public List<int> unnecessaryTransfer = new List<int>();
 #if DEBUG
         static int railCount;
         int id;
 #endif
 
-    /// <summary>
-    /// the number of higlighted edges passing through the rail
-    /// </summary>
-    bool _isHighlighted;
+        /// <summary>
+        /// the number of higlighted edges passing through the rail
+        /// </summary>
+        bool _isHighlighted;
 
-    /// <summary>
-    /// can be ICurve or Arrowhead
-    /// </summary>
-    public object Geometry;
+        /// <summary>
+        /// can be ICurve or Arrowhead
+        /// </summary>
+        public object Geometry;
 
-    /// <summary>
-    /// the point where the edge curve touches the arrowhead
-    /// </summary>
-    public Point CurveAttachmentPoint;
+        /// <summary>
+        /// the point where the edge curve touches the arrowhead
+        /// </summary>
+        public Point CurveAttachmentPoint;
 
-    /// <summary>
-    /// the corresponding LgEdgeInfo
-    /// </summary>
-    public LgEdgeInfo TopRankedEdgeInfoOfTheRail;
+        /// <summary>
+        /// the corresponding LgEdgeInfo
+        /// </summary>
+        public LgEdgeInfo TopRankedEdgeInfoOfTheRail;
 
-    bool _isUsedOnPreviousLevel;
+        bool _isUsedOnPreviousLevel;
 
-    public double MinPassingEdgeZoomLevel = Double.MaxValue;
+        public double MinPassingEdgeZoomLevel = Double.MaxValue;
 
-    public bool IsUsedOnPreviousLevel {
-      get { return _isUsedOnPreviousLevel; }
-      set { _isUsedOnPreviousLevel = value; }
-    }
+        public bool IsUsedOnPreviousLevel
+        {
+            get { return _isUsedOnPreviousLevel; }
+            set { _isUsedOnPreviousLevel = value; }
+        }
 
-    public int ZoomLevel;
+        public int ZoomLevel;
 #if !NETCORE
-    public List<SolidColorBrush> Color;
+        public List<SolidColorBrush> Color;
 #endif
 #if DEBUG
         Rail() {
@@ -95,95 +96,98 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 #endif
 
-    internal Rail(ICurve curveSegment, LgEdgeInfo topRankedEdgeInfoOfTheRail, int zoomLevel)
+        internal Rail(ICurve curveSegment, LgEdgeInfo topRankedEdgeInfoOfTheRail, int zoomLevel)
 #if DEBUG
             : this()
 #endif
         {
-      TopRankedEdgeInfoOfTheRail = topRankedEdgeInfoOfTheRail;
-      this.ZoomLevel = zoomLevel;
-      Geometry = curveSegment;
-    }
+            TopRankedEdgeInfoOfTheRail = topRankedEdgeInfoOfTheRail;
+            this.ZoomLevel = zoomLevel;
+            Geometry = curveSegment;
+        }
 
-    internal Rail(Arrowhead arrowhead, Point curveAttachmentPoint, LgEdgeInfo topRankedEdgeInfoOfTheRail,
-        int zoomLevel)
+        internal Rail(Arrowhead arrowhead, Point curveAttachmentPoint, LgEdgeInfo topRankedEdgeInfoOfTheRail,
+            int zoomLevel)
 #if DEBUG
             : this()
 #endif
         {
-      TopRankedEdgeInfoOfTheRail = topRankedEdgeInfoOfTheRail;
-      Geometry = arrowhead.Clone();
-      CurveAttachmentPoint = curveAttachmentPoint;
-      ZoomLevel = zoomLevel;
-    }
+            TopRankedEdgeInfoOfTheRail = topRankedEdgeInfoOfTheRail;
+            Geometry = arrowhead.Clone();
+            CurveAttachmentPoint = curveAttachmentPoint;
+            ZoomLevel = zoomLevel;
+        }
 
-    public Rectangle BoundingBox {
-      get {
-        var icurve = Geometry as ICurve;
-        if (icurve != null)
-          return icurve.BoundingBox;
-        var arrowhead = (Arrowhead)Geometry;
-        var rec = new Rectangle(arrowhead.TipPosition, CurveAttachmentPoint);
-        rec.Pad(arrowhead.Width); // sometimes this box will not cover the arrowhead, but rarely
-        return rec;
-      }
-    }
+        public Rectangle BoundingBox {
+            get {
+                var icurve = Geometry as ICurve;
+                if (icurve != null)
+                    return icurve.BoundingBox;
+                var arrowhead = (Arrowhead) Geometry;
+                var rec = new Rectangle(arrowhead.TipPosition, CurveAttachmentPoint);
+                rec.Pad(arrowhead.Width); // sometimes this box will not cover the arrowhead, but rarely
+                return rec;
+            }
+        }
 
-    /// <summary>
-    /// the number of higlighted edges passing through the rail
-    /// </summary>
-    public bool IsHighlighted {
-      get { return _isHighlighted; }
-      set { _isHighlighted = value; }
-    }
-
-
-
-    internal Tuple<Point, Point> PointTuple() {
-      var icurve = Geometry as ICurve;
-      if (icurve != null)
-        return new Tuple<Point, Point>(icurve.Start, icurve.End);
-      var arrowhead = (Arrowhead)Geometry;
-      return new Tuple<Point, Point>(arrowhead.TipPosition, CurveAttachmentPoint);
-    }
+        /// <summary>
+        /// the number of higlighted edges passing through the rail
+        /// </summary>
+        public bool IsHighlighted {
+            get { return _isHighlighted; }
+            set { _isHighlighted = value; }
+        }
 
 
-    public Rail(ICurve curveSegment, int zoomLevel) {
-      ZoomLevel = zoomLevel;
+
+        internal Tuple<Point, Point> PointTuple() {
+            var icurve = Geometry as ICurve;
+            if (icurve != null)
+                return new Tuple<Point, Point>(icurve.Start, icurve.End);
+            var arrowhead = (Arrowhead) Geometry;
+            return new Tuple<Point, Point>(arrowhead.TipPosition, CurveAttachmentPoint);
+        }
+
+        
+        public Rail(ICurve curveSegment, int zoomLevel)
+        {
+            ZoomLevel = zoomLevel;
 #if DEBUG
             railCount++;
             id = railCount;
 #endif
-      Geometry = curveSegment;
-    }
+            Geometry = curveSegment;
+        }
 
-    public bool GetStartEnd(out Point p0, out Point p1) {
-      var curve = Geometry as ICurve;
-      if (curve != null) {
-        p0 = curve.Start;
-        p1 = curve.End;
-        return true;
-      }
-      var arrow = Geometry as Arrowhead;
-      if (arrow != null) {
-        p0 = CurveAttachmentPoint;
-        p1 = arrow.TipPosition;
-        return true;
-      }
-      p0 = new Point();
-      p1 = new Point();
-      return false;
-    }
+        public bool GetStartEnd(out Point p0, out Point p1) {
+            var curve = Geometry as ICurve;
+            if (curve != null) {
+                p0 = curve.Start;
+                p1 = curve.End;
+                return true;
+            }
+            var arrow = Geometry as Arrowhead;
+            if (arrow != null) {
+                p0 = CurveAttachmentPoint;
+                p1 = arrow.TipPosition;
+                return true;
+            }
+            p0 = new Point();
+            p1 = new Point();
+            return false;
+        }
 
-    public void UpdateTopEdgeInfo(LgEdgeInfo ei) {
-      if (TopRankedEdgeInfoOfTheRail == null || TopRankedEdgeInfoOfTheRail.Rank < ei.Rank)
-        TopRankedEdgeInfoOfTheRail = ei;
+        public void UpdateTopEdgeInfo(LgEdgeInfo ei)
+        {
+            if (TopRankedEdgeInfoOfTheRail == null || TopRankedEdgeInfoOfTheRail.Rank < ei.Rank)
+                TopRankedEdgeInfoOfTheRail = ei;
 
-      MinPassingEdgeZoomLevel = 1 + Math.Min(MinPassingEdgeZoomLevel, ei.ZoomLevel);
-    }
+            MinPassingEdgeZoomLevel = 1+Math.Min(MinPassingEdgeZoomLevel, ei.ZoomLevel);
+        }
 
-    public LgEdgeInfo GetTopEdgeInfo() {
-      return TopRankedEdgeInfoOfTheRail;
+        public LgEdgeInfo GetTopEdgeInfo()
+        {
+            return TopRankedEdgeInfoOfTheRail;
+        }
     }
-  }
 }

@@ -12,42 +12,42 @@ using Microsoft.Msagl.Routing;
 namespace Microsoft.Msagl.Core.Layout {
 
 #if !SILVERLIGHT
-  ///<summary>
-  /// controls many properties of the layout algorithm
-  ///</summary>
-  [Description("Specifies the layout algorithm parametres")]
-  [TypeConverter(typeof(ExpandableObjectConverter))]
-  [DisplayName("Layout algorithm settings")]
+    ///<summary>
+    /// controls many properties of the layout algorithm
+    ///</summary>
+    [Description("Specifies the layout algorithm parametres")]
+    [TypeConverter(typeof (ExpandableObjectConverter))]
+    [DisplayName("Layout algorithm settings")]
 #endif
 #if TEST_MSAGL
     [Serializable]
 #endif
-  public abstract class LayoutAlgorithmSettings {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2235:MarkAllNonSerializableFields")]
-    EdgeRoutingSettings edgeRoutingSettings = new EdgeRoutingSettings();
-    ///<summary>
-    /// defines edge routing behaviour
-    ///</summary>
-    public EdgeRoutingSettings EdgeRoutingSettings {
-      get { return edgeRoutingSettings; }
-      set { edgeRoutingSettings = value; }
-    }
-    #region
+    public abstract class LayoutAlgorithmSettings {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2235:MarkAllNonSerializableFields")]
+        EdgeRoutingSettings edgeRoutingSettings = new EdgeRoutingSettings();
+        ///<summary>
+        /// defines edge routing behaviour
+        ///</summary>
+        public EdgeRoutingSettings EdgeRoutingSettings {
+            get { return edgeRoutingSettings; }
+            set { edgeRoutingSettings = value; }
+        }
+        #region
 #if REPORTING
-    bool reporting;
+        bool reporting;
 
-    /// <summary>
-    /// Controls the reporting facility.
-    /// </summary>
-    [Description("Controls the reporting facility.")]
-    [DefaultValue(false)]
-    public bool Reporting {
-      get { return reporting; }
-      set { reporting = value; }
-    }
+        /// <summary>
+        /// Controls the reporting facility.
+        /// </summary>
+        [Description("Controls the reporting facility.")]
+        [DefaultValue(false)]
+        public bool Reporting {
+            get { return reporting; }
+            set { reporting = value; }
+        }
 #endif
-    #endregion
-    #region test_msagl
+        #endregion
+        #region test_msagl
 
 #if TEST_MSAGL
         static Show show;
@@ -88,54 +88,54 @@ namespace Microsoft.Msagl.Core.Layout {
 
 #endif
 
-    #endregion
+        #endregion
 
-    double packingAspectRatio = PackingConstants.GoldenRatio;
+        double packingAspectRatio = PackingConstants.GoldenRatio;
 
-    /// <summary>
-    /// Controls the ideal aspect ratio for packing disconnected components
-    /// </summary>
-    public double PackingAspectRatio {
-      get { return packingAspectRatio; }
-      set { packingAspectRatio = value; }
+        /// <summary>
+        /// Controls the ideal aspect ratio for packing disconnected components
+        /// </summary>
+        public double PackingAspectRatio {
+            get { return packingAspectRatio; }
+            set { packingAspectRatio = value; }
+        }
+
+        PackingMethod packingMethod = PackingMethod.Compact;
+
+        /// <summary>
+        /// the packing method
+        /// </summary>
+        public PackingMethod PackingMethod {
+            get { return packingMethod; }
+            set { packingMethod = value; }
+        }
+
+        double nodeSeparation = 10;
+
+        /// <summary>
+        /// When AvoidOverlaps is set, we optionally enforce a little extra space around nodes
+        /// </summary>
+        public double NodeSeparation {
+            get { return nodeSeparation; }
+            set { nodeSeparation = value; }
+        }
+
+        double clusterMargin = 10;
+        
+        
+        /// <summary>
+        /// When AvoidOverlaps is set, we optionally enforce a little extra space between nodes and cluster boundaries
+        /// </summary>
+        public double ClusterMargin {
+            get { return clusterMargin; }
+            set { clusterMargin = value; }
+        }
+        
+
+        /// <summary>
+        /// Clones the object
+        /// </summary>
+        /// <returns></returns>
+        public abstract LayoutAlgorithmSettings Clone();
     }
-
-    PackingMethod packingMethod = PackingMethod.Compact;
-
-    /// <summary>
-    /// the packing method
-    /// </summary>
-    public PackingMethod PackingMethod {
-      get { return packingMethod; }
-      set { packingMethod = value; }
-    }
-
-    double nodeSeparation = 10;
-
-    /// <summary>
-    /// When AvoidOverlaps is set, we optionally enforce a little extra space around nodes
-    /// </summary>
-    public double NodeSeparation {
-      get { return nodeSeparation; }
-      set { nodeSeparation = value; }
-    }
-
-    double clusterMargin = 10;
-
-
-    /// <summary>
-    /// When AvoidOverlaps is set, we optionally enforce a little extra space between nodes and cluster boundaries
-    /// </summary>
-    public double ClusterMargin {
-      get { return clusterMargin; }
-      set { clusterMargin = value; }
-    }
-
-
-    /// <summary>
-    /// Clones the object
-    /// </summary>
-    /// <returns></returns>
-    public abstract LayoutAlgorithmSettings Clone();
-  }
 }
