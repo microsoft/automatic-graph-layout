@@ -4,17 +4,17 @@ using System.Linq;
 using System.Text;
 
 namespace Microsoft.Msagl.Drawing {
+  /// <summary>
+  /// shows the connection to the graph status
+  /// </summary>
+  public enum ConnectionToGraph {
     /// <summary>
-    /// shows the connection to the graph status
+    /// connected
     /// </summary>
-    public enum ConnectionToGraph {
-        /// <summary>
-        /// connected
-        /// </summary>
-        Connected, 
-        /// <summary>
-        /// disconnected
-        /// </summary>
-        Disconnected
-    }
+    Connected,
+    /// <summary>
+    /// disconnected
+    /// </summary>
+    Disconnected
+  }
 }

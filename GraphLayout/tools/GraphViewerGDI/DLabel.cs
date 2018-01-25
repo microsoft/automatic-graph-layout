@@ -32,73 +32,73 @@ using Point = Microsoft.Msagl.Core.Geometry.Point;
 using Rectangle = Microsoft.Msagl.Core.Geometry.Rectangle;
 
 namespace Microsoft.Msagl.GraphViewerGdi {
+  /// <summary>
+  /// A class representing a drawn label
+  /// </summary>
+  public sealed class DLabel : DObject, IViewerObject {
+    DObject parent;
+
     /// <summary>
-    /// A class representing a drawn label
+    /// constructor
     /// </summary>
-    public sealed class DLabel : DObject, IViewerObject {
-        DObject parent;
-
-        /// <summary>
-        /// constructor
-        /// </summary>
-        /// <param name="parentPar"></param>
-        /// <param name="label"></param>
-        /// <param name="viewer">the viewer containing the label</param>
-        public DLabel(DObject parentPar, Label label, GViewer viewer) : base(viewer) {
-            parent = parentPar;
-            DrawingLabel = label;
-            ((IHavingDLabel) parent).Label = this;
-            Font = new Font(DrawingLabel.FontName, (int)DrawingLabel.FontSize, (System.Drawing.FontStyle)(int)label.FontStyle);
-        }
-
-        /// <summary>
-        /// gets the font of the label
-        /// </summary>
-        public Font Font { get; set; }
-
-        /// <summary>
-        /// the object that label belongs to
-        /// </summary>
-        public DObject Parent {
-            get { return parent; }
-            set { parent = value; }
-        }
-
-        /// <summary>
-        /// gets or set the underlying drawing label
-        /// </summary>
-        public Label DrawingLabel { get; set; }
-
-        #region IViewerObject Members
-
-        /// <summary>
-        /// delivers the underlying label object
-        /// </summary>
-        public override DrawingObject DrawingObject {
-            get { return DrawingLabel; }
-        }
-
-        #endregion
-
-        internal override float DashSize() {
-            return 1; //it is never used
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        protected internal override void Invalidate() {}
-
-        /// <summary>
-        /// calculates the rendered rectangle and RenderedBox to it
-        /// </summary>
-        public override void UpdateRenderedBox() {
-            var box = DrawingLabel.BoundingBox;
-            if (MarkedForDragging) {
-                box.Add(DrawingLabel.GeometryLabel.AttachmentSegmentEnd);
-                box.Pad(1); //1 is the width of the attachment line on the screen                                
-            }
-            RenderedBox = box;
-        }
+    /// <param name="parentPar"></param>
+    /// <param name="label"></param>
+    /// <param name="viewer">the viewer containing the label</param>
+    public DLabel(DObject parentPar, Label label, GViewer viewer) : base(viewer) {
+      parent = parentPar;
+      DrawingLabel = label;
+      ((IHavingDLabel)parent).Label = this;
+      Font = new Font(DrawingLabel.FontName, (int)DrawingLabel.FontSize, (System.Drawing.FontStyle)(int)label.FontStyle);
     }
+
+    /// <summary>
+    /// gets the font of the label
+    /// </summary>
+    public Font Font { get; set; }
+
+    /// <summary>
+    /// the object that label belongs to
+    /// </summary>
+    public DObject Parent {
+      get { return parent; }
+      set { parent = value; }
+    }
+
+    /// <summary>
+    /// gets or set the underlying drawing label
+    /// </summary>
+    public Label DrawingLabel { get; set; }
+
+    #region IViewerObject Members
+
+    /// <summary>
+    /// delivers the underlying label object
+    /// </summary>
+    public override DrawingObject DrawingObject {
+      get { return DrawingLabel; }
+    }
+
+    #endregion
+
+    internal override float DashSize() {
+      return 1; //it is never used
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    protected internal override void Invalidate() { }
+
+    /// <summary>
+    /// calculates the rendered rectangle and RenderedBox to it
+    /// </summary>
+    public override void UpdateRenderedBox() {
+      var box = DrawingLabel.BoundingBox;
+      if (MarkedForDragging) {
+        box.Add(DrawingLabel.GeometryLabel.AttachmentSegmentEnd);
+        box.Pad(1); //1 is the width of the attachment line on the screen                                
+      }
+      RenderedBox = box;
+    }
+  }
 }

@@ -5,8 +5,7 @@ using Microsoft.Msagl.Core.Layout;
 using P2 = Microsoft.Msagl.Core.Geometry.Point;
 using Microsoft.Msagl;
 
-namespace Microsoft.Msagl.Drawing
-{
+namespace Microsoft.Msagl.Drawing {
   /// <summary>
   /// Attribute of a Node.
   /// </summary>
@@ -15,19 +14,16 @@ namespace Microsoft.Msagl.Drawing
   TypeConverterAttribute(typeof(ExpandableObjectConverter))]
 #endif
   [Serializable]
-  public class NodeAttr : AttributeBase
-  {
+  public class NodeAttr : AttributeBase {
 
     double padding = 2;
 
     /// <summary>
     /// Splines should avoid being closer to the node than Padding
     /// </summary>
-    public double Padding
-    {
+    public double Padding {
       get { return padding; }
-      set
-      {
+      set {
         padding = Math.Max(0, value);
         RaiseVisualsChangedEvent(this, null);
       }
@@ -38,11 +34,9 @@ namespace Microsoft.Msagl.Drawing
     /// <summary>
     ///x radius of the rectangle box 
     /// </summary>
-    public double XRadius
-    {
+    public double XRadius {
       get { return xRad; }
-      set
-      {
+      set {
         xRad = value;
         RaiseVisualsChangedEvent(this, null);
       }
@@ -52,8 +46,7 @@ namespace Microsoft.Msagl.Drawing
     /// <summary>
     /// y radius of the rectangle box 
     /// </summary>
-    public double YRadius
-    {
+    public double YRadius {
       get { return yRad; }
       set { yRad = value; }
     }
@@ -66,8 +59,7 @@ namespace Microsoft.Msagl.Drawing
     /// ToString
     /// </summary>
     /// <returns></returns>
-    public override string ToString()
-    {
+    public override string ToString() {
 
       return Utils.ConcatWithComma(StylesToString(","),
                              Utils.ColorToString("color=", base.Color.ToString()),
@@ -82,8 +74,7 @@ namespace Microsoft.Msagl.Drawing
     /// Clones the node attribute
     /// </summary>
     /// <returns></returns>
-    public NodeAttr Clone()
-    {
+    public NodeAttr Clone() {
       NodeAttr r = this.MemberwiseClone() as NodeAttr;
       return r;
     }
@@ -92,8 +83,7 @@ namespace Microsoft.Msagl.Drawing
     /// <summary>
     /// the default fill color
     /// </summary>
-    static public Color DefaultFillColor
-    {
+    static public Color DefaultFillColor {
       get { return defaultFillColor; }
       set { defaultFillColor = value; }
     }
@@ -103,15 +93,12 @@ namespace Microsoft.Msagl.Drawing
     ///<summary>
     ///Node fill color.
     ///</summary>
-    public Color FillColor
-    {
+    public Color FillColor {
 
-      get
-      {
+      get {
         return fillcolor;
       }
-      set
-      {
+      set {
         fillcolor = value;
         RaiseVisualsChangedEvent(this, null);
       }
@@ -153,11 +140,9 @@ namespace Microsoft.Msagl.Drawing
     /// <summary>
     /// Node shape.
     /// </summary>
-    public Shape Shape
-    {
+    public Shape Shape {
       get { return shape; }
-      set
-      {
+      set {
         shape = value;
         RaiseVisualsChangedEvent(this, null);
       }
@@ -168,11 +153,9 @@ namespace Microsoft.Msagl.Drawing
     /// <summary>
     /// the node label margin
     /// </summary>
-    public int LabelMargin
-    {
+    public int LabelMargin {
       get { return labelMargin; }
-      set
-      {
+      set {
         labelMargin = value;
         RaiseVisualsChangedEvent(this, null);
       }
@@ -183,8 +166,7 @@ namespace Microsoft.Msagl.Drawing
     /// <summary>
     /// the label width to height ratio.
     /// </summary>
-    public double LabelWidthToHeightRatio
-    {
+    public double LabelWidthToHeightRatio {
       get { return labelWidthToHeightRatio; }
       set { labelWidthToHeightRatio = value; }
     }

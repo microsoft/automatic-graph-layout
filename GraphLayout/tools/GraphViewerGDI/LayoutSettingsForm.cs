@@ -26,30 +26,30 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-﻿using System;
+using System;
 using System.Windows.Forms;
 
 namespace Microsoft.Msagl.GraphViewerGdi {
+  /// <summary>
+  /// the form for the layout settings dialog
+  /// </summary>
+  internal partial class LayoutSettingsForm : Form {
     /// <summary>
-    /// the form for the layout settings dialog
+    /// constructor
     /// </summary>
-    internal partial class LayoutSettingsForm : Form {
-        /// <summary>
-        /// constructor
-        /// </summary>
-        internal LayoutSettingsForm() {
-            InitializeComponent();
-            PropertyGrid.PropertySort = PropertySort.Alphabetical;
-            DialogResult = DialogResult.Cancel;
-        }
-
-        internal LayoutSettingsWrapper Wrapper {
-            get { return PropertyGrid.SelectedObject as LayoutSettingsWrapper; }
-        }
-
-        void okButton_Click(object sender, EventArgs e) {
-            DialogResult = DialogResult.OK;
-            Close();
-        }
+    internal LayoutSettingsForm() {
+      InitializeComponent();
+      PropertyGrid.PropertySort = PropertySort.Alphabetical;
+      DialogResult = DialogResult.Cancel;
     }
+
+    internal LayoutSettingsWrapper Wrapper {
+      get { return PropertyGrid.SelectedObject as LayoutSettingsWrapper; }
+    }
+
+    void okButton_Click(object sender, EventArgs e) {
+      DialogResult = DialogResult.OK;
+      Close();
+    }
+  }
 }

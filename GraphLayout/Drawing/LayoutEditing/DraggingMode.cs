@@ -1,6 +1,6 @@
 namespace Microsoft.Msagl.Drawing {
-    internal enum DraggingMode {
-        Default,
-        Incremental
-    }
+  internal enum DraggingMode {
+    Default,
+    Incremental
+  }
 }

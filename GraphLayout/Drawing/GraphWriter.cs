@@ -9,12 +9,10 @@ using System.Threading;
 using System.Xml;
 using Microsoft.Msagl.DebugHelpers.Persistence;
 
-namespace Microsoft.Msagl.Drawing
-{
+namespace Microsoft.Msagl.Drawing {
   ///<summary>
   ///</summary>
-  public class GraphWriter
-  {
+  public class GraphWriter {
     private readonly Graph graph;
     private readonly Stream stream;
 
@@ -24,8 +22,7 @@ namespace Microsoft.Msagl.Drawing
     ///</summary>
     ///<param name="streamPar"></param>
     ///<param name="graphP"></param>
-    public GraphWriter(Stream streamPar, Graph graphP)
-    {
+    public GraphWriter(Stream streamPar, Graph graphP) {
       stream = streamPar;
       graph = graphP;
       var xmlWriterSettings = new XmlWriterSettings();
@@ -35,26 +32,22 @@ namespace Microsoft.Msagl.Drawing
 
     ///<summary>
     ///</summary>
-    public GraphWriter()
-    {
+    public GraphWriter() {
     }
 
     ///<summary>
     ///</summary>
-    public XmlWriter XmlWriter
-    {
+    public XmlWriter XmlWriter {
       get { return xmlWriter; }
     }
 
     /// <summary>
     /// Writes the graph to a file
     /// </summary>
-    public void Write()
-    {
+    public void Write() {
       CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
       Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-      try
-      {
+      try {
         Open();
         if (graph.UserData != null) WriteUserData(graph.UserData);
         WriteGraphAttr(graph.Attr);
@@ -65,15 +58,13 @@ namespace Microsoft.Msagl.Drawing
         WriteGeometryGraph();
         Close();
       }
-      finally
-      {
+      finally {
         //restore the culture
         Thread.CurrentThread.CurrentCulture = currentCulture;
       }
     }
 
-    void WriteSubgraphs()
-    {
+    void WriteSubgraphs() {
       WriteStartElement(Tokens.Subgraphs);
       foreach (Subgraph node in graph.RootSubgraph.AllSubgraphsDepthFirstExcludingSelf())
         WriteSubgraph(node);
@@ -81,22 +72,19 @@ namespace Microsoft.Msagl.Drawing
     }
 
 
-    static internal string FirstCharToLower(Tokens attrKind)
-    {
+    static internal string FirstCharToLower(Tokens attrKind) {
       var attrString = attrKind.ToString();
       attrString = attrString.Substring(0, 1).ToLower(CultureInfo.InvariantCulture) + attrString.Substring(1, attrString.Length - 1);
       return attrString;
     }
 
-    void WriteAttribute(Tokens attrKind, object val)
-    {
+    void WriteAttribute(Tokens attrKind, object val) {
       var attrString = FirstCharToLower(attrKind);
       xmlWriter.WriteAttributeString(attrString, val.ToString());
     }
 
 
-    void WriteSubgraph(Subgraph subgraph)
-    {
+    void WriteSubgraph(Subgraph subgraph) {
       WriteStartElement(Tokens.Subgraph);
       var subgraphsString = String.Join(" ", subgraph.Subgraphs.Select(s => s.Id));
       WriteAttribute(Tokens.listOfSubgraphs, subgraphsString);
@@ -110,17 +98,14 @@ namespace Microsoft.Msagl.Drawing
     }
 
     [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-    private void WriteUserData(object o)
-    {
+    private void WriteUserData(object o) {
       DataContractSerializer dcs = null;
       StringWriter sw;
       bool success = true;
-      try
-      {
+      try {
         sw = WriteUserDataToStream(o, ref dcs);
       }
-      catch (Exception e)
-      {
+      catch (Exception e) {
         success = false;
         sw = WriteUserDataToStream(e.Message, ref dcs);
       }
@@ -135,8 +120,7 @@ namespace Microsoft.Msagl.Drawing
       WriteEndElement();
     }
 
-    private static StringWriter WriteUserDataToStream(object obj, ref DataContractSerializer dcs)
-    {
+    private static StringWriter WriteUserDataToStream(object obj, ref DataContractSerializer dcs) {
       dcs = new DataContractSerializer(obj.GetType());
       var sw = new StringWriter(CultureInfo.InvariantCulture);
       XmlWriter xw = XmlWriter.Create(sw);
@@ -145,11 +129,9 @@ namespace Microsoft.Msagl.Drawing
       return sw;
     }
 
-    private void WriteLabel(Label label)
-    {
+    private void WriteLabel(Label label) {
       WriteStartElement(Tokens.Label);
-      if (label != null && !String.IsNullOrEmpty(label.Text))
-      {
+      if (label != null && !String.IsNullOrEmpty(label.Text)) {
         WriteStringElement(Tokens.Text, label.Text);
         WriteStringElement(Tokens.FontName, label.FontName);
         WriteColorElement(Tokens.FontColor, label.FontColor);
@@ -161,8 +143,7 @@ namespace Microsoft.Msagl.Drawing
       WriteEndElement();
     }
 
-    private void WriteGraphAttr(GraphAttr graphAttr)
-    {
+    private void WriteGraphAttr(GraphAttr graphAttr) {
       WriteStartElement(Tokens.GraphAttribute);
       WriteBaseAttr(graphAttr);
       WriteMinNodeHeight();
@@ -178,32 +159,27 @@ namespace Microsoft.Msagl.Drawing
       WriteEndElement();
     }
 
-    private void WriteBorder()
-    {
+    private void WriteBorder() {
       WriteStringElement(Tokens.Border, graph.Attr.Border);
     }
 
-    private void WriteMinNodeWidth()
-    {
+    private void WriteMinNodeWidth() {
       WriteStringElement(Tokens.MinNodeWidth, graph.Attr.MinNodeWidth);
     }
 
-    private void WriteMinNodeHeight()
-    {
+    private void WriteMinNodeHeight() {
       WriteStringElement(Tokens.MinNodeHeight, graph.Attr.MinNodeHeight);
     }
 
 
-    private Color WriteColorElement(Tokens t, Color c)
-    {
+    private Color WriteColorElement(Tokens t, Color c) {
       WriteStartElement(t);
       WriteColor(c);
       WriteEndElement();
       return c;
     }
 
-    private void WriteColor(Color color)
-    {
+    private void WriteColor(Color color) {
       WriteStartElement(Tokens.Color);
       WriteStringElement(Tokens.A, color.A);
       WriteStringElement(Tokens.R, color.R);
@@ -212,13 +188,10 @@ namespace Microsoft.Msagl.Drawing
       WriteEndElement();
     }
 
-    private void WriteGeometryGraph()
-    {
-      if (graph.geomGraph != null)
-      {
+    private void WriteGeometryGraph() {
+      if (graph.geomGraph != null) {
         WriteStringElement(Tokens.GeometryGraphIsPresent, true);
-        var ggw = new GeometryGraphWriter
-        {
+        var ggw = new GeometryGraphWriter {
           Settings = graph.LayoutAlgorithmSettings,
           XmlWriter = XmlWriter,
           Stream = stream,
@@ -233,8 +206,7 @@ namespace Microsoft.Msagl.Drawing
         WriteStringElement(Tokens.GeometryGraphIsPresent, false);
     }
 
-    Dictionary<Core.Layout.Node, string> BuildGeomNodesAndClustersToIdsDictionary()
-    {
+    Dictionary<Core.Layout.Node, string> BuildGeomNodesAndClustersToIdsDictionary() {
       var d = new Dictionary<Core.Layout.Node, string>();
       var nodesAndClusters = graph.Nodes;
       if (graph.RootSubgraph != null)
@@ -244,29 +216,25 @@ namespace Microsoft.Msagl.Drawing
       return d;
     }
 
-    private void Open()
-    {
+    private void Open() {
       xmlWriter.WriteStartElement(Tokens.MsaglGraph.ToString());
     }
 
-    private void Close()
-    {
+    private void Close() {
       xmlWriter.WriteEndElement();
       xmlWriter.WriteEndDocument();
       xmlWriter.Flush();
       xmlWriter.Close();
     }
 
-    private void WriteEdges()
-    {
+    private void WriteEdges() {
       WriteStartElement(Tokens.Edges);
       foreach (Edge edge in graph.Edges)
         WriteEdge(edge);
       WriteEndElement();
     }
 
-    private void WriteEdge(Edge edge)
-    {
+    private void WriteEdge(Edge edge) {
       WriteStartElement(Tokens.Edge);
       if (edge.UserData != null)
         WriteUserData(edge.UserData);
@@ -278,15 +246,13 @@ namespace Microsoft.Msagl.Drawing
       WriteEndElement();
     }
 
-    private void WriteEdgeType(Type edgeType)
-    {
+    private void WriteEdgeType(Type edgeType) {
       WriteStartElement(Tokens.EdgeType);
       WriteStringElement(Tokens.EdgeTypeName, edgeType.FullName);
       WriteEndElement();
     }
 
-    private void WriteEdgeAttr(EdgeAttr edgeAttr)
-    {
+    private void WriteEdgeAttr(EdgeAttr edgeAttr) {
       WriteStartElement(Tokens.EdgeAttribute);
       WriteBaseAttr(edgeAttr);
       WriteStringElement(Tokens.EdgeSeparation, edgeAttr.Separation);
@@ -298,16 +264,14 @@ namespace Microsoft.Msagl.Drawing
     }
 
 
-    private void WriteNodes()
-    {
+    private void WriteNodes() {
       WriteStartElement(Tokens.Nodes);
       foreach (Node node in graph.Nodes)
         WriteNode(node);
       WriteEndElement();
     }
 
-    private void WriteNode(Node node)
-    {
+    private void WriteNode(Node node) {
       WriteStartElement(Tokens.Node);
       if (node.UserData != null)
         WriteUserData(node.UserData);
@@ -317,15 +281,13 @@ namespace Microsoft.Msagl.Drawing
       WriteEndElement();
     }
 
-    private void WriteNodeType(Type nodeType)
-    {
+    private void WriteNodeType(Type nodeType) {
       WriteStartElement(Tokens.NodeType);
       WriteStringElement(Tokens.NodeTypeName, nodeType.FullName);
       WriteEndElement();
     }
 
-    private void WriteNodeAttr(NodeAttr na)
-    {
+    private void WriteNodeAttr(NodeAttr na) {
       WriteStartElement(Tokens.NodeAttribute);
       WriteBaseAttr(na);
       WriteColorElement(Tokens.Fillcolor, na.FillColor);
@@ -337,8 +299,7 @@ namespace Microsoft.Msagl.Drawing
       WriteEndElement();
     }
 
-    private void WriteBaseAttr(AttributeBase baseAttr)
-    {
+    private void WriteBaseAttr(AttributeBase baseAttr) {
       WriteStartElement(Tokens.BaseAttr);
       WriteStyles(baseAttr.Styles);
       WriteColorElement(Tokens.Color, baseAttr.Color);
@@ -354,31 +315,26 @@ namespace Microsoft.Msagl.Drawing
     //    WriteEndElement();
     //}
 
-    private void WriteStyles(IEnumerable<Style> styles)
-    {
+    private void WriteStyles(IEnumerable<Style> styles) {
       WriteStartElement(Tokens.Styles);
       foreach (Style s in styles)
         WriteStringElement(Tokens.Style, s);
       WriteEndElement();
     }
 
-    private void WriteAspectRatio()
-    {
+    private void WriteAspectRatio() {
       WriteStringElement(Tokens.AspectRatio, graph.Attr.AspectRatio);
     }
 
-    private void WriteEndElement()
-    {
+    private void WriteEndElement() {
       xmlWriter.WriteEndElement();
     }
 
-    private void WriteStartElement(Tokens t)
-    {
+    private void WriteStartElement(Tokens t) {
       xmlWriter.WriteStartElement(t.ToString());
     }
 
-    private void WriteStringElement(Tokens t, object s)
-    {
+    private void WriteStringElement(Tokens t, object s) {
       xmlWriter.WriteElementString(t.ToString(), s.ToString());
     }
   }

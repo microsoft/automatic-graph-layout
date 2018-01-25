@@ -13,82 +13,81 @@ using Microsoft.Msagl.DebugHelpers;
 using Microsoft.Msagl.Core;
 
 namespace Microsoft.Msagl.Routing.Rectilinear {
-    internal class RectilinearScanLine : IComparer<BasicObstacleSide> {
-        readonly ScanDirection scanDirection;
+  internal class RectilinearScanLine : IComparer<BasicObstacleSide> {
+    readonly ScanDirection scanDirection;
 
-        // This is the data structure that allows fast insert/remove of obstacle edges as well as
-        // scanning for next/prev edges along the direction of the scan line.
-        RbTree<BasicObstacleSide> SideTree { get; set; }
+    // This is the data structure that allows fast insert/remove of obstacle edges as well as
+    // scanning for next/prev edges along the direction of the scan line.
+    RbTree<BasicObstacleSide> SideTree { get; set; }
 
-        // Because sides may overlap and thus their relative positions change, retain the current
-        // position, which is set on insertions by parameter, and by Overlap events via SetLinePosition.
-        private Point linePositionAtLastInsertOrRemove;
+    // Because sides may overlap and thus their relative positions change, retain the current
+    // position, which is set on insertions by parameter, and by Overlap events via SetLinePosition.
+    private Point linePositionAtLastInsertOrRemove;
 
-        internal RectilinearScanLine(ScanDirection scanDir, Point start) {
-            scanDirection = scanDir;
-            SideTree = new RbTree<BasicObstacleSide>(this);
-            this.linePositionAtLastInsertOrRemove = start;
-        }
+    internal RectilinearScanLine(ScanDirection scanDir, Point start) {
+      scanDirection = scanDir;
+      SideTree = new RbTree<BasicObstacleSide>(this);
+      this.linePositionAtLastInsertOrRemove = start;
+    }
 
-        internal RBNode<BasicObstacleSide> Insert(BasicObstacleSide side, Point scanPos) {
-            DevTraceInfo(1, "prev LinePos = {0}, new LinePos = {1}, inserting side = {2}", this.linePositionAtLastInsertOrRemove, scanPos, side.ToString());
-            Assert(!scanDirection.IsFlat(side), "Flat sides are not allowed in the scanline");
-            Assert(null == Find(side), "side already exists in the ScanLine");
-            this.linePositionAtLastInsertOrRemove = scanPos;
+    internal RBNode<BasicObstacleSide> Insert(BasicObstacleSide side, Point scanPos) {
+      DevTraceInfo(1, "prev LinePos = {0}, new LinePos = {1}, inserting side = {2}", this.linePositionAtLastInsertOrRemove, scanPos, side.ToString());
+      Assert(!scanDirection.IsFlat(side), "Flat sides are not allowed in the scanline");
+      Assert(null == Find(side), "side already exists in the ScanLine");
+      this.linePositionAtLastInsertOrRemove = scanPos;
 
-            // RBTree's internal operations on insert/remove etc. mean the node can't cache the
-            // RBNode returned by insert(); instead we must do find() on each call.  But we can
-            // use the returned node to get predecessor/successor.
-            var node = SideTree.Insert(side);
-            DevTraceDump(2);
-            return node;
-        }
+      // RBTree's internal operations on insert/remove etc. mean the node can't cache the
+      // RBNode returned by insert(); instead we must do find() on each call.  But we can
+      // use the returned node to get predecessor/successor.
+      var node = SideTree.Insert(side);
+      DevTraceDump(2);
+      return node;
+    }
 
-        internal int Count { get { return SideTree.Count; } }
+    internal int Count { get { return SideTree.Count; } }
 
-        internal void Remove(BasicObstacleSide side, Point scanPos) {
-            DevTraceInfo(1, "current linePos = {0}, removing side = {1}", this.linePositionAtLastInsertOrRemove, side.ToString());
-            Assert(null != Find(side), "side does not exist in the ScanLine");
-            this.linePositionAtLastInsertOrRemove = scanPos;
-            SideTree.Remove(side);
-            DevTraceDump(2);
-        }
+    internal void Remove(BasicObstacleSide side, Point scanPos) {
+      DevTraceInfo(1, "current linePos = {0}, removing side = {1}", this.linePositionAtLastInsertOrRemove, side.ToString());
+      Assert(null != Find(side), "side does not exist in the ScanLine");
+      this.linePositionAtLastInsertOrRemove = scanPos;
+      SideTree.Remove(side);
+      DevTraceDump(2);
+    }
 
-        internal RBNode<BasicObstacleSide> Find(BasicObstacleSide side) {
-            // Sides that start after the current position cannot be in the scanline.
-            if (-1 == scanDirection.ComparePerpCoord(this.linePositionAtLastInsertOrRemove, side.Start)) {
-                return null;
-            }
-            return SideTree.Find(side);
-        }
+    internal RBNode<BasicObstacleSide> Find(BasicObstacleSide side) {
+      // Sides that start after the current position cannot be in the scanline.
+      if (-1 == scanDirection.ComparePerpCoord(this.linePositionAtLastInsertOrRemove, side.Start)) {
+        return null;
+      }
+      return SideTree.Find(side);
+    }
 
-        internal RBNode<BasicObstacleSide> NextLow(BasicObstacleSide side) {
-            return NextLow(Find(side));
-        }
+    internal RBNode<BasicObstacleSide> NextLow(BasicObstacleSide side) {
+      return NextLow(Find(side));
+    }
 
-        internal RBNode<BasicObstacleSide> NextLow(RBNode<BasicObstacleSide> sideNode) {
-            var pred = SideTree.Previous(sideNode);
-            return pred;
-        }
+    internal RBNode<BasicObstacleSide> NextLow(RBNode<BasicObstacleSide> sideNode) {
+      var pred = SideTree.Previous(sideNode);
+      return pred;
+    }
 
-        internal RBNode<BasicObstacleSide> NextHigh(BasicObstacleSide side) {
-            return NextHigh(Find(side));
-        }
+    internal RBNode<BasicObstacleSide> NextHigh(BasicObstacleSide side) {
+      return NextHigh(Find(side));
+    }
 
-        internal RBNode<BasicObstacleSide> NextHigh(RBNode<BasicObstacleSide> sideNode) {
-            var succ = SideTree.Next(sideNode);
-            return succ;
-        }
+    internal RBNode<BasicObstacleSide> NextHigh(RBNode<BasicObstacleSide> sideNode) {
+      var succ = SideTree.Next(sideNode);
+      return succ;
+    }
 
-        internal RBNode<BasicObstacleSide> Next(Directions dir, RBNode<BasicObstacleSide> sideNode) {
-            var succ = (StaticGraphUtility.IsAscending(dir)) ? SideTree.Next(sideNode) : SideTree.Previous(sideNode);
-            return succ;
-        }
+    internal RBNode<BasicObstacleSide> Next(Directions dir, RBNode<BasicObstacleSide> sideNode) {
+      var succ = (StaticGraphUtility.IsAscending(dir)) ? SideTree.Next(sideNode) : SideTree.Previous(sideNode);
+      return succ;
+    }
 
-        internal RBNode<BasicObstacleSide> Lowest()
-        {
-            return SideTree.TreeMinimum();
-        }
+    internal RBNode<BasicObstacleSide> Lowest() {
+      return SideTree.TreeMinimum();
+    }
 
 #if DEVTRACE
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
@@ -114,112 +113,112 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             Assert(retval, "Sides are not strictly increasing");
         }
 #endif // DEVTRACE
-        #region IComparer<BasicObstacleSide>
-        /// <summary>
-        /// For ordering lines along the scanline at segment starts/ends.
-        /// </summary>
-        /// <param name="first"></param>
-        /// <param name="second"></param>
-        /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
-        public int Compare(BasicObstacleSide first, BasicObstacleSide second) {
-            ValidateArg.IsNotNull(first, "first");
-            ValidateArg.IsNotNull(second, "second");
-            
-            // If these are two sides of the same obstacle then the ordering is obvious.
-            if (first.Obstacle == second.Obstacle) {
-                if (first == second) {
-                    return 0;
-                }
-                return (first is LowObstacleSide) ? -1 : 1;
-            }
+    #region IComparer<BasicObstacleSide>
+    /// <summary>
+    /// For ordering lines along the scanline at segment starts/ends.
+    /// </summary>
+    /// <param name="first"></param>
+    /// <param name="second"></param>
+    /// <returns></returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
+    public int Compare(BasicObstacleSide first, BasicObstacleSide second) {
+      ValidateArg.IsNotNull(first, "first");
+      ValidateArg.IsNotNull(second, "second");
 
-            Debug_VerifySidesDoNotIntersect(first, second);
-
-            // Other than intersecting sides at vertices of the same obstacle, there should be no interior intersections...
-            Point firstIntersect = VisibilityGraphGenerator.ScanLineIntersectSide(this.linePositionAtLastInsertOrRemove, first, scanDirection);
-            Point secondIntersect = VisibilityGraphGenerator.ScanLineIntersectSide(this.linePositionAtLastInsertOrRemove, second, scanDirection);
-            var cmp = firstIntersect.CompareTo(secondIntersect);
-
-            // ... but we may still have rectangular sides that coincide, or angled sides that are close enough here but
-            // are not detected by the convex-hull overlap calculations.  In those cases, we refine the comparison by side
-            // type, with High coming before Low, and then by obstacle ordinal if needed. Because there are no interior
-            // intersections, this ordering will remain valid as long as the side(s) are in the scanline.
-            if (0 == cmp) {
-                bool firstIsLow = first is LowObstacleSide;
-                bool secondIsLow = second is LowObstacleSide;
-                cmp = firstIsLow.CompareTo(secondIsLow);
-                if (0 == cmp) {
-                    cmp = first.Obstacle.Ordinal.CompareTo(second.Obstacle.Ordinal);
-                }
-            }
-
-            DevTraceInfo(4, "Compare {0} @ {1:F5} {2:F5} and {3:F5} {4:F5}: {5} {6}",
-                            cmp, firstIntersect.X, firstIntersect.Y, secondIntersect.X, secondIntersect.Y, first, second);
-            return cmp;
+      // If these are two sides of the same obstacle then the ordering is obvious.
+      if (first.Obstacle == second.Obstacle) {
+        if (first == second) {
+          return 0;
         }
+        return (first is LowObstacleSide) ? -1 : 1;
+      }
 
-        [Conditional("DEBUG")]
-        internal static void Debug_VerifySidesDoNotIntersect(BasicObstacleSide side1, BasicObstacleSide side2) {
-            Point intersect;
-            if (!Point.LineLineIntersection(side1.Start, side1.End, side2.Start, side2.End, out intersect)) {
-                return;
-            }
+      Debug_VerifySidesDoNotIntersect(first, second);
 
-            // The test for being within the interval is just multiplying to ensure that both subtractions 
-            // return same-signed results (including endpoints).
-            var isInterior = ((side1.Start - intersect) * (intersect - side1.End) >= -ApproximateComparer.DistanceEpsilon)
-                        && ((side2.Start - intersect) * (intersect - side2.End) >= -ApproximateComparer.DistanceEpsilon);
-            Debug.Assert(!isInterior, "Shouldn't have interior intersections except sides of the same obstacle");
+      // Other than intersecting sides at vertices of the same obstacle, there should be no interior intersections...
+      Point firstIntersect = VisibilityGraphGenerator.ScanLineIntersectSide(this.linePositionAtLastInsertOrRemove, first, scanDirection);
+      Point secondIntersect = VisibilityGraphGenerator.ScanLineIntersectSide(this.linePositionAtLastInsertOrRemove, second, scanDirection);
+      var cmp = firstIntersect.CompareTo(secondIntersect);
+
+      // ... but we may still have rectangular sides that coincide, or angled sides that are close enough here but
+      // are not detected by the convex-hull overlap calculations.  In those cases, we refine the comparison by side
+      // type, with High coming before Low, and then by obstacle ordinal if needed. Because there are no interior
+      // intersections, this ordering will remain valid as long as the side(s) are in the scanline.
+      if (0 == cmp) {
+        bool firstIsLow = first is LowObstacleSide;
+        bool secondIsLow = second is LowObstacleSide;
+        cmp = firstIsLow.CompareTo(secondIsLow);
+        if (0 == cmp) {
+          cmp = first.Obstacle.Ordinal.CompareTo(second.Obstacle.Ordinal);
         }
+      }
 
-        #endregion // IComparer<BasicObstacleSide>
+      DevTraceInfo(4, "Compare {0} @ {1:F5} {2:F5} and {3:F5} {4:F5}: {5} {6}",
+                      cmp, firstIntersect.X, firstIntersect.Y, secondIntersect.X, secondIntersect.Y, first, second);
+      return cmp;
+    }
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString() {
-            return this.linePositionAtLastInsertOrRemove + " " + scanDirection;
-        }
+    [Conditional("DEBUG")]
+    internal static void Debug_VerifySidesDoNotIntersect(BasicObstacleSide side1, BasicObstacleSide side2) {
+      Point intersect;
+      if (!Point.LineLineIntersection(side1.Start, side1.End, side2.Start, side2.End, out intersect)) {
+        return;
+      }
 
-        [Conditional("DEBUG")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        void Assert(bool condition, string message) {
+      // The test for being within the interval is just multiplying to ensure that both subtractions 
+      // return same-signed results (including endpoints).
+      var isInterior = ((side1.Start - intersect) * (intersect - side1.End) >= -ApproximateComparer.DistanceEpsilon)
+                  && ((side2.Start - intersect) * (intersect - side2.End) >= -ApproximateComparer.DistanceEpsilon);
+      Debug.Assert(!isInterior, "Shouldn't have interior intersections except sides of the same obstacle");
+    }
+
+    #endregion // IComparer<BasicObstacleSide>
+
+    /// <summary>
+    /// </summary>
+    /// <returns></returns>
+    public override string ToString() {
+      return this.linePositionAtLastInsertOrRemove + " " + scanDirection;
+    }
+
+    [Conditional("DEBUG")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+    void Assert(bool condition, string message) {
 #if TEST_MSAGL
             if (!condition) {
                 Test_DumpScanLine();
             }
 #endif // TEST
-            Debug.Assert(condition, message);
-        }
+      Debug.Assert(condition, message);
+    }
 
-        #region DevTrace
+    #region DevTrace
 #if DEVTRACE
         readonly DevTrace scanLineTrace = new DevTrace("Rectilinear_ScanLineTrace", "RectScanLine");
         readonly DevTrace scanLineDump = new DevTrace("Rectilinear_ScanLineDump");
         readonly DevTrace scanLineVerify = new DevTrace("Rectilinear_ScanLineVerify");
 #endif // DEVTRACE
 
-        [Conditional("DEVTRACE")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        void DevTraceInfo(int verboseLevel, string format, params object[] args) {
+    [Conditional("DEVTRACE")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+    void DevTraceInfo(int verboseLevel, string format, params object[] args) {
 #if DEVTRACE
             scanLineTrace.WriteLineIf(DevTrace.Level.Info, verboseLevel, format, args);
 #endif // DEVTRACE
-        }
+    }
 
-        [Conditional("DEVTRACE")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        void DevTraceDump(int verboseLevel) {
+    [Conditional("DEVTRACE")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+    void DevTraceDump(int verboseLevel) {
 #if DEVTRACE
             if (scanLineDump.IsLevel(verboseLevel)) {
                 Test_DumpScanLine();
             }
 #endif // DEVTRACE
-        }
-        #endregion // DevTrace
+    }
+    #endregion // DevTrace
 
-        #region DebugCurves
+    #region DebugCurves
 
 #if TEST_MSAGL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
@@ -266,6 +265,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return debugCurves;
         }
 #endif // TEST
-        #endregion // DebugCurves
-    }
+    #endregion // DebugCurves
+  }
 }

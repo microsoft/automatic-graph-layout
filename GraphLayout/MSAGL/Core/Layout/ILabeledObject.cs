@@ -1,14 +1,14 @@
 namespace Microsoft.Msagl.Core.Layout {
 
+  /// <summary>
+  /// interface for geometry objects with labels
+  /// </summary>
+  public interface ILabeledObject {
     /// <summary>
-    /// interface for geometry objects with labels
+    /// the label of the object 
     /// </summary>
-    public interface ILabeledObject {
-        /// <summary>
-        /// the label of the object 
-        /// </summary>
-        Label Label { get; set; }
-    }
+    Label Label { get; set; }
+  }
 }
 
 

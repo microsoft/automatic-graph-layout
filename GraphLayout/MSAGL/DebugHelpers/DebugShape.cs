@@ -1,4 +1,4 @@
-#if DEBUG && ! SILVERLIGHT
+#if DEBUG && !SILVERLIGHT
 using System;
 
 namespace Microsoft.Msagl.DebugHelpers {

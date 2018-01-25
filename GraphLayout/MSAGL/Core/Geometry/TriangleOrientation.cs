@@ -1,19 +1,19 @@
-namespace Microsoft.Msagl.Core.Geometry{
+namespace Microsoft.Msagl.Core.Geometry {
+  /// <summary>
+  /// triangle orientations
+  /// </summary>
+  public enum TriangleOrientation {
     /// <summary>
-    /// triangle orientations
+    /// clockwise orientation
     /// </summary>
-    public enum TriangleOrientation {
-        /// <summary>
-        /// clockwise orientation
-        /// </summary>
-        Clockwise,
-        /// <summary>
-        /// counter clockwise orientation
-        /// </summary>
-        Counterclockwise,
-        /// <summary>
-        /// the points are collinear
-        /// </summary>
-        Collinear
-    }
+    Clockwise,
+    /// <summary>
+    /// counter clockwise orientation
+    /// </summary>
+    Counterclockwise,
+    /// <summary>
+    /// the points are collinear
+    /// </summary>
+    Collinear
+  }
 }

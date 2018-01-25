@@ -32,10 +32,10 @@ using System.Text;
 using Microsoft.Msagl.Core.Geometry;
 
 namespace Microsoft.Msagl.GraphViewerGdi {
-    /// <summary>
-    /// a base class for object that are drawn
-    /// </summary>
-    abstract public class ObjectWithBox {
-        abstract internal Rectangle Box { get; } 
-    }
+  /// <summary>
+  /// a base class for object that are drawn
+  /// </summary>
+  abstract public class ObjectWithBox {
+    abstract internal Rectangle Box { get; }
+  }
 }

@@ -7,13 +7,13 @@
 using System.Collections.Generic;
 
 namespace Microsoft.Msagl.Routing.Rectilinear {
-    /// <summary>
-    /// This is the list of obstacles in the clump.
-    /// </summary>
-    internal class Clump : List<Obstacle> {
-        internal Clump(IEnumerable<Obstacle> obstacles) {
-            this.AddRange(obstacles);
-        }
+  /// <summary>
+  /// This is the list of obstacles in the clump.
+  /// </summary>
+  internal class Clump : List<Obstacle> {
+    internal Clump(IEnumerable<Obstacle> obstacles) {
+      this.AddRange(obstacles);
+    }
 #if DEBUG && TEST_MSAGL
         /// <summary>
         /// </summary>
@@ -23,5 +23,5 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return string.Format("({0}", this.Count);
         }
 #endif
-    }
+  }
 }

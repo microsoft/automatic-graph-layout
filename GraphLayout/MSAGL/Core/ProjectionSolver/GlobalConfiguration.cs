@@ -7,14 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Microsoft.Msagl.Core.ProjectionSolver
-{
-    /// <summary>
-    /// Global configuration constants for the ProjectionSolver namespace.
-    /// </summary>
-    public struct GlobalConfiguration
-    {
-        #region InternalConstants
+namespace Microsoft.Msagl.Core.ProjectionSolver {
+  /// <summary>
+  /// Global configuration constants for the ProjectionSolver namespace.
+  /// </summary>
+  public struct GlobalConfiguration {
+    #region InternalConstants
 
 #if EX_VERIFY
         /// <summary>
@@ -23,7 +21,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
         internal const double BlockReferencePositionEpsilon = 1e-6;
 #endif // EX_VERIFY
 
-        #endregion // InternalConstants
+    #endregion // InternalConstants
 
-    }
+  }
 }

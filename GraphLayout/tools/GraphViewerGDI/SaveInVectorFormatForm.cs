@@ -36,14 +36,11 @@ using System.IO;
 using System.Windows.Forms;
 using Microsoft.Msagl.Drawing;
 
-namespace Microsoft.Msagl.GraphViewerGdi
-{
-  public partial class SaveInVectorFormatForm : Form
-  {
+namespace Microsoft.Msagl.GraphViewerGdi {
+  public partial class SaveInVectorFormatForm : Form {
     readonly GViewer gViewer;
 
-    public SaveInVectorFormatForm(GViewer gViewerControl)
-    {
+    public SaveInVectorFormatForm(GViewer gViewerControl) {
       InitializeComponent();
       saveCurrentView.Checked = gViewerControl.SaveCurrentViewInImage;
       saveTotalView.Checked = !gViewerControl.SaveCurrentViewInImage;
@@ -56,25 +53,21 @@ namespace Microsoft.Msagl.GraphViewerGdi
       CancelButton = cancelButton;
     }
 
-    string FileName
-    {
+    string FileName {
       get { return saveInTextBox.Text; }
     }
 
-    void saveCurrentView_CheckedChanged(object sender, EventArgs e)
-    {
+    void saveCurrentView_CheckedChanged(object sender, EventArgs e) {
       gViewer.SaveCurrentViewInImage = saveCurrentView.Checked;
     }
 
 
-    void BrowseButtonClick(object sender, EventArgs e)
-    {
+    void BrowseButtonClick(object sender, EventArgs e) {
       var saveFileDialog = new SaveFileDialog();
       saveFileDialog.Filter = "Svg files(*.svg)|*.svg|EMF Files(*.emf)|*.emf|WMF Files(*.wmf)|*.wmf";
       saveFileDialog.OverwritePrompt = false;
       DialogResult dialogResult = saveFileDialog.ShowDialog();
-      if (dialogResult == DialogResult.OK)
-      {
+      if (dialogResult == DialogResult.OK) {
         saveInTextBox.Text = saveFileDialog.FileName;
         okButton.Focus(); //to enable hitting the OK button
       }
@@ -85,8 +78,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
      SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions"),
      SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters",
          MessageId = "System.Windows.Forms.MessageBox.Show(System.String)")]
-    void okButton_Click(object sender, EventArgs e)
-    {
+    void okButton_Click(object sender, EventArgs e) {
       Cursor c = Cursor;
       Cursor = Cursors.WaitCursor;
       SaveGraphToFile(this.FileName);
@@ -94,34 +86,28 @@ namespace Microsoft.Msagl.GraphViewerGdi
       Close();
     }
 
-    public void SaveGraphToFile(string fileName)
-    {
-      if (String.IsNullOrEmpty(fileName))
-      {
+    public void SaveGraphToFile(string fileName) {
+      if (String.IsNullOrEmpty(fileName)) {
         MessageBox.Show("Unable to save. The given filename is invalid.", "Export error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         return;
       }
       string ext = Path.GetExtension(fileName).ToLower();
       if (!(ext == ".emf" || ext == ".wmf" || ext == ".svg")) ext = ".svg";
       fileName = Path.GetDirectoryName(fileName) + "\\" + Path.GetFileNameWithoutExtension(fileName) + ext;
-      try
-      {
-        if (ext != ".svg")
-        {
+      try {
+        if (ext != ".svg") {
           var w = (int)Math.Ceiling(gViewer.SrcRect.Width);
           var h = (int)Math.Ceiling(gViewer.SrcRect.Height);
           DrawVectorGraphics(w, h);
         }
         else SvgGraphWriter.Write(gViewer.Graph, fileName, null, null, 4);
       }
-      catch (Exception ex)
-      {
+      catch (Exception ex) {
         MessageBox.Show("Unfortunately an error occurred while saving image : " + ex.Message, "Export error", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
-    void DrawGeneral(int w, int h, Graphics graphics)
-    {
+    void DrawGeneral(int w, int h, Graphics graphics) {
       graphics.SmoothingMode = SmoothingMode.HighQuality;
       graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
       graphics.CompositingQuality = CompositingQuality.HighQuality;
@@ -132,8 +118,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
       else DrawAll(w, h, graphics);
     }
 
-    void DrawAll(int w, int h, Graphics graphics)
-    {
+    void DrawAll(int w, int h, Graphics graphics) {
       //fill the whole image
       graphics.FillRectangle(new SolidBrush(Draw.MsaglColorToDrawingColor(gViewer.Graph.Attr.BackgroundColor)),
                              new RectangleF(0, 0, w, h));
@@ -148,8 +133,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
       Draw.DrawPrecalculatedLayoutObject(graphics, gViewer.DGraph);
     }
 
-    void DrawCurrent(Graphics graphics)
-    {
+    void DrawCurrent(Graphics graphics) {
       graphics.Transform = gViewer.CurrentTransform();
       graphics.FillRectangle(new SolidBrush(Draw.MsaglColorToDrawingColor(gViewer.Graph.Attr.BackgroundColor)),
                              gViewer.SrcRect);
@@ -157,8 +141,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
       Draw.DrawPrecalculatedLayoutObject(graphics, gViewer.DGraph);
     }
 
-    void DrawVectorGraphics(int w, int h)
-    {
+    void DrawVectorGraphics(int w, int h) {
       Graphics graphics = CreateGraphics();
       IntPtr ipHdc = graphics.GetHdc();
 

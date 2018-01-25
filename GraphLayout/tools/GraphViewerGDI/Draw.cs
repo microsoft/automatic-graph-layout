@@ -51,24 +51,20 @@ using DrawingNode = Microsoft.Msagl.Drawing.Node;
 using P2 = Microsoft.Msagl.Core.Geometry.Point;
 
 
-namespace Microsoft.Msagl.GraphViewerGdi
-{
+namespace Microsoft.Msagl.GraphViewerGdi {
   /// <summary>
   /// exposes some drawing functionality
   /// </summary>
-  public sealed class Draw
-  {
+  public sealed class Draw {
     /// <summary>
     /// private constructor
     /// </summary>
-    Draw()
-    {
+    Draw() {
     }
 
     static double doubleCircleOffsetRatio = 0.9;
 
-    internal static double DoubleCircleOffsetRatio
-    {
+    internal static double DoubleCircleOffsetRatio {
       get { return doubleCircleOffsetRatio; }
     }
 
@@ -81,8 +77,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
     /// <param name="gleeColor"></param>
     /// <returns></returns>
     [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Msagl")]
-    public static Color MsaglColorToDrawingColor(Drawing.Color gleeColor)
-    {
+    public static Color MsaglColorToDrawingColor(Drawing.Color gleeColor) {
       return Color.FromArgb(gleeColor.A, gleeColor.R, gleeColor.G, gleeColor.B);
     }
 
@@ -95,8 +90,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
     [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "precalculated"),
      SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "object"),
      SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Precalculated")]
-    public static void DrawPrecalculatedLayoutObject(Graphics graphics, object precalculatedObject)
-    {
+    public static void DrawPrecalculatedLayoutObject(Graphics graphics, object precalculatedObject) {
       var dg = precalculatedObject as DGraph;
       if (dg != null)
         dg.DrawGraph(graphics);
@@ -630,14 +624,11 @@ namespace Microsoft.Msagl.GraphViewerGdi
 #endif
 
 
-    internal static void AddStyleForPen(DObject dObj, Pen myPen, Style style)
-    {
-      if (style == Style.Dashed)
-      {
+    internal static void AddStyleForPen(DObject dObj, Pen myPen, Style style) {
+      if (style == Style.Dashed) {
         myPen.DashStyle = DashStyle.Dash;
 
-        if (dObj.DashPatternArray == null)
-        {
+        if (dObj.DashPatternArray == null) {
           float f = dObj.DashSize();
           dObj.DashPatternArray = new[] { f, f };
         }
@@ -645,11 +636,9 @@ namespace Microsoft.Msagl.GraphViewerGdi
 
         myPen.DashOffset = dObj.DashPatternArray[0];
       }
-      else if (style == Style.Dotted)
-      {
+      else if (style == Style.Dotted) {
         myPen.DashStyle = DashStyle.Dash;
-        if (dObj.DashPatternArray == null)
-        {
+        if (dObj.DashPatternArray == null) {
           float f = dObj.DashSize();
           dObj.DashPatternArray = new[] { 1, f };
         }
@@ -657,21 +646,18 @@ namespace Microsoft.Msagl.GraphViewerGdi
       }
     }
 
-    internal static void DrawEdgeArrows(Graphics g, DrawingEdge edge, Color edgeColor, Pen myPen)
-    {
+    internal static void DrawEdgeArrows(Graphics g, DrawingEdge edge, Color edgeColor, Pen myPen) {
       ArrowAtTheEnd(g, edge, edgeColor, myPen);
       ArrawAtTheBeginning(g, edge, edgeColor, myPen);
     }
 
-    static void ArrawAtTheBeginning(Graphics g, DrawingEdge edge, Color edgeColor, Pen myPen)
-    {
+    static void ArrawAtTheBeginning(Graphics g, DrawingEdge edge, Color edgeColor, Pen myPen) {
       if (edge.GeometryEdge != null && edge.Attr.ArrowAtSource)
         DrawArrowAtTheBeginningWithControlPoints(g, edge, edgeColor, myPen);
     }
 
 
-    static void DrawArrowAtTheBeginningWithControlPoints(Graphics g, DrawingEdge edge, Color edgeColor, Pen myPen)
-    {
+    static void DrawArrowAtTheBeginningWithControlPoints(Graphics g, DrawingEdge edge, Color edgeColor, Pen myPen) {
       if (edge.EdgeCurve != null)
         if (edge.Attr.ArrowheadAtSource == ArrowStyle.None)
           DrawLine(g, myPen, edge.EdgeCurve.Start,
@@ -682,14 +668,12 @@ namespace Microsoft.Msagl.GraphViewerGdi
                       edge.ArrowAtSourcePosition, edge.Attr.LineWidth, edge.Attr.ArrowheadAtSource);
     }
 
-    static void ArrowAtTheEnd(Graphics g, DrawingEdge edge, Color edgeColor, Pen myPen)
-    {
+    static void ArrowAtTheEnd(Graphics g, DrawingEdge edge, Color edgeColor, Pen myPen) {
       if (edge.GeometryEdge != null && edge.Attr.ArrowAtTarget)
         DrawArrowAtTheEndWithControlPoints(g, edge, edgeColor, myPen);
     }
 
-    static void DrawArrowAtTheEndWithControlPoints(Graphics g, DrawingEdge edge, Color edgeColor, Pen myPen)
-    {
+    static void DrawArrowAtTheEndWithControlPoints(Graphics g, DrawingEdge edge, Color edgeColor, Pen myPen) {
       if (edge.EdgeCurve != null)
         if (edge.Attr.ArrowheadAtTarget == ArrowStyle.None)
           DrawLine(g, myPen, edge.EdgeCurve.End,
@@ -705,8 +689,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
     /// </summary>
     /// <param name="iCurve"></param>
     /// <returns></returns>
-    public static GraphicsPath CreateGraphicsPath(ICurve iCurve)
-    {
+    public static GraphicsPath CreateGraphicsPath(ICurve iCurve) {
       var graphicsPath = new GraphicsPath();
       if (iCurve == null)
         return null;
@@ -714,27 +697,22 @@ namespace Microsoft.Msagl.GraphViewerGdi
 
       if (c != null)
         HandleCurve(c, graphicsPath);
-      else
-      {
+      else {
         var ls = iCurve as LineSegment;
         if (ls != null)
           graphicsPath.AddLine(PointF(ls.Start), PointF(ls.End));
-        else
-        {
+        else {
           var seg = iCurve as CubicBezierSegment;
           if (seg != null)
             graphicsPath.AddBezier(PointF(seg.B(0)), PointF(seg.B(1)), PointF(seg.B(2)), PointF(seg.B(3)));
-          else
-          {
+          else {
             var ellipse = iCurve as Ellipse;
             if (ellipse != null)
               AddEllipseSeg(graphicsPath, iCurve as Ellipse);
-            else
-            {
+            else {
               var poly = iCurve as Polyline;
               if (poly != null) HandlePolyline(poly, graphicsPath);
-              else
-              {
+              else {
                 var rr = (RoundedRect)iCurve;
                 HandleCurve(rr.Curve, graphicsPath);
               }
@@ -769,28 +747,23 @@ namespace Microsoft.Msagl.GraphViewerGdi
       return graphicsPath;
     }
 
-    static void HandlePolyline(Polyline poly, GraphicsPath graphicsPath)
-    {
+    static void HandlePolyline(Polyline poly, GraphicsPath graphicsPath) {
       graphicsPath.AddLines(poly.Select(PointF).ToArray());
       if (poly.Closed)
         graphicsPath.CloseFigure();
     }
 
-    static void HandleCurve(Curve c, GraphicsPath graphicsPath)
-    {
-      foreach (ICurve seg in c.Segments)
-      {
+    static void HandleCurve(Curve c, GraphicsPath graphicsPath) {
+      foreach (ICurve seg in c.Segments) {
         var cubic = seg as CubicBezierSegment;
         if (cubic != null)
           graphicsPath.AddBezier(PointF(cubic.B(0)), PointF(cubic.B(1)), PointF(cubic.B(2)),
                                  PointF(cubic.B(3)));
-        else
-        {
+        else {
           var ls = seg as LineSegment;
           if (ls != null)
             graphicsPath.AddLine(PointF(ls.Start), PointF(ls.End));
-          else
-          {
+          else {
             var el = seg as Ellipse;
             //                            double del = (el.ParEnd - el.ParStart)/11.0;
             //                            graphicsPath.AddLines(Enumerable.Range(1, 10).Select(i => el[el.ParStart + del*i]).
@@ -802,8 +775,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
       }
     }
 
-    static void AddEllipseSeg(GraphicsPath graphicsPath, Ellipse el)
-    {
+    static void AddEllipseSeg(GraphicsPath graphicsPath, Ellipse el) {
       double sweepAngle;
       BBox box;
       float startAngle;
@@ -824,20 +796,17 @@ namespace Microsoft.Msagl.GraphViewerGdi
     }
 #endif
 
-    static bool NeedToFill(Color fillColor)
-    {
+    static bool NeedToFill(Color fillColor) {
       return fillColor.A != 0; //the color is not transparent
     }
 
-    internal static void DrawDoubleCircle(Graphics g, Pen pen, DNode dNode)
-    {
+    internal static void DrawDoubleCircle(Graphics g, Pen pen, DNode dNode) {
       var drNode = dNode.DrawingNode;
       NodeAttr nodeAttr = drNode.Attr;
 
       double x = drNode.GeometryNode.Center.X - drNode.GeometryNode.Width / 2.0f;
       double y = drNode.GeometryNode.Center.Y - drNode.GeometryNode.Height / 2.0f;
-      if (NeedToFill(dNode.FillColor))
-      {
+      if (NeedToFill(dNode.FillColor)) {
         g.FillEllipse(new SolidBrush(dNode.FillColor), (float)x, (float)y, (float)drNode.Width,
                       (float)drNode.Height);
       }
@@ -852,8 +821,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
       g.DrawEllipse(pen, (float)x, (float)y, w - coeff * m, h - coeff * m);
     }
 
-    static Color FillColor(NodeAttr nodeAttr)
-    {
+    static Color FillColor(NodeAttr nodeAttr) {
       return MsaglColorToDrawingColor(nodeAttr.FillColor);
     }
 
@@ -862,10 +830,8 @@ namespace Microsoft.Msagl.GraphViewerGdi
     internal const double ArrowAngle = 25.0; //degrees
 
     internal static void DrawArrow(Graphics g, Brush brush, P2 start, P2 end, double lineWidth,
-                                   ArrowStyle arrowStyle)
-    {
-      switch (arrowStyle)
-      {
+                                   ArrowStyle arrowStyle) {
+      switch (arrowStyle) {
         case ArrowStyle.NonSpecified:
         case ArrowStyle.Normal:
 
@@ -888,12 +854,10 @@ namespace Microsoft.Msagl.GraphViewerGdi
       }
     }
 
-    internal static void DrawNormalArrow(Graphics g, Brush brush, ref P2 start, ref P2 end, double lineWidth)
-    {
+    internal static void DrawNormalArrow(Graphics g, Brush brush, ref P2 start, ref P2 end, double lineWidth) {
       PointF[] points;
 
-      if (lineWidth == 1)
-      {
+      if (lineWidth == 1) {
         P2 dir = end - start;
         P2 h = dir;
         dir /= dir.Length;
@@ -904,8 +868,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
 
         points = new[] { PointF(start + s), PointF(end), PointF(start - s) };
       }
-      else
-      {
+      else {
         P2 dir = end - start;
         P2 h = dir;
         dir /= dir.Length;
@@ -930,11 +893,9 @@ namespace Microsoft.Msagl.GraphViewerGdi
       g.FillPolygon(brush, points);
     }
 
-    static void DrawTeeArrow(Graphics g, Brush brush, ref P2 start, ref P2 end, double lineWidth)
-    {
+    static void DrawTeeArrow(Graphics g, Brush brush, ref P2 start, ref P2 end, double lineWidth) {
       double lw = lineWidth == -1 ? 1 : lineWidth;
-      using (var p = new Pen(brush, (float)lw))
-      {
+      using (var p = new Pen(brush, (float)lw)) {
         g.DrawLine(p, PointF(start), PointF(end));
         P2 dir = end - start;
         P2 h = dir;
@@ -949,11 +910,9 @@ namespace Microsoft.Msagl.GraphViewerGdi
       }
     }
 
-    internal static void DrawDiamondArrow(Graphics g, Brush brush, ref P2 start, ref P2 end, double lineWidth)
-    {
+    internal static void DrawDiamondArrow(Graphics g, Brush brush, ref P2 start, ref P2 end, double lineWidth) {
       double lw = lineWidth == -1 ? 1 : lineWidth;
-      using (var p = new Pen(brush, (float)lw))
-      {
+      using (var p = new Pen(brush, (float)lw)) {
         P2 dir = end - start;
         P2 h = dir;
         dir /= dir.Length;
@@ -968,11 +927,9 @@ namespace Microsoft.Msagl.GraphViewerGdi
       }
     }
 
-    internal static void DrawODiamondArrow(Graphics g, Brush brush, ref P2 start, ref P2 end, double lineWidth)
-    {
+    internal static void DrawODiamondArrow(Graphics g, Brush brush, ref P2 start, ref P2 end, double lineWidth) {
       double lw = lineWidth == -1 ? 1 : lineWidth;
-      using (var p = new Pen(brush, (float)lw))
-      {
+      using (var p = new Pen(brush, (float)lw)) {
         P2 dir = end - start;
         P2 h = dir;
         dir /= dir.Length;
@@ -988,11 +945,9 @@ namespace Microsoft.Msagl.GraphViewerGdi
     }
 
     internal static void DrawGeneralizationArrow(Graphics g, Brush brush, ref P2 start, ref P2 end,
-                                                 double lineWidth)
-    {
+                                                 double lineWidth) {
       double lw = lineWidth == -1 ? 1 : lineWidth;
-      using (var p = new Pen(brush, (float)lw))
-      {
+      using (var p = new Pen(brush, (float)lw)) {
         P2 dir = end - start;
         P2 h = dir;
         dir /= dir.Length;
@@ -1008,23 +963,19 @@ namespace Microsoft.Msagl.GraphViewerGdi
       }
     }
 
-    internal static void DrawLine(Graphics g, Pen pen, P2 start, P2 end)
-    {
+    internal static void DrawLine(Graphics g, Pen pen, P2 start, P2 end) {
       g.DrawLine(pen, PointF(start), PointF(end));
     }
 
 
-    internal static void DrawBox(Graphics g, Pen pen, DNode dNode)
-    {
+    internal static void DrawBox(Graphics g, Pen pen, DNode dNode) {
       var drNode = dNode.DrawingNode;
       NodeAttr nodeAttr = drNode.Attr;
-      if (nodeAttr.XRadius == 0 || nodeAttr.YRadius == 0)
-      {
+      if (nodeAttr.XRadius == 0 || nodeAttr.YRadius == 0) {
         double x = drNode.GeometryNode.Center.X - drNode.Width / 2.0f;
         double y = drNode.GeometryNode.Center.Y - drNode.Height / 2.0f;
 
-        if (NeedToFill(dNode.FillColor))
-        {
+        if (NeedToFill(dNode.FillColor)) {
           Color fc = FillColor(nodeAttr);
           g.FillRectangle(new SolidBrush(fc), (float)x, (float)y, (float)drNode.Width,
                           (float)drNode.Height);
@@ -1032,18 +983,15 @@ namespace Microsoft.Msagl.GraphViewerGdi
 
         g.DrawRectangle(pen, (float)x, (float)y, (float)drNode.Width, (float)drNode.Height);
       }
-      else
-      {
+      else {
         var width = (float)drNode.Width;
         var height = (float)drNode.Height;
         var xRadius = (float)nodeAttr.XRadius;
         var yRadius = (float)nodeAttr.YRadius;
-        using (var path = new GraphicsPath())
-        {
+        using (var path = new GraphicsPath()) {
           FillTheGraphicsPath(drNode, width, height, ref xRadius, ref yRadius, path);
 
-          if (NeedToFill(dNode.FillColor))
-          {
+          if (NeedToFill(dNode.FillColor)) {
             g.FillPath(new SolidBrush(dNode.FillColor), path);
           }
 
@@ -1054,8 +1002,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
     }
 
     static void FillTheGraphicsPath(DrawingNode drNode, float width, float height, ref float xRadius,
-                                    ref float yRadius, GraphicsPath path)
-    {
+                                    ref float yRadius, GraphicsPath path) {
       NodeAttr nodeAttr = drNode.Attr;
       float w = (width / 2);
       if (xRadius > w)
@@ -1089,8 +1036,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
     }
 
 
-    internal static void DrawDiamond(Graphics g, Pen pen, DNode dNode)
-    {
+    internal static void DrawDiamond(Graphics g, Pen pen, DNode dNode) {
       var drNode = dNode.DrawingNode;
       NodeAttr nodeAttr = drNode.Attr;
 
@@ -1105,8 +1051,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
                               new PointF((float) cx, (float) cy - (float) h2)
                           };
 
-      if (NeedToFill(dNode.FillColor))
-      {
+      if (NeedToFill(dNode.FillColor)) {
         Color fc = FillColor(nodeAttr);
         g.FillPolygon(new SolidBrush(fc), ps);
       }
@@ -1114,8 +1059,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
       g.DrawPolygon(pen, ps);
     }
 
-    internal static void DrawEllipse(Graphics g, Pen pen, DNode dNode)
-    {
+    internal static void DrawEllipse(Graphics g, Pen pen, DNode dNode) {
       var drNode = dNode.DrawingNode;
       NodeAttr nodeAttr = drNode.Attr;
       var width = (float)drNode.Width;
@@ -1127,8 +1071,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
     }
 
     static void DrawEllipseOnPosition(DNode dNode, NodeAttr nodeAttr, Graphics g, float x, float y, float width,
-                                      float height, Pen pen)
-    {
+                                      float height, Pen pen) {
       if (NeedToFill(dNode.FillColor))
         g.FillEllipse(new SolidBrush(dNode.FillColor), x, y, width, height);
       if (nodeAttr.Shape == Shape.Point)
@@ -1170,23 +1113,19 @@ namespace Microsoft.Msagl.GraphViewerGdi
 
     //don't know what to do about the throw-catch block
     [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-    internal static void DrawLabel(Graphics g, DLabel label)
-    {
+    internal static void DrawLabel(Graphics g, DLabel label) {
       if (label == null || label.DrawingLabel.Width == 0)
         return;
 
       var rectF = GetLabelRect(label);
 
-      try
-      {
+      try {
         DrawStringInRectCenter(g, new SolidBrush(MsaglColorToDrawingColor(label.DrawingLabel.FontColor)),
                                label.Font, label.DrawingLabel.Text, rectF);
       }
-      catch
-      {
+      catch {
       }
-      if (label.MarkedForDragging)
-      {
+      if (label.MarkedForDragging) {
         var pen = new Pen(MsaglColorToDrawingColor(label.DrawingLabel.FontColor));
         pen.DashStyle = DashStyle.Dot;
         DrawLine(g, pen, label.DrawingLabel.GeometryLabel.AttachmentSegmentStart,
@@ -1194,11 +1133,9 @@ namespace Microsoft.Msagl.GraphViewerGdi
       }
     }
 
-    private static RectangleF GetLabelRect(DLabel label)
-    {
+    private static RectangleF GetLabelRect(DLabel label) {
       var subgraph = label.DrawingLabel.Owner as Subgraph;
-      if (subgraph != null)
-      {
+      if (subgraph != null) {
         var cluster = (Cluster)subgraph.GeometryNode;
         var rb = cluster.RectangularBoundary;
         var cx = rb.Rect.Left + rb.Rect.Width / 2;
@@ -1210,8 +1147,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
             (float)size.Width,
             (float)size.Height);
       }
-      else
-      {
+      else {
         var rectF = new RectangleF((float)label.DrawingLabel.Left, (float)label.DrawingLabel.Bottom,
             (float)label.DrawingLabel.Size.Width,
             (float)label.DrawingLabel.Size.Height);
@@ -1220,25 +1156,20 @@ namespace Microsoft.Msagl.GraphViewerGdi
     }
 
     static void DrawStringInRectCenter(Graphics g, Brush brush, Font f, string s, RectangleF r
-        /*, double rectLineWidth*/)
-    {
+        /*, double rectLineWidth*/) {
       if (String.IsNullOrEmpty(s))
         return;
 
-      using (Matrix m = g.Transform)
-      {
-        using (Matrix saveM = m.Clone())
-        {
+      using (Matrix m = g.Transform) {
+        using (Matrix saveM = m.Clone()) {
           //rotate the label around its center
           float c = (r.Bottom + r.Top) / 2;
 
-          using (var m2 = new Matrix(1, 0, 0, -1, 0, 2 * c))
-          {
+          using (var m2 = new Matrix(1, 0, 0, -1, 0, 2 * c)) {
             m.Multiply(m2);
           }
           g.Transform = m;
-          using (StringFormat stringFormat = StringFormat.GenericTypographic)
-          {
+          using (StringFormat stringFormat = StringFormat.GenericTypographic) {
             g.DrawString(s, f, brush, r.Left, r.Top, stringFormat);
           }
           g.Transform = saveM;
@@ -1246,38 +1177,31 @@ namespace Microsoft.Msagl.GraphViewerGdi
       }
     }
 
-    internal static PointF PointF(P2 p)
-    {
+    internal static PointF PointF(P2 p) {
       return new PointF((float)p.X, (float)p.Y);
     }
 
 
-    internal static void DrawFromMsaglCurve(Graphics g, Pen pen, DNode dNode)
-    {
+    internal static void DrawFromMsaglCurve(Graphics g, Pen pen, DNode dNode) {
       var drNode = dNode.DrawingNode;
       NodeAttr attr = dNode.DrawingNode.Attr;
       var iCurve = drNode.GeometryNode.BoundaryCurve;
       var c = iCurve as Curve;
-      if (c != null)
-      {
+      if (c != null) {
         DrawCurve(dNode, c, g, pen);
       }
-      else
-      {
+      else {
         var ellipse = iCurve as Ellipse;
-        if (ellipse != null)
-        {
+        if (ellipse != null) {
           double w = ellipse.AxisA.X;
           double h = ellipse.AxisB.Y;
           DrawEllipseOnPosition(dNode, dNode.DrawingNode.Attr, g, (float)(ellipse.Center.X - w),
                                 (float)(ellipse.Center.Y - h),
                                 (float)w * 2, (float)h * 2, pen);
         }
-        else
-        {
+        else {
           var poly = iCurve as Polyline;
-          if (poly != null)
-          {
+          if (poly != null) {
             var path = new GraphicsPath();
             path.AddLines(poly.Select(p => new Point((int)p.X, (int)p.Y)).ToArray());
             path.CloseAllFigures();
@@ -1285,8 +1209,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
               g.FillPath(new SolidBrush(dNode.FillColor), path);
             g.DrawPath(pen, path);
           }
-          else
-          {
+          else {
             var roundedRect = iCurve as RoundedRect;
             if (roundedRect != null)
               DrawCurve(dNode, roundedRect.Curve, g, pen);
@@ -1296,8 +1219,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
       }
     }
 
-    static void DrawCurve(DNode dNode, Curve c, Graphics g, Pen pen)
-    {
+    static void DrawCurve(DNode dNode, Curve c, Graphics g, Pen pen) {
       var path = new GraphicsPath();
       foreach (ICurve seg in c.Segments)
         AddSegToPath(seg, ref path);
@@ -1308,21 +1230,17 @@ namespace Microsoft.Msagl.GraphViewerGdi
     }
 
 
-    static void AddSegToPath(ICurve seg, ref GraphicsPath path)
-    {
+    static void AddSegToPath(ICurve seg, ref GraphicsPath path) {
       var line = seg as LineSegment;
       if (line != null)
         path.AddLine(PointF(line.Start), PointF(line.End));
-      else
-      {
+      else {
         var cb = seg as CubicBezierSegment;
         if (cb != null)
           path.AddBezier(PointF(cb.B(0)), PointF(cb.B(1)), PointF(cb.B(2)), PointF(cb.B(3)));
-        else
-        {
+        else {
           var ellipse = seg as Ellipse;
-          if (ellipse != null)
-          {
+          if (ellipse != null) {
             //we assume that ellipes are going counterclockwise
             double cx = ellipse.Center.X;
             double cy = ellipse.Center.Y;
@@ -1349,8 +1267,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
     /// <param name="startAngle"></param>
     /// <param name="sweepAngle"></param>
     /// <param name="box"></param>
-    public static void GetGdiArcDimensions(Ellipse ellipse, out float startAngle, out double sweepAngle, out BBox box)
-    {
+    public static void GetGdiArcDimensions(Ellipse ellipse, out float startAngle, out double sweepAngle, out BBox box) {
       box = ellipse.FullBox();
       startAngle = EllipseStandardAngle(ellipse, ellipse.ParStart);
       bool orientedCcw = ellipse.OrientedCounterclockwise();
@@ -1363,8 +1280,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
         sweepAngle = -sweepAngle;
     }
 
-    static float EllipseStandardAngle(Ellipse ellipse, double angle)
-    {
+    static float EllipseStandardAngle(Ellipse ellipse, double angle) {
       P2 p = Math.Cos(angle) * ellipse.AxisA + Math.Sin(angle) * ellipse.AxisB;
       return (float)(Math.Atan2(p.Y, p.X) * ToDegreesMultiplier);
     }
@@ -1373,23 +1289,18 @@ namespace Microsoft.Msagl.GraphViewerGdi
     ///</summary>
     ///<param name="sender"></param>
     ///<param name="e"></param>
-    public static void GviewerMouseMove(object sender, MouseEventArgs e)
-    {
+    public static void GviewerMouseMove(object sender, MouseEventArgs e) {
       var gviewer = sender as GViewer;
-      if (gviewer != null)
-      {
+      if (gviewer != null) {
         float viewerX;
         float viewerY;
         gviewer.ScreenToSource(e.Location.X, e.Location.Y, out viewerX, out viewerY);
         var str = String.Format(String.Format("{0},{1}", viewerX, viewerY));
         var form = gviewer.ParentForm;
-        foreach (var ch in form.Controls)
-        {
+        foreach (var ch in form.Controls) {
           var sb = ch as StatusStrip;
-          if (sb != null)
-          {
-            foreach (var item in sb.Items)
-            {
+          if (sb != null) {
+            foreach (var item in sb.Items) {
               var label = item as ToolStripStatusLabel;
               if (label == null) continue;
               label.Text = str;

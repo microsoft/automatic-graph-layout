@@ -5,39 +5,39 @@ using System.IO;
 namespace Microsoft.Msagl.Layout.Layered {
 #if REPORTING
 
+  /// <summary>
+  /// Log class
+  /// </summary>
+  public sealed class SugiyamaLayoutLogger : IDisposable {
+    static StreamWriter sw;
+    internal SugiyamaLayoutLogger() { }
+
+    #region IDisposable Members
+
     /// <summary>
-    /// Log class
+    /// disposes the object
     /// </summary>
-    public sealed class SugiyamaLayoutLogger : IDisposable {
-        static StreamWriter sw;
-        internal SugiyamaLayoutLogger() {}
-
-        #region IDisposable Members
-
-        /// <summary>
-        /// disposes the object
-        /// </summary>
-        public void Dispose() {
-            sw.Close();
-            sw.Dispose();
-            sw = null;
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion
-
-        /// <summary>
-        /// writes a message to the log file
-        /// </summary>
-        /// <param name="message"></param>
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        public void Write(string message) {
-            if (sw == null) sw = new StreamWriter("msaglLogFile");
-            sw.Write(message);
-            sw.Flush();
-
-            Console.WriteLine(message);
-        }
+    public void Dispose() {
+      sw.Close();
+      sw.Dispose();
+      sw = null;
+      GC.SuppressFinalize(this);
     }
+
+    #endregion
+
+    /// <summary>
+    /// writes a message to the log file
+    /// </summary>
+    /// <param name="message"></param>
+    [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+    public void Write(string message) {
+      if (sw == null) sw = new StreamWriter("msaglLogFile");
+      sw.Write(message);
+      sw.Flush();
+
+      Console.WriteLine(message);
+    }
+  }
 #endif
 }

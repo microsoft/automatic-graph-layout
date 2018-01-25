@@ -30,78 +30,79 @@ using System;
 using Microsoft.Msagl.Core.Geometry;
 
 namespace Microsoft.Msagl.GraphViewerGdi {
+  /// <summary>
+  /// A base class for objects that a drawn by GViewer
+  /// </summary>
+  public abstract class DObject : ObjectWithBox, Drawing.IViewerObject {
     /// <summary>
-    /// A base class for objects that a drawn by GViewer
+    /// constructor
     /// </summary>
-    public abstract class DObject:ObjectWithBox, Drawing.IViewerObject {
-/// <summary>
-/// constructor
-/// </summary>
-/// <param name="viewer"></param>
-        protected DObject(GViewer viewer) {
-            Viewer = viewer;
-        }
-    /// <summary>
-/// get the underlying drawing object
-/// </summary>
-        public abstract Drawing.DrawingObject DrawingObject {
-            get;
-        }
-
-        internal float[] DashPatternArray { get; set; }
-
-        internal abstract float DashSize();
-
-        internal BBNode BbNode { get; set; }
-
-        override internal Rectangle Box { get { return BbNode.Box; } }
-
-        bool markedForDragging;
-        /// <summary>
-        /// Implements a property of an interface IEditViewer
-        /// </summary>
-        public bool MarkedForDragging {
-            get {
-                return markedForDragging;
-            }
-            set {
-                markedForDragging = value;
-                if (value) {
-                    if (MarkedForDraggingEvent != null)
-                        MarkedForDraggingEvent(this, null);
-                } else {
-                    if (UnmarkedForDraggingEvent != null)
-                        UnmarkedForDraggingEvent(this, null);
-                }
-            }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        protected internal abstract void Invalidate();
-
-        /// <summary>
-        /// this is the bounding box with which the object was rendered the last time
-        /// </summary>
-        public Rectangle RenderedBox { get; set; }
-
-        /// <summary>
-        /// raised when the entity is marked for dragging
-        /// </summary>
-        public event EventHandler MarkedForDraggingEvent;
-
-        /// <summary>
-        /// raised when the entity is unmarked for dragging
-        /// </summary>
-        public event EventHandler UnmarkedForDraggingEvent;
-
-        /// <summary>
-        /// the current viewer holding the object
-        /// </summary>
-        public GViewer Viewer { get; set; }
-        /// <summary>
-        /// calculates the rendered rectangle and RenderedBox to it
-        /// </summary>
-        public abstract void UpdateRenderedBox();
+    /// <param name="viewer"></param>
+    protected DObject(GViewer viewer) {
+      Viewer = viewer;
     }
+    /// <summary>
+    /// get the underlying drawing object
+    /// </summary>
+    public abstract Drawing.DrawingObject DrawingObject {
+      get;
+    }
+
+    internal float[] DashPatternArray { get; set; }
+
+    internal abstract float DashSize();
+
+    internal BBNode BbNode { get; set; }
+
+    override internal Rectangle Box { get { return BbNode.Box; } }
+
+    bool markedForDragging;
+    /// <summary>
+    /// Implements a property of an interface IEditViewer
+    /// </summary>
+    public bool MarkedForDragging {
+      get {
+        return markedForDragging;
+      }
+      set {
+        markedForDragging = value;
+        if (value) {
+          if (MarkedForDraggingEvent != null)
+            MarkedForDraggingEvent(this, null);
+        }
+        else {
+          if (UnmarkedForDraggingEvent != null)
+            UnmarkedForDraggingEvent(this, null);
+        }
+      }
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    protected internal abstract void Invalidate();
+
+    /// <summary>
+    /// this is the bounding box with which the object was rendered the last time
+    /// </summary>
+    public Rectangle RenderedBox { get; set; }
+
+    /// <summary>
+    /// raised when the entity is marked for dragging
+    /// </summary>
+    public event EventHandler MarkedForDraggingEvent;
+
+    /// <summary>
+    /// raised when the entity is unmarked for dragging
+    /// </summary>
+    public event EventHandler UnmarkedForDraggingEvent;
+
+    /// <summary>
+    /// the current viewer holding the object
+    /// </summary>
+    public GViewer Viewer { get; set; }
+    /// <summary>
+    /// calculates the rendered rectangle and RenderedBox to it
+    /// </summary>
+    public abstract void UpdateRenderedBox();
+  }
 }
