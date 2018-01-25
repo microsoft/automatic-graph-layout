@@ -54,7 +54,7 @@ namespace Microsoft.Msagl.Routing {
         
 
         readonly GeometryGraph geometryGraph;
-        double multiEdgesSeparation=5;
+        double multiEdgesSeparation= 20;
         bool routeMultiEdgesAsBundles = true;
         internal bool UseEdgeLengthMultiplier;
 
