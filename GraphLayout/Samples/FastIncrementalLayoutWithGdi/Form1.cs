@@ -98,6 +98,11 @@ namespace FastIncrementalLayoutWithGdi {
             return geometryGraph.Nodes.First(n => ((DrawingNode) n.UserData).Id == id.ToString());
         }
 
+        static void SetupDisplayNodeIds(GeometryGraph geometryGraph) {
+            foreach (var node in geometryGraph.Nodes)
+                node.DebugId = ((DrawingNode)node.UserData).Id;
+        }
+
         static void FillClustersAndSettings(FastIncrementalLayoutSettings settings, GeometryGraph geometryGraph) {
             settings.AvoidOverlaps = true;
             // settings.RectangularClusters = true;
@@ -131,8 +136,9 @@ namespace FastIncrementalLayoutWithGdi {
             foreach (var cl in geometryGraph.RootCluster.AllClustersDepthFirst()) {
                 if(cl.BoundaryCurve==null)
                     cl.BoundaryCurve=cl.BoundingBox.Perimeter();
-                
             }
+
+            SetupDisplayNodeIds(geometryGraph);
         }
 
         static Graph CtreateDrawingGraph(out FastIncrementalLayoutSettings settings) {
