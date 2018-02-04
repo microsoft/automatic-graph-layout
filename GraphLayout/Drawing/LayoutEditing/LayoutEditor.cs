@@ -631,8 +631,9 @@ namespace Microsoft.Msagl.Drawing
       }
     }
 
-    void SelectObjectForDragging(IViewerObject obj)
+    public void SelectObjectForDragging(IViewerObject obj)
     {
+      if (obj == null) return;
       if (obj.MarkedForDragging == false)
       {
         obj.MarkedForDragging = true;
@@ -641,8 +642,9 @@ namespace Microsoft.Msagl.Drawing
       }
     }
 
-    void UnselectObjectForDragging(IViewerObject obj)
+    public void UnselectObjectForDragging(IViewerObject obj)
     {
+      if (obj == null) return;
       UnselectWithoutRemovingFromDragGroup(obj);
       dragGroup.Remove(obj);
     }
