@@ -49,14 +49,25 @@ namespace Microsoft.Msagl.Drawing
     /// </summary>
     DelegateToOverrideNodeRendering drawNodeDelegate;
     /// <summary>
+    /// A delegate to call after node drawing has completed
+    /// </summary>
+    DelegateToOverrideNodeRendering postDrawNodeDelegate;
+    /// <summary>
     /// If this delegate is not null and returns true then no node rendering is done
     /// </summary>
     public DelegateToOverrideNodeRendering DrawNodeDelegate
     {
+      get { return postDrawNodeDelegate; }
+      set { postDrawNodeDelegate = value; }
+    }
+    /// <summary>
+    /// Will be called after drawing completed
+    /// </summary>
+    public DelegateToOverrideNodeRendering PostDrawNodeDelegate
+    {
       get { return drawNodeDelegate; }
       set { drawNodeDelegate = value; }
     }
-
     DelegateToSetNodeBoundary nodeBoundaryDelegate;
     /// <summary>
     /// By default a node boundary is calculated from Attr.Shape and the label size. 

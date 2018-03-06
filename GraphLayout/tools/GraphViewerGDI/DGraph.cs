@@ -476,7 +476,8 @@ namespace Microsoft.Msagl.GraphViewerGdi{
                         break;
                 }
             }
-            Draw.DrawLabel(g, dnode.Label);            
+            Draw.DrawLabel(g, dnode.Label);
+            node.PostDrawNodeDelegate?.Invoke(node, g);
         }
 
         
