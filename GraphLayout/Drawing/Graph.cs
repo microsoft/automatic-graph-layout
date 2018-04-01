@@ -338,7 +338,7 @@ namespace Microsoft.Msagl.Drawing
       foreach (Edge e in delendi)
         RemoveEdge(e);
       NodeMap.Remove(node.Id);
-      GeometryGraph.Nodes.Remove(node.GeometryObject as Core.Layout.Node);
+      if(node.GeometryObject != null) GeometryGraph.Nodes.Remove(node.GeometryObject as Core.Layout.Node);
     }
 
     /// <summary>
