@@ -132,10 +132,11 @@ namespace Microsoft.Msagl.Drawing {
     }
 
 
-    /// <summary>
-    /// http://www.graphviz.org/cvs/doc/info/attrs.html#k:arrowType
-    /// </summary>
-    public enum ArrowStyle {
+
+	/// <summary>
+	/// http://www.graphviz.org/cvs/doc/info/attrs.html#k:arrowType
+	/// </summary>
+	public enum ArrowStyle {
         ///<summary>
         ///The default.
         ///</summary>
