@@ -397,6 +397,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
         bool markedForDragging;
 
+
         /// <summary>
         /// Implements a property of an interface IEditViewer
         /// </summary>

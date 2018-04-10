@@ -405,14 +405,17 @@ namespace Microsoft.Msagl.Drawing
         userData = ReadUserData();
       var nodeAttr = new NodeAttr();
       Node node = null;
-      try
+			string nodeTypeName = "";
+			Type nodeType;
+
+			try
       {
-        string nodeTypeName = ReadNodeType();
+        nodeTypeName = ReadNodeType();
         ReadNodeAttr(nodeAttr);
-        Type nodeType = GetTypeByName(nodeTypeName);
+        nodeType = GetTypeByName(nodeTypeName);
         node = (Node)Activator.CreateInstance(nodeType, new object[] { nodeAttr.Id });
       }
-      catch
+      catch (Exception Ex)
       {
         // fall back to Node
         ReadNodeAttr(nodeAttr);
@@ -599,7 +602,7 @@ namespace Microsoft.Msagl.Drawing
       {
         try
         {
-          foreach (Type t in a.GetTypes().Where(t => t.IsClass && !t.IsAbstract && (t.IsSubclassOf(nodeType) || t.IsSubclassOf(edgeType))))
+          foreach (Type t in a.GetTypes().Where(t => t.IsClass && !t.IsAbstract && (t == nodeType || t.IsSubclassOf(nodeType) || t == edgeType ||  t.IsSubclassOf(edgeType))))
           {
             _typeCache.Add(t.FullName, t);
           }

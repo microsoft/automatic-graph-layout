@@ -130,7 +130,7 @@ namespace Microsoft.Msagl.Drawing
     /// </summary>
     public MouseAndKeysAnalyzer ToggleEntityPredicate { get; set; }
 
-    bool Dragging { get; set; }
+    public bool Dragging { get; private set; }
 
     Point MouseDownScreenPoint { get; set; }
 
@@ -916,8 +916,9 @@ namespace Microsoft.Msagl.Drawing
           if (MouseDownPointAndMouseUpPointsAreFarEnoughOnScreen(e))
           {
             Dragging = true;
-            //first time we are in Dragging mode
-            if (PolylineVertex != null)
+						viewer.OnDragStart(dragGroup);
+						//first time we are in Dragging mode
+						if (PolylineVertex != null)
               geomGraphEditor.PrepareForEdgeCornerDragging(
                   SelectedEdge.DrawingObject.GeometryObject as Core.Layout.Edge, PolylineVertex);
             else if (ActiveDraggedObject != null)

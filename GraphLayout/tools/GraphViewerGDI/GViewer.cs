@@ -724,22 +724,38 @@ namespace Microsoft.Msagl.GraphViewerGdi
     }
 
     public delegate void DragEndEventHandler(IEnumerable<IViewerObject> draggedObjects);
-    /// <summary>
+   
+		/// <summary>
     /// Event is fired when node drag operation finished
     /// </summary>
     public event DragEndEventHandler DragEnded;
 
-    /// <summary>
-    /// A method of IEditViewer
-    /// </summary>
-    /// <param name="changedObjects"></param>
-    public void OnDragEnd(IEnumerable<IViewerObject> changedObjects)
+		/// <summary>
+		/// Event is fired when node drag operation started
+		/// </summary>
+		public event DragEndEventHandler DragStarted;
+
+		/// <summary>
+		/// A method of IEditViewer
+		/// </summary>
+		/// <param name="changedObjects"></param>
+		public void OnDragEnd(IEnumerable<IViewerObject> changedObjects)
     {
       DGraph.UpdateBBoxHierarchy(changedObjects);
-      DragEnded?.Invoke(changedObjects);
+			DragStarted?.Invoke(changedObjects);
     }
 
-    void IViewer.Invalidate()
+		/// <summary>
+		/// A method of IEditViewer
+		/// </summary>
+		/// <param name="changedObjects"></param>
+		public void OnDragStart(IEnumerable<IViewerObject> changedObjects)
+		{
+			DGraph.UpdateBBoxHierarchy(changedObjects);
+			DragEnded?.Invoke(changedObjects);
+		}
+
+		void IViewer.Invalidate()
     {
       panel.Invalidate();
     }
