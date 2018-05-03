@@ -286,7 +286,7 @@ namespace Microsoft.Msagl.Drawing
         Type edgeTpye = GetTypeByName(edgeTypeName);
         Node srcNode = graph.FindNode(srcId);
         Node targetNode = graph.FindNode(targetId);
-        edge = (Edge)Activator.CreateInstance(edgeTpye, new object[] { srcNode, targetNode });
+        edge = (Edge)Activator.CreateInstance(edgeTpye, new object[] { srcNode, targetNode});
         graph.AddPrecalculatedEdge(edge);
       }
       catch

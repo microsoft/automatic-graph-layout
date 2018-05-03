@@ -840,7 +840,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
 			{
 				if (Enum.TryParse<HatchStyle>(nodeAttr.FillStyle, out HatchStyle hs))
 				{
-					using (Brush b = new HatchBrush(hs, dNode.FillColor)) g.FillEllipse(b, (float)x, (float)y, (float)drNode.Width, (float)drNode.Height);
+					using (Brush b = new HatchBrush(hs, dNode.Color, dNode.FillColor)) g.FillEllipse(b, (float)x, (float)y, (float)drNode.Width, (float)drNode.Height);
 				}
 				else
 				{
@@ -1035,7 +1035,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
 
 					if (Enum.TryParse<HatchStyle>(nodeAttr.FillStyle, out HatchStyle hs))
 					{
-						using (Brush b = new HatchBrush(hs, fc)) g.FillRectangle(b, (float)x, (float)y, (float)drNode.Width, (float)drNode.Height);
+						using (Brush b = new HatchBrush(hs, dNode.Color, fc)) g.FillRectangle(b, (float)x, (float)y, (float)drNode.Width, (float)drNode.Height);
 					}
 					else
 					{
@@ -1058,7 +1058,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
 					{
 						if (!string.IsNullOrEmpty(nodeAttr.FillStyle) && Enum.TryParse<HatchStyle>(nodeAttr.FillStyle, out HatchStyle hs))
 						{
-							using (Brush b = new HatchBrush(hs, dNode.FillColor)) g.FillPath(b, path);
+							using (Brush b = new HatchBrush(hs, dNode.Color, dNode.FillColor)) g.FillPath(b, path);
 						}
 						else
 						{
@@ -1127,7 +1127,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
 				Color fc = FillColor(nodeAttr);
 				if (!string.IsNullOrEmpty(nodeAttr.FillStyle) && Enum.TryParse<HatchStyle>(nodeAttr.FillStyle, out HatchStyle hs))
 				{
-					using (Brush b = new HatchBrush(hs, fc)) g.FillPolygon(b, ps);
+					using (Brush b = new HatchBrush(hs, dNode.Color, fc)) g.FillPolygon(b, ps);
 				}
 				else
 				{
@@ -1156,7 +1156,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
 			{
 				if (Enum.TryParse<HatchStyle>(nodeAttr.FillStyle, out HatchStyle hs))
 				{
-					using (Brush b = new HatchBrush(hs, dNode.FillColor)) g.FillEllipse(b, x, y, width, height);
+					using (Brush b = new HatchBrush(hs, dNode.Color, dNode.FillColor)) g.FillEllipse(b, x, y, width, height);
 				}
 				else
 				{
@@ -1319,7 +1319,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
 						{
 							if (!string.IsNullOrEmpty(attr.FillStyle) && Enum.TryParse<HatchStyle>(attr.FillStyle, out HatchStyle hs))
 							{
-								using (Brush b = new HatchBrush(hs, dNode.FillColor)) g.FillPath(b, path);
+								using (Brush b = new HatchBrush(hs, dNode.Color, dNode.FillColor)) g.FillPath(b, path);
 							}
 							else
 							{
@@ -1348,7 +1348,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
 			{
 				if (!string.IsNullOrEmpty(dNode.Node.Attr.FillStyle) && Enum.TryParse<HatchStyle>(dNode.Node.Attr.FillStyle, out HatchStyle hs))
 				{
-					using (Brush b = new HatchBrush(hs, dNode.FillColor)) g.FillPath(b, path);
+					using (Brush b = new HatchBrush(hs, dNode.Color, dNode.FillColor)) g.FillPath(b, path);
 				}
 				else
 				{
