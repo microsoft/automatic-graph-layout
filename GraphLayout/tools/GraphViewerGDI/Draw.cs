@@ -1206,8 +1206,8 @@ namespace Microsoft.Msagl.GraphViewerGdi
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		internal static void DrawLabel(Graphics g, DLabel label)
 		{
-			if (label == null || label.DrawingLabel.Width == 0)
-				return;
+			if (label == null || label.DrawingLabel.Width == 0)			return;
+			if (!label.DrawingLabel?.IsVisible ?? true) return;
 
 			var rectF = GetLabelRect(label);
 
