@@ -1018,7 +1018,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
       Invalidate();
 
       if (EdgeRemoved != null)
-        EdgeRemoved(de.DrawingEdge, EventArgs.Empty);
+        EdgeRemoved(de, EventArgs.Empty);
     }
 
     /// <summary>
