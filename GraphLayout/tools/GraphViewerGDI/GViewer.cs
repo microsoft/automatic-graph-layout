@@ -742,7 +742,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
 		public void OnDragEnd(IEnumerable<IViewerObject> changedObjects)
     {
       DGraph.UpdateBBoxHierarchy(changedObjects);
-			DragStarted?.Invoke(changedObjects);
+			DragEnded?.Invoke(changedObjects);
     }
 
 		/// <summary>
@@ -752,7 +752,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
 		public void OnDragStart(IEnumerable<IViewerObject> changedObjects)
 		{
 			DGraph.UpdateBBoxHierarchy(changedObjects);
-			DragEnded?.Invoke(changedObjects);
+			DragStarted?.Invoke(changedObjects);
 		}
 
 		void IViewer.Invalidate()
