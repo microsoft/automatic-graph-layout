@@ -5,8 +5,8 @@ using System.Diagnostics;
 using System.Linq;
 #if !NETCORE
 using System.Runtime.Remoting.Messaging;
-using System.Windows.Media;
 #endif
+using SolidColorBrush = System.Drawing.Brush;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;

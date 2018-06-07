@@ -32,8 +32,9 @@ using Microsoft.Msagl.Miscellaneous.RegularGrid;
 using Microsoft.Msagl.Miscellaneous.Routing;
 using Microsoft.Msagl.Routing.Visibility;
 #if !NETCORE
-using Brushes = System.Windows.Media.Brushes;
+using Brushes = System.Drawing.Brushes;
 #endif
+using SolidColorBrush = System.Drawing.Brush;
 using Edge = Microsoft.Msagl.Core.Layout.Edge;
 using LineSegment = Microsoft.Msagl.Core.Geometry.Curves.LineSegment;
 using Point = Microsoft.Msagl.Core.Geometry.Point;

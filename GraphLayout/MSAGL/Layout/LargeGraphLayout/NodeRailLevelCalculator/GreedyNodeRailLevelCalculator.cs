@@ -295,7 +295,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout.NodeRailLevelCalculator {
             }
             str += "</group>";
 #if !SILVERLIGHT && !SHARPKIT && !NETCORE
-            System.Windows.Clipboard.SetText(str);
+            System.Windows.Forms.Clipboard.SetText(str);
 #endif
         }
 
