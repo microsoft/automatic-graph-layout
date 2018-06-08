@@ -62,9 +62,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 
         public int ZoomLevel;
-#if !NETCORE
-        public List<SolidColorBrush> Color;
-#endif
+        public List<object> Color;
 #if DEBUG
         Rail() {
             railCount++;
