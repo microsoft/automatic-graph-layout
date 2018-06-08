@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-#if !NETCORE
-using System.Windows.Media;
-#endif
+using SolidColorBrush = System.Drawing.Brush;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
@@ -64,9 +62,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 
         public int ZoomLevel;
-#if !NETCORE
-        public List<SolidColorBrush> Color;
-#endif
+        public List<object> Color;
 #if DEBUG
         Rail() {
             railCount++;

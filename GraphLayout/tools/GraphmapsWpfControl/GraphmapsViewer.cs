@@ -351,7 +351,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 var nodeInfo = lgSettings.GeometryNodesToLgNodeInfos[vnode.Node.GeometryNode];
 
                 var c = nodeInfo.Color;
-                List<SolidColorBrush> ColorSet = new List<SolidColorBrush>();
+                List<object> ColorSet = new List<object>();
                 addColorsToSet(ColorSet);
 
                 foreach (LgNodeInfo vinfo in SelectedNodeSet)
@@ -367,7 +367,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
 
 
-                SelectColoredEdgesIncidentTo(vnode,c);
+                SelectColoredEdgesIncidentTo(vnode, (SolidColorBrush)c);
                 SelectUnselectNode(vnode.LgNodeInfo, !IsSelected(vnode));
 
 
@@ -379,7 +379,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             vnode.Invalidate();
         }
 
-        private static void addColorsToSet(List<SolidColorBrush> ColorSet)
+        private static void addColorsToSet(List<object> ColorSet)
         {
             ColorSet.Add(Brushes.Red);
             ColorSet.Add(Brushes.Blue);
@@ -401,17 +401,17 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             //ColorSet.Add(Brushes.CornflowerBlue);
         }
 
-        void SelectColoredEdgesIncidentTo(LgNodeInfo nodeInfo, SolidColorBrush c)
+        void SelectColoredEdgesIncidentTo(LgNodeInfo nodeInfo, object c)
         {
             var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
             if (lgSettings == null) return;
 
             //var nodeInfo = lgSettings.GeometryNodesToLgNodeInfos[vnode.Node.GeometryNode];
-            lgSettings.Interactor.SelectAllColoredEdgesIncidentTo(nodeInfo, c);
+            lgSettings.Interactor.SelectAllColoredEdgesIncidentTo(nodeInfo, (SolidColorBrush)c);
             //lgSettings.Interactor.SelectVisibleEdgesIncidentTo(nodeInfo, _layer);
         }
 
-        void SelectColoredEdgesIncidentTo(GraphmapsNode vnode, SolidColorBrush c)
+        void SelectColoredEdgesIncidentTo(GraphmapsNode vnode, object c)
         {
             var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
             if (lgSettings == null) return;
@@ -1663,7 +1663,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 var nodeInfo = lgSettings.GeometryNodesToLgNodeInfos[vnode.Node.GeometryNode];
 
                 var c = nodeInfo.Color;
-                List<SolidColorBrush> ColorSet = new List<SolidColorBrush>();
+                List<object> ColorSet = new List<object>();
                 addColorsToSet(ColorSet);
 
                 foreach (LgNodeInfo vinfo in SelectedNodeSet)
@@ -1742,7 +1742,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
             //start: changing tooltip
             String tooltiptext = "";
-            List<SolidColorBrush> ColorSet = new List<SolidColorBrush>();
+            List<object> ColorSet = new List<object>();
             addColorsToSet(ColorSet);
             List<GraphmapsNode> coloredNodeList = new List<GraphmapsNode>();
             //end: changing tooltip
@@ -1819,7 +1819,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                         {
                             if(!tooltiptext.Contains(w.Node.LabelText))
                                 tooltiptext = tooltiptext+ "\n" + w.Node.LabelText;                                                        
-                            incidentColorSet.Add(w.LgNodeInfo.Color);
+                            incidentColorSet.Add((SolidColorBrush)w.LgNodeInfo.Color);
                         }
                     }
                     foreach (var edge in w.Node.GeometryNode.InEdges)
@@ -1828,7 +1828,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                         {
                             if (!tooltiptext.Contains(w.Node.LabelText))
                                 tooltiptext = tooltiptext + "\n" + w.Node.LabelText;
-                            incidentColorSet.Add(w.LgNodeInfo.Color);
+                            incidentColorSet.Add((SolidColorBrush)w.LgNodeInfo.Color);
                         }
                     }   
                 }

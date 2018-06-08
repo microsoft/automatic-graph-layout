@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using SolidColorBrush = System.Drawing.Brush;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
@@ -62,9 +63,7 @@ namespace Microsoft.Msagl.Core.Layout {
         public double LabelWidthToHeightRatio = 1.0;
 
         public LabelPlacement LabelPosition = LabelPlacement.Top;
-#if !NETCORE
-        public System.Windows.Media.SolidColorBrush Color;
-#endif
+        public object Color;
 
         public enum LabelPlacement
         {
