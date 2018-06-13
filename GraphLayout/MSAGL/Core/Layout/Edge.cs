@@ -2,7 +2,6 @@ using System;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using System.Collections.Generic;
-using SolidColorBrush = System.Drawing.Brush;
 
 namespace Microsoft.Msagl.Core.Layout {
     /// <summary>
