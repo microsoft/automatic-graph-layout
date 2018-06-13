@@ -419,7 +419,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 else
                 {
                     int Ax = 0, Rx = 0, Gx = 0, Bx = 0;
-                    foreach (var c in rail.Color)
+                    foreach (SolidColorBrush c in rail.Color)
                     {
                         Ax += c.Color.A;
                         Rx += c.Color.R;

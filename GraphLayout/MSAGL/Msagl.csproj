@@ -168,7 +168,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -384,7 +383,7 @@
     <Compile Include="Routing\Spline\Bundling\Intersections.cs" />
     <Compile Include="Routing\Spline\Bundling\LinearMetroMapOrdering.cs" />
     <Compile Include="Routing\Spline\Bundling\MetroGraphData.cs" />
-    <Compile Include="Routing\Spline\Bundling\Metroline.cs" />
+    <Compile Include="Routing\Spline\Bundling\MetroLine.cs" />
     <Compile Include="Routing\Spline\Bundling\MetroNodeInfo.cs" />
     <Compile Include="Routing\Spline\Bundling\NodePositionsAdjuster.cs" />
     <Compile Include="Routing\Spline\Bundling\OrientedHubSegment.cs" />
