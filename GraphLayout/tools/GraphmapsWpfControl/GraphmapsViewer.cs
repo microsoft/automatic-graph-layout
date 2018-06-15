@@ -3543,7 +3543,12 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 new Point(_graphCanvas.RenderSize.Width, _graphCanvas.RenderSize.Height));
             SetTransformOnViewport(scale, nodeInfo.Center, vp);
         }
-    }
+
+		public void OnDragStart(IEnumerable<IViewerObject> changedObjects)
+		{
+			// TODO : not implemented
+		}
+	}
 
     internal enum TileType
     {

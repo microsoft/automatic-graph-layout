@@ -1849,5 +1849,10 @@ namespace Microsoft.Msagl.WpfGraphControl {
                     ve.Invalidate();
             }
         }
-    }
+
+		public void OnDragStart(IEnumerable<IViewerObject> changedObjects)
+		{
+			// TODO : not implemented
+		}
+	}
 }
