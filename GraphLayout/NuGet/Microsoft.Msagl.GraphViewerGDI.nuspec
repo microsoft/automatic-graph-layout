@@ -1,7 +1,7 @@
 ﻿<package>
   <metadata>
     <id>Microsoft.Msagl.GraphViewerGDI</id>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <authors>Microsoft</authors>
     <owners>Microsoft</owners>
     <licenseUrl>https://github.com/Microsoft/automatic-graph-layout/blob/master/LICENSE</licenseUrl>
@@ -14,13 +14,13 @@
     <language>en-US</language>
     <tags>MSAGL Graph Layout</tags>
     <dependencies>
-      <dependency id="Microsoft.Msagl.Drawing" version="1.0.2" />
+      <dependency id="Microsoft.Msagl.Drawing" version="1.1.1" />
     </dependencies>
     <frameworkAssemblies>
     </frameworkAssemblies>
   </metadata>
   <files>
-    <file src="..\tools\GraphViewerGDI\bin\Debug\Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net40" />
-    <file src="..\tools\GraphViewerGDI\bin\Debug\Microsoft.Msagl.GraphViewerGdi.xml" target="lib\net40" />
+    <file src="..\tools\GraphViewerGDI\bin\release\Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net40" />
+    <file src="..\tools\GraphViewerGDI\bin\release\Microsoft.Msagl.GraphViewerGdi.xml" target="lib\net40" />
   </files>
 </package>
