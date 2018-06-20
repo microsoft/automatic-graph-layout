@@ -1,7 +1,7 @@
 ﻿<package>
   <metadata>
     <id>Microsoft.Msagl</id>
-    <version>1.0.2</version>
+    <version>1.1.1</version>
     <authors>Microsoft</authors>
     <owners>Microsoft</owners>
     <licenseUrl>https://github.com/Microsoft/automatic-graph-layout/blob/master/LICENSE</licenseUrl>
@@ -19,7 +19,7 @@
     </frameworkAssemblies>
   </metadata>
   <files>
-    <file src="..\MSAGL\bin\debug\Microsoft.Msagl.dll" target="lib\net40" />
-    <file src="..\MSAGL\bin\debug\Microsoft.Msagl.xml" target="lib\net40" />
+    <file src="..\MSAGL\bin\release\Microsoft.Msagl.dll" target="lib\net40" />
+    <file src="..\MSAGL\bin\release\Microsoft.Msagl.xml" target="lib\net40" />
   </files>
 </package>
