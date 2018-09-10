@@ -224,6 +224,13 @@ namespace Microsoft.Msagl.Drawing
 		void RemoveNode(IViewerNode node, bool registerForUndo);
 
 		/// <summary>
+		/// copies edge text to clipboard
+		/// </summary>
+		/// <param name="edge"></param>
+		/// <param name="registerForUndo"></param>
+		void CopyEdgeText(IViewerEdge edge, bool registerForUndo);
+
+		/// <summary>
 		/// Routes the edge. The edge will not be not attached to the graph after the routing
 		/// </summary>
 		/// <returns></returns>

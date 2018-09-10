@@ -3548,6 +3548,15 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 		{
 			// TODO : not implemented
 		}
+
+		public void CopyEdgeText(IViewerEdge edge, bool registerForUndo)
+		{
+			if (edge.DrawingObject is DrawingEdge)
+			{
+				DrawingEdge de = (DrawingEdge)edge.DrawingObject;
+				Clipboard.SetText(de.LabelText);
+			}
+		}
 	}
 
     internal enum TileType
