@@ -273,7 +273,8 @@ namespace Microsoft.Msagl.Drawing
       WriteStringElement(Tokens.SourceNodeID, edge.Source);
       WriteStringElement(Tokens.TargetNodeID, edge.Target);
       WriteEdgeType(edge.GetType());
-      WriteEdgeAttr(edge.Attr);
+			WriteVisibility(edge.IsVisible);
+			WriteEdgeAttr(edge.Attr);
       WriteLabel(edge.Label);
       WriteEndElement();
     }
@@ -313,6 +314,7 @@ namespace Microsoft.Msagl.Drawing
         WriteUserData(node.UserData);
       WriteNodeType(node.GetType());
       WriteNodeAttr(node.Attr);
+			WriteVisibility(node.IsVisible);
       WriteLabel(node.Label);
       WriteEndElement();
     }
@@ -324,7 +326,14 @@ namespace Microsoft.Msagl.Drawing
       WriteEndElement();
     }
 
-    private void WriteNodeAttr(NodeAttr na)
+		private void WriteVisibility(Boolean isVisible)
+		{
+			WriteStartElement(Tokens.Visibility);
+			WriteStringElement(Tokens.VisibilityValue, isVisible.ToString());
+			WriteEndElement();
+		}
+
+		private void WriteNodeAttr(NodeAttr na)
     {
       WriteStartElement(Tokens.NodeAttribute);
       WriteBaseAttr(na);

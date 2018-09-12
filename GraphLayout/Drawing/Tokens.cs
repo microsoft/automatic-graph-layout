@@ -19,6 +19,7 @@ namespace Microsoft.Msagl.Drawing {
         graph,
         NodeType, NodeTypeName,
         EdgeType, EdgeTypeName,
+				Visibility, VisibilityValue,
         End
     }
 }

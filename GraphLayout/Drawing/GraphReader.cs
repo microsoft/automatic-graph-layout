@@ -282,7 +282,8 @@ namespace Microsoft.Msagl.Drawing
       Edge edge = null;
       try
       {
-        string edgeTypeName = ReadEdgeType();
+				// Only try reading to ensure backward compatibility with older MSAGL file formates
+				string edgeTypeName = ReadEdgeType();
         Type edgeTpye = GetTypeByName(edgeTypeName);
         Node srcNode = graph.FindNode(srcId);
         Node targetNode = graph.FindNode(targetId);
@@ -293,7 +294,15 @@ namespace Microsoft.Msagl.Drawing
       {
         edge = graph.AddEdge(srcId, targetId);
       }
-
+			try
+			{
+				// Only try reading to ensure backward compatibility with older MSAGL file formates
+				edge.IsVisible = ReadVisibility();
+			}
+			catch
+			{
+				edge.IsVisible = true;
+			}
       edge.Attr = new EdgeAttr();
       edge.UserData = userData;
       ReadEdgeAttr(edge.Attr);
@@ -410,17 +419,27 @@ namespace Microsoft.Msagl.Drawing
 
 			try
       {
+				// Only try reading to ensure backward compatibility with older MSAGL file formates
         nodeTypeName = ReadNodeType();
         ReadNodeAttr(nodeAttr);
         nodeType = GetTypeByName(nodeTypeName);
         node = (Node)Activator.CreateInstance(nodeType, new object[] { nodeAttr.Id });
       }
-      catch (Exception Ex)
+      catch
       {
         // fall back to Node
         ReadNodeAttr(nodeAttr);
         node = graph.AddNode(nodeAttr.Id);
       }
+			try
+			{
+				// Only try reading to ensure backward compatibility with older MSAGL file formates
+				node.IsVisible = ReadVisibility();
+			}
+			catch
+			{
+				node.IsVisible = true;
+			}
       graph.AddNode(node);
       node.Label = null;
       node.Attr = nodeAttr;
@@ -452,7 +471,16 @@ namespace Microsoft.Msagl.Drawing
       return t;
     }
 
-    private void ReadBaseAttr(AttributeBase baseAttr)
+		private bool ReadVisibility()
+		{
+			CheckToken(Tokens.Visibility);
+			XmlRead();
+			string v = ReadStringElement(Tokens.VisibilityValue);
+			ReadEndElement();
+			return Convert.ToBoolean(v);
+		}
+
+		private void ReadBaseAttr(AttributeBase baseAttr)
     {
       CheckToken(Tokens.BaseAttr);
       XmlRead();
