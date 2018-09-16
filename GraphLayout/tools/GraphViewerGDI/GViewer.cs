@@ -1425,7 +1425,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
 			if (bBNode != null)
 			{
 				var subgraphs = new List<Geometry>();
-				Geometry geometry = bBNode.Hit(ScreenToSource(point), GetHitSlack(), filter, subgraphs) ??
+				Geometry geometry = bBNode.Hit(ScreenToSource(point), GetHitSlack(), localFilter, subgraphs) ??
 														PickSubgraph(subgraphs, ScreenToSource(point));
 				selectedDObject = geometry == null ? null : geometry.dObject;
 				if (old == selectedDObject) return;
@@ -1436,6 +1436,13 @@ namespace Microsoft.Msagl.GraphViewerGdi
 							selectedDObject);
 					ObjectUnderMouseCursorChanged(this, changedArgs);
 				}
+			}
+
+			// localFilter is a wrapper for filter and extend/override it with checking if an object is visible
+			bool localFilter(DObject d)
+			{
+				if (d == null) return false;
+				return d.DrawingObject.IsVisible && (filter?.Invoke(d) ?? true);
 			}
 		}
 
