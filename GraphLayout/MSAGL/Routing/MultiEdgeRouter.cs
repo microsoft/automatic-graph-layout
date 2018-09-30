@@ -12,7 +12,8 @@ using Microsoft.Msagl.Core.GraphAlgorithms;
 
 namespace Microsoft.Msagl.Routing {
     internal class MultiEdgeRouter {
-        readonly List<EdgeGeometry[]> multiEdgeGeometries;
+				public BundlingStatus BundlingResult { get; private set; } = BundlingStatus.None;
+				readonly List<EdgeGeometry[]> multiEdgeGeometries;
         readonly InteractiveEdgeRouter interactiveEdgeRouter;
         readonly BundlingSettings bundlingSettings;
         readonly Func<EdgeGeometry, List<Shape>> transparentShapeSetter;
@@ -35,6 +36,7 @@ namespace Microsoft.Msagl.Routing {
                     interactiveEdgeRouter.LooseHierarchy, null, null, null);
 
                 br.Run();
+								BundlingResult = br.Status;
             }
         }
 

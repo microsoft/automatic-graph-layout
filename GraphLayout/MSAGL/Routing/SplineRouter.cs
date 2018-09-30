@@ -30,7 +30,7 @@ namespace Microsoft.Msagl.Routing {
         /// 
         bool continueOnOverlaps = true;
         public bool ContinueOnOverlaps { get { return continueOnOverlaps; } set { continueOnOverlaps = value; } }
-
+				public BundlingStatus BundlingResult { get; private set; } = BundlingStatus.None;
         Shape[] rootShapes;
         IEnumerable<EdgeGeometry> edgeGeometriesEnumeration { get { return this._edges.Select(e => e.EdgeGeometry); } }
         double coneAngle;
@@ -357,7 +357,7 @@ namespace Microsoft.Msagl.Routing {
                  new BundlingSettings { InkImportance = 0.00001, EdgeSeparation = MultiEdgesSeparation}, MakeTransparentShapesOfEdgeGeometryAndGetTheShapes);
             //giving more importance to ink might produce weird routings with huge detours, maybe 0 is the best value here
             mer.Run();
-           
+						BundlingResult = mer.BundlingResult;
         }
 
         

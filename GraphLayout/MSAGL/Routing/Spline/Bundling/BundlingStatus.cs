@@ -10,6 +10,10 @@
         Overlaps,
         ///<summary>
         ///</summary>
-        EdgeSeparationIsTooLarge
+        EdgeSeparationIsTooLarge,
+				/// <summary>
+				/// Initial status
+				/// </summary>
+				None
     }
 }
