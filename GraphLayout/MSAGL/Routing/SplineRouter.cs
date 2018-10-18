@@ -526,6 +526,7 @@ namespace Microsoft.Msagl.Routing
 																									 port => LoosePolyOfOriginalShape(portsToShapes[port]));
 
 			bundleRouter.Run();
+			BundlingResult = bundleRouter.Status;
 		}
 
 		void CreateTheMapToParentLooseShapes(Shape shape, Dictionary<ICurve, Shape> loosePolylinesToLooseParentShapeMap)

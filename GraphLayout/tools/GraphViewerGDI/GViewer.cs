@@ -958,13 +958,13 @@ namespace Microsoft.Msagl.GraphViewerGdi
 				source.DrawingNode.GeometryNode.AddSelfEdge(geomEdge);
 			}
 
+
 			DGraph.BbNode = null;
 			DGraph.BuildBBHierarchy();
 
 			Invalidate();
 
-			if (EdgeAdded != null)
-				EdgeAdded(dEdge.DrawingEdge, new EventArgs());
+			EdgeAdded?.Invoke(dEdge.DrawingEdge, new EventArgs());
 		}
 
 		/// <summary>
@@ -978,6 +978,25 @@ namespace Microsoft.Msagl.GraphViewerGdi
 				layoutEditor.RegisterNodeForRemoval(node);
 
 			RemoveNodeFromAllGraphs(node);
+
+			if (!bulkRemovingEntities)
+			{
+				BbNode = null;
+				DGraph.BbNode = null;
+				DGraph.BuildBBHierarchy();
+				Invalidate();
+			}
+
+		}
+
+		public void BeginRemoveEntities()
+		{
+			this.bulkRemovingEntities = true;
+		}
+
+		public void EndRemoveEntities()
+		{
+			this.bulkRemovingEntities = false;
 
 			BbNode = null;
 			DGraph.BbNode = null;
@@ -1010,15 +1029,16 @@ namespace Microsoft.Msagl.GraphViewerGdi
 			else
 				de.Source.RemoveSelfEdge(de);
 
+			if (!bulkRemovingEntities)
+			{
+				BbNode = null;
+				DGraph.BbNode = null;
+				DGraph.BuildBBHierarchy();
 
-			BbNode = null;
-			DGraph.BbNode = null;
-			DGraph.BuildBBHierarchy();
+				Invalidate();
+			}
 
-			Invalidate();
-
-			if (EdgeRemoved != null)
-				EdgeRemoved(de, EventArgs.Empty);
+			EdgeRemoved?.Invoke(de, EventArgs.Empty);
 		}
 
 		public void CopyEdgeText(IViewerEdge edge, bool registerForUndo)
@@ -1303,6 +1323,11 @@ namespace Microsoft.Msagl.GraphViewerGdi
 			get { return asyncLayout; }
 			set { asyncLayout = value; }
 		}
+
+		/// <summary>
+		/// Flags that bulk removing in progress
+		/// </summary>
+		private bool bulkRemovingEntities { get; set; }
 
 		double HugeDiagonal = 10e6;
 
