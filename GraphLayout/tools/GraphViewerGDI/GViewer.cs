@@ -1923,8 +1923,15 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         /// </summary>
         public event EventHandler GraphLoadingEnded;
 
+        public event EventHandler<HandledEventArgs> CustomOpenButtonPressed;
+
         [SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
         void OpenButtonPressed() {
+
+            HandledEventArgs args = new HandledEventArgs();
+            CustomOpenButtonPressed?.Invoke(this, args);
+            if (args.Handled) return;
+
             var openFileDialog = new OpenFileDialog {RestoreDirectory = true, Filter = "MSAGL Files(*.msagl)|*.msagl"};
 
             try {
