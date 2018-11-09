@@ -99,8 +99,10 @@ namespace FastIncrementalLayoutWithGdi {
         }
 
         static void SetupDisplayNodeIds(GeometryGraph geometryGraph) {
+ #if DEBUG
             foreach (var node in geometryGraph.Nodes)
                 node.DebugId = ((DrawingNode)node.UserData).Id;
+#endif
         }
 
         static void FillClustersAndSettings(FastIncrementalLayoutSettings settings, GeometryGraph geometryGraph) {
