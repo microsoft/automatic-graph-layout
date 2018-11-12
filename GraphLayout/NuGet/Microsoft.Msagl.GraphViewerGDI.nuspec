@@ -1,7 +1,7 @@
 ﻿<package>
   <metadata>
     <id>Microsoft.Msagl.GraphViewerGDI</id>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <authors>Microsoft</authors>
     <owners>Microsoft</owners>
     <licenseUrl>https://github.com/Microsoft/automatic-graph-layout/blob/master/LICENSE</licenseUrl>
@@ -14,7 +14,7 @@
     <language>en-US</language>
     <tags>MSAGL Graph Layout</tags>
     <dependencies>
-      <dependency id="Microsoft.Msagl.Drawing" version="1.1.1" />
+      <dependency id="Microsoft.Msagl.Drawing" version="1.1.2" />
     </dependencies>
     <frameworkAssemblies>
     </frameworkAssemblies>
