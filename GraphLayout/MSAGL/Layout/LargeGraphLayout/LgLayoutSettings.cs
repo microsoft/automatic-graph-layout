@@ -18,7 +18,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         public int maximumNumOfLayers;
         public double mainGeometryGraphWidth;
         public double mainGeometryGraphHeight;
-        public GeometryGraph _geometryGraph;
+        public GeometryGraph lgGeometryGraph;
         public bool hugeGraph;
         public bool flow;
         public int delta;

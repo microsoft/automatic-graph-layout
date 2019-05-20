@@ -38,21 +38,24 @@ namespace Microsoft.Msagl.Miscellaneous
         /// </summary>
         /// <exception cref="System.OperationCanceledException">Thrown when the layout is canceled.</exception>
 #endif
-        public static void CalculateLayout(GeometryGraph geometryGraph, LayoutAlgorithmSettings settings, CancelToken cancelToken) {
-            if (settings is RankingLayoutSettings) {
+        public static void CalculateLayout(GeometryGraph geometryGraph, LayoutAlgorithmSettings settings, CancelToken cancelToken, string tileDirectory = null) {
+            if (settings is RankingLayoutSettings)
+            {
                 var rankingLayoutSettings = settings as RankingLayoutSettings;
                 var rankingLayout = new RankingLayout(rankingLayoutSettings, geometryGraph);
                 rankingLayout.Run(cancelToken);
                 RouteAndLabelEdges(geometryGraph, settings, geometryGraph.Edges);
             }
-            else if (settings is MdsLayoutSettings) {
+            else if (settings is MdsLayoutSettings)
+            {
                 var mdsLayoutSettings = settings as MdsLayoutSettings;
                 var mdsLayout = new MdsGraphLayout(mdsLayoutSettings, geometryGraph);
                 mdsLayout.Run(cancelToken);
                 if (settings.EdgeRoutingSettings.EdgeRoutingMode != EdgeRoutingMode.None)
                     RouteAndLabelEdges(geometryGraph, settings, geometryGraph.Edges);
             }
-            else if (settings is FastIncrementalLayoutSettings) {
+            else if (settings is FastIncrementalLayoutSettings)
+            {
                 var incrementalSettings = settings as FastIncrementalLayoutSettings;
                 incrementalSettings.AvoidOverlaps = true;
                 var initialLayout = new InitialLayout(geometryGraph, incrementalSettings);
@@ -61,13 +64,15 @@ namespace Microsoft.Msagl.Miscellaneous
                     RouteAndLabelEdges(geometryGraph, settings, geometryGraph.Edges);
                 //incrementalSettings.IncrementalRun(geometryGraph);
             }
-            else {
+            else
+            {
                 var sugiyamaLayoutSettings = settings as SugiyamaLayoutSettings;
                 if (sugiyamaLayoutSettings != null)
                     ProcessSugiamaLayout(geometryGraph, sugiyamaLayoutSettings, cancelToken);
-                else {
+                else
+                {
                     Debug.Assert(settings is LgLayoutSettings);
-                    LayoutLargeGraphWithLayers(geometryGraph, settings, cancelToken);
+                    LayoutLargeGraphWithLayers(geometryGraph, settings, cancelToken, tileDirectory);
                 }
             }
         }
@@ -78,11 +83,11 @@ namespace Microsoft.Msagl.Miscellaneous
         /// <param name="geometryGraph"></param>
         /// <param name="settings"></param>
         /// <param name="cancelToken"></param>
-        static public void LayoutLargeGraphWithLayers(GeometryGraph geometryGraph, LayoutAlgorithmSettings settings, CancelToken cancelToken) {
+        static public void LayoutLargeGraphWithLayers(GeometryGraph geometryGraph, LayoutAlgorithmSettings settings, CancelToken cancelToken, string tileDirectory) {
             var largeGraphLayoutSettings = (LgLayoutSettings) settings;
             var largeGraphLayout = new LgInteractor(geometryGraph, largeGraphLayoutSettings, cancelToken);
             largeGraphLayoutSettings.Interactor = largeGraphLayout;
-            largeGraphLayout.Run();
+            largeGraphLayout.Run(tileDirectory);
         }
 
         static public void ComputeNodeLabelsOfLargeGraphWithLayers(GeometryGraph geometryGraph, LayoutAlgorithmSettings settings, List<double> noldeLabelRatios, CancelToken cancelToken) {

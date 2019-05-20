@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using MathNet.Numerics.LinearAlgebra.Double;
-using MathNet.Numerics.LinearAlgebra.Double.Factorization;
-using MathNet.Numerics.LinearAlgebra.Generic;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Layout;
@@ -100,87 +97,8 @@ namespace OverlapGraphExperiments.Statistics {
         /// <param name="A"></param>
         /// <param name="B"></param>
         /// <returns></returns>
-        public static Tuple<String, double> ProcrustesStatistics(List<Point> A, List<Point> B) {
-            int n = A.Count;
-            //make A to be unitlength
-            double minX = A.Min(p => p.X);
-            double maxX = A.Max(p => p.X);
-            double minY = A.Min(p => p.Y);
-            double maxY = A.Max(p => p.Y);
-
-            double deltaX = maxX - minX;
-            double deltaY = maxY - minY;
-            double scale = Math.Max(deltaX, deltaY);
-
-
-            A = A.Select(p => new Point(p.X/scale, p.Y/scale)).ToList();
-
-
-            var centerA = new Point(A.Average(a => a.X), A.Average(a => a.Y));
-            var centerB = new Point(B.Average(b => b.X), B.Average(b => b.Y));
-
-            Matrix X = DenseMatrix.Create(n, 2, (i, j) => j == 0 ? A[i].X : A[i].Y);
-            Matrix Y = DenseMatrix.Create(n, 2, (i, j) => j == 0 ? B[i].X : B[i].Y);
-
-            Matrix Xc = DenseMatrix.Create(n, 2, (i, j) => j == 0 ? A[i].X - centerA.X : A[i].Y - centerA.Y);
-            Matrix Yc = DenseMatrix.Create(n, 2, (i, j) => j == 0 ? B[i].X - centerB.X : B[i].Y - centerB.Y);
-
-            //Reference: Modern Multidimensional Scaling, Theory and Applications, page 436, Procrustes Analysis
-            DenseMatrix C = (DenseMatrix) (Xc.Transpose()*Y);
-
-            Svd svd = new DenseSvd(C, true);
-            //rotation
-            Matrix<double> T = (svd.VT().Transpose())*(svd.U().Transpose());
-            //dilation
-            double s = ((C*T).Trace())/((Yc.Transpose()*Y).Trace());
-            //column Vector with n times 1
-            Vector<double> vector1 = DenseVector.Create(n, i => 1);
-            //translation vector
-            Vector<double> t = (1.0/n)*(X - s*Y*T).Transpose()*vector1;
-
-            Matrix translationMatrix = DenseMatrix.Create(n, 2, (i, j) => t.At(j));
-
-            Matrix<double> YPrime = s*Y*T + translationMatrix;
-            Matrix<double> delta = X - YPrime;
-
-            double rSquare = 0;
-            for (int i = 0; i < n; i++) {
-                rSquare += delta.Row(i)*delta.Row(i);
-            }
-            return Tuple.Create("ProcrustesStatistics", Math.Sqrt(rSquare));
-        }
-
-        /// <summary>
-        /// Method to test the ProcrustesStatistics
-        /// </summary>
-        public static void TestProcrustesStatistics() {
-
-
-            List<Point> pointsX = new List<Point>();
-            pointsX.Add(new Point(1, 2));
-            pointsX.Add(new Point(-1, 2));
-            pointsX.Add(new Point(-1, -2));
-            pointsX.Add(new Point(1, -2));
-
-            List<Point> pointsY = new List<Point>();
-            pointsY.Add(new Point(0.07, 2.62));
-            pointsY.Add(new Point(0.93, 3.12));
-            pointsY.Add(new Point(1.93, 1.38));
-            pointsY.Add(new Point(1.07, 0.88));
-
-            double res = Statistics.ProcrustesStatistics(pointsX, pointsY).Item2;
-            Console.WriteLine("Result should nearly Zero: {0}", res);
-            List<Point> randomPoints = new List<Point>();
-            Random rand = new Random(2);
-            for (int i = 0; i < pointsX.Count; i++) {
-                randomPoints.Add(new Point(rand.NextDouble(), rand.NextDouble()));
-            }
-
-            double res2 = Statistics.ProcrustesStatistics(pointsY, randomPoints).Item2;
-            Console.WriteLine("Result should big much bigger then zero: {0}", res2);
-
-        }
-
+        
+        
         public static Tuple<string, double> TrianglePropertyError(GeometryGraph graphOld, GeometryGraph graphNew,
             HashSet<Tuple<int, int, int>> triangles) {
             double distortionErrorTotal = 0;

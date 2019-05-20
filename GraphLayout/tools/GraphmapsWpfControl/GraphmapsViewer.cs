@@ -235,10 +235,11 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                     Console.WriteLine("rail's A" + rail.A);
                     Console.WriteLine("rail's B" + rail.B);
                     return;
+                    /*
                     if (clickCounter.UpCount == clickCounter.DownCount && clickCounter.UpCount == 2)
                         HandleDoubleClickForRail(rail);
                     else if (clickCounter.UpCount == clickCounter.DownCount && clickCounter.UpCount == 1)
-                        ToggleSelectRailUnderCursor();
+                        ToggleSelectRailUnderCursor();*/
                 }
                 else
                 {
@@ -350,7 +351,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 var nodeInfo = lgSettings.GeometryNodesToLgNodeInfos[vnode.Node.GeometryNode];
 
                 var c = nodeInfo.Color;
-                List<SolidColorBrush> ColorSet = new List<SolidColorBrush>();
+                List<object> ColorSet = new List<object>();
                 addColorsToSet(ColorSet);
 
                 foreach (LgNodeInfo vinfo in SelectedNodeSet)
@@ -366,7 +367,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
 
 
-                SelectColoredEdgesIncidentTo(vnode,c);
+                SelectColoredEdgesIncidentTo(vnode, (SolidColorBrush)c);
                 SelectUnselectNode(vnode.LgNodeInfo, !IsSelected(vnode));
 
 
@@ -378,7 +379,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             vnode.Invalidate();
         }
 
-        private static void addColorsToSet(List<SolidColorBrush> ColorSet)
+        private static void addColorsToSet(List<object> ColorSet)
         {
             ColorSet.Add(Brushes.Red);
             ColorSet.Add(Brushes.Blue);
@@ -400,17 +401,17 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             //ColorSet.Add(Brushes.CornflowerBlue);
         }
 
-        void SelectColoredEdgesIncidentTo(LgNodeInfo nodeInfo, SolidColorBrush c)
+        void SelectColoredEdgesIncidentTo(LgNodeInfo nodeInfo, object c)
         {
             var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
             if (lgSettings == null) return;
 
             //var nodeInfo = lgSettings.GeometryNodesToLgNodeInfos[vnode.Node.GeometryNode];
-            lgSettings.Interactor.SelectAllColoredEdgesIncidentTo(nodeInfo, c);
+            lgSettings.Interactor.SelectAllColoredEdgesIncidentTo(nodeInfo, (SolidColorBrush)c);
             //lgSettings.Interactor.SelectVisibleEdgesIncidentTo(nodeInfo, _layer);
         }
 
-        void SelectColoredEdgesIncidentTo(GraphmapsNode vnode, SolidColorBrush c)
+        void SelectColoredEdgesIncidentTo(GraphmapsNode vnode, object c)
         {
             var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
             if (lgSettings == null) return;
@@ -1341,9 +1342,8 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 try
                 {
                     var ls = _drawingGraph.LayoutAlgorithmSettings as LgLayoutSettings;
-                    geometryGraphUnderLayout.directory = this.TileDirectory;
                     LayoutHelpers.CalculateLayout(geometryGraphUnderLayout, _drawingGraph.LayoutAlgorithmSettings,
-                        CancelToken);
+                        CancelToken, TileDirectory);
                 }
                 catch (OperationCanceledException)
                 {
@@ -1352,7 +1352,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             }
             else
                 LayoutHelpers.LayoutLargeGraphWithLayers(geometryGraphUnderLayout, _drawingGraph.LayoutAlgorithmSettings,
-                    CancelToken);
+                    CancelToken, TileDirectory);
 
             _lgLayoutSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
 
@@ -1663,7 +1663,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 var nodeInfo = lgSettings.GeometryNodesToLgNodeInfos[vnode.Node.GeometryNode];
 
                 var c = nodeInfo.Color;
-                List<SolidColorBrush> ColorSet = new List<SolidColorBrush>();
+                List<object> ColorSet = new List<object>();
                 addColorsToSet(ColorSet);
 
                 foreach (LgNodeInfo vinfo in SelectedNodeSet)
@@ -1742,7 +1742,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
             //start: changing tooltip
             String tooltiptext = "";
-            List<SolidColorBrush> ColorSet = new List<SolidColorBrush>();
+            List<object> ColorSet = new List<object>();
             addColorsToSet(ColorSet);
             List<GraphmapsNode> coloredNodeList = new List<GraphmapsNode>();
             //end: changing tooltip
@@ -1819,7 +1819,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                         {
                             if(!tooltiptext.Contains(w.Node.LabelText))
                                 tooltiptext = tooltiptext+ "\n" + w.Node.LabelText;                                                        
-                            incidentColorSet.Add(w.LgNodeInfo.Color);
+                            incidentColorSet.Add((SolidColorBrush)w.LgNodeInfo.Color);
                         }
                     }
                     foreach (var edge in w.Node.GeometryNode.InEdges)
@@ -1828,7 +1828,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                         {
                             if (!tooltiptext.Contains(w.Node.LabelText))
                                 tooltiptext = tooltiptext + "\n" + w.Node.LabelText;
-                            incidentColorSet.Add(w.LgNodeInfo.Color);
+                            incidentColorSet.Add((SolidColorBrush)w.LgNodeInfo.Color);
                         }
                     }   
                 }
@@ -2707,7 +2707,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             foreach (var node in _drawingGraph.Nodes)
             {
                 //jyoti - for the case of include node position from file
-                if (!_lgLayoutSettings._geometryGraph.Nodes.Contains(node.GeometryNode)) return;
+                if (!_lgLayoutSettings.lgGeometryGraph.Nodes.Contains(node.GeometryNode)) return;
 
 
                 node.IsVisible = true;

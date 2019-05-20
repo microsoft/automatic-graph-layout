@@ -4,7 +4,9 @@ using System.Collections.Generic;
 namespace Microsoft.Msagl.Layout.Layered {
     /// <summary>
     /// Following "A technique for Drawing Directed Graphs" of Gansner, Koutsofios, North and Vo
-    /// Works on the layered graph. For explanations of the algorithm here see GraphLayout.pdf.
+    /// Works on the layered graph. 
+    /// For explanations of the algorithm here see https://www.researchgate.net/profile/Lev_Nachmanson/publication/30509007_Drawing_graphs_with_GLEE/links/54b6b2930cf2e68eb27edf71/Drawing-graphs-with-GLEE.pdf
+    /// 
     /// </summary>
     internal partial class Ordering {
         /// <summary>

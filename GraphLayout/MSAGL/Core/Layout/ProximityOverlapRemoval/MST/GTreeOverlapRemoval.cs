@@ -68,9 +68,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
             if (_overlapForLayers) {
                 nodeSizes = _sizes;
             }
-            if (_settings.InitialScaling != InitialScaling.None)
-                DoInitialScaling(_nodes, nodePositions, nodeSizes, InitialScaling.Inch72Pixel);
-
+            
             lastRunNumberIterations = 0;
             while (OneIteration(nodePositions, nodeSizes, false)) {
                 lastRunNumberIterations++;
@@ -491,33 +489,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
             visited.Insert(movedNode);
         }
 
-        /// <summary>
-        /// Does the initial scaling of the layout, could also be avoided.
-        /// </summary>
-        /// <param name="nodes"></param>
-        /// <param name="nodePositions"></param>
-        /// <param name="nodeSizes"></param>
-        /// <param name="scalingMethod"></param>
-        static void DoInitialScaling(Node[] nodes, Point[] nodePositions, Size[] nodeSizes,
-            InitialScaling scalingMethod) {
-            return;
-            var avgEdgeLength = AvgEdgeLength(nodes);
-            double goalLength;
-            if (scalingMethod == InitialScaling.Inch72Pixel)
-                goalLength = 72;
-            else if (scalingMethod == InitialScaling.AvgNodeSize)
-                goalLength = nodeSizes.Average(box => (box.Width + box.Height)/2);
-            else return;
-
-            double scaling = goalLength/avgEdgeLength;
-#if DEBUG
-            Console.WriteLine("AvgEdgeLength Scaling Method: {0}, ScaleFactor={1:F2}", scalingMethod, scaling);
-#endif
-            for (int j = 0; j < nodePositions.Length; j++) {
-                nodePositions[j] *= scaling;
-            }
-        }
-
+        
         void IOverlapRemoval.Settings(OverlapRemovalSettings settings) {
             _settings = settings;
         }

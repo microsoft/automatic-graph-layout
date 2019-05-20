@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-#if !NETCORE
-using System.Runtime.Remoting.Messaging;
-using System.Windows.Media;
-#endif
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
@@ -215,8 +211,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 //            }
 //        }
 
-
-#if !NETCORE
         internal void SelectEdges(List<Edge> passingEdges) {
             SelectedEdges.InsertRange(passingEdges);
             for (int i = _levels.Count - 1; i >= 0; i--)
@@ -241,7 +235,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 }
             }
         }
-#endif
+
         public Set<Edge> SelectedEdges {
             get { return _selectedEdges; } }
 
@@ -250,7 +244,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             private set { _selectedNodeInfos = value; }
         }
 
-#if !NETCORE
         void SelectEdgesOnLevel(int i, List<Edge> edges) {
             var level = _levels[i];
             var railsToHighlight = new Set<Rail>();
@@ -281,7 +274,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
                 foreach (Rail r in railsOfEdge)
                 {
-                    if(r.Color==null) r.Color = new List<SolidColorBrush>();
+                    if(r.Color==null) r.Color = new List<object>();
                     if (r.Color.Contains(edge.Color) == false && edge.Color!=null ) r.Color.Add(edge.Color);
                     r.IsHighlighted = true;
                 }
@@ -300,7 +293,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             //LayoutAlgorithmSettings.ShowDebugCurves(l.ToArray());
 
         }
-#endif
 
         /// <summary>
         /// gets all rails corresponding to edges on given level.
@@ -400,7 +392,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             return _levels.Last().ZoomLevel;
         }
 
-#if !NETCORE
         internal void PutOffEdgesPassingThroughTheRail(Rail rail) {
             var railLevel = _levels[(int)Math.Log(rail.ZoomLevel, 2)];
             var passingEdges = railLevel.GetEdgesPassingThroughRail(rail);
@@ -408,7 +399,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 
 
-        public void UnselectColoredEdges(List<Edge> edgesToPutOff, SolidColorBrush c)
+        public void UnselectColoredEdges(List<Edge> edgesToPutOff, object color)
         {
             
             //do not put off all the edges, otherwise it will cause disconnected components in
@@ -427,7 +418,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
                         if (r.Color.Count >= 1)
                             if (!removeEdge.ContainsKey(e)) removeEdge[e] = true;
-                        r.Color.Remove(c);
+                        r.Color.Remove(color);
                     }
                 }
                 if (!removeEdge.ContainsKey(e)) e.Color = null;
@@ -532,8 +523,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             level.HighlightedRails = railsThatShouldBeHiglighted;
         }
 
-#endif
-
         static bool RailBelongsToLevel(LgLevel level, Rail rail) {
             return level.ZoomLevel >= rail.ZoomLevel;
         }
@@ -563,13 +552,10 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             }
         }
 
-#if !NETCORE
         public void PutOffAllEdges()
         {
             UnselectEdges(SelectedEdges.ToList());
         }
-
-#endif
 
         public void CreateLevelNodeTrees(double nodeDotWidth) {
             for (int i = 0; i < _levels.Count; i++) {

@@ -11,6 +11,8 @@ using Microsoft.Msagl.GraphViewerGdi;
 using Microsoft.Msagl.Layout.Incremental;
 using Microsoft.Msagl.Layout.Initial;
 using Microsoft.Msagl.Routing;
+using Node = Microsoft.Msagl.Core.Layout.Node;
+using DrawingNode = Microsoft.Msagl.Drawing.Node;
 using Point = Microsoft.Msagl.Core.Geometry.Point;
 using Shape = Microsoft.Msagl.Drawing.Shape;
 
@@ -92,6 +94,17 @@ namespace FastIncrementalLayoutWithGdi {
         
 #endif
 
+        static Node FindNode(GeometryGraph geometryGraph, int id) {
+            return geometryGraph.Nodes.First(n => ((DrawingNode) n.UserData).Id == id.ToString());
+        }
+
+        static void SetupDisplayNodeIds(GeometryGraph geometryGraph) {
+ #if DEBUG
+            foreach (var node in geometryGraph.Nodes)
+                node.DebugId = ((DrawingNode)node.UserData).Id;
+#endif
+        }
+
         static void FillClustersAndSettings(FastIncrementalLayoutSettings settings, GeometryGraph geometryGraph) {
             settings.AvoidOverlaps = true;
             // settings.RectangularClusters = true;
@@ -100,8 +113,7 @@ namespace FastIncrementalLayoutWithGdi {
             root.AddChild(cluster);
 
             for (int i = 0; i < 4; i++) {
-                var istring = i.ToString();
-                cluster.AddChild(geometryGraph.Nodes.First(n => n.UserData.ToString() == istring));
+                cluster.AddChild(FindNode(geometryGraph, i));
             }
             cluster.BoundaryCurve = cluster.BoundingBox.Perimeter();
             cluster = new Cluster();
@@ -113,30 +125,28 @@ namespace FastIncrementalLayoutWithGdi {
             //make a subcluster 
             var parent = cluster;
             cluster = new Cluster();
-            cluster.AddChild(geometryGraph.Nodes.First(n => n.UserData.ToString() == "4"));
-            cluster.AddChild(geometryGraph.Nodes.First(n => n.UserData.ToString() == "5"));
+            cluster.AddChild(FindNode(geometryGraph, 4));
+            cluster.AddChild(FindNode(geometryGraph, 5));
             parent.AddChild(cluster);
             
 
             cluster = new Cluster();
             for (int i = 6; i < 9; i++) {
-                var istring = i.ToString();
-                cluster.AddChild(geometryGraph.Nodes.First(n => n.UserData.ToString() == istring));
+                cluster.AddChild(FindNode(geometryGraph, i));
             }
             parent.AddChild(cluster);
             foreach (var cl in geometryGraph.RootCluster.AllClustersDepthFirst()) {
                 if(cl.BoundaryCurve==null)
                     cl.BoundaryCurve=cl.BoundingBox.Perimeter();
-                
             }
+
+            SetupDisplayNodeIds(geometryGraph);
         }
 
         static Graph CtreateDrawingGraph(out FastIncrementalLayoutSettings settings) {
             settings = new FastIncrementalLayoutSettings { RouteEdges = true, NodeSeparation = 30};
             var drawingGraph = new Graph();
-            const string id0 = "0";
-            const string id1 = "1";
-            AddEdge(drawingGraph, id0, id1);
+            AddEdge(drawingGraph, "0", "1");
             AddEdge(drawingGraph, "0", "2");
             AddEdge(drawingGraph, "1", "3");
             AddEdge(drawingGraph, "2", "4");
@@ -149,7 +159,7 @@ namespace FastIncrementalLayoutWithGdi {
 
        
             drawingGraph.CreateGeometryGraph();
-            foreach (Microsoft.Msagl.Drawing.Node node in drawingGraph.Nodes) {
+            foreach (DrawingNode node in drawingGraph.Nodes) {
                 double w, h;
                 var label = node.Label;
                 var font = new Font(label.FontName, (float)label.FontSize);

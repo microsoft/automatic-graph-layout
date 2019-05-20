@@ -15,7 +15,7 @@ This .NET asssembly contains the core layout functionality. Use this library if 
 **The Drawing module (Microsoft.MSAGL.Drawing.dll)** - [NuGet package](https://www.nuget.org/packages/Microsoft.Msagl.Drawing/)
 The Definitions of different drawing attributes like colors, line styles, etc. It also contains definitions of a node class, an edge class, and a graph class. By using these classes a user can create a graph object and use it later for layout, and rendering.
 
-**A Viewer control** (Microsoft.MSAGL.GraphViewerGDIGraph.dll)** - [NuGet package](https://www.nuget.org/packages/Microsoft.Msagl.GraphViewerGDI/)
+**A Viewer control (Microsoft.MSAGL.GraphViewerGDIGraph.dll)** - [NuGet package](https://www.nuget.org/packages/Microsoft.Msagl.GraphViewerGDI/)
 The viewer control lets you visualize graphs and has and some other rendering functionality. Key features: (1) Pan and Zoom (2) Navigate Forward and Backward (3) tooltips and highlighting on graph entities (4) Search for and focus on graph entities.
 
 # Code Samples
@@ -88,7 +88,7 @@ The ideas, design, and the mathematics of GraphMaps are described in [this paper
 
 # MSAGL in JavaScript
 
-WebMSAGL is a version of MSAGL that was transcompiled to JavaScript with [SharpKit] (https://github.com/SharpKit/SharpKit/), plus a [TypeScript] (https://www.typescriptlang.org/) wrapper and rendering/interaction layer that provides a friendly TypeScript API. You can create a graph either programmatically or from a JSON object, have MSAGL create a layout for it, and then render it to an HTML Canvas or to an SVG block. All layout operations are run in a web worker, ensuring that your application remains responsive while computation is taking place. Limited interactivity is also supported.
+WebMSAGL is a version of MSAGL that was transcompiled to JavaScript with [SharpKit](https://github.com/SharpKit/SharpKit/), plus a [TypeScript](https://www.typescriptlang.org/) wrapper and rendering/interaction layer that provides a friendly TypeScript API. You can create a graph either programmatically or from a JSON object, have MSAGL create a layout for it, and then render it to an HTML Canvas or to an SVG block. All layout operations are run in a web worker, ensuring that your application remains responsive while computation is taking place. Limited interactivity is also supported.
 
 ## Using WebMSAGL
 * open WebMsagl.sln and build the solution,

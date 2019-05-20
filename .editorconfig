@@ -1,0 +1,6 @@
+[*.{js,cs}]
+csharp_new_line_before_open_brace = none
+indent_style = space
+# .net code style settings:
+[*.{cs,vb}]
+dotnet_sort_system_directives_first = true

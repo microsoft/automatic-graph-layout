@@ -330,13 +330,13 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                           
             BoundaryPath.Fill = Brushes.DarkGray;
             if (LgNodeInfo != null && LgNodeInfo.Selected)
-                BoundaryPath.Fill = LgNodeInfo.Color;//Brushes.Red;
+                BoundaryPath.Fill = (System.Windows.Media.Brush)LgNodeInfo.Color;//Brushes.Red;
             else if (LgNodeInfo != null && LgNodeInfo.SelectedNeighbor>0)
             {
                 BoundaryPath.Fill = Brushes.Yellow;                
             }  
             return;
-
+            /*
             if (LgNodeInfo == null) {
                 BoundaryPath.Fill = Brushes.Blue;
                 return;
@@ -362,7 +362,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 BoundaryPath.Fill = (LgNodeInfo.ZoomLevel < 2
                     ? Brushes.LightGreen
                     : (LgNodeInfo.ZoomLevel < 4 ? Brushes.LightBlue : Brushes.LightYellow));
-            }
+            }*/
         }
 
         

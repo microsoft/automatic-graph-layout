@@ -37,7 +37,7 @@ using System.Windows.Forms;
 using Microsoft.Msagl.Drawing;
 
 namespace Microsoft.Msagl.GraphViewerGdi {
-    internal partial class SaveViewAsImageForm : Form {
+    public partial class SaveViewAsImageForm : Form {
         readonly GViewer gViewer;
 
         internal SaveViewAsImageForm(GViewer gViewerControl) {

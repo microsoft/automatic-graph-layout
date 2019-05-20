@@ -388,7 +388,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
             return Edge.ToString();
         }
 
-        internal static double dashSize = 0.05; //inches
+        internal static double _dashSize = 0.05; //inches
         internal Func<double> PathStrokeThicknessFunc;
 
         public VEdge(Edge edge, LgLayoutSettings lgSettings) {
@@ -399,8 +399,8 @@ namespace Microsoft.Msagl.WpfGraphControl {
         internal double DashSize()
         {
             var w = PathStrokeThickness;
-            var dashSizeInPoints = dashSize * GraphViewer.DpiXStatic;
-            return dashSize = dashSizeInPoints / w;
+            var dashSizeInPoints = _dashSize * GraphViewer.DpiXStatic;
+            return dashSizeInPoints / w;
         }
 
         internal void RemoveItselfFromCanvas(Canvas graphCanvas) {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Msagl.Core.DataStructures;
+using System.Diagnostics;
 
 namespace Microsoft.Msagl.Layout.Layered {
     internal class AdjacentSwapsWithConstraints {
@@ -20,7 +21,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// <summary>
         /// for each vertex v let P[v] be the array of predeccessors of v
         /// </summary>
-        int[][] P;
+        List<int>[] P;
 
 
         /// <summary>
@@ -32,7 +33,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// <summary>
         /// for each vertex v let S[v] be the array of successors of v
         /// </summary>
-        int[][] S;
+        List<int>[] S;
 
         /// <summary>
         /// The array contains a dictionary per vertex
@@ -133,7 +134,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// <param name="cuv">the result when u is to the left of v</param>
         /// <param name="cvu">the result when v is to the left of u</param>
         void CalcPair(int u, int v, out int cuv, out int cvu) {
-            int[] su = S[u], sv = S[v], pu = P[u], pv = P[v];
+            List<int> su = S[u], sv = S[v], pu = P[u], pv = P[v];
             if (!hasCrossWeights) {
                 cuv = CountOnArrays(su, sv) +
                       CountOnArrays(pu, pv);
@@ -151,9 +152,9 @@ namespace Microsoft.Msagl.Layout.Layered {
             }
         }
 
-        int CountOnArrays(int[] unbs, int[] vnbs) {
+        int CountOnArrays(List<int> unbs, List<int> vnbs) {
             int ret = 0;
-            int vl = vnbs.Length - 1;
+            int vl = vnbs.Count - 1;
             int j = -1; //the right most position of vnbs to the left from the current u neighbor 
             int vnbsSeenAlready = 0;
             foreach (int uNeighbor in unbs) {
@@ -173,10 +174,10 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// <returns>number of intersections when u is to the left of v</returns>
         /// <param name="uCrossingCounts"></param>
         /// <param name="vCrossingCount"></param>
-        int CountOnArrays(int[] unbs, int[] vnbs, Dictionary<int, int> uCrossingCounts,
+        int CountOnArrays(List<int> unbs, List<int> vnbs, Dictionary<int, int> uCrossingCounts,
                           Dictionary<int, int> vCrossingCount) {
             int ret = 0;
-            int vl = vnbs.Length - 1;
+            int vl = vnbs.Count - 1;
             int j = -1; //the right most position of vnbs to the left from the current u neighbor 
 
             int vCrossingNumberSeenAlready = 0;
@@ -193,6 +194,10 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         //in this routine u and v are adjacent, and u is to the left of v before the swap
         void Swap(int u, int v) {
+            Debug.Assert(UAndVAreOnSameLayer(u, v));
+            Debug.Assert(UIsToTheLeftOfV(u, v));
+            Debug.Assert(CanSwap(u, v));
+
             int left = X[u];
             int right = X[v];
             int ln = layering[u]; //layer number
@@ -229,6 +234,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             return random.Next(2) == 0;
         }
 
+        
         internal void DoSwaps() {
             InitArrays();
             int count = 0;
@@ -237,9 +243,45 @@ namespace Microsoft.Msagl.Layout.Layered {
                 progress = false;
                 for (int i = 0; i < layers.Length; i++)
                     progress = AdjExchangeLayer(i) || progress;
+            
                 for (int i = layers.Length - 2; i >= 0; i--)
                     progress = AdjExchangeLayer(i) || progress;
             }
+            Debug.Assert(SPAreCorrect());
+        }
+
+        private bool SPAreCorrect()
+        {
+            int n = this.properLayeredGraph.NodeCount;
+            for (int i = 0; i < n; i++)
+                if (!SIsCorrect(i))
+                    return false;
+
+            return true;
+        }
+
+        private bool SIsCorrect(int i)
+        {
+            var s = S[i];
+            Dictionary<int, int> so = SOrder[i];
+            for (int k = 0; k < s.Count; k++)
+            {
+                int u = s[k];
+                int uPosition = 0;
+                if (so.TryGetValue(u, out uPosition) == false)
+                    return false;
+                if (uPosition != k)
+                    return false;
+            }
+
+            for (int k = 0; k < s.Count - 1; k++)
+            {
+                int u = s[k];
+                int v = s[k + 1];
+                if (!UIsToTheLeftOfV(u, v))
+                    return false;
+            }
+            return true;
         }
 
         /// <summary>
@@ -249,10 +291,11 @@ namespace Microsoft.Msagl.Layout.Layered {
             if (S == null)
                 AllocArrays();
 
-
             for (int i = 0; i < properLayeredGraph.NodeCount; i++) {
                 POrder[i].Clear();
                 SOrder[i].Clear();
+                S[i].Clear();
+                P[i].Clear();
             }
 
 
@@ -279,8 +322,8 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         void AllocArrays() {
             int n = properLayeredGraph.NodeCount;
-            P = new int[n][];
-            S = new int[n][];
+            P = new List<int>[n];
+            S = new List<int>[n];
 
 
             POrder = new Dictionary<int, int>[n];
@@ -291,7 +334,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             }
             for (int i = 0; i < n; i++) {
                 int count = properLayeredGraph.InEdgesCount(i);
-                P[i] = new int[count];
+                P[i] = new List<int>();
                 if (hasCrossWeights) {
                     Dictionary<int, int> inCounts = inCrossingCount[i] = new Dictionary<int, int>(count);
                     foreach (LayerEdge le in properLayeredGraph.InEdges(i))
@@ -299,7 +342,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                 }
                 POrder[i] = new Dictionary<int, int>(count);
                 count = properLayeredGraph.OutEdgesCount(i);
-                S[i] = new int[count];
+                S[i] = new List<int>();
                 SOrder[i] = new Dictionary<int, int>(count);
                 if (hasCrossWeights) {
                     Dictionary<int, int> outCounts = outCrossingCount[i] = new Dictionary<int, int>(count);
@@ -310,14 +353,14 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
         void UpdatePsContainingUV(int u, int v) {
-            if (S[u].Length <= S[v].Length)
+            if (S[u].Count <= S[v].Count)
                 foreach (int a in S[u]) {
                     Dictionary<int, int> porder = POrder[a];
                     //of course porder contains u, let us see if it contains v
                     if (porder.ContainsKey(v)) {
                         int vOffset = porder[v];
                         //swap u and v in the array P[coeff]
-                        int[] p = P[a];
+                        var p = P[a];
                         p[vOffset - 1] = v;
                         p[vOffset] = u;
                         //update sorder itself
@@ -332,7 +375,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                     if (porder.ContainsKey(u)) {
                         int vOffset = porder[v];
                         //swap u and v in the array P[coeff]
-                        int[] p = P[a];
+                        var p = P[a];
                         p[vOffset - 1] = v;
                         p[vOffset] = u;
                         //update sorder itself
@@ -376,31 +419,38 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// </summary>
         /// <param name="layer"></param>
         void InitPSArraysForLayer(int[] layer) {
-            foreach (int l in layer) {
-                foreach (int p in properLayeredGraph.Pred(l)) {
+            foreach (int l in layer)
+            {
+                foreach (int p in properLayeredGraph.Pred(l))
+                {
                     Dictionary<int, int> so = SOrder[p];
+                    if (so.ContainsKey(l))
+                        continue;
                     int sHasNow = so.Count;
-                    S[p][sHasNow] = l; //l takes the first available slot in S[p]
+                    S[p].Add(l); //l takes the first available slot in S[p]
                     so[l] = sHasNow;
                 }
-                foreach (int s in properLayeredGraph.Succ(l)) {
+                foreach (int s in properLayeredGraph.Succ(l))
+                {
                     Dictionary<int, int> po = POrder[s];
+                    if (po.ContainsKey(l))
+                        continue;
                     int pHasNow = po.Count;
-                    P[s][pHasNow] = l; //l take the first available slot in P[s]
+                    P[s].Add(l); //l take the first available slot in P[s]
                     po[l] = pHasNow;
                 }
             }
         }
 
         void UpdateSsContainingUV(int u, int v) {
-            if (P[u].Length <= P[v].Length)
+            if (P[u].Count <= P[v].Count)
                 foreach (int a in P[u]) {
                     Dictionary<int, int> sorder = SOrder[a];
                     //of course sorder contains u, let us see if it contains v
                     if (sorder.ContainsKey(v)) {
                         int vOffset = sorder[v];
                         //swap u and v in the array S[coeff]
-                        int[] s = S[a];
+                        var s = S[a];
                         s[vOffset - 1] = v;
                         s[vOffset] = u;
                         //update sorder itself
@@ -415,7 +465,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                     if (sorder.ContainsKey(u)) {
                         int vOffset = sorder[v];
                         //swap u and v in the array S[coeff]
-                        int[] s = S[a];
+                        var s = S[a];
                         s[vOffset - 1] = v;
                         s[vOffset] = u;
                         //update sorder itself
@@ -423,6 +473,16 @@ namespace Microsoft.Msagl.Layout.Layered {
                         sorder[u] = vOffset;
                     }
                 }
+        }
+
+        private bool UAndVAreOnSameLayer(int u, int v)
+        {
+            return layering[u] == layering[v];
+        }
+
+        private bool UIsToTheLeftOfV(int u, int v)
+        {
+            return X[u] < X[v];
         }
     }
 }
