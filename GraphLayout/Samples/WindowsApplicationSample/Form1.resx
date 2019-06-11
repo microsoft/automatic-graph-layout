@@ -117,4 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="gViewer.Transform" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFJNaWNyb3NvZnQuTXNhZ2wsIFZlcnNpb249My4wLjAuMCwgQ3Vs
+        dHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj02NDBjNTdhYTQwZTdhZTdkBQEAAAA4TWljcm9zb2Z0
+        Lk1zYWdsLkNvcmUuR2VvbWV0cnkuQ3VydmVzLlBsYW5lVHJhbnNmb3JtYXRpb24BAAAACGVsZW1lbnRz
+        AxFTeXN0ZW0uRG91YmxlW11bXQIAAAAJAwAAAAcDAAAAAQEAAAACAAAABwYJBAAAAAkFAAAADwQAAAAD
+        AAAABgAAAAAAAPA/AAAAAAAAAAAAAAAAAAAAAA8FAAAAAwAAAAYAAAAAAAAAAAAAAAAAAPA/AAAAAAAA
+        AAAL
+</value>
+  </data>
 </root>
