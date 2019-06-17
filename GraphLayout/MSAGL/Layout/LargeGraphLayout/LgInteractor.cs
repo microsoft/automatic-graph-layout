@@ -32,7 +32,7 @@ using Point = Microsoft.Msagl.Core.Geometry.Point;
 using Rectangle = Microsoft.Msagl.Core.Geometry.Rectangle;
 using Size = Microsoft.Msagl.Core.DataStructures.Size;
 using SymmetricSegment = Microsoft.Msagl.Core.DataStructures.SymmetricTuple<Microsoft.Msagl.Core.Geometry.Point>;
-#if !NETCORE
+#if !NETCORE && REPORTING
 using Timer = Microsoft.Msagl.DebugHelpers.Timer;
 #endif
 
