@@ -287,7 +287,7 @@ namespace WindowsApplicationSample {
 
             if (horizontal)
                 (graph.LayoutAlgorithmSettings as SugiyamaLayoutSettings).Transformation = PlaneTransformation.Rotation(Math.PI / 2.0);
-
+            graph.LayoutAlgorithmSettings.LiftCrossEdges = true;
             gViewer.Graph = graph;
             this.propertyGrid1.SelectedObject = graph;
         }
