@@ -34,7 +34,7 @@ namespace Microsoft.Msagl.Layout.Initial {
         /// <param name="graph">The graph being operated on.</param>
         /// <param name="defaultSettings">Settings to use if none is provided for a particular cluster or its ancestors.</param>
         public InitialLayoutByCluster(GeometryGraph graph, LayoutAlgorithmSettings defaultSettings)
-            : this(graph, anyCluster => defaultSettings) {}
+            : this(graph, anyCluster => defaultSettings) { }
 
         /// <summary>
         /// Recursively lay out the clusters of the given graph using the specified settings for each cluster, or if none is given for a particular
@@ -44,7 +44,7 @@ namespace Microsoft.Msagl.Layout.Initial {
         /// <param name="clusterSettings">Settings to use for each cluster and its descendents (if none provided for that descendent.</param>
         [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods")]
         public InitialLayoutByCluster(GeometryGraph graph, Func<Cluster, LayoutAlgorithmSettings> clusterSettings)
-            : this(graph, new[] {graph.RootCluster}, clusterSettings) {}
+            : this(graph, new[] { graph.RootCluster }, clusterSettings) { }
 
         /// <summary>
         /// Recursively lay out the given clusters using the specified settings for each cluster, or if none is given for a particular
@@ -100,7 +100,7 @@ namespace Microsoft.Msagl.Layout.Initial {
             }
 
 #if DEBUG
-    //CheckEdges();
+            //CheckEdges();
 #endif
 
             // This call isn't super cheap, so we shouldn't do this too often.
@@ -147,7 +147,7 @@ namespace Microsoft.Msagl.Layout.Initial {
                 cluster.DeepTranslation(oldBounds.Center - newBounds.Center, true);
             }
 #if DEBUG
-              //  ValidateLayout(cluster);
+            //  ValidateLayout(cluster);
 #endif
         }
 
@@ -172,7 +172,7 @@ namespace Microsoft.Msagl.Layout.Initial {
             var labeledEdges = outParentEdges.Concat(inParentEdges).Where(e => e.Labels.Any());
             if (labeledEdges.Any()) {
                 var elb = new EdgeLabelPlacement(graph.Nodes, labeledEdges);
-                    //consider adding more nodes here: some sibling clusters maybe
+                //consider adding more nodes here: some sibling clusters maybe
                 elb.Run();
             }
 
@@ -209,7 +209,7 @@ namespace Microsoft.Msagl.Layout.Initial {
         static void RouteSimplHooksAndFillTheLists(Cluster rootCluster, List<Edge> inParentEdges,
             List<Edge> outParentEdges, EdgeRoutingSettings edgeRoutingSettings) {
             var padding = edgeRoutingSettings.Padding + edgeRoutingSettings.PolylinePadding;
-            foreach (var cluster in rootCluster.AllClustersWidthFirstExcludingSelfAvoidingChildrenOfCollapsed().Where(c=>!c.IsCollapsed)) {
+            foreach (var cluster in rootCluster.AllClustersWidthFirstExcludingSelfAvoidingChildrenOfCollapsed().Where(c => !c.IsCollapsed)) {
                 RouteClusterParentInEdges(inParentEdges, edgeRoutingSettings, cluster, padding);
                 RouteClusterParentOutEdges(outParentEdges, edgeRoutingSettings, cluster, padding);
             }
@@ -217,7 +217,7 @@ namespace Microsoft.Msagl.Layout.Initial {
 
         static void RouteClusterParentOutEdges(List<Edge> outParentEdges, EdgeRoutingSettings edgeRoutingSettings, Cluster cluster, double padding) {
             foreach (var e in cluster.OutEdges.Where(e => IsDescendant(e.Target, cluster))) {
-                var ePadding = Math.Max(padding, 1.5*ArrowlengthAtSource(e));
+                var ePadding = Math.Max(padding, 1.5 * ArrowlengthAtSource(e));
                 var hookPort = e.SourcePort as HookUpAnywhereFromInsidePort;
                 if (hookPort == null)
                     e.SourcePort = hookPort = new HookUpAnywhereFromInsidePort(() => cluster.BoundaryCurve);
@@ -233,7 +233,7 @@ namespace Microsoft.Msagl.Layout.Initial {
         static void RouteClusterParentInEdges(List<Edge> inParentEdges, EdgeRoutingSettings edgeRoutingSettings, Cluster cluster,
             double padding) {
             foreach (var e in cluster.InEdges.Where(e => IsDescendant(e.Source, cluster))) {
-                double ePadding = Math.Max(padding, 1.5*ArrowlengthAtTarget(e));
+                double ePadding = Math.Max(padding, 1.5 * ArrowlengthAtTarget(e));
                 var hookPort = e.TargetPort as HookUpAnywhereFromInsidePort;
                 if (hookPort == null)
                     e.TargetPort = hookPort = new HookUpAnywhereFromInsidePort(() => cluster.BoundaryCurve);
@@ -254,31 +254,31 @@ namespace Microsoft.Msagl.Layout.Initial {
         }
 
 #if DEBUG
-    //        void CheckEdges() {
-    //            foreach (var edge in graph.Edges)
-    //                CheckEdge(edge);
-    //        }
-    //
-    //        static void CheckEdge(Edge edge) {
-    //            var s = edge.Source;
-    //            var t = edge.Target;
-    //            var sParents = new Set<Node>(s.ClusterParents);
-    //            var tParents = new Set<Node>(t.ClusterParents);
-    //            if (sParents == tParents) // the edge is between of the nodes of the same cluster, in a simple case
-    //                return;
-    //            var cluster = t as Cluster;
-    //            if (cluster != null && IsDescendant(s, cluster))
-    //                return;
-    //            cluster = s as Cluster;
-    //            if (cluster != null && IsDescendant(t, cluster))
-    //                return;
-    //            Debug.Assert(false, "an edge can be flat or connecting with an ancestor");
-    //        }
+        //        void CheckEdges() {
+        //            foreach (var edge in graph.Edges)
+        //                CheckEdge(edge);
+        //        }
+        //
+        //        static void CheckEdge(Edge edge) {
+        //            var s = edge.Source;
+        //            var t = edge.Target;
+        //            var sParents = new Set<Node>(s.ClusterParents);
+        //            var tParents = new Set<Node>(t.ClusterParents);
+        //            if (sParents == tParents) // the edge is between of the nodes of the same cluster, in a simple case
+        //                return;
+        //            var cluster = t as Cluster;
+        //            if (cluster != null && IsDescendant(s, cluster))
+        //                return;
+        //            cluster = s as Cluster;
+        //            if (cluster != null && IsDescendant(t, cluster))
+        //                return;
+        //            Debug.Assert(false, "an edge can be flat or connecting with an ancestor");
+        //        }
 
-    /// <summary>
-    /// Ensures that containment is preserved
-    /// </summary>
-    /// <param name="cluster">check is applied to specified cluster and below</param>
+        /// <summary>
+        /// Ensures that containment is preserved
+        /// </summary>
+        /// <param name="cluster">check is applied to specified cluster and below</param>
         static void ValidateLayout(Cluster cluster) {
             foreach (var c in cluster.AllClustersDepthFirst())
                 foreach (var v in c.nodes.Concat(c.Clusters.Cast<Node>()))
@@ -303,14 +303,14 @@ namespace Microsoft.Msagl.Layout.Initial {
                 foreach (var cl in cluster.Clusters)
                     LayoutCluster(cl);
 
-            List<GeometryGraph> components = (List<GeometryGraph>) GetComponents(cluster);
+            List<GeometryGraph> components = (List<GeometryGraph>)GetComponents(cluster, settings.LiftCrossEdges);
 
             //currentComponentFraction = (1.0 / clusterCount) / components.Count;
 
-//            if (runInParallel)
-//                Parallel.ForEach(components, parallelOptions, comp => LayoutComponent(settings, comp));
-//            else // debug!!!!!!
-                components.ForEach(c => LayoutComponent(settings, c));
+            //            if (runInParallel)
+            //                Parallel.ForEach(components, parallelOptions, comp => LayoutComponent(settings, comp));
+            //            else // debug!!!!!!
+            components.ForEach(c => LayoutComponent(settings, c));
 
             var bounds = MdsGraphLayout.PackGraphs(components, settings);
 
@@ -322,20 +322,20 @@ namespace Microsoft.Msagl.Layout.Initial {
             cluster.SetInitialLayoutState(settings.ClusterMargin);
             cluster.RaiseLayoutDoneEvent();
 
-//            var l = new List<DebugCurve>();
-//            foreach (var node in cluster.Nodes) {
-//                l.Add(new DebugCurve(node.BoundaryCurve));
-//            }
-//            foreach (var cl in cluster.AllClustersDepthFirstExcludingSelf()) {
-//                l.Add(new DebugCurve(cl.BoundaryCurve));
-//                l.AddRange(cl.Nodes.Select(n=>new DebugCurve(n.BoundaryCurve)));
-//            }
-//            LayoutAlgorithmSettings.ShowDebugCurves(l.ToArray());
+            //            var l = new List<DebugCurve>();
+            //            foreach (var node in cluster.Nodes) {
+            //                l.Add(new DebugCurve(node.BoundaryCurve));
+            //            }
+            //            foreach (var cl in cluster.AllClustersDepthFirstExcludingSelf()) {
+            //                l.Add(new DebugCurve(cl.BoundaryCurve));
+            //                l.AddRange(cl.Nodes.Select(n=>new DebugCurve(n.BoundaryCurve)));
+            //            }
+            //            LayoutAlgorithmSettings.ShowDebugCurves(l.ToArray());
         }
 
         internal static void FixOriginalGraph(GeometryGraph graph, bool translateEdges) {
             foreach (var v in graph.Nodes) {
-                var originalNode = (Node) v.UserData;
+                var originalNode = (Node)v.UserData;
                 var delta = v.BoundingBox.LeftBottom - originalNode.BoundingBox.LeftBottom;
                 var cluster = originalNode as Cluster;
                 if (cluster != null) {
@@ -346,17 +346,18 @@ namespace Microsoft.Msagl.Layout.Initial {
             }
             if (translateEdges) {
                 foreach (var e in graph.Edges) {
-                    var originalEdge = (Edge) e.UserData;
-                    if (e.Curve != null)
-                        originalEdge.Curve = e.Curve.Clone();
-                    originalEdge.Length = e.Length;
+                    if (e.UserData is Edge originalEdge) {
+                        if (e.Curve != null)
+                            originalEdge.Curve = e.Curve.Clone();
+                        originalEdge.Length = e.Length;
 
-                    originalEdge.EdgeGeometry.SourcePort = e.SourcePort = null;
+                        originalEdge.EdgeGeometry.SourcePort = e.SourcePort = null;
                         // EdgeGeometry ports get clobbered by edge routing          
-                    originalEdge.EdgeGeometry.TargetPort = e.TargetPort = null;
+                        originalEdge.EdgeGeometry.TargetPort = e.TargetPort = null;
 
-                    foreach (var l in originalEdge.Labels)
-                        l.GeometryParent = originalEdge;
+                        foreach (var l in originalEdge.Labels)
+                            l.GeometryParent = originalEdge;
+                    }
                 }
             }
         }
@@ -376,18 +377,38 @@ namespace Microsoft.Msagl.Layout.Initial {
         /// respect to edges internal to root.
         /// </summary>
         /// <param name="cluster">cluster to break into components</param>
+        /// <param name="liftCrossEdges">set this to consider lower-level edges while arranging subclusters</param>
         /// <returns>GeometryGraphs that are each a connected component</returns>
-        static IEnumerable<GeometryGraph> GetComponents(Cluster cluster) {
+        static IEnumerable<GeometryGraph> GetComponents(Cluster cluster, bool liftCrossEdges) {
+            // Create a copy of the cluster's nodes. Some or all of these may also be clusters. We call these "top nodes".
             Dictionary<Node, Node> originalToCopyNodeMap = ShallowNodeCopyDictionary(cluster);
             var copiedEdges = new List<Edge>();
+            // Iterate on the top nodes.
             foreach (var target in originalToCopyNodeMap.Keys) {
                 foreach (var e in target.InEdges) {
+                    // Filippo Polo: I'm not sure what's going on here. This seems to be testing whether the source node of the edge is a child of the cluster. But the edge comes from enumerating the in-edges of the target, so the source node is always the target. And the target comes from enumerating the result of a shallow node copy of the cluster. So how could it ever NOT be a child of the cluster? I.e. it looks to me like the following test is always true. Maybe this is a remnant of an earlier attempt to implement edge lifting (see below)?
                     var sourceAncestorUnderRoot = Ancestor(e.Source, cluster);
                     if (sourceAncestorUnderRoot == e.Source)
                         //it is a flat edge and we are only interested in flat edges
                         copiedEdges.Add(CopyEdge(originalToCopyNodeMap, e, sourceAncestorUnderRoot, target));
                 }
                 copiedEdges.AddRange(target.SelfEdges.Select(e => CopyEdge(originalToCopyNodeMap, e)));
+
+                // If this is a cluster, then lift the edges of contained nodes. This allows me to consider edges that connect cluster components as if they connected the clusters themselves, for the purpose of laying out clusters.
+                if (liftCrossEdges && target is Cluster targetCluster)
+                    // Iterate on all sub nodes.
+                    foreach (var sub in targetCluster.AllSuccessorsWidthFirst())
+                        // Iterate on all the in-edges of the sub node.
+                        foreach (var e in sub.InEdges) {
+                            // I already know that the target of this edge is contained within the top node. Where is the source of the edge?
+                            var sourceAncestorUnderRoot = Ancestor(e.Source, cluster);
+                            // If the source of the edge is NOT the current top node, then this is an edge that crosses clusters. Note that this may also be null, if it connects to an entirely different cluster; in this case, it will be considered at a higher level.
+                            if (sourceAncestorUnderRoot != null && sourceAncestorUnderRoot != target) {
+                                // I'm adding a "virtual" (i.e. not actually in the graph) edge to the list, which serves to make these clusters considered to be connected. Note that the source is necessarily in the set of copied nodes, because it was returned by the Ancestor function, which returns top nodes or null (and null is excluded).
+                                var virtualEdge = new Edge(originalToCopyNodeMap[sourceAncestorUnderRoot], originalToCopyNodeMap[target]);
+                                copiedEdges.Add(virtualEdge);
+                            }
+                        }
             }
 
             return GraphConnectedComponents.CreateComponents(originalToCopyNodeMap.Values.ToArray(), copiedEdges);
@@ -439,16 +460,16 @@ namespace Microsoft.Msagl.Layout.Initial {
             var originalNodeToCopy = new Dictionary<Node, Node>();
 
             foreach (var v in cluster.Nodes)
-                originalNodeToCopy[v] = new Node(v.BoundaryCurve.Clone()) {UserData = v};
+                originalNodeToCopy[v] = new Node(v.BoundaryCurve.Clone()) { UserData = v };
 
             foreach (var cl in cluster.Clusters) {
                 if (cl.IsCollapsed)
-                    originalNodeToCopy[cl] = new Node(cl.CollapsedBoundary.Clone()) {UserData = cl};
+                    originalNodeToCopy[cl] = new Node(cl.CollapsedBoundary.Clone()) { UserData = cl };
                 else {
                     if (cl.BoundaryCurve == null)
                         cl.BoundaryCurve = cl.RectangularBoundary.RectangularHull();
 
-                    originalNodeToCopy[cl] = new Node(cl.BoundaryCurve.Clone()) {UserData = cl};
+                    originalNodeToCopy[cl] = new Node(cl.BoundaryCurve.Clone()) { UserData = cl };
                 }
             }
 
@@ -502,7 +523,7 @@ namespace Microsoft.Msagl.Layout.Initial {
 
         void ForceDirectedLayout(FastIncrementalLayoutSettings settings, GeometryGraph component) {
             LayoutAlgorithmHelpers.ComputeDesiredEdgeLengths(settings.IdealEdgeLength, component);
-            var layout = new InitialLayout(component, settings) {SingleComponent = true};
+            var layout = new InitialLayout(component, settings) { SingleComponent = true };
             layout.Run(this.CancelToken);
             InitialLayoutHelpers.RouteEdges(component, settings, this.CancelToken);
             InitialLayoutHelpers.PlaceLabels(component, this.CancelToken);
@@ -522,7 +543,7 @@ namespace Microsoft.Msagl.Layout.Initial {
             var layeredLayout = new LayeredLayout(component, layeredSettings);
             layeredLayout.SetCancelToken(this.CancelToken);
             double aspectRatio = layeredLayout.EstimateAspectRatio();
-            double edgeDensity = (double) component.Edges.Count/component.Nodes.Count;
+            double edgeDensity = (double)component.Edges.Count / component.Nodes.Count;
 
             // if the estimated aspect ratio is not in the range below then we fall back to force directed layout
             // with constraints which is both faster and usually returns a better aspect ratio for largish graphs
@@ -532,7 +553,7 @@ namespace Microsoft.Msagl.Layout.Initial {
                  || component.Nodes.Count > 40 && edgeDensity > 3.0 // too dense
                  || component.Nodes.Count > 30 && edgeDensity > 4.0 // too dense
                  || component.Nodes.Count > 30 && aspectRatio > layeredSettings.MaxAspectRatioEccentricity // too wide
-                 || component.Nodes.Count > 30 && aspectRatio < 1d/layeredSettings.MaxAspectRatioEccentricity
+                 || component.Nodes.Count > 30 && aspectRatio < 1d / layeredSettings.MaxAspectRatioEccentricity
                     // too high
                     )) {
                 // for large graphs there's really no point trying to produce nice edge routes
