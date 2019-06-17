@@ -24,6 +24,7 @@
     <DefineConstants>TRACE;DEBUG;SHARPKIT;PERSISTENCE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>5</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,19 +35,56 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SharpKit.JsClr, Version=4.1.0.0, Culture=neutral, PublicKeyToken=2575297a09c47a96, processorArchitecture=MSIL" />
+    <Reference Include="SharpKit.Html, Version=1.0.0.0, Culture=neutral, PublicKeyToken=2575297a09c47a96, processorArchitecture=MSIL" />
+    <Reference Include="SharpKit.JavaScript, Version=1.5.0.0, Culture=neutral, PublicKeyToken=2575297a09c47a96, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="SharpKit.JavaScript" />
-    <Reference Include="SharpKit.Html" />
-    <Reference Include="SharpKit.jQuery" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\MSAGL\Core\Layout\ProximityOverlapRemoval\MST\GTreeOverlapRemoval.cs">
       <Link>GTreeOverlapRemoval.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\Angle.cs">
+      <Link>Angle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\ComponentCollection.cs">
+      <Link>ComponentCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\DijkstraAlgo.cs">
+      <Link>DijkstraAlgo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\LocalModifications.cs">
+      <Link>LocalModifications.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\MeshCreator.cs">
+      <Link>MeshCreator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\MeshGraph.cs">
+      <Link>MeshGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\MsaglUtilities.cs">
+      <Link>MsaglUtilities.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\Network.cs">
+      <Link>Network.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\PlanarGraphUtilities.cs">
+      <Link>PlanarGraphUtilities.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\PointSet.cs">
+      <Link>PointSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\PointToSegmentDistance.cs">
+      <Link>PointToSegmentDistance.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\SteinerTree.cs">
+      <Link>SteinerTree.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\Tiling.cs">
+      <Link>Tiling.cs</Link>
     </Compile>
     <Compile Include="ExtensionsForSharpKit.cs" />
     <Compile Include="GlobalSharpKit.cs" />
@@ -199,9 +237,6 @@
     </Compile>
     <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\ConjugateGradient\Vector.cs">
       <Link>Vector.cs</Link>
-    </Compile>
-    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\InitialScaling.cs">
-      <Link>InitialScaling.cs</Link>
     </Compile>
     <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\IOverlapRemoval.cs">
       <Link>IOverlapRemoval.cs</Link>
@@ -574,9 +609,6 @@
     </Compile>
     <Compile Include="..\..\msagl\Routing\Spline\Bundling\BundlingStatus.cs">
       <Link>BundlingStatus.cs</Link>
-    </Compile>
-    <Compile Include="..\..\msagl\Routing\Spline\Bundling\CdtGeneralPolylineTracer.cs">
-      <Link>CdtGeneralPolylineTracer.cs</Link>
     </Compile>
     <Compile Include="..\..\msagl\Routing\Spline\Bundling\CdtIntersections.cs">
       <Link>CdtIntersections.cs</Link>
@@ -1549,7 +1581,7 @@
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildBinPath)\SharpKit\5\SharpKit.Build.targets" />
+  <Import Project="$(ProgramFiles)\SharpKit\5\Compiler\SharpKit.Build.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

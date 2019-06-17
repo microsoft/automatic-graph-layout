@@ -346,7 +346,8 @@ namespace Microsoft.Msagl.Layout.Initial {
             }
             if (translateEdges) {
                 foreach (var e in graph.Edges) {
-                    if (e.UserData is Edge originalEdge) {
+                    if (e.UserData is Edge) {
+                        var originalEdge = e.UserData as Edge;
                         if (e.Curve != null)
                             originalEdge.Curve = e.Curve.Clone();
                         originalEdge.Length = e.Length;
@@ -395,7 +396,8 @@ namespace Microsoft.Msagl.Layout.Initial {
                 copiedEdges.AddRange(target.SelfEdges.Select(e => CopyEdge(originalToCopyNodeMap, e)));
 
                 // If this is a cluster, then lift the edges of contained nodes. This allows me to consider edges that connect cluster components as if they connected the clusters themselves, for the purpose of laying out clusters.
-                if (liftCrossEdges && target is Cluster targetCluster)
+                if (liftCrossEdges && target is Cluster) {
+                    var targetCluster = target as Cluster;
                     // Iterate on all sub nodes.
                     foreach (var sub in targetCluster.AllSuccessorsWidthFirst())
                         // Iterate on all the in-edges of the sub node.
@@ -409,6 +411,7 @@ namespace Microsoft.Msagl.Layout.Initial {
                                 copiedEdges.Add(virtualEdge);
                             }
                         }
+                }
             }
 
             return GraphConnectedComponents.CreateComponents(originalToCopyNodeMap.Values.ToArray(), copiedEdges);
