@@ -63,8 +63,11 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         {
             NumPoints = n;
             Pt = new WeightedPoint[n + 1];
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=340
+            throw new InvalidOperationException();
+#else
             pointMap = new int[g.NumOfnodes + 1, g.NumOfnodes + 1];
-
+#endif
             _selected = new int[g.NumOfnodes + 1];
             Random r1 = new Random();
 

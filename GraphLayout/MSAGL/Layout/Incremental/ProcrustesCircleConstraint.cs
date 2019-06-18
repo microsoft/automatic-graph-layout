@@ -286,6 +286,10 @@ namespace Microsoft.Msagl.Layout.Incremental {
         ///</summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Body"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String,System.Object,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.Write(System.String)")]
         public static void Test() {
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=340
+            double[,] XX = null;
+            throw new InvalidOperationException();
+#else
             double[,] XX = { { 1, 2 }, { -1, 2 }, { -1, -2 }, { 1, -2 } },
                 YY = { { 0.07, 2.62 }, { 0.93, 3.12 }, { 1.93, 1.38 }, { 1.07, 0.88 } };
             int ni = 4;
@@ -309,6 +313,7 @@ namespace Microsoft.Msagl.Layout.Incremental {
             PrintMatrix(T);
             System.Console.WriteLine("s={0}", s);
             System.Console.WriteLine("t=({0},{1})", t.X,t.Y);
+#endif
         }
         private static void FindTransform(Point[] X, Point[] Y,
             out Point[] T, out double s, out Point t) {
