@@ -1110,6 +1110,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             Console.WriteLine("Total Nodes =" + g.N + " Nodes Found " + count);
 
             int quota = _lgLayoutSettings.MaxNumberOfNodesPerTile;
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=340
+            throw new NotImplementedException();
+#else
             int[,] costTree = new int[maxtiles, quota + 1];
             Dictionary<IntPair, List<int>> resultTree = new Dictionary<IntPair, List<int>>();
             for (int i = 0; i < maxtiles; i++)
@@ -1156,6 +1159,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             /*
             _mainGeometryGraph.UpdateBoundingBox();
             */
+#endif
         }
 
 

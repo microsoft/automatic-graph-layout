@@ -6,7 +6,10 @@ using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.DebugHelpers;
+#if SHARPKIT
+#else
 using Microsoft.Msagl.Layout.LargeGraphLayout;
+#endif
 using Microsoft.Msagl.Routing;
 using Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation;
 

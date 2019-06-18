@@ -100,7 +100,12 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
 
             //now proceess the movement
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=340
+            int[,] listNeighbors = null;
+            throw new InvalidOperationException();
+#else
             int[,] listNeighbors = new int[20, 3];
+#endif
             double[] d = new double[10];
             int a = 0, b = 0;
             Core.Geometry.Point[] p = new Core.Geometry.Point[10];
@@ -210,6 +215,9 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
         public static void MsaglStretchAccordingToZoomLevel(Tiling g, Dictionary<int, Node> idToNodes)
         {
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=340
+            throw new InvalidOperationException();
+#else
             int[,] listNeighbors = new int[20, 3];
             double[] d = new double[10];
             int[] a = new int[10];
@@ -306,6 +314,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 }
             }
             Console.WriteLine("Done");
+#endif
         }
 
 

@@ -180,6 +180,9 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         {
             int index = 0;
             LineSegment[] segments = new LineSegment[face.Count];
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=340
+            throw new InvalidOperationException();
+#else
             Vertex[,] segmentVertices = new Vertex[face.Count, 2];
             Vertex initialVertex = null, oldVertex = null;
             Core.Geometry.Point u1, u2;
@@ -229,6 +232,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 }
             }
             return facewidth;
+#endif
         }
 
         private static bool RemoveLongestEdge(Tiling gPlanar, List<Vertex> face)

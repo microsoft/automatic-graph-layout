@@ -42,7 +42,11 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             _angularResolution = 0.3;
             NumOfnodes = N = nodeCount;
             maxDeg = 15;
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=340
+            throw new InvalidOperationException();
+#else
             EList = new Edge[10 * N, maxDeg];
+#endif
             VList = new Vertex[10 * N];
             DegList = new int[10 * N];
             _edgeNodeSeparation = new double[20];
@@ -66,6 +70,9 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             N = bound;
             _angularResolution = 0.3;
 
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=340
+            throw new InvalidOperationException();
+#else
             NodeMap = new int[N, N];
             EList = new Edge[N * N, 20];
             VList = new Vertex[N * N];
@@ -161,7 +168,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                         if (eList[x, y].nodeId == eList[x, z].nodeId) Console.WriteLine("BAD");
                 }
             }*/
-
+#endif
         }
 
         public int InsertVertex(int x, int y)
@@ -285,6 +292,9 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
         public void MsaglMoveToMaximizeMinimumAngle()
         {
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=340
+            throw new InvalidOperationException();
+#else
             int[,] listNeighbors = new int[20, 3];
             double[] d = new double[10];
             int a = 0, b = 0, mincostA = 0, mincostB = 0;
@@ -402,6 +412,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 }
             }
             Console.WriteLine("Done");
+#endif
         }
 
 
@@ -918,6 +929,9 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
         public void MsaglRemoveDeg2(Dictionary<int, Node> idToNodes)
         {
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=340
+            throw new InvalidOperationException();
+#else
             int[,] listNeighbors = new int[20, 3];
 
             bool localRefinementsFound = true;
@@ -992,6 +1006,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 }
             }
             Deg2Vertices.Clear();
+#endif
         }
         /*
         public void MsaglRemoveDeg2(Dictionary<int, Node> idToNodes)
@@ -1044,7 +1059,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                     //if the new position is good then remove this deg 2 vertex 
                     if (adjust)
                     {
-                         
+
 
                         localRefinementsFound = true;
                         var selected = Math.Max(EList[index, listNeighbors[1, 2]].Selected, EList[index, listNeighbors[2, 2]].Selected);
@@ -1070,6 +1085,9 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         */
         public void RemoveDeg2(WeightedPoint[] pt, int numPoints)
         {
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=340
+            throw new InvalidOperationException();
+#else
             int[,] listNeighbors = new int[20, 3];
 
             bool localRefinementsFound = true;
@@ -1181,7 +1199,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                     }
                 }
             }
-
+#endif
         }
 
         public void MsaglDetour(Dictionary<int, Node> idToNode, bool omit)
@@ -1197,6 +1215,9 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 int neighbor;
 
 
+#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=340
+                throw new InvalidOperationException();
+#else
                 int[,] removelist = new int[10, 2];
                 int[,] addlist = new int[10, 4];
 
@@ -1298,7 +1319,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 }
                 //remove one edge
                 if (removeA + removeB > 0) RemoveEdge(removeA, removeB);
-
+#endif
             }
         }
 
