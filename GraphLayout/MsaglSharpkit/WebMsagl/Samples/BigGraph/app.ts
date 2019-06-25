@@ -12,7 +12,6 @@ var stopButton = <HTMLButtonElement>document.getElementById("stopButton");
 var working = document.getElementById("working");
 var elapsed = document.getElementById("elapsed");
 var edgeRoutingSelect = <HTMLSelectElement>document.getElementById("edgeRoutingSelect");
-var layeredLayoutCheckBox = <HTMLInputElement>document.getElementById("layeredLayoutCheckBox");
 
 function setGUIToRunning() {
     working.style.display = "inline";
@@ -34,12 +33,16 @@ function run(nodeCount: number, edgeCount: number) {
     graph.settings.routing = edgeRoutingSelect.value;
     for (var i = 1; i <= nodeCount; i++)
         graph.addNode(new G.GNode({ id: "node" + i, label: "Node " + i }));
+    var randomness = new Uint32Array(edgeCount * 2);
+    if (typeof (crypto) != "undefined")
+        crypto.getRandomValues(randomness);
+    else
+            (<any>window).msCrypto.getRandomValues(randomness);
     for (var i = 1; i <= edgeCount; i++)
         graph.addEdge(new G.GEdge({
-            id: "edge" + i, source: "node" + Math.floor(Math.random() * nodeCount + 1),
-            target: "node" + Math.floor(Math.random() * nodeCount + 1)
+            id: "edge" + i, source: "node" + (randomness[(i - 1) * 2] % nodeCount + 1),
+            target: "node" + (randomness[(i - 1) * 2 + 1] % nodeCount + 1)
         }));
-    graph.settings.layout = layeredLayoutCheckBox.checked ? G.GSettings.sugiyamaLayout : G.GSettings.mdsLayout;
 
     var startTime = new Date();
     graph.createNodeBoundariesForSVGInContainer(graphView);

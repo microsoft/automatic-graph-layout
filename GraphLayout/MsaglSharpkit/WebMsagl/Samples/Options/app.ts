@@ -62,6 +62,7 @@ function loadGraph(json: string) {
     jsonGraph = json;
     graph = G.GGraph.ofJSON(jsonGraph);
     graphControl.setGraph(graph);
+    graphControl.allowEditing = false;
     graph.workStoppedCallbacks.add(() => {
         showWorking(false);
         graphControl.drawGraph();

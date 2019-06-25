@@ -69,17 +69,17 @@ class ContextGraph {
     }
 
     private drawCurve(context: CanvasRenderingContext2D, curve: G.GCurve, continuous: boolean): void {
-        if (curve.type === "SegmentedCurve")
+        if (curve.curvetype === "SegmentedCurve")
             this.drawSegmentedCurve(context, <G.GSegmentedCurve>curve, continuous);
-        else if (curve.type === "Polyline")
+        else if (curve.curvetype === "Polyline")
             this.drawPolyline(context, <G.GPolyline>curve, continuous);
-        else if (curve.type === "Bezier")
+        else if (curve.curvetype === "Bezier")
             this.drawBezier(context, <G.GBezier>curve, continuous);
-        else if (curve.type === "Line")
+        else if (curve.curvetype === "Line")
             this.drawLine(context, <G.GLine>curve, continuous);
-        else if (curve.type === "Ellipse")
+        else if (curve.curvetype === "Ellipse")
             this.drawEllipse(context, <G.GEllipse>curve, continuous);
-        else if (curve.type === "RoundedRect")
+        else if (curve.curvetype === "RoundedRect")
             this.drawRoundedRect(context, <G.GRoundedRect>curve, continuous);
     }
 

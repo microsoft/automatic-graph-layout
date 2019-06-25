@@ -26,6 +26,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,6 +49,8 @@
     <Content Include="packages.config" />
     <Content Include="Samples\BigGraph\index.html" />
     <Content Include="Samples\BigGraph\styles.css" />
+    <Content Include="Samples\Clusters\index.html" />
+    <Content Include="Samples\Clusters\styles.css" />
     <Content Include="Samples\CustomLabels\index.html" />
     <Content Include="Samples\CustomLabels\styles.css" />
     <Content Include="Samples\GraphFromJson\index.html" />
@@ -69,6 +72,8 @@
   <ItemGroup>
     <TypeScriptCompile Include="Samples\BigGraph\app.ts" />
     <TypeScriptCompile Include="Samples\BigGraph\boot.ts" />
+    <TypeScriptCompile Include="Samples\Clusters\app.ts" />
+    <TypeScriptCompile Include="Samples\Clusters\boot.ts" />
     <TypeScriptCompile Include="Samples\config.ts" />
     <TypeScriptCompile Include="Samples\CustomLabels\app.ts" />
     <TypeScriptCompile Include="Samples\CustomLabels\boot.ts" />
@@ -85,7 +90,7 @@
     <TypeScriptCompile Include="Scripts\src\iddgraph.ts" />
     <TypeScriptCompile Include="Scripts\src\iddsvggraph.ts" />
     <TypeScriptCompile Include="Scripts\src\messages.ts" />
-    <TypeScriptCompile Include="Scripts\src\msaglWorker.ts" />
+    <TypeScriptCompile Include="Scripts\src\msagl.worker.ts" />
     <TypeScriptCompile Include="Scripts\src\svggraph.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\requirejs\require.d.ts" />

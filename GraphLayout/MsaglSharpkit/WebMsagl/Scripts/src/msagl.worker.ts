@@ -31,7 +31,7 @@ class LayoutWorker {
     private getMsaglCurve(gcurve: G.GCurve): any {
         if (gcurve == null)
             return null;
-        else if (gcurve.type == "Ellipse") {
+        else if (gcurve.curvetype == "Ellipse") {
             var gellipse = <G.GEllipse>gcurve;
             return new Microsoft.Msagl.Core.Geometry.Curves.Ellipse.ctor$$Double$$Double$$Point$$Point$$Point(
                 gellipse.parStart,
@@ -40,13 +40,13 @@ class LayoutWorker {
                 this.getMsaglPoint(gellipse.axisB),
                 this.getMsaglPoint(gellipse.center));
         }
-        else if (gcurve.type == "Line") {
+        else if (gcurve.curvetype == "Line") {
             var gline = <G.GLine>gcurve;
             return new Microsoft.Msagl.Core.Geometry.Curves.LineSegment.ctor$$Point$$Point(
                 this.getMsaglPoint(gline.start),
                 this.getMsaglPoint(gline.end));
         }
-        else if (gcurve.type == "Bezier") {
+        else if (gcurve.curvetype == "Bezier") {
             var gbezier = <G.GBezier>gcurve;
             return new Microsoft.Msagl.Core.Geometry.Curves.CubicBezierSegment.ctor(
                 this.getMsaglPoint(gbezier.start),
@@ -54,21 +54,21 @@ class LayoutWorker {
                 this.getMsaglPoint(gbezier.p2),
                 this.getMsaglPoint(gbezier.p3));
         }
-        else if (gcurve.type == "Polyline") {
+        else if (gcurve.curvetype == "Polyline") {
             var gpolyline = <G.GPolyline>gcurve;
             var points: any[] = [];
             for (var i = 0; i < gpolyline.points.length; i++)
                 points.push(this.getMsaglPoint(gpolyline.points[i]));
             return new Microsoft.Msagl.Core.Geometry.Curves.Polyline.ctor$$IEnumerable$1$Point(points);
         }
-        else if (gcurve.type == "RoundedRect") {
+        else if (gcurve.curvetype == "RoundedRect") {
             var groundedrect = <G.GRoundedRect>gcurve;
             return new Microsoft.Msagl.Core.Geometry.Curves.RoundedRect.ctor$$Rectangle$$Double$$Double(
                 this.getMsaglRect(groundedrect.bounds),
                 groundedrect.radiusX,
                 groundedrect.radiusY);
         }
-        else if (gcurve.type == "SegmentedCurve") {
+        else if (gcurve.curvetype == "SegmentedCurve") {
             // In the case of a SegmentedCurve, I actually need to convert each of the sub-curves, and then build a MSAGL
             // object out of them.
             var gsegcurve = <G.GSegmentedCurve>gcurve;
@@ -80,35 +80,42 @@ class LayoutWorker {
         return null;
     }
 
-    private addClusterToMsagl(graph: any, cluster: any, nodeMap: NodeMap, gcluster: G.GCluster) {
-        for (var i = 0; i < gcluster.children.length; i++) {
-            var gnode = gcluster.children[i];
-            this.addNodeToMsagl(graph, cluster, nodeMap, gnode);
-        }
-    }
-
-    private addNodeToMsagl(graph: any, rootCluster: any, nodeMap: NodeMap, gnode: G.GNode) {
-        var isCluster = (<G.GCluster>gnode).children !== undefined;
+    private addNodeToMsagl(graph: any, rootCluster: any, nodeMap: NodeMap, gnode: G.GNode): any {
+        var children = (<G.GCluster>gnode).children;
         var node: any = null;
-        if (isCluster) {
+        if (children != null) {
+            var gcluster = <G.GCluster>gnode;
             node = new Microsoft.Msagl.Core.Layout.Cluster.ctor();
+            for (let child of children) {
+                let childNode = this.addNodeToMsagl(graph, node, nodeMap, child);
+                if ((<G.GCluster>child).children == null)
+                    node.AddNode(childNode);
+            }
+            node.set_GeometryParent(rootCluster);
+            var rectangularBoundary = new Microsoft.Msagl.Core.Geometry.RectangularClusterBoundary.ctor();
+            rectangularBoundary.set_BottomMargin(gcluster.margin.bottom);
+            rectangularBoundary.set_TopMargin(gcluster.margin.top);
+            rectangularBoundary.set_RightMargin(gcluster.margin.right);
+            rectangularBoundary.set_LeftMargin(gcluster.margin.left);
+            rectangularBoundary.set_MinWidth(gcluster.margin.minWidth);
+            rectangularBoundary.set_MinHeight(gcluster.margin.minHeight);
+            node.set_RectangularBoundary(rectangularBoundary);
             rootCluster.AddCluster(node);
-            this.addClusterToMsagl(graph, node, nodeMap, <G.GCluster>gnode);
         }
         else {
             node = new Microsoft.Msagl.Core.Layout.Node.ctor();
-            rootCluster.AddNode(node);
             graph.get_Nodes().Add(node);
+            var curve = this.getMsaglCurve(gnode.boundaryCurve);
+            if (curve == null)
+                curve = this.getMsaglCurve(new G.GRoundedRect({
+                    bounds: { x: 0, y: 0, width: 0, height: 0 }, radiusX: 0, radiusY: 0
+                }));
+            node.set_BoundaryCurve(curve);
         }
         node.set_UserData(gnode.id);
 
-        var curve = this.getMsaglCurve(gnode.boundaryCurve);
-        if (curve == null)
-            curve = this.getMsaglCurve(new G.GRoundedRect({
-                bounds: { x: 0, y: 0, width: 0, height: 0 }, radiusX: 0, radiusY: 0
-            }));
-        node.set_BoundaryCurve(curve);
         nodeMap[gnode.id] = { mnode: node, gnode: gnode };
+        return node;
     }
 
     private addEdgeToMsagl(graph: any, nodeMap: NodeMap, edgeMap: { [idx: string]: any }, gedge: G.GEdge) {
@@ -139,6 +146,7 @@ class LayoutWorker {
 
         // Add nodes (and clusters)
         var rootCluster = graph.get_RootCluster();
+        rootCluster.set_GeometryParent(graph);
         for (var i = 0; i < ggraph.nodes.length; i++)
             this.addNodeToMsagl(graph, rootCluster, nodeMap, ggraph.nodes[i]);
 
@@ -266,8 +274,16 @@ class LayoutWorker {
             var curve = node.get_BoundaryCurve();
             gnode.boundaryCurve = this.getGCurve(curve);
             if (gnode.label != null) {
-                gnode.label.bounds.x = node.get_Center().get_X() - gnode.label.bounds.width / 2;
-                gnode.label.bounds.y = node.get_Center().get_Y() - gnode.label.bounds.height / 2;
+                if ((<G.GCluster>gnode).children != null) {
+                    // It's a cluster. Position the label at the top.
+                    gnode.label.bounds.x = node.get_Center().get_X() - gnode.label.bounds.width / 2;
+                    gnode.label.bounds.y = node.get_BoundingBox().get_Bottom() + gnode.label.bounds.height / 2;
+                }
+                else {
+                    // It's not a cluster. Position the label in the middle.
+                    gnode.label.bounds.x = node.get_Center().get_X() - gnode.label.bounds.width / 2;
+                    gnode.label.bounds.y = node.get_Center().get_Y() - gnode.label.bounds.height / 2;
+                }
             }
         }
         // Get the edge curves, labels and arrowheads.
@@ -380,16 +396,16 @@ export function handleMessage(e: any): void {
     var ggraph = G.GGraph.ofJSON(message.graph);
     var worker = new LayoutWorker(ggraph);
     var answer: M.Response = null;
-    switch (message.type) {
+    switch (message.msgtype) {
         case "RunLayout":
             {
                 try {
                     worker.runLayout();
-                    answer = { type: "RunLayout", graph: worker.finalGraph.getJSON() };
+                    answer = { msgtype: "RunLayout", graph: worker.finalGraph.getJSON() };
                 }
                 catch (e) {
                     console.log("error in MSAGL.RunLayout: " + JSON.stringify(e));
-                    answer = { type: "Error", error: e };
+                    answer = { msgtype: "Error", error: e };
                 }
                 break;
             }
@@ -398,11 +414,11 @@ export function handleMessage(e: any): void {
                 var edges: string[] = (<M.Req_RouteEdges>message).edges;
                 try {
                     worker.runEdgeRouting(edges);
-                    answer = { type: "RouteEdges", graph: worker.finalGraph.getJSON(), edges: edges };
+                    answer = { msgtype: "RouteEdges", graph: worker.finalGraph.getJSON(), edges: edges };
                 }
                 catch (e) {
                     console.log("error in MSAGL.RouteEdges: " + JSON.stringify(e));
-                    answer = { type: "Error", error: e };
+                    answer = { msgtype: "Error", error: e };
                 }
                 break;
             }
@@ -414,7 +430,7 @@ export function handleMessage(e: any): void {
                 try {
                     result = worker.setPolyline(edge, points);
                     answer = {
-                        type: "SetPolyline", edge: edge, curve: JSON.stringify(result.curve),
+                        msgtype: "SetPolyline", edge: edge, curve: JSON.stringify(result.curve),
                         sourceArrowHeadStart: result.sourceArrowHeadStart == null ? null : JSON.stringify(result.sourceArrowHeadStart),
                         sourceArrowHeadEnd: result.sourceArrowHeadEnd == null ? null : JSON.stringify(result.sourceArrowHeadEnd),
                         targetArrowHeadStart: result.targetArrowHeadStart == null ? null : JSON.stringify(result.targetArrowHeadStart),
@@ -423,10 +439,12 @@ export function handleMessage(e: any): void {
                 }
                 catch (e) {
                     console.log("error in MSAGL.SetPolyline: " + JSON.stringify(e));
-                    answer = { type: "Error", error: e };
+                    answer = { msgtype: "Error", error: e };
                 }
                 break;
             }
     }
     self.postMessage(answer);
 }
+
+self.addEventListener('message', handleMessage);

@@ -47,7 +47,8 @@ class IDDSVGGraph extends SVGGraph {
 
                 if (!isNaN(plotRect.y) && !isNaN(plotRect.height)) {
                     var zoom = finalRect.width / plotRect.width;
-                    _svg.setAttribute("viewBox", plotRect.x + " " + (-plotRect.y - plotRect.height) + " " + plotRect.width + " " + plotRect.height);
+                    if (plotRect.width > 0 && plotRect.height > 0)
+                        _svg.setAttribute("viewBox", plotRect.x + " " + (-plotRect.y - plotRect.height) + " " + plotRect.width + " " + plotRect.height);
                 }
             }
         };
@@ -55,6 +56,12 @@ class IDDSVGGraph extends SVGGraph {
 
     chart: any;
     gplot: any;
+
+    /** The scale wich is considered to have zoom level equal to 1.0 */
+    private referenceScale: number = 1.0;
+
+    /** Is called each time the zoom level is changed by the IDD navigation */
+    public zoomLevelChangeCallback: (level: number) => void = function (level) { };
 
     /** Constructs an IDD SVG renderer and binds it to the provided HTML element.
      * @param container The container for the graph.
@@ -98,6 +105,13 @@ class IDDSVGGraph extends SVGGraph {
         var gestureSource = InteractiveDataDisplay.Gestures.getGesturesStream($("#" + chartID));
         this.chart.navigation.gestureSource = gestureSource;
         this.gplot = this.chart.get(plotContainerID);
+
+        // passing the event from IDD to the user, prforming data conversion
+        this.chart.master.host.on('widthScaleChanged', (event: any, data: any) => {
+            var newWidthScale = data['widthScale'];
+            var zoomLevel = newWidthScale / that.referenceScale;
+            that.zoomLevelChangeCallback(zoomLevel);
+        });
 
         this.containerRect = container.getBoundingClientRect();
         if ((<any>container).msagl_check_size_interval != null)
@@ -168,7 +182,6 @@ class IDDSVGGraph extends SVGGraph {
         var scaleY = cheight / bbox.height;
         var scale = Math.min(scaleX, scaleY);
         this.chart.navigation.setVisibleRect({ x: offsetX, y: -offsetY - (isNaN(scale) ? bbox.height : (cheight / scale)), width: bbox.width, height: bbox.height }, false);
-        this.hookUpMouseEvents();
     }
 
     /** The IDD gesture source. Used to disable and restore IDD mouse handling. */
@@ -182,6 +195,28 @@ class IDDSVGGraph extends SVGGraph {
     private restoreIDDMouseHandling() {
         if (this.gestureSource != null)
             this.chart.navigation.gestureSource = this.gestureSource;
+    }
+
+    /**
+     *  Recalibrates the zoom level. After this call the current view of the graph will be considered as zoom level 1.0     
+     */
+    public resetZoomLevel() {
+        this.referenceScale = this.chart.navigation.widthScale;
+    }
+
+    /**
+     * Returns the current zoom level value.
+     */
+    public getZoomLevel() {
+        return this.chart.navigation.widthScale / this.referenceScale;
+    }
+
+    /**
+     * Changes the zoom level of the graph. Value of 1.0 indicates 100%; 1.5 - 150%; 0.1 - 10% of zoom
+     * @param zoomLevel new level to set
+     */
+    public setZoomLevel(zoomLevel: number) {
+        this.chart.navigation.widthScale = this.referenceScale * zoomLevel;
     }
 
     /** Prepares to take charge of mouse handling when the user is about to start editing the graph. */
@@ -204,6 +239,13 @@ class IDDSVGGraph extends SVGGraph {
             if (that.allowEditing)
                 that.restoreIDDMouseHandling();
         }
+    }
+
+    protected onMouseDblClick(e: MouseEvent) {
+        if (this.svg != null && !this.isEditingEdge())
+            this.setViewBox(this.graph.boundingBox);
+        else
+            super.onMouseDblClick(e);
     }
 }
 

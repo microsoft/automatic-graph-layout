@@ -56,11 +56,12 @@ class SVGGraph {
 
         var workingText = document.createTextNode("LAYOUT IN PROGRESS");
         var workingSpan = document.createElement("span");
-        workingSpan.setAttribute("style", "position: absolute; top: 50%; width: 100%; height: 100%; text-align: center");
+        workingSpan.setAttribute("style", "position: absolute; top: 50%; width: 100%; text-align: center; z-index: 10");
         workingSpan.style.visibility = "hidden";
         workingSpan.appendChild(workingText);
         this.workingSpan = workingSpan;
         this.container.appendChild(this.workingSpan);
+        this.hookUpMouseEvents();
     }
 
     private edgeRoutingCallback: ((edges: string[]) => void) = null;
@@ -87,7 +88,8 @@ class SVGGraph {
         };
         this.graph.edgeRoutingCallbacks.add(this.edgeRoutingCallback);
         this.layoutStartedCallback = () => {
-            that.workingSpan.style.visibility = "visible";
+            if (this.graph.nodes.length > 0)
+                that.workingSpan.style.visibility = "visible";
         };
         this.graph.layoutStartedCallbacks.add(this.layoutStartedCallback);
         this.workStoppedCallback = () => {
@@ -222,20 +224,22 @@ class SVGGraph {
     }
 
     private pathCurve(curve: G.GCurve, continuous: boolean): string {
-        if (curve.type === "SegmentedCurve")
+        if (curve == null)
+            return "";
+        if (curve.curvetype === "SegmentedCurve")
             return this.pathSegmentedCurve(<G.GSegmentedCurve>curve, continuous);
-        else if (curve.type === "Polyline")
+        else if (curve.curvetype === "Polyline")
             return this.pathPolyline(<G.GPolyline>curve, continuous);
-        else if (curve.type === "Bezier")
+        else if (curve.curvetype === "Bezier")
             return this.pathBezier(<G.GBezier>curve, continuous);
-        else if (curve.type === "Line")
+        else if (curve.curvetype === "Line")
             return this.pathLine(<G.GLine>curve, continuous);
-        else if (curve.type === "Ellipse")
+        else if (curve.curvetype === "Ellipse")
             return this.pathEllipse(<G.GEllipse>curve, continuous);
-        else if (curve.type === "RoundedRect")
+        else if (curve.curvetype === "RoundedRect")
             return this.pathRoundedRect(<G.GRoundedRect>curve, continuous);
         else
-            throw "unknown curve type: " + curve.type;
+            throw "unknown curve type: " + curve.curvetype;
     }
 
     /** Set this to draw custom labels. Return true to suppress default label rendering, or false to render as default. Note
@@ -272,11 +276,6 @@ class SVGGraph {
     }
 
     private drawNode(parent: Element, node: G.GNode): void {
-        var cluster = <G.GCluster>node;
-        if (cluster.children !== undefined)
-            for (var i = 0; i < cluster.children.length; i++)
-                this.drawNode(parent, cluster.children[i]);
-
         var g = <SVGGElement>document.createElementNS(SVGGraph.SVGNS, "g");
         var nodeCopy = node;
         var that = this;
@@ -312,20 +311,36 @@ class SVGGraph {
         g.onclick = function () { that.onNodeClick(renderNode.node); };
         g.onmouseover = function (e) { that.onNodeMouseOver(renderNode, e); };
         g.onmouseout = function (e) { that.onNodeMouseOut(renderNode, e); };
+
+        var cluster = <G.GCluster>node;
+        if (cluster.children !== undefined)
+            for (var i = 0; i < cluster.children.length; i++)
+                this.drawNode(parent, cluster.children[i]);
     }
 
     private drawArrow(parent: Element, arrowHead: G.GArrowHead, style: string): void {
+        // start is the base of the arrowhead
         var start = arrowHead.start;
+        // end is the point where the arrowhead touches the target
         var end = arrowHead.end;
         if (start == null || end == null)
             return;
+        // dir is the vector from start to end
         var dir = new G.GPoint({ x: start.x - end.x, y: start.y - end.y });
+        // offset (x and y) is the vector from the start to the side
         var offsetX = -dir.y * Math.tan(25 * 0.5 * (Math.PI / 180));
         var offsetY = dir.x * Math.tan(25 * 0.5 * (Math.PI / 180));
         var pathString = "";
         if (arrowHead.style == "tee") {
             pathString += " M" + (start.x + offsetX) + " " + (start.y + offsetY);
             pathString += " L" + (start.x - offsetX) + " " + (start.y - offsetY);
+        }
+        else if (arrowHead.style == "diamond") {
+            pathString += " M" + (start.x) + " " + (start.y);
+            pathString += " L" + (start.x - (offsetX + dir.x / 2)) + " " + (start.y - (offsetY + dir.y / 2));
+            pathString += " L" + (end.x) + " " + (end.y);
+            pathString += " L" + (start.x - (-offsetX + dir.x / 2)) + " " + (start.y - (-offsetY + dir.y / 2));
+            pathString += " Z";
         }
         else {
             pathString += " M" + (start.x + offsetX) + " " + (start.y + offsetY);
@@ -423,6 +438,8 @@ class SVGGraph {
     }
 
     drawGraph(): void {
+        while (this.svg != null && this.svg.childElementCount > 0)
+            this.svg.removeChild(this.svg.firstChild);
         if (this.grid)
             this.drawGrid(this.svg);
         if (this.graph == null)
@@ -442,7 +459,6 @@ class SVGGraph {
         var viewBox: string = "" + offsetX + " " + offsetY + " " + bbox.width + " " + bbox.height;
         this.svg.setAttribute("viewBox", viewBox);
 
-        this.hookUpMouseEvents();
         this.populateGraph();
     }
 
@@ -534,12 +550,16 @@ class SVGGraph {
     // Mouse event handlers.
 
     protected onMouseMove(e: MouseEvent) {
+        if (this.svg == null)
+            return;
         // Update the mouse point.
         this.mousePoint = this.getGraphPoint(e);
         // Do dragging, if needed.
         this.doDrag();
     };
     protected onMouseOut(e: MouseEvent) {
+        if (this.svg == null)
+            return;
         // Clear the mouse data.
         this.mousePoint = null;
         this.elementUnderMouseCursor = null;
@@ -547,6 +567,8 @@ class SVGGraph {
         this.endDrag();
     };
     protected onMouseDown(e: MouseEvent) {
+        if (this.svg == null)
+            return;
         // Store the point where the mouse went down.
         this.mouseDownPoint = new G.GPoint(this.getGraphPoint(e));
         // Begin dragging, if needed.
@@ -554,24 +576,34 @@ class SVGGraph {
             this.beginDrag();
     };
     protected onMouseUp(e: MouseEvent) {
+        if (this.svg == null)
+            return;
         // End dragging, if needed.
         this.endDrag();
     };
     protected onMouseDblClick(e: MouseEvent) {
+        if (this.svg == null)
+            return;
         // If an edge is being edited, interpret the double click as an edge corner event. It may be
         // an insertion or a deletion.
         if (this.edgeEditEdge != null)
             this.edgeControlPointEvent(this.getGraphPoint(e));
     }
     private onNodeMouseOver(n: RenderNode, e: MouseEvent) {
+        if (this.svg == null)
+            return;
         // Update the object under mouse cursor.
         this.elementUnderMouseCursor = n;
     };
     private onNodeMouseOut(n: RenderNode, e: MouseEvent) {
+        if (this.svg == null)
+            return;
         // Clear the object under mouse cursor.
         this.elementUnderMouseCursor = null;
     };
     private onEdgeMouseOver(ed: RenderEdge, e: MouseEvent) {
+        if (this.svg == null)
+            return;
         // Update the object under mouse cursor.
         this.elementUnderMouseCursor = ed;
         // If needed, begin editing the edge.
@@ -579,16 +611,22 @@ class SVGGraph {
             this.enterEdgeEditMode(ed);
     };
     private onEdgeMouseOut(ed: RenderEdge, e: MouseEvent) {
+        if (this.svg == null)
+            return;
         // Start the timeout to exit edge edit mode.
         this.beginExitEdgeEditMode();
         // Clear the object under mouse cursor.
         this.elementUnderMouseCursor = null;
     };
     private onEdgeLabelMouseOver(l: RenderEdgeLabel, e: MouseEvent) {
+        if (this.svg == null)
+            return;
         // Update the object under mouse cursor.
         this.elementUnderMouseCursor = l;
     };
     private onEdgeLabelMouseOut(l: RenderEdgeLabel, e: MouseEvent) {
+        if (this.svg == null)
+            return;
         // Clear the object under mouse cursor.
         this.elementUnderMouseCursor = null;
     };
@@ -637,6 +675,10 @@ class SVGGraph {
     private edgeEditModeTimeout: number;
     /** The edge that's currently being edited. */
     private edgeEditEdge: RenderEdge;
+
+    protected isEditingEdge(): boolean {
+        return this.edgeEditEdge != null;
+    }
 
     /** Draws the control points for the edge that is currently being edited. */
     private drawPolylineCircles() {
