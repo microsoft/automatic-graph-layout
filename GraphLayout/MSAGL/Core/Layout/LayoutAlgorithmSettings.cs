@@ -131,8 +131,12 @@ namespace Microsoft.Msagl.Core.Layout {
             set { clusterMargin = value; }
         }
 
+        private bool liftCrossEdges = true;
         /// <summary>While laying out clusters, consider edges connecting subnodes as if they were connecting the clusters directly, for the purpose of arranging clusters. This usually results in a better layout.</summary>
-        public bool LiftCrossEdges { get; set; } = true;
+        public bool LiftCrossEdges {
+            get { return liftCrossEdges; }
+            set { liftCrossEdges = value; }
+        }
 
         /// <summary>
         /// Clones the object

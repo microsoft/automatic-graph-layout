@@ -37,42 +37,42 @@ using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.Routing;
-using Color=System.Drawing.Color;
-using DrawingGraph=Microsoft.Msagl.Drawing.Graph;
-using GeometryEdge=Microsoft.Msagl.Core.Layout.Edge;
-using GeometryNode=Microsoft.Msagl.Core.Layout.Node;
-using DrawingEdge=Microsoft.Msagl.Drawing.Edge;
-using DrawingNode=Microsoft.Msagl.Drawing.Node;
+using Color = System.Drawing.Color;
+using DrawingGraph = Microsoft.Msagl.Drawing.Graph;
+using GeometryEdge = Microsoft.Msagl.Core.Layout.Edge;
+using GeometryNode = Microsoft.Msagl.Core.Layout.Node;
+using DrawingEdge = Microsoft.Msagl.Drawing.Edge;
+using DrawingNode = Microsoft.Msagl.Drawing.Node;
 using P2 = Microsoft.Msagl.Core.Geometry.Point;
 using Rectangle = Microsoft.Msagl.Core.Geometry.Rectangle;
 using Shape = Microsoft.Msagl.Drawing.Shape;
 
-namespace Microsoft.Msagl.GraphViewerGdi{
+namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// This yet another graph is needed to hold additional GDI specific data for drawing.
     /// It has a pointer to Microsoft.Msagl.Drawing.Graph and Microsoft.Msagl.Graph.
     /// It is passed to the drawing routine
     /// </summary>
-    internal sealed class DGraph : DObject, IViewerGraph{
+    internal sealed class DGraph : DObject, IViewerGraph {
 #if DEBUG
 
         internal static bool DrawControlPoints { get; set; }
 #endif
 
-        public override DrawingObject DrawingObject{
+        public override DrawingObject DrawingObject {
             get { return DrawingGraph; }
         }
 
         readonly List<DEdge> edges = new List<DEdge>();
 
-        public List<DEdge> Edges{
+        public List<DEdge> Edges {
             get { return edges; }
         }
 
         readonly Dictionary<IComparable, DNode> nodeMap = new Dictionary<IComparable, DNode>();
-        
-        internal BBNode BBNode{
-            get{
+
+        internal BBNode BBNode {
+            get {
                 if (BbNode == null)
                     BuildBBHierarchy();
                 return BbNode;
@@ -86,22 +86,22 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         internal DNode FindDNode(string id) {
             return nodeMap[id];
         }
-        internal void AddNode(DNode dNode){
+        internal void AddNode(DNode dNode) {
             nodeMap[dNode.DrawingNode.Id] = dNode;
         }
 
-        void AddEdge(DEdge dEdge){
+        void AddEdge(DEdge dEdge) {
             edges.Add(dEdge);
         }
 
-        internal void UpdateBBoxHierarchy(IEnumerable<IViewerObject> movedObjects){
+        internal void UpdateBBoxHierarchy(IEnumerable<IViewerObject> movedObjects) {
             var changedObjects = new Set<DObject>();
             foreach (DObject dObj in movedObjects)
                 foreach (DObject relatedObj in RelatedObjs(dObj))
                     changedObjects.Insert(relatedObj);
 
 
-            foreach (DObject dObj in changedObjects){
+            foreach (DObject dObj in changedObjects) {
                 RebuildBBHierarchyUnderObject(dObj);
                 InvalidateBBNodesAbove(dObj);
             }
@@ -111,11 +111,10 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         }
 
 
-        static void RebuildBBHierarchyUnderObject(DObject dObj){
+        static void RebuildBBHierarchyUnderObject(DObject dObj) {
             BBNode oldNode = dObj.BbNode;
             BBNode newNode = BuildBBHierarchyUnderDObject(dObj);
-            if (newNode != null)
-            {
+            if (newNode != null) {
                 //now copy all fields, except the parent
                 oldNode.left = newNode.left;
                 oldNode.right = newNode.right;
@@ -126,17 +125,17 @@ namespace Microsoft.Msagl.GraphViewerGdi{
                 oldNode.bBox = Rectangle.CreateAnEmptyBox();
         }
 
-        static void InvalidateBBNodesAbove(DObject dObj){
+        static void InvalidateBBNodesAbove(DObject dObj) {
             for (BBNode node = dObj.BbNode; node != null; node = node.parent)
                 node.bBox.Width = -1; //this will make the box empty
         }
 
-        void UpdateBoxes(BBNode bbNode){
-            if (bbNode != null){
-                if (bbNode.Box.IsEmpty){
+        void UpdateBoxes(BBNode bbNode) {
+            if (bbNode != null) {
+                if (bbNode.Box.IsEmpty) {
                     if (bbNode.geometry != null)
                         bbNode.bBox = bbNode.geometry.Box;
-                    else{
+                    else {
                         UpdateBoxes(bbNode.left);
                         UpdateBoxes(bbNode.right);
                         bbNode.bBox = bbNode.left.Box;
@@ -146,10 +145,10 @@ namespace Microsoft.Msagl.GraphViewerGdi{
             }
         }
 
-        IEnumerable<DObject> RelatedObjs(DObject dObj){
+        IEnumerable<DObject> RelatedObjs(DObject dObj) {
             yield return dObj;
             var dNode = dObj as DNode;
-            if (dNode != null){
+            if (dNode != null) {
                 foreach (DEdge e in dNode.OutEdges)
                     yield return e;
                 foreach (DEdge e in dNode.InEdges)
@@ -157,9 +156,9 @@ namespace Microsoft.Msagl.GraphViewerGdi{
                 foreach (DEdge e in dNode.SelfEdges)
                     yield return e;
             }
-            else{
+            else {
                 var dEdge = dObj as DEdge;
-                if (dEdge != null){
+                if (dEdge != null) {
                     yield return dEdge.Source;
                     yield return dEdge.Target;
                     if (dEdge.Label != null)
@@ -168,10 +167,10 @@ namespace Microsoft.Msagl.GraphViewerGdi{
             }
         }
 
-        internal void BuildBBHierarchy(){
+        internal void BuildBBHierarchy() {
             var objectsWithBox = new List<ObjectWithBox>();
 
-            foreach (DObject dObject in Entities){
+            foreach (DObject dObject in Entities) {
                 dObject.BbNode = BuildBBHierarchyUnderDObject(dObject);
                 if (dObject.BbNode == null)
                     return; //the graph is not ready
@@ -182,9 +181,9 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         }
 
 
-        internal IEnumerable<IViewerObject> Entities{
-            get{
-                foreach (DEdge dEdge in Edges){
+        internal IEnumerable<IViewerObject> Entities {
+            get {
+                foreach (DEdge dEdge in Edges) {
                     yield return dEdge;
                     if (dEdge.Label != null)
                         yield return dEdge.Label;
@@ -195,12 +194,12 @@ namespace Microsoft.Msagl.GraphViewerGdi{
             }
         }
 
-        static BBNode BuildBBHierarchyUnderDObject(DObject dObject){
+        static BBNode BuildBBHierarchyUnderDObject(DObject dObject) {
             var dNode = dObject as DNode;
             if (dNode != null)
                 return BuildBBHierarchyUnderDNode(dNode);
             var dedge = dObject as DEdge;
-            if (dedge != null){
+            if (dedge != null) {
                 return BuildBBHierarchyUnderDEdge(dedge);
             }
             var dLabel = dObject as DLabel;
@@ -210,7 +209,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
                 else return null;
 
             var dGraph = dObject as DGraph;
-            if (dGraph != null){
+            if (dGraph != null) {
                 dGraph.BbNode.bBox = dGraph.DrawingGraph.BoundingBox;
                 return dGraph.BbNode;
             }
@@ -224,21 +223,21 @@ namespace Microsoft.Msagl.GraphViewerGdi{
             return edge == null || edge.Label != null;
         }
 
-        static BBNode BuildBBHierarchyUnderDLabel(DLabel dLabel){
+        static BBNode BuildBBHierarchyUnderDLabel(DLabel dLabel) {
             var bbNode = new BBNode();
             bbNode.geometry = new Geometry(dLabel);
             bbNode.bBox = dLabel.DrawingLabel.BoundingBox;
             return bbNode;
         }
 
-        static BBNode BuildBBHierarchyUnderDNode(DNode dNode){
+        static BBNode BuildBBHierarchyUnderDNode(DNode dNode) {
             var bbNode = new BBNode();
             bbNode.geometry = new Geometry(dNode);
             bbNode.bBox = dNode.DrawingNode.BoundingBox;
             return bbNode;
         }
 
-        static BBNode BuildBBHierarchyUnderDEdge(DEdge dEdge){
+        static BBNode BuildBBHierarchyUnderDEdge(DEdge dEdge) {
             if (dEdge.DrawingEdge.GeometryObject == null ||
                 dEdge.Edge.GeometryEdge.Curve == null)
                 return null;
@@ -249,42 +248,42 @@ namespace Microsoft.Msagl.GraphViewerGdi{
             return SpatialAlgorithm.CreateBBNodeOnGeometries(geometries);
         }
 
-        internal override float DashSize(){
+        internal override float DashSize() {
             return 0; //not implemented
         }
 
-        protected internal override void Invalidate() {}
+        protected internal override void Invalidate() { }
         /// <summary>
         /// calculates the rendered rectangle and RenderedBox to it
         /// </summary>
         public override void UpdateRenderedBox() {
-           RenderedBox = DrawingGraph.BoundingBox;
+            RenderedBox = DrawingGraph.BoundingBox;
         }
 
         //     internal Dictionary<DrawingObject, DObject> drawingObjectsToDObjects = new Dictionary<DrawingObject, DObject>();
 
 
         Graph drawingGraph;
-       
-        public Graph DrawingGraph{
+
+        public Graph DrawingGraph {
             get { return drawingGraph; }
             set { drawingGraph = value; }
         }
 
 
-        internal void DrawGraph(Graphics g){
+        internal void DrawGraph(Graphics g) {
             #region drawing of database for debugging only
 
 #if TEST_MSAGL
             Graph dg = DrawingGraph;
 
-            if (dg.DataBase != null){
-                var myPen = new Pen(Color.Blue, (float) (1/1000.0));
+            if (dg.DataBase != null) {
+                var myPen = new Pen(Color.Blue, (float)(1 / 1000.0));
                 Draw.DrawDataBase(g, myPen, dg);
             }
 
-            if (NeedToDrawDebugStuff()){
-                var myPen = new Pen(Color.Blue, (float) (1/1000.0));
+            if (NeedToDrawDebugStuff()) {
+                var myPen = new Pen(Color.Blue, (float)(1 / 1000.0));
                 Draw.DrawDebugStuff(g, this, myPen);
             }
 
@@ -300,7 +299,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
 
             foreach (var subgraph in drawingGraph.RootSubgraph.AllSubgraphsWidthFirstExcludingSelf())
                 DrawNode(g, nodeMap[subgraph.Id]);
-            
+
 
             foreach (DEdge dEdge in Edges)
                 if (!dEdge.SelectedForEditing)
@@ -308,25 +307,25 @@ namespace Microsoft.Msagl.GraphViewerGdi{
                 else //there must be no more than one edge selected for editing
                     dEdgeSelectedForEditing = dEdge;
 
-           
+
             foreach (DNode dnode in nodeMap.Values)
                 if (!(dnode.DrawingNode is Subgraph))
                     DrawNode(g, dnode);
-          
+
             //draw the selected edge
-            if (dEdgeSelectedForEditing != null){
+            if (dEdgeSelectedForEditing != null) {
                 DrawEdge(g, dEdgeSelectedForEditing);
                 DrawUnderlyingPolyline(g, dEdgeSelectedForEditing);
             }
 
-            if(Viewer.SourcePortIsPresent)
+            if (Viewer.SourcePortIsPresent)
                 DrawPortAtLocation(g, Viewer.SourcePortLocation);
             if (Viewer.TargetPortIsPresent)
                 DrawPortAtLocation(g, Viewer.TargetPortLocation);
         }
 
 #if TEST_MSAGL
-        bool NeedToDrawDebugStuff(){
+        bool NeedToDrawDebugStuff() {
             return drawingGraph.DebugCurves != null ||
                    drawingGraph.DebugICurves != null && drawingGraph.DebugICurves.Count > 0 ||
                    drawingGraph.DataBase != null ||
@@ -334,9 +333,9 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         }
 #endif
 
-        static void DrawUnderlyingPolyline(Graphics g, DEdge editedEdge){
+        static void DrawUnderlyingPolyline(Graphics g, DEdge editedEdge) {
             SmoothedPolyline underlyingPolyline = editedEdge.DrawingEdge.GeometryEdge.UnderlyingPolyline;
-            if (underlyingPolyline != null){
+            if (underlyingPolyline != null) {
                 var pen = new Pen(editedEdge.Color, (float)editedEdge.DrawingEdge.Attr.LineWidth);
                 IEnumerator<P2> en = underlyingPolyline.GetEnumerator();
                 en.MoveNext();
@@ -349,28 +348,28 @@ namespace Microsoft.Msagl.GraphViewerGdi{
             }
         }
 
-        static void DrawCircleAroungPolylineCorner(Graphics g, P2 p, Pen pen, double radius){
-            g.DrawEllipse(pen, (float) (p.X - radius), (float) (p.Y - radius),
-                          (float) (2*radius), (float) (2*radius));
+        static void DrawCircleAroungPolylineCorner(Graphics g, P2 p, Pen pen, double radius) {
+            g.DrawEllipse(pen, (float)(p.X - radius), (float)(p.Y - radius),
+                          (float)(2 * radius), (float)(2 * radius));
         }
 
 
-        static PointF P2P(P2 p){
-            return new PointF((float) p.X, (float) p.Y);
+        static PointF P2P(P2 p) {
+            return new PointF((float)p.X, (float)p.Y);
         }
 
-        void DrawGraphBorder(int borderWidth, Graphics graphics){
-            using (var myPen = new Pen(Draw.MsaglColorToDrawingColor(drawingGraph.Attr.Color), (float) borderWidth))
+        void DrawGraphBorder(int borderWidth, Graphics graphics) {
+            using (var myPen = new Pen(Draw.MsaglColorToDrawingColor(drawingGraph.Attr.Color), (float)borderWidth))
                 graphics.DrawRectangle(myPen,
-                                       (float) drawingGraph.Left,
-                                       (float) drawingGraph.Bottom,
-                                       (float) drawingGraph.Width,
-                                       (float) drawingGraph.Height);
+                                       (float)drawingGraph.Left,
+                                       (float)drawingGraph.Bottom,
+                                       (float)drawingGraph.Width,
+                                       (float)drawingGraph.Height);
         }
 
-//don't know what to do about the try-catch block
+        //don't know what to do about the try-catch block
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        internal static void DrawEdge(Graphics graphics, DEdge dEdge){
+        internal static void DrawEdge(Graphics graphics, DEdge dEdge) {
             DrawingEdge drawingEdge = dEdge.DrawingEdge;
             if (!drawingEdge.IsVisible || drawingEdge.GeometryEdge == null)
                 return;
@@ -386,15 +385,15 @@ namespace Microsoft.Msagl.GraphViewerGdi{
 
             EdgeAttr attr = drawingEdge.Attr;
 
-            using (var myPen = new Pen(dEdge.Color, (float)attr.LineWidth)){
-                foreach (Style style in attr.Styles){
+            using (var myPen = new Pen(dEdge.Color, (float)attr.LineWidth)) {
+                foreach (Style style in attr.Styles) {
                     Draw.AddStyleForPen(dEdge, myPen, style);
                 }
-                try{
+                try {
                     if (dEdge.GraphicsPath != null)
                         graphics.DrawPath(myPen, dEdge.GraphicsPath);
                 }
-                catch{
+                catch {
                     //  sometimes on Vista it throws an out of memory exception without any obvious reason
                 }
                 Draw.DrawEdgeArrows(graphics, drawingEdge, dEdge.Color, myPen);
@@ -402,18 +401,18 @@ namespace Microsoft.Msagl.GraphViewerGdi{
                     Draw.DrawLabel(graphics, dEdge.Label);
 
 #if TEST_MSAGL
-                if (DrawControlPoints){
+                if (DrawControlPoints) {
                     ICurve iCurve = dEdge.DrawingEdge.GeometryEdge.Curve;
                     var c = iCurve as Curve;
 
-                    if (c != null){
-                        foreach (ICurve seg in c.Segments){
+                    if (c != null) {
+                        foreach (ICurve seg in c.Segments) {
                             var cubic = seg as CubicBezierSegment;
                             if (cubic != null)
                                 Draw.DrawControlPoints(graphics, cubic);
                         }
                     }
-                    else{
+                    else {
                         var seg = iCurve as CubicBezierSegment;
                         if (seg != null)
                             Draw.DrawControlPoints(graphics, seg);
@@ -424,24 +423,24 @@ namespace Microsoft.Msagl.GraphViewerGdi{
             }
         }
 
-        internal void DrawNode(Graphics g, DNode dnode){
-            
+        internal void DrawNode(Graphics g, DNode dnode) {
+
             DrawingNode node = dnode.DrawingNode;
-            if(node.IsVisible==false)
+            if (node.IsVisible == false)
                 return;
 
             if (node.DrawNodeDelegate != null)
                 if (node.DrawNodeDelegate(node, g))
                     return; //the client draws instead
 
-            if (node.GeometryNode == null || node.GeometryNode.BoundaryCurve==null) //node comes with non-initilalized attribute - should not be drawn
+            if (node.GeometryNode == null || node.GeometryNode.BoundaryCurve == null) //node comes with non-initilalized attribute - should not be drawn
                 return;
             NodeAttr attr = node.Attr;
 
-            using (var pen = new Pen(dnode.Color, (float)attr.LineWidth)){
+            using (var pen = new Pen(dnode.Color, (float)attr.LineWidth)) {
                 foreach (Style style in attr.Styles)
                     Draw.AddStyleForPen(dnode, pen, style);
-                switch (attr.Shape){
+                switch (attr.Shape) {
                     case Shape.DoubleCircle:
                         Draw.DrawDoubleCircle(g, pen, dnode);
                         break;
@@ -454,10 +453,10 @@ namespace Microsoft.Msagl.GraphViewerGdi{
                     case Shape.Point:
                         Draw.DrawEllipse(g, pen, dnode);
                         break;
-                    case Shape.Plaintext:{
-                        break;
-                        //do nothing
-                    }
+                    case Shape.Plaintext: {
+                            break;
+                            //do nothing
+                        }
                     case Shape.Octagon:
                     case Shape.House:
                     case Shape.InvHouse:
@@ -476,20 +475,20 @@ namespace Microsoft.Msagl.GraphViewerGdi{
                         break;
                 }
             }
-            Draw.DrawLabel(g, dnode.Label);            
+            Draw.DrawLabel(g, dnode.Label);
         }
 
-        
+
         void DrawPortAtLocation(Graphics g, P2 center) {
             Brush brush = Brushes.Brown;
             double rad = Viewer.UnderlyingPolylineCircleRadius;
-            g.FillEllipse(brush, (float) center.X - (float) rad,
-                          (float) center.Y - (float) rad,
-                          2.0f*(float) rad,
-                          2.0f*(float) rad);
+            g.FillEllipse(brush, (float)center.X - (float)rad,
+                          (float)center.Y - (float)rad,
+                          2.0f * (float)rad,
+                          2.0f * (float)rad);
         }
 
-        internal DGraph(Graph drawingGraph, GViewer gviewer) : base(gviewer){
+        internal DGraph(Graph drawingGraph, GViewer gviewer) : base(gviewer) {
             DrawingGraph = drawingGraph;
         }
 
@@ -499,27 +498,26 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <param name="drawingGraph"></param>
         /// <param name="viewer">the owning viewer</param>
         /// <returns></returns>
-        internal static DGraph CreateDGraphFromPrecalculatedDrawingGraph(Graph drawingGraph, GViewer viewer){
+        internal static DGraph CreateDGraphFromPrecalculatedDrawingGraph(Graph drawingGraph, GViewer viewer) {
             var dGraph = new DGraph(drawingGraph, viewer);
             //create dnodes and node boundary curves
 
             if (drawingGraph.RootSubgraph != null)
-                foreach (DrawingNode drawingNode in drawingGraph.RootSubgraph.AllSubgraphsWidthFirstExcludingSelf())
-                {
+                foreach (DrawingNode drawingNode in drawingGraph.RootSubgraph.AllSubgraphsWidthFirstExcludingSelf()) {
                     var dNode = new DNode(drawingNode, viewer);
                     if (drawingNode.Label != null)
                         dNode.Label = new DLabel(dNode, drawingNode.Label, viewer);
                     dGraph.AddNode(dNode);
                 }
 
-            foreach (DrawingNode drawingNode in drawingGraph.Nodes){
+            foreach (DrawingNode drawingNode in drawingGraph.Nodes) {
                 var dNode = new DNode(drawingNode, viewer);
                 if (drawingNode.Label != null)
                     dNode.Label = new DLabel(dNode, drawingNode.Label, viewer);
                 dGraph.AddNode(dNode);
             }
 
-            
+
             foreach (DrawingEdge drawingEdge in drawingGraph.Edges)
                 dGraph.AddEdge(new DEdge(dGraph.GetNode(drawingEdge.SourceNode), dGraph.GetNode(drawingEdge.TargetNode),
                                       drawingEdge, ConnectionToGraph.Connected, viewer));
@@ -528,8 +526,8 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         }
 
         internal static void CreateDLabel(DObject parent, Drawing.Label label, out double width, out double height,
-                                          GViewer viewer){
-            var dLabel = new DLabel(parent, label, viewer){Font = new Font(label.FontName, (int)label.FontSize, (System.Drawing.FontStyle)(int)label.FontStyle)};
+                                          GViewer viewer) {
+            var dLabel = new DLabel(parent, label, viewer) { Font = new Font(label.FontName, (int)label.FontSize, (System.Drawing.FontStyle)(int)label.FontStyle) };
             StringMeasure.MeasureWithFont(label.Text, dLabel.Font, out width, out height);
 
             if (width <= 0)
@@ -547,14 +545,14 @@ namespace Microsoft.Msagl.GraphViewerGdi{
             var nodeMapping = new Dictionary<GeometryNode, DNode>();
             if (geometryGraph.RootCluster != null)
                 foreach (var geomCluster in geometryGraph.RootCluster.AllClustersDepthFirstExcludingSelf()) {
-                    var drawingNode = (Drawing.Node) geomCluster.UserData;
+                    var drawingNode = (Drawing.Node)geomCluster.UserData;
                     DNode dNode = CreateDNodeAndSetNodeBoundaryCurveForSubgraph(drawingGraph, dGraph, geomCluster,
                                                                                 drawingNode, viewer);
                     nodeMapping[geomCluster] = dNode;
                 }
 
             foreach (GeometryNode geomNode in geometryGraph.Nodes) {
-                var drawingNode = (Drawing.Node) geomNode.UserData;
+                var drawingNode = (Drawing.Node)geomNode.UserData;
                 DNode dNode = CreateDNodeAndSetNodeBoundaryCurve(drawingGraph, dGraph, geomNode, drawingNode, viewer);
                 nodeMapping[geomNode] = dNode;
             }
@@ -576,15 +574,13 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         }
 
         internal static DNode CreateDNodeAndSetNodeBoundaryCurveForSubgraph(Graph drawingGraph, DGraph dGraph, GeometryNode geomNode,
-                                                                 DrawingNode drawingNode, GViewer viewer)
-        {
+                                                                 DrawingNode drawingNode, GViewer viewer) {
             double width = 0;
             double height = 0;
             var dNode = new DNode(drawingNode, viewer);
             dGraph.AddNode(dNode);
             Drawing.Label label = drawingNode.Label;
-            if (label != null)
-            {
+            if (label != null) {
                 CreateDLabel(dNode, label, out width, out height, viewer);
             }
             if (width < drawingGraph.Attr.MinNodeWidth)
@@ -592,21 +588,24 @@ namespace Microsoft.Msagl.GraphViewerGdi{
             if (height < drawingGraph.Attr.MinNodeHeight)
                 height = drawingGraph.Attr.MinNodeHeight;
 
-            var cluster = (Cluster) geomNode;
+            var cluster = (Cluster)geomNode;
             var margin = dNode.DrawingNode.Attr.LabelMargin;
-            if (label != null){
+            if (label != null) {
                 CreateDLabel(dNode, label, out width, out height, viewer);
-                width += 2*dNode.DrawingNode.Attr.LabelMargin + 2*drawingNode.Attr.LineWidth;
+                width += 2 * dNode.DrawingNode.Attr.LabelMargin + 2 * drawingNode.Attr.LineWidth;
                 height += 2 * dNode.DrawingNode.Attr.LabelMargin + 2 * drawingNode.Attr.LineWidth;
             }
-            cluster.RectangularBoundary = new RectangularClusterBoundary()
-            {
-                BottomMargin = margin,
-                LeftMargin = margin,
-                RightMargin = margin,
-                TopMargin = height,
-                MinWidth = width
-            };
+            if (cluster.RectangularBoundary == null) {
+                var lp = dNode.DrawingNode.Attr.ClusterLabelMargin;
+                cluster.RectangularBoundary = new RectangularClusterBoundary() {
+                    BottomMargin = lp == LgNodeInfo.LabelPlacement.Bottom ? height : margin,
+                    LeftMargin = lp == LgNodeInfo.LabelPlacement.Left ? height : margin,
+                    RightMargin = lp == LgNodeInfo.LabelPlacement.Right ? height : margin,
+                    TopMargin = lp == LgNodeInfo.LabelPlacement.Top ? height : margin,
+                    MinWidth = lp == LgNodeInfo.LabelPlacement.Top || lp == LgNodeInfo.LabelPlacement.Bottom ? width : 0,
+                    MinHeight = lp == LgNodeInfo.LabelPlacement.Left || lp == LgNodeInfo.LabelPlacement.Right ? width : 0,
+                };
+            }
             // Filippo Polo: I'm taking this out because I've modified the drawing of a double circle
             // so that it can be used with ellipses too.
             //if (drawingNode.Attr.Shape == Shape.DoubleCircle)
@@ -620,19 +619,19 @@ namespace Microsoft.Msagl.GraphViewerGdi{
                     NodeBoundaryCurves.GetNodeBoundaryCurve(dNode.DrawingNode, width, height);
             return dNode;
         }
-        
+
 
         internal static DNode CreateDNodeAndSetNodeBoundaryCurve(Graph drawingGraph, DGraph dGraph, GeometryNode geomNode,
-                                                                 DrawingNode drawingNode, GViewer viewer){
+                                                                 DrawingNode drawingNode, GViewer viewer) {
             double width = 0;
             double height = 0;
             var dNode = new DNode(drawingNode, viewer);
             dGraph.AddNode(dNode);
             Drawing.Label label = drawingNode.Label;
-            if (label != null){
+            if (label != null) {
                 CreateDLabel(dNode, label, out width, out height, viewer);
-                width += 2*dNode.DrawingNode.Attr.LabelMargin;
-                height += 2*dNode.DrawingNode.Attr.LabelMargin;
+                width += 2 * dNode.DrawingNode.Attr.LabelMargin;
+                height += 2 * dNode.DrawingNode.Attr.LabelMargin;
             }
             if (width < drawingGraph.Attr.MinNodeWidth)
                 width = drawingGraph.Attr.MinNodeWidth;
@@ -652,8 +651,8 @@ namespace Microsoft.Msagl.GraphViewerGdi{
                     NodeBoundaryCurves.GetNodeBoundaryCurve(dNode.DrawingNode, width, height);
             return dNode;
         }
-        
-        DNode GetNode(DrawingNode node){
+
+        DNode GetNode(DrawingNode node) {
             return nodeMap[node.Id];
         }
 
@@ -661,12 +660,12 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// yields the nodes
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IViewerNode> Nodes(){
+        public IEnumerable<IViewerNode> Nodes() {
             foreach (DNode dNode in nodeMap.Values)
                 yield return dNode;
         }
 
-        IEnumerable<IViewerEdge> IViewerGraph.Edges(){
+        IEnumerable<IViewerEdge> IViewerGraph.Edges() {
             foreach (DEdge dEdge in Edges)
                 yield return dEdge;
         }

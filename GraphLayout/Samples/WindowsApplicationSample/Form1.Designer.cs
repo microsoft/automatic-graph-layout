@@ -160,9 +160,7 @@ namespace WindowsApplicationSample
             "graph",
             "clusters",
             "more clusters",
-            "more clusters (cluster-to-cluster edges only)",
-            "more clusters (horizontal)",
-            "more clusters (horizontal, cluster-to-cluster edges only)"});
+            "more clusters (horizontal)"});
             this.comboBox1.Location = new System.Drawing.Point(7, 9);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(203, 21);

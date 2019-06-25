@@ -18,15 +18,13 @@ using Microsoft.Msagl.Routing.Rectilinear;
 using Microsoft.Msagl.Prototype.Ranking;
 using Microsoft.Msagl.Routing.Spline.Bundling;
 
-namespace Microsoft.Msagl.Miscellaneous
-{
+namespace Microsoft.Msagl.Miscellaneous {
     /// <summary>
     /// A set of helper methods for executing a layout.
     /// These exist for compatibility with previous consumers of MSAGL,
     /// but the new APIs should be used for new code.
     /// </summary>
-    public static class LayoutHelpers
-    {
+    public static class LayoutHelpers {
 #if SILVERLIGHT
         /// <summary>
         /// Calculates the graph layout
@@ -39,23 +37,20 @@ namespace Microsoft.Msagl.Miscellaneous
         /// <exception cref="System.OperationCanceledException">Thrown when the layout is canceled.</exception>
 #endif
         public static void CalculateLayout(GeometryGraph geometryGraph, LayoutAlgorithmSettings settings, CancelToken cancelToken, string tileDirectory = null) {
-            if (settings is RankingLayoutSettings)
-            {
+            if (settings is RankingLayoutSettings) {
                 var rankingLayoutSettings = settings as RankingLayoutSettings;
                 var rankingLayout = new RankingLayout(rankingLayoutSettings, geometryGraph);
                 rankingLayout.Run(cancelToken);
                 RouteAndLabelEdges(geometryGraph, settings, geometryGraph.Edges);
             }
-            else if (settings is MdsLayoutSettings)
-            {
+            else if (settings is MdsLayoutSettings) {
                 var mdsLayoutSettings = settings as MdsLayoutSettings;
                 var mdsLayout = new MdsGraphLayout(mdsLayoutSettings, geometryGraph);
                 mdsLayout.Run(cancelToken);
                 if (settings.EdgeRoutingSettings.EdgeRoutingMode != EdgeRoutingMode.None)
                     RouteAndLabelEdges(geometryGraph, settings, geometryGraph.Edges);
             }
-            else if (settings is FastIncrementalLayoutSettings)
-            {
+            else if (settings is FastIncrementalLayoutSettings) {
                 var incrementalSettings = settings as FastIncrementalLayoutSettings;
                 incrementalSettings.AvoidOverlaps = true;
                 var initialLayout = new InitialLayout(geometryGraph, incrementalSettings);
@@ -64,13 +59,11 @@ namespace Microsoft.Msagl.Miscellaneous
                     RouteAndLabelEdges(geometryGraph, settings, geometryGraph.Edges);
                 //incrementalSettings.IncrementalRun(geometryGraph);
             }
-            else
-            {
+            else {
                 var sugiyamaLayoutSettings = settings as SugiyamaLayoutSettings;
                 if (sugiyamaLayoutSettings != null)
                     ProcessSugiamaLayout(geometryGraph, sugiyamaLayoutSettings, cancelToken);
-                else
-                {
+                else {
                     Debug.Assert(settings is LgLayoutSettings);
                     LayoutLargeGraphWithLayers(geometryGraph, settings, cancelToken, tileDirectory);
                 }
@@ -84,7 +77,7 @@ namespace Microsoft.Msagl.Miscellaneous
         /// <param name="settings"></param>
         /// <param name="cancelToken"></param>
         static public void LayoutLargeGraphWithLayers(GeometryGraph geometryGraph, LayoutAlgorithmSettings settings, CancelToken cancelToken, string tileDirectory) {
-            var largeGraphLayoutSettings = (LgLayoutSettings) settings;
+            var largeGraphLayoutSettings = (LgLayoutSettings)settings;
             var largeGraphLayout = new LgInteractor(geometryGraph, largeGraphLayoutSettings, cancelToken);
             largeGraphLayoutSettings.Interactor = largeGraphLayout;
             largeGraphLayout.Run(tileDirectory);
@@ -131,7 +124,7 @@ namespace Microsoft.Msagl.Miscellaneous
                     if (e.Label != null) {
                         e.OriginalLabelWidth = e.Label.Width;
                         e.OriginalLabelHeight = e.Label.Height;
-                        var r = new Rectangle(m*new Point(0, 0), m*new Point(e.Label.Width, e.Label.Height));
+                        var r = new Rectangle(m * new Point(0, 0), m * new Point(e.Label.Width, e.Label.Height));
                         e.Label.Width = r.Width;
                         e.Label.Height = r.Height;
                     }
@@ -144,7 +137,8 @@ namespace Microsoft.Msagl.Miscellaneous
         static void PrepareGraphForInitialLayoutByCluster(GeometryGraph geometryGraph,
             SugiyamaLayoutSettings sugiyamaLayoutSettings) {
             foreach (var cluster in geometryGraph.RootCluster.AllClustersDepthFirst()) {
-                cluster.RectangularBoundary = new RectangularClusterBoundary {TopMargin = 10};
+                if (cluster.RectangularBoundary == null)
+                    cluster.RectangularBoundary = new RectangularClusterBoundary { TopMargin = 10 };
 
                 if (cluster.BoundaryCurve == null)
                     cluster.BoundaryCurve = new RoundedRect(new Rectangle(0, 0, 10, 10), 3, 3);
@@ -182,7 +176,7 @@ namespace Microsoft.Msagl.Miscellaneous
 
         static void AddOrphanNodesToRootCluster(GeometryGraph geometryGraph) {
             var clusterNodeSet = new Set<Node>();
-            foreach(var cl in geometryGraph.RootCluster.AllClustersDepthFirst())
+            foreach (var cl in geometryGraph.RootCluster.AllClustersDepthFirst())
                 clusterNodeSet.InsertRange(cl.Nodes);
             foreach (var node in geometryGraph.Nodes) {
                 if (clusterNodeSet.Contains(node)) continue;
@@ -198,40 +192,41 @@ namespace Microsoft.Msagl.Miscellaneous
         public static void RouteAndLabelEdges(GeometryGraph geometryGraph, LayoutAlgorithmSettings layoutSettings, IEnumerable<Edge> edgesToRoute) {
             //todo: what about parent edges!!!!
             var filteredEdgesToRoute =
-                edgesToRoute.Where(e => ! e.UnderCollapsedCluster()).ToArray();
+                edgesToRoute.Where(e => !e.UnderCollapsedCluster()).ToArray();
             var ers = layoutSettings.EdgeRoutingSettings;
             if (ers.EdgeRoutingMode == EdgeRoutingMode.Rectilinear ||
                 ers.EdgeRoutingMode == EdgeRoutingMode.RectilinearToCenter) {
                 RectilinearInteractiveEditor.CreatePortsAndRouteEdges(
-                    layoutSettings.NodeSeparation/3,
-                    layoutSettings.NodeSeparation/3,
+                    layoutSettings.NodeSeparation / 3,
+                    layoutSettings.NodeSeparation / 3,
                     geometryGraph.Nodes,
                     edgesToRoute,
                     ers.EdgeRoutingMode,
                     true,
                     ers.UseObstacleRectangles,
                     ers.BendPenalty);
-            } else if (ers.EdgeRoutingMode == EdgeRoutingMode.Spline || ers.EdgeRoutingMode==EdgeRoutingMode.SugiyamaSplines) {
-                new SplineRouter(geometryGraph, filteredEdgesToRoute, ers.Padding, ers.PolylinePadding, ers.ConeAngle, null)
-                {
-                    ContinueOnOverlaps = true, KeepOriginalSpline = ers.KeepOriginalSpline
+            }
+            else if (ers.EdgeRoutingMode == EdgeRoutingMode.Spline || ers.EdgeRoutingMode == EdgeRoutingMode.SugiyamaSplines) {
+                new SplineRouter(geometryGraph, filteredEdgesToRoute, ers.Padding, ers.PolylinePadding, ers.ConeAngle, null) {
+                    ContinueOnOverlaps = true,
+                    KeepOriginalSpline = ers.KeepOriginalSpline
                 }.Run();
-            } else if (ers.EdgeRoutingMode == EdgeRoutingMode.SplineBundling) {
+            }
+            else if (ers.EdgeRoutingMode == EdgeRoutingMode.SplineBundling) {
                 var edgeBundlingSettings = ers.BundlingSettings ?? new BundlingSettings();
                 var bundleRouter = new SplineRouter(geometryGraph, filteredEdgesToRoute, ers.Padding, ers.PolylinePadding, ers.ConeAngle,
                                                     edgeBundlingSettings) {
-                                                        KeepOriginalSpline = ers.KeepOriginalSpline
-                                                    };
+                    KeepOriginalSpline = ers.KeepOriginalSpline
+                };
                 bundleRouter.Run();
-                if (bundleRouter.OverlapsDetected)
-                {
-                    new SplineRouter(geometryGraph, filteredEdgesToRoute, ers.Padding, ers.PolylinePadding, ers.ConeAngle, null)
-                    {
+                if (bundleRouter.OverlapsDetected) {
+                    new SplineRouter(geometryGraph, filteredEdgesToRoute, ers.Padding, ers.PolylinePadding, ers.ConeAngle, null) {
                         ContinueOnOverlaps = true,
                         KeepOriginalSpline = ers.KeepOriginalSpline
                     }.Run();
-                }                
-            } else if (ers.EdgeRoutingMode == EdgeRoutingMode.StraightLine) {
+                }
+            }
+            else if (ers.EdgeRoutingMode == EdgeRoutingMode.StraightLine) {
                 var router = new StraightLineEdges(filteredEdgesToRoute, ers.Padding);
                 router.Run();
             }
@@ -240,19 +235,17 @@ namespace Microsoft.Msagl.Miscellaneous
             geometryGraph.UpdateBoundingBox();
         }
 
-        
+
 
         /// <summary>
         /// adaptes to the node boundary curve change
         /// </summary>
-        public static void IncrementalLayout(GeometryGraph geometryGraph, Node node, SugiyamaLayoutSettings settings)
-        {
-            if(settings==null)
+        public static void IncrementalLayout(GeometryGraph geometryGraph, Node node, SugiyamaLayoutSettings settings) {
+            if (settings == null)
                 return;
             var engine = geometryGraph.AlgorithmData as LayeredLayoutEngine;
 
-            if (engine != null)
-            {
+            if (engine != null) {
                 engine.IncrementalRun(node);
                 PostRunTransform(geometryGraph, settings);
             }
@@ -282,16 +275,13 @@ namespace Microsoft.Msagl.Miscellaneous
             geometryGraph.UpdateBoundingBox();
         }
 
-        static void TransformCurves(GeometryGraph geometryGraph, SugiyamaLayoutSettings settings)
-        {
+        static void TransformCurves(GeometryGraph geometryGraph, SugiyamaLayoutSettings settings) {
             PlaneTransformation transformation = settings.Transformation;
             geometryGraph.BoundingBox = new Rectangle(transformation * geometryGraph.LeftBottom, transformation * geometryGraph.RightTop);
-            foreach (Edge e in geometryGraph.Edges)
-            {
+            foreach (Edge e in geometryGraph.Edges) {
                 if (e.Label != null)
                     e.Label.Center = transformation * e.Label.Center;
-                if (e.Curve != null)
-                {
+                if (e.Curve != null) {
                     e.Curve = e.Curve.Transform(transformation);
                     var eg = e.EdgeGeometry;
                     if (eg.SourceArrowhead != null)
@@ -303,13 +293,10 @@ namespace Microsoft.Msagl.Miscellaneous
             }
         }
 
-        static void TransformUnderlyingPolyline(Edge e, SugiyamaLayoutSettings settings)
-        {
-            if (e.UnderlyingPolyline != null)
-            {
-                for (Site s = e.UnderlyingPolyline.HeadSite; s != null; s = s.Next)
-                {
-                    s.Point = settings.Transformation*s.Point;
+        static void TransformUnderlyingPolyline(Edge e, SugiyamaLayoutSettings settings) {
+            if (e.UnderlyingPolyline != null) {
+                for (Site s = e.UnderlyingPolyline.HeadSite; s != null; s = s.Next) {
+                    s.Point = settings.Transformation * s.Point;
                 }
             }
         }
