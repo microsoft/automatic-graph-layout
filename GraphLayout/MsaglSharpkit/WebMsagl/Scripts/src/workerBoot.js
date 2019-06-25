@@ -17,7 +17,7 @@ var messages = [];
 var storeMessage = function (e) { messages.push(e); }
 
 // Start loading the AMD modules, including the "real" web worker file.
-require(['./ggraph', './msaglWorker'], function (G, Worker) {
+require(['./ggraph', './msagl.worker'], function (G, Worker) {
     // Now that I'm ready, I no longer need to store incoming messages. I'll replace the handler with the real one.
     self.removeEventListener('message', storeMessage)
     self.addEventListener('message', Worker.handleMessage);

@@ -62,8 +62,7 @@ export class GPoint implements IPoint {
             return 1;
         return c1 / c2;
     }
-    /** If the area is negative then C lies to the right of the line [cornerA, cornerB] or, in other words, the triangle (A, B, C) is oriented clockwise.
-    If it is positive then C lies to the left of the line [A,B], and the triangle (A, B, C) is oriented counter-clockwise. If zero, A, B and C are colinear. */
+    /** If the area is negative then C lies to the right of the line [cornerA, cornerB] or, in other words, the triangle (A, B, C) is oriented clockwise. If it is positive then C lies to the left of the line [A,B], and the triangle (A, B, C) is oriented counter-clockwise. If zero, A, B and C are colinear. */
     public static signedDoubledTriangleArea(cornerA: GPoint, cornerB: GPoint, cornerC: GPoint): number {
         return (cornerB.x - cornerA.x) * (cornerC.y - cornerA.y) - (cornerC.x - cornerA.x) * (cornerB.y - cornerA.y);
     }
@@ -133,7 +132,7 @@ export class GRect implements IRect {
 /** An ICurve describes a curve. This is actually abstract. */
 export interface ICurve {
     /** A string that tells what concrete type of curve this is. */
-    type: string;
+    curvetype: string;
     getCenter(): GPoint;
     getStart(): GPoint;
     getEnd(): GPoint;
@@ -144,34 +143,33 @@ export interface ICurve {
 /** A GCurve describes a curve. */
 export abstract class GCurve implements ICurve {
     /** A string that tells what concrete type of curve this is. */
-    type: string;
-    constructor(type: string) {
-        if (type === undefined)
+    curvetype: string;
+    constructor(curvetype: string) {
+        if (curvetype === undefined)
             throw new Error("Undefined curve type");
-        this.type = type;
+        this.curvetype = curvetype;
     }
     abstract getCenter(): GPoint;
     abstract setCenter(p: GPoint): void;
     abstract getStart(): GPoint;
     abstract getEnd(): GPoint;
     abstract getBoundingBox(): GRect;
-    /** Constructs a concrete curve, based on the ICurve passed. This behaves similarly to the constructors of
-    other types, but because this also needs to decide on a type, I cannot use the constructor directly. */
+    /** Constructs a concrete curve, based on the ICurve passed. This behaves similarly to the constructors of other types, but because this also needs to decide on a type, I cannot use the constructor directly. */
     static ofCurve(curve: ICurve): GCurve {
         if (curve == null || curve === undefined)
             return null;
         var ret: GCurve;
-        if (curve.type == "Ellipse")
+        if (curve.curvetype == "Ellipse")
             ret = new GEllipse(<IEllipse><any>curve);
-        else if (curve.type == "Line")
+        else if (curve.curvetype == "Line")
             ret = new GLine(<ILine><any>curve);
-        else if (curve.type == "Bezier")
+        else if (curve.curvetype == "Bezier")
             ret = new GBezier(<IBezier><any>curve);
-        else if (curve.type == "Polyline")
+        else if (curve.curvetype == "Polyline")
             ret = new GPolyline(<IPolyline><any>curve);
-        else if (curve.type == "SegmentedCurve")
+        else if (curve.curvetype == "SegmentedCurve")
             ret = new GSegmentedCurve(<ISegmentedCurve><any>curve);
-        else if (curve.type == "RoundedRect")
+        else if (curve.curvetype == "RoundedRect")
             ret = new GRoundedRect(<IRoundedRect><any>curve);
         return ret;
     }
@@ -186,9 +184,7 @@ export interface IEllipse extends ICurve {
     parEnd: number;
 }
 
-/** A GCurve that represents an ellipse. Note that the data format would support ellipses with axes that are not either vertical or
-horizontal, but in practice the MSAGL engine doesn't deal with those. So axisA and axisB should be vertical or horizontal vectors.
-Also, you can use parStart and parEnd to define portions of an ellipse. */
+/** A GCurve that represents an ellipse. Note that the data format would support ellipses with axes that are not either vertical or horizontal, but in practice the MSAGL engine doesn't deal with those. So axisA and axisB should be vertical or horizontal vectors. Also, you can use parStart and parEnd to define portions of an ellipse. */
 export class GEllipse extends GCurve implements IEllipse {
     center: GPoint;
     axisA: GPoint;
@@ -319,8 +315,7 @@ export interface IRoundedRect {
     radiusY: number;
 }
 
-/** A GRoundedRect represents a GCurve that is a rectangle that may have rounded corners. Technically, this is just a handy
-helper... the same shape can be represented with a composition of simpler objects. */
+/** A GRoundedRect represents a GCurve that is a rectangle that may have rounded corners. Technically, this is just a handy helper... the same shape can be represented with a composition of simpler objects. */
 export class GRoundedRect extends GCurve implements IRoundedRect {
     bounds: GRect;
     radiusX: number;
@@ -488,8 +483,7 @@ export class GLabel implements ILabel {
     }
 }
 
-/** A GShape is the shape of a node's boundary, in an abstract sense (as opposed to a GCurve, which is a concrete curve).
-You can think of this as a description of how a GCurve should eventually be built to correctly encircle a node's label. */
+/** A GShape is the shape of a node's boundary, in an abstract sense (as opposed to a GCurve, which is a concrete curve). You can think of this as a description of how a GCurve should eventually be built to correctly encircle a node's label. */
 export class GShape {
     /** Helper that gives you a rectangular shape. */
     static GetRect(): GShape {
@@ -579,23 +573,58 @@ export class GNode implements INode {
     }
 }
 
+export interface IClusterMargin {
+    bottom: number;
+    top: number;
+    left: number;
+    right: number;
+    minWidth: number;
+    minHeight: number;
+}
+
+export class GClusterMargin implements IClusterMargin {
+    bottom: number;
+    top: number;
+    left: number;
+    right: number;
+    minWidth: number;
+    minHeight: number;
+    constructor(clusterMargin: any)
+    constructor(clusterMargin: IClusterMargin) {
+        this.bottom = clusterMargin.bottom == null ? 0 : clusterMargin.bottom;
+        this.top = clusterMargin.top == null ? 0 : clusterMargin.top;
+        this.left = clusterMargin.left == null ? 0 : clusterMargin.left;
+        this.right = clusterMargin.right == null ? 0 : clusterMargin.right;
+        this.minWidth = clusterMargin.minWidth == null ? 0 : clusterMargin.minWidth;
+        this.minHeight = clusterMargin.minHeight == null ? 0 : clusterMargin.minHeight;
+    }
+}
+
 /** An ICluster is an INode that's actually a cluster. */
 export interface ICluster extends INode {
     children: INode[];
+    margin: IClusterMargin;
 }
 
-/** A GCluster is a GNode that's actually a cluster. */
+/** A GCluster is a GNode that's actually a cluster. Note that if you add children via the constructor, you'll lose custom fields. If your nodes have custom fields, use CGluster.addChild instead. */
 export class GCluster extends GNode implements ICluster {
     children: GNode[];
+    margin: IClusterMargin;
     constructor(cluster: any)
     constructor(cluster: ICluster) {
         super(cluster);
+        this.margin = new GClusterMargin(cluster.margin == null ? {} : cluster.margin);
         this.children = [];
-        for (var i = 0; i < cluster.children.length; i++)
-            if ((<GCluster>cluster.children[i]).children !== undefined)
-                this.children.push(new GCluster(<ICluster>cluster.children[i]));
-            else
-                this.children.push(new GNode(cluster.children[i]));
+        if (cluster.children != null)
+            for (var i = 0; i < cluster.children.length; i++)
+                if ((<GCluster>cluster.children[i]).children !== undefined)
+                    this.children.push(new GCluster(<ICluster>cluster.children[i]));
+                else
+                    this.children.push(new GNode(cluster.children[i]));
+    }
+
+    addChild(n: GNode) {
+        this.children.push(n);
     }
 }
 
@@ -616,7 +645,7 @@ export class GArrowHead implements IArrowHead {
     closed: boolean;
     fill: boolean;
     dash: string;
-    style: string; // standard|tee
+    style: string; // standard|tee|diamond
     constructor(arrowHead: any)
     constructor(arrowHead: IArrowHead) {
         this.start = arrowHead.start == undefined ? null : arrowHead.start;
@@ -632,8 +661,12 @@ export class GArrowHead implements IArrowHead {
     static closed: GArrowHead = new GArrowHead({ closed: true });
     /** Filled arrowhead. */
     static filled: GArrowHead = new GArrowHead({ closed: true, fill: true });
-    /** Tee-shaped arrowhead. */
+    /** Tee-shaped arrowhead. The closed and fill flags have no effect on this arrowhead. */
     static tee: GArrowHead = new GArrowHead({ style: "tee" });
+    /** Diamond-shaped arrowhead (empty). The closed flag has no effect on this arrowhead. */
+    static diamond: GArrowHead = new GArrowHead({ style: "diamond" });
+    /** Diamond-shaped arrowhead (filled). The closed flag has no effect on this arrowhead. */
+    static diamondFilled: GArrowHead = new GArrowHead({ style: "diamond", fill: true });
 }
 
 /** An IEdge describes a graph edge. */
@@ -703,8 +736,7 @@ export class GPlaneTransformation implements IPlaneTransformation {
     m10: number;
     m11: number;
     m12: number;
-    /** Note that you can also pass an object that has a field named "rotation" with a numerical value, to create a 
-    transformation that corresponds to a rotation of that value (in radians). */
+    /** Note that you can also pass an object that has a field named "rotation" with a numerical value, to create a transformation that corresponds to a rotation of that value (in radians). */
     constructor(transformation: any)
     constructor(transformation: IPlaneTransformation) {
         if ((<any>transformation).rotation !== undefined) {
@@ -820,35 +852,30 @@ class GEdgeInternal {
 class MoveElementToken {
 }
 
-/** This token stores the information needed to move a node: a reference to the node, and the original
-coordinates of the node. */
+/** This token stores the information needed to move a node: a reference to the node, and the original coordinates of the node. */
 class MoveNodeToken extends MoveElementToken {
     public node: GNode;
     public originalBoundsCenter: GPoint;
 }
 
-/** This token stores the information needed to move an edge label: a reference to the label, and the original
-coordinates of the label. */
+/** This token stores the information needed to move an edge label: a reference to the label, and the original coordinates of the label. */
 class MoveEdgeLabelToken extends MoveElementToken {
     public label: GLabel;
     public originalLabelCenter: GPoint;
 }
 
-/** This token stores the information needed to move an edge control point: a reference to the edge, the original
-polyline, and the point on the original polyline that's being edited. */
+/** This token stores the information needed to move an edge control point: a reference to the edge, the original polyline, and the point on the original polyline that's being edited. */
 class MoveEdgeToken extends MoveElementToken {
     public edge: GEdge;
     public originalPolyline: GPoint[];
     public originalPoint: GPoint;
 }
 
-/** This class is a simple implementation of a callback set. Note that there are libraries to do this, e.g. jQuery,
-but I'd rather not acquire a dependency on jQuery just for this. */
+/** This class is a simple implementation of a callback set. Note that there are libraries to do this, e.g. jQuery, but I'd rather not acquire a dependency on jQuery just for this. */
 export class CallbackSet<T> {
     private callbacks: ((par: T) => void)[] = [];
 
-    /** Adds a callback to the list. If you want to be able to remove the callback later, you'll need to store
-    a reference to it. */
+    /** Adds a callback to the list. If you want to be able to remove the callback later, you'll need to store a reference to it. */
     public add(callback: (par: T) => void) {
         if (callback == null)
             return;
@@ -894,10 +921,23 @@ export class GGraph implements IGraph {
         this.settings = new GSettings({ transformation: { m00: -1, m01: 0, m02: 0, m10: 0, m11: -1, m12: 0 } });
     }
 
+    /** Add a node to the node map. Recursively map cluster children. */
+    private mapNode(node: GNode): void {
+        this.nodesMap[node.id] = <GNodeInternal>{ node: node, outEdges: [], inEdges: [], selfEdges: [] };
+        let children = (<GCluster>node).children;
+        if (children !== undefined)
+            for (let child of children)
+                this.mapNode(child);
+    }
+
     /** Add a node to the graph. */
     addNode(node: GNode): void {
-        this.nodesMap[node.id] = <GNodeInternal>{ node: node, outEdges: [], inEdges: [], selfEdges: [] };
         this.nodes.push(node);
+        this.mapNode(node);
+        let children = (<GCluster>node).children;
+        if (children !== undefined)
+            for (let child of children)
+                this.mapNode(child);
     }
 
     /** Returns a node, given its ID. */
@@ -985,41 +1025,43 @@ export class GGraph implements IGraph {
 
     /** Creates boundaries for all nodes, based on their shape and label. */
     private createNodeBoundariesRec(node: GNode, sizer?: (label: GLabel, owner: IElement) => IPoint) {
+        var cluster = <GCluster>node;
+
         if (node.boundaryCurve == null) {
             if (node.label != null && node.label.bounds == GRect.zero && sizer !== undefined) {
                 var labelSize = sizer(node.label, node);
                 node.label.bounds = new GRect({ x: 0, y: 0, width: labelSize.x, height: labelSize.y });
             }
-            var labelWidth = node.label == null ? 0 : node.label.bounds.width;
-            var labelHeight = node.label == null ? 0 : node.label.bounds.height;
-            labelWidth += 2 * node.labelMargin;
-            labelHeight += 2 * node.labelMargin;
-            var boundary: GCurve;
-            if (node.shape != null && node.shape.shape == GShape.RectShape) {
-                var radiusX = node.shape.radiusX;
-                var radiusY = node.shape.radiusY;
-                if (radiusX == null && radiusY == null) {
-                    var k = Math.min(labelWidth, labelHeight);
-                    radiusX = radiusY = k / 2;
+            // Do not create boundaries for clusters. The layout algorithm will handle that.
+            if (cluster.children == null) {
+                var labelWidth = node.label == null ? 0 : node.label.bounds.width;
+                var labelHeight = node.label == null ? 0 : node.label.bounds.height;
+                labelWidth += 2 * node.labelMargin;
+                labelHeight += 2 * node.labelMargin;
+                var boundary: GCurve;
+                if (node.shape != null && node.shape.shape == GShape.RectShape) {
+                    var radiusX = node.shape.radiusX;
+                    var radiusY = node.shape.radiusY;
+                    if (radiusX == null && radiusY == null) {
+                        var k = Math.min(labelWidth, labelHeight);
+                        radiusX = radiusY = k / 2;
+                    }
+                    boundary = new GRoundedRect({
+                        bounds: new GRect({ x: 0, y: 0, width: labelWidth, height: labelHeight }), radiusX: radiusX, radiusY: radiusY
+                    });
                 }
-                boundary = new GRoundedRect({
-                    bounds: new GRect({ x: 0, y: 0, width: labelWidth, height: labelHeight }), radiusX: radiusX, radiusY: radiusY
-                });
+                else
+                    boundary = GEllipse.make(labelWidth * Math.sqrt(2), labelHeight * Math.sqrt(2));
+                node.boundaryCurve = boundary;
             }
-            else
-                boundary = GEllipse.make(labelWidth * Math.sqrt(2), labelHeight * Math.sqrt(2));
-            node.boundaryCurve = boundary;
         }
 
-        var cluster = <GCluster>node;
-        if (cluster.children !== undefined)
+        if (cluster.children != null)
             for (var i = 0; i < cluster.children.length; i++)
                 this.createNodeBoundariesRec(cluster.children[i], sizer);
     }
 
-    /** Creates the node boundaries for nodes that don't have one. If the node has a label, it will first compute the label's
-    size based on the provided size function, and then create an appropriate boundary. There are several predefined sizers, corresponding
-    to the most common ways of sizing text. */
+    /** Creates the node boundaries for nodes that don't have one. If the node has a label, it will first compute the label's size based on the provided size function, and then create an appropriate boundary. There are several predefined sizers, corresponding to the most common ways of sizing text. */
     createNodeBoundaries(sizer?: (label: GLabel, owner: IElement) => IPoint) {
         for (var i = 0; i < this.nodes.length; i++)
             this.createNodeBoundariesRec(this.nodes[i], sizer);
@@ -1092,9 +1134,7 @@ export class GGraph implements IGraph {
         return ret;
     }
 
-    /** Creates node boundaries using the svgSizer on the given SVG element. You can also not give this function the SVG element, in
-    which case it will use a temporary one. In this case, you can give it a style declaration that will be used for the temporary
-    SVG element.*/
+    /** Creates node boundaries using the svgSizer on the given SVG element. You can also not give this function the SVG element, in which case it will use a temporary one. In this case, you can give it a style declaration that will be used for the temporary SVG element.*/
     createNodeBoundariesFromSVG(svg?: Element, style?: CSSStyleDeclaration) {
         var selfMadeSvg = (svg === undefined);
         if (selfMadeSvg) {
@@ -1117,9 +1157,7 @@ export class GGraph implements IGraph {
             document.body.removeChild(svg);
     }
 
-    /** Creates node boundaries for text that will be SVG text, placed in an SVG element in the given HTML container. Warning:
-    you are responsible for the container to be valid for this purpose. E.g. it should not be hidden, or the results won't be
-    valid.*/
+    /** Creates node boundaries for text that will be SVG text, placed in an SVG element in the given HTML container. Warning: you are responsible for the container to be valid for this purpose. E.g. it should not be hidden, or the results won't be valid.*/
     createNodeBoundariesForSVGInContainer(container: HTMLElement) {
         var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         container.appendChild(svg);
@@ -1127,11 +1165,30 @@ export class GGraph implements IGraph {
         container.removeChild(svg);
     }
 
+    /** Creates node boundaries for text that will be SVG text, placed in an SVG element at the top level of the DOM. This guarantees that the SVG element is not hidden, but it will not use the same style as the real container. You can pass a style to use for font styling. */
+    createNodeBoundariesForSVGWithStyle(style: CSSStyleDeclaration) {
+        var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        if (style != null) {
+            (<any>svg).style.font = style.font;
+            (<any>svg).style.fontFamily = style.fontFamily;
+            (<any>svg).style.fontFeatureSettings = style.fontFeatureSettings;
+            (<any>svg).style.fontSize = style.fontSize;
+            (<any>svg).style.fontSizeAdjust = style.fontSizeAdjust;
+            (<any>svg).style.fontStretch = style.fontStretch;
+            (<any>svg).style.fontStyle = style.fontStyle;
+            (<any>svg).style.fontVariant = style.fontVariant;
+            (<any>svg).style.fontWeight = style.fontWeight;
+        }
+        document.body.appendChild(svg);
+        this.createNodeBoundaries((label, owner) => GGraph.SVGSizer(svg, label));
+        document.body.removeChild(svg);
+    }
+
     /** The web worker that performs layout operations. There's at most one of these at any given time. */
     private worker: Worker = null;
     public working: boolean = false;
 
-    /** Aborts a layout operation, if there is one ongoing. */
+    /** Aborts a layout operation, if there is one ongoing. You should call this to dispose the worker when you are no longer using the graph, because there is an apparent bug in Chrome that causes workers not to be garbage collected unless they are terminated. If this Chrome issue gets fixed, then calling stopLayoutGraph for disposal becomes unnecessary. */
     public stopLayoutGraph(): void {
         if (this.worker != null) {
             this.worker.terminate();
@@ -1142,69 +1199,63 @@ export class GGraph implements IGraph {
 
     private workerCallback(msg: MessageEvent) {
         var data: M.Response = msg.data;
-        if (data.type == "RunLayout") {
+        if (data.msgtype == "RunLayout") {
             var runLayoutMsg = <M.Res_RunLayout>data;
-            // data.graph contains a string that is the JSON string for an IGraph.
-            // Deserialize it into a GGraph. This GGraph doesn't directly replace myself; I just want to copy its curves over mine. This way,
-            // the user can keep using this GGraph.
+            // data.graph contains a string that is the JSON string for an IGraph. Deserialize it into a GGraph. This GGraph doesn't directly replace myself; I just want to copy its curves over mine. This way, the user can keep using this GGraph.
             var gs: GGraph = GGraph.ofJSON(runLayoutMsg.graph);
             // Copy its bounding box to me, extending the margins a little bit.
             this.boundingBox = new GRect({
                 x: gs.boundingBox.x - 10, y: gs.boundingBox.y - 10, width: gs.boundingBox.width + 20, height: gs.boundingBox.height + 20
             });
             // Copy all of the curves of the nodes, including the label boundaries.
-            for (var i = 0; i < gs.nodes.length; i++) {
-                var workerNode = gs.nodes[i];
-                var myNode = this.getNode(workerNode.id);
-                myNode.boundaryCurve = workerNode.boundaryCurve;
+            for (var nodeId in gs.nodesMap) {
+                var workerNode = gs.nodesMap[nodeId];
+                var myNode = this.getNode(nodeId);
+                myNode.boundaryCurve = workerNode.node.boundaryCurve;
                 if (myNode.label != null)
-                    myNode.label.bounds = workerNode.label.bounds;
+                    myNode.label.bounds = workerNode.node.label.bounds;
             }
             // Copy all of the curves of the edges, including the label boundaries and the arrowheads.
-            for (var i = 0; i < gs.edges.length; i++) {
-                var workerEdge = gs.edges[i];
-                var myEdge = this.getEdge(workerEdge.id);
-                myEdge.curve = workerEdge.curve;
+            for (var edgeId in gs.edgesMap) {
+                var workerEdge = gs.edgesMap[edgeId];
+                var myEdge = this.getEdge(edgeId);
+                myEdge.curve = workerEdge.edge.curve;
                 if (myEdge.label != null)
-                    myEdge.label.bounds = workerEdge.label.bounds;
+                    myEdge.label.bounds = workerEdge.edge.label.bounds;
                 if (myEdge.arrowHeadAtSource != null)
-                    myEdge.arrowHeadAtSource = workerEdge.arrowHeadAtSource;
+                    myEdge.arrowHeadAtSource = workerEdge.edge.arrowHeadAtSource;
                 if (myEdge.arrowHeadAtTarget != null)
-                    myEdge.arrowHeadAtTarget = workerEdge.arrowHeadAtTarget;
+                    myEdge.arrowHeadAtTarget = workerEdge.edge.arrowHeadAtTarget;
             }
             // Invoke the user callbacks.
             this.layoutCallbacks.fire();
         }
-        else if (data.type == "RouteEdges") {
+        else if (data.msgtype == "RouteEdges") {
             var routeEdgesMsg = <M.Res_RouteEdges>data;
-            // data.graph contains a string that is the JSON string for an IGraph.
-            // Deserialize it into a GGraph. This GGraph doesn't directly replace myself; I just want to copy its curves over mine. This way,
-            // the user can keep using this GGraph.
+            // data.graph contains a string that is the JSON string for an IGraph. Deserialize it into a GGraph. This GGraph doesn't directly replace myself; I just want to copy its curves over mine. This way, the user can keep using this GGraph.
             var gs: GGraph = GGraph.ofJSON(routeEdgesMsg.graph);
             // Copy all of the curves of the edges, including the label boundaries and the arrowheads.
-            for (var i = 0; i < gs.edges.length; i++) {
-                // data.graph contains a string that is the JSON string for an IGraph.
-                // Deserialize it into a GGraph. This GGraph doesn't directly replace myself; I just want to copy its curves over mine. This way,
-                // the user can keep using this GGraph.
+            for (var edgeId in gs.edgesMap) {
+                // data.graph contains a string that is the JSON string for an IGraph. Deserialize it into a GGraph. This GGraph doesn't directly replace myself; I just want to copy its curves over mine. This way, the user can keep using this GGraph.
                 var gs: GGraph = GGraph.ofJSON(routeEdgesMsg.graph);
-                var workerEdge = gs.edges[i];
-                if (routeEdgesMsg.edges == null || routeEdgesMsg.edges.length == 0 || routeEdgesMsg.edges.indexOf(workerEdge.id) >= 0) {
-                    var edgeInternal = this.edgesMap[workerEdge.id];
+                var workerEdge = gs.edgesMap[edgeId];
+                if (routeEdgesMsg.edges == null || routeEdgesMsg.edges.length == 0 || routeEdgesMsg.edges.indexOf(workerEdge.edge.id) >= 0) {
+                    var edgeInternal = this.edgesMap[edgeId];
                     var myEdge = edgeInternal.edge;
-                    myEdge.curve = workerEdge.curve;
+                    myEdge.curve = workerEdge.edge.curve;
                     edgeInternal.polyline = null;
                     if (myEdge.label != null)
-                        myEdge.label.bounds = workerEdge.label.bounds;
+                        myEdge.label.bounds = workerEdge.edge.label.bounds;
                     if (myEdge.arrowHeadAtSource != null)
-                        myEdge.arrowHeadAtSource = workerEdge.arrowHeadAtSource;
+                        myEdge.arrowHeadAtSource = workerEdge.edge.arrowHeadAtSource;
                     if (myEdge.arrowHeadAtTarget != null)
-                        myEdge.arrowHeadAtTarget = workerEdge.arrowHeadAtTarget;
+                        myEdge.arrowHeadAtTarget = workerEdge.edge.arrowHeadAtTarget;
                 }
             }
             // Invoke the user callbacks.
             this.edgeRoutingCallbacks.fire(routeEdgesMsg.edges);
         }
-        else if (data.type == "SetPolyline") {
+        else if (data.msgtype == "SetPolyline") {
             var setPolylineMsg = <M.Res_SetPolyline>data;
             var edge = this.edgesMap[setPolylineMsg.edge].edge;
             var curve = JSON.parse(setPolylineMsg.curve);
@@ -1240,9 +1291,7 @@ export class GGraph implements IGraph {
     public layoutStartedCallbacks: CallbackSet<void> = new CallbackSet<void>();
     /** Callbacks you can set to be notified when a layout operation is complete. */
     public layoutCallbacks: CallbackSet<void> = new CallbackSet<void>();
-    /** Callbacks you can set to be notified when an edge routing operation is complete. The set of routed edges is passed
-    as a parameter. If it is null, it means that all edges in the graph were routed. Note that edge routing may happen after
-    being invoked by the user program, but it may also happen as a consequence of moving a node. */
+    /** Callbacks you can set to be notified when an edge routing operation is complete. The set of routed edges is passed as a parameter. If it is null, it means that all edges in the graph were routed. Note that edge routing may happen after being invoked by the user program, but it may also happen as a consequence of moving a node. */
     public edgeRoutingCallbacks: CallbackSet<string[]> = new CallbackSet<string[]>();
     /** Callbacks you can set to be notified when the engine starts an asynchronous operation. */
     public workStartedCallbacks: CallbackSet<void> = new CallbackSet<void>();
@@ -1265,7 +1314,7 @@ export class GGraph implements IGraph {
         // Serialize the graph.
         var serialisedGraph = this.getJSON();
         // Send the worker the serialized graph to layout.
-        var msg: M.Req_RunLayout = { type: "RunLayout", graph: serialisedGraph };
+        var msg: M.Req_RunLayout = { msgtype: "RunLayout", graph: serialisedGraph };
         this.worker.postMessage(msg);
     }
 
@@ -1276,7 +1325,7 @@ export class GGraph implements IGraph {
         // Serialize the graph.
         var serialisedGraph = this.getJSON();
         // Send the worker the serialized graph to layout.
-        var msg: M.Req_RouteEdges = { type: "RouteEdges", graph: serialisedGraph, edges: edges };
+        var msg: M.Req_RouteEdges = { msgtype: "RouteEdges", graph: serialisedGraph, edges: edges };
         this.worker.postMessage(msg);
     }
 
@@ -1286,16 +1335,14 @@ export class GGraph implements IGraph {
         this.setWorking(true);
         var serialisedGraph = this.getJSON();
         var points = this.edgesMap[edge].polyline;
-        var msg: M.Req_SetPolyline = { type: "SetPolyline", graph: serialisedGraph, edge: edge, polyline: JSON.stringify(points) };
+        var msg: M.Req_SetPolyline = { msgtype: "SetPolyline", graph: serialisedGraph, edge: edge, polyline: JSON.stringify(points) };
         this.worker.postMessage(msg);
     }
 
-    /** A list of the current move tokens. Note that currently only one object can be moved at the same time. This
-    may change in the future. */
+    /** A list of the current move tokens. Note that currently only one object can be moved at the same time. This may change in the future. */
     private moveTokens: MoveElementToken[] = [];
 
-    /** Returns the control point of the given edge that's within an editing circle radius from the given point. If more than
-    one such points exist, the one which has the closest centre is returned. If no such point exists, returns null. */
+    /** Returns the control point of the given edge that's within an editing circle radius from the given point. If more than one such points exist, the one which has the closest centre is returned. If no such point exists, returns null. */
     public getControlPointAt(edge: GEdge, point: GPoint): GPoint {
         var points = this.getPolyline(edge.id);
         // Iterate over points, comparing the squared distance.
@@ -1314,9 +1361,7 @@ export class GGraph implements IGraph {
         return ret;
     }
 
-    /** This function selects an element for moving. After calling this, you can call moveElement to apply a delta to the
-    position of the element. You can select multiple elements and then move them all in one operation, but you should not
-    move elements between selections (in that case, call endMoveElements and then select them all again). */
+    /** This function selects an element for moving. After calling this, you can call moveElement to apply a delta to the position of the element. You can select multiple elements and then move them all in one operation, but you should not move elements between selections (in that case, call endMoveElements and then select them all again). */
     public startMoveElement(el: IElement, mousePoint: GPoint) {
         if (el instanceof GNode) {
             // In the case of nodes, I need to make a note of the original center location of the node.
@@ -1327,8 +1372,7 @@ export class GGraph implements IGraph {
             this.moveTokens.push(mnt);
         }
         else if (el instanceof GLabel) {
-            // In the case of labels (which means edge labels, as node labels cannot be moved independently), I need to
-            // make a note of the original center location of the label.
+            // In the case of labels (which means edge labels, as node labels cannot be moved independently), I need to make a note of the original center location of the label.
             var label = <GLabel>el;
             var melt = new MoveEdgeLabelToken();
             melt.label = label;
@@ -1336,8 +1380,7 @@ export class GGraph implements IGraph {
             this.moveTokens.push(melt);
         }
         else if (el instanceof GEdge) {
-            // In the case of edges (which means an edge control point, as edges cannot be moved as a whole), I need to
-            // make a note of the original polyline, and the point of that polyline that's being moved.
+            // In the case of edges (which means an edge control point, as edges cannot be moved as a whole), I need to make a note of the original polyline, and the point of that polyline that's being moved.
             var edge = <GEdge>el;
             var point = this.getControlPointAt(edge, mousePoint);
             if (point != null) {
@@ -1355,8 +1398,7 @@ export class GGraph implements IGraph {
         for (var i in this.moveTokens) {
             var token = this.moveTokens[i];
             if (token instanceof MoveNodeToken) {
-                // If I'm moving a node, I'll need to apply the delta to the original center, and set it as the
-                // new center.
+                // If I'm moving a node, I'll need to apply the delta to the original center, and set it as the new center.
                 var ntoken = <MoveNodeToken>token;
                 var newBoundaryCenter = ntoken.originalBoundsCenter.add(delta);
                 ntoken.node.boundaryCurve.setCenter(newBoundaryCenter);
@@ -1369,16 +1411,13 @@ export class GGraph implements IGraph {
                 this.checkRouteEdges();
             }
             else if (token instanceof MoveEdgeLabelToken) {
-                // If I'm moving an edge, I'll need to apply the delta to the original center, and set it as the
-                // new center.
+                // If I'm moving an edge, I'll need to apply the delta to the original center, and set it as the new center.
                 var ltoken = <MoveEdgeLabelToken>token;
                 var newBoundsCenter = ltoken.originalLabelCenter.add(delta);
                 ltoken.label.bounds.setCenter(newBoundsCenter);
             }
             else if (token instanceof MoveEdgeToken) {
-                // If I'm moving a control point, I'll need to apply the delta to the original control point, and
-                // then replace it in the original polyline. The resulting polyline is the new polyline for the
-                // edge.
+                // If I'm moving a control point, I'll need to apply the delta to the original control point, and then replace it in the original polyline. The resulting polyline is the new polyline for the edge.
                 var etoken = <MoveEdgeToken>token;
                 var newPoint = etoken.originalPoint.add(delta);
                 for (var j = 0; j < etoken.originalPolyline.length; j++)
@@ -1395,10 +1434,7 @@ export class GGraph implements IGraph {
 
     /** The callback that's waiting to attempt to start edge routing again, if it could not be started immediately. */
     private delayCheckRouteEdges: () => void = null;
-    /** Attempts to begin edge routing on the given edge set. If no edge set is provided, gets the edges that are
-    outdated (i.e. the edges that are being affected by current node move operations). Edge routing cannot be
-    started if the worker is already busy; in this case, a new attempt to start will be made when the worker becomes
-    free again. Multiple calls to this function while an edge routing operation is pending will reset the request. */
+    /** Attempts to begin edge routing on the given edge set. If no edge set is provided, gets the edges that are outdated (i.e. the edges that are being affected by current node move operations). Edge routing cannot be started if the worker is already busy; in this case, a new attempt to start will be made when the worker becomes free again. Multiple calls to this function while an edge routing operation is pending will reset the request. */
     private checkRouteEdges(edgeSet?: string[]) {
         var edges: string[] = edgeSet == null ? this.getOutdatedEdges() : edgeSet;
         if (edges.length > 0) {
@@ -1420,9 +1456,7 @@ export class GGraph implements IGraph {
 
     /** The callback that's waiting to attempt to start edge rebuild again, if it could not be started immediately. */
     private delayCheckRebuildEdge: () => void = null;
-    /** Attempts to begin rebuilding the given edge from its polyline. Edge rebuild cannot be started if the worker 
-    is already busy; in this case, a new attempt to start the rebuild will be made when the worker becomes free again.
-    Multiple calls to this function while a rebuild is pending will reset the request. */
+    /** Attempts to begin rebuilding the given edge from its polyline. Edge rebuild cannot be started if the worker is already busy; in this case, a new attempt to start the rebuild will be made when the worker becomes free again. Multiple calls to this function while a rebuild is pending will reset the request. */
     private checkRebuildEdge(edge: string) {
         if (this.delayCheckRebuildEdge != null)
             this.workStoppedCallbacks.remove(this.delayCheckRebuildEdge);
@@ -1440,8 +1474,7 @@ export class GGraph implements IGraph {
 
     /** Returns an array of all the edges that are affected by node move operations. */
     private getOutdatedEdges(): string[] {
-        // Prepare a dictionary of affected edges. By doing it this way, I avoid duplicate entries in case two
-        // or more nodes are being moved.
+        // Prepare a dictionary of affected edges. By doing it this way, I avoid duplicate entries in case two or more nodes are being moved.
         var affectedEdges: { [id: string]: boolean } = {};
         for (var t in this.moveTokens) {
             var token = this.moveTokens[t];
@@ -1467,45 +1500,38 @@ export class GGraph implements IGraph {
         this.moveTokens = [];
     }
 
-    /** If the triangle formed by three vertices has an area that's less than this, it's okay to discard the middle
-    vertex for the purpose of building an edge's polyline. */
+    /** If the triangle formed by three vertices has an area that's less than this, it's okay to discard the middle vertex for the purpose of building an edge's polyline. */
     private static ColinearityEpsilon: number = 50.00;
     /** Simplifies a polyline by removing vertexes that are colinear (or nearly so). */
     private removeColinearVertices(polyline: GPoint[]) {
         for (var i = 1; i < polyline.length - 2; i++) {
             // Get the (signed, doubled) triangle area and compare it with an epsilon.
             var a = GPoint.signedDoubledTriangleArea(polyline[i - 1], polyline[i], polyline[i + 1]);
-            // If it's less than that, remove the vertex. This is an approximation, but it's good enough for
-            // the purpose of not producing a polyline with many useless control points.
+            // If it's less than that, remove the vertex. This is an approximation, but it's good enough for the purpose of not producing a polyline with many useless control points.
             if (a >= -GGraph.ColinearityEpsilon && a <= GGraph.ColinearityEpsilon)
                 polyline.splice(i--, 1);
         }
     }
 
-    /** Creates a polyline for an edge that doesn't have one. Note: generally speaking, this is *not* a round-trip
-    transformation. This is fine. In practice, the polyline will be composed by the start and end points of every
-    segment of the curve, if it is segmented. If it isn't, it'll just be the start and end points. */
+    /** Creates a polyline for an edge that doesn't have one. Note: generally speaking, this is *not* a round-trip transformation. This is fine. In practice, the polyline will be composed by the start and end points of every segment of the curve, if it is segmented. If it isn't, it'll just be the start and end points. */
     private makePolyline(edge: GEdge): GPoint[] {
         var points: GPoint[] = [];
         // Push the center of the source node.
         var source = this.nodesMap[edge.source];
         points.push(source.node.boundaryCurve.getCenter());
         // If the curve is segmented...
-        if (edge.curve != null && edge.curve.type == "SegmentedCurve") {
-            // Push the start of the curve (note that, in general, this is not the same as the center of the
-            // source node, due to trimming.
+        if (edge.curve != null && edge.curve.curvetype == "SegmentedCurve") {
+            // Push the start of the curve (note that, in general, this is not the same as the center of the source node, due to trimming.
             var scurve = <GSegmentedCurve>edge.curve;
             points.push(scurve.getStart());
-            // Push the end point of each segment (again, the end point of the last segment will not be the
-            // same as the center of the target node, due to trimming).
+            // Push the end point of each segment (again, the end point of the last segment will not be the same as the center of the target node, due to trimming).
             for (var i = 0; i < scurve.segments.length; i++)
                 points.push(scurve.segments[i].getEnd());
         }
         // Push the center of the target node.
         var target = this.nodesMap[edge.target];
         points.push(target.node.boundaryCurve.getCenter());
-        // At this point, the polyline often has a lot of points due to edge routing algorithms producing
-        // segmented curves with lots of segments. Simplify the polyline.
+        // At this point, the polyline often has a lot of points due to edge routing algorithms producing segmented curves with lots of segments. Simplify the polyline.
         this.removeColinearVertices(points);
         return points;
     }
@@ -1518,10 +1544,7 @@ export class GGraph implements IGraph {
         return edgeInternal.polyline;
     }
 
-    /** Adds a control point for an edge, at the given point. The control point will be placed, in the polyline order,
-    between the closest existing control point and the one opposite that. If there is no control point opposing the
-    closest one, it'll be placed right after the closest one. If the closest one is the last one, it'll be placed
-    right before. */
+    /** Adds a control point for an edge, at the given point. The control point will be placed, in the polyline order, between the closest existing control point and the one opposite that. If there is no control point opposing the closest one, it'll be placed right after the closest one. If the closest one is the last one, it'll be placed right before. */
     public addEdgeControlPoint(edgeID: string, point: GPoint) {
         var edgeInternal: GEdgeInternal = this.edgesMap[edgeID];
         // Find the closest control point.
@@ -1534,15 +1557,11 @@ export class GGraph implements IGraph {
                 dclosest = d;
             }
         }
-        // If it's the last one, just put it before (i.e. decrease "iclosest", which at this point will mean "the
-        // index of the control point right before the new one").
+        // If it's the last one, just put it before (i.e. decrease "iclosest", which at this point will mean "the index of the control point right before the new one").
         if (iclosest == edgeInternal.polyline.length - 1)
             iclosest--;
         else if (iclosest > 0) {
-            // If it's neither the last one nor the first one, I need to decide which control point, between the next
-            // and the previous, can be considered the "opposite" one. I get the distance from the segment made by the
-            // closest and the previous, as a parameter on the segment. If it is far from the extremes, i.e. it is
-            // somewhere in the middle, that's the one.
+            // If it's neither the last one nor the first one, I need to decide which control point, between the next and the previous, can be considered the "opposite" one. I get the distance from the segment made by the closest and the previous, as a parameter on the segment. If it is far from the extremes, i.e. it is somewhere in the middle, that's the one.
             var par = point.closestParameter(edgeInternal.polyline[iclosest - 1], edgeInternal.polyline[iclosest]);
             if (par > 0.1 && par < 0.9)
                 iclosest--;
@@ -1553,8 +1572,7 @@ export class GGraph implements IGraph {
         this.beginRebuildEdgeCurve(edgeID);
     }
 
-    /** Removes the specified control point from the edge. The point should be the exact location of an existing
-    control point. You cannot remove the first or last control points. */
+    /** Removes the specified control point from the edge. The point should be the exact location of an existing control point. You cannot remove the first or last control points. */
     public delEdgeControlPoint(edgeID: string, point: GPoint) {
         var edgeInternal: GEdgeInternal = this.edgesMap[edgeID];
         // Search for the index of the control point in the polyline.
