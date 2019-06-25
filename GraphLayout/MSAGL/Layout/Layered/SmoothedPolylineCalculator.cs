@@ -11,7 +11,6 @@ using System.Threading;
 using System.Reflection.Emit;
 using Microsoft.Msagl.Layout.MDS;
 using System.IO.Packaging;
-using System.Diagnostics.Eventing.Reader;
 
 namespace Microsoft.Msagl.Layout.Layered {
 
@@ -431,13 +430,13 @@ namespace Microsoft.Msagl.Layout.Layered {
         private void RefineBeetweenNeighborLayers(Site topSite, int topNode, int bottomNode) {
             RefinerBetweenTwoLayers.Refine(topNode, bottomNode, topSite, this.anchors,
                                            this.layerArrays, this.layeredGraph, this.originalGraph,
-                                           this.settings.LayerSeparation);
+                                           this.settings.LayerSeparation);           
         }
 
         private void CreateInitialListOfSites() {
             Site currentSite = headSite = new Site(EdgePathPoint(0));
             for (int i = 1; i <= edgePath.Count; i++)
-                currentSite = new Site(currentSite, EdgePathPoint(i));
+                currentSite = new Site(currentSite, EdgePathPoint(i));            
         }
 
         Site TailSite { get { Site s = headSite; while (s.Next != null) s = s.Next; return s; } }
