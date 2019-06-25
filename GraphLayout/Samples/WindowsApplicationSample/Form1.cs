@@ -204,7 +204,6 @@ namespace WindowsApplicationSample {
             graph.AddEdge(receivers_growth.Id, receivers_control.Id);
             graph.AddEdge(receiver0_control.Id, receiver0.Id);
             graph.AddEdge(receiver0_growth.Id, receiver0.Id);
-            graph.LayoutAlgorithmSettings.LiftCrossEdges = true;
             gViewer.Graph = graph;
             this.propertyGrid1.SelectedObject = graph;
         }
