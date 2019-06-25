@@ -170,16 +170,10 @@ namespace WindowsApplicationSample {
                     CreateGraphClustersSmall();
                     break;
                 case 2:
-                    CreateGraphClustersBig(false, false);
+                    CreateGraphClustersBig(false);
                     break;
                 case 3:
-                    CreateGraphClustersBig(true, false);
-                    break;
-                case 4:
-                    CreateGraphClustersBig(false, true);
-                    break;
-                case 5:
-                    CreateGraphClustersBig(true, true);
+                    CreateGraphClustersBig(true);
                     break;
                 default:
                     CreateGraph();
@@ -210,12 +204,11 @@ namespace WindowsApplicationSample {
             graph.AddEdge(receivers_growth.Id, receivers_control.Id);
             graph.AddEdge(receiver0_control.Id, receiver0.Id);
             graph.AddEdge(receiver0_growth.Id, receiver0.Id);
-            graph.LayoutAlgorithmSettings.LiftCrossEdges = true;
             gViewer.Graph = graph;
             this.propertyGrid1.SelectedObject = graph;
         }
 
-        void CreateGraphClustersBig(bool enforceClusterEdgesOnly, bool horizontal) {
+        void CreateGraphClustersBig(bool horizontal) {
             Graph graph = new Graph("clusters big");
 
             void addCluster(string clusterId, params string[] nodeIds) {
@@ -228,6 +221,8 @@ namespace WindowsApplicationSample {
                     graph.AddNode(node);
                     cluster.AddNode(node);
                 }
+                if (horizontal)
+                    cluster.Attr.ClusterLabelMargin = Microsoft.Msagl.Core.Layout.LgNodeInfo.LabelPlacement.Right;
                 graph.RootSubgraph.AddSubgraph(cluster);
             }
 
@@ -251,12 +246,10 @@ namespace WindowsApplicationSample {
             addCluster("Standard_growth");
 
             void addEdge(string sourceCluster, string sourceNode, string targetCluster, string targetNode) {
-                if (enforceClusterEdgesOnly)
-                    graph.AddEdge(sourceCluster, targetCluster);
-                else
-                    graph.AddEdge(sourceNode == null ? sourceCluster : (sourceCluster + "." + sourceNode), targetNode == null ? targetCluster : (targetCluster + "." + targetNode));
+                graph.AddEdge(sourceNode == null ? sourceCluster : (sourceCluster + "." + sourceNode), targetNode == null ? targetCluster : (targetCluster + "." + targetNode));
             }
 
+            addEdge("Arabinose", "Arabinose", "Degrader", "Degrader");
             addEdge("Arabinose_control", "Arabinose_control", "Arabinose", "Arabinose");
             addEdge("Arabinose_control", "Arabinose_control", "Degrader_control", "Degrader_control");
             addEdge("Arabinose_growth", "Arabinose_growth", "Arabinose_control", "Arabinose_control");
@@ -283,6 +276,7 @@ namespace WindowsApplicationSample {
             addEdge("Relays_growth", "Relay2_growth", "Relays_control", "Relay2_control");
             addEdge("Standard", null, "Receivers", null);
             addEdge("Standard_control", null, "Receivers_control", null);
+            addEdge("Standard_control", "Standard_control", "Standard", "Standard");
             addEdge("Standard_growth", "Standard_growth", "Standard_control", "Standard_control");
 
             if (horizontal)

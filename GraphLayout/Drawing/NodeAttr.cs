@@ -48,11 +48,14 @@ namespace Microsoft.Msagl.Drawing {
             get { return yRad; }
             set { yRad = value; }
         }
-       
 
+        private LgNodeInfo.LabelPlacement clusterLabelPlacement = LgNodeInfo.LabelPlacement.Top;
+        /// <summary>Informs the rendering layer on where the margin for a cluster label is supposed to appear.</summary>
+        public LgNodeInfo.LabelPlacement ClusterLabelMargin {
+            get { return clusterLabelPlacement; }
+            set { clusterLabelPlacement = value; }
+        }
         
-
-
         /// <summary>
         /// ToString
         /// </summary>

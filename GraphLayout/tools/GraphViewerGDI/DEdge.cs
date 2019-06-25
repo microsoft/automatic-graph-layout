@@ -136,9 +136,9 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         internal override float DashSize() {
             if (dashSize > 0)
                 return dashSize;
-            var w = (float) DrawingEdge.Attr.LineWidth;
-            var dashSizeInPoints = (float) (Draw.dashSize*GViewer.Dpi);
-            return dashSize = dashSizeInPoints/w;
+            var w = (float)DrawingEdge.Attr.LineWidth;
+            var dashSizeInPoints = (float)(Draw.dashSize * GViewer.Dpi);
+            return dashSize = dashSizeInPoints / w;
         }
         /// <summary>
         /// 
@@ -153,7 +153,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         public override void UpdateRenderedBox() {
             Rectangle box = Edge.GeometryEdge.BoundingBox;
             AddLabelBox(ref box);
-            AddArrows( ref box);
+            AddArrows(ref box);
             box.Pad(DrawingEdge.Attr.LineWidth);
             if (SelectedForEditing)
                 box.Pad(GViewer.UnderlyingPolylineRadiusWithNoScale);
@@ -162,16 +162,16 @@ namespace Microsoft.Msagl.GraphViewerGdi {
 
         void AddArrows(ref Rectangle box) {
             AddArrowAtSource(ref box);
-            AddArrowAtTarget( ref box);
-		
+            AddArrowAtTarget(ref box);
+
         }
         void AddArrowAtTarget(ref Rectangle box) {
-            if (DrawingEdge.EdgeCurve != null && DrawingEdge.Attr.ArrowAtTarget)
+            if (DrawingEdge.EdgeCurve != null && DrawingEdge.Attr != null && DrawingEdge.Attr.ArrowAtTarget)
                 AddArrowToBox(DrawingEdge.EdgeCurve.End, DrawingEdge.ArrowAtTargetPosition, DrawingEdge.Attr.LineWidth, ref box);
         }
-        
+
         void AddArrowAtSource(ref Rectangle box) {
-            if (DrawingEdge.EdgeCurve != null && DrawingEdge.Attr.ArrowAtSource)
+            if (DrawingEdge.EdgeCurve != null && DrawingEdge.Attr != null && DrawingEdge.Attr.ArrowAtSource)
                 AddArrowToBox(DrawingEdge.EdgeCurve.End, DrawingEdge.ArrowAtSourcePosition, DrawingEdge.Attr.LineWidth, ref box);
         }
 
@@ -193,6 +193,6 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         void AddLabelBox(ref Rectangle box) {
             if (Label != null && DGraph.DLabelIsValid(Label))
                 box.Add(Label.DrawingLabel.BoundingBox);
-        }        
+        }
     }
 }
