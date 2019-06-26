@@ -463,6 +463,8 @@ namespace Microsoft.Msagl.Layout.Layered {
             double mY = ms.Point.Y;
             ms.Point = new Point(MiddlePos(ax, bx, a, b, mY), mY);
             ms.Next.Point = new Point(bx, b.Y);
+            Anchor ma = anchors[EdgePathNode(1)];
+            ma.X = ms.Point.X;
             //show(new DebugCurve(200, 3, "yellow", new LineSegment(ax, a.Y, ms.Point.X, ms.Point.Y)),
             //    new DebugCurve(200, 3, "green", new LineSegment(bx, b.Y, ms.Point.X, ms.Point.Y)));
         }
@@ -559,14 +561,31 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         private bool PositionsAreLegal(double sax, double sbx, int sign, Anchor a, Anchor b, int middleNodeIndex) {
             
-            if (ApproximateComparer.Close(sax, sbx))
-                return true;
-
-            if ((sax - sbx) * sign > 0)
+            if (!ApproximateComparer.Close(sax, sbx) && (sax - sbx) * sign > 0)
+                return false;
+            Anchor mAnchor = anchors[middleNodeIndex];
+            double mx = MiddlePos(sax, sbx, a, b, mAnchor.Y);
+            if (!MiddleAnchorLegal(mx, middleNodeIndex, mAnchor))
                 return false;
 
-
             return !LineSegIntersectBound(new Point(sax, a.Bottom), new Point(sbx, b.Top));
+        }
+
+        private bool MiddleAnchorLegal(double mx, int middleNodeIndex, Anchor mAnchor) {          
+            var mLayer = NodeLayer(middleNodeIndex);
+            int pos = this.layerArrays.X[middleNodeIndex];
+            double shift = mx - mAnchor.X;
+            if (pos > 0) {
+                Anchor l = anchors[mLayer[pos - 1]];
+                if (l.Right > shift + mAnchor.Left)
+                    return false;
+            }
+            if (pos < mLayer.Length - 1) {
+                Anchor r = anchors[mLayer[pos + 1]];
+                if (r.Left < shift + mAnchor.Right)
+                    return false;
+            }
+            return true;
         }
 
         private double MiddlePos(double sax, double sbx, Anchor a, Anchor b, double mY) {
