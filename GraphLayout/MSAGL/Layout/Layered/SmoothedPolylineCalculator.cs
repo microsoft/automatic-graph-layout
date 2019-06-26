@@ -288,8 +288,8 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
         #endregion
 
-        internal ICurve GetSpline() {
-            CreateRefinedPolyline();
+        internal ICurve GetSpline(bool optimizeShortEdges) {
+            CreateRefinedPolyline(optimizeShortEdges);
             return CreateSmoothedPolyline();
         }
 
@@ -412,7 +412,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             return ret;
         }
 
-        private void CreateRefinedPolyline() {
+        private void CreateRefinedPolyline(bool optimizeShortEdges) {
             CreateInitialListOfSites();
 
             Site topSite = this.headSite;
@@ -423,7 +423,8 @@ namespace Microsoft.Msagl.Layout.Layered {
                 topSite = bottomSite;
             }
             TryToRemoveInflections();
-            OptimizeShortPath();
+            if (optimizeShortEdges)
+                OptimizeShortPath();
         }
 
         private void RefineBeetweenNeighborLayers(Site topSite, int topNode, int bottomNode) {

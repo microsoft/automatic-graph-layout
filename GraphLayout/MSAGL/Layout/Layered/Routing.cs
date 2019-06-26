@@ -76,11 +76,12 @@ foreach (var intEdgeList in Database.RegularMultiedges) {
 #endif
                 //Here we try to optimize multi-edge routing
                 int m = intEdgeList.Count;
-                for (int i = m / 2; i < m; i++) CreateSplineForNonSelfEdge(intEdgeList[i]);
+                bool optimizeShortEdges = m == 1;
+                for (int i = m / 2; i < m; i++) CreateSplineForNonSelfEdge(intEdgeList[i], optimizeShortEdges);
 #if SHARPKIT // https://github.com/SharpKit/SharpKit/issues/4
-                for (int i = (m / 2) - 1; i >= 0; i--) CreateSplineForNonSelfEdge(intEdgeList[i]);
+                for (int i = (m / 2) - 1; i >= 0; i--) CreateSplineForNonSelfEdge(intEdgeList[i], optimizeShortEdges);
 #else
-                for (int i = m / 2 - 1; i >= 0; i--) CreateSplineForNonSelfEdge(intEdgeList[i]);
+                for (int i = m / 2 - 1; i >= 0; i--) CreateSplineForNonSelfEdge(intEdgeList[i], optimizeShortEdges);
 #endif
             }
 #if PPC
@@ -140,12 +141,11 @@ foreach (var intEdgeList in Database.RegularMultiedges) {
                 }
             }
         }
-        void CreateSplineForNonSelfEdge(IntEdge es){
+        void CreateSplineForNonSelfEdge(IntEdge es, bool optimizeShortEdges) {
             this.ProgressStep();
 
-            if (es.LayerEdges != null)
-            {
-                DrawSplineBySmothingThePolyline(es);
+            if (es.LayerEdges != null) {
+                DrawSplineBySmothingThePolyline(es, optimizeShortEdges);
                 if (!es.IsVirtualEdge)
                 {
                     es.UpdateEdgeLabelPosition(Database.Anchors);
@@ -156,11 +156,11 @@ foreach (var intEdgeList in Database.RegularMultiedges) {
             }
         }
 
-        void DrawSplineBySmothingThePolyline(IntEdge edgePath) {
+        void DrawSplineBySmothingThePolyline(IntEdge edgePath, bool optimizeShortEdges) {
             var smoothedPolyline = new SmoothedPolylineCalculator(edgePath, Database.Anchors, OriginalGraph, settings,
                                                                   LayerArrays,
                                                                   ProperLayeredGraph, Database);
-            ICurve spline = smoothedPolyline.GetSpline();
+            ICurve spline = smoothedPolyline.GetSpline(optimizeShortEdges);
             if (edgePath.Reversed) {
                 edgePath.Curve = spline.Reverse();
                 edgePath.UnderlyingPolyline = smoothedPolyline.Reverse().GetPolyline;
