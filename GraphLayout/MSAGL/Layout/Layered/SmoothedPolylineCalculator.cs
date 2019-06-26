@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Reflection.Emit;
 using Microsoft.Msagl.Layout.MDS;
-using System.IO.Packaging;
 
 namespace Microsoft.Msagl.Layout.Layered {
 
@@ -563,6 +562,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             }            
         }
 
+#if !SHARPKIT
         void show(params DebugCurve[] cs) {
             var l = new List<DebugCurve>();
             l.AddRange(anchors.Select(aa => new DebugCurve(100, 1, "red", aa.PolygonalBoundary)));
@@ -575,6 +575,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             // Database(db, thinRightNodes.Select(p=>new Polyline(p.Parallelogram.Vertex(VertexId.Corner), p.Parallelogram.Vertex(VertexId.VertexA),
             //p.Parallelogram.Vertex(VertexId.OtherCorner), p.Parallelogram.Vertex(VertexId.VertexB)){Closed=true}).ToArray());
         }
+#endif
 
         private bool PositionsAreLegal(double sax, double sbx, int sign, Anchor a, Anchor b, int middleNodeIndex) {
             
@@ -645,7 +646,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
 
 
-        #region Edge path node access
+#region Edge path node access
         Point EdgePathPoint(int i) {
             return anchors[EdgePathNode(i)].Origin;
         }
@@ -658,9 +659,9 @@ namespace Microsoft.Msagl.Layout.Layered {
                 v = edgePath[i].Source;
             return v;
         }
-        #endregion
+#endregion
 
-        #region Fitting Bezier segs
+#region Fitting Bezier segs
         Curve CreateSmoothedPolyline() {
             RemoveVerticesWithNoTurns();
             Curve curve = new Curve();
@@ -788,6 +789,6 @@ namespace Microsoft.Msagl.Layout.Layered {
         //    return new CubicBezierSegment(s, t + s / 3.0, t + e / 3.0, e);
         //}
 
-        #endregion
+#endregion
     }
 }
