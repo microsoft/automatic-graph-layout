@@ -575,18 +575,18 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
 #if !SHARPKIT
-        void show(params DebugCurve[] cs) {
-            var l = new List<DebugCurve>();
-            l.AddRange(anchors.Select(aa => new DebugCurve(100, 1, "red", aa.PolygonalBoundary)));
-            l.AddRange(thinRightNodes.Select(n => n.Parallelogram).Select(p => new Polyline(p.Vertex(VertexId.Corner), p.Vertex(VertexId.VertexA),
-                  p.Vertex(VertexId.OtherCorner), p.Vertex(VertexId.VertexB))).Select(c => new DebugCurve(100, 3, "brown", c)));
-            foreach (var le in this.edgePath.LayerEdges)
-                l.Add(new DebugCurve(100, 1, "blue", new LineSegment(anchors[le.Source].Origin, anchors[le.Target].Origin)));
-            l.AddRange(cs);
-            LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(l);
-            // Database(db, thinRightNodes.Select(p=>new Polyline(p.Parallelogram.Vertex(VertexId.Corner), p.Parallelogram.Vertex(VertexId.VertexA),
-            //p.Parallelogram.Vertex(VertexId.OtherCorner), p.Parallelogram.Vertex(VertexId.VertexB)){Closed=true}).ToArray());
-        }
+        //void show(params DebugCurve[] cs) {
+        //    var l = new List<DebugCurve>();
+        //    l.AddRange(anchors.Select(aa => new DebugCurve(100, 1, "red", aa.PolygonalBoundary)));
+        //    l.AddRange(thinRightNodes.Select(n => n.Parallelogram).Select(p => new Polyline(p.Vertex(VertexId.Corner), p.Vertex(VertexId.VertexA),
+        //          p.Vertex(VertexId.OtherCorner), p.Vertex(VertexId.VertexB))).Select(c => new DebugCurve(100, 3, "brown", c)));
+        //    foreach (var le in this.edgePath.LayerEdges)
+        //        l.Add(new DebugCurve(100, 1, "blue", new LineSegment(anchors[le.Source].Origin, anchors[le.Target].Origin)));
+        //    l.AddRange(cs);
+        //    LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(l);
+        //    // Database(db, thinRightNodes.Select(p=>new Polyline(p.Parallelogram.Vertex(VertexId.Corner), p.Parallelogram.Vertex(VertexId.VertexA),
+        //    //p.Parallelogram.Vertex(VertexId.OtherCorner), p.Parallelogram.Vertex(VertexId.VertexB)){Closed=true}).ToArray());
+        //}
 #endif
 
         private bool PositionsAreLegal(double sax, double sbx, int sign, Anchor a, Anchor b, int middleNodeIndex) {
