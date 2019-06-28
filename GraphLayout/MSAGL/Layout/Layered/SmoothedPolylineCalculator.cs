@@ -529,7 +529,8 @@ namespace Microsoft.Msagl.Layout.Layered {
             }
             if (overlapMin <= overlapMax) {
                 ax = bx = 0.5 * (overlapMin + overlapMax);
-            } else {
+            }
+            else {
                 if (OriginToOriginSegCrossesAnchorSide(a, b))
                     return false;
                 if (sign == 1) {
@@ -559,7 +560,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                     ||
                     Curve.CurvesIntersect(seg, new LineSegment(b.RightBottom, a.RightTop)));
         }
-    
+
 
         private void OptimizeShortPath() {
             if (edgePath.Count > 2)
