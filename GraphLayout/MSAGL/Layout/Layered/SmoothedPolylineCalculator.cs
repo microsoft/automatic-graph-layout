@@ -535,11 +535,11 @@ namespace Microsoft.Msagl.Layout.Layered {
                 if (OriginToOriginSegCrossesAnchorSide(a, b))
                     return false;
                 if (sign == 1) {
-                    ax = a.Right;
+                    ax = a.Right - 0.1 * a.RightAnchor;
                     bx = b.Left;
                 }
                 else {
-                    ax = a.Left;
+                    ax = a.Left + 0.1 * a.LeftAnchor;
                     bx = b.Right;
                 }
             }
