@@ -382,7 +382,7 @@ namespace Microsoft.Msagl.Core.Layout {
         ///     to allow for extra space required for non-shortest path edge routes or for labels.
         /// </summary>
         /// <param name="padding">amount of padding between child node bounding box and expected inner bounds</param>
-        internal void SetInitialLayoutState(double padding) {
+        public void SetInitialLayoutState(double padding) {
             isInInitialLayoutState = true;
             if (RectangularBoundary != null) {
                 RectangularBoundary.StoreDefaultMargin();
@@ -396,6 +396,19 @@ namespace Microsoft.Msagl.Core.Layout {
             }
         }
 
+        /// <summary>
+        /// Set the initial layout state such that our current margin is stored and the new margin is taken from the given rb
+        /// </summary>
+        public void SetInitialLayoutState(RectangularClusterBoundary bounds) {
+            isInInitialLayoutState = true;
+            if (RectangularBoundary != null && bounds != null) {
+                RectangularBoundary.StoreDefaultMargin();
+                RectangularBoundary.LeftMargin = bounds.LeftMargin;
+                RectangularBoundary.RightMargin = bounds.RightMargin;
+                RectangularBoundary.BottomMargin = bounds.BottomMargin;
+                RectangularBoundary.TopMargin = bounds.TopMargin;
+            }
+        }
 
         /// <summary>
         ///     sets IsInitialLayoutState to false and restores the default margins if we have a RectangularBoundary

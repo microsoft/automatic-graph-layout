@@ -32,7 +32,15 @@ namespace Microsoft.Msagl.Routing {
         public bool ContinueOnOverlaps { get { return continueOnOverlaps; } set { continueOnOverlaps = value; } }
 
         Shape[] rootShapes;
-        IEnumerable<EdgeGeometry> edgeGeometriesEnumeration { get { return this._edges.Select(e => e.EdgeGeometry); } }
+        IEnumerable<EdgeGeometry> edgeGeometriesEnumeration {
+            get {
+                if (this._edges != null) {
+                    foreach (var item in this._edges.Select(e => e.EdgeGeometry)) {
+                        yield return item;
+                    }
+                }
+            }
+        }
         double coneAngle;
         readonly double tightPadding;
         double LoosePadding { get; set; }
