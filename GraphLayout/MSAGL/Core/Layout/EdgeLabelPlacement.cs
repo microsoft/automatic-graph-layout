@@ -704,5 +704,18 @@ namespace Microsoft.Msagl.Core.Layout {
             }
             return points;
         }
+
+        /// <summary>
+        /// Places the given labels at their default positions.  Only avoids overlaps with the edge and source/target node that the label is connected to.
+        /// </summary>
+        public static void PlaceLabelsAtDefaultPositions(CancelToken cancelToken, IEnumerable<Edge> edges) {
+            ValidateArg.IsNotNull(edges, "edges");
+            foreach (Edge edge in edges) {
+                if (edge.Labels.Count > 0) {
+                    EdgeLabelPlacement placer = new EdgeLabelPlacement(new[] { edge.Source, edge.Target }, new[] { edge });
+                    placer.Run(cancelToken);
+                }
+            }
+        }
     }
 }
