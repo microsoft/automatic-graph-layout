@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ChristopheGraphs": {
+      "commandName": "Project",
+      "commandLineArgs": "ng 10 m 10"
+    }
+  }
+}

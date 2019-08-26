@@ -3,43 +3,78 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
+using System.Xml;
+using ArgsParser;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Miscellaneous;
 
 namespace ChristopheGraphs {
+
     class Program {
         static void Main(string[] args) {
+            ArgsParser.ArgsParser ap = new ArgsParser.ArgsParser(args);
+            ap.AddOptionWithAfterStringWithHelp("ng", "number of graphs to process");
+            ap.AddOptionWithAfterStringWithHelp("m", "the graph index multiplier");
+            int numberGrapsToWrite; int increment;
+            ParseCommandLine(ap, out numberGrapsToWrite, out increment);
+                
             var graphList = GetGraphList(@"z:\");
             List<Node> nodes = PositionNodes(graphList);
-            WriteGraphs(@"c:\\tmp\out_graph.txt", graphList, nodes);
+            int k = 1;
+            for (int i = 0; i < increment; i++) {
+                string fileName = "z:\\out\\out_graph";
+                k *= 2;
+                fileName += numberGrapsToWrite.ToString() + "_" + k.ToString() + ".csv";
+                WriteGraphs(fileName, graphList, nodes, numberGrapsToWrite, k);
+            }
         }
 
-        private static void WriteGraphs(string fileName, string[] graphList, List<Node> nodes) {
-            using (System.IO.StreamWriter file =new System.IO.StreamWriter(fileName, true)) {
-                for (int i = 1; i < graphList.Length; i++) {
-                    WriteGraph(file, graphList[i], i, nodes);
+        static void ParseCommandLine(ArgsParser.ArgsParser ap, out int ng, out int increment) {
+            ng = 10;
+            increment = 6;
+            if (ap.Parse() == false) {
+                Console.WriteLine("{0}", ap.ErrorMessage);
+                return;
+            }
+            if (ap.OptionIsUsed("ng")) {
+                ap.GetIntOptionValue("ng", out ng);
+            }
+
+            if (ap.OptionIsUsed("m")) {
+                ap.GetIntOptionValue("m", out increment);
+            }
+        }
+
+        private static void WriteGraphs(string fileName, string[] graphList,
+            List<Node> nodes, int numberOfGraphToWrite, int increment) {
+            using (System.IO.StreamWriter file =new System.IO.StreamWriter(fileName)) {
+                int edgeNumber = 0;
+                int k = 1;
+                for (int i = 1; k < graphList.Length && i <= numberOfGraphToWrite; i++, k = 1 + (i - 1) * increment) {
+                    WriteGraph(file, graphList[k], i, nodes, ref edgeNumber);
                 }
             }
         }
 
-        private static void WriteGraph(StreamWriter file, string graphToParse, int z, List<Node> nodes) {
-            var edges = ParseGraph(graphToParse);
-            int edgeNumber = 0;
+        private static void WriteGraph(StreamWriter file, string graphToParse, int z, List<Node> nodes, ref int edgeNumber) {
+            List<int> activities = new List<int>();
+            var edges = ParseGraph(graphToParse, activities);
             foreach(var e in edges) {
-                Node s = nodes[e.Item1];
-                Node t = nodes[e.Item2];
-                file.WriteLine("{0},{1},{2},{3},{4}", ++edgeNumber, s.Center.X, s.Center.Y, z, edgeNumber) ;
-                file.WriteLine("{0},{1},{2},{3},{4}", edgeNumber, t.Center.X, t.Center.Y, z, edgeNumber);                
+                int si = e.Item1;
+                int ti = e.Item2;
+                Node s = nodes[si];
+                Node t = nodes[ti];
+                file.WriteLine("{0},{1},{2},{3},{4}", ++edgeNumber, s.Center.X, s.Center.Y, z, activities[si] ) ;
+                file.WriteLine("{0},{1},{2},{3},{4}",   edgeNumber, t.Center.X, t.Center.Y, z, activities[ti]);                
             }
         }
 
         private static List<Node> PositionNodes(string[] graphList) {
             //int i = graphList.Length - 1; // take the last graph
-            int i = 1; 
-            var edges = ParseGraph(graphList[i]);
+            int i = 1;
+            List<int> activities = new List<int>();
+            var edges = ParseGraph(graphList[i], activities);
             GeometryGraph g = new GeometryGraph();
             List<Node> nodes = CreateNodes(edges);
             foreach (var n in nodes)
@@ -75,17 +110,36 @@ namespace ChristopheGraphs {
                 l[n] = new Node(CurveFactory.CreateCircle(5, new Microsoft.Msagl.Core.Geometry.Point()));
         }
 
-        private static List<Tuple<int, int>> ParseGraph(string fileName) {
-            string edgeLine = GetEdgeLine(fileName);
-            return ParseEdgeLine(edgeLine);
+        private static List<Tuple<int, int>> ParseGraph(string fileName, List<int> activities) {
+            string activityLine;
+            string edgeLine = GetEdgeLineAndActivityLine(fileName, out activityLine);
+            var edges = ParseEdgeLine(edgeLine);
+            FillActivities(activityLine, ref activities);
+            return edges;
         }
 
+        private static void FillActivities(string line, ref List<int> activities) {
+            char[] delimiterChars = { '[', ']', '(', ')', ',', ' ', '}' };
+            string[] words = line.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
+            try {
+                foreach (var w in words) {
+                    activities.Add(Int32.Parse(w));
+                }
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.Message);
+            }
+        }
 
-        private static string GetEdgeLine(string fileName) {
-            System.IO.StreamReader file = new System.IO.StreamReader(fileName);
-            file.ReadLine(); file.ReadLine(); file.ReadLine();
-            string line = file.ReadLine();
-            return line.Substring(line.IndexOf('['));
+        private static string GetEdgeLineAndActivityLine(string fileName, out string activityLine) {
+            using (System.IO.StreamReader file = new System.IO.StreamReader(fileName)) {
+                file.ReadLine(); file.ReadLine(); file.ReadLine();
+                string line = file.ReadLine();
+                var ret = line.Substring(line.IndexOf('['));
+                activityLine = file.ReadLine();
+                activityLine = activityLine.Substring(activityLine.IndexOf('['));
+                return ret;
+            }
         }
 
         class GraphNameCompare : IComparer {
@@ -111,27 +165,6 @@ namespace ChristopheGraphs {
             }
             return files;
         }
-
-
-
-        private static void WriteGraphToFile(GeometryGraph geometryGraph, string fileName, bool round) {
-            using (System.IO.StreamWriter file =
-           new System.IO.StreamWriter(fileName, true)) {
-                int edgeNumber = 0;
-                foreach (var e in geometryGraph.Edges) {
-                    edgeNumber++;
-                    if (round) {
-                        file.WriteLine("{0},{1},{2},0,{3}", edgeNumber, (int)(e.Source.Center.X + 0.5), (int)(e.Source.Center.Y + 0.5), edgeNumber);
-                        file.WriteLine("{0},{1},{2},0,{3}", edgeNumber, (int)(e.Target.Center.X + 0.5), (int)(e.Target.Center.Y + 0.5), edgeNumber);
-                    }
-                    else {
-                        file.WriteLine("{0},{1},{2},0,{3}", edgeNumber, e.Source.Center.X, e.Source.Center.Y, edgeNumber);
-                        file.WriteLine("{0},{1},{2},0,{3}", edgeNumber, e.Target.Center.X, e.Target.Center.Y, edgeNumber);
-                    }
-                }
-            }
-        }
-
         private static void LayoutGraph(GeometryGraph geometryGraph) {
             var settings = new Microsoft.Msagl.Layout.MDS.MdsLayoutSettings();
             settings.EdgeRoutingSettings.EdgeRoutingMode = Microsoft.Msagl.Core.Routing.EdgeRoutingMode.StraightLine;
@@ -151,13 +184,6 @@ namespace ChristopheGraphs {
 
         private static void AddEdgeToList(string a, string b, List<Tuple<int, int>> list) {
             list.Add(new Tuple<int, int>(Int32.Parse(a), Int32.Parse(b)));
-        }
-
-        
-        private static void ReserveEnoughNodes(List<Node> nodes, int i) {
-            if (i + 1 > nodes.Count) {
-                nodes.AddRange(Enumerable.Repeat<Node>(null, 2 * (i + 1)));
-            }
-        }
+        }     
     }
 }

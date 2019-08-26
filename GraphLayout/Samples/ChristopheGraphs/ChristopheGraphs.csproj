@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\MSAGL\Msagl.csproj" />
+    <ProjectReference Include="..\..\tools\ArgsParser\ArgsParser.csproj" />
   </ItemGroup>
 
 </Project>
