@@ -9,30 +9,70 @@ using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Miscellaneous;
 
-namespace ChristopheGraphs {
+namespace Z3Graphs {
 
     class Program {
+        
         static void Main(string[] args) {
             ArgsParser.ArgsParser ap = new ArgsParser.ArgsParser(args);
-            ap.AddOptionWithAfterStringWithHelp("ng", "number of graphs to process");
-            ap.AddOptionWithAfterStringWithHelp("m", "the graph index multiplier");
-            int numberGrapsToWrite; int increment;
-            ParseCommandLine(ap, out numberGrapsToWrite, out increment);
-                
-            var graphList = GetGraphList(@"z:\");
+            ap.AddOptionWithAfterStringWithHelp("ng", "number of graphs to output");
+            ap.AddOptionWithAfterStringWithHelp("diff", "the minimal differences between two consequtive graphs in the output");
+            int numberGrapsToWrite;
+            int diff;
+
+            ParseCommandLine(ap, out numberGrapsToWrite, out diff);
+    
+            string[] graphList = GetAllGraphsNamesSorted(@"z:\");
             List<Node> nodes = PositionNodes(graphList);
-            int k = 1;
-            for (int i = 0; i < increment; i++) {
-                string fileName = "z:\\out\\out_graph";
-                k *= 2;
-                fileName += numberGrapsToWrite.ToString() + "_" + k.ToString() + ".csv";
-                WriteGraphs(fileName, graphList, nodes, numberGrapsToWrite, k);
-            }
+            graphList = GetListOfGraphsToWrite(graphList, numberGrapsToWrite, diff);
+
+            string fileName = @"z:\out"; 
+            fileName += "_" + numberGrapsToWrite.ToString() + ".csv";
+            WriteGraphs(fileName, graphList, nodes);
+            
         }
 
-        static void ParseCommandLine(ArgsParser.ArgsParser ap, out int ng, out int increment) {
+        static string[] GetListOfGraphsToWrite(string[] graphList, int numberGrapsToWrite, int diff) {
+            var ret = new List<string>();
+            var edges = ParseGraphEdgesOnly(graphList[0]);
+            ret.Add(graphList[0]);
+            for (int next = 1; next < graphList.Length; next++) {
+                var es = ParseGraphEdgesOnly(graphList[next]);
+                if (Diff(es, edges) >= ((diff/ 100.0) * (edges.Count + es.Count))) { // diff percentage of the half sum of the edges in both grapsh
+                    ret.Add(graphList[next]);
+                    if (ret.Count >= numberGrapsToWrite)
+                        break;
+                    edges = es;
+                }
+            }
+            return ret.ToArray();
+        }
+
+        private static int Diff(HashSet<Tuple<ushort, ushort>> edges, HashSet<Tuple<ushort, ushort>> es) {
+            int r = 0;
+            foreach (var e in edges) {
+                if (!es.Contains(e))
+                    r++;
+            }
+            foreach (var e in es) {
+                if (!edges.Contains(e))
+                    r++;
+            }
+            return r;
+        }
+
+        private static HashSet<Tuple<ushort, ushort>> ParseGraphEdgesOnly(string fileName) {
+            string edgeLine = GetEdgeLine(fileName);
+            var edges = ParseEdgeLine(edgeLine);
+            var s = new HashSet<Tuple<ushort, ushort>>();
+            foreach (var e in edges) { s.Add(e); }
+            return s;
+            
+        }
+
+        static void ParseCommandLine(ArgsParser.ArgsParser ap, out int ng, out int diff) {
             ng = 10;
-            increment = 6;
+            diff = 5; // percentage of edges
             if (ap.Parse() == false) {
                 Console.WriteLine("{0}", ap.ErrorMessage);
                 return;
@@ -40,26 +80,24 @@ namespace ChristopheGraphs {
             if (ap.OptionIsUsed("ng")) {
                 ap.GetIntOptionValue("ng", out ng);
             }
-
-            if (ap.OptionIsUsed("m")) {
-                ap.GetIntOptionValue("m", out increment);
+            if (ap.OptionIsUsed("diff")) {
+                ap.GetIntOptionValue("diff", out diff);
             }
         }
 
-        private static void WriteGraphs(string fileName, string[] graphList,
-            List<Node> nodes, int numberOfGraphToWrite, int increment) {
+        private static void WriteGraphs(string fileName, string[] graphList, List<Node> nodes) {
             using (System.IO.StreamWriter file =new System.IO.StreamWriter(fileName)) {
                 int edgeNumber = 0;
-                int k = 1;
-                for (int i = 1; k < graphList.Length && i <= numberOfGraphToWrite; i++, k = 1 + (i - 1) * increment) {
-                    WriteGraph(file, graphList[k], i, nodes, ref edgeNumber);
+                int z = 0;
+                foreach (var graph in graphList) {
+                    WriteGraph(file, graph, z++, nodes, ref edgeNumber) ;
                 }
             }
         }
 
-        private static void WriteGraph(StreamWriter file, string graphToParse, int z, List<Node> nodes, ref int edgeNumber) {
-            List<int> activities = new List<int>();
-            var edges = ParseGraph(graphToParse, activities);
+        private static void WriteGraph(StreamWriter file, string fileName, int z, List<Node> nodes, ref int edgeNumber) {
+            var activities = new List<int> ();
+            var edges = ParseGraph(fileName, activities);
             foreach(var e in edges) {
                 int si = e.Item1;
                 int ti = e.Item2;
@@ -72,7 +110,7 @@ namespace ChristopheGraphs {
 
         private static List<Node> PositionNodes(string[] graphList) {
             //int i = graphList.Length - 1; // take the last graph
-            int i = 1;
+            int i = 0;
             List<int> activities = new List<int>();
             var edges = ParseGraph(graphList[i], activities);
             GeometryGraph g = new GeometryGraph();
@@ -87,7 +125,7 @@ namespace ChristopheGraphs {
             return nodes;
         }
 
-        private static List<Node> CreateNodes(List<Tuple<int, int>> edges) {
+        private static List<Node> CreateNodes(List<Tuple<ushort, ushort>> edges) {
             int length = -1;
 
             foreach (var e in edges) {
@@ -110,7 +148,7 @@ namespace ChristopheGraphs {
                 l[n] = new Node(CurveFactory.CreateCircle(5, new Microsoft.Msagl.Core.Geometry.Point()));
         }
 
-        private static List<Tuple<int, int>> ParseGraph(string fileName, List<int> activities) {
+        private static List<Tuple<ushort, ushort>> ParseGraph(string fileName, List<int> activities) {
             string activityLine;
             string edgeLine = GetEdgeLineAndActivityLine(fileName, out activityLine);
             var edges = ParseEdgeLine(edgeLine);
@@ -141,6 +179,14 @@ namespace ChristopheGraphs {
                 return ret;
             }
         }
+        private static string GetEdgeLine(string fileName) {
+            using (var file = new StreamReader(fileName)) {
+                file.ReadLine(); file.ReadLine(); file.ReadLine();
+                string line = file.ReadLine();
+                var ret = line.Substring(line.IndexOf('['));                
+                return ret;
+            }
+        }
 
         class GraphNameCompare : IComparer {
 
@@ -154,16 +200,16 @@ namespace ChristopheGraphs {
             }
         }
 
-        private static string[] GetGraphList(string dir) {
+        private static string[] GetAllGraphsNamesSorted(string dir) {
             string[] files = Directory.GetFiles(dir, "*.json")
                                      .Select(Path.GetFileName)
                                      .ToArray();
-
+            
             Array.Sort(files, new GraphNameCompare());
             for (int i = 0; i < files.Length; i++) {
                 files[i] = Path.Combine(dir, files[i]);
             }
-            return files;
+            return files;            
         }
         private static void LayoutGraph(GeometryGraph geometryGraph) {
             var settings = new Microsoft.Msagl.Layout.MDS.MdsLayoutSettings();
@@ -172,9 +218,9 @@ namespace ChristopheGraphs {
             Console.WriteLine("layout done");
         }
 
-        private static List<Tuple<int, int>> ParseEdgeLine(string line) {
+        private static List<Tuple<ushort, ushort>> ParseEdgeLine(string line) {
             char[] delimiterChars = { '[', ']', '(', ')', ',', ' ', '}' };
-            var list = new List<Tuple<int, int>>();
+            var list = new List<Tuple<ushort, ushort>>();
             string[] words = line.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < words.Length - 1; i += 2) {
                 AddEdgeToList(words[i], words[i + 1], list);
@@ -182,8 +228,8 @@ namespace ChristopheGraphs {
             return list;
         }
 
-        private static void AddEdgeToList(string a, string b, List<Tuple<int, int>> list) {
-            list.Add(new Tuple<int, int>(Int32.Parse(a), Int32.Parse(b)));
+        private static void AddEdgeToList(string a, string b, List<Tuple<ushort, ushort>> list) {
+            list.Add(new Tuple<ushort, ushort>(ushort.Parse(a), ushort.Parse(b)));
         }     
     }
 }

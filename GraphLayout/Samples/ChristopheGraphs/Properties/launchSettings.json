@@ -2,7 +2,7 @@
   "profiles": {
     "ChristopheGraphs": {
       "commandName": "Project",
-      "commandLineArgs": "ng 10 m 10"
+      "commandLineArgs": "ng 100 diff 10"
     }
   }
 }
