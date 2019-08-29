@@ -14,22 +14,26 @@ namespace Z3Graphs {
     class Program {
         
         static void Main(string[] args) {
-            ArgsParser.ArgsParser ap = new ArgsParser.ArgsParser(args);
-            ap.AddOptionWithAfterStringWithHelp("ng", "number of graphs to output");
-            ap.AddOptionWithAfterStringWithHelp("diff", "the minimal differences between two consequtive graphs in the output");
-            int numberGrapsToWrite;
-            int diff;
+            int numberGrapsToWrite, diff;
+            bool onlyDiffs;
+            SetupAndParseArgs(args, out numberGrapsToWrite, out diff, out onlyDiffs);
 
-            ParseCommandLine(ap, out numberGrapsToWrite, out diff);
-    
             string[] graphList = GetAllGraphsNamesSorted(@"z:\");
             List<Node> nodes = PositionNodes(graphList);
             graphList = GetListOfGraphsToWrite(graphList, numberGrapsToWrite, diff);
 
-            string fileName = @"z:\out"; 
-            fileName += "_" + numberGrapsToWrite.ToString() + ".csv";
-            WriteGraphs(fileName, graphList, nodes);
-            
+            string fileName = @"z:\out";
+            fileName += "_" + numberGrapsToWrite.ToString() + "_" + diff.ToString() + "_" + onlyDiffs.ToString() + ".csv";
+            WriteGraphs(fileName, graphList, nodes, onlyDiffs);
+
+        }
+
+        private static void SetupAndParseArgs(string[] args, out int numberGrapsToWrite, out int diff, out bool onlyDiffs) {
+            ArgsParser.ArgsParser ap = new ArgsParser.ArgsParser(args);
+            ap.AddOptionWithAfterStringWithHelp("ng", "number of graphs to output");
+            ap.AddOptionWithAfterStringWithHelp("diff", "the minimal differences between two consequtive graphs in the output");
+            ap.AddAllowedOptionWithHelpString("onlydiff", "output differences only");
+            ParseCommandLine(ap, out numberGrapsToWrite, out diff, out onlyDiffs);
         }
 
         static string[] GetListOfGraphsToWrite(string[] graphList, int numberGrapsToWrite, int diff) {
@@ -70,12 +74,16 @@ namespace Z3Graphs {
             
         }
 
-        static void ParseCommandLine(ArgsParser.ArgsParser ap, out int ng, out int diff) {
+        static void ParseCommandLine(ArgsParser.ArgsParser ap, out int ng, out int diff, out bool onlyDiffs) {
             ng = 10;
             diff = 5; // percentage of edges
+            onlyDiffs = false;
             if (ap.Parse() == false) {
                 Console.WriteLine("{0}", ap.ErrorMessage);
                 return;
+            }
+            if (ap.OptionIsUsed("onlydiff")) {
+                onlyDiffs = true;
             }
             if (ap.OptionIsUsed("ng")) {
                 ap.GetIntOptionValue("ng", out ng);
@@ -85,14 +93,55 @@ namespace Z3Graphs {
             }
         }
 
-        private static void WriteGraphs(string fileName, string[] graphList, List<Node> nodes) {
-            using (System.IO.StreamWriter file =new System.IO.StreamWriter(fileName)) {
-                int edgeNumber = 0;
-                int z = 0;
-                foreach (var graph in graphList) {
-                    WriteGraph(file, graph, z++, nodes, ref edgeNumber) ;
+        private static void WriteGraphs(string fileName, string[] graphList, List<Node> nodes, bool onlyDiffs) {
+            if (onlyDiffs == false) {
+                using (var file = new System.IO.StreamWriter(fileName)) {
+                    int edgeNumber = 0;
+                    int z = 0;
+                    foreach (var graph in graphList) {
+                        WriteGraph(file, graph, z++, nodes, ref edgeNumber);
+                    }
                 }
             }
+            else {
+                Console.WriteLine("writing diffs only");
+                using (var file = new StreamWriter(fileName)) {
+                    int edgeNumber = 0;
+                    int z = 0;
+                    HashSet<Tuple<ushort, ushort>> edges = null;
+                    foreach (var graph in graphList) {
+                        WriteGraphDiffs(file, graph, z++, nodes, ref edgeNumber, ref edges);
+                    }
+                }
+            }
+        }
+
+        private static void WriteGraphDiffs(StreamWriter file, string graph, int z, List<Node> nodes, ref int edgeNumber, ref HashSet<Tuple<ushort, ushort>> prevEdges) {
+            var activities = new List<int>();
+            var edges = ParseGraph(graph, activities);
+            var edgeSet = new HashSet<Tuple<ushort, ushort>>();
+
+            foreach (var e in edges) {
+                edgeSet.Add(e);
+                if (prevEdges.Contains(e)) continue;
+                int si = e.Item1;
+                int ti = e.Item2;
+                Node s = nodes[si];
+                Node t = nodes[ti];
+                file.WriteLine("{0},{1},{2},{3},{4},{5}", ++edgeNumber, s.Center.X, s.Center.Y, z, activities[si], "n");
+                file.WriteLine("{0},{1},{2},{3},{4},{5}", edgeNumber, t.Center.X, t.Center.Y, z, activities[ti], "n");
+            }
+
+            foreach (var e in prevEdges) { // dump dead edges
+                if (edges.Contains(e)) continue;
+                int si = e.Item1;
+                int ti = e.Item2;
+                Node s = nodes[si];
+                Node t = nodes[ti];
+                file.WriteLine("{0},{1},{2},{3},{4},{5}", ++edgeNumber, s.Center.X, s.Center.Y, z, activities[si], "o");
+                file.WriteLine("{0},{1},{2},{3},{4},{5}", edgeNumber, t.Center.X, t.Center.Y, z, activities[ti], "o");
+            }
+            prevEdges = edgeSet;
         }
 
         private static void WriteGraph(StreamWriter file, string fileName, int z, List<Node> nodes, ref int edgeNumber) {
