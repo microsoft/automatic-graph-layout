@@ -111,7 +111,7 @@ namespace ArgsParser {
             ret += "\n";
             ret += "Usage:\n";
             foreach (var allowedOption in allowedOptions)
-                ret += allowedOption.Key + " " + (string.IsNullOrEmpty(allowedOption.Value) ? "" : "/" + allowedOption.Value) + "\n";
+                ret += allowedOption.Key + " " + (string.IsNullOrEmpty(allowedOption.Value) ? "" : ":" + allowedOption.Value) + "\n";
             foreach (var s in allowedOptionWithAfterString) {
                 ret += s.Key +" "+( String.IsNullOrEmpty(s.Value)? " \"option value\"":("\""+ s.Value+"\"")) + "\n";
             }

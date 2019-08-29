@@ -39,6 +39,7 @@ namespace Z3Graphs {
             ap.AddOptionWithAfterStringWithHelp("inputDir", "the input directory");
             ap.AddOptionWithAfterStringWithHelp("outputDir", "the output directory");
             ap.AddAllowedOptionWithHelpString("onlydiff", "output differences only");
+            ap.AddAllowedOptionWithHelpString("/h", "prints the usage string and exits");
             ParseCommandLine(ap, out numberGrapsToWrite, out diff, out onlyDiffs, out inputDir, out outputDir);
         }
 
@@ -89,7 +90,11 @@ namespace Z3Graphs {
             outputDir = ".";
             if (ap.Parse() == false) {
                 Console.WriteLine("{0}", ap.ErrorMessage);
-                return;
+                Environment.Exit(1);
+            }
+            if (ap.OptionIsUsed("/h")) {
+                Console.WriteLine(ap.UsageString());
+                Environment.Exit(0);
             }
             if (ap.OptionIsUsed("onlydiff")) {
                 onlyDiffs = true;
