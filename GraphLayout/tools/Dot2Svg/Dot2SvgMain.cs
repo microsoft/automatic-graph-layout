@@ -104,7 +104,7 @@ namespace Agl {
             if (argsParser.OptionIsUsed(HelpOption))
                 return PrintHelpAndExit();
 
-            var precisionStr = argsParser.GetValueOfOptionWithAfterString(PrecisionOption);
+            var precisionStr = argsParser.GetStringOptionValue(PrecisionOption);
             if (precisionStr != null) {
                 var prec=int.Parse(precisionStr);
                 if(prec!=0)
@@ -118,7 +118,7 @@ namespace Agl {
                 if (r != 0)
                     return r;
             }
-            var listFile = argsParser.GetValueOfOptionWithAfterString(FileOption);
+            var listFile = argsParser.GetStringOptionValue(FileOption);
             if (listFile != null)
                 return ProccessFileList(listFile);
             return 0;
@@ -243,7 +243,7 @@ namespace Agl {
                 PrepareForOutput(graph);
 
             var outputFile = Path.ChangeExtension(inputFile, ".svg");
-            string outputDir = argsParser.GetValueOfOptionWithAfterString(OutputDirOption);
+            string outputDir = argsParser.GetStringOptionValue(OutputDirOption);
             if (outputDir != null) {
                 var name = Path.GetFileName(outputFile);
                 if (name != null)
@@ -293,7 +293,7 @@ namespace Agl {
 
         private LayerDirection GetLayerDirection()
         {
-            string orientOption = argsParser.GetValueOfOptionWithAfterString("-orient");
+            string orientOption = argsParser.GetStringOptionValue("-orient");
             if (orientOption == null)
                 return LayerDirection.TB;
             switch (orientOption)

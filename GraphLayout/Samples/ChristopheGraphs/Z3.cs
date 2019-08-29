@@ -16,24 +16,30 @@ namespace Z3Graphs {
         static void Main(string[] args) {
             int numberGrapsToWrite, diff;
             bool onlyDiffs;
-            SetupAndParseArgs(args, out numberGrapsToWrite, out diff, out onlyDiffs);
+            string inputDir;
+            string outputDir;
+            SetupAndParseArgs(args, out numberGrapsToWrite, out diff, out onlyDiffs, out inputDir, out outputDir);
 
-            string[] graphList = GetAllGraphsNamesSorted(@"z:\");
+            string[] graphList = GetAllGraphsNamesSorted(inputDir);
             List<Node> nodes = PositionNodes(graphList);
             graphList = GetListOfGraphsToWrite(graphList, numberGrapsToWrite, diff);
 
-            string fileName = @"z:\out";
+            string fileName = @"out";
             fileName += "_" + numberGrapsToWrite.ToString() + "_" + diff.ToString() + "_" + onlyDiffs.ToString() + ".csv";
+            fileName = Path.Combine(outputDir, fileName);
             WriteGraphs(fileName, graphList, nodes, onlyDiffs);
 
         }
 
-        private static void SetupAndParseArgs(string[] args, out int numberGrapsToWrite, out int diff, out bool onlyDiffs) {
+        private static void SetupAndParseArgs(string[] args, out int numberGrapsToWrite, out int diff, out bool onlyDiffs,
+            out string inputDir, out string outputDir) {
             ArgsParser.ArgsParser ap = new ArgsParser.ArgsParser(args);
             ap.AddOptionWithAfterStringWithHelp("ng", "number of graphs to output");
             ap.AddOptionWithAfterStringWithHelp("diff", "the minimal differences between two consequtive graphs in the output");
+            ap.AddOptionWithAfterStringWithHelp("inputDir", "the input directory");
+            ap.AddOptionWithAfterStringWithHelp("outputDir", "the output directory");
             ap.AddAllowedOptionWithHelpString("onlydiff", "output differences only");
-            ParseCommandLine(ap, out numberGrapsToWrite, out diff, out onlyDiffs);
+            ParseCommandLine(ap, out numberGrapsToWrite, out diff, out onlyDiffs, out inputDir, out outputDir);
         }
 
         static string[] GetListOfGraphsToWrite(string[] graphList, int numberGrapsToWrite, int diff) {
@@ -42,7 +48,7 @@ namespace Z3Graphs {
             ret.Add(graphList[0]);
             for (int next = 1; next < graphList.Length; next++) {
                 var es = ParseGraphEdgesOnly(graphList[next]);
-                if (Diff(es, edges) >= ((diff/ 100.0) * (edges.Count + es.Count))) { // diff percentage of the half sum of the edges in both grapsh
+                if (Diff(es, edges) >= ((diff/ 100.0) * (edges.Count + es.Count))) { // diff percentage of the half sum of the edges in both graphs
                     ret.Add(graphList[next]);
                     if (ret.Count >= numberGrapsToWrite)
                         break;
@@ -74,16 +80,25 @@ namespace Z3Graphs {
             
         }
 
-        static void ParseCommandLine(ArgsParser.ArgsParser ap, out int ng, out int diff, out bool onlyDiffs) {
+        static void ParseCommandLine(ArgsParser.ArgsParser ap, out int ng, out int diff, out bool onlyDiffs, 
+            out string inputDir, out string outputDir ) {
             ng = 10;
             diff = 5; // percentage of edges
             onlyDiffs = false;
+            inputDir = "Z:\\";
+            outputDir = ".";
             if (ap.Parse() == false) {
                 Console.WriteLine("{0}", ap.ErrorMessage);
                 return;
             }
             if (ap.OptionIsUsed("onlydiff")) {
                 onlyDiffs = true;
+            }
+            if (ap.OptionIsUsed("inputDir")) {
+                inputDir = ap.GetStringOptionValue("inputDir");
+            }
+            if (ap.OptionIsUsed("outputDir")) {
+                outputDir = ap.GetStringOptionValue("outputDir");
             }
             if (ap.OptionIsUsed("ng")) {
                 ap.GetIntOptionValue("ng", out ng);
@@ -123,7 +138,7 @@ namespace Z3Graphs {
 
             foreach (var e in edges) {
                 edgeSet.Add(e);
-                if (prevEdges.Contains(e)) continue;
+                if (prevEdges != null && prevEdges.Contains(e)) continue;
                 int si = e.Item1;
                 int ti = e.Item2;
                 Node s = nodes[si];
@@ -131,7 +146,7 @@ namespace Z3Graphs {
                 file.WriteLine("{0},{1},{2},{3},{4},{5}", ++edgeNumber, s.Center.X, s.Center.Y, z, activities[si], "n");
                 file.WriteLine("{0},{1},{2},{3},{4},{5}", edgeNumber, t.Center.X, t.Center.Y, z, activities[ti], "n");
             }
-
+            if (prevEdges != null)
             foreach (var e in prevEdges) { // dump dead edges
                 if (edges.Contains(e)) continue;
                 int si = e.Item1;

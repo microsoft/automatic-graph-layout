@@ -162,7 +162,7 @@ namespace TestWpfViewer {
             graphViewer.MouseMove += GraphViewerMouseMove;
             
 
-            var msaglFile = argsParser.GetValueOfOptionWithAfterString(SaveMsaglOption);
+            var msaglFile = argsParser.GetStringOptionValue(SaveMsaglOption);
             if (msaglFile != null)
                 graphViewer.MsaglFileToSave = msaglFile;
             
@@ -437,11 +437,11 @@ namespace TestWpfViewer {
 
             _graphViewerIsLoaded = true;
             
-            string fileName = argsParser.GetValueOfOptionWithAfterString(FileOption);
+            string fileName = argsParser.GetStringOptionValue(FileOption);
             if (fileName != null)
                 CreateAndLayoutGraph(fileName);
             else {
-                string fileList = argsParser.GetValueOfOptionWithAfterString(FileListOption);
+                string fileList = argsParser.GetStringOptionValue(FileListOption);
                 if (fileList != null)
                     ProcessFileList(fileList);
             }            
@@ -792,7 +792,7 @@ namespace TestWpfViewer {
         }
 
         void GiveGraphToControlFromMsagl(Graph graph) {
-            var fn = argsParser.GetValueOfOptionWithAfterString(SaveMsaglOption);
+            var fn = argsParser.GetStringOptionValue(SaveMsaglOption);
             var oldVal = graphViewer.NeedToCalculateLayout;
             if (fn != null) {
                 graphViewer.NeedToCalculateLayout = true;
@@ -817,9 +817,9 @@ namespace TestWpfViewer {
                 bool layoutExist = dgraph.GeometryGraph != null &&
                                    dgraph.GeometryGraph.Nodes.All(n => n.BoundaryCurve != null) &&
                                    dgraph.GeometryGraph.Nodes.Any(n => n.Center != origin);
-                if (layoutExist && argsParser.GetValueOfOptionWithAfterString(SaveMsaglOption) != null) {
-                    dgraph.Write(argsParser.GetValueOfOptionWithAfterString(SaveMsaglOption));
-                    Console.WriteLine("saved to {0}", argsParser.GetValueOfOptionWithAfterString(SaveMsaglOption));
+                if (layoutExist && argsParser.GetStringOptionValue(SaveMsaglOption) != null) {
+                    dgraph.Write(argsParser.GetStringOptionValue(SaveMsaglOption));
+                    Console.WriteLine("saved to {0}", argsParser.GetStringOptionValue(SaveMsaglOption));
                     Environment.Exit(0);
                 }
 
@@ -934,7 +934,7 @@ namespace TestWpfViewer {
             else if (mdsIsUsed)
                 gwgraph.LayoutAlgorithmSettings = GetMdsLayoutSettings();
             if (argsParser.OptionIsUsed(NodeSeparationOption)) {
-                var ns = double.Parse(argsParser.GetValueOfOptionWithAfterString(NodeSeparationOption));
+                var ns = double.Parse(argsParser.GetStringOptionValue(NodeSeparationOption));
                 if (ns != 0)
                     gwgraph.LayoutAlgorithmSettings.NodeSeparation = ns;
 

@@ -63,7 +63,7 @@ namespace OverlapGraphExperiments
         }
 
         private void Run() {
-            _testDir = _argsParser.GetValueOfOptionWithAfterString("-test_dir");
+            _testDir = _argsParser.GetStringOptionValue("-test_dir");
 
             if (_testDir == null) {
                 Console.WriteLine("-test_dir is not given, exiting");
@@ -94,7 +94,7 @@ namespace OverlapGraphExperiments
         }
 
         int GetRandomNodesCount() {
-            string s = _argsParser.GetValueOfOptionWithAfterString("-random_nodes");
+            string s = _argsParser.GetStringOptionValue("-random_nodes");
             if (s == null)
                 return 0;
             int ret;
@@ -176,7 +176,7 @@ namespace OverlapGraphExperiments
         }
 
         double GetWidthOfGraph() {
-            string s = _argsParser.GetValueOfOptionWithAfterString("-box_width");
+            string s = _argsParser.GetStringOptionValue("-box_width");
             if (s == null)
                 return 1000;
             double ret;

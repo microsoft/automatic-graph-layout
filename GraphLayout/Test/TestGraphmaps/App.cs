@@ -195,7 +195,7 @@ namespace TestGraphmaps {
             _argsParser = SetArgsParser(Args);
 
             if (_argsParser.OptionIsUsed(BackgroundColorOption)) {
-                var bc = _argsParser.GetValueOfOptionWithAfterString(BackgroundColorOption);
+                var bc = _argsParser.GetStringOptionValue(BackgroundColorOption);
                 _graphViewerPanel.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom(bc));
             }
 
@@ -290,7 +290,7 @@ namespace TestGraphmaps {
             }
             if (_argsParser.OptionIsUsed("-no_tiles"))
                 _graphViewer.DefaultLargeLayoutSettings.GenerateTiles = false;
-            string labelH = _argsParser.GetValueOfOptionWithAfterString("-labelH");
+            string labelH = _argsParser.GetStringOptionValue("-labelH");
             if (labelH != null) {
                 double h;
                 if (double.TryParse(labelH, out h)) {
@@ -305,7 +305,7 @@ namespace TestGraphmaps {
         }
 
         void CheckRailColors() {
-            string railColors = _argsParser.GetValueOfOptionWithAfterString(RailColorsOption);
+            string railColors = _argsParser.GetStringOptionValue(RailColorsOption);
             if (railColors != null)
             {
                 _graphViewer.DefaultLargeLayoutSettings.RailColors = railColors.Split(',');
@@ -313,14 +313,14 @@ namespace TestGraphmaps {
         }
 
         void CheckSelectionColors() {
-            string selColors = _argsParser.GetValueOfOptionWithAfterString(SelectionColorsOption);
+            string selColors = _argsParser.GetStringOptionValue(SelectionColorsOption);
             if (selColors != null) {
                 _graphViewer.DefaultLargeLayoutSettings.SelectionColors = selColors.Split(',');
             }
         }
 
         void CheckRailQuota() {
-            string railQuota = _argsParser.GetValueOfOptionWithAfterString("-rt");
+            string railQuota = _argsParser.GetStringOptionValue("-rt");
             if (railQuota != null) {
                 int n;
                 if (Int32.TryParse(railQuota, out n))
@@ -331,7 +331,7 @@ namespace TestGraphmaps {
         }
         void CheckNodeQuota()
         {
-            string nodeQuota = _argsParser.GetValueOfOptionWithAfterString(NodeQuotaOption);
+            string nodeQuota = _argsParser.GetStringOptionValue(NodeQuotaOption);
             if (nodeQuota != null)
             {
                 int n;
@@ -342,7 +342,7 @@ namespace TestGraphmaps {
             }
         }
         void CheckIncreaseNodeQuota() {
-            string incrNodeQuota = _argsParser.GetValueOfOptionWithAfterString(IncreaseNodeQuotaOption);
+            string incrNodeQuota = _argsParser.GetStringOptionValue(IncreaseNodeQuotaOption);
             if (incrNodeQuota != null) {
                 double inq;
                 if (Double.TryParse(incrNodeQuota, out inq))
@@ -390,11 +390,11 @@ namespace TestGraphmaps {
         void GraphViewerLoaded(object sender, EventArgs e) {
             if (_graphViewerIsLoaded) return;
             _graphViewerIsLoaded = true;
-            string fileName = _argsParser.GetValueOfOptionWithAfterString(FileOption);
+            string fileName = _argsParser.GetStringOptionValue(FileOption);
             if (fileName != null)
                 CreateAndLayoutGraph(fileName);
             else {
-                string fileList = _argsParser.GetValueOfOptionWithAfterString(FileListOption);
+                string fileList = _argsParser.GetStringOptionValue(FileListOption);
                 if (fileList != null)
                     ProcessFileList(fileList);
             }
@@ -946,7 +946,7 @@ namespace TestGraphmaps {
             else if (mdsIsUsed)
                 gwgraph.LayoutAlgorithmSettings = GetMdsLayoutSettings();
             if (_argsParser.OptionIsUsed(NodeSeparationOption)) {
-                var ns = double.Parse(_argsParser.GetValueOfOptionWithAfterString(NodeSeparationOption));
+                var ns = double.Parse(_argsParser.GetStringOptionValue(NodeSeparationOption));
                 if (ns != 0)
                     gwgraph.LayoutAlgorithmSettings.NodeSeparation = ns;
             }

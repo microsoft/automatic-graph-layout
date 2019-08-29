@@ -83,12 +83,12 @@ namespace Test01 {
             if (argsParser.OptionIsUsed(AsyncLayoutOption))
                 gviewer.AsyncLayout = true;
 
-            string listOfFilesFile = argsParser.GetValueOfOptionWithAfterString(ListOfFilesOption);
+            string listOfFilesFile = argsParser.GetStringOptionValue(ListOfFilesOption);
             if (listOfFilesFile != null) {
                 ProcessListOfFiles(listOfFilesFile, argsParser);
                 return;
             }
-            string fileName = argsParser.GetValueOfOptionWithAfterString(FileOption);
+            string fileName = argsParser.GetStringOptionValue(FileOption);
             string ext = Path.GetExtension(fileName);
             if (ext != null) {
                 ext = ext.ToLower();
@@ -397,14 +397,14 @@ namespace Test01 {
             if (!argsParser.OptionIsUsed(BundlingOption))
                 return null;
             var bs = new BundlingSettings();
-            string ink = argsParser.GetValueOfOptionWithAfterString(InkImportanceOption);
+            string ink = argsParser.GetStringOptionValue(InkImportanceOption);
             double inkCoeff;
             if (ink != null && double.TryParse(ink, out inkCoeff)) {
                 bs.InkImportance = inkCoeff;
                 BundlingSettings.DefaultInkImportance = inkCoeff;
             }
 
-            string esString = argsParser.GetValueOfOptionWithAfterString(EdgeSeparationOption);
+            string esString = argsParser.GetStringOptionValue(EdgeSeparationOption);
             if (esString != null) {
                 double es;
                 if (double.TryParse(esString, out es)) {
@@ -417,7 +417,7 @@ namespace Test01 {
                 }
             }
 
-            string capacityCoeffString = argsParser.GetValueOfOptionWithAfterString(CapacityCoeffOption);
+            string capacityCoeffString = argsParser.GetStringOptionValue(CapacityCoeffOption);
             if (capacityCoeffString != null) {
                 double capacityCoeff;
                 if (double.TryParse(capacityCoeffString, out capacityCoeff)) {
@@ -466,7 +466,7 @@ namespace Test01 {
                 graph.LayoutAlgorithmSettings.EdgeRoutingSettings.EdgeRoutingMode = EdgeRoutingMode.SplineBundling;
                 BundlingSettings bs = GetBundlingSettings(argsParser);
                 graph.LayoutAlgorithmSettings.EdgeRoutingSettings.BundlingSettings = bs;
-                string ink = argsParser.GetValueOfOptionWithAfterString(InkImportanceOption);
+                string ink = argsParser.GetStringOptionValue(InkImportanceOption);
                 if (ink != null) {
                     double inkCoeff;
                     if (double.TryParse(ink, out inkCoeff)) {
@@ -479,7 +479,7 @@ namespace Test01 {
                     }
                 }
 
-                string esString = argsParser.GetValueOfOptionWithAfterString(EdgeSeparationOption);
+                string esString = argsParser.GetStringOptionValue(EdgeSeparationOption);
                 if (esString != null) {
                     double es;
                     if (double.TryParse(esString, out es)) {
@@ -699,7 +699,7 @@ namespace Test01 {
         static double GetPaddings(ArgsParser.ArgsParser argsParser, out double loosePadding) {
             double tightPadding = 0.5;
             if (argsParser.OptionIsUsed(TightPaddingOption)) {
-                string tightPaddingString = argsParser.GetValueOfOptionWithAfterString(TightPaddingOption);
+                string tightPaddingString = argsParser.GetStringOptionValue(TightPaddingOption);
                 if (!double.TryParse(tightPaddingString, out tightPadding)) {
                     Console.WriteLine("cannot parse {0} {1}", TightPaddingOption, tightPaddingString);
                     Environment.Exit(1);
@@ -707,7 +707,7 @@ namespace Test01 {
             }
             loosePadding = 2.25;
             if (argsParser.OptionIsUsed(LoosePaddingOption)) {
-                string loosePaddingString = argsParser.GetValueOfOptionWithAfterString(LoosePaddingOption);
+                string loosePaddingString = argsParser.GetStringOptionValue(LoosePaddingOption);
                 if (!double.TryParse(loosePaddingString, out loosePadding)) {
                     Console.WriteLine("cannot parse {0} {1}", LoosePaddingOption, loosePaddingString);
                     Environment.Exit(1);
