@@ -158,6 +158,7 @@ class LayoutWorker {
         var settings: any;
         if (ggraph.settings.layout == G.GSettings.mdsLayout) {
             settings = new Microsoft.Msagl.Layout.MDS.MdsLayoutSettings.ctor();
+            settings.set_IterationsWithMajorization(settings.iterationsWithMajorization);
         }
         else {
             settings = new Microsoft.Msagl.Layout.Layered.SugiyamaLayoutSettings.ctor();

@@ -790,6 +790,8 @@ export interface ISettings {
     routing: string;
     aspectRatio: number;
     upDownConstraints: IUpDownConstraint[];
+    /** Specific to MDS layout. */
+    iterationsWithMajorization: number;
 }
 
 /** GSettings represents a graph's layout settings. */
@@ -800,6 +802,7 @@ export class GSettings implements ISettings {
     routing: string;
     aspectRatio: number;
     upDownConstraints: GUpDownConstraint[];
+    iterationsWithMajorization: number;
     constructor(settings: any)
     constructor(settings: ISettings) {
         this.layout = settings.layout === undefined ? GSettings.sugiyamaLayout : settings.layout;
@@ -813,6 +816,7 @@ export class GSettings implements ISettings {
                 this.upDownConstraints.push(upDownConstraint);
             }
         }
+        this.iterationsWithMajorization = settings.iterationsWithMajorization == undefined ? 30 : settings.iterationsWithMajorization;
     }
 
     static sugiyamaLayout = "sugiyama";
