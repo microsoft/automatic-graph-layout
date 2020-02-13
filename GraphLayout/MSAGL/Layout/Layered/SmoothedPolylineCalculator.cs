@@ -11,10 +11,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Reflection.Emit;
 using Microsoft.Msagl.Layout.MDS;
-#if !SHARPKIT
-using System.IO.Packaging;
-#endif
-using System.Diagnostics.Eventing.Reader;
 
 namespace Microsoft.Msagl.Layout.Layered {
 

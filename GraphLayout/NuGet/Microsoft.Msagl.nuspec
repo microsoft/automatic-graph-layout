@@ -19,7 +19,8 @@
     </frameworkAssemblies>
   </metadata>
   <files>
-    <file src="..\MSAGL\bin\release\Microsoft.Msagl.dll" target="lib\net40" />
-    <file src="..\MSAGL\bin\release\Microsoft.Msagl.xml" target="lib\net40" />
+    <file src="../MSAGL/bin/release/Microsoft.Msagl.dll" target="lib/net40" />
+    <file src="../MSAGL/bin/release/Microsoft.Msagl.xml" target="lib/net40" />
+    <file src="../MSAGL.NETCore/MSAGL/bin/Release/netstandard2.0/MSAGL.NETCore.dll" target="lib/netstandard2.0" />
   </files>
 </package>
