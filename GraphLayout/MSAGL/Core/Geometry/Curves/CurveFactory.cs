@@ -7,7 +7,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
     /// the helper class to create curves
     /// </summary>
     public sealed class CurveFactory {
-         CurveFactory() { }
+        CurveFactory() { }
         /// <summary>
         /// Creates an ellipse by the length of axes and the center
         /// </summary>
@@ -39,7 +39,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         /// <param name="center">the rectangle center</param>
         /// <returns></returns>
         static public ICurve CreateRectangleWithRoundedCorners(double width, double height, double radiusInXDirection, double radiusInYDirection, Point center) {
-            var box = new Rectangle(center.X - width/2, center.Y - height/2, center.X + width/2, center.Y + height/2);
+            var box = new Rectangle(center.X - width / 2, center.Y - height / 2, center.X + width / 2, center.Y + height / 2);
             return new RoundedRect(box, radiusInXDirection, radiusInYDirection);
         }
 
@@ -53,19 +53,17 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         /// <param name="radiusInYDirection">the length of the y axis of the corner smoothing ellipse</param>
         /// <param name="center">the rectangle center</param>
         /// <returns></returns>
-        static internal void CreateRectangleWithRoundedCorners(Curve c, double width, double height, double radiusInXDirection, double radiusInYDirection, Point center)
-        {
-            if (radiusInXDirection == 0 || radiusInYDirection == 0)
-            {
+        static internal void CreateRectangleWithRoundedCorners(Curve c, double width, double height, double radiusInXDirection, double radiusInYDirection, Point center) {
+            if (radiusInXDirection == 0 || radiusInYDirection == 0) {
                 CreateRectangle(c, width, height, center);
                 return;
             }
             double w = width / 2;
-            if (radiusInXDirection > w/2)
-                radiusInXDirection = w/2;
+            if (radiusInXDirection > w / 2)
+                radiusInXDirection = w / 2;
             double h = height / 2;
-            if (radiusInYDirection > h/2)
-                radiusInYDirection = h/2;
+            if (radiusInYDirection > h / 2)
+                radiusInYDirection = h / 2;
             double x = center.X;
             double y = center.Y;
             double ox = w - radiusInXDirection;
@@ -101,8 +99,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         /// <param name="height"></param>
         /// <param name="center"></param>
         /// <returns></returns>
-        static public ICurve CreateRectangle(double width, double height, Point center)
-        {
+        static public ICurve CreateRectangle(double width, double height, Point center) {
             double w = width / 2;
             double h = height / 2;
             double x = center.X;
@@ -121,8 +118,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         /// <param name="height"></param>
         /// <param name="center"></param>
         /// <returns></returns>
-        static internal void CreateRectangle(Curve c, double width, double height, Point center)
-        {
+        static internal void CreateRectangle(Curve c, double width, double height, Point center) {
             double w = width / 2;
             double h = height / 2;
             double x = center.X;
@@ -136,8 +132,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         /// </summary>
         /// <param name="rectangle"></param>
         /// <returns></returns>
-        static public ICurve CreateRectangle(Rectangle rectangle)
-        {
+        static public ICurve CreateRectangle(Rectangle rectangle) {
             return CreateRectangle(rectangle.Width, rectangle.Height, rectangle.Center);
         }
 
@@ -259,7 +254,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
                 ps[i] += center;
             }
 
-            Polyline polyline = new Polyline(ps) {Closed = true};
+            Polyline polyline = new Polyline(ps) { Closed = true };
             return polyline;
         }
 
@@ -272,21 +267,21 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         /// <param name="center">the inscribed rectangle (and hexagon) center</param>
         /// <returns></returns>
         public static ICurve CreateHexagon(double width, double height, Point center) {
-            double w = width/2;
             Point[] ps = new Point[6];
+            var h = height / 2;
+            var w = width / 2;
 
-            ps[0] = new Point(w, 0);
-            for (int i = 1; i < 6; i++)
-                ps[i] = ps[i - 1].Rotate(Math.PI/3);
-
-            double al = height/width;
-            for (int i = 0; i < 6; i++)
-                ps[i].Y *= al; //make it to fit the height
+            ps[0] = new Point(-w, h);
+            ps[1] = new Point(w, h);
+            ps[2] = new Point(w + h, 0);
+            ps[3] = new Point(w, -h);
+            ps[4] = new Point(-w, -h);
+            ps[5] = new Point(-w - h, 0);
 
             for (int i = 0; i < 6; i++)
                 ps[i] += center;
 
-            var poly = new Polyline(ps) {Closed = true};            
+            var poly = new Polyline(ps) { Closed = true };
             return poly;
         }
 
@@ -307,18 +302,18 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public static ICurve CreateTestShape(double width, double height ) {
+        public static ICurve CreateTestShape(double width, double height) {
             int mult = 1;
-            double w = width *3;
-            double h = height *3;
+            double w = width * 3;
+            double h = height * 3;
             Curve curve = new Curve(9);
-            Curve.AddLineSegment(curve,  - w,  - h,  0,  -h/2);
+            Curve.AddLineSegment(curve, -w, -h, 0, -h / 2);
             Curve.ContinueWithLineSegment(curve, w / 2, -0.75 * h);
             Curve.ContinueWithLineSegment(curve, w, -h);
             Curve.ContinueWithLineSegment(curve, 0.75 * w, -h / 2);
             Curve.ContinueWithLineSegment(curve, w / 2, 0);
-            Curve.ContinueWithLineSegment(curve,  w,  h);
-           
+            Curve.ContinueWithLineSegment(curve, w, h);
+
             Curve.ContinueWithLineSegment(curve, 0, h / 2);
             Curve.ContinueWithLineSegment(curve, -w, mult * h);
             Curve.ContinueWithLineSegment(curve, -w / 3, 0);
@@ -378,29 +373,29 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         ///<param name="center"></param>
         ///<returns></returns>
         public static ICurve CreateStar(double width, Point center) {
-            const double a = Math.PI*2/5;
-            var r2 = width/(2*Math.Sin(a));
-            var r = r2/2;
-            return new Polyline(StarPoints(r, r2, center, a)) {Closed = true};
+            const double a = Math.PI * 2 / 5;
+            var r2 = width / (2 * Math.Sin(a));
+            var r = r2 / 2;
+            return new Polyline(StarPoints(r, r2, center, a)) { Closed = true };
 
         }
 
         static IEnumerable<Point> StarPoints(double r, double r2, Point center, double a) {
-            var ang = Math.PI/2;
-            var anghalf = a/2;
+            var ang = Math.PI / 2;
+            var anghalf = a / 2;
             for (int i = 0; i < 5; i++) {
-                yield return center + r2*new Point(Math.Cos(ang), Math.Sin(ang));
-                yield return center + r * new Point(Math.Cos(ang+anghalf), Math.Sin(ang+anghalf));
+                yield return center + r2 * new Point(Math.Cos(ang), Math.Sin(ang));
+                yield return center + r * new Point(Math.Cos(ang + anghalf), Math.Sin(ang + anghalf));
                 ang += a;
             }
         }
 
         internal static Polyline CreateRegularPolygon(int n, Point center, double rad) {
             var pt = new Point[n];
-            double a = 2*Math.PI/n;
+            double a = 2 * Math.PI / n;
             for (int i = 0; i < n; i++)
-                pt[i] = rad * (new Point(Math.Cos(i*a), Math.Sin(i*a))) + center;
-            return new Polyline(pt) {Closed = true};
+                pt[i] = rad * (new Point(Math.Cos(i * a), Math.Sin(i * a))) + center;
+            return new Polyline(pt) { Closed = true };
         }
     }
 }

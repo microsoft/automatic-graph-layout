@@ -54,6 +54,8 @@ namespace Microsoft.Msagl.Drawing
 
           case Shape.InvHouse:
               return CurveFactory.CreateInvertedHouse(width, height, new P2());
+          case Shape.Hexagon:
+              return CurveFactory.CreateHexagon(width, height, new P2());
           case Shape.Octagon:
               return CurveFactory.CreateOctagon(width, height, new P2());
 #if DEBUG
