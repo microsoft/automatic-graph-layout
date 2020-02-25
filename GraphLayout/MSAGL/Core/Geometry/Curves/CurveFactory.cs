@@ -267,18 +267,22 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         /// <param name="center">the inscribed rectangle (and hexagon) center</param>
         /// <returns></returns>
         public static ICurve CreateHexagon(double width, double height, Point center) {
-            var h = height / 2;
-            var w = width / 2;
-            var x = center.X;
-            var y = center.Y;
-            return new Polyline(new[]{
-                new Point(-w     - x, h  -y),
-                new Point( w     - x, h  -y),
-                new Point( w + h - x, 0  -y),
-                new Point( w     - x, -h -y),
-                new Point(-w     - x, -h -y),
-                new Point(-w - h - x, 0  -y),
-            }) { Closed = true };
+            double w = width/2;
+            Point[] ps = new Point[6];
+
+            ps[0] = new Point(w, 0);
+            for (int i = 1; i < 6; i++)
+                ps[i] = ps[i - 1].Rotate(Math.PI/3);
+
+            double al = height/width;
+            for (int i = 0; i < 6; i++)
+                ps[i].Y *= al; //make it to fit the height
+
+            for (int i = 0; i < 6; i++)
+                ps[i] += center;
+
+            var poly = new Polyline(ps) {Closed = true};            
+            return poly;
         }
 
         /// <summary>
