@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="Migrated rules for drawing (2).ruleset" Description="This rule set was created from the CodeAnalysisRules property for the &quot;MinimalMsagl (Any CPU)&quot; configuration in project &quot;C:\dev\GraphLayout\Drawing\drawing.csproj&quot;." ToolsVersion="10.0">
-  <RuleHintPaths>
-    <Path>C:\Program Files\Microsoft Visual Studio 9.0\Team Tools\Static Analysis Tools\FxCop\Rules</Path>
-  </RuleHintPaths>
-</RuleSet>

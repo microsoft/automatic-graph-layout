@@ -32,7 +32,7 @@ using Point = Microsoft.Msagl.Core.Geometry.Point;
 using Rectangle = Microsoft.Msagl.Core.Geometry.Rectangle;
 using Size = Microsoft.Msagl.Core.DataStructures.Size;
 using SymmetricSegment = Microsoft.Msagl.Core.DataStructures.SymmetricTuple<Microsoft.Msagl.Core.Geometry.Point>;
-#if !NETCORE && REPORTING
+#if REPORTING
 using Timer = Microsoft.Msagl.DebugHelpers.Timer;
 #endif
 
@@ -1883,7 +1883,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             FillGeometryNodeToLgInfosTables();
             LevelCalculator.RankGraph(_lgData, _mainGeometryGraph);
             LayoutTheWholeGraph();
-#if !SILVERLIGHT && !SHARPKIT && !NETCORE
+#if !SHARPKIT
             var timer = new Timer();
             timer.Start();
 #endif
@@ -1893,7 +1893,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             _railGraph = new RailGraph();
             LayoutAndRouteByLayers(_lgLayoutSettings.MaxNumberOfNodesPerTile, _lgLayoutSettings.MaxNumberOfRailsPerTile,
                 _lgLayoutSettings.IncreaseNodeQuota);
-#if !SILVERLIGHT && !SHARPKIT && !NETCORE
+#if !SHARPKIT
             timer.Stop();
             Console.WriteLine("levels calculated for {0}", timer.Duration);
             if (_lgLayoutSettings.ExitAfterInit)
@@ -3066,7 +3066,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         static void ShowNodesAndSegmentsForOverlapRemoval(IEnumerable<LgNodeInfo> fixedNodes,
             IEnumerable<LgNodeInfo> moveableNodes, SymmetricSegment[] fixedSegments)
         {
-#if DEBUG && !SILVERLIGHT && !SHARPKIT && !NETCORE
+#if DEBUG && !SHARPKIT
             var l = new List<DebugCurve>();
             if (fixedNodes != null && fixedNodes.Any())
             {
@@ -3213,7 +3213,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         }
 
 
-#if DEBUG && !SILVERLIGHT && !SHARPKIT && !NETCORE
+#if DEBUG && !SHARPKIT
         static void ShowOldNewIntersected(Set<Rail> oldIntersected, Set<Rail> newIntersected, Point a, Point shortcutted,
             Point b, LgSkeletonLevel skeletonLevel)
         {
@@ -3240,7 +3240,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         }
 #endif
 
-#if DEBUG && !SILVERLIGHT && !SHARPKIT && !NETCORE
+#if DEBUG && !SHARPKIT
         private static void ShowOldTrajectories(LgSkeletonLevel skeletonLevel)
         {
             if (skeletonLevel.ZoomLevel <= 1.0) return;
@@ -4288,8 +4288,6 @@ return new Rectangle(nodeInfo.Center + offset - d, nodeInfo.Center + offset + d)
             return null;
         }
 
-#if !NETCORE
-
         public void AnalyzeClick(Point mouseDownPositionInGraph, int downCount)
         {
             var closest = FindClosestNodeInfoForMouseClickBelowCurrentLevel(mouseDownPositionInGraph);
@@ -4316,8 +4314,6 @@ return new Rectangle(nodeInfo.Center + offset - d, nodeInfo.Center + offset + d)
             RunOnViewChange();
             return closest.GeometryNode;
         }
-#endif
-
 
         public bool NumberOfNodesOfLastLayerIntersectedRectIsLessThanBound(int iLevel, Rectangle rect, int bound)
         {

@@ -9,11 +9,9 @@ namespace Microsoft.Msagl.Core.Routing {
     ///<summary>
     ///</summary>
 
-#if !SILVERLIGHT
     [Description("Specifies the edge bundling settings")]
     [TypeConverter(typeof(ExpandableObjectConverter))]
     [DisplayName("Edge bundling settings")]
-#endif
     public sealed class BundlingSettings {
 
         ///<summary>

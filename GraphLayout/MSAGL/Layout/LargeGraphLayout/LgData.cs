@@ -167,7 +167,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                     }
                 }
         */
-#if DEBUG && !SILVERLIGHT && !SHARPKIT && !NETCORE
+#if DEBUG && !SHARPKIT
         static void ShowDimmedRails(Set<Rail> dimmedRails) {
             var l = new List<DebugHelpers.DebugCurve>();
             foreach (var r in dimmedRails) {

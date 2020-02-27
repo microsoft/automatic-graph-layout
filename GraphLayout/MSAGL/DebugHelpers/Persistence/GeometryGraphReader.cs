@@ -48,9 +48,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
             new Dictionary<string, ClusterWithChildLists>();
 
         readonly Dictionary<string, Node> nodeIdToNodes = new Dictionary<string, Node>();
-#if !SILVERLIGHT
         readonly XmlTextReader xmlTextReader;
-#endif
 
         /// <summary>
         /// an empty constructor
@@ -66,12 +64,8 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
         public GeometryGraphReader(Stream streamP)
         {
             var settings = new XmlReaderSettings { IgnoreComments = false, IgnoreWhitespace = true };
-#if !SILVERLIGHT
             xmlTextReader = new XmlTextReader(streamP);
             XmlReader = XmlReader.Create(xmlTextReader, settings);
-#else
-            XmlReader.Create(streamP, settings);
-#endif
         }
 
         /// <summary>
@@ -1711,15 +1705,10 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
 
         string GetPositionInfo()
         {
-#if SILVERLIGHT
-            return "";
-            //todo, figure out how to find the line number for Silverlight
-#else
             if (xmlTextReader != null)
                 return String.Format(CultureInfo.InvariantCulture, "line {0} col {1}", xmlTextReader.LineNumber,
                     xmlTextReader.LinePosition);
             return String.Empty;
-#endif
         }
 
         /*
@@ -1771,10 +1760,8 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
         /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
-#if !SILVERLIGHT
             if (disposing)
                 xmlTextReader.Close();
-#endif
         }
 
         /// <summary>

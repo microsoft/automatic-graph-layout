@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Msagl", "MSAGL\Msagl.csproj", "{415D3E3F-7105-46C1-84D2-7ECB34213D92}"
 EndProject
@@ -11,12 +11,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{B93737FE-D87D-4D95-A631-45E50FDEF19C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{9E51C177-3DF6-474E-AC7A-ED036ED32F05}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{6DB2D1AA-3709-40AB-A103-36D87734E15A}"
-	ProjectSection(SolutionItems) = preProject
-		libs\Xceed.Wpf.DataGrid.dll = libs\Xceed.Wpf.DataGrid.dll
-		libs\Xceed.Wpf.Toolkit.dll = libs\Xceed.Wpf.Toolkit.dll
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{598DA7CD-D0AE-4C2B-9627-8FAB8C6EE62C}"
 	ProjectSection(SolutionItems) = preProject
@@ -276,9 +270,12 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{C662BBF3-97D2-4000-8304-B900F785D48F} = {B93737FE-D87D-4D95-A631-45E50FDEF19C}
 		{B9AB0B32-D315-4ED1-83F6-5DBB2F832070} = {9E51C177-3DF6-474E-AC7A-ED036ED32F05}
 		{BA8FED53-458E-4CB3-8EB3-CBFCADD87E5D} = {9E51C177-3DF6-474E-AC7A-ED036ED32F05}
 		{561233E4-4FB4-47CC-ADCD-F6A0E8D8AC87} = {9E51C177-3DF6-474E-AC7A-ED036ED32F05}
+		{C662BBF3-97D2-4000-8304-B900F785D48F} = {B93737FE-D87D-4D95-A631-45E50FDEF19C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CC8A5D14-0AB5-4B29-94EB-0DA61512D6FE}
 	EndGlobalSection
 EndGlobal

@@ -98,7 +98,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             var visEdgeDump =
                 new Set<SymmetricSegment>(
                     PathRouter.VisGraph.Edges.Select(e => new SymmetricSegment(e.SourcePoint, e.TargetPoint)));
-#if DEBUG && !SILVERLIGHT && !SHARPKIT && !NETCORE
+#if DEBUG && !SHARPKIT
             foreach (var s in routesDump - visEdgeDump)
                 Console.WriteLine("{0} is in routes but no in vis graph", s);
             foreach (var s in visEdgeDump - routesDump)

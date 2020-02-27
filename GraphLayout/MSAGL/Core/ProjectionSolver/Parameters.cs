@@ -15,9 +15,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
     /// Per-instance parameters for ProjectionSolver.Solver.Solve().
     /// </summary>
     public class Parameters
-#if !SILVERLIGHT
         : ICloneable
-#endif
     {
         /// <summary>
         /// GapTolerance is the amount of violation of constraint gaps we will accept as a
@@ -106,9 +104,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
     /// Parameter specification for advanced options.
     /// </summary>
     public class AdvancedParameters
-#if !SILVERLIGHT
          : ICloneable
-#endif
     {
         /// <summary>
         /// Whether Solve() should use the full Qpsc (Quadratic Programming for Separation Constraints; see paper)

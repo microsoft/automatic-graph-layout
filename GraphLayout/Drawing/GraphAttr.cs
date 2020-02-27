@@ -9,10 +9,8 @@ namespace Microsoft.Msagl.Drawing
     /// <summary>
     /// Microsoft.Msagl.Drawing attribute.
     /// </summary>
-#if !SILVERLIGHT
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Attr"), Description("Graph or cluster layout attributes."),
     TypeConverterAttribute(typeof(ExpandableObjectConverter))]
-#endif
     [Serializable]
     public class GraphAttr : AttributeBase
     {

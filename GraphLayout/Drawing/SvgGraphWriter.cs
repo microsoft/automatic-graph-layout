@@ -207,9 +207,7 @@ namespace Microsoft.Msagl.Drawing
 
         void Open()
         {
-#if !SILVERLIGHT
             WriteComment("SvgWriter version " + typeof(SvgGraphWriter).Assembly.GetName().Version);
-#endif
             var box = _graph.BoundingBox;
             xmlWriter.WriteStartElement("svg", "http://www.w3.org/2000/svg");
             WriteAttributeWithPrefix("xmlns", "xlink", "http://www.w3.org/1999/xlink");

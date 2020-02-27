@@ -66,11 +66,7 @@ namespace Microsoft.Msagl.Routing {
         }
 
         static IEnumerable<Node> Children(Cluster parent) {
-#if SILVERLIGHT
-            return parent.Clusters.Cast<Node>().Concat(parent.Nodes);
-#else
             return parent.Clusters.Concat(parent.Nodes);
-#endif
         }
 
 

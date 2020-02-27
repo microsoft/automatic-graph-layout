@@ -16,10 +16,7 @@ namespace Microsoft.Msagl.Core.Geometry
     /// Per-instance parameters for OverlapRemoval.ConstraintGenerator.Generate()/Solve().
     /// </summary>
     public class OverlapRemovalParameters
-#if SILVERLIGHT
-#else
  : ICloneable
-#endif
     {
         /// <summary>
         /// If true and the current instance's IsHorizontal property is true, then by default

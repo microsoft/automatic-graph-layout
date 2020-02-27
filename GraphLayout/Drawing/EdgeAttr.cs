@@ -6,10 +6,8 @@ namespace Microsoft.Msagl.Drawing {
     /// <summary>
     /// Edge layout attributes.
     /// </summary>
-#if !SILVERLIGHT
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Attr"), Description("Edge layout attributes."),
     TypeConverterAttribute(typeof(ExpandableObjectConverter))]
-#endif
     [Serializable]
     public sealed class EdgeAttr : AttributeBase {
        

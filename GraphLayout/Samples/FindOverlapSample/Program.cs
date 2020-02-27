@@ -35,7 +35,7 @@ namespace OverlapGraphExperiments
         }
 
         private static void Main(string[] args) {
-#if DEBUG && !SILVERLIGHT
+#if DEBUG
             DisplayGeometryGraph.SetShowFunctions();
             // ProximityOverlapRemoval.DebugMode = true;
 #endif

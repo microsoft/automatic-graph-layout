@@ -392,7 +392,7 @@ namespace Microsoft.Msagl.Miscellaneous.ConstrainedSkeleton
 
         public void LaunchTriangleExe(string pathExe, string arguments)
         {
-#if !SILVERLIGHT && !SHARPKIT
+#if !SHARPKIT
             const string triangleMessage =
                 "Cannot start Triangle.exe To build Triangle.exe, please open http://www.cs.cmu.edu/~quake/triangle.html and build it by following the instructions from the site. Copy Triange.exe to a directory in your PATH." +
                 "Unfortunately we cannot distribute Triangle.exe because of the license restrictions.";
