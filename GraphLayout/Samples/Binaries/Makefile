@@ -10,13 +10,6 @@ EngineTargetXml=$(bin)\Microsoft.Msagl.xml
 ParallExtSource= $(DEVDIR)\GraphLayout\MSAGL\ParallelExtensions_3_5.dll
 ParallExtTarget= $(bin)\ParallelExtensions_3_5.dll
 
-SLEngineSource= $(DEVDIR)\GraphLayout\MSAGL\Silverlight\MsaglSilverlight\bin\$(CONFIG)\MsaglSilverlight.dll
-SLEngineTarget=$(bin)\MsaglSilverlight.dll
-SLEngineSourcePdb= $(DEVDIR)\GraphLayout\MSAGL\Silverlight\MsaglSilverlight\bin\$(CONFIG)\MsaglSilverlight.Pdb
-SLEngineTargetPdb=$(bin)\MsaglSilverlight.Pdb
-SLEngineSourceXml= $(DEVDIR)\GraphLayout\MSAGL\Silverlight\MsaglSilverlight\bin\$(CONFIG)\MsaglSilverlight.xml
-SLEngineTargetXml=$(bin)\MsaglSilverlight.xml
-
 DrawingSource= $(DEVDIR)\GraphLayout\Drawing\bin\$(CONFIG)\Microsoft.Msagl.Drawing.dll
 DrawingTarget= $(bin)\Microsoft.Msagl.Drawing.dll
 DrawingSourcePdb= $(DEVDIR)\GraphLayout\Drawing\bin\$(CONFIG)\Microsoft.Msagl.Drawing.Pdb
