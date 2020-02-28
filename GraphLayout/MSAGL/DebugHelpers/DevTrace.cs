@@ -14,7 +14,6 @@
 
 using System.Diagnostics;
 
-#if !SILVERLIGHT
 namespace Microsoft.Msagl.DebugHelpers {
 #if DEVTRACE
     #if !TRACE
@@ -147,4 +146,3 @@ namespace Microsoft.Msagl.DebugHelpers {
     }
 }
 #endif // DEBUG
-#endif

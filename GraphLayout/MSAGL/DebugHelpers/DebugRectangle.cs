@@ -1,6 +1,6 @@
 using Microsoft.Msagl.Core.Geometry;
 
-#if DEBUG && !SILVERLIGHT  && !SHARPKIT
+#if DEBUG && !SHARPKIT
 namespace Microsoft.Msagl.DebugHelpers {
     ///<summary>
     ///</summary>

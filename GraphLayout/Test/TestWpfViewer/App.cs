@@ -40,6 +40,7 @@ using Node = Microsoft.Msagl.Drawing.Node;
 using Point = Microsoft.Msagl.Core.Geometry.Point;
 using Shape = Microsoft.Msagl.Drawing.Shape;
 using Size = System.Windows.Size;
+using Microsoft.Msagl.GraphViewerGdi;
 
 namespace TestWpfViewer {
     internal class App : Application {

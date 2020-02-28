@@ -412,14 +412,11 @@ namespace Microsoft.Msagl.Layout.Layered {
         void DecideIfUsingFastXCoordCalculation(LayerArrays layerArrays) {
             if (layerArrays.X.Length >= sugiyamaSettings.BrandesThreshold)
                 Brandes = true;
-#if SILVERLIGHT
-#else
             else {
                 string s = Environment.GetEnvironmentVariable("Brandes");
                 if (!String.IsNullOrEmpty(s) && String.Compare(s, "on", true, CultureInfo.CurrentCulture) == 0)
                     Brandes = true;
             }
-#endif
         }
 
         void StraightensShortEdges() {

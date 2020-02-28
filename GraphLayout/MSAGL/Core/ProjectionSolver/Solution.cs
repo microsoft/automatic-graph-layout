@@ -15,9 +15,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
     /// Per-instance results from ProjectionSolver.Solver.Solve().
     /// </summary>
     public class Solution
-#if !SILVERLIGHT
         : ICloneable
-#endif
     {
         /// <summary>
         /// The only failure condition is if there are one or more unsatisfiable constraints, such as cycles

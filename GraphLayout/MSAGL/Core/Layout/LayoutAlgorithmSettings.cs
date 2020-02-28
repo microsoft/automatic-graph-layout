@@ -11,14 +11,12 @@ using Microsoft.Msagl.Routing;
 
 namespace Microsoft.Msagl.Core.Layout {
 
-#if !SILVERLIGHT
     ///<summary>
     /// controls many properties of the layout algorithm
     ///</summary>
     [Description("Specifies the layout algorithm parametres")]
     [TypeConverter(typeof (ExpandableObjectConverter))]
     [DisplayName("Layout algorithm settings")]
-#endif
 #if TEST_MSAGL
     [Serializable]
 #endif

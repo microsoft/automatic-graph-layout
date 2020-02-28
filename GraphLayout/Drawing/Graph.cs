@@ -205,15 +205,8 @@ namespace Microsoft.Msagl.Drawing {
             Subgraph subgraph;
             if (SubgraphMap.TryGetValue(nodeId, out subgraph))
                 return subgraph;
-#if SILVERLIGHT
-            object obj;
-            nodeMap.TryGetValue(nodeId, out obj);
-            if(obj!=null)
-                ret = (Node) obj;
-            else ret = null;
-#else
+
             ret = nodeMap[nodeId] as Node;
-#endif
             if (ret == null) {
                 ret = new Node(nodeId);
                 nodeMap[nodeId] = ret;
@@ -552,7 +545,7 @@ namespace Microsoft.Msagl.Drawing {
             set { GeometryGraph = (GeometryGraph) value; }
         }
             
-#if TEST_MSAGL && !SILVERLIGHT
+#if TEST_MSAGL
         ///<summary>
         ///</summary>
         public List<ICurve> DebugICurves {

@@ -1,5 +1,3 @@
-#if SILVERLIGHT
-#else 
 using System;
 using System.IO;
 using System.Runtime.Serialization;
@@ -51,6 +49,4 @@ namespace Microsoft.Msagl.Splines {
 
     }
 }
-#endif
-
 #endif

@@ -8,11 +8,7 @@ namespace Microsoft.Msagl.Core.DataStructures {
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Set")]
-#if SILVERLIGHT
-    public class Set<T> : ICollection<T> {
-#else
     public class Set<T> : MarshalByRefObject, ICollection<T> {
-#endif
         HashSet<T> hashSet = new HashSet<T>();
         /// <summary>
         /// inserts an element into the set

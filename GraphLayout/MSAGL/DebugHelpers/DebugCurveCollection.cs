@@ -1,4 +1,4 @@
-#if TEST_MSAGL && ! SILVERLIGHT
+#if TEST_MSAGL
 using System;
 using System.Collections.Generic;
 using System.IO;

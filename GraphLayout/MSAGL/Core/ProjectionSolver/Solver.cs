@@ -21,10 +21,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Msagl.Core.Geometry;
 
-#if SILVERLIGHT
-using Stopwatch = Microsoft.Msagl.Core.ProjectionSolver.SimpleStopwatch;
-#endif // SILVERLIGHT
-
 namespace Microsoft.Msagl.Core.ProjectionSolver
 {
     using System.Linq;

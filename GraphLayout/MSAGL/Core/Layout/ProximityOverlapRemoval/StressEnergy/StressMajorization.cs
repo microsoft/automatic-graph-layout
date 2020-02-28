@@ -116,7 +116,6 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.StressEnergy {
         /// </summary>
         /// <returns></returns>
          List<Point> IterateSingleConjugateGradient() {
-#if !SILVERLIGHT
             SparseMatrix Lw;
             SparseMatrix Lx;
             ConstructLinearSystemFromMajorization(out Lw, out Lx);
@@ -157,9 +156,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.StressEnergy {
                 Positions[i] = new Point(resX[i], resY[i]);
 
             return Positions;
-#else 
-            return null;
-#endif
+
         }
 
 

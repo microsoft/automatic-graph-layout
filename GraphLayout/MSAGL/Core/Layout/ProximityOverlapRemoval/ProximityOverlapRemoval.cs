@@ -326,7 +326,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             }
 #endif
 
-#if !SILVERLIGHT && !SHARPKIT
+#if !SHARPKIT
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 #endif
@@ -336,11 +336,11 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             while (!finished && ((iter++) < Settings.IterationsMax || !Settings.StopOnMaxIterat)) {
                 finished = DoSingleIteration(iter, ref scanlinePhase);
             }
-#if !SILVERLIGHT && !SHARPKIT
+#if !SHARPKIT
             stopWatch.Stop();
 #endif
             LastRunIterations = iter;
-#if DEBUG && !SILVERLIGHT && !SHARPKIT
+#if DEBUG && !SHARPKIT
             if (DebugMode) {
                 ShowTrajectoriesOfNodes(trajectories);
 
@@ -350,7 +350,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
 
 
             SetPositionsToGraph();
-#if !SILVERLIGHT && !SHARPKIT
+#if !SHARPKIT
             PrintTimeSpan(stopWatch);
 #endif
             double nodeBoxArea = nodeSizes.Sum(r => r.Width*r.Height);
@@ -360,13 +360,13 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             Console.WriteLine("BBox Area Ratio: {0}", boundingBoxArea/nodeBoxArea);
 //            nodePositions = null;
 //            nodeBoxes = null;
-#if DEBUG && !SILVERLIGHT && !SHARPKIT
+#if DEBUG && !SHARPKIT
             if (DebugMode) {
                 //LayoutAlgorithmSettings.ShowGraph(Graph);
             }
 #endif
 
-#if !SILVERLIGHT && !SHARPKIT
+#if !SHARPKIT
             lastCpuTime = stopWatch.Elapsed;
             return;
 #else
@@ -502,7 +502,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
                                                        Point[] nodePositions, List<Point> newPositions,
                                                        List<Tuple<int, int, double, double>> proximityEdgesWithDistance,
                                                        Point[] finalGridVectors) {
-#if DEBUG && ! SILVERLIGHT && !SHARPKIT && !NETCORE
+#if DEBUG && !SHARPKIT
             if (DebugMode && currentIteration%1 == 0) {
                 List<DebugCurve> curveList = new List<DebugCurve>();
                 var nodeBoxes = new Rectangle[nodeSizes.Length];
@@ -546,7 +546,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
         }
 
 
-#if !SILVERLIGHT && !SHARPKIT
+#if !SHARPKIT
          static void PrintTimeSpan(Stopwatch stopWatch) {
             // Get the elapsed time as a TimeSpan value.
             TimeSpan ts = stopWatch.Elapsed;
