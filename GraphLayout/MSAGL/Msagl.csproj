@@ -4,13 +4,12 @@
   </PropertyGroup>
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <DefineConstants>NET4;NETCORE;PERSISTENCE;REPORTING</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <CodeAnalysisRuleSet />
+    <DefineConstants>NET4;NETCORE;PERSISTENCE;REPORTING</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <CodeAnalysisRuleSet />
+    <DefineConstants>NET4;NETCORE;PERSISTENCE;REPORTING;TEST_MSAGL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\version.cs" Link="version.cs" />
