@@ -1,41 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 using Microsoft.Msagl.Drawing;
-using Microsoft.Msagl.WpfGraphControl;
 
 namespace MinWpfApp {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window {
-        DockPanel Panel = new DockPanel();
-        
+    public partial class MainWindow {
+
         public MainWindow() {
             InitializeComponent();
-            this.Content = Panel;
             Loaded += MainWindow_Loaded;
         }
         private void MainWindow_Loaded(object sender, RoutedEventArgs e) {
-            GraphViewer graphViewer = new GraphViewer();
-            graphViewer.BindToPanel(Panel);
+
             Graph graph = new Graph();
+            //graph.AddEdge("Box", "House");
+            //graph.AddEdge("House", "InvHouse");
+            //graph.AddEdge("InvHouse", "Diamond");
+            //graph.AddEdge("Diamond", "Octagon");
+            graph.AddEdge("Octagon", "Hexagon");
+            //graph.AddEdge("Hexagon", "2 Circle");
+            //graph.AddEdge("2 Circle", "Box");
 
-            graph.AddEdge("A", "B");
+            //graph.FindNode("Box").Attr.Shape = Shape.Box;
+            //graph.FindNode("House").Attr.Shape = Shape.House;
+            //graph.FindNode("InvHouse").Attr.Shape = Shape.InvHouse;
+            //graph.FindNode("Diamond").Attr.Shape = Shape.Diamond;
+            graph.FindNode("Octagon").Attr.Shape = Shape.Octagon;
+            graph.FindNode("Hexagon").Attr.Shape = Shape.Hexagon;
+            //graph.FindNode("2 Circle").Attr.Shape = Shape.DoubleCircle;
+
             graph.Attr.LayerDirection = LayerDirection.LR;
-            graphViewer.Graph = graph; // throws exception
-        }
 
+            graphControl.Graph = graph;
+        }
     }
 }

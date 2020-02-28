@@ -1,3 +1,11 @@
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("TestRectilinear")]
+[assembly: InternalsVisibleTo("TestForGdi")]
+[assembly: InternalsVisibleTo("Microsoft.Msagl.UnitTests")]
+[assembly: InternalsVisibleTo("GeometryGraphConverter")]
+[assembly: InternalsVisibleTo("Test01")]
+
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "MDS", Scope = "namespace", Target = "Microsoft.Msagl.Layout.MDS")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "Microsoft.Msagl.ToBeRelocated.Ranking")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "Microsoft.Msagl.ToBeRelocated.Phylo")]

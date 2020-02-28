@@ -79,9 +79,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\version.cs">
-      <Link>version.cs</Link>
-    </Compile>
     <Compile Include="ClickCounter.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="GraphmapsViewer.cs" />
@@ -94,11 +91,6 @@
     <Compile Include="NativeMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
