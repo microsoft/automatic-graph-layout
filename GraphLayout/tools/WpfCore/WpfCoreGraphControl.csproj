@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Msagl.Viewers.Wpf.nuspec" />
+    <None Remove="Msagl.Viewers.WpfCore.nuspec" />
+    <None Remove="WpfCoreGraphControl.nuspec" />
+    <None Remove="WpfGraphControl.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\WpfGraphControl\AutomaticGraphLayoutControl.xaml.cs" Link="AutomaticGraphLayoutControl.xaml.cs" />
+    <Compile Include="..\WpfGraphControl\ClickCounter.cs" Link="ClickCounter.cs" />
+    <Compile Include="..\WpfGraphControl\Common.cs" Link="Common.cs" />
+    <Compile Include="..\WpfGraphControl\GraphViewer.cs" Link="GraphViewer.cs" />
+    <Compile Include="..\WpfGraphControl\GvMouseEventArgs.cs" Link="GvMouseEventArgs.cs" />
+    <Compile Include="..\WpfGraphControl\IInvalidatable.cs" Link="IInvalidatable.cs" />
+    <Compile Include="..\WpfGraphControl\NativeMethods.cs" Link="NativeMethods.cs" />
+    <Compile Include="..\WpfGraphControl\VEdge.cs" Link="VEdge.cs" />
+    <Compile Include="..\WpfGraphControl\VLabel.cs" Link="VLabel.cs" />
+    <Compile Include="..\WpfGraphControl\VNode.cs" Link="VNode.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="..\WpfGraphControl\AutomaticGraphLayoutControl.xaml" Link="AutomaticGraphLayoutControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Drawing\drawing.csproj" />
+    <ProjectReference Include="..\..\MSAGL\Msagl.csproj" />
+  </ItemGroup>
+</Project>
