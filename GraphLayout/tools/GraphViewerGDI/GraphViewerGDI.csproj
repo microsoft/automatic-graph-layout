@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Msagl.GraphViewerGdi</RootNamespace>
-    <AssemblyName>Microsoft.Msagl.GraphViewerGdi</AssemblyName>
+    <AssemblyName>AutomaticGraphLayout.Forms</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
@@ -44,7 +44,7 @@
     <DefineConstants>TRACE;DEBUG;TEST_MSAGL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGDI.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\AutomaticGraphLayout.Forms.xml</DocumentationFile>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
@@ -58,7 +58,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\AutomaticGraphLayout.Forms.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
@@ -71,7 +71,7 @@
     <ErrorReport>prompt</ErrorReport>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>bin\Retail\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
+    <DocumentationFile>bin\Retail\AutomaticGraphLayout.Forms.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
@@ -83,7 +83,7 @@
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <DocumentationFile>bin\Setup\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
+    <DocumentationFile>bin\Setup\AutomaticGraphLayout.Forms.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
@@ -374,9 +374,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\version.cs">
-      <Link>version.cs</Link>
-    </Compile>
     <Compile Include="BBNode.cs" />
     <Compile Include="CMouseEventArgs.cs" />
     <Compile Include="DEdge.cs" />
@@ -462,13 +459,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Drawing\drawing.csproj">
+    <ProjectReference Include="..\..\Drawing\AutomaticGraphLayout.Drawing.csproj">
       <Project>{B76F8F71-4B00-4242-BE36-C9F0732511F7}</Project>
-      <Name>drawing</Name>
+      <Name>AutomaticGraphLayout.Drawing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MSAGL\Msagl.csproj">
+    <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj">
       <Project>{415D3E3F-7105-46C1-84D2-7ECB34213D92}</Project>
-      <Name>Msagl</Name>
+      <Name>AutomaticGraphLayout</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -175,9 +175,9 @@
       <Project>{725CD2CB-CF37-414E-A5A6-F1D87D4D6EDE}</Project>
       <Name>GraphViewerGDI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MSAGL\Msagl.csproj">
+    <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj">
       <Project>{415d3e3f-7105-46c1-84d2-7ecb34213d92}</Project>
-      <Name>Msagl</Name>
+      <Name>AutomaticGraphLayout</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -8,7 +8,7 @@
     <OutputType>library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Msagl.WpfGraphControl</RootNamespace>
-    <AssemblyName>Microsoft.Msagl.WpfGraphControl</AssemblyName>
+    <AssemblyName>AutomaticGraphLayout.Wpf</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -75,9 +75,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\version.cs">
-      <Link>version.cs</Link>
-    </Compile>
     <Compile Include="AutomaticGraphLayoutControl.xaml.cs">
       <DependentUpon>AutomaticGraphLayoutControl.xaml</DependentUpon>
     </Compile>
@@ -102,13 +99,13 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Drawing\drawing.csproj">
+    <ProjectReference Include="..\..\Drawing\AutomaticGraphLayout.Drawing.csproj">
       <Project>{b76f8f71-4b00-4242-be36-c9f0732511f7}</Project>
-      <Name>drawing</Name>
+      <Name>AutomaticGraphLayout.Drawing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MSAGL\Msagl.csproj">
+    <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj">
       <Project>{415d3e3f-7105-46c1-84d2-7ecb34213d92}</Project>
-      <Name>Msagl</Name>
+      <Name>AutomaticGraphLayout</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

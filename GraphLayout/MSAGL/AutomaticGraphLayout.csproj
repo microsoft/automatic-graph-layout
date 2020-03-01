@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DefineConstants>PERSISTENCE;REPORTING</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DefineConstants>PERSISTENCE;REPORTING;TEST_MSAGL</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="AutomaticGraphLayout.nuspec" />
+  </ItemGroup>
+</Project>

@@ -109,9 +109,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Drawing\drawing.csproj">
+    <ProjectReference Include="..\Drawing\AutomaticGraphLayout.Drawing.csproj">
       <Project>{b76f8f71-4b00-4242-be36-c9f0732511f7}</Project>
-      <Name>drawing</Name>
+      <Name>AutomaticGraphLayout.Drawing</Name>
     </ProjectReference>
     <ProjectReference Include="..\tools\GraphViewerGDI\GraphViewerGDI.csproj">
       <Project>{725cd2cb-cf37-414e-a5a6-f1d87d4d6ede}</Project>

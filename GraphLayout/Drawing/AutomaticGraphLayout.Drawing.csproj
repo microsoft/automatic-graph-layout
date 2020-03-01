@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DefineConstants>TEST_MSAGL</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="AutomaticGraphLayout.Drawing.nuspec" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MSAGL\AutomaticGraphLayout.csproj" />
+  </ItemGroup>
+</Project>

@@ -227,13 +227,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Drawing\drawing.csproj">
+    <ProjectReference Include="..\..\Drawing\AutomaticGraphLayout.Drawing.csproj">
       <Project>{b76f8f71-4b00-4242-be36-c9f0732511f7}</Project>
-      <Name>drawing</Name>
+      <Name>AutomaticGraphLayout.Drawing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MSAGL\Msagl.csproj">
+    <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj">
       <Project>{415d3e3f-7105-46c1-84d2-7ecb34213d92}</Project>
-      <Name>Msagl</Name>
+      <Name>AutomaticGraphLayout</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\tools\Dot2Graph\Dot2Graph.csproj">
       <Project>{ba8fed53-458e-4cb3-8eb3-cbfcadd87e5d}</Project>

@@ -1,8 +1,8 @@
 ﻿<package>
   <metadata>
-    <id>Microsoft.Msagl.WpfGraphControl</id>
+    <id>AutomaticGraphLayout.WpfGraphControl</id>
     <version>1.1.4</version>
-    <authors>Microsoft</authors>
+    <authors>paulovila</authors>
     <owners>Microsoft</owners>
     <licenseUrl>https://github.com/Microsoft/automatic-graph-layout/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/Microsoft/automatic-graph-layout</projectUrl>
@@ -14,13 +14,13 @@
     <language>en-US</language>
     <tags>MSAGL Graph Layout</tags>
     <dependencies>
-       <dependency id="Microsoft.Msagl" version="1.1.4" />  
-       <dependency id="Microsoft.Msagl.Drawing" version="1.1.4" />
+       <dependency id="AutomaticGraphLayout" version="1.1.4" />  
+       <dependency id="AutomaticGraphLayout.Drawing" version="1.1.4" />
     </dependencies>
     <frameworkAssemblies>
     </frameworkAssemblies>
   </metadata>
   <files>
-    <file src="..\tools\WpfGraphControl\bin\release\Microsoft.Msagl.WpfGraphControl.dll" target="lib\net40" />
+    <file src="./bin/Release/AutomaticGraphLayout.Wpf.dll" target="lib\net47" />
   </files>
 </package>

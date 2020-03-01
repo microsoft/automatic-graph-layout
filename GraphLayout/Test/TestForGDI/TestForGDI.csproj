@@ -384,13 +384,13 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Drawing\drawing.csproj">
+    <ProjectReference Include="..\..\Drawing\AutomaticGraphLayout.Drawing.csproj">
       <Project>{B76F8F71-4B00-4242-BE36-C9F0732511F7}</Project>
-      <Name>drawing</Name>
+      <Name>AutomaticGraphLayout.Drawing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MSAGL\Msagl.csproj">
+    <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj">
       <Project>{415D3E3F-7105-46C1-84D2-7ECB34213D92}</Project>
-      <Name>Msagl</Name>
+      <Name>AutomaticGraphLayout</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\tools\DebugCurveViewer\DebugCurveViewer.csproj">
       <Project>{5767aa9a-b6f6-46f1-b3e6-4e76fa049263}</Project>
