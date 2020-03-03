@@ -23,11 +23,11 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
         private void SetGraph(Graph graph) {
             if (graph == null) {
-                Children.Clear();
+                dockPanel.Children.Clear();
                 return;
             }
             var graphViewer = new GraphViewer();
-            graphViewer.BindToPanel(this);
+            graphViewer.BindToPanel(dockPanel);
             graphViewer.Graph = graph;
         }
     }

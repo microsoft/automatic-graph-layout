@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Msagl.GraphViewerGdi</RootNamespace>
-    <AssemblyName>AutomaticGraphLayout.Forms</AssemblyName>
+    <AssemblyName>Microsoft.Msagl.GraphViewerGdi</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
@@ -44,7 +44,7 @@
     <DefineConstants>TRACE;DEBUG;TEST_MSAGL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\AutomaticGraphLayout.Forms.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGdi.xml</DocumentationFile>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
@@ -58,7 +58,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\AutomaticGraphLayout.Forms.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
@@ -71,7 +71,7 @@
     <ErrorReport>prompt</ErrorReport>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>bin\Retail\AutomaticGraphLayout.Forms.xml</DocumentationFile>
+    <DocumentationFile>bin\Retail\Microsoft.Msagl.GraphViewerGdi.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
@@ -83,7 +83,7 @@
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <DocumentationFile>bin\Setup\AutomaticGraphLayout.Forms.xml</DocumentationFile>
+    <DocumentationFile>bin\Setup\Microsoft.Msagl.GraphViewerGdi.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
