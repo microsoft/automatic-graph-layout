@@ -19,7 +19,7 @@ The Definitions of different drawing attributes like colors, line styles, etc. I
 **A WPF control (Microsoft.Msagl.WpfGraphControl.dll)** - [NuGet package](https://www.nuget.org/packages/AutomaticGraphLayout.WpfGraphControl/)
 The viewer control lets you visualize graphs and has and some other rendering functionality. Key features: (1) Pan and Zoom (2) Navigate Forward and Backward (3) tooltips and highlighting on graph entities (4) Search for and focus on graph entities.
 
-**A Windows Forms  Viewer control (Microsoft.Msagl.GraphViewerGdi.dll)** - [NuGet package](https://www.nuget.org/packages/AutomaticGraphLayout.Forms/)
+**A Windows Forms  Viewer control (Microsoft.Msagl.GraphViewerGdi.dll)** - [NuGet package](https://www.nuget.org/packages/AutomaticGraphLayout.GraphViewerGDI/)
 The viewer control lets you visualize graphs and has and some other rendering functionality. Key features: (1) Pan and Zoom (2) Navigate Forward and Backward (3) tooltips and highlighting on graph entities (4) Search for and focus on graph entities.
 
 # Code Samples
