@@ -14,7 +14,7 @@
     <language>en-US</language>
     <tags>MSAGL Graph Layout</tags>
     <dependencies>
-      <dependency id="Microsoft.AutomaticGraphLayout" version="1.1.4" />
+      <dependency id="Microsoft.AutomaticGraphLayout" version="$(BuildVersion)" />
     </dependencies>
   </metadata>
   <files>

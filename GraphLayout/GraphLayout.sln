@@ -89,6 +89,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		MSAGL\AutomaticGraphLayout.nuspec = MSAGL\AutomaticGraphLayout.nuspec
 		NuGet\build_nuget_packages.ps1 = NuGet\build_nuget_packages.ps1
 		tools\GraphViewerGDI\GraphViewerGDI.nuspec = tools\GraphViewerGDI\GraphViewerGDI.nuspec
+		NuGet\prepareNuspec.ps1 = NuGet\prepareNuspec.ps1
 		..\README.md = ..\README.md
 		tools\WpfGraphControl\WpfGraphControl.nuspec = tools\WpfGraphControl\WpfGraphControl.nuspec
 	EndProjectSection

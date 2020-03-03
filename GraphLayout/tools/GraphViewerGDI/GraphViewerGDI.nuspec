@@ -1,6 +1,6 @@
 ﻿<package>
   <metadata>
-    <id>AutomaticGraphLayout.Forms</id>
+    <id>AutomaticGraphLayout.GraphViewerGDI</id>
     <version>1.1.4</version>
     <authors>paulovila</authors>
     <owners>Microsoft</owners>
@@ -14,12 +14,12 @@
     <language>en-US</language>
     <tags>MSAGL Graph Layout</tags>
     <dependencies>
-      <dependency id="AutomaticGraphLayout.Drawing" version="1.1.4" />
+      <dependency id="AutomaticGraphLayout.Drawing" version="$(BuildVersion)" />
     </dependencies>
     <frameworkAssemblies>
     </frameworkAssemblies>
   </metadata>
   <files>
-    <file src="./bin/Release/AutomaticGraphLayout.Forms.dll" target="lib\net47" />
+    <file src="./bin/Release/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net47" />
   </files>
 </package>

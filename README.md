@@ -16,10 +16,10 @@ This .NET asssembly contains the core layout functionality. Use this library if 
 The Definitions of different drawing attributes like colors, line styles, etc. It also contains definitions of a node class, an edge class, and a graph class. By using these classes a user can create a graph object and use it later for layout, and rendering.
 
 
-**A WPF control (AutomaticGraphLayout.WpfGraphControl.dll)** - [NuGet package](https://www.nuget.org/packages/AutomaticGraphLayout.WpfGraphControl/)
+**A WPF control (Microsoft.Msagl.WpfGraphControl.dll)** - [NuGet package](https://www.nuget.org/packages/AutomaticGraphLayout.WpfGraphControl/)
 The viewer control lets you visualize graphs and has and some other rendering functionality. Key features: (1) Pan and Zoom (2) Navigate Forward and Backward (3) tooltips and highlighting on graph entities (4) Search for and focus on graph entities.
 
-**A Windows Forms  Viewer control (AutomaticGraphLayout.Forms.dll)** - [NuGet package](https://www.nuget.org/packages/AutomaticGraphLayout.Forms/)
+**A Windows Forms  Viewer control (Microsoft.Msagl.GraphViewerGdi.dll)** - [NuGet package](https://www.nuget.org/packages/AutomaticGraphLayout.Forms/)
 The viewer control lets you visualize graphs and has and some other rendering functionality. Key features: (1) Pan and Zoom (2) Navigate Forward and Backward (3) tooltips and highlighting on graph entities (4) Search for and focus on graph entities.
 
 # Code Samples
