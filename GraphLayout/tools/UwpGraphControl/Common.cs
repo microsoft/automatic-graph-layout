@@ -32,9 +32,17 @@ namespace Microsoft.Msagl.Viewers.Uwp {
 
     public class SKTextBlock : SKFrameworkElement {
         public string Text { get; set; }
+
+        public override (double, double) Dimensions() {
+            var r = new SKRect();
+            MeasureText(Text, ref r);
+            return (r.Width, r.Height);
+        }
     }
 
-    public class SKFrameworkElement : SKPaint {
+    public abstract class SKFrameworkElement : SKPaint {
+
+        public abstract (double, double) Dimensions();
         public VLabel Tag { get; set; }
         public SKCanvas Parent { get; set; }
     }

@@ -1,0 +1,13 @@
+{
+  "solution": {
+    "path": "GraphLayout.sln",
+    "projects": [
+      "Drawing\\AutomaticGraphLayout.Drawing.csproj",
+      "MSAGL\\AutomaticGraphLayout.csproj",
+      "Samples\\MinUwpApp\\MinUwpApp.csproj",
+      "Samples\\MinWpfApp\\MinWpfApp.csproj",
+      "Tools\\UwpGraphControl\\UwpGraphControl.csproj",
+      "Tools\\WpfGraphControl\\WpfGraphControl.csproj"
+    ]
+  }
+}

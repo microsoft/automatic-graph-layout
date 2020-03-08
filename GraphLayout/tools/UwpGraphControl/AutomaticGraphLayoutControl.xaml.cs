@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
@@ -40,6 +41,8 @@ namespace UwpGraphControl {
             }
         }
 
+        GeometryGraph geometryGraphUnderLayout;
+
         public Graph CurrentGraph {
             get => (Graph)GetValue(CurrentGraphProperty);
             set => SetValue(CurrentGraphProperty, value);
@@ -47,8 +50,8 @@ namespace UwpGraphControl {
         readonly Dictionary<DrawingObject, IViewerObject> drawingObjectsToIViewerObjects =
             new Dictionary<DrawingObject, IViewerObject>();
 
-        readonly Dictionary<DrawingObject, SKPaint> drawingObjectsToFrameworkElements =
-            new Dictionary<DrawingObject, SKPaint>();
+        readonly Dictionary<DrawingObject, SKFrameworkElement> drawingObjectsToFrameworkElements =
+            new Dictionary<DrawingObject, SKFrameworkElement>();
 
 
         private void OnPaintSurface(object sender, SKPaintSurfaceEventArgs e) {
@@ -57,8 +60,16 @@ namespace UwpGraphControl {
             canvas.Clear();
             ClearGraphViewer();
             CreateFrameworkElementsForLabelsOnly();
+            if (NeedToCalculateLayout) {
+                CurrentGraph.CreateGeometryGraph(); 
+                PopulateGeometryOfGeometryGraph();
+            }
 
+            geometryGraphUnderLayout = CurrentGraph.GeometryGraph;
+            //LayoutGraph();
+            //PostLayoutStep();
         }
+        public CancellationTokenSource CancelTokenSource { get; set; }
         void ClearGraphViewer() {
 
             drawingObjectsToIViewerObjects.Clear();
@@ -66,12 +77,148 @@ namespace UwpGraphControl {
         }
 
 
+        void PopulateGeometryOfGeometryGraph() {
+            geometryGraphUnderLayout = CurrentGraph.GeometryGraph;
+            foreach (
+                var msaglNode in
+                    geometryGraphUnderLayout.Nodes) {
+                var node = (DrawingNode)msaglNode.UserData;
+                    msaglNode.BoundaryCurve = GetNodeBoundaryCurve(node);
+            }
+
+            foreach (
+                Cluster cluster in geometryGraphUnderLayout.RootCluster.AllClustersWideFirstExcludingSelf()) {
+                var subGraph = (Subgraph)cluster.UserData;
+                    cluster.CollapsedBoundary = GetClusterCollapsedBoundary(subGraph);
+                if (cluster.RectangularBoundary == null)
+                    cluster.RectangularBoundary = new RectangularClusterBoundary();
+                cluster.RectangularBoundary.TopMargin = subGraph.DiameterOfOpenCollapseButton + 0.5 +
+                                                        subGraph.Attr.LineWidth / 2;
+            }
+
+            foreach (var msaglEdge in geometryGraphUnderLayout.Edges) {
+                var drawingEdge = (DrawingEdge)msaglEdge.UserData;
+                AssignLabelWidthHeight(msaglEdge, drawingEdge);
+            }
+        }
+
+        void AssignLabelWidthHeight(Microsoft.Msagl.Core.Layout.ILabeledObject labeledGeomObj,
+            DrawingObject drawingObj) {
+            if (drawingObjectsToFrameworkElements.ContainsKey(drawingObj)) {
+                var fe = drawingObjectsToFrameworkElements[drawingObj];
+                var wh = fe.Dimensions();
+                labeledGeomObj.Label.Width = wh.Item1;
+                labeledGeomObj.Label.Height = wh.Item2;
+            }
+        }
+
+
+        ICurve GetNodeBoundaryCurve(DrawingNode node) {
+            double width, height;
+
+            if (drawingObjectsToFrameworkElements.TryGetValue(node, out var fe)) {
+                var wh = fe.Dimensions();
+                width = wh.Item1 + 2 * node.Attr.LabelMargin;
+                height = wh.Item2 + 2 * node.Attr.LabelMargin;
+            }
+            else
+                return GetNodeBoundaryCurveByMeasuringText(node);
+
+            if (width < CurrentGraph.Attr.MinNodeWidth)
+                width = CurrentGraph.Attr.MinNodeWidth;
+            if (height < CurrentGraph.Attr.MinNodeHeight)
+                height = CurrentGraph.Attr.MinNodeHeight;
+            return NodeBoundaryCurves.GetNodeBoundaryCurve(node, width, height);
+        }
+        ICurve GetNodeBoundaryCurveByMeasuringText(DrawingNode node) {
+            double width, height;
+            if (String.IsNullOrEmpty(node.LabelText)) {
+                width = 10;
+                height = 10;
+            }
+            else {
+                var t1 = new SKTextBlock{ 
+                    Text = node.LabelText,
+                    Typeface = SKTypeface.FromFamilyName(node.Label.FontName),
+                    TextSize = (float)node.Label.FontSize
+                };
+                var size =t1.Dimensions();
+                width = size.Item1;
+                height = size.Item2;
+            }
+
+            width += 2 * node.Attr.LabelMargin;
+            height += 2 * node.Attr.LabelMargin;
+
+            if (width < CurrentGraph.Attr.MinNodeWidth)
+                width = CurrentGraph.Attr.MinNodeWidth;
+            if (height < CurrentGraph.Attr.MinNodeHeight)
+                height = CurrentGraph.Attr.MinNodeHeight;
+
+            return NodeBoundaryCurves.GetNodeBoundaryCurve(node, width, height);
+        }
+        ICurve GetClusterCollapsedBoundary(Subgraph subgraph) {
+            double width, height;
+
+            SKFrameworkElement fe;
+            if (drawingObjectsToFrameworkElements.TryGetValue(subgraph, out fe)) {
+                var wh = fe.Dimensions();
+                width = wh.Item1 + 2 * subgraph.Attr.LabelMargin + subgraph.DiameterOfOpenCollapseButton;
+                height = Math.Max(wh.Item2 + 2 * subgraph.Attr.LabelMargin, subgraph.DiameterOfOpenCollapseButton);
+            }
+            else
+                return GetApproximateCollapsedBoundary(subgraph);
+
+            if (width < CurrentGraph.Attr.MinNodeWidth)
+                width = CurrentGraph.Attr.MinNodeWidth;
+            if (height < CurrentGraph.Attr.MinNodeHeight)
+                height = CurrentGraph.Attr.MinNodeHeight;
+            return NodeBoundaryCurves.GetNodeBoundaryCurve(subgraph, width, height);
+        }
+        SKTextBlock textBoxForApproxNodeBoundaries;
+
+        ICurve GetApproximateCollapsedBoundary(Subgraph subgraph) {
+            if (textBoxForApproxNodeBoundaries == null)
+                SetUpTextBoxForApproxNodeBoundaries();
+
+
+            double width, height;
+            if (String.IsNullOrEmpty(subgraph.LabelText))
+                height = width = subgraph.DiameterOfOpenCollapseButton;
+            else {
+                double a = ((double)subgraph.LabelText.Length) / textBoxForApproxNodeBoundaries.Text.Length *
+                           subgraph.Label.FontSize / Label.DefaultFontSize;
+                var wh = textBoxForApproxNodeBoundaries.Dimensions();
+                width = wh.Item1 * a + subgraph.DiameterOfOpenCollapseButton;
+                height =
+                    Math.Max(
+                        wh.Item2 * subgraph.Label.FontSize / Label.DefaultFontSize,
+                        subgraph.DiameterOfOpenCollapseButton);
+            }
+
+            if (width < CurrentGraph.Attr.MinNodeWidth)
+                width = CurrentGraph.Attr.MinNodeWidth;
+            if (height < CurrentGraph.Attr.MinNodeHeight)
+                height = CurrentGraph.Attr.MinNodeHeight;
+
+            return NodeBoundaryCurves.GetNodeBoundaryCurve(subgraph, width, height);
+        }
+
+        void SetUpTextBoxForApproxNodeBoundaries() {
+            textBoxForApproxNodeBoundaries = new SKTextBlock {
+                Text = "Fox jumping over River",
+                Typeface = SKTypeface.FromFamilyName(Label.DefaultFontName),
+                IsAntialias = true,
+                TextSize = Label.DefaultFontSize
+            };
+        }
+
         void CreateFrameworkElementsForLabelsOnly() {
             foreach (var edge in CurrentGraph.Edges) {
                 var fe = CreateDefaultFrameworkElementForDrawingObject(edge);
                 if (fe != null)
-                        fe.Tag = new VLabel(edge, fe);
-                
+                    fe.Tag = new VLabel(edge, fe);
+
             }
 
             foreach (var node in CurrentGraph.Nodes)
@@ -116,7 +263,7 @@ namespace UwpGraphControl {
 
         public IViewerNode CreateIViewerNode(DrawingNode drawingNode) => throw new NotImplementedException();
 
-        public bool NeedToCalculateLayout { get; set; }
+        public bool NeedToCalculateLayout { get; set; } = true;
         public event EventHandler<EventArgs> ViewChangeEvent;
         public event EventHandler<MsaglMouseEventArgs> MouseDown;
         public event EventHandler<MsaglMouseEventArgs> MouseMove;
