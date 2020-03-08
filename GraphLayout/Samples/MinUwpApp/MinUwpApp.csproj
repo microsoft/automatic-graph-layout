@@ -153,9 +153,20 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.9</Version>
     </PackageReference>
-    <PackageReference Include="MSAGL.netstandard">
-      <Version>1.0.0</Version>
-    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Drawing\AutomaticGraphLayout.Drawing.csproj">
+      <Project>{B76F8F71-4B00-4242-BE36-C9F0732511F7}</Project>
+      <Name>AutomaticGraphLayout.Drawing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj">
+      <Project>{415d3e3f-7105-46c1-84d2-7ecb34213d92}</Project>
+      <Name>AutomaticGraphLayout</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\UwpGraphControl\UwpGraphControl.csproj">
+      <Project>{7362db4b-615a-4ba9-9ad6-257e9bfd1c0f}</Project>
+      <Name>UwpGraphControl</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

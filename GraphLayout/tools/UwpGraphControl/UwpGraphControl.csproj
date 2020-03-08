@@ -120,15 +120,25 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AutomaticGraphLayoutControl.xaml.cs">
+      <DependentUpon>AutomaticGraphLayoutControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ClickCounter.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VLabel.cs" />
     <EmbeddedResource Include="Properties\UwpGraphControl.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.9</Version>
+    </PackageReference>
+    <PackageReference Include="SkiaSharp">
+      <Version>1.68.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="SkiaSharp.Views">
+      <Version>1.68.1.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +150,12 @@
       <Project>{415d3e3f-7105-46c1-84d2-7ecb34213d92}</Project>
       <Name>AutomaticGraphLayout</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="AutomaticGraphLayoutControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

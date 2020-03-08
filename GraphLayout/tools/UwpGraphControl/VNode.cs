@@ -500,6 +500,7 @@ namespace Microsoft.Msagl.Viewers.Uwp {
         }
 
         public override string ToString() {
+
             return Node.Id;
         }
 

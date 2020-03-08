@@ -1,5 +1,7 @@
 using System;
 using Microsoft.Msagl.Drawing;
+using SkiaSharp;
+using UwpGraphControl;
 using Colors = Windows.UI.Colors;
 using FrameworkElement = Windows.UI.Xaml.FrameworkElement;
 using Canvas = Windows.UI.Xaml.Controls.Canvas;
@@ -7,11 +9,11 @@ using SolidColorBrush = Windows.UI.Xaml.Media.SolidColorBrush;
 using Line = Windows.UI.Xaml.Shapes.Line;
 
 namespace Microsoft.Msagl.Viewers.Uwp {
-    internal class VLabel : IViewerObject {
-        internal readonly FrameworkElement FrameworkElement;
+    public class VLabel : IViewerObject {
+        internal readonly SKFrameworkElement FrameworkElement;
         bool markedForDragging;
 
-        public VLabel(Edge edge, FrameworkElement frameworkElement) {
+        public VLabel(Edge edge, SKFrameworkElement frameworkElement) {
             FrameworkElement = frameworkElement;
             DrawingObject = edge.Label;
         }
@@ -21,19 +23,19 @@ namespace Microsoft.Msagl.Viewers.Uwp {
         public bool MarkedForDragging {
             get { return markedForDragging; }
             set {
-                markedForDragging = value;
-                if (value) {
-                    AttachmentLine = new Line {
-                        Stroke = new SolidColorBrush(Colors.Black),
-                        StrokeDashArray = { 1, 2 }
-                    }; //the line will have 0,0, 0,0 start and end so it would not be rendered
+                //markedForDragging = value;
+                //if (value) {
+                //    AttachmentLine = new SKLine {
+                //        Stroke = new SolidColorBrush(Colors.Black),
+                //        StrokeDashArray = { 1, 2 }
+                //    }; //the line will have 0,0, 0,0 start and end so it would not be rendered
 
-                    ((Canvas)FrameworkElement.Parent).Children.Add(AttachmentLine);
-                }
-                else {
-                    ((Canvas)FrameworkElement.Parent).Children.Remove(AttachmentLine);
-                    AttachmentLine = null;
-                }
+                //    (FrameworkElement.Parent.Children.Add(AttachmentLine);
+                //}
+                //else {
+                //    ((Canvas)FrameworkElement.Parent).Children.Remove(AttachmentLine);
+                //    AttachmentLine = null;
+                //}
             }
         }
 
