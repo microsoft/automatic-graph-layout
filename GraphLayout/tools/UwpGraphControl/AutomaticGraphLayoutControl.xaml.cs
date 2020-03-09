@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
@@ -53,27 +54,159 @@ namespace UwpGraphControl {
         readonly Dictionary<DrawingObject, SKFrameworkElement> drawingObjectsToFrameworkElements =
             new Dictionary<DrawingObject, SKFrameworkElement>();
 
+        private SKCanvas _canvas;
 
         private void OnPaintSurface(object sender, SKPaintSurfaceEventArgs e) {
 
-            var canvas = e.Surface.Canvas;
-            canvas.Clear();
+            _canvas = e.Surface.Canvas;
+            _canvasWidth = e.Info.Width - 2f;
+            _canvasHeight = e.Info.Height;
+
+            _canvas.Clear();
             ClearGraphViewer();
             CreateFrameworkElementsForLabelsOnly();
             if (NeedToCalculateLayout) {
-                CurrentGraph.CreateGeometryGraph(); 
+                CurrentGraph.CreateGeometryGraph();
                 PopulateGeometryOfGeometryGraph();
             }
 
             geometryGraphUnderLayout = CurrentGraph.GeometryGraph;
-            //LayoutGraph();
-            //PostLayoutStep();
+            LayoutGraph();
+            PostLayoutStep();
         }
-        public CancellationTokenSource CancelTokenSource { get; set; }
+
+        void PostLayoutStep() {
+            Visibility = Windows.UI.Xaml.Visibility.Visible;
+            PushDataFromLayoutGraphToFrameworkElements();
+            GraphChanged?.Invoke(this, null);
+
+            SetInitialTransform();
+        }
+        GeometryGraph GeomGraph => CurrentGraph.GeometryGraph;
+        double FitFactor {
+            get {
+                var geomGraph = GeomGraph;
+                if (CurrentGraph == null || geomGraph == null ||
+
+                    geomGraph.Width == 0 || geomGraph.Height == 0)
+                    return 1;
+
+                var size = RenderSize;
+
+                return GetFitFactor(size);
+            }
+        }
+        double GetFitFactor(Windows.Foundation.Size rect) {
+            var geomGraph = GeomGraph;
+            return geomGraph == null ? 1 : Math.Min(rect.Width / geomGraph.Width, rect.Height / geomGraph.Height);
+        }
+
+        public void SetInitialTransform() {
+            if (CurrentGraph == null || GeomGraph == null) return;
+
+            var scale = FitFactor;
+            var graphCenter = GeomGraph.BoundingBox.Center;
+            var vp = new Rectangle(new Point(0, 0),
+                new Point(RenderSize.Width, RenderSize.Height));
+
+            SetTransformOnViewportWithoutRaisingViewChangeEvent(scale, graphCenter, vp);
+        }
+
+        void SetTransformOnViewportWithoutRaisingViewChangeEvent(double scale, Point graphCenter, Rectangle vp) {
+            var dx = vp.Width / 2 - scale * graphCenter.X;
+            var dy = vp.Height / 2 + scale * graphCenter.Y;
+
+            SetTransformWithoutRaisingViewChangeEvent(scale, dx, dy);
+
+        }
+        void SetTransformWithoutRaisingViewChangeEvent(double scale, double dx, double dy) {
+            if (ScaleIsOutOfRange(scale)) return;
+            _canvas.SetMatrix(new SKMatrix((float)scale, 0, (float)dx, 0, (float)-scale, (float)dy, 0, 0, 0));
+        }
+        bool ScaleIsOutOfRange(double scale) {
+            return scale < 0.000001 || scale > 100000.0; //todo: remove hardcoded values
+        }
+
+
+
+        void PushDataFromLayoutGraphToFrameworkElements() {
+            CreateRectToFillCanvas();
+            CreateAndPositionGraphBackgroundRectangle();
+            CreateVNodes();
+            CreateEdges();
+        }
+        void CreateVNodes() {
+            foreach (var node in CurrentGraph.Nodes.Concat(CurrentGraph.RootSubgraph.AllSubgraphsDepthFirstExcludingSelf())) {
+                CreateVNode(node);
+                Invalidate(drawingObjectsToIViewerObjects[node]);
+            }
+        }
+
+        IViewerNode CreateVNode(DrawingNode node) {
+            lock (this) {
+                if (drawingObjectsToIViewerObjects.ContainsKey(node))
+                    return (IViewerNode) drawingObjectsToIViewerObjects[node];
+
+                SKFrameworkElement feOfLabel;
+                if (!drawingObjectsToFrameworkElements.TryGetValue(node, out feOfLabel))
+                    feOfLabel = CreateAndRegisterFrameworkElementOfDrawingNode(node);
+
+                var vn = new VNode(node, feOfLabel,
+                    e => (VEdge) drawingObjectsToIViewerObjects[e],
+                    () => GetBorderPathThickness() * node.Attr.LineWidth);
+
+                foreach (var fe in vn.FrameworkElements)
+                    _graphCanvas.Children.Add(fe);
+
+                drawingObjectsToIViewerObjects[node] = vn;
+                return vn;
+            }
+        }
+
+
+        private SKPaint _rectToFillGraphBackground;
+        void CreateGraphBackgroundRect() {
+            var lgGraphBrowsingSettings = CurrentGraph.LayoutAlgorithmSettings as LgLayoutSettings;
+            if (lgGraphBrowsingSettings == null) {
+                _rectToFillGraphBackground = new SKPaint();
+            }
+        }
+
+        void CreateAndPositionGraphBackgroundRectangle() {
+            CreateGraphBackgroundRect();
+            _rectToFillGraphBackground.Color = Common.BrushFromMsaglColor(CurrentGraph.Attr.BackgroundColor);
+            if (GeomGraph == null) return ;
+
+            var center = GeomGraph.BoundingBox.Center;
+            Common.PositionFrameworkElement(_rectToFillGraphBackground, center, 1);
+            //Panel.SetZIndex(_rectToFillGraphBackground, -1);
+            _canvas.DrawRect(0,0, (float)GeomGraph.Width, (float)GeomGraph.Height,_rectToFillGraphBackground);
+
+        }
+
+        private SKPaint _rectToFillCanvas;
+        void CreateRectToFillCanvas() {
+            _rectToFillCanvas = new SKPaint { Color  = SKColor.Empty, };
+            _canvas.DrawRect(0,0,_canvasWidth, _canvasHeight,_rectToFillCanvas);
+        }
+
+
+        public CancelToken CancelToken { get; set; } = new CancelToken();
         void ClearGraphViewer() {
 
             drawingObjectsToIViewerObjects.Clear();
             drawingObjectsToFrameworkElements.Clear();
+        }
+        void LayoutGraph() {
+            if (NeedToCalculateLayout) {
+                try {
+                    LayoutHelpers.CalculateLayout(geometryGraphUnderLayout, CurrentGraph.LayoutAlgorithmSettings,
+                        CancelToken);
+                }
+                catch (OperationCanceledException) {
+                    //swallow this exception
+                }
+            }
         }
 
 
@@ -83,13 +216,13 @@ namespace UwpGraphControl {
                 var msaglNode in
                     geometryGraphUnderLayout.Nodes) {
                 var node = (DrawingNode)msaglNode.UserData;
-                    msaglNode.BoundaryCurve = GetNodeBoundaryCurve(node);
+                msaglNode.BoundaryCurve = GetNodeBoundaryCurve(node);
             }
 
             foreach (
                 Cluster cluster in geometryGraphUnderLayout.RootCluster.AllClustersWideFirstExcludingSelf()) {
                 var subGraph = (Subgraph)cluster.UserData;
-                    cluster.CollapsedBoundary = GetClusterCollapsedBoundary(subGraph);
+                cluster.CollapsedBoundary = GetClusterCollapsedBoundary(subGraph);
                 if (cluster.RectangularBoundary == null)
                     cluster.RectangularBoundary = new RectangularClusterBoundary();
                 cluster.RectangularBoundary.TopMargin = subGraph.DiameterOfOpenCollapseButton + 0.5 +
@@ -137,12 +270,12 @@ namespace UwpGraphControl {
                 height = 10;
             }
             else {
-                var t1 = new SKTextBlock{ 
+                var t1 = new SKTextBlock {
                     Text = node.LabelText,
                     Typeface = SKTypeface.FromFamilyName(node.Label.FontName),
                     TextSize = (float)node.Label.FontSize
                 };
-                var size =t1.Dimensions();
+                var size = t1.Dimensions();
                 width = size.Item1;
                 height = size.Item2;
             }
@@ -176,6 +309,8 @@ namespace UwpGraphControl {
             return NodeBoundaryCurves.GetNodeBoundaryCurve(subgraph, width, height);
         }
         SKTextBlock textBoxForApproxNodeBoundaries;
+        private float _canvasWidth;
+        private int _canvasHeight;
 
         ICurve GetApproximateCollapsedBoundary(Subgraph subgraph) {
             if (textBoxForApproxNodeBoundaries == null)
