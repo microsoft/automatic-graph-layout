@@ -1426,11 +1426,8 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
         TextBlock textBoxForApproxNodeBoundaries;
 
-        public static Size MeasureText(string text,
-        FontFamily family, double size)
+        public static Size MeasureText(string text, FontFamily family, double size, Visual visual=null)
         {
-
-            
             FormattedText formattedText = new FormattedText(
                 text,
                 System.Globalization.CultureInfo.CurrentCulture,
@@ -1438,7 +1435,12 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 new Typeface(family, new System.Windows.FontStyle(), FontWeights.Regular, FontStretches.Normal),
                 size,
                 Brushes.Black,
+#if FEATURE_PIXELS_PER_DPI
+                null,
+                VisualTreeHelper.GetDpi(visual).PixelsPerDip);
+#else
                 null);
+#endif
 
             return new Size(formattedText.Width, formattedText.Height);
         }
@@ -1453,7 +1455,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
             }
             else
             {
-                var size = MeasureText(node.LabelText, new FontFamily(node.Label.FontName), node.Label.FontSize);
+                var size = MeasureText(node.LabelText, new FontFamily(node.Label.FontName), node.Label.FontSize, GraphCanvas);
                 width = size.Width;
                 height = size.Height;
             }
@@ -1808,7 +1810,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
         public void StartDrawingRubberLine(Point startingPoint) {
         }
 
-        #endregion
+#endregion
 
 
 

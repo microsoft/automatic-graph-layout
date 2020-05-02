@@ -26,7 +26,8 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         public double Maxweight;
         public int maxDeg;
         public int N;
-        Component _sNet;
+        // TODO: Remove field as it is never used
+        Component _sNet = null;
         readonly double[] _edgeNodeSeparation;
         readonly double _angularResolution;
         public bool isPlanar;

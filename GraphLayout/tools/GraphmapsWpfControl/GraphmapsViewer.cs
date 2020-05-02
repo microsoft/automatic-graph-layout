@@ -610,16 +610,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
         void zoomout(double x)
         {
             SetInitialTransform();
-            return;
-            if (Graph == null || searchnode == null) return;
-            LgNodeInfo nodeInfo = _stringFinder.Find(searchnode);
-            if (nodeInfo != null)
-                ZoomToNodeInfo(nodeInfo);
-
-            var scale = Math.Min(CurrentScale, x);
-            var vp = new Rectangle(new Point(0, 0),
-                new Point(_graphCanvas.RenderSize.Width, _graphCanvas.RenderSize.Height));
-            SetTransformOnViewport(scale, nodeInfo.Center, vp);            
         }
 
         void GraphCanvasKeyDown(object sender, KeyEventArgs e)
@@ -988,7 +978,10 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
         public event EventHandler<MsaglMouseEventArgs> MouseDown;
         public event EventHandler<MsaglMouseEventArgs> MouseMove;
         public event EventHandler<MsaglMouseEventArgs> MouseUp;
+
+#pragma warning disable 67
         public event EventHandler<ObjectUnderMouseCursorChangedEventArgs> ObjectUnderMouseCursorChanged;
+#pragma warning restore 67
 
         public IViewerObject ObjectUnderMouseCursor
         {
@@ -2889,11 +2882,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
         }
 
 
-        public static Size MeasureText(string text,
-            FontFamily family, double size)
-        {
-
-
+        public static Size MeasureText(string text, FontFamily family, double size, Visual visual = null) {
             FormattedText formattedText = new FormattedText(
                 text,
                 CultureInfo.CurrentCulture,
@@ -2901,7 +2890,8 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 new Typeface(family, new System.Windows.FontStyle(), FontWeights.Regular, FontStretches.Normal),
                 size,
                 Brushes.Black,
-                null);
+                null,
+                VisualTreeHelper.GetDpi(visual).PixelsPerDip);
 
             return new Size(formattedText.Width, formattedText.Height);
         }
@@ -2916,7 +2906,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             }
             else
             {
-                var size = MeasureText(node.LabelText, new FontFamily(node.Label.FontName), node.Label.FontSize);
+                var size = MeasureText(node.LabelText, new FontFamily(node.Label.FontName), node.Label.FontSize, GraphCanvas);
                 width = size.Width;
                 height = size.Height;
 
@@ -2938,7 +2928,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             }
             else
             {
-                var size = MeasureText(node.LabelText, new FontFamily(node.Label.FontName), node.Label.FontSize);
+                var size = MeasureText(node.LabelText, new FontFamily(node.Label.FontName), node.Label.FontSize, GraphCanvas);
                 width = size.Width;
                 height = size.Height;
 
