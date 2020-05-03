@@ -44,7 +44,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
     public class LgInteractor
     {
         const bool ShrinkEdgeLengths = true;
-        readonly bool _initFromPrecomputedLgData;
         readonly LgData _lgData;
         readonly LgLayoutSettings _lgLayoutSettings;
         readonly CancelToken _cancelToken;
@@ -85,7 +84,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             }
             else
             {
-                _initFromPrecomputedLgData = true;
                 _lgData = geometryGraph.LgData;
                 _lgLayoutSettings.GeometryNodesToLgNodeInfos = _lgData.GeometryNodesToLgNodeInfos;
             }

@@ -422,7 +422,9 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         /// 
         /// </summary>
+#pragma warning disable 67
         public event EventHandler<EventArgs> ViewChangeEvent;
+#pragma warning restore 67
 
         /// <summary>
         /// enables and disables the default editing of the viewer

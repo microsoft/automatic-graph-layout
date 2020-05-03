@@ -53,8 +53,6 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         System.Drawing.Point mouseUpPoint;
         P2 rubberLineEnd;
         P2 rubberLineStart;
-        System.Drawing.Rectangle rubberRect;
-        const FrameStyle RubberRectStyle = FrameStyle.Dashed;
         bool zoomWindow;
         PlaneTransformation mouseDownTransform;
 
