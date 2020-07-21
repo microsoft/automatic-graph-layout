@@ -701,7 +701,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             return l;
         }
 #if TEST_MSAGL
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String,System.Object,System.Object,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.Debug.WriteLine(System.String,System.Object,System.Object,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         void CheckCutValues() {
             foreach (NetworkEdge e in this.graph.Edges) {
                 if (e.inTree) {
@@ -713,7 +713,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
                     }
                     if (e.Cut != cut)
-                        Console.WriteLine("cuts are wrong for {0}; should be {1} but is {2}", e, cut, e.Cut);
+                        System.Diagnostics.Debug.WriteLine("cuts are wrong for {0}; should be {1} but is {2}", e, cut, e.Cut);
                 }
 
 

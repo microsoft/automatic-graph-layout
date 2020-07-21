@@ -19,8 +19,8 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         internal static void DebugOutput(string str) {
 #if DEBUG && TEST_MSAGL
             timer.Stop();
-            Console.Write("{0}: ", String.Format("{0:0.000}", timer.Duration));
-            Console.WriteLine(str);
+            System.Diagnostics.Debug.Write("{0}: ", String.Format("{0:0.000}", timer.Duration));
+            System.Diagnostics.Debug.WriteLine(str);
 #endif
         }
     }

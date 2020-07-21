@@ -412,7 +412,7 @@ namespace Test01 {
                     bs.EdgeSeparation = es;
                 }
                 else {
-                    Console.WriteLine("cannot parse {0}", esString);
+                    System.Diagnostics.Debug.WriteLine("cannot parse {0}", esString);
                     Environment.Exit(1);
                 }
             }
@@ -424,7 +424,7 @@ namespace Test01 {
                     bs.CapacityOverflowCoefficient = capacityCoeff;
                 }
                 else {
-                    Console.WriteLine("cannot parse {0}", capacityCoeffString);
+                    System.Diagnostics.Debug.WriteLine("cannot parse {0}", capacityCoeffString);
                     Environment.Exit(1);
                 }
             }
@@ -439,7 +439,7 @@ namespace Test01 {
             string msg;
             Graph graph = Parser.Parse(dotFileName, out line, out col, out msg);
             if (graph == null) {
-                Console.WriteLine("{0}({1},{2}): error: {3}", dotFileName, line, col, msg);
+                System.Diagnostics.Debug.WriteLine("{0}({1},{2}): error: {3}", dotFileName, line, col, msg);
                 Environment.Exit(1);
             }
             if (argsParser.OptionIsUsed(RecoverSugiyamaTestOption)) {
@@ -474,7 +474,7 @@ namespace Test01 {
                         BundlingSettings.DefaultInkImportance = inkCoeff;
                     }
                     else {
-                        Console.WriteLine("cannot parse {0}", ink);
+                        System.Diagnostics.Debug.WriteLine("cannot parse {0}", ink);
                         Environment.Exit(1);
                     }
                 }
@@ -487,7 +487,7 @@ namespace Test01 {
                         bs.EdgeSeparation = es;
                     }
                     else {
-                        Console.WriteLine("cannot parse {0}", esString);
+                        System.Diagnostics.Debug.WriteLine("cannot parse {0}", esString);
                         Environment.Exit(1);
                     }
                 }
@@ -518,7 +518,7 @@ namespace Test01 {
                 sr = new StreamReader(listOfFilesFile);
             }
             catch (Exception e) {
-                Console.WriteLine(e.Message);
+                System.Diagnostics.Debug.WriteLine(e.Message);
                 return;
             }
             string fileName;
@@ -536,7 +536,7 @@ namespace Test01 {
         }
 
         static void ProcessFile(string fileName, ArgsParser.ArgsParser argsParser, GViewer gViewer, ref int nOfBugs) {
-            Console.WriteLine("processing " + fileName);
+            System.Diagnostics.Debug.WriteLine("processing " + fileName);
             try {
                 string extension = Path.GetExtension(fileName);
                 if (extension == ".msagl")
@@ -550,8 +550,8 @@ namespace Test01 {
             }
             catch (Exception e) {
                 nOfBugs++;
-                Console.WriteLine("bug " + nOfBugs);
-                Console.WriteLine(e.ToString());
+                System.Diagnostics.Debug.WriteLine("bug " + nOfBugs);
+                System.Diagnostics.Debug.WriteLine(e.ToString());
             }
         }
 
@@ -562,7 +562,7 @@ namespace Test01 {
         static void ProcessMsaglFile(string fileName, ArgsParser.ArgsParser argsParser) {
             Graph graph = Graph.Read(fileName);
             if (graph == null) {
-                Console.WriteLine("cannot read " + fileName);
+                System.Diagnostics.Debug.WriteLine("cannot read " + fileName);
                 return;
             }
 
@@ -701,7 +701,7 @@ namespace Test01 {
             if (argsParser.OptionIsUsed(TightPaddingOption)) {
                 string tightPaddingString = argsParser.GetStringOptionValue(TightPaddingOption);
                 if (!double.TryParse(tightPaddingString, out tightPadding)) {
-                    Console.WriteLine("cannot parse {0} {1}", TightPaddingOption, tightPaddingString);
+                    System.Diagnostics.Debug.WriteLine("cannot parse {0} {1}", TightPaddingOption, tightPaddingString);
                     Environment.Exit(1);
                 }
             }
@@ -709,7 +709,7 @@ namespace Test01 {
             if (argsParser.OptionIsUsed(LoosePaddingOption)) {
                 string loosePaddingString = argsParser.GetStringOptionValue(LoosePaddingOption);
                 if (!double.TryParse(loosePaddingString, out loosePadding)) {
-                    Console.WriteLine("cannot parse {0} {1}", LoosePaddingOption, loosePaddingString);
+                    System.Diagnostics.Debug.WriteLine("cannot parse {0} {1}", LoosePaddingOption, loosePaddingString);
                     Environment.Exit(1);
                 }
             }
@@ -746,7 +746,7 @@ namespace Test01 {
             argsParser.AddAllowedOptionWithHelpString(AsyncLayoutOption, "test viewer in the async mode");
 
             if (!argsParser.Parse()) {
-                Console.WriteLine(argsParser.UsageString());
+                System.Diagnostics.Debug.WriteLine(argsParser.UsageString());
                 Environment.Exit(1);
             }
             return argsParser;

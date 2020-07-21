@@ -162,7 +162,7 @@ namespace Microsoft.Msagl.Core.DataStructures {
             q.DecreasePriority(4, 2.5);
 
             while (q.IsEmpty() == false)
-                Console.WriteLine(q.Dequeue());
+                System.Diagnostics.Debug.WriteLine(q.Dequeue());
 
 
         }

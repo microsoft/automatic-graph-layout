@@ -288,7 +288,7 @@ namespace Microsoft.Msagl.UnitTests.Constraints
                 foreach (Variable var in solver.Variables)
                 {
                     var node = (OverlapRemovalNode)var.UserData;
-                    Console.Write("    {0}", node);
+                    System.Diagnostics.Debug.Write($"    {node}");
 
                     const string Format = " - L/R T/B {0:F5}/{1:F5} {2:F5}/{3:F5}";
                     if (generator.IsHorizontal)

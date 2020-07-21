@@ -96,7 +96,7 @@ namespace Microsoft.Msagl.UnitTests
                         ++intersecting;
                     }
                 }
-                System.Console.WriteLine(intersecting);
+                System.Diagnostics.Debug.WriteLine(intersecting);
             }
         }
 

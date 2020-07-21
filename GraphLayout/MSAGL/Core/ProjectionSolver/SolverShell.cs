@@ -295,7 +295,6 @@ namespace Microsoft.Msagl.Core.ProjectionSolver{
         public double GetVariableIdealPosition(int v){
             return variables[v].DesiredPos;
         }
-#endif // SOLVERFOUNDATION
 
         /// <summary>
         /// Returns the solution object class specific to the underlying solver, or null if there has

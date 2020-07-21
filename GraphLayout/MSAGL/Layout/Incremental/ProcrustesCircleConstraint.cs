@@ -186,24 +186,24 @@ namespace Microsoft.Msagl.Layout.Incremental {
         /// <summary>
         /// output an n*2 point matrix in Mathematica format
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.Write(System.String,System.Object,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.Write(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.Debug.Write(System.String,System.Object,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.Debug.Write(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.Debug.WriteLine(System.String)")]
         public static void PrintMatrix(Point[] points) {
             ValidateArg.IsNotNull(points, "points");
-            System.Console.Write("{");
+            System.Diagnostics.Debug.Write("{");
             for (int i = 0; i < points.Length;) {
-                System.Console.Write("{{{0},{1}}}", points[i].X, points[i].Y);
+                Console.Write("{{{0},{1}}}", points[i].X, points[i].Y);
                 if (++i != points.Length) {
-                    System.Console.Write(",");
+                    System.Diagnostics.Debug.Write(",");
                 }
             }
-            System.Console.WriteLine("};");
+            System.Diagnostics.Debug.WriteLine("};");
         }
         private static Point[] Transpose(Point[] X) {
             return new Point[] { new Point(X[0].X, X[1].X), new Point(X[0].Y, X[1].Y) };
         }
         ///<summary>
         ///</summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Body"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String,System.Object,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.Write(System.String)")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Body"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.Debug.WriteLine(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.Debug.WriteLine(System.String,System.Object,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.Debug.Write(System.String)")]
         public static void Test() {
 #if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=340
             double[,] XX = null;
@@ -219,7 +219,7 @@ namespace Microsoft.Msagl.Layout.Incremental {
                 Y[i] = new Point(YY[i, 0], YY[i, 1]);
             }
             Point[] XY = matrixProduct(X, Y);
-            System.Console.Write("XY=");
+            System.Diagnostics.Debug.Write("XY=");
             PrintMatrix(XY);
             Point[] P, Q;
             SingularValueDecomposition(XY, out P, out Q);
@@ -230,8 +230,8 @@ namespace Microsoft.Msagl.Layout.Incremental {
             Point t;
             FindTransform(X, Y, out T, out s, out t);
             PrintMatrix(T);
-            System.Console.WriteLine("s={0}", s);
-            System.Console.WriteLine("t=({0},{1})", t.X,t.Y);
+            System.Diagnostics.Debug.WriteLine("s={0}", s);
+            System.Diagnostics.Debug.WriteLine("t=({0},{1})", t.X,t.Y);
 #endif
         }
         private static void FindTransform(Point[] X, Point[] Y,

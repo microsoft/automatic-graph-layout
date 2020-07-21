@@ -90,7 +90,7 @@ namespace Microsoft.Msagl.UnitTests
             splineRouter.Run();
 
             sw.Stop();
-            System.Console.WriteLine("Edge routing took: {0} seconds.", sw.ElapsedMilliseconds / 1000.0);
+            System.Diagnostics.Debug.WriteLine("Edge routing took: {0} seconds.", sw.ElapsedMilliseconds / 1000.0);
         }
 
         [TestMethod]
@@ -110,7 +110,7 @@ namespace Microsoft.Msagl.UnitTests
             SplineRouter splineRouter = new SplineRouter(g, TightPadding, loosePadding, Math.PI / 6, null);
             splineRouter.Run();
             sw.Stop();
-            Console.WriteLine("Edge routing took: {0} seconds.", sw.ElapsedMilliseconds / 1000.0);
+            System.Diagnostics.Debug.WriteLine("Edge routing took: {0} seconds.", sw.ElapsedMilliseconds / 1000.0);
             CheckEdgesForOverlapWithNodes(TightPadding, g);
         }
 

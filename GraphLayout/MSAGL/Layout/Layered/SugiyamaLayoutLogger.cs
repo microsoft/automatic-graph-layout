@@ -36,7 +36,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             sw.Write(message);
             sw.Flush();
 
-            Console.WriteLine(message);
+            System.Diagnostics.Debug.WriteLine(message);
         }
     }
 #endif

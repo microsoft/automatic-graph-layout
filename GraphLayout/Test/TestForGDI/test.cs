@@ -111,7 +111,7 @@ namespace TestForGdi {
 #endif
 
 #else
-                        Console.WriteLine("-devtrace requires the DEVTRACE build configuration");
+                        System.Diagnostics.Debug.WriteLine("-devtrace requires the DEVTRACE build configuration");
                         return;
 #endif
                     }
@@ -135,7 +135,7 @@ namespace TestForGdi {
                                 return;
                             case "-vdc":
                                 if (iarg == args.Length - 1) {
-                                    Console.WriteLine("argument is missing after -vdc");
+                                    System.Diagnostics.Debug.WriteLine("argument is missing after -vdc");
                                     return;
                                 }
 #if DEBUG
@@ -222,34 +222,34 @@ namespace TestForGdi {
                                 break;
                             case "-rectsp":
                                 edgeRoutingMode = EdgeRoutingMode.Rectilinear;
-                                Console.WriteLine("setting rectsp");
+                                System.Diagnostics.Debug.WriteLine("setting rectsp");
                                 break;
                             case "-sparsevg":
                                 useSparseVisibilityGraph = true;
-                                Console.WriteLine("setting sparseVg");
+                                System.Diagnostics.Debug.WriteLine("setting sparseVg");
                                 break;
                             case "-userect":
                                 useObstacleRectangles = true;
-                                Console.WriteLine("setting useRect");
+                                System.Diagnostics.Debug.WriteLine("setting useRect");
                                 break;
                             case "-bendpenalty":
                                 bendPenalty = double.Parse(args[iarg + 1]);
-                                Console.WriteLine("setting bendPenalty");
+                                System.Diagnostics.Debug.WriteLine("setting bendPenalty");
                                 ++iarg;
                                 break;
                             case "freespline":
                                 edgeRoutingMode = EdgeRoutingMode.Spline;
-                                Console.WriteLine("setting EdgeRoutingMode.Spline");
+                                System.Diagnostics.Debug.WriteLine("setting EdgeRoutingMode.Spline");
                                 break;
                             case "-rectcenter":
                                 edgeRoutingMode = EdgeRoutingMode.RectilinearToCenter;
-                                Console.WriteLine("setting rectToCenter");
+                                System.Diagnostics.Debug.WriteLine("setting rectToCenter");
                                 break;
                                 //                            case "testspanner":
                                 //#if TEST_MSAGL
                                 //                                ConeSpannerTest.TestSpanner();
                                 //#else
-                                //                                Console.WriteLine("ConeSpannerTest is only available in TEST mode");
+                                //                                System.Diagnostics.Debug.WriteLine("ConeSpannerTest is only available in TEST mode");
                                 //#endif
                             default:
                                 if (s.StartsWith(badEdgeOption)) {} else if (s.StartsWith(mdsOption)) {
@@ -284,7 +284,7 @@ namespace TestForGdi {
                                 else if (s.StartsWith("-p")) {
                                     dotFileSpecs.Add(GetFileSpec(args, ref iarg));
                                     showForm = false;
-                                } else Console.WriteLine("unknown option " + s);
+                                } else System.Diagnostics.Debug.WriteLine("unknown option " + s);
                                 break;
                         }
                     }
@@ -335,7 +335,7 @@ namespace TestForGdi {
 
                 sw.Stop();
                 var ts = sw.Elapsed;
-                Console.WriteLine("  Elapsed time: {0:00}:{1:00}:{2:00}.{3:000}", ts.Hours, ts.Minutes, ts.Seconds,
+                System.Diagnostics.Debug.WriteLine("  Elapsed time: {0:00}:{1:00}:{2:00}.{3:000}", ts.Hours, ts.Minutes, ts.Seconds,
                                   ts.Milliseconds);
 
                 if (showForm) {
@@ -346,7 +346,7 @@ namespace TestForGdi {
                 }
             }
             catch (Exception e) {
-                Console.WriteLine(e);
+                System.Diagnostics.Debug.WriteLine(e);
             }
             return;
         }
@@ -481,14 +481,13 @@ namespace TestForGdi {
                 file = File.Open(fileName, FileMode.Open);
                 var debugCurveCollection = formatter.Deserialize(file) as DebugCurveCollection;
                 if (null == debugCurveCollection) {
-                    Console.WriteLine("cannot read debugcurves from " + fileName);
+                    System.Diagnostics.Debug.WriteLine("cannot read debugcurves from " + fileName);
                     return null;
                 }
                 return debugCurveCollection.DebugCurvesArray;
             }
             catch (FileNotFoundException ex) {
-                Console.WriteLine();
-                Console.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
             }
             catch (Exception) {
                 throw;
@@ -681,7 +680,7 @@ namespace TestForGdi {
             //RouteGroupGraph(count);
             RouteCustomEdges(count);
             sw.Stop();
-            Console.WriteLine((double) sw.ElapsedMilliseconds/1000);
+            System.Diagnostics.Debug.WriteLine((double) sw.ElapsedMilliseconds/1000);
             return;
 #if false // turns off "unreachable code" warning due to the foregoing "return;".
 
@@ -1080,9 +1079,9 @@ namespace TestForGdi {
 
         static void RectilinearTestOnGeomGraph(EdgeRoutingMode edgeRoutingMode, bool useSparseVisibilityGraph, bool useObstacleRectangles,
                                                double bendPenalty, int reps, Random random, GeometryGraph geomGraph, Point delta) {
-            Console.WriteLine("shifting nodes and calling RectilinearEdgeRouter {0} times", reps);
+            System.Diagnostics.Debug.WriteLine("shifting nodes and calling RectilinearEdgeRouter {0} times", reps);
             for (int i = 0; i < reps; i++) {
-                Console.WriteLine(i + 1);
+                System.Diagnostics.Debug.WriteLine(i + 1);
                 ShiftNodes(random, geomGraph, delta);
                 //                    if(i<=567)
                 //                        continue;
@@ -1197,7 +1196,7 @@ namespace TestForGdi {
 //
 //            Environment.Exit(0);
 //#else
-//            Console.WriteLine("Test_WayPoints is only available in TEST mode");
+//            System.Diagnostics.Debug.WriteLine("Test_WayPoints is only available in TEST mode");
 //#endif
         }
 
@@ -1243,7 +1242,7 @@ namespace TestForGdi {
                     router.Run();
                 }
             t.Stop();
-            Console.WriteLine(t.Duration);
+            System.Diagnostics.Debug.WriteLine(t.Duration);
             //#if DEBUG
 
             //            LayoutAlgorithmSettings.Show(a, b, c, eg.Curve, eg0.Curve, eg1.Curve);
@@ -1350,7 +1349,7 @@ namespace TestForGdi {
                 sr = new StreamReader(listFile);
             }
             catch (Exception e) {
-                Console.WriteLine(e.Message);
+                System.Diagnostics.Debug.WriteLine(e.Message);
                 return;
             }
             string fileName;
@@ -1375,7 +1374,7 @@ namespace TestForGdi {
             int nOfBugs = 0;
             FileSystemInfo[] fileInfos = new DirectoryInfo(dirName).GetFileSystemInfos(fileName);
             if (0 == fileInfos.Length) {
-                Console.WriteLine("No matching files found for '{0}'", fileSpec);
+                System.Diagnostics.Debug.WriteLine("No matching files found for '{0}'", fileSpec);
                 return;
             }
             foreach (FileSystemInfo fileInfo in fileInfos)
@@ -1385,7 +1384,7 @@ namespace TestForGdi {
 
         static void ProcessFile(string fileName, int fileReps, bool show, bool mds, EdgeRoutingMode edgeRoutingMode, double bendPenalty,
                                 ref int nOfBugs, bool bundling, int randomShifts, bool useSparseVisibilityGraph, bool useObstacleRectangles) {
-            Console.WriteLine(fileName);
+            System.Diagnostics.Debug.WriteLine(fileName);
             var random = new Random(1);
             for (int rep = 0; rep < fileReps; ++rep) {
                 try {
@@ -1469,19 +1468,19 @@ namespace TestForGdi {
                             }
                         }
                     } else
-                        Console.WriteLine(" skipping - cannot parse");
+                        System.Diagnostics.Debug.WriteLine(" skipping - cannot parse");
                 }
                 catch (Exception e) {
                     nOfBugs++;
-                    Console.WriteLine("bug " + nOfBugs);
+                    System.Diagnostics.Debug.WriteLine("bug " + nOfBugs);
                     if (fileReps > 1) {
-                        Console.WriteLine("  (iteration: {0})", rep);
+                        System.Diagnostics.Debug.WriteLine("  (iteration: {0})", rep);
                     }
-                    Console.WriteLine(e.ToString());
+                    System.Diagnostics.Debug.WriteLine(e.ToString());
                     return;
                 }
                 if ((rep > 1) && (0 == (rep%100))) {
-                    Console.WriteLine("  {0} reps", rep);
+                    System.Diagnostics.Debug.WriteLine("  {0} reps", rep);
                 }
             }
         }

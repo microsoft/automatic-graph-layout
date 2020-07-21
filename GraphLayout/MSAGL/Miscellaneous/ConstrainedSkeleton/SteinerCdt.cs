@@ -352,9 +352,9 @@ namespace Microsoft.Msagl.Miscellaneous.ConstrainedSkeleton
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(triangleMessage);
-                Console.WriteLine("Exiting now.");
+                System.Diagnostics.Debug.WriteLine(e.Message);
+                System.Diagnostics.Debug.WriteLine(triangleMessage);
+                System.Diagnostics.Debug.WriteLine("Exiting now.");
                 Environment.Exit(1);
             }
 #endif

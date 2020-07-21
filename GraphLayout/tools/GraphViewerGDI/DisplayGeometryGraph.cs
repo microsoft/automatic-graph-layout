@@ -205,7 +205,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
                 DisplayGraph(g, f);
             }
             catch (Exception e){
-                Console.WriteLine(e);
+                System.Diagnostics.Debug.WriteLine(e);
             }
         }
 
@@ -419,7 +419,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
             try {
                 DisplayGraph(graph, new Form());
             } catch (Exception e) {
-                Console.WriteLine(e);
+                System.Diagnostics.Debug.WriteLine(e);
             }
         }
         
@@ -428,7 +428,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
             try {
                 DisplayGraph(graph, f);
             } catch (Exception e) {
-                Console.WriteLine(e);
+                System.Diagnostics.Debug.WriteLine(e);
             }
         }
 

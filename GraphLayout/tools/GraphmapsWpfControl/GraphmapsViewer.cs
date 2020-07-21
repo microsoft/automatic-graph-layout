@@ -231,9 +231,9 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 var rail = clickCounter.ClickedObject as Rail;
                 if (rail != null)
                 {
-                    Console.WriteLine("rail's zoomlevel = " + rail.ZoomLevel);                    
-                    Console.WriteLine("rail's A" + rail.A);
-                    Console.WriteLine("rail's B" + rail.B);
+                    System.Diagnostics.Debug.WriteLine("rail's zoomlevel = " + rail.ZoomLevel);                    
+                    System.Diagnostics.Debug.WriteLine("rail's A" + rail.A);
+                    System.Diagnostics.Debug.WriteLine("rail's B" + rail.B);
                     return;
                     /*
                     if (clickCounter.UpCount == clickCounter.DownCount && clickCounter.UpCount == 2)
@@ -1165,11 +1165,11 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             set
             {
                 _drawingGraph = value;
-                Console.WriteLine("starting processing a graph with {0} nodes and {1} edges", _drawingGraph.NodeCount,
+                System.Diagnostics.Debug.WriteLine("starting processing a graph with {0} nodes and {1} edges", _drawingGraph.NodeCount,
                     _drawingGraph.EdgeCount);
                 if (_drawingGraph.RootSubgraph.Subgraphs != null && _drawingGraph.RootSubgraph.Subgraphs.Any())
                 {
-                    Console.WriteLine("skipping a graph with clusters");
+                    System.Diagnostics.Debug.WriteLine("skipping a graph with clusters");
                     return;
                 }
                 ProcessGraph();
@@ -2182,11 +2182,11 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                     if (Entities.Count() != oGraph.Nodes.Count + oGraph.Edges.Count) {
                         foreach (var newDrawingNode in oDrawingNodes) {
                             if (!drawingObjectsToIViewerObjects.ContainsKey(newDrawingNode))
-                                Console.WriteLine();
+                                System.Diagnostics.Debug.WriteLine();
                         }
                         foreach (var drawingEdge in oDrawgingEdges) {
                             if (!drawingObjectsToIViewerObjects.ContainsKey(drawingEdge))
-                                Console.WriteLine();
+                                System.Diagnostics.Debug.WriteLine();
                         }
                         foreach (var viewerObject in Entities) {
                             if (viewerObject is VEdge) {
@@ -3288,20 +3288,20 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 for (int iLevel = 0; iLevel < _lgLayoutSettings.Interactor.GetNumberOfLevels() - 1 && tileList.Count > 0; )
                 {
                     GridTraversal grid = new GridTraversal(GeomGraph.BoundingBox, iLevel);
-                    Console.WriteLine("Drawing tiles on level {0} ...", iLevel);
+                    System.Diagnostics.Debug.WriteLine("Drawing tiles on level {0} ...", iLevel);
                     DrawTilesOnLevel(tileList, grid, renderBitmap, w, h, fitFactor * Math.Pow(2, iLevel), iLevel,
                         nextLevelTileList);
                     iLevel++;
                     if (iLevel == _lgLayoutSettings.Interactor.GetNumberOfLevels() - 1) break;
                     tileList = SwapTileLists(tileList, ref nextLevelTileList);
                 }
-                Console.WriteLine("Done");
+                System.Diagnostics.Debug.WriteLine("Done");
                 normalFlow = true;
             }
             catch (Exception e)
             {
-                    Console.WriteLine(e.Message);
-                Console.WriteLine("did not succeeed to save all tiles");
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                System.Diagnostics.Debug.WriteLine("did not succeeed to save all tiles");
             }
             finally
             {

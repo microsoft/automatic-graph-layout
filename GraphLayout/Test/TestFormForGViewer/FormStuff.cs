@@ -125,7 +125,7 @@ namespace TestFormForGViewer {
                 msaglFile = true;
                 return graph;
             } catch (Exception) {
-                Console.WriteLine("cannot read " + fileName);
+                System.Diagnostics.Debug.WriteLine("cannot read " + fileName);
             }
             msaglFile = false;
             return null;
@@ -155,7 +155,7 @@ namespace TestFormForGViewer {
                 gViewer.Graph = graph;
                 if (sw != null) {
                     sw.Stop();
-                    Console.WriteLine("layout done for {0} ms", (double)sw.ElapsedMilliseconds / 1000);
+                    System.Diagnostics.Debug.WriteLine("layout done for {0} ms", (double)sw.ElapsedMilliseconds / 1000);
                 }
             }
         }

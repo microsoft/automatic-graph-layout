@@ -37,7 +37,7 @@ namespace Microsoft.Msagl.DebugHelpers{
                 bformatter.Serialize(stream, new DebugCurveCollection(debugCurves));
             }
             catch (SerializationException e) {
-                Console.WriteLine(e.ToString());
+                System.Diagnostics.Debug.WriteLine(e.ToString());
             }
             stream.Close();
         }
@@ -54,7 +54,7 @@ namespace Microsoft.Msagl.DebugHelpers{
                 dc = bformatter.Deserialize(stream) as DebugCurveCollection;
             }
             catch (SerializationException e) {
-                Console.WriteLine(e.ToString());
+                System.Diagnostics.Debug.WriteLine(e.ToString());
             }
             stream.Close();
             return new List<DebugCurve>(dc.DebugCurvesArray);

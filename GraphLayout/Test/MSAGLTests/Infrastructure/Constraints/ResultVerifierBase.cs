@@ -408,11 +408,11 @@ namespace Microsoft.Msagl.UnitTests.Constraints
                         rect => new DebugCurve(0.1, "green", CurveFactory.CreateRectangle(rect))));
             }
 
-            Console.WriteLine("ShowRectangles: there are {0} variables and {1} clusters",
+            System.Diagnostics.Debug.WriteLine("ShowRectangles: there are {0} variables and {1} clusters",
                     variableDebugCurves.Count, clusterDebugCurves.Count);
             SugiyamaLayoutSettings.ShowDebugCurvesEnumeration(variableDebugCurves.Concat(clusterDebugCurves));
 #else  // TEST_MSAGL
-            Console.WriteLine("-show* options require TEST mode");
+            System.Diagnostics.Debug.WriteLine("-show* options require TEST mode");
 #endif // TEST_MSAGL
         }
 
@@ -430,7 +430,7 @@ namespace Microsoft.Msagl.UnitTests.Constraints
                 rect => new DebugCurve(0.1, "black", CurveFactory.CreateRectangle(rect))));
             SugiyamaLayoutSettings.ShowDebugCurvesEnumeration(debugCurves);
 #else  // TEST_MSAGL
-            Console.WriteLine("-show* options require TEST mode");
+            System.Diagnostics.Debug.WriteLine("-show* options require TEST mode");
 #endif // TEST_MSAGL
         }
     }

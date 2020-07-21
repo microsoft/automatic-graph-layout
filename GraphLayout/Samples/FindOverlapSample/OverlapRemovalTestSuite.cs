@@ -229,12 +229,12 @@ namespace OverlapGraphExperiments
             String graphName = Path.GetFileNameWithoutExtension(graphFilename);
             Graph graph = LoadGraphFile(graphFilename, runLayout);
             if (graph == null) {
-                Console.WriteLine("Failed to load drawing graph: {0}", graphName);
+                System.Diagnostics.Debug.WriteLine("Failed to load drawing graph: {0}", graphName);
                 return;
             }
             if (graph.GeometryGraph == null)
             {
-                Console.WriteLine("Failed to load geometry graph: {0}", graphName);
+                System.Diagnostics.Debug.WriteLine("Failed to load geometry graph: {0}", graphName);
                 return;
             }
             Point[] initPositions = graph.GeometryGraph.Nodes.Select(v => v.Center).ToArray();
@@ -396,7 +396,7 @@ namespace OverlapGraphExperiments
 
             string[] filePaths = Directory.GetFiles(graphsFolder, "*.dot");
             
-            Console.WriteLine(@"total graphs  = {0} ", filePaths.Count());
+            System.Diagnostics.Debug.WriteLine(@"total graphs  = {0} ", filePaths.Count());
             Parallel.ForEach(
                 filePaths,
                 new ParallelOptions {MaxDegreeOfParallelism = numberCores},
@@ -411,7 +411,7 @@ namespace OverlapGraphExperiments
                 else if (t.Value.prismError > t.Value.gtreeError)
                     gtreeWins++;
             }
-            Console.WriteLine(@"total graphs {2} prism wins {0} gtree wins {1}", prismWins, gtreeWins, filePaths.Length);
+            System.Diagnostics.Debug.WriteLine(@"total graphs {2} prism wins {0} gtree wins {1}", prismWins, gtreeWins, filePaths.Length);
             testSuite.Finished();
         }
 

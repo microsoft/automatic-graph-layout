@@ -30,7 +30,7 @@ namespace Microsoft.Msagl.Splines {
                 return null;
 
             // Open the requested file to a stream object
-            Console.WriteLine("\nDeserializing LinkedList from file: {0} ..\n", fileName);
+            System.Diagnostics.Debug.WriteLine("\nDeserializing LinkedList from file: {0} ..\n", fileName);
 
             Stream file = File.Open(fileName, FileMode.Open);
 

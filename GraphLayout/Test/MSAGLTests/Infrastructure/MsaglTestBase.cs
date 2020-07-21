@@ -75,7 +75,7 @@ namespace Microsoft.Msagl.UnitTests {
                 testContext.WriteLine(line);
                 return;
             }
-            Console.WriteLine(line);
+            System.Diagnostics.Debug.WriteLine(line);
         }
 
         public void WriteLine(string line) {

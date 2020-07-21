@@ -520,7 +520,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
 
 #if CACHE_STATS
             cacheStats.Print();
-            Console.WriteLine("  NumFinalBlocks = {0}, MinCacheBlocks = {1}, MaxCacheSize = {2}",
+            System.Diagnostics.Debug.WriteLine("  NumFinalBlocks = {0}, MinCacheBlocks = {1}, MaxCacheSize = {2}",
                                 allBlocks.Count, violationCacheMinBlockCutoff, ViolationCache.MaxConstraints);
 #endif // CACHE_STATS
 
@@ -539,7 +539,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 }
             } // endforeach block
 
-            Console.WriteLine("Num final Blocks: {0}, Min Block Vars: {1}, Max Block Vars: {2}",
+            System.Diagnostics.Debug.WriteLine("Num final Blocks: {0}, Min Block Vars: {1}, Max Block Vars: {2}",
                     allBlocks.Count, minBlockVars, maxBlockVars);
 #endif // BLOCK_STATS
             this.solverSolution.MaxConstraintTreeDepth = this.allConstraints.MaxConstraintTreeDepth;
@@ -723,7 +723,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 if (this.timeoutStopwatch.ElapsedMilliseconds >= this.solverParams.TimeLimit)
                 {
 #if VERBOSE
-                    Console.WriteLine("Solve() aborting due to time limit: max {0}, elapsed {1}",
+                    System.Diagnostics.Debug.WriteLine("Solve() aborting due to time limit: max {0}, elapsed {1}",
                                     solverParams.TimeLimit, timeoutStopwatch.ElapsedMilliseconds);
 #endif // VERBOSE
                     this.solverSolution.TimeLimitExceeded = true;
@@ -735,7 +735,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 if (this.solverSolution.OuterProjectIterations >= this.solverParams.OuterProjectIterationsLimit)
                 {
 #if VERBOSE
-                    Console.WriteLine("Solve() aborting due to max outer iterations: max {0}",
+                    System.Diagnostics.Debug.WriteLine("Solve() aborting due to max outer iterations: max {0}",
                                     solverParams.OuterProjectIterationsLimit);
 #endif // VERBOSE
                     this.solverSolution.OuterProjectIterationsLimitExceeded = true;
@@ -919,7 +919,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 MergeBlocks(constraint);
             }
 #if VERBOSE
-            Console.WriteLine("  -- End ProcessEqualityConstraints -- ");
+            System.Diagnostics.Debug.WriteLine("  -- End ProcessEqualityConstraints -- ");
 #endif // VERBOSE
         }
 
@@ -947,7 +947,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             if (null == maxViolatedConstraint)
             {
 #if VERBOSE
-                Console.WriteLine("Project() found no violations");
+                System.Diagnostics.Debug.WriteLine("Project() found no violations");
 #endif // VERBOSE
                 return false;
             }
@@ -958,11 +958,11 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 Debug.Assert(!maxViolatedConstraint.IsUnsatisfiable, "maxViolatedConstraint should not be unsatisfiable");
                 Debug.Assert(!maxViolatedConstraint.IsEquality, "maxViolatedConstraint should not be equality");
 #if VERBOSE
-                Console.WriteLine("MaxVio: {0}", maxViolatedConstraint);
+                System.Diagnostics.Debug.WriteLine("MaxVio: {0}", maxViolatedConstraint);
 
                 // Write a line in satisfy_inc format to compare:
                 // most violated is: (45=9.73427)+3<=(51=0.456531)(-12.2777) [chop off lm as it's uninitialized in satisfy_inc output]
-                Console.WriteLine("  most violated is: ({0}={1:F6})+{2:F0}<=({3}={4:F6})({5:F6})",
+                System.Diagnostics.Debug.WriteLine("  most violated is: ({0}={1:F6})+{2:F0}<=({3}={4:F6})({5:F6})",
                                 maxViolatedConstraint.Left.Name, maxViolatedConstraint.Left.ActualPos, maxViolatedConstraint.Gap,
                                 maxViolatedConstraint.Right.Name, maxViolatedConstraint.Right.ActualPos, maxViolatedConstraint.Violation);
 #endif // VERBOSE
@@ -993,7 +993,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                     if (cIterations >= this.solverParams.InnerProjectIterationsLimit)
                     {
 #if VERBOSE
-                        Console.WriteLine("PostProject aborting due to max inner iterations: max {0}",
+                        System.Diagnostics.Debug.WriteLine("PostProject aborting due to max inner iterations: max {0}",
                                         solverParams.InnerProjectIterationsLimit);
 #endif // VERBOSE
                         this.solverSolution.InnerProjectIterationsLimitExceeded = true;
@@ -1031,12 +1031,12 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
         {
             if (null != (object)strPrefix)
             {
-                Console.WriteLine("*** {0} ***", strPrefix);
+                System.Diagnostics.Debug.WriteLine("*** {0} ***", strPrefix);
             }
             for (int ii = 0; ii < allBlocks.Count; ++ii)
             {
                 Block block = allBlocks[ii];
-                Console.WriteLine(block);
+                System.Diagnostics.Debug.WriteLine(block);
                 block.DumpState(null);
             }
         }
@@ -1050,7 +1050,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                     cost += Math.Pow((variable.ActualPos * variable.Scale) - variable.DesiredPos, 2);
                 }
             }
-            Console.WriteLine("NumBlocks = {0}, Cost = {1:F5}", allBlocks.Count, cost);
+            System.Diagnostics.Debug.WriteLine("NumBlocks = {0}, Cost = {1:F5}", allBlocks.Count, cost);
         }
 #endif // VERBOSE
 
@@ -1074,19 +1074,19 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 blockFrom = violatedConstraint.Left.Block;
                 distance = -distance;
 #if VERBOSE
-                Console.WriteLine("MergeBlocks merging left ({0}) into right ({1}), distance = {2:F5}",
+                System.Diagnostics.Debug.WriteLine("MergeBlocks merging left ({0}) into right ({1}), distance = {2:F5}",
                                 blockFrom, blockTo, distance);
             }
             else
             {
-                Console.WriteLine("MergeBlocks merging right ({0}) into left ({1}), distance = {2:F5}",
+                System.Diagnostics.Debug.WriteLine("MergeBlocks merging right ({0}) into left ({1}), distance = {2:F5}",
                                 blockFrom, blockTo, distance);
 #endif // VERBOSE
             }
 #if VERBOSE
-            Console.WriteLine("blockFrom: {0}", blockFrom);
+            System.Diagnostics.Debug.WriteLine("blockFrom: {0}", blockFrom);
             blockFrom.DumpState(null /* no prefix */);
-            Console.WriteLine("blockTo: {0}", blockTo);
+            System.Diagnostics.Debug.WriteLine("blockTo: {0}", blockTo);
             blockTo.DumpState(null /* no prefix */);
 #endif // VERBOSE
 
@@ -1108,7 +1108,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             blockTo.Debug_PostMerge(blockFrom);
 
 #if VERBOSE
-            Console.WriteLine("MergeBlocks result: {0}", blockTo);
+            System.Diagnostics.Debug.WriteLine("MergeBlocks result: {0}", blockTo);
             blockTo.DumpState(null /* no prefix */);
 #endif // VERBOSE
 
@@ -1156,7 +1156,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             }
             else
             {
-                Console.WriteLine("SplitBlocks found nothing to split");
+                System.Diagnostics.Debug.WriteLine("SplitBlocks found nothing to split");
             }
 #endif // VERBOSE
 

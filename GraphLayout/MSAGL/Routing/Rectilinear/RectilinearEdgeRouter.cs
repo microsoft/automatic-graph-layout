@@ -631,7 +631,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
 #if TEST_MSAGL && !SILVERLIGHT
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.Debug.WriteLine(System.String)")]
         internal static void ShowPointEnum(IEnumerable<Point> p) {
 // ReSharper disable InconsistentNaming
             const double w0 = 0.1;

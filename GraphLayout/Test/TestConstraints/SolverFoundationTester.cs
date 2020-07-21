@@ -113,7 +113,7 @@ namespace TestConstraints
 
                 if (!Solve())
                 {
-                    Console.WriteLine("Error: SolverFoundation.Solve returned false");
+                    System.Diagnostics.Debug.WriteLine("Error: SolverFoundation.Solve returned false");
                     fRet = false;
                 }
 
@@ -133,12 +133,12 @@ namespace TestConstraints
                     {
                         if (!fViolationSeen)
                         {
-                            Console.WriteLine("Error: H Constraint Violation(s):");
+                            System.Diagnostics.Debug.WriteLine("Error: H Constraint Violation(s):");
                             fViolationSeen = true;
                         }
                         if (TestGlobals.VerboseLevel >= 1)
                         {
-                            Console.WriteLine("    {0} <--> {1} {2} {3:F5}"
+                            System.Diagnostics.Debug.WriteLine("    {0} <--> {1} {2} {3:F5}"
                                             , cstDef.LeftVariableDef.Ordinal, cstDef.RightVariableDef.Ordinal
                                             , cstDef.IsEquality ? "==" : ">=", cstDef.Gap);
                         }
@@ -154,8 +154,8 @@ namespace TestConstraints
             }
             if (TestGlobals.VerboseLevel >= 1)
             {
-                Console.WriteLine("  Completion status: {0}", solution.Quality);
-                Console.WriteLine("  Goal Function value: {0}", goal.ToDouble());
+                System.Diagnostics.Debug.WriteLine("  Completion status: {0}", solution.Quality);
+                System.Diagnostics.Debug.WriteLine("  Goal Function value: {0}", goal.ToDouble());
             }
 
             return fRet;
@@ -289,7 +289,7 @@ namespace TestConstraints
             var result = CheckResult(variableDefs, new ConstraintDef[0], neighborDefs, expectedPositionsX, true /* fCheckResults */);
 
             // This allows inspecting the actual values to examine at greater precision if desired.
-            //Console.WriteLine("Full Pos: var0 {0}, var1 {1}", rgVariableDefs[0].ActualPosX, rgVariableDefs[1].ActualPosX);
+            //System.Diagnostics.Debug.WriteLine("Full Pos: var0 {0}, var1 {1}", rgVariableDefs[0].ActualPosX, rgVariableDefs[1].ActualPosX);
             return result;
         }
 
@@ -488,7 +488,7 @@ namespace TestConstraints
             if (TestGlobals.VerboseLevel >= 2)
             {
                 SfServ.Report report = solution.GetReport();
-                Console.WriteLine(report.ToString());
+                System.Diagnostics.Debug.WriteLine(report.ToString());
             }
             return solution.Quality == SfServ.SolverQuality.Optimal;
         }

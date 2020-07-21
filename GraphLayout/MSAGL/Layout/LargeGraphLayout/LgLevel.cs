@@ -185,7 +185,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                     maxVerticesPerTile = tileStatistic.vertices;
             }
 
-            Console.WriteLine("max rails per tile {0}\n" + "max verts per tile {1}.\n", maxRailsPerTile, maxVerticesPerTile);
+            System.Diagnostics.Debug.WriteLine("max rails per tile {0}\n" + "max verts per tile {1}.\n", maxRailsPerTile, maxVerticesPerTile);
 
             if (maxVerticesPerTile <= NodeQuota && maxRailsPerTile <= RailQuota) return true;
             //if ( maxRailsPerTile <= RailQuota) return true;
@@ -222,7 +222,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         #region Statistics
 
         internal void RunLevelStatistics(IEnumerable<Node> nodes) {
-            Console.WriteLine("running stats");
+            System.Diagnostics.Debug.WriteLine("running stats");
 
             foreach (var rail in _railDictionary.Values)
                 CreateStatisticsForRail(rail);
@@ -248,15 +248,15 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                     maxTotalPerTile = tileStatistic.vertices + tileStatistic.rails;
             }
 
-            Console.WriteLine("level {0}: average rails per tile {1}\n" +
+            System.Diagnostics.Debug.WriteLine("level {0}: average rails per tile {1}\n" +
                               "average verts per tile {2}, total average per tile {1}.\n", ZoomLevel,
                 averageRailsForTile, averageVerticesForTile);
 
-            Console.WriteLine("max rails per tile {0}\n" +
+            System.Diagnostics.Debug.WriteLine("max rails per tile {0}\n" +
                               "max verts per tile {1}, total max per tile {2}.\n", maxRailsPerTile,
                 maxVerticesPerTile, maxTotalPerTile);
 
-            Console.WriteLine("done with stats");
+            System.Diagnostics.Debug.WriteLine("done with stats");
         }
  
 

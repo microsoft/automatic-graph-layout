@@ -126,11 +126,11 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
         double Recursive_DfDv(Variable varToEval, Constraint currentConstraint, int level) {
             var dfdv = varToEval.DfDv;
 #if VERBOSE
-            Console.WriteLine("Recursive_DfDv level {0} initial dfdv = {1}", level, dfdv);
-            Console.WriteLine("    varToEval = " + varToEval);
+            System.Diagnostics.Debug.WriteLine("Recursive_DfDv level {0} initial dfdv = {1}", level, dfdv);
+            System.Diagnostics.Debug.WriteLine("    varToEval = " + varToEval);
             if (0 != level) {
-                Console.WriteLine("    currentConstraint  = " + currentConstraint);
-                Console.WriteLine("    " + ((varToEval == currentConstraint.Right) ? "(LToR)" : "RToL"));
+                System.Diagnostics.Debug.WriteLine("    currentConstraint  = " + currentConstraint);
+                System.Diagnostics.Debug.WriteLine("    " + ((varToEval == currentConstraint.Right) ? "(LToR)" : "RToL"));
             }
 #endif // VERBOSE
 
@@ -139,7 +139,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                     constraint.Lagrangian = Recursive_DfDv(constraint.Right, constraint, level + 1);
                     dfdv += constraint.Lagrangian;
 #if VERBOSE
-                    Console.WriteLine("Recursive_DfDv level {0} LToR cst {1} Lm = {2}, .Left scale = {3}, dfdv = {4}",
+                    System.Diagnostics.Debug.WriteLine("Recursive_DfDv level {0} LToR cst {1} Lm = {2}, .Left scale = {3}, dfdv = {4}",
                             level, constraint.Id, constraint.Lagrangian, constraint.Left.Scale, dfdv);
 #endif // VERBOSE
                 }
@@ -150,7 +150,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                     constraint.Lagrangian = -Recursive_DfDv(constraint.Left, constraint, level + 1);
                     dfdv -= constraint.Lagrangian;
 #if VERBOSE
-                    Console.WriteLine("Recursive_DfDv level {0} RToL cst {1} Lm = {2}, .Right scale = {3}, dfdv = {4}",
+                    System.Diagnostics.Debug.WriteLine("Recursive_DfDv level {0} RToL cst {1} Lm = {2}, .Right scale = {3}, dfdv = {4}",
                             level, constraint.Id, constraint.Lagrangian, constraint.Right.Scale, dfdv);
 #endif // VERBOSE
                 }
@@ -161,7 +161,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 Debug_ClearDfDv(false /* forceFull */);
             }
 #if VERBOSE
-            Console.WriteLine("Recursive_DfDv level {0} final dfdv = {1}", level, dfdv);
+            System.Diagnostics.Debug.WriteLine("Recursive_DfDv level {0} final dfdv = {1}", level, dfdv);
 #endif // VERBOSE
             return dfdv;
         }
@@ -188,7 +188,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             Debug.Assert(0 != this.idDfDv, "idDfDv should not be 0");
 #endif // DEBUG
 #if VERBOSE
-            Console.WriteLine("ComputeDfDv initialVarToEval: [{0}]", initialVarToEval);
+            System.Diagnostics.Debug.WriteLine("ComputeDfDv initialVarToEval: [{0}]", initialVarToEval);
 #endif // VERBOSE
 
             // Compute the derivative of the spanning tree (comprised of our active constraints) at the
@@ -226,7 +226,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 int prevStackCount = this.allConstraints.DfDvStack.Count;
 
 #if VERBOSE
-                Console.WriteLine("ComputeDfDv peeking at node {0}: varDoneEval {1}, {2}Constraint: {3}",
+                System.Diagnostics.Debug.WriteLine("ComputeDfDv peeking at node {0}: varDoneEval {1}, {2}Constraint: {3}",
                                     node, node.VariableDoneEval, node.IsLeftToRight ? "Left" : "Right", node.ConstraintToEval);
 #endif // VERBOSE
 
@@ -290,7 +290,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 // the stack and process it.  If it's the initial node, we've already updated DummyConstraint.Lagrangian
                 // from all child nodes, and it's in the DummyParentNode as well so this will add the final dfdv.
 #if VERBOSE
-                Console.WriteLine("ComputeDfDv: Node has no children or all have been processed");
+                System.Diagnostics.Debug.WriteLine("ComputeDfDv: Node has no children or all have been processed");
 #endif // VERBOSE
                 Debug.Assert(this.allConstraints.DfDvStack.Peek() == node, "DfDvStack.Peek() should be 'node'");
                 this.allConstraints.DfDvStack.Pop();
@@ -303,7 +303,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             } // endwhile stack is not empty
 
 #if VERBOSE
-            Console.WriteLine("ComputeDfDv result: {0:F5}", dummyConstraint.Lagrangian);
+            System.Diagnostics.Debug.WriteLine("ComputeDfDv result: {0:F5}", dummyConstraint.Lagrangian);
 #endif // VERBOSE
 
 #if DEBUG
@@ -328,12 +328,12 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
         void ProcessDfDvLeafNode(DfDvNode node)
         {
 #if VERBOSE
-            Console.WriteLine("  ComputeDfDv depth {0} evaluating {1}Constraint: {2}", 
+            System.Diagnostics.Debug.WriteLine("  ComputeDfDv depth {0} evaluating {1}Constraint: {2}", 
                                 node.Depth, node.IsLeftToRight ? "Left" : "Right", node.ConstraintToEval);
 
             // If pathTargetVariable is non-null, we haven't found it yet, so this constraint is a dead end.
             if (null != this.pathTargetVariable) {
-                Console.WriteLine("    {0} dead end: {1}", node.IsLeftToRight ? "LtoR" : "RtoL", node.ConstraintToEval);
+                System.Diagnostics.Debug.WriteLine("    {0} dead end: {1}", node.IsLeftToRight ? "LtoR" : "RtoL", node.ConstraintToEval);
             }
 #endif // VERBOSE
 
@@ -357,12 +357,12 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 node.Parent.ConstraintToEval.Lagrangian -= node.ConstraintToEval.Lagrangian;
             }
 #if VERBOSE
-            Console.WriteLine("  ComputeDfDv: incremental {0} dfdv = {1:F5}", node.IsLeftToRight ? "LToR" : "RToL", dfdv);
-            Console.WriteLine("    Constraint {0} Lagrangian: {1:F5} (scale when {2} parent = {3:F5})",
+            System.Diagnostics.Debug.WriteLine("  ComputeDfDv: incremental {0} dfdv = {1:F5}", node.IsLeftToRight ? "LToR" : "RToL", dfdv);
+            System.Diagnostics.Debug.WriteLine("    Constraint {0} Lagrangian: {1:F5} (scale when {2} parent = {3:F5})",
                                 node.ConstraintToEval.Id, node.ConstraintToEval.Lagrangian,
                                 node.IsLeftToRight ? "added to" : "subtracted from",
                                 node.IsLeftToRight ? node.ConstraintToEval.Left.Scale : node.ConstraintToEval.Right.Scale);
-            Console.WriteLine("        Parent {0} Lagrangian: {1:F5}",
+            System.Diagnostics.Debug.WriteLine("        Parent {0} Lagrangian: {1:F5}",
                                 node.Parent.ConstraintToEval.Id, node.Parent.ConstraintToEval.Lagrangian);
 #endif // VERBOSE
 
@@ -383,7 +383,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             if (constraint.Violation > this.allConstraints.SolverParameters.GapTolerance)
             {
 #if VERBOSE
-                Console.WriteLine("Violated active constraint encountered: {0}", constraint);
+                System.Diagnostics.Debug.WriteLine("Violated active constraint encountered: {0}", constraint);
 #endif // VERBOSE
                 Debug.Assert(false, "Violated active constraint should never be encountered");
             }
@@ -393,7 +393,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
         void ProcessDfDvLeafNodeDirectly(DfDvNode node)
         {
 #if VERBOSE
-            Console.WriteLine("ComputeDfDv directly processing the following leaf constraint:");
+            System.Diagnostics.Debug.WriteLine("ComputeDfDv directly processing the following leaf constraint:");
 #endif // VERBOSE
             Debug_MarkForCycleCheck(node.ConstraintToEval);
             ProcessDfDvLeafNode(node);
@@ -416,7 +416,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
         void PushDfDvNode(DfDvNode node)
         {
 #if VERBOSE
-            Console.WriteLine("ComputeDfDv depth {0} pushing non-leaf {1}Constraint: {2}",
+            System.Diagnostics.Debug.WriteLine("ComputeDfDv depth {0} pushing non-leaf {1}Constraint: {2}",
                     node.Depth, node.IsLeftToRight ? "Left" : "Right", node.ConstraintToEval);
 #endif // VERBOSE
             Debug_CycleCheck(node.ConstraintToEval);
@@ -520,14 +520,14 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
         {
             if (null != (object)strPrefix)
             {
-                Console.WriteLine("*** {0} ***", strPrefix);
+                System.Diagnostics.Debug.WriteLine("*** {0} ***", strPrefix);
             }
 
             foreach (var variable in this.Variables)
             {
                 foreach (var constraint in variable.LeftConstraints)
                 {
-                    Console.WriteLine(constraint);
+                    System.Diagnostics.Debug.WriteLine(constraint);
                 }
             }
 
@@ -538,7 +538,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 {
                     // 2 spaces lead pad because Var.ToString is called for this or from Cst.ToString.
                     // "-0-: " is a placeholder for the missing "Cst: ".
-                    Console.WriteLine("  -0-: [{0}]", variable);
+                    System.Diagnostics.Debug.WriteLine("  -0-: [{0}]", variable);
                 }
             }
         }
@@ -546,11 +546,11 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
         {
             if (null != (object)strPrefix)
             {
-                Console.WriteLine("*** {0} ***", strPrefix);
+                System.Diagnostics.Debug.WriteLine("*** {0} ***", strPrefix);
             }
             foreach (ConstraintDirectionPair pathItem in constraintPath)
             {
-                Console.WriteLine("{0} Dir={1}{2}", pathItem.Constraint, pathItem.IsForward ? "fwd" : "bwd",
+                System.Diagnostics.Debug.WriteLine("{0} Dir={1}{2}", pathItem.Constraint, pathItem.IsForward ? "fwd" : "bwd",
                                                    (pathItem.Constraint == minLagrangianConstraint) ? " (min Lm)" : "");
             }
         }
@@ -559,9 +559,9 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
         {
             if (null != (object)strPrefix)
             {
-                Console.WriteLine("*** {0} ***", strPrefix);
+                System.Diagnostics.Debug.WriteLine("*** {0} ***", strPrefix);
             }
-            Console.WriteLine(minLagrangianConstraint);
+            System.Diagnostics.Debug.WriteLine(minLagrangianConstraint);
         }
 #endif // VERBOSE
 
@@ -584,13 +584,13 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             this.pathTargetVariable = violatedConstraint.Right;
 
 #if VERBOSE
-            Console.WriteLine("Before Block.Expand ComputeDfDv: {0}", this);
+            System.Diagnostics.Debug.WriteLine("Before Block.Expand ComputeDfDv: {0}", this);
 #endif // VERBOSE
 
             ComputeDfDv(violatedConstraint.Left);
 
 #if VERBOSE
-            Console.WriteLine("After Block.Expand ComputeDfDv: {0}", this);
+            System.Diagnostics.Debug.WriteLine("After Block.Expand ComputeDfDv: {0}", this);
             DumpState(null /* no prefix */);
 #endif // VERBOSE
 
@@ -607,7 +607,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 foreach (ConstraintDirectionPair pathItem in this.constraintPath)
                 {
 #if VERBOSE
-                    Console.WriteLine("ConstraintPath: {0} ({1})", pathItem.Constraint, pathItem.IsForward ? "forward" : "backward");
+                    System.Diagnostics.Debug.WriteLine("ConstraintPath: {0} ({1})", pathItem.Constraint, pathItem.IsForward ? "forward" : "backward");
 #endif // VERBOSE
                     if (pathItem.IsForward 
                             && ((null == minLagrangianConstraint) || (pathItem.Constraint.Lagrangian < minLagrangianConstraint.Lagrangian)))
@@ -638,8 +638,8 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 violatedConstraint.IsUnsatisfiable = true;
                 ++this.allConstraints.NumberOfUnsatisfiableConstraints;
 #if VERBOSE
-                Console.WriteLine("  -- Expand: No forward non-equality edge (minLagrangianConstraint) found, therefore the constraint is unsatisfiable -- ");
-                Console.WriteLine("     Unsatisfiable constraint: {0}", violatedConstraint);
+                System.Diagnostics.Debug.WriteLine("  -- Expand: No forward non-equality edge (minLagrangianConstraint) found, therefore the constraint is unsatisfiable -- ");
+                System.Diagnostics.Debug.WriteLine("     Unsatisfiable constraint: {0}", violatedConstraint);
 #endif // VERBOSE
                 return;
             }
@@ -675,7 +675,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             this.UpdateReferencePos();
 
 #if VERBOSE
-            Console.WriteLine("Block.Expand result: {0}", this);
+            System.Diagnostics.Debug.WriteLine("Block.Expand result: {0}", this);
             DumpState(null /* no prefix */);
 #endif // VERBOSE
         } // end Expand()
@@ -719,13 +719,13 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             // (or close enough) where an Active (i.e. == Gap) constraint would be better made inactive 
             // and the gap grown.
 #if VERBOSE
-            Console.WriteLine("Before Block.Split ComputeDfDv: {0}", this);
+            System.Diagnostics.Debug.WriteLine("Before Block.Split ComputeDfDv: {0}", this);
 #endif // VERBOSE
 
             ComputeDfDv(this.Variables[0]);
 
 #if VERBOSE
-            Console.WriteLine("After Block.Split ComputeDfDv: {0}", this);
+            System.Diagnostics.Debug.WriteLine("After Block.Split ComputeDfDv: {0}", this);
             DumpState(null /* no prefix */);
 #endif // VERBOSE
 
@@ -807,10 +807,10 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 newSplitBlock.DebugVerifyBlockConnectivity();
 
 #if VERBOSE
-                Console.WriteLine("Block.Split Result: {0} {1}", this, newSplitBlock);
-                Console.WriteLine("Old block: {0}", this);
+                System.Diagnostics.Debug.WriteLine("Block.Split Result: {0} {1}", this, newSplitBlock);
+                System.Diagnostics.Debug.WriteLine("Old block: {0}", this);
                 this.DumpState(null /* no prefix */);
-                Console.WriteLine("New block: {0}", newSplitBlock);
+                System.Diagnostics.Debug.WriteLine("New block: {0}", newSplitBlock);
                 newSplitBlock.DumpState(null /* no prefix */);
 #endif // VERBOSE
             }
@@ -821,7 +821,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 // Return NULL so Solver.SplitBlocks knows we didn't split.
                 newSplitBlock = null;
 #if VERBOSE
-                Console.WriteLine("Block.Split Result: all variables would be moved, so skipping");
+                System.Diagnostics.Debug.WriteLine("Block.Split Result: all variables would be moved, so skipping");
                 this.DumpState(null /* no prefix */);
 #endif // VERBOSE
             }
@@ -975,9 +975,9 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             RecurseGetConnectedVariables(lstVars, varToEval, varDoneEval);
 
 #if VERBOSE
-            Console.WriteLine("GetConnectedVariables result:");
+            System.Diagnostics.Debug.WriteLine("GetConnectedVariables result:");
             foreach (var variable in lstVars) {
-                Console.WriteLine("  {0}", variable);
+                System.Diagnostics.Debug.WriteLine("  {0}", variable);
             }
 #endif // VERBOSE
         }

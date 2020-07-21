@@ -163,9 +163,9 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.ConjugateGradient 
             
             for (int i = 0; i < rowLength; i++) {
                 for (int j = 0; j < colLength; j++) {
-                    Console.Write(string.Format("{0} \t",matrix[i,j].ToString("0.00")));
+                    System.Diagnostics.Debug.Write(string.Format("{0} \t",matrix[i,j].ToString("0.00")));
                 }
-                Console.Write(Environment.NewLine+Environment.NewLine);
+                System.Diagnostics.Debug.Write(Environment.NewLine+Environment.NewLine);
             }
         }
     }

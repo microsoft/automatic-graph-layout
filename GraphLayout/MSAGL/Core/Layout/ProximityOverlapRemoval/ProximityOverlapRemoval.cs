@@ -392,7 +392,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             int realCrossings = CountCrossingsWithRTree(nodeSizes);
             crossingsOverTime.Add(realCrossings);
             if (currentIteration%10 == 0)
-                Console.WriteLine("Scanline: {0}, Crossings: {1}", scanlinePhase, numCrossings);
+                System.Diagnostics.Debug.WriteLine("Scanline: {0}, Crossings: {1}", scanlinePhase, numCrossings);
 #endif
 
             if (numCrossings == 0) return true;
@@ -546,7 +546,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
                                                ts.Hours, ts.Minutes, ts.Seconds,
                                                ts.Milliseconds/10);
-            Console.WriteLine(elapsedTime, "RunTime");
+            System.Diagnostics.Debug.WriteLine(elapsedTime, "RunTime");
         }
 
 #endif

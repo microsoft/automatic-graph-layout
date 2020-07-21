@@ -217,7 +217,7 @@ namespace Microsoft.Msagl.Layout.Incremental {
         /// Remove a specific lock on node position.  Once you remove it, you'll have to call AddLock again to create a new one if you want to lock it again.
         /// </summary>
         /// <param name="lockPosition">the LinkedListNode returned by the AddLock method above</param>
-        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "FastIncrementalLayoutSettings"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "RemoveLock")]
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.Debug.WriteLine(System.String)"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "FastIncrementalLayoutSettings"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "RemoveLock")]
         public void RemoveLock(LockPosition lockPosition) {
             ValidateArg.IsNotNull(lockPosition, "lockPosition");
             if (lockPosition.listNode != null) {

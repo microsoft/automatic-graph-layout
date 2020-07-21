@@ -42,7 +42,7 @@ namespace DebugCurveViewer {
         static void Main(string[] args) {
 #if DEBUG
             if (args.Length < 1){
-                Console.WriteLine("no file name was given");
+                System.Diagnostics.Debug.WriteLine("no file name was given");
                 return;
             }
             var debugCurves = GetDebugCurves(args[0]);
@@ -59,13 +59,12 @@ namespace DebugCurveViewer {
                 file = File.Open(fileName, FileMode.Open);
                 var debugCurveCollection = formatter.Deserialize(file) as DebugCurveCollection;
                 if (null == debugCurveCollection) {
-                    Console.WriteLine("cannot read debugcurves from " + fileName);
+                    System.Diagnostics.Debug.WriteLine("cannot read debugcurves from " + fileName);
                     return null;
                 }
                 return debugCurveCollection.DebugCurvesArray;
             } catch (System.IO.FileNotFoundException ex) {
-                Console.WriteLine();
-                Console.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
             } catch (Exception) {
                 throw;
             } finally {

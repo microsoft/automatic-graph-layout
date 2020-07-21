@@ -198,7 +198,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                             pathvertices = dijkstra.MSAGLAstarShortestPath(g.VList, g.EList, g.DegList,
                                 nodeToId[edge.Source], nodeToId[edge.Target], g.NumOfnodes);
                             if(pathvertices.Count ==0 )
-                                System.Diagnostics.Debug.WriteLine("missing path!");
+                                Console.WriteLine("missing path!");
                             g.pathList.Add(edge, pathvertices);
                             ssp.Add(edge, dijkstra.Edgelist);                          
                         }
@@ -2712,7 +2712,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             }
             bool hasCycles = graph.HasCycles(rootPoint);
             if (hasCycles)
-                System.Diagnostics.Debug.WriteLine("BAD SP Tree at: " + s);
+                Console.WriteLine("BAD SP Tree at: " + s);
             return !hasCycles;
         }
 
@@ -3277,7 +3277,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     Rail rail = _lgData.Levels[iLevel].FindRail(path[i], path[i + 1]);
                     if (rail == null)
                     {
-                        System.Diagnostics.Debug.WriteLine("Rail not found for trajectory!");
+                        Console.WriteLine("Rail not found for trajectory!");
                     }
                 }
             }
