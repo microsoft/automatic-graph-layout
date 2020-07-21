@@ -159,15 +159,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             PathVisibilityGraph = combinatorialNudger.PathVisibilityGraph;
         }
 
-        /*
-                [Conditional("DEBUG")]
-                void CheckPathsForSwitchbacks() {
-                    foreach(var p in Paths)
-                        CheckForSwitchbacks(p.PathPoints.ToArray());
-                }
-        */
-
-
         Directions NudgingDirection { get; set; }
 
         #region debugging
@@ -934,54 +925,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             StaircaseRemover.RemoveStaircases(Paths, HierarchyOfObstacles);
             
         }
-        /*
-        void RemoveStaircasesFromPath(Path path) {
-
-            var points = (Point[]) path.PathPoints;
-            if (points.Length <= 4) return;
-            int i = FindStaircase(points);
-            if (i == -1) return;
-            var linkedList = new LinkedList<Point>(points);
-            var node = linkedList.First;
-            for(int j=0;j<i;j++)
-                node = node.Next; //getting to the i-th node
-
-            RemoveStaircaseOnNode(node);
-            node = node.Next;
-            while(true) {
-                node = FindStaircaseAfterNode(node);
-                if (node == null) break;
-                RemoveStaircaseOnNode(node);
-                node = node.Next;
-            }
-        }
-
-        LinkedListNode<Point> FindStaircaseAfterNode(LinkedListNode<Point> n) {
-            do {
-                var nn = n.Next;
-                var nnn = nn.Next;
-                var nnnn = nnn.Next;
-                if (nnn.Next == null)
-                    return null;
-                if (IsStaircase(n.Value, nn.Value, nnn.Value, nnnn.Value))
-                    return n;
-                n = nn;
-            } while (true);
-        }
-
-        bool IsStaircase(Point a, Point b, Point c, Point d) {
-
-            return false;
-        }
-
-        void RemoveStaircaseOnNode(LinkedListNode<Point> node) {
-            throw new NotImplementedException();
-        }
-
-        int FindStaircase(Point[] points) {
-            throw new NotImplementedException();
-        }
-         */
 
         internal static Dictionary<Port, Shape> MapPortsToShapes(IEnumerable<Shape> listOfShapes) {
             var portToShapes = new Dictionary<Port, Shape>();

@@ -154,26 +154,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         void SortAllPointsWithoutPivot() {
             comparer = new HullPointComparer(pivot);
             Array.Sort(hullPoints, comparer);
-//            if (true) {
-//                var list = new List<DebugCurve>();
-//                var d = 3.0;
-//                list.Add(new DebugCurve(100, 0.001, "magenta", El(ref d, pivot)));
-//                foreach (var hullPoint in hullPoints) {
-//                    list.Add(new DebugCurve(100,0.001, hullPoint.Deleted ? "blue" : "green", El(ref d, hullPoint.Point)));
-//                }
-//                LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(list);
-//            }
         }
-    
-
-/*
-        Ellipse El(ref double d, Point p) {
-            var ret= new Ellipse(d, d, p);
-            d -= 0.01;
-            return ret;
-        }
-*/
-
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object,System.Object)")]
         internal static Polyline CreateConvexHullAsClosedPolyline(IEnumerable<Point> points) {

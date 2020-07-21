@@ -143,13 +143,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             var closestPoint = Point.ClosestPointAtLineSegment(center, a, b);
             var where = Curve.PointRelativeToCurveLocation(closestPoint, lgNodeInfo.BoundaryOnLayer);
             return where == PointLocation.Inside;
-            /*
-            LayoutAlgorithmSettings.ShowDebugCurves(
-              new Microsoft.Msagl.DebugHelpers.DebugCurve(100, 0.1, "blue", lgNodeInfo.BoundaryOnLayer),
-              new DebugHelpers.DebugCurve(100, 0.1, "red", new LineSegment(a, b)));
-          
-            return true; // the intersection is not at the end of the [a,b]
-             */
         }
 
         List<VisibilityVertex> GetNeighbors(VisibilityVertex v) {

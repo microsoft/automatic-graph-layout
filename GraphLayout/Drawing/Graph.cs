@@ -454,8 +454,6 @@ namespace Microsoft.Msagl.Drawing {
 
         void InitAttributes() {
             attr = new GraphAttr();
-            //     CreateSelectedNodeAttr();
-            //     CreateSelectedEdgeAttr();
         }
 
 
@@ -475,7 +473,7 @@ namespace Microsoft.Msagl.Drawing {
         /// underlying graph with pure geometry info
         /// </summary>
         public GeometryGraph GeometryGraph {
-            get { return geomGraph; // != null ? geomGraph : geomGraph = CreateLayoutGraph.Create(this);
+            get { return geomGraph;
             }
             set { geomGraph = value; }
         }

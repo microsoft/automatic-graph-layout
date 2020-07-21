@@ -138,32 +138,6 @@ namespace Microsoft.Msagl.Layout.Layered {
                 }
                 
             }
-
-            #region old code
-            /*
-             int noGainSteps = 0;
-             for (int i = 0; i < NumberOfSweeps && noGainSteps <= MaxNumberOfNoGainSteps && !measure.Perfect(); i++) {
-                 SweepDown(false);
-                 SweepUp(false);
-                 ConstrainedOrderMeasure newMeasure = CreateMeasure();
-                 if (newMeasure < measure) {
-                     noGainSteps = 0;
-                     Ordering.CloneLayers(LayerArrays.Layers, ref yetBestLayers);
-                     measure = newMeasure;
-                 } else {
-                     noGainSteps++;
-                     RestoreState();
-                 }
-             }
-             
-             SwitchXPositions();
-             SweepUpWithoutChangingLayerOrder(true);
-             
-             SwitchXPositions();
-             SweepDownWithoutChangingLayerOrder(true);
-             AverageXPositions();
-              */
-            #endregion
         }
 
         void SetXPositions() {

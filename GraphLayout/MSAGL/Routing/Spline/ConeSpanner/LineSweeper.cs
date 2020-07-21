@@ -484,13 +484,10 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
             // ReSharper restore UnusedMember.Local
             foreach (var s in rightConeSides) {
                 coneSideComparer. SetOperand(s);
-                if (!leftConeSides.Contains(s.Cone.LeftSide))
-                    Console.WriteLine("bug");
             }
             foreach (var s in leftConeSides) {
                 coneSideComparer.SetOperand(s);
                 if (!rightConeSides.Contains(s.Cone.RightSide)) {
-                    Console.WriteLine("bug");
                     PrintOutRightSegTree();
                     PrintOutLeftSegTree();
 
@@ -639,8 +636,6 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
                                                     coneRightSide.Start, ConeRightSideDirection, out intersection) &&
                         SegmentIsNotHorizontal(intersection, obstacleSideVertex.Point)) {
                         EnqueueEvent(CreateRightIntersectionEvent(coneRightSide, intersection, obstacleSideVertex));
-                        //                   Console.WriteLine("right intersection");
-                        //    Show(new Ellipse(3, 3, intersection));
                     }
                 }
             }
@@ -823,16 +818,9 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
 #if TEST_MSAGL
                 if (b == null) {
                     PrintOutRightSegTree();
-                    Console.WriteLine(coneSide);
-                   // ShowBothTrees(new DebugCurve("red", CurveFactory.CreateDiamond(3, 4, coneSide.Start)));
-                    // GeometryGraph gg = CreateGraphFromObstacles(Obstacles);
-                    //gg.Save("c:\\tmp\\bug1");
                 }
 #endif
             }
-            // the following should not happen if the containment hierarchy is correct.  
-            // If containment is not correct it still should not result in a fatal error, just a funny looking route.
-            // Debug.Assert(b != null);
         }
 
         void RemoveSegFromLeftTree(ConeSide coneSide) {
@@ -853,7 +841,6 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
 #if TEST_MSAGL
                 if (b == null) {
                     PrintOutLeftSegTree();
-                    Console.WriteLine(coneSide);
                     ShowLeftTree(new Ellipse(2, 2, coneSide.Start));
                 }
 #endif

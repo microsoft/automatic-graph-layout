@@ -44,14 +44,10 @@ namespace Microsoft.Msagl.Miscellaneous.ConstrainedSkeleton
 
         public void SaveInputFilePoly(string path)
         {
-
-            Console.WriteLine("\nInitializing Cdt input");
-
             IndexPoints();
             InitSegments();
 
             Debug.Assert(TopologyForCallingTriangleIsCorrect());
-            Console.WriteLine("\nWriting Cdt input");
 
             using (var file = new StreamWriter(path))
             {
@@ -95,40 +91,6 @@ namespace Microsoft.Msagl.Miscellaneous.ConstrainedSkeleton
                 file.WriteLine(tuple.Value + 1 + " " + tuple.Key.X + " " + tuple.Key.Y);
             }
         }
-
-        /*
-        public void SaveInputToInputGeomtery()
-        {
-            CheckTopology();
-
-            InitPoints();
-            InitSegments();
-            InputGeometry inputGeometry = new InputGeometry();
-            file.WriteLine("# vertices");
-            file.WriteLine(_pointIndices.Count + " 2 0 0");
-            foreach (var tuple in _pointIndices)
-            {
-                file.WriteLine(tuple.Value + 1 + " " + tuple.Key.X + " " + tuple.Key.Y);
-            }
-            file.WriteLine("# segments");
-            file.WriteLine(_segments.Count + " 0");
-            int i = 1;
-            foreach (var seg in _segments)
-            {
-                file.WriteLine(i + " " + (seg.Item1 + 1) + " " + (seg.Item2 + 1));
-                i++;
-            }
-
-            file.WriteLine("# holes");
-            //file.WriteLine("0");
-
-            file.WriteLine(_holes.Count);
-            for (int j = 0; j < _holes.Count; j++)-
-            {
-                file.WriteLine((j + 1) + " " + _holes[j].X + " " + _holes[j].Y);
-            }
-        }
-        */
 
         public void LoadOutputFileNode(string path)
         {
@@ -199,10 +161,6 @@ namespace Microsoft.Msagl.Miscellaneous.ConstrainedSkeleton
             if (v0 != v1)
             {
                 VisibilityGraph.AddEdge(v0, v1);
-            }
-            else
-            {
-                Console.WriteLine("avoiding creating a small visibility edge");
             }
         }
 
@@ -299,29 +257,9 @@ namespace Microsoft.Msagl.Miscellaneous.ConstrainedSkeleton
                 double width = badSegs.Contains(seg) ? 3 : 1;
                 l.Add(new DebugCurve(100, width, color, ls));
             }
-            //foreach (var p in indexToPoints)
-            //{
-            //    l.Add(new DebugCurve(200, 0.1, "black", CurveFactory.CreateCircle(0.1, p)));
-            //}
             LayoutAlgorithmSettings.ShowDebugCurves(l.ToArray());
         }
 #endif
-
-        /*
-                void AddSegsHandlingOverlaps(SymmetricTuple<int> seg, RTree<Point> tree, Point[] indexToPoints) {
-                    var overlaps = GetPointsOverlappingSeg(seg, tree,indexToPoints);
-                    if (overlaps.Count <= 2) {
-                        _segments.Insert(seg);
-                        return;
-                    }
-                    Point ep0 = indexToPoints[seg.A];
-                    AddSegment(ep0, overlaps[1]);
-                    AddSegment(overlaps[overlaps.Count - 2], indexToPoints[seg.B]);
-                    if (overlaps.Count > 3) {
-                        AddSegsHandlingOverlaps(new SymmetricTuple<int>(_pointIndices[overlaps[1]],_pointIndices[overlaps[overlaps.Count - 2]]), tree, indexToPoints);
-                    }
-                }
-        */
 
         List<Point> GetPointsOverlappingSeg(SymmetricTuple<int> seg, RTree<Point> tree, Point[] indexToPoints)
         {
@@ -336,12 +274,6 @@ namespace Microsoft.Msagl.Miscellaneous.ConstrainedSkeleton
             var vtsOverlapping = vts.Where(p => Point.DistToLineSegment(p, p0, p1, out t) < 1e-5).ToList();
 
             vtsOverlapping = vtsOverlapping.OrderBy(p => (p - p0).Length).ToList();
-            if (vtsOverlapping.Count > 2)
-            {
-                Console.WriteLine("overlapping points");
-                foreach (var v in vtsOverlapping)
-                    Console.WriteLine(v);
-            }
             return vtsOverlapping;
         }
 
@@ -411,7 +343,6 @@ namespace Microsoft.Msagl.Miscellaneous.ConstrainedSkeleton
                 {
                     if (exeProcess == null)
                     {
-                        Console.WriteLine(triangleMessage);
                         Environment.Exit(1);
                     }
                     exeProcess.WaitForExit();
@@ -436,7 +367,6 @@ namespace Microsoft.Msagl.Miscellaneous.ConstrainedSkeleton
             const string exePath = "triangle.exe";
             string arguments = outPath + ".poly -c -q10 -S100000000";
             LaunchTriangleExe(exePath, arguments);
-            Console.WriteLine("loading output of triangle exe");
             LoadOutputFileNode(outPath + ".1.node");
             LoadOutputFileSides(outPath + ".1.ele");
             File.Delete(outPath + ".poly");

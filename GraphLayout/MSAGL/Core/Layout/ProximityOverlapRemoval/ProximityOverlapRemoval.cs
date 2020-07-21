@@ -306,12 +306,6 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
         /// <returns></returns>
         public void RemoveOverlaps() {
             if (_nodes == null || _nodes.Length == 0) return;
-#if DEBUG
-//            if (DebugMode) {
-//                Console.WriteLine("Showing graph on startup.");
-//                LayoutAlgorithmSettings.ShowGraph(Graph);
-//            }
-#endif
             // init some things
             InitNodePositionsAndBoxes(Settings, _nodes, out nodePositions, out nodeSizes);
             InitStressWithGraph(StressSolver, _nodes, nodePositions);
@@ -356,8 +350,6 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             double nodeBoxArea = nodeSizes.Sum(r => r.Width*r.Height);
             var boundingBox = GetCommonRectangle(nodeSizes, nodePositions);
             double boundingBoxArea = boundingBox.Width*boundingBox.Height;
-            Console.WriteLine("Needed maxIterat: {0}", iter);
-            Console.WriteLine("BBox Area Ratio: {0}", boundingBoxArea/nodeBoxArea);
 //            nodePositions = null;
 //            nodeBoxes = null;
 #if DEBUG && !SHARPKIT
@@ -558,41 +550,6 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
         }
 
 #endif
-
-        /// <summary>
-        /// Scale the graph, such that the average edge length corresponds to a predefined size.
-        /// </summary>
-         void DoInitialScaling() {
-            return;
-//            var edges = _nodes.SelectMany(n => n.OutEdges).ToArray();
-//            if (edges.Length == 0) return;
-
-//            var avgEdgeLength = AvgEdgeLength(edges);
-
-//            double goalLength;
-//            if (Settings.InitialScaling == InitialScaling.Inch72Pixel)
-//                goalLength = 72;
-//            else if (Settings.InitialScaling == InitialScaling.AvgNodeSize)
-//                goalLength = nodeSizes.Average(box => (box.Width + box.Height)/2);
-//            else return;
-
-//            double scaling = goalLength/avgEdgeLength;
-//#if DEBUG
-//            Console.WriteLine("AvgEdgeLength Scaling Method: {0}, ScaleFactor={1:F2}", Settings.InitialScaling, scaling);
-//#endif
-//            for (int j = 0; j < nodePositions.Length; j++) {
-//                nodePositions[j] *= scaling;                
-//            }
-
-
-//            if (Settings.WorkInInches) {
-//                //change to inches, to match with GraphViz algorithm
-//                for (int i = 0; i < nodePositions.Length; i++) {
-//                    nodePositions[i] /= 72;
-//                    nodeSizes[i] /= 72;
-//                }
-//            }
-        }
 
         internal static Point[] InitNodePositionsAndBoxes(OverlapRemovalSettings overlapRemovalSettings,
                                                           Node[] nodes, out Point[] nodePositions,

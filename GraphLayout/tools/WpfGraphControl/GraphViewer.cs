@@ -710,9 +710,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
             get { return _drawingGraph; }
             set {
                 _drawingGraph = value;
-                if (_drawingGraph != null)
-                    Console.WriteLine("starting processing a graph with {0} nodes and {1} edges", _drawingGraph.NodeCount,
-                        _drawingGraph.EdgeCount);
                 ProcessGraph();
             }
         }
@@ -827,7 +824,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
                                                   CancelToken);
                     if (MsaglFileToSave != null) {
                         _drawingGraph.Write(MsaglFileToSave);
-                        Console.WriteLine("saved into {0}", MsaglFileToSave);
                         Environment.Exit(0);
                     }
                 } catch (OperationCanceledException) {
@@ -845,70 +841,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
             SetInitialTransform();
         }
-
-/*
-        void SubscribeToChangeVisualsEvents() {
-            //            foreach(var cluster in drawingGraph.RootSubgraph.AllSubgraphsDepthFirstExcludingSelf())
-            //                cluster.Attr.VisualsChanged += AttrVisualsChanged;
-            foreach (var edge in drawingGraph.Edges) {
-                DrawingEdge edge1 = edge;
-                edge.Attr.VisualsChanged += (a, b) => AttrVisualsChangedForEdge(edge1);
-            }
-
-            foreach (var node in drawingGraph.Nodes) {
-                Drawing.Node node1 = node;
-                node.Attr.VisualsChanged += (a, b) => AttrVisualsChangedForNode(node1);
-            }
-
-        }
-*/
-
-/*
-        void AttrVisualsChangedForNode(Drawing.Node node) {
-            IViewerObject viewerObject;
-            if (drawingObjectsToIViewerObjects.TryGetValue(node, out viewerObject)) {
-                var vNode = (VNode) viewerObject;
-                if (vNode != null)
-                    vNode.Invalidate();
-            }
-        }
-*/
-
-
-        
-
-//        void SetupTimerOnViewChangeEvent(object sender, EventArgs e) {
-//            SetupRoutingTimer();
-//        }
-
-
-        /*
-                void TestCorrectness(GeometryGraph oGraph, Set<Drawing.Node> oDrawingNodes, Set<DrawingEdge> oDrawgingEdges) {
-                    if (Entities.Count() != oGraph.Nodes.Count + oGraph.Edges.Count) {
-                        foreach (var newDrawingNode in oDrawingNodes) {
-                            if (!drawingObjectsToIViewerObjects.ContainsKey(newDrawingNode))
-                                Console.WriteLine();
-                        }
-                        foreach (var drawingEdge in oDrawgingEdges) {
-                            if (!drawingObjectsToIViewerObjects.ContainsKey(drawingEdge))
-                                Console.WriteLine();
-                        }
-                        foreach (var viewerObject in Entities) {
-                            if (viewerObject is VEdge) {
-                                Debug.Assert(oDrawgingEdges.Contains(viewerObject.DrawingObject));
-                            } else {
-                                if (viewerObject is VNode) {
-                                    Debug.Assert(oDrawingNodes.Contains(viewerObject.DrawingObject));
-                                } else {
-                                    Debug.Fail("expecting a node or an edge");
-                                }
-                            }
-
-                        }
-
-                    }
-                }
-        */
 
         /// <summary>
         /// creates a viewer node
@@ -939,51 +871,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
             else _graphCanvas.Dispatcher.Invoke(() => _graphCanvas.Children.Clear());
         }
 
-        /*
-                void StartLayoutCalculationInThread() {
-                    PushGeometryIntoLayoutGraph();
-                    graphCanvas.RaiseEvent(new RoutedEventArgs(LayoutStartEvent));
-
-                    layoutThread =
-                        new Thread(
-                            () =>
-                            LayoutHelpers.CalculateLayout(geometryGraphUnderLayout, graph.LayoutAlgorithmSettings));
-
-                    layoutThread.Start();
-
-                    //the timer monitors the thread and then pushes the data from layout graph to the framework
-                    layoutThreadCheckingTimer.IsEnabled = true;
-                    layoutThreadCheckingTimer.Tick += LayoutThreadCheckingTimerTick;
-                    layoutThreadCheckingTimer.Interval = new TimeSpan((long) 10e6);
-                    layoutThreadCheckingTimer.Start();
-                }
-        */
-
-        /*
-                void LayoutThreadCheckingTimerTick(object sender, EventArgs e) {
-                    if (layoutThread.IsAlive)
-                        return;
-
-                    if (Monitor.TryEnter(layoutThreadCheckingTimer)) {
-                        if (layoutThreadCheckingTimer.IsEnabled == false)
-                            return; //somehow it is called on more time after stopping and disabling
-                        layoutThreadCheckingTimer.Stop();
-                        layoutThreadCheckingTimer.IsEnabled = false;
-
-                        TransferLayoutDataToWpf();
-
-                        graphCanvas.RaiseEvent(new RoutedEventArgs(LayoutEndEvent));
-                        if (LayoutComplete != null) 
-                            LayoutComplete(this, new EventArgs());               
-                    }
-                }
-        */
-
-        //        void TransferLayoutDataToWpf() {
-        //            PushDataFromLayoutGraphToFrameworkElements();
-        //            graphCanvas.Visibility = Visibility.Visible;
-        //            SetInitialTransform();
-        //        }
         /// <summary>
         /// zooms to the default view
         /// </summary>
@@ -1057,35 +944,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
             SetTransformWithoutRaisingViewChangeEvent(scale, dx, dy);
                        
         }
-
-
-/*
-        void FixArrowheads(LgLayoutSettings lgSettings) {
-            const double arrowheadRatioToBoxDiagonal = 0.3;
-            var maximalArrowheadLength = lgSettings.MaximalArrowheadLength();
-            if (lgSettings.OGraph == null) return;
-            foreach (Edge geomEdge in lgSettings.OGraph.Edges) {
-
-                var edge = (DrawingEdge) geomEdge.UserData;
-                var vEdge = (VEdge) drawingObjectsToIViewerObjects[edge];
-
-                if (geomEdge.EdgeGeometry.SourceArrowhead != null) {
-                    var origLength = vEdge.EdgeAttrClone.ArrowheadLength;
-                    geomEdge.EdgeGeometry.SourceArrowhead.Length =
-                        Math.Min(Math.Min(origLength, maximalArrowheadLength),
-                                 geomEdge.Source.BoundingBox.Diagonal*arrowheadRatioToBoxDiagonal);
-                }
-                if (geomEdge.EdgeGeometry.TargetArrowhead != null) {
-                    var origLength = vEdge.EdgeAttrClone.ArrowheadLength;
-                    geomEdge.EdgeGeometry.TargetArrowhead.Length =
-                        Math.Min(Math.Min(origLength, maximalArrowheadLength),
-                                 geomEdge.Target.BoundingBox.Diagonal*arrowheadRatioToBoxDiagonal);
-                }
-            }
-        }
-*/
-
-
 
         public Rectangle ClientViewportMappedToGraph {
             get {

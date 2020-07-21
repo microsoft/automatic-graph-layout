@@ -53,7 +53,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             nodeZoomLevelCalculator.RunAfterFlow(lgData);
             lgData.SortedLgNodeInfos = nodeZoomLevelCalculator.SortedLgNodeInfos;
             lgData.LevelNodeCounts = nodeZoomLevelCalculator.LevelNodeCounts;
-            //AssignEdges(lgData, nodeZoomLevelCalculator);
         }
 
         internal static void SetNodeZoomLevelsAndRouteEdgesOnLevels(

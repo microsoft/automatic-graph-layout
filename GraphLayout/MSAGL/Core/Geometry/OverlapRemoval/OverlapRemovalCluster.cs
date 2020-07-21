@@ -263,8 +263,8 @@ namespace Microsoft.Msagl.Core.Geometry
          void AddEvents(OverlapRemovalNode node, List<Event> events)
         {
             // Add/subtract only half the padding so they meet in the middle of the padding.
-            events.Add(new Event(true /* fForOpen */, node, node.OpenP - (NodePaddingP / 2)));
-            events.Add(new Event(false /* fForOpen */, node, node.CloseP + (NodePaddingP / 2)));
+            events.Add(new Event(true, node, node.OpenP - (NodePaddingP / 2)));
+            events.Add(new Event(false, node, node.CloseP + (NodePaddingP / 2)));
         }
 
         // This is internal rather than  so Test_OverlapRemoval can see it.

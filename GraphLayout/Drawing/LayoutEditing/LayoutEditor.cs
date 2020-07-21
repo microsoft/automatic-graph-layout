@@ -383,14 +383,6 @@ namespace Microsoft.Msagl.Drawing {
             }            
         }
 
-/*
-        bool IsUnderCluster(GeometryNode node, Cluster cluster) {
-            foreach(var parent in node.AllClusterAncestors)
-                if (parent == cluster) return true;
-            return false;
-        }
-*/
-
 
         void ReportBeforeChange(IViewerObject viewerObject) {
             if (CurrentUndoAction==null || CurrentUndoAction.ContainsAffectedObject(viewerObject)) return;
@@ -514,7 +506,6 @@ namespace Microsoft.Msagl.Drawing {
 
         static SmoothedPolyline CreateUnderlyingPolyline(Core.Layout.Edge geomEdge) {
             var ret = SmoothedPolyline.FromPoints(CurvePoints(geomEdge));
-            //SetCoefficientsCorrecty(ret, geomEdge.Curve);
             return ret;
         }
 

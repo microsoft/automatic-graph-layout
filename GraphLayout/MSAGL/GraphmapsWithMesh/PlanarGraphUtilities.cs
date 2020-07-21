@@ -13,8 +13,6 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
         public static void TransformToGeometricPlanarGraph(Tiling g)
         {
-            Console.WriteLine("Transforming into a planar graph.");
-
             for (int nodeIndex = 0; nodeIndex < g.NumOfnodes; nodeIndex++)
             {
                 var sortedEdgeList = new Edge[g.DegList[nodeIndex]];
@@ -45,7 +43,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                         if (g.EList[neighbor, neighborIndex2].NodeId == nodeIndex) consistent = true;
 
                     if (!consistent)
-                        Console.WriteLine("Beware! Graph is Not Consistent!");
+                        System.Diagnostics.Debug.WriteLine("Beware! Graph is Not Consistent!");
                 }
             }
         }
@@ -105,12 +103,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
          */
         public static void RemoveLongEdgesFromThinFaces(Tiling gPlanar)
         {
-            Console.WriteLine("Removing Thin Faces");
-            //bool searchFurther = true;
-            //while (searchFurther)
-            //{
             //you need to handle face one after another - since you are changing the adjacency list
-            //searchFurther = false;
             List<Face> faces = new List<Face>();
             for (int nodeIndex = 0; nodeIndex < gPlanar.NumOfnodes; nodeIndex++)
             {
@@ -120,15 +113,13 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                     Vertex tailVertex = gPlanar.VList[nodeIndex];
                     Vertex headVertex = gPlanar.VList[gPlanar.EList[nodeIndex, neighborIndex].NodeId];
                     List<Vertex> boundary = GetRightIncidentFace(gPlanar, tailVertex, headVertex, out degenerate);
-                    if (degenerate) continue;// Console.WriteLine("Found a degenerate face!");
+                    if (degenerate) continue; // Found a degenerate face!
 
                     //check whether if all the boundary vertices are junctions
                     if (AllBoundaryVerticesAreJunctions(gPlanar, boundary) == false) continue;
 
                     faces.Add(new Face(boundary));
-                    //if (searchFurther) break;
                 }
-                //if (searchFurther) break;
             }
             foreach (var face in faces)
             {
@@ -264,7 +255,6 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 removeB = oldVertex;
                 longestLength = length;
             }
-            //Console.WriteLine("Removing an edge of length "+ longestLength);
             //remove the longest edge
             return gPlanar.RemoveEdge(removeA.Id, removeB.Id);
         }

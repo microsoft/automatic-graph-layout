@@ -23,7 +23,6 @@ namespace Editing {
         readonly GViewer gViewer = new GViewer();
         readonly ToolTip toolTip = new ToolTip();
         readonly Image treeImage;
-        //Microsoft.Msagl.Drawing.DrawingLayoutEditor drawingLayoutEditor;
 
         /// <summary>
         /// 

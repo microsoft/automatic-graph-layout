@@ -621,53 +621,7 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
             return InCone(pi, a, b, c) && InCircle(pi, a, b, c);
         }
 
-//      /// <summary>
-//      /// Testing that s in inside of the circumcircle of (p,q,r). 
-//      /// The good explanation of this test is in 
-//      /// "Guibas, Stolfi,"Primitives for the Manipulation of General Subdivisions and the Computation of Voronoi Diagrams
-//      /// 
-//      /// </summary>
-//      /// <param name="s"></param>
-//      /// <param name="p"></param>
-//      /// <param name="q"></param>
-//      /// <param name="r"></param>
-//      /// <param name="ccc"></param>
-//      /// <returns></returns>
-//        public static bool InCircle0(CdtSite s, CdtSite p, CdtSite q, CdtSite r, double ccc) {
-//          Debug.Assert(Point.GetTriangleOrientationWithNoEpsilon(p.Point, q.Point, r.Point) == TriangleOrientation.Counterclockwise);
-//          /*
-//             * det(p.x,p.y, p*p,1
-//             *     q.x,q.y, q*q,1
-//             *     r.x,r.y, r*r,1
-//             *     s.x,s.y, s*s,1) > 0
-//             */
-//
-//          var a = p.Point.X;
-//          var b = p.Point.Y;
-//          var c = a*a + b*b;
-//          var d = q.Point.X;
-//          var e = q.Point.Y;
-//          var f = d*d + e*e;
-//          var g = r.Point.X;
-//          var h = r.Point.Y;
-//          var k = g*g + h*h;
-//          var l = s.Point.X;
-//          var m = s.Point.Y;
-//          var n = l*l + m*m;
-//
-//
-//
-//          double ddd = ccc - ((a - d) * (h * n - k * m) + (e - b) * (g * n - k * l) + (c - f) * (g * m - h * l) +
-//                                   (g - l) * (b * f - c * e) + (m - h) * (a * f - c * d) + (k - n) * (a * e - b * d));
-//          if (Math.Abs(ddd) > diff) {
-//              diff = ddd;
-//              Console.WriteLine(diff);
-//          }
-//          return (a - d)*(h*n - k*m) + (e - b)*(g*n - k*l) + (c - f)*(g*m - h*l) +
-//                 (g - l)*(b*f - c*e) + (m - h)*(a*f - c*d) + (k - n)*(a*e - b*d) > ApproximateComparer.Tolerance;
-//      }
-
-      /// <summary>
+        /// <summary>
         /// Testing that d in inside of the circumcircle of (a,b,c). 
         /// The good explanation of this test is in 
         /// "Guibas, Stolfi,"Primitives for the Manipulation of General Subdivisions and the Computation of Voronoi Diagrams

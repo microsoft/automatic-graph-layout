@@ -157,15 +157,14 @@ namespace Microsoft.Msagl.Drawing
                 return;
             //need to remove these hecks. TODO
             const double yScaleAdjustment = 1.5;
-  //          const double scaleFromGdiToSvg = 1.5;
 
             var x = label.Center.X - label.Width / 2;
             var y = label.Center.Y + label.Height / (2 * yScaleAdjustment);
             WriteStartElement("text");
             WriteAttribute("x", x);
             WriteAttribute("y", y);
-            WriteAttribute("font-family", "Arial");//AttrSanitizer(label.FontName)); 
-            WriteAttribute("font-size", "16"); //label.FontSize * scaleFromGdiToSvg);
+            WriteAttribute("font-family", "Arial");
+            WriteAttribute("font-size", "16");
             WriteAttribute("fill", MsaglColorToSvgColor(label.FontColor));
             xmlWriter.WriteRaw(NodeSanitizer(label.Text));
             WriteEndElement();
@@ -215,7 +214,6 @@ namespace Microsoft.Msagl.Drawing
             WriteAttribute("height", box.Height);
             WriteAttribute("id", "svg2");
             WriteAttribute("version", "1.1");
-            // WriteEndElement();
             WriteStartElement("g");
             WriteAttribute("transform", String.Format("translate({0},{1})", -box.Left, -box.Bottom));
         }
@@ -694,20 +692,8 @@ namespace Microsoft.Msagl.Drawing
         const double DoubleCircleOffsetRatio = 0.9;
         const double ArrowAngle = 25; //degrees
 
-
-        //private void WriteLabelSize(Size size) {
-        //    WriteStartElement(Tokens.LabelSize);
-        //    WriteStringElement(Tokens.Width, size.Width);
-        //    WriteStringElement(Tokens.Height, size.Height);
-        //    WriteEndElement();
-        //}
-
         static void WriteStyles(IEnumerable<Style> styles)
         {
-            //            WriteStartElement(Tokens.Styles);
-            //            foreach (Style s in styles)
-            //                WriteStringElement(Tokens.Style, s);
-            //            WriteEndElement();
         }
 
         void WriteEndElement()

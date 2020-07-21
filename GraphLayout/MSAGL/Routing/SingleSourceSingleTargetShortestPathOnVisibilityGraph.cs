@@ -118,16 +118,6 @@ namespace Microsoft.Msagl.Routing
         {
             var len = l.Length + penalty;
             var c = u.Distance + len;
-            /*
-            if (_visGraph.visVertexToId[l.Source] < _g.N || _visGraph.visVertexToId[l.Target] < _g.N)
-            {
-                if (!(l.Source == _source || l.Target == _source || l.Source == _target || l.Target == _target))
-                {
-                    c = 500;
-                }
-            }
-            */
-            // (v != _source && _visGraph.PreviosVertex(v) == null)
 
             if (v != _source && _visGraph.PreviosVertex(v) == null)
             {
@@ -157,16 +147,6 @@ namespace Microsoft.Msagl.Routing
         {
             var len = l.Length;
             var c = u.Distance + len;
-            /*
-            if (_visGraph.visVertexToId[l.Source] < _g.N || _visGraph.visVertexToId[l.Target] < _g.N)
-            {
-                if (!(l.Source == _source || l.Target == _source || l.Source == _target || l.Target == _target))
-                {
-                    c = 500;
-                }
-            }
-            */
-            // (v != _source && _visGraph.PreviosVertex(v) == null)
 
             if (v != _source && _visGraph.PreviosVertex(v) == null)
             {

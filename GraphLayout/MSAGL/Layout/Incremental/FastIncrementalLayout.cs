@@ -479,7 +479,6 @@ namespace Microsoft.Msagl.Layout.Incremental {
             if (settings.ApplyForces) {
                 ComputeForces();
             }
-            //System.Console.WriteLine("Iteration = {0}, Energy = {1}, StepSize = {2}", settings.maxIterations - settings.RemainingIterations, energy, stepSize);
             double lEnergy = 0;
             foreach (FiNode v in nodes) {
                 lEnergy += v.force.LengthSquared;
@@ -495,13 +494,9 @@ namespace Microsoft.Msagl.Layout.Incremental {
                 dx /= v.stayWeight;
                 v.Center += dx;
             }
-            //System.Console.WriteLine("Iteration = {0}, Energy = {1}, StepSize = {2}", settings.maxIterations - settings.RemainingIterations, energy, stepSize);
-            //UpdateStepSize(energy, energy0);
             SatisfyConstraints();
             return lEnergy;
         }
-
-        // end VerletIntegration()
 
         void ResetForceVectors() {
             foreach (var v in nodes) {
@@ -565,7 +560,6 @@ namespace Microsoft.Msagl.Layout.Incremental {
                 nodes[i].Center = y0[i] + dx;
             }
             UpdateStepSize(energy0);
-            //System.Console.WriteLine("energy0={0}, energy={1}, progress={2}, stepsize={3}", energy0, energy, progress, stepSize);
             SolveSeparationConstraints();
 
             return this.nodes.Sum(v => (v.Center - v.previousCenter).LengthSquared);

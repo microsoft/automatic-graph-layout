@@ -93,8 +93,6 @@ namespace Microsoft.Msagl.Drawing {
             msaglEdge.TargetPort = drawingEdge.TargetPort;
 
             if (drawingEdge.Label != null) {
-// && graph.LayoutAlgorithmSettings is SugiyamaLayoutSettings &&
-                //                   graph.LayoutAlgorithmSettings.routingMode == false){
                 msaglEdge.Label = drawingEdge.Label.GeometryLabel;
                 msaglEdge.Label.GeometryParent = msaglEdge;
             }

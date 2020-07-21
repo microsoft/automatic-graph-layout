@@ -11,13 +11,6 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         ///// <param name="hint">will return Double.MaxVal if Newton iterations fail</param>
         ///// <param name="closestPointParam"></param>
         internal static double ClosestPoint(ICurve curve, Point a, double hint, double low, double high) {
-            /*
-              * Let F=(c(t)-a)^2. We try to bring to zero the first derivative of F, Ft. Denote it by f(t).
-              * Applying the Newton method we see that dt=-f(t)/der(f(t)
-              * The first derivative of F, f, has the form (c-a)*ct. We discarded a multiplier here.
-              * The second derivative has the form ct*ct+(c-a)*ctt
-              * The new t becomes t-dt
-              */
             const int numberOfIterationsMax = 5;
             const int numberOfOverShootsMax = 5;
             double t = hint;

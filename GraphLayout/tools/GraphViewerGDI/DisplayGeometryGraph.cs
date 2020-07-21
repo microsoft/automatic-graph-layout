@@ -376,7 +376,6 @@ namespace Microsoft.Msagl.GraphViewerGdi{
                 float viewerX;
                 float viewerY;
                 gviewer.ScreenToSource(e.Location.X, e.Location.Y, out viewerX, out viewerY);
-                Console.WriteLine("{0} {1}", viewerX, viewerY);
             }
         }
 

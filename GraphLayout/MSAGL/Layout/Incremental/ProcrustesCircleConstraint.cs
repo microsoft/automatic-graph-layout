@@ -119,32 +119,6 @@ namespace Microsoft.Msagl.Layout.Incremental {
         private static Point SingularValueDecomposition(Point[] X, out Point[] P, out Point[] Q) {
             Point[] XX = matrixProduct(X, X);
             Point l = eigenSystem2(XX, out Q);
-            /*
-            Point[] Q0;
-            Point l0 = eigenSystem3(XX, out Q0);
-
-            Q0 = new Point[] { Q0[1], Q0[0] };
-            Q0 = Transpose(Q0);
-            Q0 = new Point[] { -Q0[0], -Q0[1] };
-            double tmp = l0.X;
-            l0.X = l0.Y;
-            l0.Y = tmp;
-            if (!cmpEigenSystem(Q0, Q, l0, l)) {
-                System.Console.Write("XX=");
-                printMatrix(XX);
-                System.Console.Write("Q0=");
-                printMatrix(Q0);
-                System.Console.WriteLine("l0=" + l0 + ";");
-                System.Console.Write("Q=");
-                printMatrix(Q);
-                System.Console.WriteLine("l=" + l + ";");
-            }
-            l = l0;
-            Q = Q0;
-            System.Console.Write("Q=");
-            printMatrix(Q);
-            System.Console.WriteLine("l=" + l + ";");
-             */
             Point s = new Point(Math.Sqrt(l.X), Math.Sqrt(l.Y));
             P = matrixProductNoTranspose(X, Q);
             P = matrixProductNoTranspose(P,new Point[]{new Point(1.0/s.X,0), new Point(0,1.0/s.Y)});
@@ -178,16 +152,6 @@ namespace Microsoft.Msagl.Layout.Incremental {
             Point[] P, Q;
             SingularValueDecomposition(C, out P, out Q);
             Point[] T = matrixProductNoTranspose(Q, Transpose(P));
-            /*
-            Point[] XY = matrixProduct(X, Y);
-            Point[] XYT = matrixProductNoTranspose(XY, T);
-            Point[] YY = matrixProduct(Y, Y);
-            double s = XYT[0].X + XYT[1].Y;
-                   s /= YY[0].X + YY[1].Y;
-            for (int i = 0; i < nodes.Count; ++i) {
-                Y[i] = Y[i] * s;
-            }
-             */
             i = 0;
             foreach (var v in nodes) {
                 v.Center = barycenter + MatrixTimesVector(T, Y[i++]);
@@ -209,14 +173,6 @@ namespace Microsoft.Msagl.Layout.Incremental {
             double s;
             Point t;
             FindTransform(X, Y, out T, out s, out t);
-            //System.Console.WriteLine("X=");
-            //printMatrix(X);
-            //System.Console.WriteLine("Y=");
-            //printMatrix(Y);
-            //System.Console.WriteLine("T=");
-            //printMatrix(T);
-            //System.Console.WriteLine("s="+s);
-            //System.Console.WriteLine("t="+t);
             Point[] TT = Transpose(T);
             double displacement = 0;
             for (int i = 0; i < n; ++i)
@@ -245,43 +201,6 @@ namespace Microsoft.Msagl.Layout.Incremental {
         private static Point[] Transpose(Point[] X) {
             return new Point[] { new Point(X[0].X, X[1].X), new Point(X[0].Y, X[1].Y) };
         }
-        //// <summary>
-        //// 
-        //// </summary>
-        //public static void Test1() {
-        //    Random rand = new Random();
-        //    Point[] X = new Point[] { new Point(rand.NextDouble(), rand.NextDouble()), new Point(rand.NextDouble(), rand.NextDouble()) };
-        //    System.Console.Write("X="); printMatrix(X);
-        //    Point[] P, Q;
-        //    Point s = SingularValueDecomposition(X, out P, out Q);
-        //    Point[] S = new Point[] { new Point(s.X, 0), new Point(0, s.Y) };
-        //    System.Console.Write("S="); printMatrix(S);
-        //    System.Console.Write("Q="); printMatrix(Q);
-        //    System.Console.Write("P="); printMatrix(P);
-        //    Point[] R = matrixProductNoTranspose(P, S);
-        //    System.Console.Write("PS="); printMatrix(R);
-        //    R = matrixProductNoTranspose(R, Transpose(Q));
-        //    System.Console.Write("R="); printMatrix(R);
-        //    Debug.Assert(Math.Abs(R[0].X - X[0].X) < 0.01);
-        //    Debug.Assert(Math.Abs(R[0].Y - X[0].Y) < 0.01);
-        //    Debug.Assert(Math.Abs(R[1].X - X[1].X) < 0.01);
-        //    Debug.Assert(Math.Abs(R[1].Y - X[1].Y) < 0.01);
-        //}
-        //// <summary>
-        //// 
-        //// </summary>
-  //      public static void Test() {
-  //          double[,] XX = {{-0.342439, -0.815696}, {-0.772753, -0.807363}, {-0.264356, 
-  //0.847908}, {-0.524064, 0.826169}, {0.615021, -0.762655}};
-  //          List<Microsoft.Msagl.Node> vs = new List<Microsoft.Msagl.Node>();
-  //          for (int i = 0; i < XX.Length/2; ++i) {
-  //              var v = new Microsoft.Msagl.Node();
-  //              v.Center = new Point(XX[i,0], XX[i,1]);
-  //              vs.Add(v);
-  //          }
-  //          ProcrustesCircleConstraint c = new ProcrustesCircleConstraint(vs);
-  //          c.Project();
-  //      }  
         ///<summary>
         ///</summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Body"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String,System.Object,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.Write(System.String)")]

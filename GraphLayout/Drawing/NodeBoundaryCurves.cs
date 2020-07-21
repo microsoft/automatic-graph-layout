@@ -65,7 +65,6 @@ namespace Microsoft.Msagl.Drawing
       
         default:
           {
-            //  Console.WriteLine("creating ellipse for shape {0}",nodeAttr.Shape);
             return new Ellipse(
               new P2(width / 2, 0), new P2(0, height / 2), new P2());
           }

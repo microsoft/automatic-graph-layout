@@ -60,20 +60,10 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
         void UpdateLayerArrays() {
-#if TEST_MSAGL
-            //    int initialCrossingNumber = Ordering.GetCrossingsTotal(properLayeredGraph, layerArrays);
-#endif
-
             //algo stuff here
             Dictionary<Point, List<int>> ordering = CreateInitialOrdering();
             ordering = BuildOrdering(ordering);
             RestoreLayerArrays(ordering);
-
-#if TEST_MSAGL
-//            int finalCrossingNumber = Ordering.GetCrossingsTotal(properLayeredGraph, layerArrays);
-//            double gain = (initialCrossingNumber > 0 ? (double)(initialCrossingNumber - finalCrossingNumber) / initialCrossingNumber * 100.0 : 0);
-//            Console.WriteLine("Crossing number reduced on {0:0.00}% (initial:{1}, final:{2})", gain, initialCrossingNumber, finalCrossingNumber);
-#endif
         }
 
         Dictionary<Point, List<int>> CreateInitialOrdering() {

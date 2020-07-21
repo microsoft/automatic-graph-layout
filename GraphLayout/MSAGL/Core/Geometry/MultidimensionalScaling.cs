@@ -345,7 +345,6 @@ namespace Microsoft.Msagl.Core.Geometry {
                         wSum[i] += w[i][j];
                 }
             }
-            System.Console.Write("distance scaling ");
             for (int c = 0; c < iter; c++) {
                 for (int i = 0; i < n; i++) {
                     double xNew = 0;
@@ -446,13 +445,6 @@ namespace Microsoft.Msagl.Core.Geometry {
             SpectralDecomposition(c, out u1, out lambda1, out u2, out lambda2);
             lambda1 = Math.Sqrt(Math.Abs(lambda1));
             lambda2 = Math.Sqrt(Math.Abs(lambda2));
-            
-            /*
-            for (int i = 0; i < u1.Length; i++) {
-                u1[i] *= lambda1;
-                u2[i] *= lambda2;
-            }
-            */
 
             // place non-pivots by weighted barycenter
             x=new double[d[0].Length];

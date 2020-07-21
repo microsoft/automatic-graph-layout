@@ -20,21 +20,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
         const int InitialHeapCapacity = 16;
 
 
-        //indexing for A starts from 1
-
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        //internal void Clear()
-        //{
-        //    if(heapSize>0)
-        //    {
-        //        for(int i=0;i<cache.Length;i++)
-        //            this.cache[i]=null;
-
-        //        heapSize=0; 
-        //    }
-        //}
-
-
         // ReSharper disable InconsistentNaming
         GenericHeapElementWithTimestamp<T>[] A;//array of heap elements
         // ReSharper restore InconsistentNaming
@@ -171,50 +156,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
                 i >>= 1;
             }
         }
-
-        ///<summary>
-        ///</summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        //        public static void Test() {
-        //            Timer nm = new Timer();
-        //            var bound = 1000000;
-        //            nm.Start();
-        //            {
-        //                var q = new BinaryHeapPriorityQueue(bound + 1);
-        //                Random random = new Random();
-        //                for (int i = 0; i < bound; i++) {
-        //                    q.Enqueue(i, random.NextDouble());
-        //                }
-        //                for (int i = 0; i < bound; i++) {
-        //                    q.DecreasePriority(i, -random.NextDouble());
-        //                }
-        //
-        //                while (q.IsEmpty() == false) {
-        //                    q.Dequeue();
-        //                }
-        //
-        //            }
-        //            nm.Stop();
-        //            Console.WriteLine(nm.Duration);
-        //            nm.Start();
-        //            {
-        //                var q = new GenericBinaryHeapPriorityQueue<int>();
-        //                Random random = new Random();
-        //                for (int i = 0; i < bound; i++) {
-        //                    q.Enqueue(i, random.NextDouble());
-        //                }
-        //                for (int i = 0; i < bound; i++) {
-        //                    q.DecreasePriority(i, -random.NextDouble());
-        //                }
-        //
-        //                while (q.IsEmpty() == false) {
-        //                    q.Dequeue();
-        //                }
-        //
-        //            }
-        //            nm.Stop();
-        //            Console.WriteLine(nm.Duration);
-        //}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void Test() {

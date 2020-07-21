@@ -252,18 +252,12 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
             // ReSharper restore UnusedMember.Local
             foreach (var s in rightConeSides) {
                 coneSideComparer.SetOperand(s);
-                if (!leftConeSides.Contains(s.Cone.LeftSide))
-                    Console.WriteLine("bug");
             }
             foreach (var s in leftConeSides) {
                 coneSideComparer.SetOperand(s);
                 if (!rightConeSides.Contains(s.Cone.RightSide)) {
-                    Console.WriteLine("bug");
                     PrintOutRightSegTree();
                     PrintOutLeftSegTree();
-
-                    //                    ShowLeftTree();
-                    //                    ShowRightTree();
                 }
             }
         }
@@ -421,8 +415,6 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
                                                     coneRightSide.Start, ConeRightSideDirection, out intersection) &&
                         SegmentIsNotHorizontal(intersection, obstacleSideVertex.Point)) {
                         EnqueueEvent(CreateRightIntersectionEvent(coneRightSide, intersection, obstacleSideVertex));
-                        //                   Console.WriteLine("right intersection");
-                        //    Show(new Ellipse(3, 3, intersection));
                     }
                 }
             }
@@ -593,7 +585,6 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
 #if TEST_MSAGL
                 if (b == null) {
                     PrintOutRightSegTree();
-                    Console.WriteLine(coneSide);
                     ShowRightTree(CurveFactory.CreateDiamond(3, 4, coneSide.Start));
                     GeometryGraph gg = CreateGraphFromObstacles(Obstacles);
                     GeometryGraphWriter.Write(gg, "c:\\tmp\\bug1");
@@ -622,7 +613,6 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
 #if TEST_MSAGL
                 if (b == null) {
                     PrintOutLeftSegTree();
-                    Console.WriteLine(coneSide);
                     ShowLeftTree(new Ellipse(2, 2, coneSide.Start));
                 }
 #endif

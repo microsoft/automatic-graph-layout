@@ -16,18 +16,6 @@ namespace Microsoft.Msagl.Core.GraphAlgorithms {
         static internal IEnumerable<IEdge> GetFeedbackSetWithConstraints(BasicGraph<TEdge> graph, Set<IntPair> constraints) {
             if (constraints == null || constraints.Count == 0) {
                 return GetFeedbackSet(graph);
-                /*
-                var reg = GetFeedbackSetFromGraph(graph);
-                var con= GetFeedbackSetWithConstraints(graph, new HashSet<Tuple<int, int>>());
-                int i = 0;
-                foreach (var z in reg)
-                    i++;
-                foreach (var z in con)
-                    i--;
-                Console.WriteLine("Eades {0} by {1}", i>0?"wins":"loses", i);
-                return con;
-                 */
-
             } else
                 return GetFeedbackSetWithConstraintsLocal(graph, constraints);
         }

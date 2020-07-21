@@ -71,13 +71,6 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             _selected = new int[g.NumOfnodes + 1];
             Random r1 = new Random();
 
-            //List<int> list = new List<int>();
-
-            //for (int i = 1; i < 255; i++)
-            //{
-            //list.Add(i);
-            //}
-
 
             //generate points in random
             while (n > 0)
@@ -86,10 +79,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 if (_selected[temp] == 1 || (g.VList[temp].XLoc + g.VList[temp].YLoc) % 2 == 1) continue;
                 Pt[n] = new WeightedPoint(g.VList[temp].XLoc, g.VList[temp].YLoc, 0);
                 _selected[temp] = 1;
-                //compute weight based on point density                    
-                //temp2 = r2.Next(1, list.Count);
-                //pt[n] = new Point(g.vList[temp].x_loc, g.vList[temp].y_loc, (int) list.ElementAt(temp2));
-                //list.RemoveAt(temp2);
+                //compute weight based on point density
                 Pt[n].GridPoint = temp;
                 g.VList[temp].Weight = Pt[n].Weight;
                 n--;
@@ -107,21 +97,11 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
             for (int i = 1; i <= NumPoints; i++)
             {
-                Console.WriteLine(Pt[i].Weight);
                 g.VList[Pt[i].GridPoint].Weight = Pt[i].Weight;
                 g.VList[Pt[i].GridPoint].ZoomLevel = Pt[i].ZoomLevel;
                 pointMap[Pt[i].X, Pt[i].Y] = i;
 
             }
-
-            //random shuffle
-            //int p1;
-            //for (int i = 1; i <= 10000; i++)
-            //{
-            //    p1 = r1.Next(1, num_points);
-            //    pt[p1].weight = r2.Next(10, 255);
-            //    g.vList[pt[p1].grid_point].weight = pt[p1].weight;
-            //}
         }
         public void AssignWeight(WeightedPoint[] pt, int numPoints, int rad)
         {

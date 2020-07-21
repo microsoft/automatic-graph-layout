@@ -640,11 +640,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             double d = (w1 - w0)/(arr.Length - 1);
             var l = new List<DebugCurve>();
             for (int i = 0; i < arr.Length - 1; i++) {
-                Console.WriteLine(arr[i]);
                 l.Add(new DebugCurve(100, w0 + i*d, "blue", new LineSegment(arr[i], arr[i + 1])));
             }
-            Console.WriteLine(arr.Last());
-            Console.WriteLine("================");
 
 
             LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(l);
@@ -663,69 +660,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             //Nudger.NudgePaths(edgePaths, CornerFitRadius, this.ObstacleTree.GetAllPrimaryObstacles().Select(obs => obs.VisibilityPolyline), ancestorSets, RemoveStaircases);
              
         }
-        /*
-        MetroGraphData CreateMetroData() {
-            return new MetroGraphData(EdgeGeometries.ToArray(),BuildLooseTree(), BuildTightTree(), GetRoutingWithGroups() , 
-                EdgeLooseEnterable(), EdgeTightEnterable());
-        }
-
-        Dictionary<EdgeGeometry, Set<Polyline>> EdgeLooseEnterable() {
-            var ret = new Dictionary<EdgeGeometry, Set<Polyline>>();
-            foreach (var edgeGeometry in EdgeGeometries) {
-                ret[edgeGeometry] = GetEdgeEnterableLoosePolylines(edgeGeometry);
-            }
-            return ret;
-        }
-
-        Set<Polyline> GetEdgeEnterableLoosePolylines(EdgeGeometry edgeGeometry) {                    
-            return PortEnterableLoose(edgeGeometry.SourcePort) + PortEnterableLoose(edgeGeometry.TargetPort);
-        }
-
-        Set<Polyline> PortEnterableLoose(Port port) {
-            var obstPort = PortManager.FindObstaclePort(port);
-            var obst = obstPort.Obstacle;
-            var ret = new Set<Polyline>();
-            ret.Insert(obst.PaddedPolyline);
-            ret.InsertRange(AncestorsSets[obst.InputShape].Select(sh=>ShapeToObstacleMap[sh].LooseVisibilityPolyline));
-            return ret;
-        }
-
-        Set<Polyline> PortEnterableTight(Port port)
-        {
-            var obstPort = PortManager.FindObstaclePort(port);
-            var obst = obstPort.Obstacle;
-            var ret = new Set<Polyline>();
-            ret.Insert(obst.PaddedPolyline);
-            ret.InsertRange(AncestorsSets[obst.InputShape].Select(sh => ShapeToObstacleMap[sh].PaddedPolyline));
-            return ret;
-        }
-
-        Dictionary<EdgeGeometry, Set<Polyline>> EdgeTightEnterable() {
-        var ret = new Dictionary<EdgeGeometry, Set<Polyline>>();
-            foreach (var edgeGeometry in EdgeGeometries) {
-                ret[edgeGeometry] = GetEdgeEnterableTightPolylines(edgeGeometry);
-            }
-            return ret;
-
-        }
-
-        Set<Polyline> GetEdgeEnterableTightPolylines(EdgeGeometry edgeGeometry) {
-            return PortEnterableTight(edgeGeometry.SourcePort) + 
-                PortEnterableTight(edgeGeometry.TargetPort);
-        }
-
-        bool GetRoutingWithGroups() {
-            throw new NotImplementedException();
-        }
-
-        RectangleNode<Polyline> BuildTightTree() {
-            throw new NotImplementedException();
-        }
-
-        RectangleNode<Polyline> BuildLooseTree() {
-            throw new NotImplementedException();
-        }
-        */
         private bool removeStaircases = true;
         readonly List<EdgeGeometry> selfEdges = new List<EdgeGeometry>();
 

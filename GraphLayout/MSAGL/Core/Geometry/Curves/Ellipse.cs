@@ -283,9 +283,8 @@ namespace Microsoft.Msagl.Core.Geometry.Curves{
                 return false;
 
             double d1 = ParallelogramNodeOverICurve.DistToSegm(seg[start + d*(n - 1)], s, e);
-            //double d1d1 = seg.d1(start) * seg.d1(end);
 
-            return d1 <= eps; // && d1d1 > 0;
+            return d1 <= eps;
         }
 
         static ParallelogramNodeOverICurve CreateParallelogramNodeForCurveSeg(Ellipse seg) {

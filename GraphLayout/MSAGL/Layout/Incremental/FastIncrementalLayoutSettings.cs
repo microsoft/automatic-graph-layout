@@ -225,7 +225,7 @@ namespace Microsoft.Msagl.Layout.Incremental {
                 try {
                     locks.Remove(lockPosition.listNode);
                 } catch (InvalidOperationException e) {
-                    Console.WriteLine("Problem in FastIncrementalLayoutSettings.RemoveLock "+e.Message);
+                    System.Diagnostics.Debug.WriteLine("Problem in FastIncrementalLayoutSettings.RemoveLock "+e.Message);
                 }
                 lockPosition.listNode = null;
             }
