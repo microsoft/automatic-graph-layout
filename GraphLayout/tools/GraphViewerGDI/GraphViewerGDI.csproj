@@ -1,21 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{725CD2CB-CF37-414E-A5A6-F1D87D4D6EDE}</ProjectGuid>
+    <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Msagl.GraphViewerGdi</RootNamespace>
     <AssemblyName>Microsoft.Msagl.GraphViewerGdi</AssemblyName>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -30,30 +19,18 @@
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
-    <TargetFrameworkProfile />
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;TEST_MSAGL</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGdi.xml</DocumentationFile>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
@@ -62,9 +39,6 @@
     <OutputPath>bin\Retail\</OutputPath>
     <DefineConstants>CODE_ANALYSIS</DefineConstants>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>bin\Retail\Microsoft.Msagl.GraphViewerGdi.xml</DocumentationFile>
@@ -73,35 +47,23 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Setup|AnyCPU' ">
     <OutputPath>bin\Setup\</OutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants></DefineConstants>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <DocumentationFile>bin\Setup\Microsoft.Msagl.GraphViewerGdi.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Surface Graph Viewer - Release|AnyCPU' ">
     <OutputPath>bin\Surface Graph Viewer - Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
     <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Surface Graph Viewer - Debug|AnyCPU' ">
     <OutputPath>bin\Surface Graph Viewer - Debug\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
     <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
@@ -115,9 +77,6 @@
     <OutputPath>bin\DebugSurface\</OutputPath>
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS;DEBUGGLEE</DefineConstants>
     <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGDI.XML</DocumentationFile>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
@@ -126,9 +85,6 @@
     <DefineConstants>TRACE;DEBUG;DEBUGGLEE</DefineConstants>
     <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
@@ -137,33 +93,20 @@
     <OutputPath>bin\DebugDevTrace\</OutputPath>
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS;DEBUGGLEE;TEST_MSAGL;DEVTRACE</DefineConstants>
     <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGDI.XML</DocumentationFile>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;TEST_MSAGL</DefineConstants>
     <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGDI.XML</DocumentationFile>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
     <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
@@ -174,10 +117,7 @@
     <DocumentationFile>bin\Retail\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
     <RunCodeAnalysis>true</RunCodeAnalysis>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
@@ -185,37 +125,25 @@
     <OutputPath>bin\x86\Setup\</OutputPath>
     <DocumentationFile>bin\Setup\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Surface Graph Viewer - Release|x86'">
     <OutputPath>bin\x86\Surface Graph Viewer - Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
     <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Surface Graph Viewer - Debug|x86'">
     <OutputPath>bin\x86\Surface Graph Viewer - Debug\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
     <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Surface Graph Viewer|x86'">
     <OutputPath>bin\x86\Debug Surface Graph Viewer\</OutputPath>
-    <PlatformTarget>x86</PlatformTarget>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
@@ -224,9 +152,6 @@
     <OutputPath>bin\x86\DebugSurface\</OutputPath>
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS;DEBUGGLEE</DefineConstants>
     <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGDI.XML</DocumentationFile>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
@@ -235,9 +160,6 @@
     <DefineConstants>TRACE;DEBUG;DEBUGGLEE</DefineConstants>
     <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
@@ -246,32 +168,20 @@
     <OutputPath>bin\x86\DebugDevTrace\</OutputPath>
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS;DEBUGGLEE;TEST_MSAGL;DEVTRACE</DefineConstants>
     <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGDI.XML</DocumentationFile>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;TEST_MSAGL</DefineConstants>
     <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGDI.XML</DocumentationFile>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
     <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
@@ -281,10 +191,7 @@
     <DocumentationFile>bin\Retail\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
     <RunCodeAnalysis>true</RunCodeAnalysis>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
@@ -292,37 +199,25 @@
     <OutputPath>bin\x64\Setup\</OutputPath>
     <DocumentationFile>bin\Setup\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Surface Graph Viewer - Release|x64'">
     <OutputPath>bin\x64\Surface Graph Viewer - Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
     <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Surface Graph Viewer - Debug|x64'">
     <OutputPath>bin\x64\Surface Graph Viewer - Debug\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
     <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Surface Graph Viewer|x64'">
     <OutputPath>bin\x64\Debug Surface Graph Viewer\</OutputPath>
-    <PlatformTarget>x64</PlatformTarget>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
@@ -331,9 +226,6 @@
     <OutputPath>bin\x64\DebugSurface\</OutputPath>
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS;DEBUGGLEE</DefineConstants>
     <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGDI.XML</DocumentationFile>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
@@ -342,9 +234,6 @@
     <DefineConstants>TRACE;DEBUG;DEBUGGLEE</DefineConstants>
     <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
@@ -353,123 +242,72 @@
     <OutputPath>bin\x64\DebugDevTrace\</OutputPath>
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS;DEBUGGLEE;TEST_MSAGL;DEVTRACE</DefineConstants>
     <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGDI.XML</DocumentationFile>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core">
+    <Reference Update="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BBNode.cs" />
-    <Compile Include="CMouseEventArgs.cs" />
-    <Compile Include="DEdge.cs" />
-    <Compile Include="DLabel.cs" />
-    <Compile Include="DGraph.cs" />
-    <Compile Include="DisplayGeometryGraph.cs" />
-    <Compile Include="DNode.cs" />
-    <Compile Include="DObject.cs" />
-    <Compile Include="DraggingMode.cs" />
-    <Compile Include="Draw.cs" />
-    <Compile Include="DrawingPanel.cs">
+    <Compile Update="DrawingPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Geometry.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="GraphRenderer.cs" />
-    <Compile Include="GViewer.cs">
+    <Compile Update="GViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="IHavingDLabel.cs" />
-    <Compile Include="LayoutMethod.cs" />
-    <Compile Include="LayoutProgress.cs" />
-    <Compile Include="LayoutProgressEventArgs.cs" />
-    <Compile Include="LayoutSettingsForm.cs">
+    <Compile Update="LayoutSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LayoutSettingsForm.designer.cs">
+    <Compile Update="LayoutSettingsForm.designer.cs">
       <DependentUpon>LayoutSettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="LayoutSettingsWrapper.cs" />
-    <Compile Include="Line.cs" />
-    <Compile Include="ObjectWithBox.cs" />
-    <Compile Include="printing.cs">
+    <Compile Update="printing.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SaveInVectorFormatForm.cs">
+    <Compile Update="SaveInVectorFormatForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SaveInVectorFormatForm.Designer.cs">
+    <Compile Update="SaveInVectorFormatForm.Designer.cs">
       <DependentUpon>SaveInVectorFormatForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SaveViewAsImageForm.cs">
+    <Compile Update="SaveViewAsImageForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SaveViewAsImageForm.Designer.cs">
+    <Compile Update="SaveViewAsImageForm.Designer.cs">
       <DependentUpon>SaveViewAsImageForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ScrollGViewer.cs">
+    <Compile Update="ScrollGViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="spatialAlgorithm.cs" />
-    <Compile Include="StringMeasure.cs" />
-    <Compile Include="Tesselator.cs" />
-    <Compile Include="ViewInfo.cs" />
-    <Compile Include="ViewInfoHolder.cs" />
-    <Compile Include="ViewInfoList.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GViewer.resx">
+    <EmbeddedResource Update="GViewer.resx">
       <DependentUpon>GViewer.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="hmove.cur">
-    </EmbeddedResource>
-    <EmbeddedResource Include="LayoutSettingsForm.resx">
+    <EmbeddedResource Include="hmove.cur"></EmbeddedResource>
+    <EmbeddedResource Update="LayoutSettingsForm.resx">
       <DependentUpon>LayoutSettingsForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="oph.cur">
-    </EmbeddedResource>
-    <EmbeddedResource Include="SaveInVectorFormatForm.resx">
+    <EmbeddedResource Include="oph.cur"></EmbeddedResource>
+    <EmbeddedResource Update="SaveInVectorFormatForm.resx">
       <DependentUpon>SaveInVectorFormatForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SaveViewAsImageForm.resx">
+    <EmbeddedResource Update="SaveViewAsImageForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SaveViewAsImageForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Drawing\AutomaticGraphLayout.Drawing.csproj">
-      <Project>{B76F8F71-4B00-4242-BE36-C9F0732511F7}</Project>
-      <Name>AutomaticGraphLayout.Drawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj">
-      <Project>{415D3E3F-7105-46C1-84D2-7ECB34213D92}</Project>
-      <Name>AutomaticGraphLayout</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\Drawing\AutomaticGraphLayout.Drawing.csproj" />
+    <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
