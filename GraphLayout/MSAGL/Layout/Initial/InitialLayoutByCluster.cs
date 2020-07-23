@@ -99,12 +99,7 @@ namespace Microsoft.Msagl.Layout.Initial {
 
             }
 
-#if DEBUG
-            //CheckEdges();
-#endif
-
             // This call isn't super cheap, so we shouldn't do this too often.
-            //clusterCount = clusters.Sum(c => c.AllClustersDepthFirst().Count());
 
             if (runInParallel && clusters.Count > 1)
                 Parallel.ForEach(clusters, parallelOptions, ProcessCluster);
@@ -175,28 +170,6 @@ namespace Microsoft.Msagl.Layout.Initial {
                 //consider adding more nodes here: some sibling clusters maybe
                 elb.Run();
             }
-
-            /*//*************debug code start
-            var parentEdges = inParentEdges.Concat(outParentEdges);
-            var ll = new List<DebugCurve>();
-            var marked = new Microsoft.Msagl.Core.DataStructures.Set<Node>();
-            foreach (var e in parentEdges) {
-                marked.Insert(e.Source);
-                marked.Insert(e.Target);
-                ll.Add(new DebugCurve(100, 1, "blue", e.Curve));
-            }
-            foreach (var c in graph.RootCluster.AllClustersDepthFirst()) {
-                var color = marked.Contains(c) ? "red" : "green";
-                ll.Add(new DebugCurve(100, 1, color, c.BoundaryCurve));
-            }
-            foreach (var c in graph.Nodes) {
-                var color = marked.Contains(c) ? "red" : "green";
-                ll.Add(new DebugCurve(100, 1, color, c.BoundaryCurve));
-            }
-
-            LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(ll);
-            */
-            //*************debug code end
         }
 
         static bool AllowedToRoute(List<Edge> inParentEdges, List<Edge> outParentEdges,

@@ -82,8 +82,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             lock (this) {
                 var grid = new GridTraversal(_graphViewer.Graph.BoundingBox, _graphViewer.GetBackgroundTileLevel());
                 Set<Triple> desiredActiveSetOfImages = _desiredActiveSetFunc();
-//                Set<Triple> setOfNotImageTiles = null;
-//                Console.WriteLine(setOfNotImageTiles);
                 Set<Triple> toRemove = new Set<Triple>(_activeImages.Keys) - desiredActiveSetOfImages;
                 Task.Factory.StartNew(() =>
                     {

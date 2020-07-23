@@ -99,19 +99,10 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 new Set<SymmetricSegment>(
                     PathRouter.VisGraph.Edges.Select(e => new SymmetricSegment(e.SourcePoint, e.TargetPoint)));
 #if DEBUG && !SHARPKIT
-            foreach (var s in routesDump - visEdgeDump)
-                Console.WriteLine("{0} is in routes but no in vis graph", s);
-            foreach (var s in visEdgeDump - routesDump)
-                Console.WriteLine("{0} is in visgraph but no in routes", s);
             var routesOutOfVisGraph = routesDump - visEdgeDump;
             if (routesOutOfVisGraph.Count > 0) {
                 SplineRouter.ShowVisGraph(PathRouter.VisGraph, null,null, Ttt(routesOutOfVisGraph));
             }
-            foreach (var s in usedEdges - routesDump)
-                Console.WriteLine("{0} is in usedEdges but not in routes", s);
-
-            foreach (var s in routesDump - usedEdges)
-                Console.WriteLine("{0} is in routes but not in usedEdges", s);
 
 #endif
             return routesDump == visEdgeDump && usedEdges==routesDump;

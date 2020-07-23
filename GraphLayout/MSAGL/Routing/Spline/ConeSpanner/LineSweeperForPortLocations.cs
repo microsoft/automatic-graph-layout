@@ -247,23 +247,17 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
 
 #if TEST_MSAGL
     // ReSharper disable UnusedMember.Local
-        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.Debug.WriteLine(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         void CheckConsistency() {
             // ReSharper restore UnusedMember.Local
             foreach (var s in rightConeSides) {
                 coneSideComparer.SetOperand(s);
-                if (!leftConeSides.Contains(s.Cone.LeftSide))
-                    Console.WriteLine("bug");
             }
             foreach (var s in leftConeSides) {
                 coneSideComparer.SetOperand(s);
                 if (!rightConeSides.Contains(s.Cone.RightSide)) {
-                    Console.WriteLine("bug");
                     PrintOutRightSegTree();
                     PrintOutLeftSegTree();
-
-                    //                    ShowLeftTree();
-                    //                    ShowRightTree();
                 }
             }
         }
@@ -421,8 +415,6 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
                                                     coneRightSide.Start, ConeRightSideDirection, out intersection) &&
                         SegmentIsNotHorizontal(intersection, obstacleSideVertex.Point)) {
                         EnqueueEvent(CreateRightIntersectionEvent(coneRightSide, intersection, obstacleSideVertex));
-                        //                   Console.WriteLine("right intersection");
-                        //    Show(new Ellipse(3, 3, intersection));
                     }
                 }
             }
@@ -467,12 +459,12 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
             // ReSharper restore UnusedMember.Local
             return CurveFactory.CreateRectangle(2, 2, p);
         }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.Debug.WriteLine(System.String)")]
         void PrintOutRightSegTree() {
-            Console.WriteLine("right segment tree");
+            System.Diagnostics.Debug.WriteLine("right segment tree");
             foreach (var t in rightConeSides)
-                Console.WriteLine(t);
-            Console.WriteLine("end of right segments");
+                System.Diagnostics.Debug.WriteLine(t);
+            System.Diagnostics.Debug.WriteLine("end of right segments");
         }
 #endif
 
@@ -593,7 +585,6 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
 #if TEST_MSAGL
                 if (b == null) {
                     PrintOutRightSegTree();
-                    Console.WriteLine(coneSide);
                     ShowRightTree(CurveFactory.CreateDiamond(3, 4, coneSide.Start));
                     GeometryGraph gg = CreateGraphFromObstacles(Obstacles);
                     GeometryGraphWriter.Write(gg, "c:\\tmp\\bug1");
@@ -622,7 +613,6 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
 #if TEST_MSAGL
                 if (b == null) {
                     PrintOutLeftSegTree();
-                    Console.WriteLine(coneSide);
                     ShowLeftTree(new Ellipse(2, 2, coneSide.Start));
                 }
 #endif
@@ -771,7 +761,7 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
 
 
                     PrintOutLeftSegTree();
-                    Console.WriteLine(leftConeSide);
+                    System.Diagnostics.Debug.WriteLine(leftConeSide);
                     ShowLeftTree(new Ellipse(3, 3, vertexEvent.Site));
                     ShowRightTree(new Ellipse(3, 3, vertexEvent.Site));
                 }
@@ -829,12 +819,12 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
             return gg;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.Debug.WriteLine(System.String)")]
         void PrintOutLeftSegTree() {
-            Console.WriteLine("Left cone segments");
+            System.Diagnostics.Debug.WriteLine("Left cone segments");
             foreach (var t in leftConeSides)
-                Console.WriteLine(t);
-            Console.WriteLine("end of left cone segments");
+                System.Diagnostics.Debug.WriteLine(t);
+            System.Diagnostics.Debug.WriteLine("end of left cone segments");
         }
 #endif
 

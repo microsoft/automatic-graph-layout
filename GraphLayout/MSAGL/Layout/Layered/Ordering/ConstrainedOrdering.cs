@@ -138,32 +138,6 @@ namespace Microsoft.Msagl.Layout.Layered {
                 }
                 
             }
-
-            #region old code
-            /*
-             int noGainSteps = 0;
-             for (int i = 0; i < NumberOfSweeps && noGainSteps <= MaxNumberOfNoGainSteps && !measure.Perfect(); i++) {
-                 SweepDown(false);
-                 SweepUp(false);
-                 ConstrainedOrderMeasure newMeasure = CreateMeasure();
-                 if (newMeasure < measure) {
-                     noGainSteps = 0;
-                     Ordering.CloneLayers(LayerArrays.Layers, ref yetBestLayers);
-                     measure = newMeasure;
-                 } else {
-                     noGainSteps++;
-                     RestoreState();
-                 }
-             }
-             
-             SwitchXPositions();
-             SweepUpWithoutChangingLayerOrder(true);
-             
-             SwitchXPositions();
-             SweepDownWithoutChangingLayerOrder(true);
-             AverageXPositions();
-              */
-            #endregion
         }
 
         void SetXPositions() {
@@ -361,11 +335,11 @@ namespace Microsoft.Msagl.Layout.Layered {
 #endif
 
 #if TEST_MSAGL
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.Write(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledCode")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.Debug.Write(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledCode")]
         static void PrintPositions(double[] positions) {
             for (int j = 0; j < positions.Length; j++)
-                Console.Write(" " + positions[j]);
-            Console.WriteLine();
+                System.Diagnostics.Debug.Write(" " + positions[j]);
+            System.Diagnostics.Debug.WriteLine("");
         }
 #endif
 

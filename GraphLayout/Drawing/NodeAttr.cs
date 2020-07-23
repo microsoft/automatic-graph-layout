@@ -104,35 +104,6 @@ namespace Microsoft.Msagl.Drawing {
         }
 
         
-
-        //void AddFilledStyle(){
-        //    if(Array.IndexOf(styles,Style.filled)==-1){
-        //        Style []st=new Style[styles.Length+1];
-        //        st[0]=Style.filled;
-        //        styles.CopyTo(st,1);
-        //        styles=st;
-        //    }
-        //}
-
-        //void RemoveFilledStyle()
-        //{
-
-        //  int index;
-        //  if ((index = Array.IndexOf(styles, Style.filled)) != -1)
-        //  {
-        //    Style[] st = new Style[styles.Length - 1];
-
-        //    int count = 0;
-        //    for (int j = 0; j < styles.Length; j++)
-        //    {
-        //      if (j != index)
-        //        st[count++] = styles[j];
-        //    }
-        //    styles = st;
-        //  }
-        //}
-
-        
         internal Shape shape = Shape.Box;
 
 

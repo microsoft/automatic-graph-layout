@@ -44,10 +44,6 @@ namespace Microsoft.Msagl.Layout.Incremental
                 // equality constraints and we do not really have any scenarios involving equality constraints at
                 // the moment, and also the fact that it turns off DeferToVertical causes it to resolve too
                 // many overlaps horizontally, so let's skip it for now.
-                //if (level >= 2 && settings.AvoidOverlaps)
-                //{
-                //    RemoveOverlapsOnEqualityConstraints(dblVpad, dblHpad, horizontalConstraints, verticalConstraints);
-                //}
                 var hsSolver = new AxisSolver(true, nodes, clusterHierarchies,
                                              level >= 2 && settings.AvoidOverlaps, level, clusterSettings);
                 hsSolver.structuralConstraints = horizontalConstraints;

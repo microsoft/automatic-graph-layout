@@ -17,9 +17,6 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             int shortcutcount = 1;
             int iteration = 10;
 
-            //Console.WriteLine();
-            //Console.WriteLine("Minimize the number of railes for quick interaction? (Y/N)");
-            //string input = Console.ReadLine();
             if (_lgLayoutSettings.hugeGraph)
             {
                 iteration = 1;
@@ -89,7 +86,6 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 }
                 unit *= 2;
             }
-            Console.WriteLine("Shortcut made for " + shortcutcount + " edges");
         }
 
         public static void MsaglMoveToMedian(Tiling g, Dictionary<int, Node> idToNodes, LgLayoutSettings _lgLayoutSettings)
@@ -200,7 +196,6 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                             }
                             else
                             {
-                                //Console.Write(".");
                                 localRefinementsFound = true;
                                 break;
                             }
@@ -209,7 +204,6 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
                 }
             }
-            Console.WriteLine("Done");
         }
 
 
@@ -304,7 +298,6 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                             }
                             else
                             {
-                                //Console.Write(".");
                                 localRefinementsFound = true;
                                 break;
                             }
@@ -313,7 +306,6 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
 
                 }
             }
-            Console.WriteLine("Done");
 #endif
         }
 

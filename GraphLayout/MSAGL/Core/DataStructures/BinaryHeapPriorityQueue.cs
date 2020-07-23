@@ -122,7 +122,7 @@ namespace Microsoft.Msagl.Core.DataStructures {
             q.Enqueue(6, 6);
             q.Enqueue(0, 0);
             for (int i = 0; i < 10; i++)
-                Console.WriteLine(q.Dequeue());
+                System.Diagnostics.Debug.WriteLine(q.Dequeue());
         }
     }
 }

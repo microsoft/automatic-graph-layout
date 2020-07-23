@@ -50,15 +50,13 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             while (SomeNodesAreNotAssigned())
             {
-                Console.WriteLine("zoom level = {0} with the grid size = {1}", zoomLevel, gridSize);
                 DrawNodesOnLevel2(gridSize, zoomLevel);
                 zoomLevel *= 2;
                 if (zoomLevel == 2) gridSize /= 2.5;
                 if (zoomLevel == 4) gridSize /= 2;
                 if (zoomLevel == 8) gridSize /= 1.5;
-                if (zoomLevel >= 8) gridSize /= 10;//1.25;
-                if (zoomLevel >= 256) gridSize /= 10;//1.125;
-                //gridSize /= 2;  //jyoti changed it from 2 to make smooth transition between levels
+                if (zoomLevel >= 8) gridSize /= 10;
+                if (zoomLevel >= 256) gridSize /= 10;
             }
         }
         /// <summary>
@@ -73,7 +71,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             while (SomeNodesAreNotAssigned())
             {
-                Console.WriteLine("zoom level = {0} with the grid size = {1}", zoomLevel, gridSize);
                 DrawNodesOnLevel(gridSize, zoomLevel);
                 zoomLevel *= 2;
                 if (zoomLevel == 2) gridSize /= 2.5;
@@ -81,7 +78,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 if (zoomLevel == 8) gridSize /= 1.5;
                 if (zoomLevel >= 8) gridSize /= 3;//1.25;
                 if (zoomLevel >= 256) gridSize /= 10;
-                //gridSize /= 2;  //jyoti changed it from 2 to make smooth transition between levels
             }
         }
 
@@ -210,16 +206,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 new Polygon(new Polyline(sb.LeftBottom, sb.LeftTop, sb.RightTop, sb.RightBottom) { Closed = true });
             return spolygon;
         }
-        /*
-                void DebugShow(LgNodeInfo[] lgNodeInfoArray) {
-                    var delx = 1000.0/lgNodeInfoArray.Length;
-                    var scaleMult = 5000.0;
-                    var l = new List<DebugCurve>();
-                    for (int i = 0; i < lgNodeInfoArray.Length; i++) {
-                        l.Add(new DebugCurve(new Ellipse(1,1,new Point(i*delx,lgNodeInfoArray[i].Rank*scaleMult))));
-                    }
-                    LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(l);
-                }*/
 
         List<LgNodeInfo> GetSortedLgNodeInfos()
         {

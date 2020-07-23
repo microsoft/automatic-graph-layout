@@ -231,9 +231,9 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 var rail = clickCounter.ClickedObject as Rail;
                 if (rail != null)
                 {
-                    Console.WriteLine("rail's zoomlevel = " + rail.ZoomLevel);                    
-                    Console.WriteLine("rail's A" + rail.A);
-                    Console.WriteLine("rail's B" + rail.B);
+                    System.Diagnostics.Debug.WriteLine("rail's zoomlevel = " + rail.ZoomLevel);                    
+                    System.Diagnostics.Debug.WriteLine("rail's A" + rail.A);
+                    System.Diagnostics.Debug.WriteLine("rail's B" + rail.B);
                     return;
                     /*
                     if (clickCounter.UpCount == clickCounter.DownCount && clickCounter.UpCount == 2)
@@ -1165,11 +1165,11 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             set
             {
                 _drawingGraph = value;
-                Console.WriteLine("starting processing a graph with {0} nodes and {1} edges", _drawingGraph.NodeCount,
+                System.Diagnostics.Debug.WriteLine("starting processing a graph with {0} nodes and {1} edges", _drawingGraph.NodeCount,
                     _drawingGraph.EdgeCount);
                 if (_drawingGraph.RootSubgraph.Subgraphs != null && _drawingGraph.RootSubgraph.Subgraphs.Any())
                 {
-                    Console.WriteLine("skipping a graph with clusters");
+                    System.Diagnostics.Debug.WriteLine("skipping a graph with clusters");
                     return;
                 }
                 ProcessGraph();
@@ -1433,18 +1433,8 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             ProcessEdgesAddRemove(existingEdges, requiredEdges);
             RemoveNoLongerVisibleRails(railGraph);
 
-
-
-            //UpdateVisibleRails is for linear interpolation - jyoti
-            //Rectangle vp = _lgLayoutSettings.ClientViewportFunc();
-            //double factor = Math.Min(vp.Width / _lgLayoutSettings.mainGeometryGraphWidth, vp.Height / _lgLayoutSettings.mainGeometryGraphHeight);
-            //double currentlayer = Math.Max(0, _lgLayoutSettings.TransformFromGraphToScreen()[0, 0] / factor);
-            //_layer = (int)currentlayer;
             double currentlayer = Math.Max(0, GetZoomFactorToTheGraph());
             
-            //jyoti - print current layer
-            //Console.WriteLine("Raw Layer = " + currentlayer);
-            //Console.WriteLine("Layer = " + GetLevelIndexByScale(currentlayer));
             _layer = GetLevelIndexByScale(currentlayer);
             UpdateVisibleRails(railGraph, Math.Log(currentlayer, 2));
 
@@ -1452,16 +1442,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             CreateOrInvalidateFrameworksElementForVisibleRails(railGraph);
             InvalidateNodesOfRailGraph(nodesFromVectorTiles);
 
-            //DEBUG: jyoti added this to get more labels
             InvalidateNodesOfRailGraph(requiredNodes);
-            /*
-            foreach (LgNodeInfo nodeInfo in SelectedNodeSet)
-            {
-                var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
-                lgSettings.Interactor.UpdateVisibleEdgesIncidentTo(nodeInfo, _layer);
-            }*/
-
-
             _lgLayoutSettings.Interactor.AddLabelsOfHighlightedNodes(CurrentScale);
 
             InvalidateNodesOfRailGraph(fakeTileNodes);
@@ -1472,11 +1453,8 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
         internal int GetLevelIndexByScale(double scale)
         {
             if (scale <= 1) return 0;
-            //if (scale >= _lgLayoutSettings.maximumNumOfLayers) return _lgLayoutSettings.maximumNumOfLayers - 1;
             var z = Math.Floor(scale);//Math.Log(scale, 2);
             if (z >= _lgLayoutSettings.maximumNumOfLayers) return _lgLayoutSettings.maximumNumOfLayers - 1;
-            //int ret = (int)Math.Ceiling(z);
-            //return ret;
             return (int)z;
         }
         private Rectangle NodeDotRect(LgNodeInfo ni)
@@ -1639,9 +1617,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
         void ClearSelection()
         {
-            ClearNodesSelection();            
-            //ClearEdgeSelection();
-            //ClearRailSelection();
+            ClearNodesSelection();
         }
 
 
@@ -1690,20 +1666,13 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
         void ClearNodesSelection()
         {
-            /*
-            var nodesToDeselect = SelectedNodeInfos.Clone();
-            foreach (LgNodeInfo ni in nodesToDeselect)
-            {
-                SelectColoredEdgesIncidentTo(ni, null);
-                SelectUnselectNode(ni, false);                
-            }*/
             //jyoti fixed the 'End' operation by deselecting colored nodes
             foreach (var o in _drawingObjectsToIViewerObjects.Values)
             {
                 var vNode = o as GraphmapsNode;
                 if (vNode != null && vNode.LgNodeInfo.Color != null)
                 {
-                    DeselectNode(vNode); //vNode.Invalidate();    
+                    DeselectNode(vNode);
                 }
             }
             
@@ -1766,12 +1735,8 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                     double nodeLabelHeight = _lgLayoutSettings.NodeLabelHeightInInches * DpiY / CurrentScale;
                     double nodeLabelWidth = nodeLabelHeight * vNode.LgNodeInfo.LabelWidthToHeightRatio;
 
-                    //DEBUG: jyoti: Only show zoomlabels
-                    //vNode.Node.LabelText = ""+vNode.LgNodeInfo.ZoomLevel;
-
                     if (vNode.LgNodeInfo.LabelVisibleFromScale >= 0 &&
                         vNode.LgNodeInfo.LabelVisibleFromScale <= zf
-                        //|| vNode.LgNodeInfo.ZoomLevel == 0 //jyoti: added this for always getting the top labels
                         )
                     {
                         var offset = Point.Scale(nodeLabelWidth + NodeDotWidth * 1.01, nodeLabelHeight + NodeDotWidth * 1.01,
@@ -1906,8 +1871,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             double t = currentLayerNumber - integralLayerNumber;
             if (t > 1) t = 1;
             if (t < 0) t = 1 + t;
-
-           // Console.WriteLine(currentLayerNumber + t);
 
             if (LayerNumber < currentLayerNumber)
             {
@@ -2196,7 +2159,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 if (!oGraph.Rails.Contains(rail))
                     railsToRemove.Add(rail);
             }
-            Console.WriteLine("Removing " + railsToRemove.Count + " rails ");
             RemoveRustyRails(railsToRemove);
         }
 
@@ -2220,11 +2182,11 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                     if (Entities.Count() != oGraph.Nodes.Count + oGraph.Edges.Count) {
                         foreach (var newDrawingNode in oDrawingNodes) {
                             if (!drawingObjectsToIViewerObjects.ContainsKey(newDrawingNode))
-                                Console.WriteLine();
+                                System.Diagnostics.Debug.WriteLine();
                         }
                         foreach (var drawingEdge in oDrawgingEdges) {
                             if (!drawingObjectsToIViewerObjects.ContainsKey(drawingEdge))
-                                Console.WriteLine();
+                                System.Diagnostics.Debug.WriteLine();
                         }
                         foreach (var viewerObject in Entities) {
                             if (viewerObject is VEdge) {
@@ -3326,20 +3288,20 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                 for (int iLevel = 0; iLevel < _lgLayoutSettings.Interactor.GetNumberOfLevels() - 1 && tileList.Count > 0; )
                 {
                     GridTraversal grid = new GridTraversal(GeomGraph.BoundingBox, iLevel);
-                    Console.WriteLine("Drawing tiles on level {0} ...", iLevel);
+                    System.Diagnostics.Debug.WriteLine("Drawing tiles on level {0} ...", iLevel);
                     DrawTilesOnLevel(tileList, grid, renderBitmap, w, h, fitFactor * Math.Pow(2, iLevel), iLevel,
                         nextLevelTileList);
                     iLevel++;
                     if (iLevel == _lgLayoutSettings.Interactor.GetNumberOfLevels() - 1) break;
                     tileList = SwapTileLists(tileList, ref nextLevelTileList);
                 }
-                Console.WriteLine("Done");
+                System.Diagnostics.Debug.WriteLine("Done");
                 normalFlow = true;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-                Console.WriteLine("did not succeeed to save all tiles");
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                System.Diagnostics.Debug.WriteLine("did not succeeed to save all tiles");
             }
             finally
             {
@@ -3358,7 +3320,6 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
                     ViewChangeEvent(null, null);
             }
             timer.Stop();
-            Console.WriteLine("tiles for {0}", timer.Duration);
         }
         FileStream CreateTileFileStream(GridTraversal grid, int ix, int iy)
         {
@@ -3472,11 +3433,9 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
 
         public void InitTiles()
         {
-            Console.Write("loading tile images...");
             _tileDictionary.Clear();
             var grids = GetTileGridsForAllLevelsExceptLast();
             InitTilesRecursively(0, 0, 0, grids, TileType.Image);
-            Console.WriteLine("done");
             UpdateBackgroundTiles();
         }
 

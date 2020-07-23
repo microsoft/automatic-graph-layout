@@ -183,7 +183,7 @@ namespace Microsoft.Msagl.UnitTests {
                 Random random = new Random(i);
              
                 double edgeSeparation = 5*random.NextDouble();
-                Console.WriteLine("i={0} es={1}", i, edgeSeparation);
+                System.Diagnostics.Debug.WriteLine("i={0} es={1}", i, edgeSeparation);
                 RouteEdges(graph, edgeSeparation);
                 // DisplayGeometryGraph.ShowGraph(graph);
 
@@ -198,7 +198,7 @@ namespace Microsoft.Msagl.UnitTests {
             int iStart = 1;
             for (int multiplier = 1; multiplier < 12; multiplier++)
             {
-                Console.WriteLine("multiplier " + multiplier);
+                System.Diagnostics.Debug.WriteLine("multiplier " + multiplier);
 #if DEBUG && TEST_MSAGL
                 DisplayGeometryGraph.SetShowFunctions();
 #endif
@@ -210,7 +210,7 @@ namespace Microsoft.Msagl.UnitTests {
                     // DisplayGeometryGraph.ShowGraph(graph);
 
                     double edgeSeparation = 5 * random.NextDouble();
-                    Console.WriteLine("i={0} es={1}", i, edgeSeparation);
+                    System.Diagnostics.Debug.WriteLine("i={0} es={1}", i, edgeSeparation);
                     GeometryGraphWriter.Write(graph, "c:\\tmp\\graph");
                     RouteEdges(graph, edgeSeparation);
                     //DisplayGeometryGraph.ShowGraph(graph);

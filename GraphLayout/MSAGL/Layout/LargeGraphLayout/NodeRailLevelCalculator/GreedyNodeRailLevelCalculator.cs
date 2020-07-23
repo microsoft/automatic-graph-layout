@@ -404,7 +404,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout.NodeRailLevelCalculator {
 
             if (!canInsertSegment)
             {
-                Console.WriteLine("maxNumRailPerTile = " + maxNumRailPerTile);
                 return false;
             }
 

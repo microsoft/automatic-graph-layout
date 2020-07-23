@@ -1297,7 +1297,7 @@ namespace Microsoft.Msagl.UnitTests.Constraints
                     FailureString);
 
             // This allows inspecting the actual values to examine at greater precision if desired.
-            //Console.WriteLine("Full Pos: var0 {0}, var1 {1}", rgVariableDefs[0].ActualPosX, rgVariableDefs[1].ActualPosX);
+            //System.Diagnostics.Debug.WriteLine("Full Pos: var0 {0}, var1 {1}", rgVariableDefs[0].ActualPosX, rgVariableDefs[1].ActualPosX);
         }
 
         [TestMethod]

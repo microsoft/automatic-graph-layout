@@ -134,7 +134,7 @@ namespace Agl {
                          "The input can be in the Dot format or in the XML format of MSAGL.\n" +
                          "The output can be in the SVG format or in the XML format of MSAGL.\n" +
                          "The output in the MSAGL format will be pure geometry.";
-            Console.WriteLine(helpString);
+            System.Diagnostics.Debug.WriteLine(helpString);
             return 0;
         }
 
@@ -152,7 +152,7 @@ namespace Agl {
                                 filename = Path.Combine(path, filename);
 
                         if (!File.Exists(filename)) {
-                            Console.WriteLine("File does not exist \"{0}\"", filename);
+                            System.Diagnostics.Debug.WriteLine("File does not exist \"{0}\"", filename);
                             return 1;
                         }
                         int r = ProcessFile(filename);
@@ -161,7 +161,7 @@ namespace Agl {
                     } while (true);
                 }
             } catch (Exception e) {
-                Console.WriteLine(e.Message);
+                System.Diagnostics.Debug.WriteLine(e.Message);
                 success=false;
             }
             return success ? 0 : 1;
@@ -171,7 +171,7 @@ namespace Agl {
         
         int ProcessFile(string inputFile) {
             if(argsParser.OptionIsUsed(PrintProcessedFileNameOption))
-                Console.WriteLine(inputFile);
+                System.Diagnostics.Debug.WriteLine(inputFile);
             try {
                 var inputType = FigureOutFileType(inputFile);
                 if (inputType == FileType.Dot)
@@ -182,7 +182,7 @@ namespace Agl {
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                System.Diagnostics.Debug.WriteLine(ex);
                 return -1;
             }
         }
@@ -200,8 +200,8 @@ namespace Agl {
 
             }
             catch(Exception e) {
-                //Console.WriteLine(e.ToString());
-                Console.WriteLine(e.Message);
+                //System.Diagnostics.Debug.WriteLine(e.ToString());
+                System.Diagnostics.Debug.WriteLine(e.Message);
                 return -1;
             }
             return 0;
@@ -358,13 +358,13 @@ namespace Agl {
                 graph = Dot2Graph.Parser.Parse(inputFile, out line, out column, out msg);
             }
             catch (Exception ex) {
-                Console.WriteLine(ex.ToString());
-                Console.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 graph = null;
                 return -1;
             }
             if (graph == null) {
-                Console.WriteLine("{0}({1},{2}): error: {3}", inputFile, line, column, msg);
+                System.Diagnostics.Debug.WriteLine("{0}({1},{2}): error: {3}", inputFile, line, column, msg);
                 return -1;
             }
             return 0;
@@ -449,7 +449,7 @@ namespace Agl {
                 }
             }
             catch (Exception e) {
-                Console.WriteLine(e.Message);
+                System.Diagnostics.Debug.WriteLine(e.Message);
                 throw;
             }
             

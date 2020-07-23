@@ -34,45 +34,6 @@ namespace Microsoft.Msagl.Layout.MDS {
             LayoutConnectedComponents();
             SetGraphBoundingBox();
         }
-
-        ///// <summary>
-        ///// needed a comment
-        ///// </summary>
-        ///// <param name="geometryGraph"></param>
-        ///// <param name="group"></param>
-        //public void GroupSpread(GeometryGraph geometryGraph, Set<Node> group) {
-        //    this.graph = geometryGraph;
-        //    double[][] d = new double[group.Count][];
-
-        //    double[] x, y;
-        //    System.Console.WriteLine(group.Count);
-        //    LayoutConnectedComponents(geometryGraph, out x, out y);
-
-
-            
-        //    int c = 0;
-        //    foreach (Node node in group) {
-        //        d[c] = Distances.SingleSourceUniformDistances(geometryGraph, node, false);
-        //        c++;
-        //    }
-        //    double[][] w = MultidimensionalScaling.ExponentialWeightMatrix(d, -2);
-        //    MultidimensionalScaling.DistanceScalingSubset(d, x, y, w, 5);
-            
-        //    double scaleX = ((MdsLayoutSettings)geometryGraph.LayoutAlgorithmSettings).ScaleX;
-        //    double scaleY = ((MdsLayoutSettings)geometryGraph.LayoutAlgorithmSettings).ScaleY;
-        //    double rotate = ((MdsLayoutSettings)geometryGraph.LayoutAlgorithmSettings).Rotate;
-        //    Transformation.Rotate(x, y, rotate);
-
-        //    int index = 0;
-        //    foreach (Node node in geometryGraph.Nodes) {
-        //        node.Center = new Point((int)(x[index] * scaleX), (int)(y[index] * scaleY));
-        //        node.BoundaryCurve = node.BoundaryCurve.Move(node.Center);
-        //        index++;
-        //    }
-        //    RankingLayout.SetEdgeCurves(geometryGraph);
-        //    SetGraphBoundingBox();
-        //}
-
          void SetGraphBoundingBox() {
             graph.BoundingBox = graph.PumpTheBoxToTheGraphWithMargins();
         }
@@ -171,26 +132,19 @@ namespace Microsoft.Msagl.Layout.MDS {
             }
             else
                 for (int i = 0; i < graphs.Length; i++) {
-                    Console.WriteLine("laying out {0} connected component", i);
                     LayoutConnectedGraphWithMds(graphs[i]);
                 }
 
             if (graphs.Length > 1) {
-                Console.WriteLine("packing");
                 PackGraphs(graphs, settings);
-                Console.WriteLine("done packing");
                 //restore the parents
                 foreach (var node in graphs.SelectMany(g => g.Nodes))
                     node.GeometryParent = graph;
             }
-            Console.WriteLine("done with LayoutConnectedComponents");
         }
 
         void LayoutConnectedGraphWithMds(GeometryGraph compGraph)
         {
-
-            Console.WriteLine("LayoutConnectedGraphWithMds: nodes {0} edges {1}", compGraph.Nodes.Count(), compGraph.Edges.Count());
-
             double[] x, y;
 
             LayoutGraphWithMds(compGraph, settings, out x, out y);
@@ -248,8 +202,6 @@ namespace Microsoft.Msagl.Layout.MDS {
                 else if (hits > maxNumberOfHits)
                     scale *= 1+delta;
                 else {
-                 //    if ( maxRepetitions> repetitions )
-                  //      Console.WriteLine("reps={0} scale={1}, hits={2}", maxRepetitions-repetitions , scale, hits);
                     return;                    
                 }
                 delta /= 2;

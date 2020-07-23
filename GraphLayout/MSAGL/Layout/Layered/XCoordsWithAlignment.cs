@@ -749,29 +749,6 @@ namespace Microsoft.Msagl.Layout.Layered {
                     }
                 }
             }
-            #region debug print
-#if DEBUGGLEE
-            //PrintLayers();
-            //for (int i = 0; i < nOfVertices; i++)
-            //    if (root[i] == i)
-            //    {
-            //        Console.Write(" Block ");
-            //        int w = i;
-            //        do
-            //        {
-            //            Console.Write(w.ToString() + " ");
-            //            w = align[w];
-            //        }
-            //        while (w != i);
-            //        Console.WriteLine();
-            //    }
-            //Console.WriteLine("edges");
-            //foreach (IntEdge e in graph.Edges)
-            //    Console.WriteLine(e.ToString() + " ");
-            //Console.WriteLine();
-
-#endif
-            #endregion
         }
         
 
@@ -785,49 +762,6 @@ namespace Microsoft.Msagl.Layout.Layered {
         private void MarkEdge(LayerEdge ie) {
             this.markedEdges.Insert(new IntPair(ie.Source, ie.Target));
         }
-
-
-        #region debug routines
-#if DEBUGGLEE
-        //List<IIntEdge> EdgesIntoLayer(int i) {
-        //    List<IIntEdge> es = new List<IIntEdge>();
-        //    foreach (int v in this.la.Layers[i]) {
-        //        es.AddRange(InEdges(v));
-        //    }
-        //    return es;
-        //}
-
-        //List<IIntEdge> AlignmentIntoLayer(int i) {
-        //    List<IIntEdge> es = new List<IIntEdge>();
-        //    foreach (int v in this.la.Layers[i])
-        //        foreach (IIntEdge ie in InEdges(v))
-        //            if (ie.Marked == false)
-        //                es.Add(ie);
-
-        //    return es;
-        //}
-
-        //List<IIntEdge> AlignmentInnerIntoLayer(int i) {
-        //    List<IIntEdge> es = new List<IIntEdge>();
-        //    foreach (int v in this.la.Layers[i])
-        //        foreach (IIntEdge ie in InEdges(v))
-        //            if (ie.Marked == false && IsInnerEdge(ie))
-        //                es.Add(ie);
-
-        //    return es;
-        //}
-
-
-        //private void PrintLayers() {
-        //    foreach (int[] lay in la.Layers) {
-        //        Console.WriteLine("layer");
-        //        foreach (int v in lay)
-        //            Console.Write(v.ToString() + " ");
-        //        Console.WriteLine();
-        //    }
-        //}
-#endif
-        #endregion
 
         /// <summary>
         /// Assigning xcoords starting from roots

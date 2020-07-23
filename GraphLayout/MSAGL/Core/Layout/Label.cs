@@ -109,8 +109,6 @@ namespace Microsoft.Msagl.Core.Layout {
         public Point AttachmentSegmentEnd {
             get { return edgeAttachmentPoint; }
             set {
-                if (value.X == 0)
-                    Console.WriteLine();
                 RaiseLayoutChangeEvent(value);
                 edgeAttachmentPoint = value;
             }

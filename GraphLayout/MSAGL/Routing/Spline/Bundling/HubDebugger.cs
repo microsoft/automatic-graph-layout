@@ -39,8 +39,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             List<DebugCurve> debugCurves = hd.CreateDebugCurves();
             debugCurves.Add(new DebugCurve(100,1, "magenta", CurveFactory.CreateCircle(3, highlightedNode.Position)));
             debugCurves.Add(new DebugCurve(100, 0.1, "green", highlightedNode.BoundaryCurve));
-
-            Console.WriteLine(highlightedNode.SerialNumber);
             LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(debugCurves);
         }
 

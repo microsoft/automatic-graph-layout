@@ -21,7 +21,6 @@ namespace Microsoft.Msagl.Drawing {
         /// </summary>
         Right = 2097152,
         
-        //
         /// <summary>
         ///The middle mouse button was pressed. 
         /// </summary>

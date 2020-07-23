@@ -86,7 +86,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
                 TestContext.WriteLine(message);
                 return;
             }
-            Console.WriteLine(message);
+            System.Diagnostics.Debug.WriteLine(message);
         }
 
         internal ObstacleTree ObstacleTree

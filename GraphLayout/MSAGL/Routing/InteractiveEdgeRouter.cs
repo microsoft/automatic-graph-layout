@@ -1073,8 +1073,6 @@ namespace Microsoft.Msagl.Routing {
         bool TryShortcutPolyPoint(PolylinePoint pp) {
             if (LineAvoidsTightHierarchy(new LineSegment(pp.Point, pp.Next.Next.Point), SourceTightPolyline,
                                          targetTightPolyline)) {
-                //                if (debug)
-                //                    ShowPolylineAndObstaclesWithLineSeg(new LineSegment(pp.Point, pp.Next.Next.Point));
                 //remove pp.Next
                 pp.Next = pp.Next.Next;
                 pp.Next.Prev = pp;
@@ -1082,15 +1080,6 @@ namespace Microsoft.Msagl.Routing {
             }
             return false;
         }
-
-        /*
-                void ShowPolylineAndObstaclesWithLineSeg(LineSegment lineSegment)
-                {
-                    var ls = GetDebugCurves();
-                    ls.Add(new DebugCurve(2,"pink", lineSegment));
-                    LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(ls);
-                }
-        */
 
         void ExtendVisibilityGraphToLocationOfTargetFloatingPort(Polyline portLoosePolyline) {
             if (VisibilityGraph == null)

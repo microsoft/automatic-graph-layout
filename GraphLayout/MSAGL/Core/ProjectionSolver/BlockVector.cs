@@ -28,7 +28,6 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
         {
             block.VectorIndex = Vector.Count;
             Vector.Add(block);
-            //Debug_AssertConsistency();
             Debug.Assert(Vector[block.VectorIndex] == block, "Inconsistent block.VectorIndex");
         }
 
@@ -39,7 +38,6 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             Vector[block.VectorIndex] = swapBlock;
             swapBlock.VectorIndex = block.VectorIndex;
             Vector.RemoveAt(Vector.Count - 1);
-            //Debug_AssertConsistency();
             Debug.Assert((0 == Vector.Count) || (block == swapBlock) || (Vector[swapBlock.VectorIndex] == swapBlock),
                     "Inconsistent swapBlock.VectorIndex");
             Debug.Assert((0 == Vector.Count) || (Vector[Vector.Count - 1].VectorIndex == (Vector.Count - 1)),

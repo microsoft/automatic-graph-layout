@@ -261,7 +261,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             }
             internal void Print()
             {
-                Console.WriteLine("GetMaxViolationCalls = {0}; ViolationCacheHits = {1}", this.NumberOfCalls, this.NumberOfHits);
+                System.Diagnostics.Debug.WriteLine("GetMaxViolationCalls = {0}; ViolationCacheHits = {1}", this.NumberOfCalls, this.NumberOfHits);
             }
         } // end struct CacheStats
 #endif // CACHE_STATS

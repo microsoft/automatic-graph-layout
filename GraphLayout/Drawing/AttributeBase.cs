@@ -35,7 +35,7 @@ namespace Microsoft.Msagl.Drawing{
         /// a default constructor
         /// </summary>
         protected AttributeBase(){
-            color = new Color(0, 0, 0); //black
+            color = new Color(0, 0, 0); // black
         }
 
         

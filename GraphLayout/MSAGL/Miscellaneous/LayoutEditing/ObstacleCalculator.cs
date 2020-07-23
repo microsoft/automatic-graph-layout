@@ -313,25 +313,6 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
                 pol.Closed = true;
                 portObstacles.Insert(pol);
                 TightObstacles.Insert(pol);
-                /*
-                Polyline padded = CreatePaddedCurve(Anchor.PolylineAroundClosedCurve(node.BoundaryCurve), this.router.MinimalPadding);
-        
-
-                
-                
-                PolylinePoint polyRightBottomPoint = FindPolyPointToCutAt(node, bp.Parameter, padded);
-                PolylinePoint nextToRightTopTip;
-                Point rightTopTip = GetRightTopTip(node, bp.Parameter, padded, out nextToRightTopTip);
-
-                PolylinePoint prevToLeftTopTip;
-                Point leftTopTip = GetLeftTopTip(node, bp.Parameter, padded, out prevToLeftTopTip);
-                double al = 0.25;
-                Point rightLow = (1 - al) * polyRightBottomPoint.Point + al * polyRightBottomPoint.NextOnPolyline.Point;
-                Point leftLow = al * polyRightBottomPoint.Point + (1 - al) * polyRightBottomPoint.NextOnPolyline.Point;
-                filterLine = new LineSegment(0.5 * (rightTopTip + rightLow), 0.5 * (leftTopTip + leftLow));
-                AddRightObstacle(rightTopTip, nextToRightTopTip, polyRightBottomPoint, rightLow);
-                AddLeftObstacle(leftLow, polyRightBottomPoint.NextOnPolyline, prevToLeftTopTip, leftTopTip);
-                 */
             } else {
                 filterLine = null;
                 portObstacles.Insert(node.BoundaryCurve);

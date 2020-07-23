@@ -64,7 +64,7 @@ namespace Microsoft.Msagl.Drawing {
                         ReadNodes();
                         break;
                     case Tokens.Edges:
-                        FleshOutSubgraphs(); //for this moment the nodes and the clusters have to be set already
+                        FleshOutSubgraphs(); // for this moment the nodes and the clusters have to be set already
                         ReadEdges();
                         break;
                     case Tokens.Subgraphs:
@@ -76,17 +76,9 @@ namespace Microsoft.Msagl.Drawing {
                     case Tokens.End:
                         done = true;
                         break;
-                    default: //ignore this element
+                    default: // ignore this element
                         xmlReader.Skip();
                         break;
-
-                    //                        XmlReader.Skip();
-                    //                        ReadHeader();
-                    //                        if (TokenIs(Tokens.LayoutAlgorithmSettings))
-                    //                            this.Settings = ReadLayoutAlgorithmSettings(XmlReader);
-                    //                        ReadNodes();
-                    //                        ReadClusters();
-                    //                        ReadEdges();
                 }
             } while (!done);
           

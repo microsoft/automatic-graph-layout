@@ -297,13 +297,6 @@ namespace Microsoft.Msagl.Drawing {
             WriteEndElement();
         }
 
-        //private void WriteLabelSize(Size size) {
-        //    WriteStartElement(Tokens.LabelSize);
-        //    WriteStringElement(Tokens.Width, size.Width);
-        //    WriteStringElement(Tokens.Height, size.Height);
-        //    WriteEndElement();
-        //}
-
         private void WriteStyles(IEnumerable<Style> styles) {
             WriteStartElement(Tokens.Styles);
             foreach (Style s in styles)

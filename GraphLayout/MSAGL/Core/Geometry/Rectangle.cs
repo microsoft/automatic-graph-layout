@@ -75,11 +75,9 @@ namespace Microsoft.Msagl.Core.Geometry{
                 return false;
 
             return true;
-            //return ApproximateComparer.Compare(r.bottom, top) <= 0 && ApproximateComparer.Compare(bottom, r.top) <= 0;
         }
 
         internal bool IntersectsOnX(Rectangle r){
-            //return ApproximateComparer.Compare(r.left, right) <= 0 && ApproximateComparer.Compare(left, r.right) <= 0;
             if (r.Left > right + ApproximateComparer.DistanceEpsilon)
                 return false;
 
@@ -87,8 +85,6 @@ namespace Microsoft.Msagl.Core.Geometry{
                 return false;
 
             return true;
-
-            //return ApproximateComparer.Compare(r.left, right) <= 0 && ApproximateComparer.Compare(left, r.right) <= 0;
         }
 
         /// <summary>
@@ -343,8 +339,6 @@ namespace Microsoft.Msagl.Core.Geometry{
         public double Area{
             get { return (right - left)*(top - bottom); }
         }
-
-        //internal Rectangle(){}
 
         /// <summary>
         /// adding a point to the rectangle

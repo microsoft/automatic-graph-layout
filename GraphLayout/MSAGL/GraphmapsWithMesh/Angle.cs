@@ -5,16 +5,6 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
     class Angle
     {
         //compute the angle at A if it is less than pi/2, otherwise return pi/2
-
-        /*TESTS
-            Console.WriteLine("0 0, 1 1, 0 1" +Angle.getAngleIfSmallerThanPIby2(new Vertex(0, 0), new Vertex(1, 1), new Vertex(0, 1)));
-            Console.WriteLine("0 0, -1 1, 0 1" + Angle.getAngleIfSmallerThanPIby2(new Vertex(0, 0), new Vertex(-1, 1), new Vertex(0, 1)));
-            Console.WriteLine("0 0, -1 -1, 0 1" + Angle.getAngleIfSmallerThanPIby2(new Vertex(0, 0), new Vertex(-1, -1), new Vertex(0, 1)));
-            Console.WriteLine("0 0, 1 -1, 0 1" + Angle.getAngleIfSmallerThanPIby2(new Vertex(0, 0), new Vertex(1, -1), new Vertex(0, 1)));
-            Console.WriteLine("0 0, -1 1, 1 1" + Angle.getAngleIfSmallerThanPIby2(new Vertex(0, 0), new Vertex(-1, 1), new Vertex(1, 1)));
-            Console.WriteLine("0 0, -1 -1, 1 1" + Angle.getAngleIfSmallerThanPIby2(new Vertex(0, 0), new Vertex(-1, -1), new Vertex(1, 1)));
-            Console.WriteLine("0 0, 1 -1, 1 1" + Angle.getAngleIfSmallerThanPIby2(new Vertex(0, 0), new Vertex(1, -1), new Vertex(1, 1)));
-         */
         public static double getAngleIfSmallerThanPIby2(Vertex A, Vertex B, Vertex C)
         {
 
@@ -34,7 +24,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 return Math.Abs(Math.Atan2(yDiff1, xDiff1) - Math.Atan2(yDiff2, xDiff2));
 
 
-            return Math.PI / 2;//Abs(Math.Atan2(yDiff1, xDiff1) - Math.Atan2(yDiff2, xDiff2));
+            return Math.PI / 2;
         }
 
         public static double getClockwiseAngle(Vertex A, Vertex B, Vertex C)

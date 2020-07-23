@@ -192,7 +192,7 @@ namespace Microsoft.Msagl.Drawing
         ///<summary>
         ///Separation between layers in
         ///</summary>
-        private double layersep = 72 * 0.5; //is equal to minLayerSep
+        private double layersep = 72 * 0.5; // is equal to minLayerSep
  /// <summary>
  /// the distance between two neigbor layers
  /// </summary>

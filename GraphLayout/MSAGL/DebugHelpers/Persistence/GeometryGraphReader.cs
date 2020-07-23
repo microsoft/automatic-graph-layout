@@ -547,11 +547,6 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
 
         void ReadRails(LgLevel level)
         {
-            //CheckToken(GeometryToken.Rails);
-            //XmlRead();
-            //while (TokenIs(GeometryToken.Rail)) {
-            //    ReadRail(level);
-            //}
 
             CheckToken(GeometryToken.Rails);
             if (XmlReader.IsEmptyElement)
@@ -1042,43 +1037,6 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
             return 0;
         }
 
-        /*
-                SmoothedPolyline ReadUnderlyingPolyline() {
-                    CheckToken(GeometryToken.UnderlyingPolyline);
-                    XmlRead();
-                    if (ReadBooleanElement(GeometryToken.UnderlyingPolylineIsNull)) {
-                        ReadEndElement();
-                        return null;
-                    }
-
-                    Site s = ReadSite();
-                    var poly = new SmoothedPolyline(s);
-                    while (TokenIs(GeometryToken.PolylineSite)) {
-                        Site ns = ReadSite();
-                        s.Next = ns;
-                        ns.Previous = s;
-                        s = ns;
-                    }
-                    ReadEndElement();
-                    return poly;
-                }
-        */
-
-        /*
-                Site ReadSite() {
-                    CheckToken(GeometryToken.PolylineSite);
-                    XmlRead();
-                    var s = new Site {
-                                         PreviousBezierSegmentFitCoefficient = ReadDoubleElement(GeometryToken.SiteK),
-                                         NextBezierSegmentFitCoefficient = ReadDoubleElement(GeometryToken.SiteK),
-                                         Point = ReadPointElement(GeometryToken.SiteV)
-                                     };
-                    ReadEndElement();
-                    return s;
-                }
-        */
-
-
         Node ReadTargetNode()
         {
             var targetId = GetMustAttribute(GeometryToken.T);
@@ -1405,16 +1363,6 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
 
         ICurve ReadEllepticalArc(CurveStream curveStream, ref Point currentPoint)
         {
-            /*
-            var rx = "A"+DoubleToString(ellipse.AxisA.Length);
-            var ry = DoubleToString(ellipse.AxisB.Length);
-            var xAxisRotation = DoubleToString(180*Point.Angle(new Point(1, 0), ellipse.AxisA)/Math.PI);
-            var largeArcFlag = Math.Abs(ellipse.ParEnd - ellipse.ParStart) >= Math.PI ? "1" : "0";
-            var sweepFlag = ellipse.ParEnd > ellipse.ParStart ? "1" : "0"; //it happens because of the y-axis orientation down in SVG
-            var endPoint=PointToString(ellipse.End);
-            return string.Join(" ", new[] {rx, ry, xAxisRotation, largeArcFlag, sweepFlag, endPoint});
-            var endPoint = GetCurveDataPoint(curveStream);
-             */
             var rx = GetNextDoubleFromCurveData(curveStream);
             var ry = GetNextDoubleFromCurveData(curveStream);
             var xAxisRotation = GetNextDoubleFromCurveData(curveStream) / 180 * Math.PI;
@@ -1508,23 +1456,6 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
             // ReSharper restore PossibleNullReferenceException
         }
 
-
-        /*
-                ICurve ReadPolyline() {
-                    XmlRead();
-                    var poly = new Polyline {
-                        Closed = ReadBooleanElement(GeometryToken.Closed)
-                    };
-                    CheckToken(GeometryToken.PolylinePoints);
-                    XmlRead();
-                    while (TokenIs(GeometryToken.Point))
-                        poly.AddPoint(ReadPoint());
-                    ReadEndElement();
-                    ReadEndElement();
-                    return poly;
-                }
-        */
-
         ICurve ReadLineSeg()
         {
             CheckToken(GeometryToken.LineSegment);
@@ -1552,126 +1483,10 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
                    XmlReader.IsStartElement(t.ToString());
         }
 
-
-        /*
-                void ReadTransform(PlaneTransformation transform) {
-                    if (TokenIs(GeometryToken.Transform)) {
-                        XmlRead();
-                        for (int i = 0; i < 2; i++)
-                            for (int j = 0; j < 3; j++) {
-                                CheckToken(GeometryToken.TransformElement);
-                                MoveToContent();
-                                transform[i, j] = ReadElementContentAsDouble();
-                            }
-                        XmlRead();
-                    } else {
-                        //set the unit transform
-                        transform[0, 0] = 1;
-                        transform[0, 1] = 0;
-                        transform[0, 2] = 0;
-                        transform[1, 0] = 0;
-                        transform[1, 1] = 1;
-                        transform[1, 2] = 0;
-                    }
-                }
-        */
-
-
         void MoveToContent()
         {
             XmlReader.MoveToContent();
         }
-
-
-        /*
-                /// <summary>
-                /// reads the layout algorithm settings
-                /// </summary>
-                LayoutAlgorithmSettings ReadLayoutAlgorithmSettings(XmlReader reader) {
-                    LayoutAlgorithmSettings layoutSettings = null;
-                    CheckToken(reader, GeometryToken.LayoutAlgorithmSettings);
-                    if (reader.IsEmptyElement) {
-                        reader.Read();
-                        return null;
-                    }
-                    reader.Read();
-                    var edgeRoutingMode = (EdgeRoutingMode)ReadIntElement(reader, GeometryToken.EdgeRoutingMode);
-                    bool useSpanner = ReadBooleanElement(GeometryToken.UseSparseVisibilityGraph);
-                    bool useKdHull = ReadBooleanElement(GeometryToken.UseKdHull);
-                    if (XmlReader.NodeType == XmlNodeType.EndElement) { //todo - support fastincremental settings
-                        layoutSettings = new FastIncrementalLayoutSettings();
-                        EdgeRoutingSettings routingSettings = layoutSettings.EdgeRoutingSettings;
-                        routingSettings.UseKdHullForRouting = useKdHull;
-                        routingSettings.UseSparseVisibilityGraph = useSpanner;
-                        routingSettings.EdgeRoutingMode = edgeRoutingMode;
-                    } else {
-                        var token = (GeometryToken)Enum.Parse(typeof(GeometryToken), reader.ReadElementContentAsString(), false);
-                        if (token == GeometryToken.SugiyamaLayoutSettings) {
-                            layoutSettings = ReadSugiyamaLayoutSettings(reader, useKdHull, useSpanner, edgeRoutingMode);
-                        } else if (token == GeometryToken.MdsLayoutSettings) {
-                            var mds = new MdsLayoutSettings();
-                            EdgeRoutingSettings routingSettings = mds.EdgeRoutingSettings;
-                            routingSettings.EdgeRoutingMode = edgeRoutingMode;
-                            routingSettings.UseSparseVisibilityGraph = useSpanner;
-                            routingSettings.UseKdHullForRouting = useKdHull;
-
-                            layoutSettings = mds;
-        #if REPORTING
-                            mds.Reporting = ReadBooleanElement(reader, GeometryToken.Reporting);
-        #endif
-                            mds.Exponent = ReadDoubleElement(reader, GeometryToken.Exponent);
-                            mds.majorizationMaxIter = ReadIntElement(reader, GeometryToken.majorizationMaxIter);
-                            mds.PivotNumber = ReadIntElement(reader, GeometryToken.PivotNumber);
-                            mds.RotationAngle = ReadDoubleElement(reader, GeometryToken.RotationAngle);
-                            mds.ScaleX = ReadDoubleElement(reader, GeometryToken.ScaleX);
-                            mds.ScaleY = ReadDoubleElement(reader, GeometryToken.ScaleY);
-                        } else//todo - write a reader and a writer for FastIncrementalLayoutSettings 
-                            throw new NotImplementedException();
-                    }
-                    reader.ReadEndElement();
-
-                    return layoutSettings;
-                }
-        */
-
-        /*
-                LayoutAlgorithmSettings ReadSugiyamaLayoutSettings(XmlReader reader, bool useKdHull, bool useSpanner, EdgeRoutingMode edgeRoutingMode) {
-                    LayoutAlgorithmSettings layoutSettings;
-                    var sugiyama = new SugiyamaLayoutSettings();
-                    EdgeRoutingSettings routingSettings = sugiyama.EdgeRoutingSettings;
-                    routingSettings.EdgeRoutingMode = edgeRoutingMode;
-                    routingSettings.UseSparseVisibilityGraph = useSpanner;
-                    routingSettings.UseKdHullForRouting = useKdHull;
-
-                    layoutSettings = sugiyama;
-
-                    sugiyama.MinNodeWidth = ReadDoubleElement(GeometryToken.MinNodeWidth);
-                    sugiyama.MinNodeHeight = ReadDoubleElement(GeometryToken.MinNodeHeight);
-                    ReadAspectRatio(sugiyama);
-                    ReadNodeSeparation(sugiyama);
-
-        #if REPORTING
-                    sugiyama.Reporting = ReadBooleanElement(reader, GeometryToken.Reporting);
-        #endif
-                    sugiyama.RandomSeedForOrdering = ReadIntElement(reader, GeometryToken.RandomSeedForOrdering);
-                    sugiyama.NoGainAdjacentSwapStepsBound = ReadIntElement(reader, GeometryToken.NoGainStepsBound);
-                    sugiyama.MaxNumberOfPassesInOrdering = ReadIntElement(reader,
-                                                                          GeometryToken.MaxNumberOfPassesInOrdering);
-                    sugiyama.RepetitionCoefficientForOrdering = ReadIntElement(reader,
-                                                                               GeometryToken.
-                                                                                   RepetitionCoefficientForOrdering);
-                    sugiyama.GroupSplit = ReadIntElement(reader, GeometryToken.GroupSplit);
-                    sugiyama.LabelCornersPreserveCoefficient = ReadDoubleElement(reader,
-                                                                                 GeometryToken.
-                                                                                     LabelCornersPreserveCoefficient);
-                    sugiyama.BrandesThreshold = ReadIntElement(reader, GeometryToken.BrandesThreshold);
-                    sugiyama.LayerSeparation = ReadDoubleElement(reader, GeometryToken.LayerSeparation);
-                    var transform = new PlaneTransformation();
-                    ReadTransform(transform);
-                    return layoutSettings;
-                }
-        */
-
 
         /// <summary>
         /// the xml reader
@@ -1710,14 +1525,6 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
                     xmlTextReader.LinePosition);
             return String.Empty;
         }
-
-        /*
-                static void CheckToken(XmlReader xmlR, GeometryToken t) {
-                    if (!xmlR.IsStartElement(t.ToString())) {
-                        throw new InvalidDataException(String.Format(CultureInfo.InvariantCulture, "{0}", t));
-                    }
-                }
-        */
 
         ///<summary>
         ///reads the end element

@@ -75,16 +75,11 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
             lastRunNumberIterations = 0;
             while (OneIteration(nodePositions, nodeSizes, false)) {
                 lastRunNumberIterations++;
-//                if (lastRunNumberIterations%10 == 0)
-//                    Console.Write("removing overlaps with cdt only {0},", lastRunNumberIterations);
             }
-            //        Console.WriteLine();
             while (OneIteration(nodePositions, nodeSizes, true)) {
                 lastRunNumberIterations++;
-//                Console.Write("iterations with sweeping line {0},", lastRunNumberIterations);
             }
 
-            Console.WriteLine();
 
             for (int i = 0; i < _nodes.Length; i++) {
                 _nodes[i].Center = nodePositions[i];
@@ -217,9 +212,6 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
 
             int rootId = treeEdges.First().Item1;
 
-//            if (nodeSizes.Length > 100)
-//                ShowAndMoveBoxesRemoveLater(treeEdges, proximityEdges, nodeSizes, nodePositions, rootId);
-
             MoveNodePositions(treeEdges, nodePositions, rootId);
 
             return true;
@@ -231,52 +223,6 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
             MstLineSweeper mstLineSweeper = new MstLineSweeper(proximityEdges, nodeSizes, nodePositions, _overlapForLayers);
             return mstLineSweeper.Run();
         }
-
-/*
-        /// <summary>
-        /// Add additional proximity edges which where not found by the triangulation.
-        /// </summary>
-        /// <param name="proximityEdges">tuple representing an edge with more information: nodeId1, nodeId2,expandingFactor t, ideal distance, weight</param>
-        /// <param name="nodeSizes"></param>
-        /// <param name="nodePositions"></param>
-        /// <returns></returns>
-        int CreateProximityEdgesWithRTree(List<Tuple<int, int, double, double, double>> proximityEdges,
-            Size[] nodeSizes, Point[] nodePositions) {
-            HashSet<Tuple<int, int>> edgeSet = new HashSet<Tuple<int, int>>();
-
-            foreach (var proximityEdge in proximityEdges) {
-                edgeSet.Add(Tuple.Create(proximityEdge.Item1, proximityEdge.Item2));
-            }
-            RectangleNode<int> rootNode =
-                RectangleNode<int>.CreateRectangleNodeOnEnumeration(
-                    nodeSizes.Select(
-                        (size, index) => new RectangleNode<int>(index, new Rectangle(size, nodePositions[index]))));
-            int numCrossings = 0;
-            RectangleNodeUtils.CrossRectangleNodes<int, int>(rootNode, rootNode,
-                (a, b) => {
-                    if (a == b) return;
-
-                    var tuple = GetIdealEdgeLength
-                        (
-                            a, b,
-                            nodePositions[a
-                                ],
-                            nodePositions[b
-                                ],
-                            nodeSizes);
-
-                    Tuple<int, int> setTuple;
-                    if (!(tuple.Item3 > 1) ||
-                        edgeSet.Contains(setTuple = new Tuple<int, int>(tuple.Item1, tuple.Item2)))
-                        return;
-                    proximityEdges.Add(tuple);
-                    edgeSet.Add(setTuple);
-                    numCrossings++;
-                });
-
-            return numCrossings;
-        }
-*/
 
 
         /// <summary>

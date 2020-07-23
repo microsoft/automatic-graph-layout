@@ -259,7 +259,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
         internal void VariablesComplete()
         {
 #if VERBOSE
-            Console.WriteLine("Q and b (before scaling)...");
+            System.Diagnostics.Debug.WriteLine("Q and b (before scaling)...");
             DumpMatrix();
             DumpVector("WiDi", vectorWiDi);
 #endif // VERBOSE
@@ -294,11 +294,11 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             }
 
 #if VERBOSE
-            Console.WriteLine("Qpsc.VariablesComplete Variable scales and values");
-            Console.WriteLine(" ordinal     origDesired     desired     scale       unscaled actualpos      scaled actualpos");
+            System.Diagnostics.Debug.WriteLine("Qpsc.VariablesComplete Variable scales and values");
+            System.Diagnostics.Debug.WriteLine(" ordinal     origDesired     desired     scale       unscaled actualpos      scaled actualpos");
             foreach (var qvar in vectorQpscVars)
             {
-                Console.WriteLine("  {0} {1} {2} {3} {4} {5}",
+                System.Diagnostics.Debug.WriteLine("  {0} {1} {2} {3} {4} {5}",
                                     qvar.Variable.Ordinal,
                                     qvar.OrigDesiredPos, qvar.Variable.DesiredPos,
                                     qvar.Variable.Scale,
@@ -337,7 +337,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 }
             }
 #if VERBOSE
-            Console.WriteLine("Q' and b' (after scaling)...");
+            System.Diagnostics.Debug.WriteLine("Q' and b' (after scaling)...");
             DumpMatrix();
             DumpVector("WiDi", vectorWiDi);
 #endif // VERBOSE
@@ -353,12 +353,12 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             if (this.isFirstProjectCall)
             {
 #if VERBOSE
-                Console.WriteLine("Previous and scale-munged ActualPos:");
-                Console.WriteLine(" Ordinal   origDesired desired   unscaledPos     scaledPos");
+                System.Diagnostics.Debug.WriteLine("Previous and scale-munged ActualPos:");
+                System.Diagnostics.Debug.WriteLine(" Ordinal   origDesired desired   unscaledPos     scaledPos");
                 foreach (var qvar in vectorQpscVars)
                 {
                     Debug.Assert(qvar.Variable.ActualPos == vectorCurY[qvar.Variable.Ordinal], "FirstProject: ActualPos != CurY");
-                    Console.WriteLine("    {0} {1} {2} {3} {4}", qvar.Variable.Ordinal,
+                    System.Diagnostics.Debug.WriteLine("    {0} {1} {2} {3} {4}", qvar.Variable.Ordinal,
                                 qvar.OrigDesiredPos, qvar.Variable.DesiredPos,
                                 vectorCurY[qvar.Variable.Ordinal] / qvar.Variable.Scale,
                                 vectorCurY[qvar.Variable.Ordinal]);
@@ -403,13 +403,13 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             if (0.0 == alphaDenominator)
             {
 #if VERBOSE
-                Console.WriteLine("Converging due to zero-gradient");
+                System.Diagnostics.Debug.WriteLine("Converging due to zero-gradient");
 #endif // VERBOSE
                 return false;
             }
             double alpha = alphaNumerator / alphaDenominator;
 #if VERBOSE
-            Console.WriteLine("Alpha = {0} (num {1}, den {2})", alpha, alphaNumerator, alphaDenominator);
+            System.Diagnostics.Debug.WriteLine("Alpha = {0} (num {1}, den {2})", alpha, alphaNumerator, alphaDenominator);
 #endif // VERBOSE
 
             //
@@ -428,13 +428,13 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             }
             normAlphaG = Math.Sqrt(normAlphaG);
 #if VERBOSE
-            Console.WriteLine("NormAlphaG = {0}", this.normAlphaG);
+            System.Diagnostics.Debug.WriteLine("NormAlphaG = {0}", this.normAlphaG);
 #endif // VERBOSE
 #endif // VERIFY || VERBOSE
 
             // Update d(esiredpos) = y - alpha*g
 #if VERBOSE
-            Console.WriteLine("PreProject gradient-stepped desired positions:");
+            System.Diagnostics.Debug.WriteLine("PreProject gradient-stepped desired positions:");
 #endif // VERBOSE
             // Use vectorCurY as temp as it is not used again here and is updated at start of PostProject.
             VectorScaledVectorSubtract(this.vectorPrevY, alpha, this.gradientVector, this.vectorCurY /*d*/);
@@ -443,7 +443,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 this.vectorQpscVars[ii].Variable.DesiredPos = this.vectorCurY[ii];
 #if VERBOSE
                 var qvar = vectorQpscVars[ii];
-                Console.WriteLine("{0} curY {1} orig desiredpos = {2}, current desiredpos = {3}, gradient = {4}",
+                System.Diagnostics.Debug.WriteLine("{0} curY {1} orig desiredpos = {2}, current desiredpos = {3}, gradient = {4}",
                         ii, vectorCurY[ii], qvar.OrigDesiredPos, qvar.Variable.DesiredPos, gradientVector[ii]);
 #endif // VERBOSE
             }
@@ -457,13 +457,13 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             // Update our copy of current positions (y-bar from the paper) and deltaY (p in the Scaling paper; y-bar minus y-hat).
             //
 #if VERBOSE
-            Console.WriteLine("PostProject current scaled and unscaled ActualPos:");
+            System.Diagnostics.Debug.WriteLine("PostProject current scaled and unscaled ActualPos:");
 #endif // VERBOSE
             foreach (var qvar in this.vectorQpscVars)
             {
                 this.vectorCurY[qvar.Variable.Ordinal] = qvar.Variable.ActualPos;
 #if VERBOSE
-                Console.WriteLine("    {0} {1} {2}", qvar.Variable.Ordinal, qvar.Variable.ActualPos, qvar.Variable.ActualPos * qvar.Variable.Scale);
+                System.Diagnostics.Debug.WriteLine("    {0} {1} {2}", qvar.Variable.Ordinal, qvar.Variable.ActualPos, qvar.Variable.ActualPos * qvar.Variable.Scale);
 #endif // VERBOSE
             }
 
@@ -472,7 +472,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             VectorVectorSubtract(this.vectorPrevY, this.vectorCurY, this.vectorCurY /*result; p (deltaY)*/);
 
 #if VERBOSE
-            Console.WriteLine("PostProject variable deltas:");
+            System.Diagnostics.Debug.WriteLine("PostProject variable deltas:");
 #endif // VERBOSE
 
 #if VERIFY || VERBOSE
@@ -481,12 +481,12 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             {
                 normDeltaY += this.vectorCurY[ii] * this.vectorCurY[ii];
 #if VERBOSE
-                Console.WriteLine("  {0} {1}", ii, vectorCurY[ii]);
+                System.Diagnostics.Debug.WriteLine("  {0} {1}", ii, vectorCurY[ii]);
 #endif // VERBOSE
             }
             normDeltaY = Math.Sqrt(normDeltaY);
 #if VERBOSE
-            Console.WriteLine("NormAlphaG = {0}; normDeltaY = {1}", this.normAlphaG, normDeltaY);
+            System.Diagnostics.Debug.WriteLine("NormAlphaG = {0}; normDeltaY = {1}", this.normAlphaG, normDeltaY);
 #endif // VERBOSE
 
             // dblNormSg must be >= dblNormd; account for rounding errors.
@@ -500,7 +500,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             double beta = 0.0;
 #if VERBOSE
             if (0.0 == betaNumerator) {
-                Console.WriteLine("  Beta-numerator is zero");
+                System.Diagnostics.Debug.WriteLine("  Beta-numerator is zero");
             }
 #endif // VERBOSE
             if (0.0 != betaNumerator)
@@ -515,7 +515,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 // Dividing by almost-0 would yield a huge value which we'd cap at 1.0 below.
                 beta = (0.0 == betaDenominator) ? 1.0 : (betaNumerator / betaDenominator);
 #if VERBOSE
-                Console.WriteLine("Beta = {0} (num {1}, den {2})", beta, betaNumerator, betaDenominator);
+                System.Diagnostics.Debug.WriteLine("Beta = {0} (num {1}, den {2})", beta, betaNumerator, betaDenominator);
 #endif // VERBOSE
                 if (beta > 1.0)
                 {
@@ -526,7 +526,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 else if (beta < 0.0)
                 {
 #if VERBOSE
-                    Console.WriteLine("  Resetting negative Beta to zero");
+                    System.Diagnostics.Debug.WriteLine("  Resetting negative Beta to zero");
 #endif // VERBOSE
                     // Setting it above 0.0 can move us away from convergence, so set it to 0.0 which leaves 
                     // vectorCurY unchanged from vectorPrevY and we'll terminate if there are no splits/violations.
@@ -540,9 +540,9 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             VectorScaledVectorSubtract(this.vectorPrevY, beta, this.vectorCurY /*p*/, this.vectorCurY /*result*/);
 
 #if VERBOSE
-            Console.WriteLine("PostProject variable positions (scaled, unscaled) adjusted for Beta:");
+            System.Diagnostics.Debug.WriteLine("PostProject variable positions (scaled, unscaled) adjusted for Beta:");
             for (int ii = 0; ii < vectorCurY.Length; ++ii) {
-                Console.WriteLine("  {0} {1} {2}", ii, vectorCurY[ii], vectorCurY[ii] * vectorQpscVars[ii].Variable.Scale);
+                System.Diagnostics.Debug.WriteLine("  {0} {1} {2}", ii, vectorCurY[ii], vectorCurY[ii] * vectorQpscVars[ii].Variable.Scale);
             }
 #endif // VERBOSE
             this.isFirstProjectCall = false;
@@ -564,7 +564,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                     qvar.Variable.ActualPos *= qvar.Variable.Scale;
                     qvar.Variable.Scale = qvar.OrigScale;
 #if VERBOSE
-                    Console.WriteLine("var {0} block {1} blockscale {2} blockrefpos {3} ActualPos {4}", qvar.Variable.Ordinal, qvar.Variable.Block.Id,
+                    System.Diagnostics.Debug.WriteLine("var {0} block {1} blockscale {2} blockrefpos {3} ActualPos {4}", qvar.Variable.Ordinal, qvar.Variable.Block.Id,
                                         qvar.Variable.Block.Scale, qvar.Variable.Block.ReferencePos, qvar.Variable.ActualPos);
 #endif // VERBOSE
                 }
@@ -601,7 +601,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 // Add the (w d).d final factor for the function value.
                 dblTestFuncValue += qvar.OrigWeight * dblOrigDi * dblOrigDi;
             }
-            Console.WriteLine("Iteration function value: {0}", dblTestFuncValue);
+            System.Diagnostics.Debug.WriteLine("Iteration function value: {0}", dblTestFuncValue);
 #endif // VERBOSE
 
             // If this is not our first PreProject call, test for convergence.
@@ -615,7 +615,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                     dblDeltaNorm += (vectorPrevY[ii] - vectorCurY[ii]) * (vectorPrevY[ii] - vectorCurY[ii]);
                 }
                 dblDeltaNorm = Math.Sqrt(dblDeltaNorm);
-                Console.WriteLine("|Xprev - xCur|: {0}", dblDeltaNorm);
+                System.Diagnostics.Debug.WriteLine("|Xprev - xCur|: {0}", dblDeltaNorm);
 #endif // VERBOSE
 
                 // Check for convergence.  We are monotonically decreasing so prev should be > cur
@@ -632,7 +632,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
 #endif // EX_VERIFY
                 }
 #if VERBOSE
-                Console.WriteLine("  dblPrevFunctionValue {0:F5}, currentFunctionValue {1:F5}, dblDiff {2}, dblQuotient {3}",
+                System.Diagnostics.Debug.WriteLine("  dblPrevFunctionValue {0:F5}, currentFunctionValue {1:F5}, dblDiff {2}, dblQuotient {3}",
                                 previousFunctionValue, currentFunctionValue, diff, quotient);
 #endif // VERBOSE
 
@@ -640,7 +640,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                         || (Math.Abs(quotient) < solverParameters.QpscConvergenceQuotient))
                 {
 #if VERBOSE
-                    Console.WriteLine("  Terminating due to function value change within convergence epsilon");
+                    System.Diagnostics.Debug.WriteLine("  Terminating due to function value change within convergence epsilon");
 #endif // VERBOSE
                     fConverged = true;
                 }
@@ -760,7 +760,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
 #if VERBOSE
         void DumpMatrix() {
             // We only have the one matrix to dump.
-            Console.WriteLine("A:");
+            System.Diagnostics.Debug.WriteLine("A:");
             double[] row = new double[vectorQpscVars.Length];
             uint activeCells = 0;
             for (int ii = 0; ii < row.Length; ++ii) {
@@ -773,17 +773,17 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 }
                 DumpVector(null /*name*/, row);
             }
-            Console.WriteLine("A matrix: {0} cells (average {1:F2} per row)", activeCells, (double)activeCells / matrixQ.Length);
+            System.Diagnostics.Debug.WriteLine("A matrix: {0} cells (average {1:F2} per row)", activeCells, (double)activeCells / matrixQ.Length);
         }
 
         void DumpVector(string name, double[] vector) {
             if (null != (object)name) {
-                Console.WriteLine(name);
+                System.Diagnostics.Debug.WriteLine(name);
             }
             for (int jj = 0; jj < vector.Length; ++jj) {
-                Console.Write(" {0:F5}", vector[jj]);
+                System.Diagnostics.Debug.Write(" {0:F5}", vector[jj]);
             }
-            Console.WriteLine();
+            System.Diagnostics.Debug.WriteLine();
         }
 #endif // VERBOSE
         #endregion // Internal workers

@@ -331,7 +331,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// <param name="y">Coordinate vector.</param>
         /// <param name="w">Weight matrix.</param>
         /// <param name="iter">Number of iteration steps.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.Write(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "y"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "x"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "w"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "iter")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.Debug.Write(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "y"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "x"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "w"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "iter")]
         public static void DistanceScaling(double[][] d, double[] x, double[] y, double[][] w, int iter) {
             ValidateArg.IsNotNull(d, "d");
             ValidateArg.IsNotNull(x, "x");
@@ -345,7 +345,6 @@ namespace Microsoft.Msagl.Core.Geometry {
                         wSum[i] += w[i][j];
                 }
             }
-            System.Console.Write("distance scaling ");
             for (int c = 0; c < iter; c++) {
                 for (int i = 0; i < n; i++) {
                     double xNew = 0;
@@ -446,13 +445,6 @@ namespace Microsoft.Msagl.Core.Geometry {
             SpectralDecomposition(c, out u1, out lambda1, out u2, out lambda2);
             lambda1 = Math.Sqrt(Math.Abs(lambda1));
             lambda2 = Math.Sqrt(Math.Abs(lambda2));
-            
-            /*
-            for (int i = 0; i < u1.Length; i++) {
-                u1[i] *= lambda1;
-                u2[i] *= lambda2;
-            }
-            */
 
             // place non-pivots by weighted barycenter
             x=new double[d[0].Length];

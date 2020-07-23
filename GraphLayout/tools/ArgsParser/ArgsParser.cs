@@ -42,7 +42,7 @@ namespace ArgsParser {
             if (svalue == null) { v = 0; return false; }
             bool ret = double.TryParse(svalue, out v);
             if (!ret) {
-                Console.WriteLine("for option '{0}' cannot parse value of '{1}'", s, GetStringOptionValue(s));
+                System.Diagnostics.Debug.WriteLine("for option '{0}' cannot parse value of '{1}'", s, GetStringOptionValue(s));
                 return false;
             }
             return true;
@@ -55,7 +55,7 @@ namespace ArgsParser {
             bool ret = int.TryParse(svalue, out v);
             if (!ret)
             {
-                Console.WriteLine("for option '{0}' cannot parse value of '{1}'", s, GetStringOptionValue(s));
+                System.Diagnostics.Debug.WriteLine("for option '{0}' cannot parse value of '{1}'", s, GetStringOptionValue(s));
                 return false;
             }
             return true;
