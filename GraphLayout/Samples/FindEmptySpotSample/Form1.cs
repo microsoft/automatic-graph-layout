@@ -72,6 +72,8 @@ namespace FindEmptySpotSample {
                 }
                 label1.Text = selectedObject.ToString();
             }
+
+            label1.Refresh();
             gViewer.Invalidate();
         }
 

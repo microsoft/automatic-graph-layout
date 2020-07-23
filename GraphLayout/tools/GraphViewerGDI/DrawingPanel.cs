@@ -64,9 +64,9 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     
         DraggingMode MouseDraggingMode {
             get {
-                if (gViewer.panButton.Pushed)
+                if (gViewer.panButton.Checked)
                     return DraggingMode.Pan;
-                if (gViewer.windowZoomButton.Pushed)
+                if (gViewer.windowZoomButton.Checked)
                     return DraggingMode.WindowZoom;
                 return DraggingMode.Default;
             }

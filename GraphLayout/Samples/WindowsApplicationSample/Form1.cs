@@ -144,9 +144,10 @@ namespace WindowsApplicationSample {
                                                      (selectedObject as Microsoft.Msagl.Drawing.Node).Attr.Id));
                     gViewer.Invalidate(e.NewObject);
                 }
-                label1.Text = selectedObject.ToString();
+                label1.Text = selectedObject.ToString();                
             }
 
+            label1.Refresh();
         }
 
         void RestoreSelectedObjAttr() {
