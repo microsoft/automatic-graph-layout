@@ -118,7 +118,7 @@ namespace Editing {
             toolTip.InitialDelay = 1000;
             toolTip.ReshowDelay = 500;
 
-            ToolBar.ButtonClick += ToolBar_ButtonClick;
+            ToolBar.ItemClicked += ToolBar_ButtonClick;
         }
 
         /// <summary>
@@ -139,10 +139,10 @@ namespace Editing {
         /// <summary>
         /// The ToolBar contained in the viewer.
         /// </summary>
-        internal ToolBar ToolBar {
+        internal ToolStrip ToolBar {
             get {
                 foreach (Control c in gViewer.Controls) {
-                    var t = c as ToolBar;
+                    var t = c as ToolStrip;
                     if (t != null)
                         return t;
                 }
@@ -150,9 +150,9 @@ namespace Editing {
             }
         }
 
-        void ToolBar_ButtonClick(object sender, ToolBarButtonClickEventArgs e) {
+        void ToolBar_ButtonClick(object sender, ToolStripItemClickedEventArgs e) {
             foreach (NodeTypeEntry nte in m_NodeTypes)
-                if (nte.Button == e.Button) {
+                if (nte.Button == e.ClickedItem) {
                     var center = new Point();
                     var random = new Random(1);
 
@@ -384,11 +384,11 @@ namespace Editing {
             m_NodeTypes.Add(nte);
 
             if (nte.ButtonImage != null) {
-                ToolBar tb = ToolBar;
-                var btn = new ToolBarButton();
+                ToolStrip tb = ToolBar;
+                var btn = new ToolStripButton();
                 tb.ImageList.Images.Add(nte.ButtonImage);
                 btn.ImageIndex = tb.ImageList.Images.Count - 1;
-                tb.Buttons.Add(btn);
+                tb.Items.Add(btn);
                 nte.Button = btn;
             }
         }
@@ -414,44 +414,36 @@ namespace Editing {
         /// </summary>
         /// <param name="point">The point where the user clicked</param>
         /// <returns>The context menu to be displayed</returns>
-        protected virtual ContextMenu BuildContextMenu(Point point) {
-            var cm = new ContextMenu();
+        protected virtual ContextMenuStrip BuildContextMenu(Point point) {
+            var cm = new ContextMenuStrip();
 
-            MenuItem mi;
+            ToolStripMenuItem mi;
             if (m_NodeTypes.Count == 0) {
-                mi = new MenuItem();
-                mi.OwnerDraw = true;
-                mi.MeasureItem += mi_MeasureItem;
-                mi.DrawItem += mi_DrawItem;
+                mi = new ToolStripMenuItem();
                 mi.Text = "Insert node";
                 mi.Click += insertNode_Click;
-                cm.MenuItems.Add(mi);
+                cm.Items.Add(mi);
             } else {
                 foreach (NodeTypeEntry nte in m_NodeTypes) {
-                    mi = new MenuItem();
-                    mi.OwnerDraw = true;
-                    mi.MeasureItem += mi_MeasureItem;
-                    mi.DrawItem += mi_DrawItem;
+                    mi = new ToolStripMenuItem();
                     mi.Text = "Insert " + nte.Name;
                     mi.Click += insertNode_Click;
                     nte.MenuItem = mi;
-                    cm.MenuItems.Add(mi);
+                    cm.Items.Add(mi);
                 }
             }
 
-            mi = new MenuItem();
-            mi.Text = "-";
-            cm.MenuItems.Add(mi);
+            cm.Items.Add(new ToolStripSeparator());
 
-            mi = new MenuItem();
+            mi = new ToolStripMenuItem();
             mi.Text = "Delete selected";
             mi.Click += deleteSelected_Click;
-            cm.MenuItems.Add(mi);
+            cm.Items.Add(mi);
 
-            mi = new MenuItem();
+            mi = new ToolStripMenuItem();
             mi.Text = "Redo layout";
             mi.Click += redoLayout_Click;
-            cm.MenuItems.Add(mi);
+            cm.Items.Add(mi);
 
             return cm;
         }
@@ -467,7 +459,7 @@ namespace Editing {
                 e.Graphics.DrawImage(nte.ButtonImage, e.Bounds.X, e.Bounds.Y);
                 x = nte.ButtonImage.Width + 1;
             }
-            var mi = sender as MenuItem;
+            var mi = sender as ToolStripMenuItem;
             var h = (int) e.Graphics.MeasureString(mi.Text, Font).Height;
             if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
                 e.Graphics.DrawString(mi.Text, Font, SystemBrushes.HighlightText, x,
@@ -480,7 +472,7 @@ namespace Editing {
             if (e.Index < m_NodeTypes.Count) {
                 var nte = (m_NodeTypes[e.Index] as NodeTypeEntry);
 
-                var mi = sender as MenuItem;
+                var mi = sender as ToolStripMenuItem;
                 e.ItemHeight = SystemInformation.MenuHeight;
                 e.ItemWidth = (int) e.Graphics.MeasureString(mi.Text, Font).Width;
 
@@ -499,7 +491,7 @@ namespace Editing {
             if (e.RightButtonIsPressed && !e.Handled) {
                 m_MouseRightButtonDownPoint = (gViewer).ScreenToSource(e);
 
-                ContextMenu cm = BuildContextMenu(m_MouseRightButtonDownPoint);
+                ContextMenuStrip cm = BuildContextMenu(m_MouseRightButtonDownPoint);
 
                 cm.Show(this, new System.Drawing.Point(e.X, e.Y));
             }
@@ -544,7 +536,7 @@ namespace Editing {
             /// <summary>
             /// If this node type has an associated button, then this will contain a reference to the button.
             /// </summary>
-            internal ToolBarButton Button;
+            internal ToolStripButton Button;
 
             /// <summary>
             /// If this is not null, then a button will be created in the toolbar, which allows the user to insert a node.
@@ -574,7 +566,7 @@ namespace Editing {
             /// <summary>
             /// This will contain the menu item to which this node type is associated.
             /// </summary>
-            internal MenuItem MenuItem;
+            internal ToolStripMenuItem MenuItem;
 
             /// <summary>
             /// The name for this type.
