@@ -710,15 +710,6 @@ namespace Microsoft.Msagl.Drawing
         ///</summary>
         ///<param name="graph"></param>
         ///<param name="outputFile"></param>
-        public static void Write(Graph graph, string outputFile)
-        {
-            Write(graph, outputFile, null, null, 4);
-        }
-
-        ///<summary>
-        ///</summary>
-        ///<param name="graph"></param>
-        ///<param name="outputFile"></param>
         public static void WriteAllExceptEdges(Graph graph, string outputFile) {
             using (var stream = File.Create(outputFile)) {
                 var writer = new SvgGraphWriter(stream, graph) {
