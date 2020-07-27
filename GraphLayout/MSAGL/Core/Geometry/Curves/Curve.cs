@@ -311,7 +311,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             ValidateArg.IsNotNull(curve0, "curve0");
             ValidateArg.IsNotNull(curve1, "curve1");
             Debug.Assert(curve0 != curve1, "curve0 == curve1");
-#if DEBUGGLEE
+#if TEST_MSAGL
 //            double c0S = curve0.ParStart, c1S = curve1.ParStart;
 //            if (CurvesAreCloseAtParams(curve0, curve1, c0S, c1S)) {
 //                double mc0 = 0.5 * (curve0.ParStart + curve0.ParEnd);
@@ -347,7 +347,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             ValidateArg.IsNotNull(curve0, "curve0");
             ValidateArg.IsNotNull(curve1, "curve1");
             Debug.Assert(curve0 != curve1);
-#if DEBUGGLEE
+#if TEST_MSAGL
 //            var c0S = curve0.ParStart;
 //            var c1S = curve1.ParStart;
 //            var c0E = curve0.ParEnd;
@@ -563,13 +563,6 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
                 par1 = Math.Ceiling(par1);
             }
         }
-
-#if DEBUGGLEE
-        static bool CurvesAreCloseAtParams(ICurve c0, ICurve c1, double c0S, double c1S) {
-            return Close(c0[c0S], c1[c1S]) && Close(c0.Derivative(c0S), c1.Derivative(c1S));
-        }
-#endif
-
 
         static IntersectionInfo CurveCurveXWithParallelogramNodesOne(ParallelogramNodeOverICurve n0,
             ParallelogramNodeOverICurve n1) {

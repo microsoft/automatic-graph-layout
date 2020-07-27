@@ -223,7 +223,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         void CalcBiasedAlignment() {
             ConflictElimination();
             Align();
-#if DEBUGGLEE
+#if TEST_MSAGL
             //for (int i = 0; i < nOfVertices; i++)
             //    anchors[i].X = x[i];
             //Layout.ShowDataBase(dataBase);

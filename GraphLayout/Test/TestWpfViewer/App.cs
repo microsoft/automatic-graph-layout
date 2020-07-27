@@ -846,7 +846,7 @@ namespace TestWpfViewer {
         }
 
         void ProcessDgml(string fileName) {
-#if GraphModel
+#if TEST_MSAGL
             Graph gwgraph = DgmlParser.DgmlParser.Parse(fileName);
             if (gwgraph != null) {
                 SetLayoutSettings(gwgraph);

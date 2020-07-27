@@ -2,7 +2,8 @@ using System;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-#if DEBUGGLEE
+using Microsoft.Msagl.Core.Geometry.Curves;
+#if TEST_MSAGL
 
 namespace Microsoft.Msagl.Splines {
     /// <summary>

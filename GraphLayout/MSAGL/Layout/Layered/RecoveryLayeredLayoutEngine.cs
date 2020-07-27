@@ -602,7 +602,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                 anchors[i].X = xLayers[i];
         }
 
-        //[System.Diagnostics.Conditional("DEBUGGLEE")]
+        //[System.Diagnostics.Conditional("TEST_MSAGL")]
         //private void TestYXLayers(LayerArrays layerArrays, int[] xLayers) {
         //    foreach (IntEdge e in this.xLayoutGraph.Edges) {
         //        int s = e.Source; int targ = e.Target;

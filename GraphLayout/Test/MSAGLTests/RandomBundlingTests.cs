@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
 using Microsoft.Msagl.GraphViewerGdi;
 #endif
 using Microsoft.Msagl.Core;

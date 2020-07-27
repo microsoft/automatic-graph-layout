@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
 using Microsoft.Msagl.GraphViewerGdi;
 #endif
 using Microsoft.Msagl.Core;
@@ -116,7 +116,7 @@ namespace Microsoft.Msagl.UnitTests
 
         private static void CheckEdgesForOverlapWithNodes(double tightPadding, GeometryGraph graph)
         {
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
             if (!DontShowTheDebugViewer())
             {
                 DisplayGeometryGraph.SetShowFunctions();
@@ -135,7 +135,7 @@ namespace Microsoft.Msagl.UnitTests
                     var box = v.BoundingBox;
                     var poly = InteractiveObstacleCalculator.CreatePaddedPolyline(Curve.PolylineAroundClosedCurve(v.BoundaryCurve), tightPadding / 2);
                     bool overlaps = CurveOverlapsBox(e.EdgeGeometry.Curve, ref box, poly);
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
     //uncomment to see the graph and the overlaps  
                     if (overlaps && !DontShowTheDebugViewer())
                     {

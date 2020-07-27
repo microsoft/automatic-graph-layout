@@ -820,7 +820,7 @@ namespace TestGraphmaps {
         }
 
         void ProcessDgml(string fileName) {
-#if GRAPH_MODEL
+#if TEST_MSAGL
             Graph gwgraph = DgmlParser.DgmlParser.Parse(fileName);
             if (gwgraph != null) {
                 SetLayoutSettings(gwgraph);

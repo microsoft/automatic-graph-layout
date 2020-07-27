@@ -1,4 +1,4 @@
-﻿#if GRAPH_MODEL
+﻿#if TEST_MSAGL
 using System.Collections.Generic;
 using Microsoft.Msagl.Drawing;
 using Microsoft.VisualStudio.GraphModel;

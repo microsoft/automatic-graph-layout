@@ -6,25 +6,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomaticGraphLayout", "MSA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomaticGraphLayout.Drawing", "Drawing\AutomaticGraphLayout.Drawing.csproj", "{B76F8F71-4B00-4242-BE36-C9F0732511F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdgeRoutingSample", "Samples\EdgeRoutingSample\EdgeRoutingSample.csproj", "{5BAFC4E1-9F39-4D4A-92A3-D2FFE9F52E07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EdgeRoutingSample", "Samples\EdgeRoutingSample\EdgeRoutingSample.csproj", "{5BAFC4E1-9F39-4D4A-92A3-D2FFE9F52E07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editing", "Samples\Editing\Editing.csproj", "{2E68A550-16EC-4E12-B4FA-0AF8789D8731}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Editing", "Samples\Editing\Editing.csproj", "{2E68A550-16EC-4E12-B4FA-0AF8789D8731}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSAGLTests", "Test\MSAGLTests\MSAGLTests.csproj", "{A6D1F09A-3DB0-4CB2-A7F0-422BF1AFE222}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NodesWithImages", "Samples\NodesWithImages\NodesWithImages.csproj", "{63EB7360-5A2B-479D-B1E9-D5D0E8C49D2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NodesWithImages", "Samples\NodesWithImages\NodesWithImages.csproj", "{63EB7360-5A2B-479D-B1E9-D5D0E8C49D2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhyloTreeSampleOverGDI", "Samples\PhyloTreeSampleOverGDI\PhyloTreeSampleOverGDI.csproj", "{5BA112F2-350D-463E-9059-9CBFCEBE92A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhyloTreeSampleOverGDI", "Samples\PhyloTreeSampleOverGDI\PhyloTreeSampleOverGDI.csproj", "{5BA112F2-350D-463E-9059-9CBFCEBE92A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsApplicationSample", "Samples\WindowsApplicationSample\WindowsApplicationSample.csproj", "{2E492C28-479A-46C3-BEB4-6D745D2D30DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsApplicationSample", "Samples\WindowsApplicationSample\WindowsApplicationSample.csproj", "{2E492C28-479A-46C3-BEB4-6D745D2D30DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsingMDSLayoutSample", "Samples\UsingMDSLayoutSample\UsingMDSLayoutSample.csproj", "{E09ABA0A-DF98-4BDF-961B-7A03CBD1BD40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UsingMDSLayoutSample", "Samples\UsingMDSLayoutSample\UsingMDSLayoutSample.csproj", "{E09ABA0A-DF98-4BDF-961B-7A03CBD1BD40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawingFromGeometryGraphSample", "Samples\DrawingFromGeometryGraphSample\DrawingFromGeometryGraphSample.csproj", "{76C7B926-D1C1-405F-AB40-41914FEC3E89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrawingFromGeometryGraphSample", "Samples\DrawingFromGeometryGraphSample\DrawingFromGeometryGraphSample.csproj", "{76C7B926-D1C1-405F-AB40-41914FEC3E89}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestForGDI", "Test\TestForGDI\TestForGDI.csproj", "{2A784E8E-0778-49A9-9D33-32F7C4EFB2CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SettingGraphBoundsSample", "Samples\AspectRatioSample\SettingGraphBoundsSample.csproj", "{18D464C1-1F40-4A32-8E3B-89E19DCE590D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SettingGraphBoundsSample", "Samples\AspectRatioSample\SettingGraphBoundsSample.csproj", "{18D464C1-1F40-4A32-8E3B-89E19DCE590D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{CAAD5476-353C-41F5-A6E7-88BA0C97C2C9}"
 EndProject
@@ -32,9 +32,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{B93737FE-D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{9E51C177-3DF6-474E-AC7A-ED036ED32F05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConstraints", "Test\TestConstraints\TestConstraints.csproj", "{E4DBA222-4285-433F-8F6C-CFA8EE611506}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayoutOfADisconnectedGraphWithSugiyama", "Samples\LayoutOfADisconnectedGraphWithSugiyama\LayoutOfADisconnectedGraphWithSugiyama.csproj", "{F2B48220-24E6-4E5C-B526-976F1541884D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LayoutOfADisconnectedGraphWithSugiyama", "Samples\LayoutOfADisconnectedGraphWithSugiyama\LayoutOfADisconnectedGraphWithSugiyama.csproj", "{F2B48220-24E6-4E5C-B526-976F1541884D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestFormForGViewer", "Test\TestFormForGViewer\TestFormForGViewer.csproj", "{AF9121C3-E4B7-464F-8EBB-96C9CF627C06}"
 EndProject
@@ -44,17 +42,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoronoiDiagramTest", "Test\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWpfViewer", "Test\TestWpfViewer\TestWpfViewer.csproj", "{89066A48-4E50-46A3-84D5-AB99870F1912}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApplicationSample", "Samples\WpfApplicationSample\WpfApplicationSample.csproj", "{B3227B0D-2DA4-4102-82AF-C21842B3674B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfApplicationSample", "Samples\WpfApplicationSample\WpfApplicationSample.csproj", "{B3227B0D-2DA4-4102-82AF-C21842B3674B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeometryRoutinesSample", "Samples\GeometryRoutinesSample\GeometryRoutinesSample.csproj", "{C5ED937C-9739-4991-9A12-F25BBA60F9CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeometryRoutinesSample", "Samples\GeometryRoutinesSample\GeometryRoutinesSample.csproj", "{C5ED937C-9739-4991-9A12-F25BBA60F9CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OverlapRemovalExperiments", "Samples\FindOverlapSample\OverlapRemovalExperiments.csproj", "{CBFA3F16-B154-4127-8419-BEB716F791DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OverlapRemovalExperiments", "Samples\FindOverlapSample\OverlapRemovalExperiments.csproj", "{CBFA3F16-B154-4127-8419-BEB716F791DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastIncrementalLayoutWithGdi", "Samples\FastIncrementalLayoutWithGdi\FastIncrementalLayoutWithGdi.csproj", "{F999D14C-A1F2-4C95-912D-DDA2F1B28B9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastIncrementalLayoutWithGdi", "Samples\FastIncrementalLayoutWithGdi\FastIncrementalLayoutWithGdi.csproj", "{F999D14C-A1F2-4C95-912D-DDA2F1B28B9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindEmptySpotSample", "Samples\FindEmptySpotSample\FindEmptySpotSample.csproj", "{E1195625-FCE6-4073-9A87-76E17782AEF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FindEmptySpotSample", "Samples\FindEmptySpotSample\FindEmptySpotSample.csproj", "{E1195625-FCE6-4073-9A87-76E17782AEF8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocationLabeler", "Samples\LocationLabeling\LocationLabeler.csproj", "{8D541A86-E1CF-4EF2-A817-D79B3F237D9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocationLabeler", "Samples\LocationLabeling\LocationLabeler.csproj", "{8D541A86-E1CF-4EF2-A817-D79B3F237D9B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArgsParser", "tools\ArgsParser\ArgsParser.csproj", "{B9AB0B32-D315-4ED1-83F6-5DBB2F832070}"
 EndProject
@@ -66,21 +64,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DgmlParser", "tools\DgmlPar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dot2Svg", "tools\Dot2Svg\Dot2Svg.csproj", "{363CA13D-7AEE-4229-8279-FBF7754F4426}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadingDgmlGraph", "Samples\LoadingDgmlGraph\LoadingDgmlGraph.csproj", "{931CD0AA-49BF-4038-A1FA-E8EC6C4F59DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoadingDgmlGraph", "Samples\LoadingDgmlGraph\LoadingDgmlGraph.csproj", "{931CD0AA-49BF-4038-A1FA-E8EC6C4F59DE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphmapsWpfControl", "tools\GraphmapsWpfControl\GraphmapsWpfControl.csproj", "{ABE9E888-50BB-4806-8345-D8D69A23F39A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestGraphmaps", "Test\TestGraphmaps\TestGraphmaps.csproj", "{C662BBF3-97D2-4000-8304-B900F785D48F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SameLayerSample", "Samples\SameLayerSample\SameLayerSample.csproj", "{85248FB4-BB05-41D1-98B2-481752F0670A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SameLayerSample", "Samples\SameLayerSample\SameLayerSample.csproj", "{85248FB4-BB05-41D1-98B2-481752F0670A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhyloTreeFromGeometrySample", "Samples\PhyloTreeFromGeometrySample\PhyloTreeFromGeometrySample.csproj", "{158AAAF4-939F-419A-B3EA-2871D167BB1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhyloTreeFromGeometrySample", "Samples\PhyloTreeFromGeometrySample\PhyloTreeFromGeometrySample.csproj", "{158AAAF4-939F-419A-B3EA-2871D167BB1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayerConstraintsFromGeometrySample", "Samples\LayerConstraintsFromGeometrySample\LayerConstraintsFromGeometrySample.csproj", "{26B3B8C1-2AA8-48D3-9DA2-AC2D6AA34C33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LayerConstraintsFromGeometrySample", "Samples\LayerConstraintsFromGeometrySample\LayerConstraintsFromGeometrySample.csproj", "{26B3B8C1-2AA8-48D3-9DA2-AC2D6AA34C33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinWpfApp", "Samples\MinWpfApp\MinWpfApp.csproj", "{543B61A8-A0A4-4C9E-93AB-79559A59EAEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinWpfApp", "Samples\MinWpfApp\MinWpfApp.csproj", "{543B61A8-A0A4-4C9E-93AB-79559A59EAEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimplestWinFormsSample", "Samples\SimplestWinFormsSample\SimplestWinFormsSample.csproj", "{6827BA1E-0922-4223-8A5A-3E2194E229D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimplestWinFormsSample", "Samples\SimplestWinFormsSample\SimplestWinFormsSample.csproj", "{6827BA1E-0922-4223-8A5A-3E2194E229D2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2FAFC72A-4DE4-4D91-A2FD-349EC6F1C720}"
 	ProjectSection(SolutionItems) = preProject
@@ -100,7 +98,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfGraphControl", "Tools\Wp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UwpGraphControl", "Tools\UwpGraphControl\UwpGraphControl.csproj", "{7362DB4B-615A-4BA9-9AD6-257E9BFD1C0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyClickDemo", "TinyClickDemo\TinyClickDemo.csproj", "{0744500E-DBF3-435B-B7D9-085868B8C7A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TinyClickDemo", "TinyClickDemo\TinyClickDemo.csproj", "{0744500E-DBF3-435B-B7D9-085868B8C7A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -196,8 +194,8 @@ Global
 		{2E68A550-16EC-4E12-B4FA-0AF8789D8731}.Release|x64.Build.0 = Release|Any CPU
 		{2E68A550-16EC-4E12-B4FA-0AF8789D8731}.Release|x86.ActiveCfg = Release|Any CPU
 		{2E68A550-16EC-4E12-B4FA-0AF8789D8731}.Release|x86.Build.0 = Release|Any CPU
-		{A6D1F09A-3DB0-4CB2-A7F0-422BF1AFE222}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A6D1F09A-3DB0-4CB2-A7F0-422BF1AFE222}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6D1F09A-3DB0-4CB2-A7F0-422BF1AFE222}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{A6D1F09A-3DB0-4CB2-A7F0-422BF1AFE222}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{A6D1F09A-3DB0-4CB2-A7F0-422BF1AFE222}.Debug|ARM.ActiveCfg = Debug|Any CPU
 		{A6D1F09A-3DB0-4CB2-A7F0-422BF1AFE222}.Debug|ARM.Build.0 = Debug|Any CPU
 		{A6D1F09A-3DB0-4CB2-A7F0-422BF1AFE222}.Debug|ARM64.ActiveCfg = Debug|Any CPU
@@ -316,8 +314,8 @@ Global
 		{76C7B926-D1C1-405F-AB40-41914FEC3E89}.Release|x64.Build.0 = Release|Any CPU
 		{76C7B926-D1C1-405F-AB40-41914FEC3E89}.Release|x86.ActiveCfg = Release|Any CPU
 		{76C7B926-D1C1-405F-AB40-41914FEC3E89}.Release|x86.Build.0 = Release|Any CPU
-		{2A784E8E-0778-49A9-9D33-32F7C4EFB2CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2A784E8E-0778-49A9-9D33-32F7C4EFB2CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A784E8E-0778-49A9-9D33-32F7C4EFB2CC}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{2A784E8E-0778-49A9-9D33-32F7C4EFB2CC}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{2A784E8E-0778-49A9-9D33-32F7C4EFB2CC}.Debug|ARM.ActiveCfg = Debug|Any CPU
 		{2A784E8E-0778-49A9-9D33-32F7C4EFB2CC}.Debug|ARM.Build.0 = Debug|Any CPU
 		{2A784E8E-0778-49A9-9D33-32F7C4EFB2CC}.Debug|ARM64.ActiveCfg = Debug|Any CPU
@@ -356,26 +354,6 @@ Global
 		{18D464C1-1F40-4A32-8E3B-89E19DCE590D}.Release|x64.Build.0 = Release|Any CPU
 		{18D464C1-1F40-4A32-8E3B-89E19DCE590D}.Release|x86.ActiveCfg = Release|Any CPU
 		{18D464C1-1F40-4A32-8E3B-89E19DCE590D}.Release|x86.Build.0 = Release|Any CPU
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Debug|ARM.Build.0 = Debug|Any CPU
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Debug|ARM64.ActiveCfg = Debug|Any CPU
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Debug|ARM64.Build.0 = Debug|Any CPU
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Debug|x64.ActiveCfg = Debug|x64
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Debug|x64.Build.0 = Debug|x64
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Debug|x86.ActiveCfg = Debug|x86
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Debug|x86.Build.0 = Debug|x86
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Release|ARM.ActiveCfg = Release|Any CPU
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Release|ARM.Build.0 = Release|Any CPU
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Release|ARM64.ActiveCfg = Release|Any CPU
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Release|ARM64.Build.0 = Release|Any CPU
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Release|x64.ActiveCfg = Release|x64
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Release|x64.Build.0 = Release|x64
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Release|x86.ActiveCfg = Release|x86
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506}.Release|x86.Build.0 = Release|x86
 		{F2B48220-24E6-4E5C-B526-976F1541884D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F2B48220-24E6-4E5C-B526-976F1541884D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2B48220-24E6-4E5C-B526-976F1541884D}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -951,7 +929,6 @@ Global
 		{76C7B926-D1C1-405F-AB40-41914FEC3E89} = {CAAD5476-353C-41F5-A6E7-88BA0C97C2C9}
 		{2A784E8E-0778-49A9-9D33-32F7C4EFB2CC} = {B93737FE-D87D-4D95-A631-45E50FDEF19C}
 		{18D464C1-1F40-4A32-8E3B-89E19DCE590D} = {CAAD5476-353C-41F5-A6E7-88BA0C97C2C9}
-		{E4DBA222-4285-433F-8F6C-CFA8EE611506} = {B93737FE-D87D-4D95-A631-45E50FDEF19C}
 		{F2B48220-24E6-4E5C-B526-976F1541884D} = {CAAD5476-353C-41F5-A6E7-88BA0C97C2C9}
 		{AF9121C3-E4B7-464F-8EBB-96C9CF627C06} = {B93737FE-D87D-4D95-A631-45E50FDEF19C}
 		{FBDC1032-9FD3-4BF0-81AC-7DF45920413A} = {B93737FE-D87D-4D95-A631-45E50FDEF19C}

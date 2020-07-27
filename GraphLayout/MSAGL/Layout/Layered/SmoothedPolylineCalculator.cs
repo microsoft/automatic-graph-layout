@@ -297,7 +297,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
 #region debug stuff
-#if DEBUGGLEE
+#if TEST_MSAGL
         //   static int calls;
         // bool debug { get { return calls == 5;} }
 
