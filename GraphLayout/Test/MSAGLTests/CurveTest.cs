@@ -482,7 +482,7 @@ namespace Microsoft.Msagl.UnitTests {
 
             Assert.IsTrue(d <= (p - poly[l]).Length + ApproximateComparer.Tolerance && d < (p - poly[h]).Length + ApproximateComparer.Tolerance && d < (p - poly[(l + h) / 2]).Length + ApproximateComparer.Tolerance);
         }
-#if !DEBUG
+#if !TEST_MSAGL
         [Timeout(1000)]
 #endif
         [TestMethod]

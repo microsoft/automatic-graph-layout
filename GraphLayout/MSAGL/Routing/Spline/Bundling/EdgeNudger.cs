@@ -58,7 +58,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             CreateBundleBases();
             CreateSegmentsInsideHubs();
 
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
             //ShowHubs(metroGraphData, metroOrdering, null);
 #endif
             CreateCurves();
@@ -168,7 +168,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
         #region Debug show
 
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         static internal void ShowHubs(MetroGraphData metroGraphData, IMetroMapOrderingAlgorithm metroMapOrdering, Station station) {
             var ttt = GetAllDebugCurves(metroMapOrdering, metroGraphData);
@@ -335,7 +335,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             if (ts * (p4 - p0) <= 0 && ts * te <= 0) {
                 //switch to Bezier
                 var curve2 = StandardBezier(p0, ts, p4, te);
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
                 /*List<DebugCurve> dc = new List<DebugCurve>();
                 dc.Add(new DebugCurve(curve));
                 dc.Add(new DebugCurve(0.3, "black", curve2));

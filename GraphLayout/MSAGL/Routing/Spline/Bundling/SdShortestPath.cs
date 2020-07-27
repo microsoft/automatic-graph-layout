@@ -246,7 +246,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             }
         }
 
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
         //        void DebugShow(SdSimpleVertex prevElement, SdBoneEdge outBoneEdge) {
         //            SplineRouter.ShowVisGraph(this.VisibilityGraph,
         //                                      this.ObstacleHierarchy.GetAllLeaves(),

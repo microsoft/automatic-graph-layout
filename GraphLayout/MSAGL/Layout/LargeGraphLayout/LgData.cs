@@ -94,7 +94,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             return ret;
         }
 
-#if DEBUG && !SHARPKIT
+#if TEST_MSAGL && !SHARPKIT
         static void ShowDimmedRails(Set<Rail> dimmedRails) {
             var l = new List<DebugHelpers.DebugCurve>();
             foreach (var r in dimmedRails) {
@@ -185,7 +185,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 }
             }
             
-            //DEBUG comment out by jyoti
+            //TEST_MSAGL comment out by jyoti
             //var l = level.HighlightedRails.Select(r => new DebugCurve((ICurve) r.Geometry));
             //LayoutAlgorithmSettings.ShowDebugCurves(l.ToArray());
 

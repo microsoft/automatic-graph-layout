@@ -33,7 +33,7 @@ using Node = Microsoft.Msagl.Core.Layout.Node;
 using Path = System.IO.Path;
 using Shape = Microsoft.Msagl.Routing.Shape;
 using Size = System.Drawing.Size;
-#if REPORTING
+#if TEST_MSAGL
 using Timer = Microsoft.Msagl.DebugHelpers.Timer;
 #endif
 //using Timer = Microsoft.Msagl.Timer;
@@ -56,7 +56,7 @@ namespace TestForGdi {
             EdgeRoutingMode edgeRoutingMode = EdgeRoutingMode.SugiyamaSplines;
             bool useSparseVisibilityGraph = false;
             bool useObstacleRectangles = false;
-#if DEBUG
+#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif
             const string badEdgeOption = "-edge";
@@ -138,7 +138,7 @@ namespace TestForGdi {
                                     System.Diagnostics.Debug.WriteLine("argument is missing after -vdc");
                                     return;
                                 }
-#if DEBUG
+#if TEST_MSAGL
                                 ShowDebugCurves(args[iarg + 1]);
 #endif
                                 return;
@@ -369,7 +369,7 @@ namespace TestForGdi {
                 router.Run();
 
                 TestPadding(graph.GeometryGraph);
-#if DEBUG
+#if TEST_MSAGL
                 var gv = new GViewer();
                 var f = new Form {
                     StartPosition = FormStartPosition.CenterScreen,
@@ -462,12 +462,12 @@ namespace TestForGdi {
             layeredLayout.Run();
             //   LayoutHelpers.CalculateLayout(graph, settings);
             GeometryGraphWriter.Write(graph, "c:\\tmp\\correctLayout");
-#if DEBUG
+#if TEST_MSAGL
             LayoutAlgorithmSettings.ShowGraph(graph);
 #endif
         }
 
-#if DEBUG
+#if TEST_MSAGL
 
         static void ShowDebugCurves(string fileName) {
             DisplayGeometryGraph.ShowDebugCurvesEnumerationOnForm(GetDebugCurves(fileName), new Form1());
@@ -504,12 +504,12 @@ namespace TestForGdi {
         static void GroupRoutingTestSpline() {
             LayoutAlgorithmSettings settings;
             var graph = GetTestGraphWithClusters(out settings);
-#if DEBUG
+#if TEST_MSAGL
             //DisplayGeometryGraph.ShowGraph(graph);
 #endif
             var router = new SplineRouter(graph, 2, 9, Math.PI / 6, new BundlingSettings());
             router.Run();
-#if DEBUG
+#if TEST_MSAGL
             DisplayGeometryGraph.ShowGraph(graph);
 #endif
         }
@@ -560,7 +560,7 @@ namespace TestForGdi {
             GeometryGraph graph = GeometryGraphReader.CreateFromFile("c:/tmp/bug.msagl.geom");
             var router = new SplineRouter(graph, 10, 5, Math.PI/6);
             router.Run();
-#if DEBUG
+#if TEST_MSAGL
             DisplayGeometryGraph.ShowGraph(graph);
 #endif
         }
@@ -623,7 +623,7 @@ namespace TestForGdi {
 
             var layeredLayout = new LayeredLayout(graph, settings);
             layeredLayout.Run();
-#if DEBUG
+#if TEST_MSAGL
             LayoutAlgorithmSettings.ShowGraph(graph);
 #endif
 
@@ -695,13 +695,13 @@ namespace TestForGdi {
                 var router = new SplineRouter(graph, 10, 1, Math.PI/6);
                 router.Run();
             }
-#if DEBUG
+#if TEST_MSAGL
             LayoutAlgorithmSettings.ShowGraph(graph);
 #endif
             graph = GeometryGraphReader.CreateFromFile("c:\\tmp\\graph1.msagl.geom");
             var splineRouter = new SplineRouter(graph, 10, 1, Math.PI / 6);
             splineRouter.Run();
-#if DEBUG
+#if TEST_MSAGL
             LayoutAlgorithmSettings.ShowGraph(graph);
 #endif
             //RoutingTest0();
@@ -714,7 +714,7 @@ namespace TestForGdi {
                 box.Pad(box.Diagonal/4);
                 graph.BoundingBox = box;
             }
-#if DEBUG
+#if TEST_MSAGL
             LayoutAlgorithmSettings.ShowGraph(graph);
 #endif
 #endif
@@ -722,12 +722,12 @@ namespace TestForGdi {
         static void RouteCustomEdges(int count) {
             for (int i = 0; i < count; i++) {
                 var graph = CreateGraphForGroupRouting();
-#if DEBUG
+#if TEST_MSAGL
                 LayoutAlgorithmSettings.ShowGraph(graph);
 #endif
                 var router = new SplineRouter(graph, 3, 3,Math.PI/180*30);
                 router.Run();
-#if DEBUG
+#if TEST_MSAGL
 
                 int j = 0;
                 List<DebugCurve> edges =
@@ -752,7 +752,7 @@ namespace TestForGdi {
                                                        BendPenaltyAsAPercentageOfDistance = sugiyamaSettings.EdgeRoutingSettings.BendPenalty
                                                    };
             router.Run();
-#if DEBUG
+#if TEST_MSAGL
             DisplayGeometryGraph.ShowGraph(graph);
 #endif
         }
@@ -987,7 +987,7 @@ namespace TestForGdi {
                 }
             }
 
-#if DEBUG
+#if TEST_MSAGL
             if (show) {
                 geomGraph.UpdateBoundingBox();
                 var b = geomGraph.BoundingBox;
@@ -1015,7 +1015,7 @@ namespace TestForGdi {
 
                     var p = nb.ClosestParameter(curvePoint);
                     var nodePoint = nb[p];
-#if DEBUG
+#if TEST_MSAGL
                     if ((nodePoint - curvePoint).Length < 0.99)
                         LayoutAlgorithmSettings.Show(new LineSegment(nodePoint, curvePoint), nb, edgeCurve);
 #endif
@@ -1147,7 +1147,7 @@ namespace TestForGdi {
 //#if TEST_MSAGL
 //            var graph = Parser.GraphFromFile("c:/dev/graphlayout/graphs/fsm.dot");
 //            var gv = new GViewer();
-//#if DEBUG
+//#if TEST_MSAGL
 //            gv.MouseMove += DisplayGeometryGraph.GviewerMouseMove;
 //#endif
 //            gv.CalculateLayout(graph);
@@ -1243,7 +1243,7 @@ namespace TestForGdi {
                 }
             t.Stop();
             System.Diagnostics.Debug.WriteLine(t.Duration);
-            //#if DEBUG
+            //#if TEST_MSAGL
 
             //            LayoutAlgorithmSettings.Show(a, b, c, eg.Curve, eg0.Curve, eg1.Curve);
             //#endif
@@ -1265,7 +1265,7 @@ namespace TestForGdi {
             //            }
             //
             //            hullCurve.AddSegment(new LineSegment(hullCurve.End, hullCurve.Start));
-            //#if DEBUG
+            //#if TEST_MSAGL
             //            LayoutAlgorithmSettings.Show(hullCurve);
             //#endif
         }

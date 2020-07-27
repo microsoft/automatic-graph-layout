@@ -142,7 +142,7 @@ namespace TestFormForGViewer {
 
             else {
                 
-#if REPORTING
+#if TEST_MSAGL
                 graph.LayoutAlgorithmSettings.Reporting = Test.verbose;
 #endif
                 gViewer.FileName = fileName;

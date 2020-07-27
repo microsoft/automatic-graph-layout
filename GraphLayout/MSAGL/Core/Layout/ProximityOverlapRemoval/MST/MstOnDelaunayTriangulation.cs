@@ -78,7 +78,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
         /// </summary>
         public static void Test()
         {
-#if DEBUG && !SHARPKIT
+#if TEST_MSAGL && !SHARPKIT
             int count = 100;
             var random = new Random(3);
             var points = new List<Point>();

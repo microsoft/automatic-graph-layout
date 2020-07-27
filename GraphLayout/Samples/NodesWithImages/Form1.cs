@@ -26,7 +26,7 @@ namespace NodesWithImages {
         GViewer viewer = new GViewer();
 
         public Form1() {
-#if DEBUG
+#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif
             InitializeComponent();

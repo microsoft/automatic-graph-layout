@@ -194,7 +194,7 @@ namespace Microsoft.Msagl.UnitTests
         [TestMethod]
         [Description("the run does not stop")]
         public void BundlingBug1GeomGraph() {
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif
             var graph = GeometryGraphReader.CreateFromFile(GetGeomGraphFileName("bug1.msagl.geom"));

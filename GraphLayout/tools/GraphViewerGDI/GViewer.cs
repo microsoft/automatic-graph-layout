@@ -1524,7 +1524,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             if (localSugiyamaSettings != null) {
                 // Insert hard coded constraints for tests
 
-#if DEBUG
+#if TEST_MSAGL
                 TestSomeGraphs();
 #endif
             }
@@ -1544,7 +1544,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             }
         }
 
-#if DEBUG
+#if TEST_MSAGL
         void TestSomeGraphs() {
             if (fileName.EndsWith("lovett.dot")) {
                 OriginalGraph.LayerConstraints.AddUpDownVerticalConstraint(OriginalGraph.FindNode("Logica"),

@@ -134,27 +134,27 @@ namespace Microsoft.Msagl.Core.Geometry
             if (weight <= 0)
             {
                 throw new ArgumentOutOfRangeException("weight"
-#if DEBUG
+#if TEST_MSAGL
                         , "Invalid node properties"
-#endif // DEBUG
+#endif // TEST_MSAGL
                         );
             }
             double dblCheck = (Math.Abs(position) + size) * weight;
             if (double.IsInfinity(dblCheck) || double.IsNaN(dblCheck))
             {
                 throw new ArgumentOutOfRangeException("position"
-#if DEBUG
+#if TEST_MSAGL
                         , "Invalid node properties"
-#endif // DEBUG
+#endif // TEST_MSAGL
                         );
             }
             dblCheck = (Math.Abs(positionP) + sizeP) * weight;
             if (double.IsInfinity(dblCheck) || double.IsNaN(dblCheck))
             {
                 throw new ArgumentOutOfRangeException("positionP"
-#if DEBUG
+#if TEST_MSAGL
                         , "Invalid node properties"
-#endif // DEBUG
+#endif // TEST_MSAGL
                         );
             }
             this.Id = id;
@@ -274,9 +274,9 @@ namespace Microsoft.Msagl.Core.Geometry
             if (null == rhs)
             {
                 throw new InvalidOperationException(
-#if DEBUG
+#if TEST_MSAGL
                         "Argument 'obj' must be a Node"
-#endif // DEBUG
+#endif // TEST_MSAGL
 );
             }
             return this.CompareTo(rhs);

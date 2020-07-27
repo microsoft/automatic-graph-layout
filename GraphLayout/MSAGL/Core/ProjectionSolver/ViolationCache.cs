@@ -227,9 +227,9 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                     if ((null == this.constraints[ii]) || (this.constraints[ii].Violation <= 0.0))
                     {
                         throw new InvalidOperationException(
-#if DEBUG
+#if TEST_MSAGL
                                 "NULL or stale constraint found in cache"
-#endif // DEBUG
+#endif // TEST_MSAGL
                             );
                     }
                     if (this.constraints[ii].Violation < lowViolation)
@@ -240,9 +240,9 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 if (lowViolation != this.LowViolation)
                 {
                     throw new InvalidOperationException(
-#if DEBUG
+#if TEST_MSAGL
                             "Mismatched Low Violation"
-#endif // DEBUG
+#endif // TEST_MSAGL
                         );
                 }
             }

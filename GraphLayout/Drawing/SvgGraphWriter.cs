@@ -85,7 +85,7 @@ namespace Microsoft.Msagl.Drawing
                 WriteEdges();
                 WriteNodes();
                 
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
                 WriteDebugCurves();
 #endif
                 Close();
@@ -97,7 +97,7 @@ namespace Microsoft.Msagl.Drawing
                 Thread.CurrentThread.CurrentCulture = currentCulture;
             }
         }
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
         void WriteDebugCurves() {
             if(_graph.DebugCurves!=null)
                 foreach (var debugCurve in _graph.DebugCurves) {
@@ -358,7 +358,7 @@ namespace Microsoft.Msagl.Drawing
                 case Shape.Ellipse:
                 case Shape.DrawFromGeometry:
 
-#if DEBUG
+#if TEST_MSAGL
                 case Shape.TestShape:
 #endif
                     WriteFromMsaglCurve(node);

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Msagl.Layout.LargeGraphLayout;
 using Microsoft.Msagl.Prototype.Ranking;
-#if PERSISTENCE
+#if TEST_MSAGL
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -111,7 +111,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
         [SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#")]
         public static GeometryGraph CreateFromFile(string fileName, out LayoutAlgorithmSettings settings)
         {
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
             if (FirstCharacter(fileName) != '<') {
                 settings = null;
                 return null;
@@ -126,7 +126,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
             }
         }
 
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
         static char FirstCharacter(string fileName) {
             using (TextReader reader = File.OpenText(fileName))
             {
@@ -198,7 +198,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
                         layoutSettings = mds;
                         if (XmlReader.IsStartElement(GeometryToken.Reporting.ToString()))
                         {
-#if REPORTING
+#if TEST_MSAGL
                             mds.Reporting =
 #endif
  ReadBooleanElement(GeometryToken.Reporting);
@@ -233,7 +233,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
             sugiyama.NodeSeparation = GetDoubleAttributeOrDefault(GeometryToken.NodeSeparation, sugiyama.NodeSeparation);
             sugiyama.ClusterMargin = sugiyama.NodeSeparation;
 
-#if REPORTING
+#if TEST_MSAGL
             sugiyama.Reporting = GetBoolAttributeOrDefault(GeometryToken.Reporting, false);
 #endif
 

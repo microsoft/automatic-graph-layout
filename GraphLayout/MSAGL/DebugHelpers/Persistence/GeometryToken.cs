@@ -1,4 +1,4 @@
-#if PERSISTENCE
+#if TEST_MSAGL
 namespace Microsoft.Msagl.DebugHelpers {
 #pragma warning disable 1591
     /// <summary>

@@ -974,7 +974,7 @@ namespace Dot2Graph {
                     break;
                 case Shape.DrawFromGeometry:
                     break;
-#if DEBUG
+#if TEST_MSAGL
                 case Shape.TestShape:
                     break;
 #endif

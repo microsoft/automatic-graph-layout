@@ -54,7 +54,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// It is passed to the drawing routine
     /// </summary>
     internal sealed class DGraph : DObject, IViewerGraph {
-#if DEBUG
+#if TEST_MSAGL
 
         internal static bool DrawControlPoints { get; set; }
 #endif
@@ -463,7 +463,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                     case Shape.Ellipse:
                     case Shape.DrawFromGeometry:
 
-#if DEBUG
+#if TEST_MSAGL
                     case Shape.TestShape:
 #endif
                         pen.EndCap = LineCap.Square;

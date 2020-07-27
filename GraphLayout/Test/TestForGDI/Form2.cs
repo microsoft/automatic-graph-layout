@@ -255,7 +255,7 @@ namespace TestForGdi {
                     //                        graph.Attr.LayerDirection = LayerDirection.RL;
                 }
 
-#if REPORTING
+#if TEST_MSAGL
                 graph.LayoutAlgorithmSettings.Reporting = verbose;
 #endif
                 gViewer.FileName = fileName;
@@ -484,7 +484,7 @@ namespace TestForGdi {
 
         void RouteEdgesRegular() {
             if (GViewer.Graph != null) {
-#if DEBUG
+#if TEST_MSAGL
                 gViewer.Graph.DebugICurves.Clear();
 #endif
                 var edgeMode = GViewer.Graph.LayoutAlgorithmSettings.EdgeRoutingSettings.EdgeRoutingMode;

@@ -159,7 +159,7 @@ namespace TestGraphmaps {
 
         
         protected override void OnStartup(StartupEventArgs e) {
-#if DEBUG
+#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif
 

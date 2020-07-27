@@ -135,7 +135,7 @@ namespace TestWpfViewer {
         //RangeSlider edgeRangeSlider;
 
         protected override void OnStartup(StartupEventArgs e) {
-#if DEBUG
+#if TEST_MSAGL
             Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
 #endif
 

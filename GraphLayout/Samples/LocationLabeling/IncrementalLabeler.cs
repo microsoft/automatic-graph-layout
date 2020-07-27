@@ -55,7 +55,7 @@ namespace LocationLabeling {
             do {
                 Shift();
                 var newE = GetEnergy();
-#if MYDEBUG
+#if TEST_MSAGL
                 System.Diagnostics.Debug.WriteLine("e {0} newE {1} diff {2}", e, newE, e - newE);
 #endif
 

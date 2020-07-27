@@ -40,7 +40,7 @@ namespace DebugCurveViewer {
         /// </summary>
         [STAThread]
         static void Main(string[] args) {
-#if DEBUG
+#if TEST_MSAGL
             if (args.Length < 1){
                 System.Diagnostics.Debug.WriteLine("no file name was given");
                 return;

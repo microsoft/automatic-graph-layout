@@ -1,5 +1,5 @@
 ﻿using Microsoft.Msagl.Layout.LargeGraphLayout;
-#if PERSISTENCE
+#if TEST_MSAGL
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -949,7 +949,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
                     if (mds != null)
                     {
                         WriteAttribute(GeometryToken.LayoutAlgorithmType, GeometryToken.MdsLayoutSettings);
-#if REPORTING
+#if TEST_MSAGL
                         WriteAttribute(GeometryToken.Reporting, mds.Reporting);
 #endif
                         WriteAttribute(GeometryToken.Exponent, mds.Exponent);
@@ -972,7 +972,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
             WriteAttribute(GeometryToken.MinNodeHeight, sugiyama.MinNodeHeight);
             WriteAttribute(GeometryToken.AspectRatio, sugiyama.AspectRatio);
             WriteAttribute(GeometryToken.NodeSeparation, sugiyama.NodeSeparation);
-#if REPORTING
+#if TEST_MSAGL
             WriteAttribute(GeometryToken.Reporting, sugiyama.Reporting);
 #endif
             WriteAttribute(GeometryToken.RandomSeedForOrdering, sugiyama.RandomSeedForOrdering);

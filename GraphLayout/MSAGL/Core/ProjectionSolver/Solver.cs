@@ -146,9 +146,9 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             if (!this.allConstraints.IsEmpty)
             {
                 throw new InvalidOperationException(
-#if DEBUG
+#if TEST_MSAGL
                         "Cannot add Variables or Constraints once Solve() has been called"
-#endif // DEBUG
+#endif // TEST_MSAGL
                     );
             }
 
@@ -277,18 +277,18 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             if (!this.allConstraints.IsEmpty)
             {
                 throw new InvalidOperationException(
-#if DEBUG
+#if TEST_MSAGL
                         "Cannot add Variables or Constraints once Solve() has been called"
-#endif // DEBUG
+#endif // TEST_MSAGL
                         );
             }
 
             if (left == right)
             {
                 throw new ArgumentException(
-#if DEBUG
+#if TEST_MSAGL
                         "Cannot add a constraint between a variable and itself"
-#endif // DEBUG
+#endif // TEST_MSAGL
                         );
             }
 
@@ -384,17 +384,17 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             if ((relationshipWeight <= 0) || double.IsNaN(relationshipWeight) || double.IsInfinity(relationshipWeight))
             {
                 throw new ArgumentOutOfRangeException("relationshipWeight"
-#if DEBUG
+#if TEST_MSAGL
                         , "Invalid Neighbor Weight"
-#endif // DEBUG
+#endif // TEST_MSAGL
                     );
             }
             if (variable1 == variable2)
             {
                 throw new InvalidOperationException(
-#if DEBUG
+#if TEST_MSAGL
                         "Cannot make a Variable a neighbor of itself"
-#endif // DEBUG
+#endif // TEST_MSAGL
                     );
             }
             variable1.AddNeighbor(variable2, relationshipWeight);
@@ -847,7 +847,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             return this.RunProject(out foundViolation);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Conditional("DEBUG")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Conditional("TEST_MSAGL")]
         private void VerifyConstraintsAreFeasible()
         {
 #if EX_VERIFY

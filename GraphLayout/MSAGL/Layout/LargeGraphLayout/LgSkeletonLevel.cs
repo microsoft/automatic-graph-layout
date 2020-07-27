@@ -98,7 +98,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             var visEdgeDump =
                 new Set<SymmetricSegment>(
                     PathRouter.VisGraph.Edges.Select(e => new SymmetricSegment(e.SourcePoint, e.TargetPoint)));
-#if DEBUG && !SHARPKIT
+#if TEST_MSAGL && !SHARPKIT
             var routesOutOfVisGraph = routesDump - visEdgeDump;
             if (routesOutOfVisGraph.Count > 0) {
                 SplineRouter.ShowVisGraph(PathRouter.VisGraph, null,null, Ttt(routesOutOfVisGraph));
@@ -108,7 +108,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             return routesDump == visEdgeDump && usedEdges==routesDump;
         }
 
-#if DEBUG
+#if TEST_MSAGL
         IEnumerable<ICurve> Ttt(Set<SymmetricSegment> routesOutOfVisGraph) {
             foreach (var symmetricTuple in routesOutOfVisGraph) {
                 yield return new LineSegment(symmetricTuple.A,symmetricTuple.B);

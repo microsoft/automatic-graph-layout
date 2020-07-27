@@ -70,11 +70,11 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
         List<ConstraintDirectionPair> constraintPath;
         Variable pathTargetVariable;
 
-#if DEBUG
+#if TEST_MSAGL
         // For detecting and reporting cycles in ComputeDfDv in case we have some unexpected
         // case that gets past the null-minLagrangian check in Block.Expand.
         int idDfDv;
-#endif // DEBUG
+#endif // TEST_MSAGL
 
         // The global list of all constraints, used in the "recursive iteration" functions
         // and for active/inactive constraint partitioning.
@@ -167,7 +167,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
         }
 #endif // COMPARE_RECURSIVE_DFDV
 
-#if DEBUG
+#if TEST_MSAGL
         void DebugVerifyFinalDfDvValue(double dfdv, string message)
         {
             // Account for rounding.
@@ -184,9 +184,9 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
 #if COMPARE_RECURSIVE_DFDV
             var recursiveDfDv = Recursive_DfDv(initialVarToEval, null, 0);
 #endif // COMPARE_RECURSIVE_DFDV
-#if DEBUG
+#if TEST_MSAGL
             Debug.Assert(0 != this.idDfDv, "idDfDv should not be 0");
-#endif // DEBUG
+#endif // TEST_MSAGL
 #if VERBOSE
             System.Diagnostics.Debug.WriteLine("ComputeDfDv initialVarToEval: [{0}]", initialVarToEval);
 #endif // VERBOSE
@@ -306,7 +306,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             System.Diagnostics.Debug.WriteLine("ComputeDfDv result: {0:F5}", dummyConstraint.Lagrangian);
 #endif // VERBOSE
 
-#if DEBUG
+#if TEST_MSAGL
             // From the definition of the optimal position of all variables that satisfies the constraints, the
             // final value of this should be zero.  Think of the constraints as rigid rods and the variables as
             // the attachment points of the rods.  Also think of those attachment points as having springs connecting
@@ -322,7 +322,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             DebugVerifyFinalDfDvValue((dummyConstraint.Lagrangian / 2.0) - recursiveDfDv,
                     String.Format(CultureInfo.InvariantCulture, "Unequal DfDv values; Recursive = {0}, iterative = {1}", recursiveDfDv, dummyConstraint.Lagrangian));
 #endif // COMPARE_RECURSIVE_DFDV
-#endif // DEBUG
+#endif // TEST_MSAGL
         } // end ComputeDfDv()
 
         void ProcessDfDvLeafNode(DfDvNode node)
@@ -376,7 +376,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             this.allConstraints.RecycleDfDvNode(node);
         }
 
-        [Conditional("DEBUG")]
+        [Conditional("TEST_MSAGL")]
         void Debug_CheckForViolatedActiveConstraint(Constraint constraint)
         {
             // Test is: Test_Unsatisfiable_Direct_Inequality(); it should not encounter this.
@@ -423,22 +423,22 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             PushOnDfDvStack(node);
         }
 
-        [Conditional("DEBUG")]
+        [Conditional("TEST_MSAGL")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         private void Debug_CycleCheck(Constraint constraint)
         {
-#if DEBUG
+#if TEST_MSAGL
             Debug.Assert(this.idDfDv != constraint.IdDfDv, "Cycle detected someplace other than null minLagrangian");
-#endif // DEBUG
+#endif // TEST_MSAGL
         }
 
-        [Conditional("DEBUG")]
+        [Conditional("TEST_MSAGL")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         private void Debug_MarkForCycleCheck(Constraint constraint)
         {
-#if DEBUG
+#if TEST_MSAGL
             constraint.IdDfDv = this.idDfDv;
-#endif // DEBUG
+#endif // TEST_MSAGL
         }
 
         // Called by RecurseGetConnectedVariables.
@@ -469,12 +469,12 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             }
         }
 
-        [Conditional("DEBUG")]
+        [Conditional("TEST_MSAGL")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         void Debug_ClearDfDv(bool forceFull)
         {
-#if DEBUG
-            // This is now DEBUG-only, in case we encounter some strange case that gets past the check
+#if TEST_MSAGL
+            // This is now TEST_MSAGL-only, in case we encounter some strange case that gets past the check
             // for null minLagrangian in Block.Expand.
 
             // Clear the Lagrangian multiplier of all active constraints in this block; i.e. for all
@@ -512,7 +512,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 }
 #endif // VERIFY || VERBOSE
             }
-#endif // DEBUG
+#endif // TEST_MSAGL
         }
 
 #if VERBOSE
@@ -667,7 +667,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             // Now make the (no-longer-) violated constraint active.
             this.allConstraints.ActivateConstraint(violatedConstraint);
 
-            // Clear the DfDv values.  For DEBUG, the new constraint came in from outside this block 
+            // Clear the DfDv values.  For TEST_MSAGL, the new constraint came in from outside this block 
             // so this will make sure it doesn't have a stale cycle-detection flag.
             violatedConstraint.ClearDfDv();
 
@@ -739,9 +739,9 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 {
                     if (constraint.IsActive && !constraint.IsEquality && (constraint.Lagrangian < minLagrangian))
                     {
-#if DEBUG
+#if TEST_MSAGL
                         Debug.Assert(constraint.IdDfDv == this.idDfDv, "stale constraint.Lagrangian");
-#endif // DEBUG
+#endif // TEST_MSAGL
                         minLagrangianConstraint = constraint;
                         minLagrangian = constraint.Lagrangian;
                     }
@@ -829,7 +829,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             return newSplitBlock;
         } // end Split()
 
-        [Conditional("DEBUG")]
+        [Conditional("TEST_MSAGL")]
         private void DebugVerifyBlockConnectivity()
         {
             // This ensures that splitting a block does not split the variables of a constraint across
@@ -847,11 +847,11 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             }
         }
 
-        [Conditional("DEBUG")]
+        [Conditional("TEST_MSAGL")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         internal void DebugVerifyReferencePos()
         {
-#if DEBUG && EX_VERIFY
+#if TEST_MSAGL && EX_VERIFY
             // Due to rounding differences in MergeBlocks calculation of new refpos vs. UpdateReferencePos()
             // these may be slightly different, so have a tolerance range.  Restore it when done so there are no
             // VERIFY vs. RELEASE differences.
@@ -871,7 +871,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             this.sumAd = tempSumAd;
             this.sumAb = tempSumAb;
             this.sumA2 = tempSumA2;
-#endif // DEBUG && EX_VERIFY
+#endif // TEST_MSAGL && EX_VERIFY
         }
 
         internal void AddVariable(Variable variable)
@@ -938,9 +938,9 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             if (double.IsInfinity(this.sumAd) || double.IsInfinity(this.sumAb) || double.IsInfinity(this.sumA2))
             {
                 throw new OverflowException(
-#if DEBUG
+#if TEST_MSAGL
                         "Block Reference Position component is infinite"
-#endif // DEBUG
+#endif // TEST_MSAGL
                 );
             }
             this.ReferencePos = (sumAd - sumAb) / sumA2;
@@ -970,7 +970,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
 
         internal void GetConnectedVariables(List<Variable> lstVars, Variable varToEval, Variable varDoneEval)
         {
-            // First set up cycle-detection in DEBUG mode.
+            // First set up cycle-detection in TEST_MSAGL mode.
             Debug_ClearDfDv(false /* forceFull */);
             RecurseGetConnectedVariables(lstVars, varToEval, varDoneEval);
 
@@ -1110,18 +1110,18 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             }
         } // end TransferConnectedVariables()
 
-        [Conditional("DEBUG")]
+        [Conditional("TEST_MSAGL")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         internal void Debug_PostMerge(Block blockFrom)
         {
-#if DEBUG
+#if TEST_MSAGL
             // If blockFrom's DfDv-cycle detection value was higher than ours, we need to set ours to
             // that value, to avoid running into stale values.
             if (blockFrom.idDfDv > this.idDfDv)
             {
                 this.idDfDv = blockFrom.idDfDv;
             }
-#endif // DEBUG
+#endif // TEST_MSAGL
         }
     }
 }

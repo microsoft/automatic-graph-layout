@@ -35,7 +35,7 @@ namespace LocationLabeling {
             n5.Center = n5Center;
 
             IncrementalLabeler il = new IncrementalLabeler(6, false, -1);
-#if MYDEBUG
+#if TEST_MSAGL
             Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
 #endif
 

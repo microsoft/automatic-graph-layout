@@ -115,13 +115,13 @@ namespace TestGraphmaps
             GridTraversal grid = new GridTraversal(new Rectangle(bl, bl + new Point(20, 15)), 2);
             var tiles = grid.GetTilesIntersectedByLineSeg(p1, p2);
 
-#if DEBUG
+#if TEST_MSAGL
             Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions(); 
             ShowTiles(tiles, grid, p1, p2);
 #endif
         }
 
-#if DEBUG
+#if TEST_MSAGL
         static void ShowTiles(List<Tuple<int, int>> tiles, GridTraversal grid, Point p1, Point p2) {
             var ll = tiles.Select(t => grid.GetTileRect(t.Item1, t.Item2)).Select(r => new DebugCurve("black", r.Perimeter())).ToList();
             ll.Add(new DebugCurve("red", new LineSegment(p1, p2)));
@@ -138,7 +138,7 @@ namespace TestGraphmaps
 
             GridTraversal grid = new GridTraversal(new Rectangle(bl, bl + new Point(gridSize, gridSize)), 20);
             var tiles = grid.GetTilesIntersectedByLineSeg(p1, p2);
-#if DEBUG
+#if TEST_MSAGL
             Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
             ShowTiles(tiles, grid, p1, p2);
 #endif

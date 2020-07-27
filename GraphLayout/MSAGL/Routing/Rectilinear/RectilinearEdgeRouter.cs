@@ -208,9 +208,9 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             ValidateArg.IsNotNull(shape, "shape");
             if (null == shape.BoundaryCurve) {
                 throw new InvalidOperationException(
-#if DEBUG
+#if TEST_MSAGL
                     "Shape must have a BoundaryCurve"
-#endif // DEBUG
+#endif // TEST_MSAGL
                     );
             }
             this.CreatePaddedObstacle(shape);
@@ -222,9 +222,9 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             ValidateArg.IsNotNull(shape, "shape");
             if (null == shape.BoundaryCurve) {
                 throw new InvalidOperationException(
-#if DEBUG
+#if TEST_MSAGL
                     "Shape must have a BoundaryCurve"
-#endif // DEBUG
+#endif // TEST_MSAGL
                     );
             }
 

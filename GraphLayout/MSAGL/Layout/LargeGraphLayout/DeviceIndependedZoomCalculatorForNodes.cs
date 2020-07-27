@@ -221,7 +221,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             return ret;
         }
 
-#if DEBUG
+#if TEST_MSAGL
 
 
         //        void ShowZoomLevels() {

@@ -12,7 +12,7 @@ using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Routing.Spline.ConeSpanner;
 using Microsoft.Msagl.Routing.Visibility;
 
-#if DEBUG
+#if TEST_MSAGL
 using System.Linq;
 using Microsoft.Msagl.DebugHelpers;
 #endif
@@ -167,12 +167,12 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             ProcessEvents();
         }
 
-        [Conditional("DEBUG")]
+        [Conditional("TEST_MSAGL")]
         // ReSharper disable InconsistentNaming
         protected static void Debug_AssertGraphIsRectilinear(VisibilityGraph graph, ObstacleTree obstacleTree)
         // ReSharper restore InconsistentNaming
         {
-#if DEBUG
+#if TEST_MSAGL
             if (graph.Edges.Any(edge => !PointComparer.IsPureDirection(PointComparer.GetDirections(edge.SourcePoint, edge.TargetPoint))))
             {
                 StaticGraphUtility.Assert(false, "Generated VisibilityGraph contains non-rectilinear lines", obstacleTree, graph);

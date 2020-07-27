@@ -20,7 +20,7 @@ namespace FastIncrementalLayoutWithGdi {
     public partial class Form1 : Form {
         readonly GViewer gViewer = new GViewer();
         public Form1() {
-#if DEBUG
+#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif
             InitializeComponent();
@@ -43,7 +43,7 @@ namespace FastIncrementalLayoutWithGdi {
 
            
 
-#if DEBUG
+#if TEST_MSAGL
             DisplayGeometryGraph.BindGeomGraphToDrawingGraph(drawingGraph, geometryGraph);
             drawingGraph.DebugCurves = GetClusterBounds(geometryGraph.RootCluster.Clusters).ToArray();
             
@@ -58,7 +58,7 @@ namespace FastIncrementalLayoutWithGdi {
             gViewer.Graph = drawingGraph;
             gViewer.ZoomF = 1;
         }
-#if DEBUG
+#if TEST_MSAGL
         static List<DebugCurve> GetClusterBounds(IEnumerable<Cluster> listOfClusters){
             var ret = new List<DebugCurve>();
             foreach (var cluster in listOfClusters){
@@ -99,7 +99,7 @@ namespace FastIncrementalLayoutWithGdi {
         }
 
         static void SetupDisplayNodeIds(GeometryGraph geometryGraph) {
- #if DEBUG
+ #if TEST_MSAGL
             foreach (var node in geometryGraph.Nodes)
                 node.DebugId = ((DrawingNode)node.UserData).Id;
 #endif

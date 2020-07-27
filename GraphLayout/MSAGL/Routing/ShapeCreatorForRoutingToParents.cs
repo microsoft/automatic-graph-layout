@@ -57,7 +57,7 @@ namespace Microsoft.Msagl.Routing {
         static void CreateShapeIfNeeeded(Node n, Dictionary<Node, Shape> nodesToShapes) {
             if (nodesToShapes.ContainsKey(n)) return;
             nodesToShapes[n] = new RelativeShape(() => n.BoundaryCurve)
-#if DEBUG
+#if TEST_MSAGL
         {
                         UserData = n.ToString()
         }

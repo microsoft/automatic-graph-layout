@@ -65,7 +65,7 @@ namespace Agl {
         int precision=3;
      
         Dot2SvgMain(string[] args) {
-#if DEBUG
+#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif
             argsParser = new ArgsParser.ArgsParser(args);

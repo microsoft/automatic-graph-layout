@@ -5,7 +5,7 @@ using System.Linq;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.StressEnergy;
-#if DEBUG
+#if TEST_MSAGL
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.DebugHelpers;
 #endif
@@ -20,7 +20,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
     /// </summary>
     public class ProximityOverlapRemoval :IOverlapRemoval {
         Node[] _nodes;
-#if DEBUG
+#if TEST_MSAGL
         /// <summary>
         /// 
         /// </summary>
@@ -309,7 +309,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             // init some things
             InitNodePositionsAndBoxes(Settings, _nodes, out nodePositions, out nodeSizes);
             InitStressWithGraph(StressSolver, _nodes, nodePositions);
-#if DEBUG
+#if TEST_MSAGL
             //debugging the node movements
             trajectories = new List<Polyline>(_nodes.Length);
             //add starting positions
@@ -334,7 +334,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             stopWatch.Stop();
 #endif
             LastRunIterations = iter;
-#if DEBUG && !SHARPKIT
+#if TEST_MSAGL && !SHARPKIT
             if (DebugMode) {
                 ShowTrajectoriesOfNodes(trajectories);
 
@@ -352,7 +352,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             double boundingBoxArea = boundingBox.Width*boundingBox.Height;
 //            nodePositions = null;
 //            nodeBoxes = null;
-#if DEBUG && !SHARPKIT
+#if TEST_MSAGL && !SHARPKIT
             if (DebugMode) {
                 //LayoutAlgorithmSettings.ShowGraph(Graph);
             }
@@ -388,7 +388,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
                 scanlinePhase = true;
                 numCrossings = CompleteProximityGraphWithRTree(ref numCrossings, proximityEdgesWithDistance);
             }
-#if DEBUG
+#if TEST_MSAGL
             int realCrossings = CountCrossingsWithRTree(nodeSizes);
             crossingsOverTime.Add(realCrossings);
             if (currentIteration%10 == 0)
@@ -407,7 +407,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             UpdatePointsAndBoxes(newPositions);
             //clear the data structures
             StressSolver.ClearVotings();
-#if DEBUG
+#if TEST_MSAGL
             for (int i = 0; i < nodePositions.Length; i++) {
                 trajectories[i].AddPoint(newPositions[i]);
             }
@@ -430,7 +430,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
         }
 
 
-#if DEBUG
+#if TEST_MSAGL
          void ShowTrajectoriesOfNodes(List<Polyline> trajectories) {
 //            if (trajectories.Count < 1 || trajectories[0].Count < 3) return;
 //
@@ -494,7 +494,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
                                                        Point[] nodePositions, List<Point> newPositions,
                                                        List<Tuple<int, int, double, double>> proximityEdgesWithDistance,
                                                        Point[] finalGridVectors) {
-#if DEBUG && !SHARPKIT
+#if TEST_MSAGL && !SHARPKIT
             if (DebugMode && currentIteration%1 == 0) {
                 List<DebugCurve> curveList = new List<DebugCurve>();
                 var nodeBoxes = new Rectangle[nodeSizes.Length];
@@ -603,7 +603,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             return numCrossings;
         }
 
-#if DEBUG
+#if TEST_MSAGL
          int CountCrossingsWithRTree(Size[] nodeSizes) {
             RectangleNode<int> rootNode =
                 RectangleNode<int>.CreateRectangleNodeOnEnumeration(

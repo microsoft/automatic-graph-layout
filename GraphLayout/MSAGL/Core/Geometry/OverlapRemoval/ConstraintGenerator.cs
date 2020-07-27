@@ -260,9 +260,9 @@ namespace Microsoft.Msagl.Core.Geometry
             if (node is OverlapRemovalCluster)
             {
                 throw new InvalidOperationException(
-#if DEBUG
+#if TEST_MSAGL
                         "Argument 'node' must not be a Cluster"
-#endif // DEBUG
+#endif // TEST_MSAGL
                         );
             }
             cluster.AddNode(node);

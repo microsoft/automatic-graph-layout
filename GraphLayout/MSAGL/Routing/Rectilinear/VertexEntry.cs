@@ -22,14 +22,14 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // A new prevEntry using the same previous vertex but a different entry to that vertex is valid here;
             // e.g. we could have prevEntry from S, which in turn had a prevEntry from E, replaced by prevEntry from
             // S which has a prevEntry from S.
-#if DEBUG
+#if TEST_MSAGL
             if (this.PreviousEntry != null) {
                 Debug.Assert(this.PreviousEntry.Vertex == prevEntry.Vertex, "Inconsistent prevEntry vertex");
                 Debug.Assert(this.PreviousEntry.Direction != prevEntry.Direction, "Duplicate prevEntry direction");
                 Debug.Assert(this.Direction == CompassVector.PureDirectionFromPointToPoint(this.PreviousEntry.Vertex.Point, this.Vertex.Point),
                         "Inconsistent entryDir");
             }
-#endif // DEBUG
+#endif // TEST_MSAGL
             this.PreviousEntry = prevEntry;
             this.Length = length;
             this.NumberOfBends = numberOfBends;

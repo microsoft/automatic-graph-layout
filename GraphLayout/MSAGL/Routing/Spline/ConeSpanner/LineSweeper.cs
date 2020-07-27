@@ -5,7 +5,7 @@ using System.Linq;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
-#if DEBUG
+#if TEST_MSAGL
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.DebugHelpers;
 #endif
@@ -184,7 +184,7 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
             return d > 0 ? -1 : 0;
         }
 
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         void Showside(PolylinePoint p, Point a, Point b, PolylinePoint pn) {
             ShowBothTrees(new DebugCurve(100, 1, "brown", BorderPolyline), new DebugCurve(100, 2, "blue",
@@ -363,12 +363,12 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
 
         void CreateConeClosureEvent(BrokenConeSide brokenConeSide, ConeSide otherSide) {
             Point x;
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
             var r =
 #endif
  Point.RayIntersectsRayInteriors(brokenConeSide.start, brokenConeSide.Direction, otherSide.Start,
                                                 otherSide.Direction, out x);
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
             if (!r)
                 LayoutAlgorithmSettings.ShowDebugCurves(
                     new DebugCurve(100, 0.1, "red",new LineSegment(brokenConeSide.Start, brokenConeSide.start + brokenConeSide.Direction)),

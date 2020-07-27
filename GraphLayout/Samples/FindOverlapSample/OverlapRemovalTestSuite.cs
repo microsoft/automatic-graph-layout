@@ -274,7 +274,7 @@ namespace OverlapGraphExperiments
 
 
 
-            //#if DEBUG
+            //#if TEST_MSAGL
             //            //write the number of crossings per iteration
             //            String convergenceFilename = graphName + "-crossPerIterat.csv";
             //            List<int> crossings1 = prism1.crossingsOverTime;

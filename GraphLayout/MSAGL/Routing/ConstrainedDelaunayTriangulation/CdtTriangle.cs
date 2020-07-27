@@ -109,7 +109,7 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
             return Edges[index + 1];
         }
 
-#if DEBUG&&TEST_MSAGL
+#if TEST_MSAGL&&TEST_MSAGL
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// </summary>

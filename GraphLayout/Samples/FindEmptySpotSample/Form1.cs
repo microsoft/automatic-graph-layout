@@ -27,7 +27,7 @@ namespace FindEmptySpotSample {
         void Form1_Load(object sender, EventArgs e) {
             gViewer.ObjectUnderMouseCursorChanged += new EventHandler<ObjectUnderMouseCursorChangedEventArgs>(gViewer_ObjectUnderMouseCursorChanged);
 
-#if DEBUG
+#if TEST_MSAGL
            Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
 #endif
 
@@ -286,7 +286,7 @@ namespace FindEmptySpotSample {
 
 
 
-#if DEBUG
+#if TEST_MSAGL
             Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
 #endif
 

@@ -31,7 +31,7 @@ namespace Microsoft.Msagl.Core.Layout {
             set { edgeRoutingSettings = value; }
         }
         #region
-#if REPORTING
+#if TEST_MSAGL
         bool reporting;
 
         /// <summary>

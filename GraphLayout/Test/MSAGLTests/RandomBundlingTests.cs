@@ -174,7 +174,7 @@ namespace Microsoft.Msagl.UnitTests {
             int ntest = 10000;
             int iStart = 1; // 470;
 
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif   
             var graph = GeometryGraphReader.CreateFromFile(@"c:\tmp\graph0.msagl.geom");
@@ -199,7 +199,7 @@ namespace Microsoft.Msagl.UnitTests {
             for (int multiplier = 1; multiplier < 12; multiplier++)
             {
                 System.Diagnostics.Debug.WriteLine("multiplier " + multiplier);
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
                 DisplayGeometryGraph.SetShowFunctions();
 #endif
                 for (int i = iStart; i < ntest; i++) {

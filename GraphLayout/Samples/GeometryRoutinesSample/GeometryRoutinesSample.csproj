@@ -20,16 +20,16 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DefineConstants>TRACE;DEBUG;TEST</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL;TEST</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugDevTrace|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\DebugDevTrace\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;TEST;DEVTRACE</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL;TEST;DEVTRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;TEST</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL;TEST</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -37,11 +37,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugDevTrace|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\DebugDevTrace\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;TEST;DEVTRACE</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL;TEST;DEVTRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;TEST</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL;TEST</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -49,7 +49,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugDevTrace|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\DebugDevTrace\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;TEST;DEVTRACE</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL;TEST;DEVTRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Update="System.Core">

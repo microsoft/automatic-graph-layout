@@ -17,7 +17,7 @@ using Point = Microsoft.Msagl.Core.Geometry.Point;
 namespace LayoutOfADisconnectedGraphWithSugiyama {
     public partial class Form1 : Form {
         public Form1() {
-#if DEBUG
+#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif
 

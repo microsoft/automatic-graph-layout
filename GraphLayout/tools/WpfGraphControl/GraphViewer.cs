@@ -388,7 +388,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
                     if (vEdge != null) ret = vEdge.CurvePath;
                     else {
                         throw new InvalidOperationException(
-#if DEBUG
+#if TEST_MSAGL
                             "Unexpected object type in GraphViewer"
 #endif
                             );
@@ -397,7 +397,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
             }
             if (ret == null)
                 throw new InvalidOperationException(
-#if DEBUG
+#if TEST_MSAGL
                     "did not find a framework element!"
 #endif
                     );

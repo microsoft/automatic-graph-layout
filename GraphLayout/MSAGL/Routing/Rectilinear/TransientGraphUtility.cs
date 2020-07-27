@@ -665,16 +665,16 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return null != spliceTarget;
         }
 
-        [Conditional("DEBUG")]
+        [Conditional("TEST_MSAGL")]
         private void Debug_VerifyNonOverlappedExtension(bool isOverlapped, VisibilityVertex extendVertex, VisibilityVertex nextExtendVertex,
                                                         VisibilityVertex spliceSource, VisibilityVertex spliceTarget) {
             if (isOverlapped) {
                 return;
             }
-#if DEBUG
+#if TEST_MSAGL
             StaticGraphUtility.Assert(!this.ObstacleTree.SegmentCrossesANonGroupObstacle(extendVertex.Point, nextExtendVertex.Point)
                     , "extendDir edge crosses an obstacle", this.ObstacleTree, this.VisGraph);
-#endif // DEBUG
+#endif // TEST_MSAGL
 
             if (spliceSource == null) {
                 // Only verifying the direct extension.

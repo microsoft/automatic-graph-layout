@@ -46,7 +46,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return this.segmentTree.Insert(seg);
         }
 
-        [Conditional("DEBUG")]
+        [Conditional("TEST_MSAGL")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         void AssertValidSegmentForInsertion(ScanSegment seg) {
             Debug.Assert((seg.End.X >= seg.Start.X) && (seg.End.Y >= seg.Start.Y), "Reversed direction in ScanSegment");

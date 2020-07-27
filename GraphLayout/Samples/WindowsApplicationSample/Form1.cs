@@ -104,7 +104,7 @@ namespace WindowsApplicationSample {
         void Form1Load(object sender, EventArgs e) {
             gViewer.ObjectUnderMouseCursorChanged += GViewerObjectUnderMouseCursorChanged;
 
-#if DEBUG
+#if TEST_MSAGL
             //DisplayGeometryGraph.SetShowFunctions();
 #endif
 
@@ -287,7 +287,7 @@ namespace WindowsApplicationSample {
         }
 
         void CreateGraph() {
-#if DEBUG
+#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif
             //Graph graph = new Graph();

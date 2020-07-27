@@ -20,7 +20,7 @@ namespace Microsoft.Msagl.Layout.Layered {
     /// This is the top level class driving the calculation
     /// </summary>
     internal class LayeredLayoutEngine : AlgorithmBase {
-#if REPORTING
+#if TEST_MSAGL
         /// <summary>
         /// the Log property
         /// </summary>
@@ -114,7 +114,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                 this.nodeIdToIndex = nodeIdToIndex;
                 foreach (IntEdge e in graph.Edges)
                     database.RegisterOriginalEdgeInMultiedges(e);
-#if REPORTING
+#if TEST_MSAGL
                 if (sugiyamaSettings.Reporting && SugiyamaLayoutLogger == null)
                     SugiyamaLayoutLogger = new SugiyamaLayoutLogger();
 #endif
@@ -162,7 +162,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                 foreach (IntEdge e in IntGraph.Edges)
                     database.RegisterOriginalEdgeInMultiedges(e);
 
-#if REPORTING
+#if TEST_MSAGL
                 if (sugiyamaSettings.Reporting && SugiyamaLayoutLogger == null)
                     SugiyamaLayoutLogger = new SugiyamaLayoutLogger();
 #endif
@@ -233,7 +233,7 @@ namespace Microsoft.Msagl.Layout.Layered {
          SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider",
              MessageId = "System.String.Format(System.String,System.Object)")]
         override protected void RunInternal() {
-#if REPORTING
+#if TEST_MSAGL
             Timer t = null;
             if (sugiyamaSettings.Reporting) {
                 Report("removing cycles ... ");
@@ -249,7 +249,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             } else
                 originalGraph.boundingBox.SetToEmpty();
 
-#if REPORTING
+#if TEST_MSAGL
             if (sugiyamaSettings.Reporting) {
                 t.Stop();
                 Report(String.Format(CultureInfo.InvariantCulture, "done for {0}, nodes {1} edges {2}", t.Duration,
@@ -261,7 +261,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
         void RunPostLayering() {
-#if REPORTING
+#if TEST_MSAGL
             Timer t = null;
             if (sugiyamaSettings.Reporting) {
                 Report("Calculating edge splines... ");
@@ -316,7 +316,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             }
             originalGraph.BoundingBox = originalGraph.PumpTheBoxToTheGraphWithMargins();
 
-#if REPORTING
+#if TEST_MSAGL
             if (sugiyamaSettings.Reporting) {
                 t.Stop();
                 Report(String.Format(CultureInfo.InvariantCulture, "splines done for {0}", t.Duration));
@@ -433,7 +433,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
             #region reporting
 
-#if REPORTING
+#if TEST_MSAGL
             Timer t = null;
             if (sugiyamaSettings.Reporting) {
                 Report("calculating layers ... ");
@@ -450,7 +450,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
             #region reporting
 
-#if REPORTING
+#if TEST_MSAGL
             if (sugiyamaSettings.Reporting) {
                 t.Stop();
                 Report(String.Format(CultureInfo.CurrentCulture, "done with layers for {0}\n", t.Duration));
@@ -881,7 +881,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
 
-#if REPORTING
+#if TEST_MSAGL
         /// <summary>
         /// Prints the function to the console and to the log if the log file name is given
         /// </summary>
@@ -1006,7 +1006,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         LayerArrays YLayeringAndOrdering(LayerCalculator layering) {
             #region reporting
 
-#if REPORTING
+#if TEST_MSAGL
             Timer t = null;
             if (sugiyamaSettings.Reporting) {
                 t = new Timer();
@@ -1023,7 +1023,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
             #region reporting
 
-#if REPORTING
+#if TEST_MSAGL
             if (sugiyamaSettings.Reporting) {
                 t.Stop();
                 Report(String.Format(CultureInfo.CurrentCulture, "{0}\n", t.Duration));
@@ -1041,7 +1041,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
                 #region reporting
 
-#if REPORTING
+#if TEST_MSAGL
                 if (sugiyamaSettings.Reporting) {
                     t.Stop();
                     Report(String.Format(CultureInfo.CurrentCulture, "{0}\n", t.Duration));
@@ -1059,7 +1059,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
             #region reporting
 
-#if REPORTING
+#if TEST_MSAGL
             if (sugiyamaSettings.Reporting) {
                 t.Stop();
                 Report(String.Format(CultureInfo.CurrentCulture, "{0}\n", t.Duration));
@@ -1199,13 +1199,13 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
         void CalculateEdgeSplines() {
-#if REPORTING
+#if TEST_MSAGL
             if (sugiyamaSettings.Reporting)
                 Report("calculating splines ... ");
 #endif
             var routing = new Routing(sugiyamaSettings, originalGraph, database, engineLayerArrays, properLayeredGraph,
                                       IntGraph);
-#if REPORTING
+#if TEST_MSAGL
             Timer t = null;
             if (sugiyamaSettings.Reporting) {
                 t = new Timer();
@@ -1213,7 +1213,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             }
 #endif
             routing.Run();
-#if REPORTING
+#if TEST_MSAGL
             if (sugiyamaSettings.Reporting) {
                 t.Stop();
                 Report(String.Format(CultureInfo.CurrentCulture, " {0}\n", t.Duration));
@@ -1597,7 +1597,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             return ret;
         }
 
-#if REPORTING
+#if TEST_MSAGL
         ~LayeredLayoutEngine() {
             if (SugiyamaLayoutLogger != null)
                 SugiyamaLayoutLogger.Dispose();

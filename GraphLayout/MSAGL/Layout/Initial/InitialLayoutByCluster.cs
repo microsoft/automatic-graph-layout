@@ -141,7 +141,7 @@ namespace Microsoft.Msagl.Layout.Initial {
                 Rectangle newBounds = cluster.BoundingBox;
                 cluster.DeepTranslation(oldBounds.Center - newBounds.Center, true);
             }
-#if DEBUG
+#if TEST_MSAGL
             //  ValidateLayout(cluster);
 #endif
         }
@@ -226,7 +226,7 @@ namespace Microsoft.Msagl.Layout.Initial {
             return edge.EdgeGeometry.TargetArrowhead == null ? 0 : edge.EdgeGeometry.TargetArrowhead.Length;
         }
 
-#if DEBUG
+#if TEST_MSAGL
         //        void CheckEdges() {
         //            foreach (var edge in graph.Edges)
         //                CheckEdge(edge);

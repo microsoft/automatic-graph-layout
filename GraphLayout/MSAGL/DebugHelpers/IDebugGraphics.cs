@@ -1,4 +1,4 @@
-#if DEBUG && !SHARPKIT
+#if TEST_MSAGL && !SHARPKIT
 using System.Collections.Generic;
 
 namespace Microsoft.Msagl.DebugHelpers {

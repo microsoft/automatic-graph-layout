@@ -39,7 +39,7 @@ namespace LocationLabeling {
         /// The result will be better but the calculation will take more time.
         /// </param>
         public static GeometryGraph PositionLabels(Node[] locationNodes, double locationRadius, bool routeEdges, double labelSeparation) {
-#if MYDEBUG
+#if TEST_MSAGL
             Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
 #endif
             var labeler = new LocationLabeler(locationNodes, locationRadius, routeEdges, labelSeparation);
@@ -75,7 +75,7 @@ namespace LocationLabeling {
             do {
                 Shift();
                 var newE = GetEnergy();
-#if MYDEBUG
+#if TEST_MSAGL
                 System.Diagnostics.Debug.WriteLine("e {0} newE {1} diff {2}", e, newE, e - newE);
 #endif
 

@@ -32,7 +32,7 @@ using Point = Microsoft.Msagl.Core.Geometry.Point;
 using Rectangle = Microsoft.Msagl.Core.Geometry.Rectangle;
 using Size = Microsoft.Msagl.Core.DataStructures.Size;
 using SymmetricSegment = Microsoft.Msagl.Core.DataStructures.SymmetricTuple<Microsoft.Msagl.Core.Geometry.Point>;
-#if REPORTING
+#if TEST_MSAGL
 using Timer = Microsoft.Msagl.DebugHelpers.Timer;
 #endif
 
@@ -587,7 +587,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         private int[] tileNodeCount = new int[21845];
         private int[] tileEdgeFlow = new int[21845];
         int[] tileDepth = new int[21845];
-        private int id;
         Rectangle[] tiles = new Rectangle[21845];
 
 
@@ -960,10 +959,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         private void ComputeZoomLevelviaFlow(Dictionary<Node, int> nodeToId, int maxX, int maxY)
         {
 
-            id = 0;
             buildTiles(0, 0, maxX, maxY, 0, 0, 0);
 
-            id = 0;
             int count = 0;
             RTree<int> TreeOfNodes = new RTree<int>();
             for (int index = 0; index < g.N; index++)
@@ -1101,7 +1098,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             _lgData.CreateLevelNodeTrees(NodeDotWidth(1));
             //LabelingOfOneRun();
-#if DEBUG
+#if TEST_MSAGL
             TestAllEdgesConsistency();
 #endif
         }
@@ -1661,7 +1658,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             _railGraph = new RailGraph();
     
 #if TEST_GRAPHMAPS
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
             _mainGeometryGraph.SetDebugIds();
 #endif
 
@@ -2203,7 +2200,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     {
                         CollapsedBoundary = cluster.CollapsedBoundary,
                         BoundaryCurve = oNode.BoundaryCurve,
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
                         DebugId = oNode.DebugId
 #endif
                     }
@@ -2542,7 +2539,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             LgSkeletonLevel prevSkeletonLevel, LgSkeletonLevel skeletonLevel
             )
         {
-            int numRouted = 0;
             foreach (LgNodeInfo s in nodes)
             {
                 var neighb = GetNeighborsOnLevel(s, i).OrderBy(n => n.ZoomLevel);
@@ -2601,7 +2597,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     newWeight = Math.Min(0.6, newWeight);
 
                     skeletonLevel.PathRouter.DecreaseWeightOfEdgesAlongPath(path, newWeight);
-                    //#if DEBUG
+                    //#if TEST_MSAGL
                     //                    skeletonLevel.PathRouter.AssertEdgesPresentAndPassable(path);
                     //#endif
 
@@ -2776,7 +2772,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         static void ShowNodesAndSegmentsForOverlapRemoval(IEnumerable<LgNodeInfo> fixedNodes,
             IEnumerable<LgNodeInfo> moveableNodes, SymmetricSegment[] fixedSegments)
         {
-#if DEBUG && !SHARPKIT
+#if TEST_MSAGL && !SHARPKIT
             var l = new List<DebugCurve>();
             if (fixedNodes != null && fixedNodes.Any())
             {
@@ -2913,7 +2909,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             var fixedVertices = new Set<Point>(nodes.Select(n => n.Center));
             if (iLevel > 0)
                 fixedVertices.InsertRange(_lgData.SkeletonLevels[iLevel - 1].GetPointsOnSavedTrajectories());
-#if DEBUG
+#if TEST_MSAGL
             //            SplineRouter.ShowVisGraph(skeletonLevel.PathRouter.VisGraph, nodes.Select(n=>n.BoundaryOnLayer), null, null);
 #endif
 
@@ -2922,7 +2918,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         }
 
 
-#if DEBUG && !SHARPKIT
+#if TEST_MSAGL && !SHARPKIT
         static void ShowOldNewIntersected(Set<Rail> oldIntersected, Set<Rail> newIntersected, Point a, Point shortcutted,
             Point b, LgSkeletonLevel skeletonLevel)
         {
@@ -2949,7 +2945,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         }
 #endif
 
-#if DEBUG && !SHARPKIT
+#if TEST_MSAGL && !SHARPKIT
         private static void ShowOldTrajectories(LgSkeletonLevel skeletonLevel)
         {
             if (skeletonLevel.ZoomLevel <= 1.0) return;
@@ -3125,7 +3121,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
             _lgData.CreateLevelNodeTrees(NodeDotWidth(1));
             //LabelingOfOneRun();
-#if DEBUG
+#if TEST_MSAGL
             TestAllEdgesConsistency();
 #endif
         }
@@ -3223,7 +3219,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
 
         void SimplifyRoutesOnLevelUntilDone(int i)
         {
-#if DEBUG
+#if TEST_MSAGL
             //            ShowOldTrajectories(_lgData.SkeletonLevels[i]);
 #endif
 
@@ -3234,7 +3230,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 UpdateRoutesAfterSimplification(i);
             } while (true);
 
-#if DEBUG
+#if TEST_MSAGL
             //            ShowOldTrajectories(_lgData.SkeletonLevels[i]);
 #endif
         }

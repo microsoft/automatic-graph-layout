@@ -122,8 +122,8 @@ namespace Microsoft.Msagl.UnitTests.Constraints
             } // endif clusters exist
 
             // Write the constraints.
-            // TODOclus: This is outputting vars Lnn Rnn in DEBUG and an empty string in RELEASE; consider making the file
-            //           output (with clusters, anyway) run in DEBUG-only and have TestFileReader.cs know how to decode them.
+            // TODOclus: This is outputting vars Lnn Rnn in TEST_MSAGL and an empty string in RELEASE; consider making the file
+            //           output (with clusters, anyway) run in TEST_MSAGL-only and have TestFileReader.cs know how to decode them.
             outputFileWriter.WriteLine(TestFileStrings.BeginConstraintsX);
             foreach (Constraint cst in solverX.Constraints.OrderBy(cst => cst))
             {

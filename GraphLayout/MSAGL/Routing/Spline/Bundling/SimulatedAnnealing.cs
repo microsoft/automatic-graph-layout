@@ -321,7 +321,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                 List<Tuple<Point, Point>> closestPoints;
                 bool res = metroGraphData.cdtIntersections.BundleAvoidsObstacles(node, adj, node.Position, adj.Position, idealWidth / 2, out closestPoints);
                 if (!res) {
-#if DEBUG&& TEST_MSAGL
+#if TEST_MSAGL&& TEST_MSAGL
                     HubDebugger.ShowHubs(metroGraphData, bundlingSettings, new LineSegment(node.Position, adj.Position));
 #endif
                 }

@@ -67,7 +67,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 
         void RemoveAction(Point a, Point b) {
-#if DEBUG
+#if TEST_MSAGL
             VisibilityEdge ve;
             Debug.Assert(_pathRouter.FindVertex(a).TryGetEdge(_pathRouter.FindVertex(b), out ve));
 #endif

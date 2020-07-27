@@ -58,7 +58,7 @@ namespace Microsoft.Msagl.Drawing
               return CurveFactory.CreateHexagon(width, height, new P2());
           case Shape.Octagon:
               return CurveFactory.CreateOctagon(width, height, new P2());
-#if DEBUG
+#if TEST_MSAGL
           case Shape.TestShape:
               return CurveFactory.CreateTestShape(width, height);
 #endif
