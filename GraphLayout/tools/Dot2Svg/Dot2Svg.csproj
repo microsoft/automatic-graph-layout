@@ -65,9 +65,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AntiXSSLibrary">
-      <HintPath>.\AntiXSSLibrary.dll</HintPath>
-    </Reference>
     <Reference Include="QUT.ShiftReduceParser">
       <HintPath>..\Dot2Graph\gp\QUT.ShiftReduceParser.dll</HintPath>
     </Reference>
@@ -109,9 +106,6 @@
       <Project>{415D3E3F-7105-46C1-84D2-7ECB34213D92}</Project>
       <Name>AutomaticGraphLayout</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="AntiXSSLibrary.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

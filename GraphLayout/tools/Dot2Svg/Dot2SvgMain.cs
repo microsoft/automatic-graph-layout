@@ -38,7 +38,6 @@ using System.IO;
 ﻿using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.Layout.Layered;
 using Microsoft.Msagl.Layout.MDS;
-using Microsoft.Security.Application;
 using DrawingNode=Microsoft.Msagl.Drawing.Node;
 using DrawingEdge = Microsoft.Msagl.Drawing.Edge;
 using Label = Microsoft.Msagl.Drawing.Label;
@@ -257,8 +256,6 @@ namespace Agl {
             using (var stream = File.Create(outputFile)) {
                 var svgWriter = new SvgGraphWriter(stream, graph) {
                     BlackAndWhite = argsParser.OptionIsUsed("-bw"),
-                    NodeSanitizer = AntiXss.HtmlAttributeEncode,
-                    AttrSanitizer = AntiXss.HtmlAttributeEncode,
                     Precision = precision,
                     AllowedToWriteUri = !argsParser.OptionIsUsed(NoUrls),
                     IgnoreEdges = argsParser.OptionIsUsed("-noedges")
