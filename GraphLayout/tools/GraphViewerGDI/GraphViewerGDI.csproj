@@ -35,43 +35,6 @@
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Retail|AnyCPU' ">
-    <OutputPath>bin\Retail\</OutputPath>
-    <DefineConstants>CODE_ANALYSIS</DefineConstants>
-    <Optimize>true</Optimize>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>bin\Retail\Microsoft.Msagl.GraphViewerGdi.xml</DocumentationFile>
-    <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Setup|AnyCPU' ">
-    <OutputPath>bin\Setup\</OutputPath>
-    <DefineConstants></DefineConstants>
-    <Optimize>true</Optimize>
-    <DocumentationFile>bin\Setup\Microsoft.Msagl.GraphViewerGdi.xml</DocumentationFile>
-    <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Surface Graph Viewer - Release|AnyCPU' ">
-    <OutputPath>bin\Surface Graph Viewer - Release\</OutputPath>
-    <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Surface Graph Viewer - Debug|AnyCPU' ">
-    <OutputPath>bin\Surface Graph Viewer - Debug\</OutputPath>
-    <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug Surface Graph Viewer|AnyCPU' ">
-    <OutputPath>bin\Debug Surface Graph Viewer\</OutputPath>
-    <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet />
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugSurface|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\DebugSurface\</OutputPath>
@@ -111,42 +74,6 @@
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Retail|x86'">
-    <OutputPath>bin\x86\Retail\</OutputPath>
-    <DefineConstants>CODE_ANALYSIS;CODE_ANALYSIS</DefineConstants>
-    <DocumentationFile>bin\Retail\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Setup|x86'">
-    <OutputPath>bin\x86\Setup\</OutputPath>
-    <DocumentationFile>bin\Setup\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Surface Graph Viewer - Release|x86'">
-    <OutputPath>bin\x86\Surface Graph Viewer - Release\</OutputPath>
-    <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Surface Graph Viewer - Debug|x86'">
-    <OutputPath>bin\x86\Surface Graph Viewer - Debug\</OutputPath>
-    <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Surface Graph Viewer|x86'">
-    <OutputPath>bin\x86\Debug Surface Graph Viewer\</OutputPath>
-    <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet />
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugSurface|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\DebugSurface\</OutputPath>
@@ -182,42 +109,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
     <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
-    <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Retail|x64'">
-    <OutputPath>bin\x64\Retail\</OutputPath>
-    <DefineConstants>CODE_ANALYSIS;CODE_ANALYSIS</DefineConstants>
-    <DocumentationFile>bin\Retail\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Setup|x64'">
-    <OutputPath>bin\x64\Setup\</OutputPath>
-    <DocumentationFile>bin\Setup\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Surface Graph Viewer - Release|x64'">
-    <OutputPath>bin\x64\Surface Graph Viewer - Release\</OutputPath>
-    <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Surface Graph Viewer - Debug|x64'">
-    <OutputPath>bin\x64\Surface Graph Viewer - Debug\</OutputPath>
-    <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Surface Graph Viewer|x64'">
-    <OutputPath>bin\x64\Debug Surface Graph Viewer\</OutputPath>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
