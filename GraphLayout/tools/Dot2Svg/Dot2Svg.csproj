@@ -65,9 +65,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="QUT.ShiftReduceParser">
-      <HintPath>..\Dot2Graph\gp\QUT.ShiftReduceParser.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -105,6 +102,10 @@
     <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj">
       <Project>{415D3E3F-7105-46C1-84D2-7ECB34213D92}</Project>
       <Name>AutomaticGraphLayout</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QUT.ShiftReduceParser\QUT.ShiftReduceParser.csproj">
+      <Project>{ef5cf15e-5645-433b-8a23-af93e3f2682f}</Project>
+      <Name>QUT.ShiftReduceParser</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

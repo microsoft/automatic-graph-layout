@@ -20,36 +20,6 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Setup|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Setup\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Retail|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Retail\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Surface Graph Viewer - Release|AnyCPU' ">
-    <OutputPath>bin\Surface Graph Viewer - Release\</OutputPath>
-    <Optimize>true</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Surface Graph Viewer - Debug|AnyCPU' ">
-    <OutputPath>bin\Surface Graph Viewer - Debug\</OutputPath>
-    <Optimize>true</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug Surface Graph Viewer|AnyCPU' ">
-    <OutputPath>bin\Debug Surface Graph Viewer\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugSurface|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\DebugSurface\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugWithoutRebuild|AnyCPU' ">
-    <OutputPath>bin\DebugWithoutRebuild\</OutputPath>
-    <Optimize>true</Optimize>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugDevTrace|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\DebugDevTrace\</OutputPath>
@@ -61,34 +31,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Setup|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Setup\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Retail|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Retail\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Surface Graph Viewer - Release|x86'">
-    <OutputPath>bin\x86\Surface Graph Viewer - Release\</OutputPath>
-    <Optimize>true</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Surface Graph Viewer - Debug|x86'">
-    <OutputPath>bin\x86\Surface Graph Viewer - Debug\</OutputPath>
-    <Optimize>true</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Surface Graph Viewer|x86'">
-    <OutputPath>bin\x86\Debug Surface Graph Viewer\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugSurface|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\DebugSurface\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugWithoutRebuild|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\DebugWithoutRebuild\</OutputPath>
-    <Optimize>true</Optimize>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugDevTrace|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\DebugDevTrace\</OutputPath>
@@ -99,34 +41,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Setup|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Setup\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Retail|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Retail\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Surface Graph Viewer - Release|x64'">
-    <OutputPath>bin\x64\Surface Graph Viewer - Release\</OutputPath>
-    <Optimize>true</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Surface Graph Viewer - Debug|x64'">
-    <OutputPath>bin\x64\Surface Graph Viewer - Debug\</OutputPath>
-    <Optimize>true</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Surface Graph Viewer|x64'">
-    <OutputPath>bin\x64\Debug Surface Graph Viewer\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugSurface|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\DebugSurface\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugWithoutRebuild|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\DebugWithoutRebuild\</OutputPath>
-    <Optimize>true</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugDevTrace|x64'">
     <DebugSymbols>true</DebugSymbols>

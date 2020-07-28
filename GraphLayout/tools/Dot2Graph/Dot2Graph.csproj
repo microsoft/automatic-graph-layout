@@ -51,22 +51,6 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Itanium'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Itanium\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>Itanium</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Itanium'">
-    <OutputPath>bin\Itanium\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>Itanium</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
@@ -84,9 +68,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="QUT.ShiftReduceParser">
-      <HintPath>gp\QUT.ShiftReduceParser.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -111,6 +92,10 @@
     <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj">
       <Project>{415D3E3F-7105-46C1-84D2-7ECB34213D92}</Project>
       <Name>AutomaticGraphLayout</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QUT.ShiftReduceParser\QUT.ShiftReduceParser.csproj">
+      <Project>{ef5cf15e-5645-433b-8a23-af93e3f2682f}</Project>
+      <Name>QUT.ShiftReduceParser</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

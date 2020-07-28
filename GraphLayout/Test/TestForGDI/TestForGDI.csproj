@@ -132,9 +132,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="QUT.ShiftReduceParser">
-      <HintPath>..\..\tools\Dot2Graph\gp\QUT.ShiftReduceParser.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -187,6 +184,10 @@
     <ProjectReference Include="..\..\tools\GraphViewerGDI\GraphViewerGDI.csproj">
       <Project>{725CD2CB-CF37-414E-A5A6-F1D87D4D6EDE}</Project>
       <Name>GraphViewerGDI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\tools\QUT.ShiftReduceParser\QUT.ShiftReduceParser.csproj">
+      <Project>{ef5cf15e-5645-433b-8a23-af93e3f2682f}</Project>
+      <Name>QUT.ShiftReduceParser</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestFormForGViewer\TestFormForGViewer.csproj">
       <Project>{AF9121C3-E4B7-464F-8EBB-96C9CF627C06}</Project>

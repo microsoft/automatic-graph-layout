@@ -21,11 +21,6 @@
     <OutputPath>bin\x86\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="QUT.ShiftReduceParser">
-      <HintPath>..\..\tools\Dot2Graph\gp\QUT.ShiftReduceParser.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Drawing\AutomaticGraphLayout.Drawing.csproj" />
     <ProjectReference Include="..\..\tools\ArgsParser\ArgsParser.csproj" />
     <ProjectReference Include="..\..\tools\GraphViewerGDI\GraphViewerGDI.csproj" />
