@@ -14,6 +14,9 @@
     <language>en-US</language>
     <tags>MSAGL Graph Layout</tags>
     <dependencies>
+      <group targetFramework=".NETFramework4.6.1" >
+        <dependency id="AutomaticGraphLayout.Drawing" version="$(BuildVersion)" />
+      </group>
       <group targetFramework=".NETFramework4.7.2" >
         <dependency id="AutomaticGraphLayout.Drawing" version="$(BuildVersion)" />
       </group>
@@ -23,6 +26,7 @@
     </dependencies>
   </metadata>
   <files>
+    <file src="./bin/Release/net461/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net61" />
     <file src="./bin/Release/net472/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net472" />
     <file src="./bin/Release/netcoreapp3.1/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\netcoreapp3.1" />
   </files>

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net461;net472;netcoreapp3.1</TargetFrameworks>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Msagl.GraphViewerGdi</RootNamespace>
     <AssemblyName>Microsoft.Msagl.GraphViewerGdi</AssemblyName>
