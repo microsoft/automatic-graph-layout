@@ -7,7 +7,7 @@
     <licenseUrl>https://github.com/Microsoft/automatic-graph-layout/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/Microsoft/automatic-graph-layout</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>This .NET asssembly contains the core MSAGL layout functionality. Use this library if you just want MSAGL to perform the layout only and afterwards you will use a separate tool to perform the rendering and visalization.</description>
+    <description>This .NET assembly contains the core MSAGL layout functionality. Use this library if you just want MSAGL to perform the layout only and afterwards you will use a separate tool to perform the rendering and visualization.</description>
     <releaseNotes>
     </releaseNotes>
     <copyright>Copyright © Microsoft Corporation</copyright>
