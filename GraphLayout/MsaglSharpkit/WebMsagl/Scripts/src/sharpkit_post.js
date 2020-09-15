@@ -160,16 +160,15 @@ System$Collections$Generic$Dictionary$2.definition.get_Count = function () {
     return this.get_Keys().get_Count();
 }
 
-// The jsclr version of TryGetValue behaves differently from the CLR version because when the value is not in the dictionary, it sets
-// the ref parameter to undefined. This implementation correctly reproduces the CLR behavior (i.e. if the value is not in the 
-// dictionary, it does not get changed.
-System$Collections$Generic$Dictionary$2.definition.TryGetValue = function (key, value) {
+// The jsclr version of TryGetValue behaves differently from the CLR version because when the value is not in the dictionary, it sets the ref parameter to undefined. This implementation correctly reproduces the CLR behavior (i.e. if the value is not in the dictionary, it does not get changed.
+// Update 15/09/2020: it looks like it is not true that the CLR does not change the out value if the key is not in the dictionary. I observe this behavior in EdgePathInserter.WidenOriginalLayers. I am reverting this to the jsclr version, pending further investigation on the original issue.
+/*System$Collections$Generic$Dictionary$2.definition.TryGetValue = function (key, value) {
     var hashKey = this.GetHashKey(key);
     var v = this._table[hashKey];
     if (v !== undefined)
         value.Value = v;
     return typeof (v) != "undefined";
-}
+}*/
 
 // The jsclr version of List does not have Capacity, as it doesn't make sense in JS. But I still need it to prevent crashes. This
 // implementation will just return the item count.
