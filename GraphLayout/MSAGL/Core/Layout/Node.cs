@@ -14,7 +14,7 @@ namespace Microsoft.Msagl.Core.Layout {
     [Serializable]
 #endif
     public class Node : GeometryObject {
-#if DEBUG
+#if TEST_MSAGL
 
         ///<summary>
         /// used for debugging purposes

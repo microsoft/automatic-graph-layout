@@ -35,7 +35,7 @@ namespace OverlapGraphExperiments
         }
 
         private static void Main(string[] args) {
-#if DEBUG && !SILVERLIGHT
+#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
             // ProximityOverlapRemoval.DebugMode = true;
 #endif
@@ -54,8 +54,8 @@ namespace OverlapGraphExperiments
 
             if (!argsParser.Parse())
             {
-                Console.WriteLine(argsParser.ErrorMessage);
-                Console.WriteLine(argsParser.UsageString());
+                System.Diagnostics.Debug.WriteLine(argsParser.ErrorMessage);
+                System.Diagnostics.Debug.WriteLine(argsParser.UsageString());
                 return;
             }
             var program = new Program(argsParser);
@@ -66,7 +66,7 @@ namespace OverlapGraphExperiments
             _testDir = _argsParser.GetStringOptionValue("-test_dir");
 
             if (_testDir == null) {
-                Console.WriteLine("-test_dir is not given, exiting");
+                System.Diagnostics.Debug.WriteLine("-test_dir is not given, exiting");
                 return;
             }
             bool run_layout;
@@ -99,7 +99,7 @@ namespace OverlapGraphExperiments
                 return 0;
             int ret;
             if (!int.TryParse(s, out ret)) {
-                Console.WriteLine("Cannot parse string '{0}' following option '-random_nodes'; Returning 0 by default", s);
+                System.Diagnostics.Debug.WriteLine("Cannot parse string '{0}' following option '-random_nodes'; Returning 0 by default", s);
                 return 0;
             }
             return ret;
@@ -182,7 +182,7 @@ namespace OverlapGraphExperiments
             double ret;
             if (!double.TryParse(s, out ret))
             {
-                Console.WriteLine("Cannot parse string '{0}' following option '-box width'; Returning 10 by default", s);
+                System.Diagnostics.Debug.WriteLine("Cannot parse string '{0}' following option '-box width'; Returning 10 by default", s);
                 return 1000;
             }
             return ret;
@@ -268,7 +268,7 @@ namespace OverlapGraphExperiments
             if (_nofTriangles == 0) return 0;
             int h = _nofTriangles / 2;
             int triangles = Math.Max(h + _random.Next() % _nofTriangles,1);
-            Console.WriteLine("generating {0} triangles", triangles);
+            System.Diagnostics.Debug.WriteLine("generating {0} triangles", triangles);
             for (int i = 0; i < triangles; i++)
             {
                 AddTriangle(graph);

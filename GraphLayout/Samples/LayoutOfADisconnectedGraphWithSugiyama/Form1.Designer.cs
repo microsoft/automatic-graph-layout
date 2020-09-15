@@ -1,4 +1,6 @@
-﻿namespace LayoutOfADisconnectedGraphWithSugiyama {
+﻿using Microsoft.Msagl.GraphViewerGdi;
+
+namespace LayoutOfADisconnectedGraphWithSugiyama {
     partial class Form1 {
         /// <summary>
         /// Required designer variable.

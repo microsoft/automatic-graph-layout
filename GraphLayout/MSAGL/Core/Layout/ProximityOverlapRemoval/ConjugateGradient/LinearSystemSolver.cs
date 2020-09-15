@@ -133,9 +133,9 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.ConjugateGradient 
             var A = new SparseMatrix(values, col_ind, row_ptr, 2);
 
             double[] res = SolveConjugateGradient(A, b, xStart, 1000, 1E-4);
-            Console.WriteLine("Solution: x: {0}, y={1}", res[0], res[1]);
+            System.Diagnostics.Debug.WriteLine("Solution: x: {0}, y={1}", res[0], res[1]);
             res = SolvePrecondConjugateGradient(A, b, xStart, 1000, 1E-4);
-            Console.WriteLine("SolutionPreconditioned: x: {0}, y={1}", res[0], res[1]);
+            System.Diagnostics.Debug.WriteLine("SolutionPreconditioned: x: {0}, y={1}", res[0], res[1]);
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.ConjugateGradient 
             string res = result1.Aggregate("", (s, t) => string.Format("{0},\t{1}", s, t));
 
             //Result should be 1 =(1,1,1,.....,1,1)
-            Console.WriteLine(res);
+            System.Diagnostics.Debug.WriteLine(res);
         }
     }
 }

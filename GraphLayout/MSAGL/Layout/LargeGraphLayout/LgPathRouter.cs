@@ -231,7 +231,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             var vpath = router.GetPath(shrinkDistances);
             if (vpath == null)
             {
-                Console.WriteLine("seeing a null path");
+                // seeing a null path
                 vs.IsShortestPathTerminal = vt.IsShortestPathTerminal = false;
                 return pathPoints;
             }
@@ -258,7 +258,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             var vpath = router.GetPath(shrinkDistances);
             if (vpath == null)
             {
-                Console.WriteLine("seeing a null path");
+                // seeing a null path
                 vs.IsShortestPathTerminal = vt.IsShortestPathTerminal = false;
                 return pathPoints;
             }

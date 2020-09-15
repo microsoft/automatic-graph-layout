@@ -40,6 +40,7 @@ using Node = Microsoft.Msagl.Drawing.Node;
 using Point = Microsoft.Msagl.Core.Geometry.Point;
 using Shape = Microsoft.Msagl.Drawing.Shape;
 using Size = System.Windows.Size;
+using Microsoft.Msagl.GraphViewerGdi;
 
 namespace TestWpfViewer {
     internal class App : Application {
@@ -134,7 +135,7 @@ namespace TestWpfViewer {
         //RangeSlider edgeRangeSlider;
 
         protected override void OnStartup(StartupEventArgs e) {
-#if DEBUG
+#if TEST_MSAGL
             Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
 #endif
 
@@ -258,7 +259,7 @@ namespace TestWpfViewer {
          
             textBox = new TextBox();
             textBox.FontSize *= 1.5;
-            textBox.FontFamily = new FontFamily("Consoles");
+            textBox.FontFamily = new FontFamily("System.Diagnostics.Debugs");
             textBox.Width = 400;
             DockPanel.SetDock(textBox,Dock.Top);
             panel.Children.Add(textBox);
@@ -314,7 +315,7 @@ namespace TestWpfViewer {
             richBox = new RichTextBox();
             richBox.FontSize *= 1.5;
             richBox.AppendText("Label");
-            richBox.FontFamily = new FontFamily("Consoles");
+            richBox.FontFamily = new FontFamily("System.Diagnostics.Debugs");
             richBox.Width = window.Width;
             DockPanel.SetDock(richBox, Dock.Top);
             panel.Children.Add(richBox);
@@ -457,11 +458,11 @@ namespace TestWpfViewer {
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                System.Diagnostics.Debug.WriteLine(e.Message);
                 return;
             }
-            graphViewer.LayoutStarted += (a, b) => { Console.WriteLine("processing {0}", currentFileListName); };
-            graphViewer.LayoutComplete += (a, b) => { Console.WriteLine("Done with {0}", currentFileListName);
+            graphViewer.LayoutStarted += (a, b) => { System.Diagnostics.Debug.WriteLine("processing {0}", currentFileListName); };
+            graphViewer.LayoutComplete += (a, b) => { System.Diagnostics.Debug.WriteLine("Done with {0}", currentFileListName);
                 SetupNextRun(sr, fileListDir);
             };
             currentFileListName = ReadNextFileName(sr, fileListDir);
@@ -544,7 +545,7 @@ namespace TestWpfViewer {
             argsParser.AddAllowedOptionWithHelpString(ExitAfterLgLayoutOption, "exit after lg calculation");
 
             if(!argsParser.Parse()) {
-                Console.WriteLine(argsParser.UsageString());
+                System.Diagnostics.Debug.WriteLine(argsParser.UsageString());
                 Environment.Exit(1);
             }
             return argsParser;
@@ -772,7 +773,7 @@ namespace TestWpfViewer {
             
             if (graph != null) {
                 if (argsParser.OptionIsUsed(PrintMaxNodeDegreeOption)) {
-                    Console.WriteLine("max node degree {0}",
+                    System.Diagnostics.Debug.WriteLine("max node degree {0}",
                         graph.Nodes.Max(n => n.OutEdges.Count() + n.InEdges.Count() + n.SelfEdges.Count()));
                     Environment.Exit(0);
                 }
@@ -819,7 +820,7 @@ namespace TestWpfViewer {
                                    dgraph.GeometryGraph.Nodes.Any(n => n.Center != origin);
                 if (layoutExist && argsParser.GetStringOptionValue(SaveMsaglOption) != null) {
                     dgraph.Write(argsParser.GetStringOptionValue(SaveMsaglOption));
-                    Console.WriteLine("saved to {0}", argsParser.GetStringOptionValue(SaveMsaglOption));
+                    System.Diagnostics.Debug.WriteLine("saved to {0}", argsParser.GetStringOptionValue(SaveMsaglOption));
                     Environment.Exit(0);
                 }
 
@@ -845,7 +846,7 @@ namespace TestWpfViewer {
         }
 
         void ProcessDgml(string fileName) {
-#if GraphModel
+#if TEST_MSAGL
             Graph gwgraph = DgmlParser.DgmlParser.Parse(fileName);
             if (gwgraph != null) {
                 SetLayoutSettings(gwgraph);
@@ -902,7 +903,7 @@ namespace TestWpfViewer {
                 }
                 if (graphViewer.MsaglFileToSave != null) {
                     gwgraph.Write(graphViewer.MsaglFileToSave);
-                    Console.WriteLine("saved into {0}", graphViewer.MsaglFileToSave);
+                    System.Diagnostics.Debug.WriteLine("saved into {0}", graphViewer.MsaglFileToSave);
                     Environment.Exit(0);
                 }
             }

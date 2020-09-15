@@ -41,18 +41,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         internal void BoundFromRight(double rightbound) {
             rightbound = Math.Max(rightbound, LeftBound);
             RightBound = Math.Min(rightbound, RightBound);
-            //Debug.Assert(SegsAreFine());
         }
-
-/*
-        bool SegsAreFine() {
-            foreach (var lseg in setOfLongestSegs) {
-                if (lseg.GetLeftBound() > lseg.GetRightBound())
-                    return false;
-            }
-            return true;
-        }
-*/
 
         internal void BoundFromLeft(double leftbound) {
             leftbound = Math.Min(leftbound, RightBound);

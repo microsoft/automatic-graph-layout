@@ -619,14 +619,14 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return !PointComparer.Equal(obstacleIntersectSeg.End, endPoint);
         }
 
-#if DEBUG
+#if TEST_MSAGL
         internal bool SegmentCrossesANonGroupObstacle(Point startPoint, Point endPoint) {
             stopAtGroups = false;
             wantGroupCrossings = false;
             LineSegment obstacleIntersectSeg = RestrictSegmentPrivate(startPoint, endPoint);
             return !PointComparer.Equal(obstacleIntersectSeg.End, endPoint);
         }
-#endif // DEBUG
+#endif // TEST_MSAGL
 
         internal LineSegment RestrictSegmentWithObstacles(Point startPoint, Point endPoint) {
             stopAtGroups = false;

@@ -5,7 +5,7 @@ namespace Microsoft.Msagl.Routing.Visibility {
         abstract internal Point Start { get; }
         abstract internal Point End { get; }
         internal Point Direction { get { return End - Start; } }
-#if DEBUG
+#if TEST_MSAGL
         public override string ToString() {
             return Start + " " + End;
         }

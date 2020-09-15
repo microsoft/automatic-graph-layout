@@ -94,19 +94,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             if (RailDictionary.TryGetValue(t1, out rail)) return rail;
             var t2 = new SymmetricSegment(p1, p0);
             if (RailDictionary.TryGetValue(t2, out rail)) return rail;
-
-            // no rail exists // roman: please check that this code really can be commented out and does need to be fixed instead 
-            /*
-             * var q0 = VisGraph.GetPointOfVisGraphVertex(s);
-            var q1 = VisGraph.GetPointOfVisGraphVertex(t);
-            if (q0 == null || q1 == null)
-            {
-                //no visgraph vertex found
-            }
-            else
-            {
-                var edge = VisGraph.FindEdge(q0.Point, q1.Point);
-            }*/
             return CreateRail(p0, p1);
         }
 
@@ -179,7 +166,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
         internal bool PrintQuota(IEnumerable<Node> nodes, int NodeQuota, int RailQuota)
         {
-            //Console.WriteLine("running stats "+nodes.Count());
             tileTableForStatistic.Clear();
             foreach (var rail in _railDictionary.Values)
                 if (rail.ZoomLevel == ZoomLevel)
@@ -199,7 +185,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                     maxVerticesPerTile = tileStatistic.vertices;
             }
 
-            Console.WriteLine("max rails per tile {0}\n" + "max verts per tile {1}.\n", maxRailsPerTile, maxVerticesPerTile);
+            System.Diagnostics.Debug.WriteLine("max rails per tile {0}\n" + "max verts per tile {1}.\n", maxRailsPerTile, maxVerticesPerTile);
 
             if (maxVerticesPerTile <= NodeQuota && maxRailsPerTile <= RailQuota) return true;
             //if ( maxRailsPerTile <= RailQuota) return true;
@@ -208,7 +194,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
         internal bool QuotaSatisfied(IEnumerable<Node> nodes, int NodeQuota, int RailQuota)
         {
-            //Console.WriteLine("running stats "+nodes.Count());
             tileTableForStatistic.Clear();
             foreach (var rail in _railDictionary.Values)
                 if (rail.ZoomLevel == ZoomLevel)
@@ -228,20 +213,16 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                     maxVerticesPerTile = tileStatistic.vertices;
              }
              
-            
-
-            //if (maxVerticesPerTile <= NodeQuota && maxRailsPerTile <= RailQuota) return true;
             if ( maxRailsPerTile <= RailQuota) 
                 return true;
             
-            Console.WriteLine("max rails per tile {0}\n" + "max verts per tile {1}.\n", maxRailsPerTile, maxVerticesPerTile);
             return false;
         }
 
         #region Statistics
 
         internal void RunLevelStatistics(IEnumerable<Node> nodes) {
-            Console.WriteLine("running stats");
+            System.Diagnostics.Debug.WriteLine("running stats");
 
             foreach (var rail in _railDictionary.Values)
                 CreateStatisticsForRail(rail);
@@ -267,15 +248,15 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                     maxTotalPerTile = tileStatistic.vertices + tileStatistic.rails;
             }
 
-            Console.WriteLine("level {0}: average rails per tile {1}\n" +
+            System.Diagnostics.Debug.WriteLine("level {0}: average rails per tile {1}\n" +
                               "average verts per tile {2}, total average per tile {1}.\n", ZoomLevel,
                 averageRailsForTile, averageVerticesForTile);
 
-            Console.WriteLine("max rails per tile {0}\n" +
+            System.Diagnostics.Debug.WriteLine("max rails per tile {0}\n" +
                               "max verts per tile {1}, total max per tile {2}.\n", maxRailsPerTile,
                 maxVerticesPerTile, maxTotalPerTile);
 
-            Console.WriteLine("done with stats");
+            System.Diagnostics.Debug.WriteLine("done with stats");
         }
  
 

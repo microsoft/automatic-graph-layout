@@ -6,10 +6,6 @@ msbuild="c:\Windows\Microsoft.NET\Framework\v3.5\msbuild.exe"
 
 alldebug:  gleedebug
 
-silv:
-	cd msagl\silverlight\msaglsilverlight
-	$(msbuild) msaglsilverlight.csrpoj  /l:$(GL)\utilities\msbuildlogger\bin\Debug\msbuildlogger.dll /noconlog
-
 
 release:  buildrelease 
 

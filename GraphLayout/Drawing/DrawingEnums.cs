@@ -35,17 +35,6 @@ namespace Microsoft.Msagl.Drawing {
 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        //static int ToByte(double c){
-        //    return (int)(255.0*c+0.5);
-        //}
-
-        //  static string Xex(int i){
-        //      string s=Convert.ToString(i,16);
-        //if(s.Length==1)
-        //          return "0"+s;
-
-        //      return s.Substring(s.Length-2,2);
-        //  }
 
         internal static string ColorToString(string attr, string c) {
 

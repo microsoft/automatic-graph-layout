@@ -422,8 +422,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             containerNode.Item.RemoveAxis(edge);
             if(containerNode.Item.IsEmpty())
                 edgeContainersTree.DeleteNodeInternal(containerNode);
-            
-         //   Console.WriteLine(edgeContainersTree);
         }
 
 

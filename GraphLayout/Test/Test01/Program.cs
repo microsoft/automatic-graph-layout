@@ -58,7 +58,7 @@ namespace Test01 {
 
         [STAThread]
         static void Main(string[] args) {
-#if DEBUG
+#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif
             ArgsParser.ArgsParser argsParser = SetArgsParser(args);
@@ -103,7 +103,7 @@ namespace Test01 {
                         FixHookPorts(geometryGraph);
                         // if (argsParser.OptionIsUsed(BundlingOption)) {
                         for (int i = 0; i < 1; i++) {
-#if DEBUG
+#if TEST_MSAGL
                             /*DisplayGeometryGraph.ShowGraph(geometryGraph);
                                 var l = new List<DebugCurve>(); l.AddRange(geometryGraph.Nodes.Select(n=>new DebugCurve(100,1,"black",n.BoundaryCurve)));
                                 l.AddRange(geometryGraph.Edges.Select(e=>new DebugCurve(100,1,"black", new LineSegment(e.Source.Center,e.Target.Center))));
@@ -141,7 +141,7 @@ namespace Test01 {
                                                                 Math.PI/6, bs);
                             splineRouter.Run();
                         }
-#if DEBUG
+#if TEST_MSAGL
                         DisplayGeometryGraph.ShowGraph(geometryGraph);
 #endif
                         return;
@@ -225,7 +225,7 @@ namespace Test01 {
             } while (!settings.Converged);
 
             RouteEdges(graph, settings);
-#if DEBUG
+#if TEST_MSAGL
             LayoutAlgorithmSettings.ShowGraph(graph);
 #endif
             Environment.Exit(0);
@@ -310,7 +310,7 @@ namespace Test01 {
             var start = (Point) bformatter.Deserialize(stream);
             var end = (Point) bformatter.Deserialize(stream);
             stream.Close();
-#if DEBUG
+#if TEST_MSAGL
             foreach (var t in FindStartTriangle(trs, start)) {
 
                 var ll=ThreadOnTriangle(start, end, t);
@@ -322,7 +322,7 @@ namespace Test01 {
 #endif
         }
 
-#if DEBUG
+#if TEST_MSAGL
         static List<DebugCurve> ThreadOnTriangle(Point start, Point end, CdtTriangle t) {
             var l = new List<DebugCurve> {new DebugCurve(10, "red", new LineSegment(start, end))};
             AddTriangleToListOfDebugCurves(l, t, 100, 3, "brown");
@@ -412,7 +412,7 @@ namespace Test01 {
                     bs.EdgeSeparation = es;
                 }
                 else {
-                    Console.WriteLine("cannot parse {0}", esString);
+                    System.Diagnostics.Debug.WriteLine("cannot parse {0}", esString);
                     Environment.Exit(1);
                 }
             }
@@ -424,7 +424,7 @@ namespace Test01 {
                     bs.CapacityOverflowCoefficient = capacityCoeff;
                 }
                 else {
-                    Console.WriteLine("cannot parse {0}", capacityCoeffString);
+                    System.Diagnostics.Debug.WriteLine("cannot parse {0}", capacityCoeffString);
                     Environment.Exit(1);
                 }
             }
@@ -439,7 +439,7 @@ namespace Test01 {
             string msg;
             Graph graph = Parser.Parse(dotFileName, out line, out col, out msg);
             if (graph == null) {
-                Console.WriteLine("{0}({1},{2}): error: {3}", dotFileName, line, col, msg);
+                System.Diagnostics.Debug.WriteLine("{0}({1},{2}): error: {3}", dotFileName, line, col, msg);
                 Environment.Exit(1);
             }
             if (argsParser.OptionIsUsed(RecoverSugiyamaTestOption)) {
@@ -474,7 +474,7 @@ namespace Test01 {
                         BundlingSettings.DefaultInkImportance = inkCoeff;
                     }
                     else {
-                        Console.WriteLine("cannot parse {0}", ink);
+                        System.Diagnostics.Debug.WriteLine("cannot parse {0}", ink);
                         Environment.Exit(1);
                     }
                 }
@@ -487,7 +487,7 @@ namespace Test01 {
                         bs.EdgeSeparation = es;
                     }
                     else {
-                        Console.WriteLine("cannot parse {0}", esString);
+                        System.Diagnostics.Debug.WriteLine("cannot parse {0}", esString);
                         Environment.Exit(1);
                     }
                 }
@@ -518,7 +518,7 @@ namespace Test01 {
                 sr = new StreamReader(listOfFilesFile);
             }
             catch (Exception e) {
-                Console.WriteLine(e.Message);
+                System.Diagnostics.Debug.WriteLine(e.Message);
                 return;
             }
             string fileName;
@@ -536,7 +536,7 @@ namespace Test01 {
         }
 
         static void ProcessFile(string fileName, ArgsParser.ArgsParser argsParser, GViewer gViewer, ref int nOfBugs) {
-            Console.WriteLine("processing " + fileName);
+            System.Diagnostics.Debug.WriteLine("processing " + fileName);
             try {
                 string extension = Path.GetExtension(fileName);
                 if (extension == ".msagl")
@@ -550,8 +550,8 @@ namespace Test01 {
             }
             catch (Exception e) {
                 nOfBugs++;
-                Console.WriteLine("bug " + nOfBugs);
-                Console.WriteLine(e.ToString());
+                System.Diagnostics.Debug.WriteLine("bug " + nOfBugs);
+                System.Diagnostics.Debug.WriteLine(e.ToString());
             }
         }
 
@@ -562,7 +562,7 @@ namespace Test01 {
         static void ProcessMsaglFile(string fileName, ArgsParser.ArgsParser argsParser) {
             Graph graph = Graph.Read(fileName);
             if (graph == null) {
-                Console.WriteLine("cannot read " + fileName);
+                System.Diagnostics.Debug.WriteLine("cannot read " + fileName);
                 return;
             }
 
@@ -701,7 +701,7 @@ namespace Test01 {
             if (argsParser.OptionIsUsed(TightPaddingOption)) {
                 string tightPaddingString = argsParser.GetStringOptionValue(TightPaddingOption);
                 if (!double.TryParse(tightPaddingString, out tightPadding)) {
-                    Console.WriteLine("cannot parse {0} {1}", TightPaddingOption, tightPaddingString);
+                    System.Diagnostics.Debug.WriteLine("cannot parse {0} {1}", TightPaddingOption, tightPaddingString);
                     Environment.Exit(1);
                 }
             }
@@ -709,7 +709,7 @@ namespace Test01 {
             if (argsParser.OptionIsUsed(LoosePaddingOption)) {
                 string loosePaddingString = argsParser.GetStringOptionValue(LoosePaddingOption);
                 if (!double.TryParse(loosePaddingString, out loosePadding)) {
-                    Console.WriteLine("cannot parse {0} {1}", LoosePaddingOption, loosePaddingString);
+                    System.Diagnostics.Debug.WriteLine("cannot parse {0} {1}", LoosePaddingOption, loosePaddingString);
                     Environment.Exit(1);
                 }
             }
@@ -746,14 +746,14 @@ namespace Test01 {
             argsParser.AddAllowedOptionWithHelpString(AsyncLayoutOption, "test viewer in the async mode");
 
             if (!argsParser.Parse()) {
-                Console.WriteLine(argsParser.UsageString());
+                System.Diagnostics.Debug.WriteLine(argsParser.UsageString());
                 Environment.Exit(1);
             }
             return argsParser;
         }
 
         static void Triangulation(bool reverseX) {
-#if DEBUG
+#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif
             int r = reverseX ? -1 : 1;
@@ -762,7 +762,7 @@ namespace Test01 {
             var poly = (Polyline) RussiaPolyline.GetTestPolyline().ScaleFromOrigin(1, 1);
             var cdt = new Cdt(null, new[] {poly}, null);
             cdt.Run();
-#if DEBUG
+#if TEST_MSAGL
             CdtSweeper.ShowFront(cdt.GetTriangles(), null, null, null);
 #endif
         }
@@ -846,7 +846,7 @@ namespace Test01 {
 
             var layeredLayout = new LayeredLayout(graph, settings);
             layeredLayout.Run();
-#if DEBUG
+#if TEST_MSAGL
             DisplayGeometryGraph.ShowGraph(graph);
 #endif
         }

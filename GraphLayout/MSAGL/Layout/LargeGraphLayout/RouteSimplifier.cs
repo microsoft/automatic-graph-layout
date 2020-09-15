@@ -67,7 +67,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 
         void RemoveAction(Point a, Point b) {
-#if DEBUG
+#if TEST_MSAGL
             VisibilityEdge ve;
             Debug.Assert(_pathRouter.FindVertex(a).TryGetEdge(_pathRouter.FindVertex(b), out ve));
 #endif
@@ -143,13 +143,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             var closestPoint = Point.ClosestPointAtLineSegment(center, a, b);
             var where = Curve.PointRelativeToCurveLocation(closestPoint, lgNodeInfo.BoundaryOnLayer);
             return where == PointLocation.Inside;
-            /*
-            LayoutAlgorithmSettings.ShowDebugCurves(
-              new Microsoft.Msagl.DebugHelpers.DebugCurve(100, 0.1, "blue", lgNodeInfo.BoundaryOnLayer),
-              new DebugHelpers.DebugCurve(100, 0.1, "red", new LineSegment(a, b)));
-          
-            return true; // the intersection is not at the end of the [a,b]
-             */
         }
 
         List<VisibilityVertex> GetNeighbors(VisibilityVertex v) {

@@ -159,7 +159,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return cmp;
         }
 
-        [Conditional("DEBUG")]
+        [Conditional("TEST_MSAGL")]
         internal static void Debug_VerifySidesDoNotIntersect(BasicObstacleSide side1, BasicObstacleSide side2) {
             Point intersect;
             if (!Point.LineLineIntersection(side1.Start, side1.End, side2.Start, side2.End, out intersect)) {
@@ -182,7 +182,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return this.linePositionAtLastInsertOrRemove + " " + scanDirection;
         }
 
-        [Conditional("DEBUG")]
+        [Conditional("TEST_MSAGL")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         void Assert(bool condition, string message) {
 #if TEST_MSAGL

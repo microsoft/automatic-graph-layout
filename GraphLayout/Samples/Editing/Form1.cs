@@ -5,7 +5,7 @@ using Microsoft.Msagl.Drawing;
 using Color = Microsoft.Msagl.Drawing.Color;
 using Node = Microsoft.Msagl.Drawing.Node;
 using Shape = Microsoft.Msagl.Drawing.Shape;
-#if DEBUG
+#if TEST_MSAGL
 using Microsoft.Msagl.GraphViewerGdi;
 #endif 
 namespace Editing {
@@ -13,7 +13,7 @@ namespace Editing {
         bool helpIsShown;
        
         public Form1() {
-#if DEBUG
+#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif
             graphEditor = new GraphEditor();
@@ -33,7 +33,7 @@ namespace Editing {
             ResumeLayout();
 
             helpButton.Click += helpButton_Click;
-#if DEBUG
+#if TEST_MSAGL
             //   Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
 #endif
         }

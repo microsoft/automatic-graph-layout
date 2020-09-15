@@ -91,29 +91,6 @@ namespace Microsoft.Msagl.Layout.Layered {
                 }
         }
 
-
-/*
-        static void RemoveForks(Set<Tuple<int,int>> couples){
-            var graph = BasicGraphFromIntCouples(couples);
-            for (int i = 0; i < graph.NodeCount; i++) {
-                bool fork=false;
-                foreach (var edge in graph.OutEdges(i)) {
-                    if (fork)
-                        couples.Remove(new Tuple<int, int>(edge.First, edge.Second));
-                    else
-                        fork = true;
-                }
-                fork = false;
-                foreach (var edge in graph.InEdges(i)) {
-                    if (fork)
-                        couples.Remove(new Tuple<int, int>(edge.First, edge.Second));
-                    else
-                        fork = true;
-                }
-            }
-        }
-*/
-
         BasicGraph<IntPair> BasicGraphFromLeftRightIntNeibs() {
             return new BasicGraph<IntPair>(from p in LeftRightIntNeibs select new IntPair(p.Item1, p.Item2));
         }

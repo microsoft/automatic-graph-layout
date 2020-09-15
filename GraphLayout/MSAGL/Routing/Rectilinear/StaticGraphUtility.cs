@@ -227,7 +227,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                 && (PointComparer.Compare(rect.Left, point.X) < 0);
         }
 
-        [Conditional("DEBUG")]
+        [Conditional("TEST_MSAGL")]
         static internal void Assert(bool condition, string message, ObstacleTree obstacleTree, VisibilityGraph vg) {
             if (!condition) {
                 Test_DumpVisibilityGraph(obstacleTree, vg);
@@ -318,7 +318,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 #endif // TEST
 // ReSharper restore InconsistentNaming
 
-#if DEBUG
+#if TEST_MSAGL
         // Make it easier for floating-point conditional breakpoints in the VS debugger
         // (the docs say they don't need to be non-private but apparently they do).
         static internal bool IsEqualForDebugger(double variable, double want) {
@@ -327,6 +327,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         static internal bool IsEqualForDebugger(Point variable, double wantX, double wantY) {
             return IsEqualForDebugger(variable.X, wantX) && IsEqualForDebugger(variable.Y, wantY);
         }
-#endif // DEBUG
+#endif // TEST_MSAGL
     }
 }

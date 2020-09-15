@@ -6,12 +6,10 @@ namespace Microsoft.Msagl.Core.Routing {
     ///<summary>
     /// defines egde routing behaviour
     ///</summary>
-#if !SILVERLIGHT
     [DisplayName("Edge routing settings")]
     [Description("Sets the edge routing method")]
 
     [TypeConverter(typeof (ExpandableObjectConverter))]
-#endif
     public class EdgeRoutingSettings {
         EdgeRoutingMode edgeRoutingMode = EdgeRoutingMode.SugiyamaSplines;
 

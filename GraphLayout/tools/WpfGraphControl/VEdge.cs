@@ -294,8 +294,12 @@ namespace Microsoft.Msagl.WpfGraphControl {
         }
 
         public bool MarkedForDragging { get; set; }
+
+#pragma warning disable 67
         public event EventHandler MarkedForDraggingEvent;
+
         public event EventHandler UnmarkedForDraggingEvent;
+#pragma warning restore 67
 
         #endregion
 

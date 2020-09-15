@@ -43,16 +43,16 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         double arrowheadLength = 10;
 
         LayoutEditor layoutEditor;
-        ToolBarButton edgeInsertButton;
+        ToolStripButton edgeInsertButton;
         bool insertingEdge;
-        ToolBarButton layoutSettingsButton;
-        ToolBarButton redoButton;
-        ToolBarButton undoButton;
-        internal ToolBarButton zoomin;
-        internal ToolBarButton zoomout;
-        internal ToolBarButton windowZoomButton;
-        internal ToolBarButton panButton;
-        private ToolBarButton homeZoomButton;
+        ToolStripButton layoutSettingsButton;
+        ToolStripButton redoButton;
+        ToolStripButton undoButton;
+        internal ToolStripButton zoomin;
+        internal ToolStripButton zoomout;
+        internal ToolStripButton windowZoomButton;
+        internal ToolStripButton panButton;
+        private ToolStripButton homeZoomButton;
 
         /// <summary>
         /// gets or sets the drawing layout editor
@@ -155,13 +155,13 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         #endregion
 
         bool asyncLayout;
-        ToolBarButton backwardButton;
+        ToolStripButton backwardButton;
         BBNode bBNode;
         bool buildHitTree = true;
         IContainer components;
         DGraph dGraph;
         string fileName = "";
-        ToolBarButton forwardButton;
+        ToolStripButton forwardButton;
         EventHandler<MsaglMouseEventArgs> iEditViewerMouseDown;
         EventHandler<MsaglMouseEventArgs> iEditViewerMouseMove;
         EventHandler<MsaglMouseEventArgs> iEditViewerMouseUp;
@@ -170,14 +170,14 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         double mouseHitDistance = 0.05;
         bool needToCalculateLayout = true;
         double offsetForRelaxingInRouting = 0.6;
-        ToolBarButton openButton;
+        ToolStripButton openButton;
         Graph originalGraph;
         double paddingForEdgeRouting = 8;
         const string PanButtonDisabledToolTipText = "Pan, is disabled now";
-        ToolBarButton print;
-        ToolBarButton saveButton;
+        ToolStripButton print;
+        ToolStripButton saveButton;
         double tightOffsetForRouting = 1.0 / 8;
-        ToolBar toolbar;
+        ToolStrip toolbar;
         ToolTip toolTip1;
         const double VisibleWidth = 0.05; //inches
         bool wasMinimized;
@@ -194,21 +194,21 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GViewer));
             this.imageList = new System.Windows.Forms.ImageList(this.components);
-            this.toolbar = new System.Windows.Forms.ToolBar();
-            this.homeZoomButton = new System.Windows.Forms.ToolBarButton();
-            this.zoomin = new System.Windows.Forms.ToolBarButton();
-            this.zoomout = new System.Windows.Forms.ToolBarButton();
-            this.windowZoomButton = new System.Windows.Forms.ToolBarButton();
-            this.panButton = new System.Windows.Forms.ToolBarButton();
-            this.backwardButton = new System.Windows.Forms.ToolBarButton();
-            this.forwardButton = new System.Windows.Forms.ToolBarButton();
-            this.saveButton = new System.Windows.Forms.ToolBarButton();
-            this.undoButton = new System.Windows.Forms.ToolBarButton();
-            this.redoButton = new System.Windows.Forms.ToolBarButton();
-            this.openButton = new System.Windows.Forms.ToolBarButton();
-            this.print = new System.Windows.Forms.ToolBarButton();
-            this.layoutSettingsButton = new System.Windows.Forms.ToolBarButton();
-            this.edgeInsertButton = new System.Windows.Forms.ToolBarButton();
+            this.toolbar = new System.Windows.Forms.ToolStrip();
+            this.homeZoomButton = new System.Windows.Forms.ToolStripButton();
+            this.zoomin = new System.Windows.Forms.ToolStripButton();
+            this.zoomout = new System.Windows.Forms.ToolStripButton();
+            this.windowZoomButton = new System.Windows.Forms.ToolStripButton();
+            this.panButton = new System.Windows.Forms.ToolStripButton();
+            this.backwardButton = new System.Windows.Forms.ToolStripButton();
+            this.forwardButton = new System.Windows.Forms.ToolStripButton();
+            this.saveButton = new System.Windows.Forms.ToolStripButton();
+            this.undoButton = new System.Windows.Forms.ToolStripButton();
+            this.redoButton = new System.Windows.Forms.ToolStripButton();
+            this.openButton = new System.Windows.Forms.ToolStripButton();
+            this.print = new System.Windows.Forms.ToolStripButton();
+            this.layoutSettingsButton = new System.Windows.Forms.ToolStripButton();
+            this.edgeInsertButton = new System.Windows.Forms.ToolStripButton();
             this.SuspendLayout();
             // 
             // imageList
@@ -236,7 +236,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             // 
             // toolbar
             // 
-            this.toolbar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
+            this.toolbar.Items.AddRange(new System.Windows.Forms.ToolStripButton[] {
             this.homeZoomButton,
             this.zoomin,
             this.zoomout,
@@ -251,15 +251,14 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             this.print,
             this.layoutSettingsButton,
             this.edgeInsertButton});
-            this.toolbar.ButtonSize = new System.Drawing.Size(22, 23);
-            this.toolbar.DropDownArrows = true;
+            this.toolbar.Size = new System.Drawing.Size(22, 23);
             this.toolbar.ImageList = this.imageList;
             this.toolbar.Location = new System.Drawing.Point(0, 0);
             this.toolbar.Name = "toolbar";
-            this.toolbar.ShowToolTips = true;
+            this.toolbar.ShowItemToolTips = true;
             this.toolbar.Size = new System.Drawing.Size(624, 28);
             this.toolbar.TabIndex = 2;
-            this.toolbar.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.ToolBarButtonClick);
+            this.toolbar.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.ToolBarButtonClick);
             // 
             // homeZoomButton
             // 
@@ -282,15 +281,18 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             // 
             this.windowZoomButton.ImageKey = "zoom.bmp";
             this.windowZoomButton.Name = "windowZoomButton";
-            this.windowZoomButton.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton;
+            this.windowZoomButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.windowZoomButton.CheckOnClick = true;
             this.windowZoomButton.ToolTipText = "Zoom in to the rectangle";
+            this.windowZoomButton.CheckedChanged += new EventHandler(this.ToolBarButtonCheckChanged);
             // 
             // panButton
             // 
             this.panButton.ImageIndex = 3;
             this.panButton.Name = "panButton";
-            this.panButton.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton;
+            this.panButton.CheckOnClick = true;
             this.panButton.ToolTipText = "Pan";
+            this.panButton.CheckedChanged += new EventHandler(this.ToolBarButtonCheckChanged);
             // 
             // backwardButton
             // 
@@ -339,9 +341,10 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             // edgeInsertButton
             // 
             this.edgeInsertButton.ImageIndex = 16;
+            this.edgeInsertButton.CheckOnClick = true;
             this.edgeInsertButton.Name = "edgeInsertButton";
-            this.edgeInsertButton.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton;
             this.edgeInsertButton.ToolTipText = "Edge insertion";
+            this.edgeInsertButton.CheckedChanged += new EventHandler(this.ToolBarButtonCheckChanged);
             // 
             // GViewer
             // 
@@ -416,16 +419,16 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         /// Controls the pan button.
         /// </summary>
         public bool PanButtonPressed {
-            get { return panButton.Pushed; }
-            set { panButton.Pushed = value; }
+            get { return panButton.Checked; }
+            set { panButton.Checked = value; }
         }
 
         /// <summary>
         /// Controls the window zoom button.
         /// </summary>
         public bool WindowZoomButtonPressed {
-            get { return windowZoomButton.Pushed; }
-            set { windowZoomButton.Pushed = value; }
+            get { return windowZoomButton.Checked; }
+            set { windowZoomButton.Checked = value; }
         }
 
         /// <summary>
@@ -679,9 +682,9 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         /// </summary>
         /// <param name="menuItems"></param>
         public void PopupMenus(params Tuple<string, VoidDelegate>[] menuItems) {
-            var contextMenu = new ContextMenu();
+            var contextMenu = new ContextMenuStrip();
             foreach (var menuItem in menuItems)
-                contextMenu.MenuItems.Add(CreateMenuItem(menuItem.Item1, menuItem.Item2));
+                contextMenu.Items.Add(CreateMenuItem(menuItem.Item1, menuItem.Item2));
             contextMenu.Show(this, PointToClient(MousePosition));
         }
 
@@ -1521,7 +1524,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             if (localSugiyamaSettings != null) {
                 // Insert hard coded constraints for tests
 
-#if DEBUG
+#if TEST_MSAGL
                 TestSomeGraphs();
 #endif
             }
@@ -1541,7 +1544,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             }
         }
 
-#if DEBUG
+#if TEST_MSAGL
         void TestSomeGraphs() {
             if (fileName.EndsWith("lovett.dot")) {
                 OriginalGraph.LayerConstraints.AddUpDownVerticalConstraint(OriginalGraph.FindNode("Logica"),
@@ -1751,45 +1754,47 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             return 1.0f + zoomFraction;
         }
 
-        void ToolBarButtonClick(object sender, ToolBarButtonClickEventArgs e) {
-            if (e.Button == zoomin)
+        void ToolBarButtonClick(object sender, ToolStripItemClickedEventArgs e) {
+            if (e.ClickedItem == zoomin)
                 ZoomInPressed();
-            else if (e.Button == zoomout)
+            else if (e.ClickedItem == zoomout)
                 ZoomOutPressed();
-            else if (e.Button == backwardButton)
+            else if (e.ClickedItem == backwardButton)
                 BackwardButtonPressed();
-            else if (e.Button == forwardButton)
+            else if (e.ClickedItem == forwardButton)
                 ForwardButtonPressed();
-            else if (e.Button == saveButton)
+            else if (e.ClickedItem == saveButton)
                 SaveButtonPressed();
-            else if (e.Button == print)
+            else if (e.ClickedItem == print)
                 PrintButtonPressed();
-            else if (e.Button == openButton)
+            else if (e.ClickedItem == openButton)
                 OpenButtonPressed();
-            else if (e.Button == undoButton)
+            else if (e.ClickedItem == undoButton)
                 UndoButtonPressed();
-            else if (e.Button == redoButton)
+            else if (e.ClickedItem == redoButton)
                 RedoButtonPressed();
-            else if (e.Button == windowZoomButton)
-                WindowZoomButtonIsPressed();
-            else if (e.Button == panButton)
-                PanButtonIsPressed();
-            else if (e.Button == layoutSettingsButton)
+            else if (e.ClickedItem == layoutSettingsButton)
                 LayoutSettingsIsClicked();
-            else if (e.Button == edgeInsertButton) {
-                InsertingEdge = edgeInsertButton.Pushed;
-                if (InsertingEdge)
-                    layoutEditor.PrepareForEdgeDragging();
-                else
-                    layoutEditor.ForgetEdgeDragging();
-            }
-            else if (e.Button == homeZoomButton) {
+            else if (e.ClickedItem == homeZoomButton) {
                 transformation = null;
                 panel.Invalidate();
             }
 
         }
 
+        void ToolBarButtonCheckChanged(object sender, EventArgs e) {
+            if (sender == windowZoomButton)
+                WindowZoomButtonIsPressed();
+            else if (sender == panButton)
+                PanButtonIsPressed();
+            else if (sender == edgeInsertButton) {
+                InsertingEdge = edgeInsertButton.Checked;
+                if (InsertingEdge)
+                    layoutEditor.PrepareForEdgeDragging();
+                else
+                    layoutEditor.ForgetEdgeDragging();
+            }
+        }
 
         void LayoutSettingsIsClicked() {
             var layoutSettingsForm = new LayoutSettingsForm();
@@ -1876,9 +1881,9 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         }
 
         void PanButtonIsPressed() {
-            if (panButton.Pushed) {
+            if (panButton.Checked) {
                 panButton.ToolTipText = panButtonToolTipText;
-                windowZoomButton.Pushed = false;
+                windowZoomButton.Checked = false;
                 windowZoomButton.ToolTipText = windowZoomButtonDisabledToolTipText;
             }
             else
@@ -1886,9 +1891,9 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         }
 
         void WindowZoomButtonIsPressed() {
-            if (windowZoomButton.Pushed) {
+            if (windowZoomButton.Checked) {
                 windowZoomButton.ToolTipText = WindowZoomButtonToolTipText;
-                panButton.Pushed = false;
+                panButton.Checked = false;
                 panButton.ToolTipText = PanButtonDisabledToolTipText;
             }
             else
@@ -1946,26 +1951,27 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                 return;
             }
 
-            var contextMenu = new ContextMenu(CreateSaveMenuItems());
+            var contextMenu = new ContextMenuStrip();
+            contextMenu.Items.AddRange(CreateSaveMenuItems());
             contextMenu.Show(this, new System.Drawing.Point(toolbar.Left + 100, toolbar.Bottom),
-                             LeftRightAlignment.Right);
+                             ToolStripDropDownDirection.BelowRight);
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters",
             MessageId = "System.Windows.Forms.MenuItem.#ctor(System.String)")]
-        MenuItem[] CreateSaveMenuItems() {
-            var menuItems = new List<MenuItem>();
-            MenuItem menuItem;
+        ToolStripMenuItem[] CreateSaveMenuItems() {
+            var menuItems = new List<ToolStripMenuItem>();
+            ToolStripMenuItem menuItem;
             if (SaveAsMsaglEnabled) {
-                menuItems.Add(menuItem = new MenuItem("Save graph"));
+                menuItems.Add(menuItem = new ToolStripMenuItem("Save graph"));
                 menuItem.Click += SaveGraphClick;
             }
             if (SaveAsImageEnabled) {
-                menuItems.Add(menuItem = new MenuItem("Save in bitmap format"));
+                menuItems.Add(menuItem = new ToolStripMenuItem("Save in bitmap format"));
                 menuItem.Click += SaveImageClick;
             }
             if (SaveInVectorFormatEnabled) {
-                menuItems.Add(menuItem = new MenuItem("Save in vector format"));
+                menuItems.Add(menuItem = new ToolStripMenuItem("Save in vector format"));
                 menuItem.Click += SaveInVectorGraphicsFormatClick;
             }
             return menuItems.ToArray();
@@ -2219,8 +2225,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         }
 
 
-        static MenuItem CreateMenuItem(string title, VoidDelegate voidVoidDelegate) {
-            var menuItem = new MenuItem { Text = title };
+        static ToolStripMenuItem CreateMenuItem(string title, VoidDelegate voidVoidDelegate) {
+            var menuItem = new ToolStripMenuItem { Text = title };
             menuItem.Click += ((sender, e) => voidVoidDelegate());
             return menuItem;
         }

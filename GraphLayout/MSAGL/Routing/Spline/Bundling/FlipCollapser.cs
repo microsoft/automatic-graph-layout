@@ -7,7 +7,7 @@ using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Routing;
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
 using Microsoft.Msagl.DebugHelpers;
 #endif
 using Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation;

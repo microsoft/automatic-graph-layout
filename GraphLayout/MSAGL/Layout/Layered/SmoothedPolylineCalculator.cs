@@ -11,10 +11,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Reflection.Emit;
 using Microsoft.Msagl.Layout.MDS;
-#if !SHARPKIT
-using System.IO.Packaging;
-#endif
-using System.Diagnostics.Eventing.Reader;
 
 namespace Microsoft.Msagl.Layout.Layered {
 
@@ -301,7 +297,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
 #region debug stuff
-#if DEBUGGLEE
+#if TEST_MSAGL
         //   static int calls;
         // bool debug { get { return calls == 5;} }
 

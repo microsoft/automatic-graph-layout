@@ -255,7 +255,7 @@ namespace TestForGdi {
                     //                        graph.Attr.LayerDirection = LayerDirection.RL;
                 }
 
-#if REPORTING
+#if TEST_MSAGL
                 graph.LayoutAlgorithmSettings.Reporting = verbose;
 #endif
                 gViewer.FileName = fileName;
@@ -269,7 +269,7 @@ namespace TestForGdi {
                 if (sw != null)
                 {
                     sw.Stop();
-                    Console.WriteLine("layout done for {0} ms", (double)sw.ElapsedMilliseconds / 1000);
+                    System.Diagnostics.Debug.WriteLine("layout done for {0} ms", (double)sw.ElapsedMilliseconds / 1000);
                 }
             }
         }
@@ -301,7 +301,7 @@ namespace TestForGdi {
                 return graph;
             }
             catch (Exception) {
-                Console.WriteLine("cannot read " + fileName);
+                System.Diagnostics.Debug.WriteLine("cannot read " + fileName);
             }
             msaglFile = false;
             return null;
@@ -344,7 +344,7 @@ namespace TestForGdi {
                 double ar = generatedGraph.GeometryGraph.BoundingBox.Width/
                             generatedGraph.GeometryGraph.BoundingBox.Height;
                 if (ar > 5)
-                    Console.WriteLine("ar={0}", ar);
+                    System.Diagnostics.Debug.WriteLine("ar={0}", ar);
 
                 //update the dotviewer
                 if (InvokeRequired)
@@ -377,7 +377,7 @@ namespace TestForGdi {
                     if (l.EndsWith(".dot")) {
                         l = Path.Combine(Path.GetDirectoryName(fn), l);
 
-                        Console.WriteLine("processing {0} ...", l);
+                        System.Diagnostics.Debug.WriteLine("processing {0} ...", l);
                         int line;
                         int column;
                         bool msaglFile;
@@ -399,7 +399,7 @@ namespace TestForGdi {
                             GraphLayoutCalculation();
                         }
                         else
-                            Console.WriteLine(String.Format("{0}({1},{2}): cannot process the file", fn, line, column));
+                            System.Diagnostics.Debug.WriteLine(String.Format("{0}({1},{2}): cannot process the file", fn, line, column));
                     }
 
                     Thread.Sleep(1000*(int) demoPauseValueNumericValue.Value);
@@ -484,7 +484,7 @@ namespace TestForGdi {
 
         void RouteEdgesRegular() {
             if (GViewer.Graph != null) {
-#if DEBUG
+#if TEST_MSAGL
                 gViewer.Graph.DebugICurves.Clear();
 #endif
                 var edgeMode = GViewer.Graph.LayoutAlgorithmSettings.EdgeRoutingSettings.EdgeRoutingMode;

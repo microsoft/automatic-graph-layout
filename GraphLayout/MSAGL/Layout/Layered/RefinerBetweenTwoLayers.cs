@@ -66,20 +66,6 @@ namespace Microsoft.Msagl.Layout.Layered {
             while (InsertSites());
         }
 
-#if DEBUGGLEE
-        private ICurve[] CreateShortTestPoly() {
-            List<ICurve> ret = new List<ICurve>();
-            Site s = this.topSite;
-            Site t = s.Next;
-            do {
-                ret.Add(new LineSegment(s.Point, t.Point));
-                s = s.Next; t = s.Next;
-            }
-            while (s.Point != this.NodeAnchor(bottomNode).Origin);
-            return ret.ToArray();
-        }
-#endif
-
         private Point FixCorner(Point start, Point corner, Point end) {
             if (start == corner)
                 return corner;

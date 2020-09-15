@@ -159,7 +159,7 @@ namespace TestGraphmaps {
 
         
         protected override void OnStartup(StartupEventArgs e) {
-#if DEBUG
+#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif
 
@@ -326,7 +326,7 @@ namespace TestGraphmaps {
                 if (Int32.TryParse(railQuota, out n))
                     _graphViewer.DefaultLargeLayoutSettings.MaxNumberOfRailsPerTile = n;
                 else
-                    Console.WriteLine("cannot parse {0}", railQuota);
+                    System.Diagnostics.Debug.WriteLine("cannot parse {0}", railQuota);
             }
         }
         void CheckNodeQuota()
@@ -338,7 +338,7 @@ namespace TestGraphmaps {
                 if (Int32.TryParse(nodeQuota, out n))
                     _graphViewer.DefaultLargeLayoutSettings.MaxNumberOfNodesPerTile = n;
                 else
-                    Console.WriteLine("cannot parse {0}", nodeQuota);
+                    System.Diagnostics.Debug.WriteLine("cannot parse {0}", nodeQuota);
             }
         }
         void CheckIncreaseNodeQuota() {
@@ -348,7 +348,7 @@ namespace TestGraphmaps {
                 if (Double.TryParse(incrNodeQuota, out inq))
                     _graphViewer.DefaultLargeLayoutSettings.IncreaseNodeQuota = inq;
                 else
-                    Console.WriteLine("cannot parse {0}", incrNodeQuota);
+                    System.Diagnostics.Debug.WriteLine("cannot parse {0}", incrNodeQuota);
             }
         }
 
@@ -406,12 +406,12 @@ namespace TestGraphmaps {
                 var fileListDir = Path.GetDirectoryName(fileList);
                 var streamReader = new StreamReader(fileList);
 //                _graphViewer.LayoutStarted +=
-//                    (a, b) => Console.WriteLine("processing {0}", _currentFileNameFromList);
+//                    (a, b) => System.Diagnostics.Debug.WriteLine("processing {0}", _currentFileNameFromList);
 //                _graphViewer.LayoutComplete += (a, b) =>
 //                    {
-//                        Console.WriteLine("Done with {0}", _currentFileNameFromList);
+//                        System.Diagnostics.Debug.WriteLine("Done with {0}", _currentFileNameFromList);
 //                        if (!SetupNextRun(streamReader, fileListDir)) {
-//                            Console.WriteLine("done with the list");
+//                            System.Diagnostics.Debug.WriteLine("done with the list");
 //                        }
 //                    };
 
@@ -421,7 +421,7 @@ namespace TestGraphmaps {
                 } while (_currentFileNameFromList != null);
             }
             catch (Exception e) {
-                Console.WriteLine(e.Message);
+                System.Diagnostics.Debug.WriteLine(e.Message);
             }
         }
 
@@ -495,7 +495,7 @@ namespace TestGraphmaps {
             _argsParser.AddOptionWithAfterStringWithHelp("-labelH", "the height of labels");
 
             if (!_argsParser.Parse()) {
-                Console.WriteLine(_argsParser.UsageString());
+                System.Diagnostics.Debug.WriteLine(_argsParser.UsageString());
                 Environment.Exit(1);
             }
             return _argsParser;
@@ -724,7 +724,7 @@ namespace TestGraphmaps {
                         ProcessMsagl(fileName);
                         return;
                     default:
-                        Console.WriteLine("format {0} is not supported, cannot process {1}", extension, fileName);
+                        System.Diagnostics.Debug.WriteLine("format {0} is not supported, cannot process {1}", extension, fileName);
                         return;
                 }
                 SaveMsaglAndTiles(fileName);
@@ -741,12 +741,12 @@ namespace TestGraphmaps {
         }
 
         void ProcessMsagl(string fileName) {
-            Console.WriteLine("reading {0}", fileName);
+            System.Diagnostics.Debug.WriteLine("reading {0}", fileName);
             var graph = Graph.Read(fileName);
 
             if (graph != null) {
                 if (_argsParser.OptionIsUsed(PrintMaxNodeDegreeOption)) {
-                    Console.WriteLine("max node degree {0}",
+                    System.Diagnostics.Debug.WriteLine("max node degree {0}",
                         graph.Nodes.Max(n => n.OutEdges.Count() + n.InEdges.Count() + n.SelfEdges.Count()));
                     Environment.Exit(0);
                 }
@@ -761,7 +761,7 @@ namespace TestGraphmaps {
                         graph.LayoutAlgorithmSettings.NodeSeparation);
                 }
             }
-            Console.WriteLine("passing graph to the control");
+            System.Diagnostics.Debug.WriteLine("passing graph to the control");
             PassGraphToControl(graph, fileName);
         }
 
@@ -820,7 +820,7 @@ namespace TestGraphmaps {
         }
 
         void ProcessDgml(string fileName) {
-#if GRAPH_MODEL
+#if TEST_MSAGL
             Graph gwgraph = DgmlParser.DgmlParser.Parse(fileName);
             if (gwgraph != null) {
                 SetLayoutSettings(gwgraph);
@@ -854,7 +854,7 @@ namespace TestGraphmaps {
                 PassGraphToGraphViewer(gwgraph, fileName);
                 return true;
             }
-            Console.WriteLine("Cannot parse {3} {2} line {0} column {1}", line, column, msg, fileName);
+            System.Diagnostics.Debug.WriteLine("Cannot parse {3} {2} line {0} column {1}", line, column, msg, fileName);
             return false;
         }
 
@@ -863,7 +863,7 @@ namespace TestGraphmaps {
             if (_graphViewer.Graph == null) return;
             string rootName = FileNameWithoutExtension(fileName);
             string msaglFileName = rootName + ".msagl";
-            Console.WriteLine("saving to {0}", msaglFileName);
+            System.Diagnostics.Debug.WriteLine("saving to {0}", msaglFileName);
             _graphViewer.Graph.Write(msaglFileName);
             if (_graphViewer.DefaultLargeLayoutSettings.GenerateTiles) {
                 CreateTileDirectoryName(fileName);
@@ -874,7 +874,7 @@ namespace TestGraphmaps {
 /*
         bool OkToCreateOrOverwriteMsaglFile(string fileName) {
             string msaglFileName = CreateMsaglFileNameFromDotName(fileName);
-            Console.WriteLine(msaglFileName);
+            System.Diagnostics.Debug.WriteLine(msaglFileName);
             if (File.Exists(msaglFileName)) {
                 string message = String.Format("Do you want to overwrite {0}?", msaglFileName);
                 MessageBoxResult result = MessageBox.Show(message, "confirm overwrite", MessageBoxButton.YesNo);

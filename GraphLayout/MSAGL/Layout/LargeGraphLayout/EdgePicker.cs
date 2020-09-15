@@ -19,30 +19,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 return;
             }
 
-            FillShortRoutes();           
-            //ShowStuff();
+            FillShortRoutes();
         }
-
-
-        //        void ShowStuff() {
-//            var l = new List<DebugCurve>();
-//            for (int i = 0; i <= levelLastNodeIndex; i++) {
-//                var node = nodeZoomLevelCalculator.SortedLgNodeInfos[i].GeometryNode;
-//                l.Add(new DebugCurve(200, 1, "green", node.BoundaryCurve));
-//            }
-//
-//            foreach (
-//                var e in lgData.GeometryEdgesToLgEdgeInfos.Where(e => e.Value.ZoomLevel <= zoomLevel).Select(g => g.Key)
-//                )
-//                l.Add(new DebugCurve(100, 1, "brown", new LineSegment(e.Source.Center, e.Target.Center)));
-//
-//            foreach (
-//                var e in lgData.GeometryEdgesToLgEdgeInfos.Where(e => e.Value.ZoomLevel > zoomLevel).Select(g => g.Key))
-//                l.Add(new DebugCurve(20, 0.5, "green", new LineSegment(e.Source.Center, e.Target.Center)));
-//
-//            LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(l);
-//
-//        }
 
 
         readonly int zoomLevel;

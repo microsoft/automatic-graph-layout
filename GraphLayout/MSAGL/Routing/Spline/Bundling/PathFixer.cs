@@ -208,7 +208,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         }
 
         bool AddVertexToSplittingList(PointPair a, Dictionary<PointPair, List<Point>> splittingPoints, Point intersectionPoint) {
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
             double t;
             System.Diagnostics.Debug.Assert(Point.DistToLineSegment(intersectionPoint, a.First, a.Second, out t) < ApproximateComparer.IntersectionEpsilon);
 #endif

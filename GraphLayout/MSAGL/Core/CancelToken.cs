@@ -6,12 +6,6 @@ using System.Threading.Tasks;
 #endif
 
 namespace Microsoft.Msagl.Core {
-#if SILVERLIGHT
-    public class OperationCanceledException : Exception
-    {
-    }
-#endif
-
 
     /// <summary>
     /// a place holder for the cancelled flag

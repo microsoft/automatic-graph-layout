@@ -22,7 +22,7 @@ namespace GeometryRoutinesSample {
 #endif
 
             // prints out the location of the point relative ot the polygon
-            Console.WriteLine(Curve.PointRelativeToCurveLocation(point, polygon));
+            System.Diagnostics.Debug.WriteLine(Curve.PointRelativeToCurveLocation(point, polygon));
 
             //=====================================================================//
             // find out if one curve intersects another 
@@ -32,9 +32,9 @@ namespace GeometryRoutinesSample {
 #endif
 
             if (PolylinesIntersect(polygon0, polygon))
-                Console.WriteLine("intersects");
+                System.Diagnostics.Debug.WriteLine("intersects");
             else
-                Console.WriteLine("do not intersects");
+                System.Diagnostics.Debug.WriteLine("do not intersects");
 
             (polygon0 as ICurve).Translate(new Point(1, 0));
 #if TEST
@@ -42,9 +42,9 @@ namespace GeometryRoutinesSample {
 #endif
 
             if (PolylinesIntersect(polygon0, polygon))
-                Console.WriteLine("intersect");
+                System.Diagnostics.Debug.WriteLine("intersect");
             else
-                Console.WriteLine("do not intersect");
+                System.Diagnostics.Debug.WriteLine("do not intersect");
           
         }
 

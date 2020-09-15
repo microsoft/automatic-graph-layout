@@ -46,17 +46,6 @@ namespace Microsoft.Msagl.Layout.MDS
             get { return removeOverlaps; }
         }
 
-        /*
-        /// <summary>
-        /// Level of convergence accuracy (the closer to zero, the more accurate).
-        /// </summary>
-        [Description("this is the epsilon")]
-        public double Epsilon {
-            set { epsilon=value; }
-            get { return epsilon; }
-        }
-        */
-
         /// <summary>
         /// Number of pivots in Landmark Scaling (between 3 and number of objects).
         /// </summary>

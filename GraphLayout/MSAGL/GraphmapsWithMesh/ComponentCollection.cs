@@ -50,7 +50,6 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                 NumOfComponents++;
             }
             NumOfAliveComponents = NumOfComponents;
-            Console.WriteLine(" Number of components:" + NumOfAliveComponents);
 
         }
 

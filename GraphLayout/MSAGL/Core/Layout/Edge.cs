@@ -10,9 +10,7 @@ namespace Microsoft.Msagl.Core.Layout {
 #if TEST_MSAGL
     [Serializable]
 #endif
-#pragma warning disable 1591
     public class Edge : GeometryObject, ILabeledObject {
-#pragma warning restore 1591
         /// <summary>
         /// Defines the way the edge connects to the source.
         /// The member is used at the moment only when adding an edge to the graph.

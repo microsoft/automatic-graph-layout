@@ -39,8 +39,8 @@ namespace WpfApplicationSample
 
         protected override void OnStartup(StartupEventArgs e)
         {
-#if DEBUG
-            Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
+#if TEST_MSAGL
+     //       Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
 #endif
 
             appWindow = new Window {

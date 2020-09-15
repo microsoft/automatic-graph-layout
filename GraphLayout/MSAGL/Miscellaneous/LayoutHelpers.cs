@@ -25,17 +25,10 @@ namespace Microsoft.Msagl.Miscellaneous {
     /// but the new APIs should be used for new code.
     /// </summary>
     public static class LayoutHelpers {
-#if SILVERLIGHT
-        /// <summary>
-        /// Calculates the graph layout
-        /// </summary>
-        /// <exception cref="CancelException">Thrown when the layout is canceled.</exception>
-#else
         /// <summary>
         /// Calculates the graph layout
         /// </summary>
         /// <exception cref="System.OperationCanceledException">Thrown when the layout is canceled.</exception>
-#endif
         public static void CalculateLayout(GeometryGraph geometryGraph, LayoutAlgorithmSettings settings, CancelToken cancelToken, string tileDirectory = null) {
             if (settings is RankingLayoutSettings) {
                 var rankingLayoutSettings = settings as RankingLayoutSettings;

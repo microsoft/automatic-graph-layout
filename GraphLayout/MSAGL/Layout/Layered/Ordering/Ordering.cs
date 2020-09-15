@@ -195,7 +195,6 @@ namespace Microsoft.Msagl.Layout.Layered {
                     measure = newMeasure;
                 }
             }
-            //Console.WriteLine("DONE == Calcuate {0}\n\n", sw.ElapsedMilliseconds);
         }
 
         internal static void CloneLayers(int[][] layers, ref int[][] layerArraysCopy) {
@@ -527,56 +526,5 @@ namespace Microsoft.Msagl.Layout.Layered {
 
             return edges;
         }
-
-        /*
-        void Visualize()
-        {
-          int x = 0;
-          for (int i = 0; i < layers.Length - 1; i++)
-            x += GetCrossingCountFromStrip(i);
-
-          GraphViewer.Graph g = new GraphViewer.Graph(x.ToString(),"");
-          //same layers 
-          foreach (int[] l in layers)
-          {
-            List<string> r = new List<string>();
-            foreach (int i in l)
-            {
-              r.Add(i.ToString());
-              GraphViewer.Node n=g.IncludeNode(i.ToString());
-            }
-
-            g.SetSameLayer(r);
-          }
-
-          foreach (int[] l in layers)
-          {
-
-            for (int i = 0; i < l.Length - 1; i++)
-            {
-              GraphViewer.Edge e=g.AddEdge(l[i].ToString(), l[i + 1].ToString());
-              e.attr.Color = System.Drawing.Color.White;
-
-            }
-
-          }
-
-          foreach (LayerEdge ie in this.graph.Edges)
-            g.AddEdge(ie.Source.ToString(), ie.Target.ToString());
-
-          Form f = new Form();
-          GraphViewer.DOTViewer v = new DOTViewer();
-          v.Graph = g;
-          f.SuspendLayout();
-          f.Controls.Add(v);
-          f.Size = 
-            new System.Drawing.Size(System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Size.Width / 2, System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Size.Height / 2);
-   
-          v.Dock = DockStyle.Fill;
-          f.ResumeLayout();
-          f.ShowDialog();
-
-        }
-        */
     }
 }

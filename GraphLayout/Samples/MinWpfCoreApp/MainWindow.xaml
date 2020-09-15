@@ -1,0 +1,8 @@
+﻿<Window x:Class="MinWpfApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:wpfcoregraphcontrol="clr-namespace:Microsoft.Msagl.WpfGraphControl;assembly=WpfCoreGraphControl"
+     
+        Title="MainWindow" Height="350" Width="525">
+    <wpfcoregraphcontrol:AutomaticGraphLayoutControl x:Name="graphControl" />
+</Window>

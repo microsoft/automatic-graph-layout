@@ -199,20 +199,6 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         }
 
-
-        //        private void CheckLayer(int[]l) {
-        //      ///debug 
-        //      
-        // for (int i = 0; i < l.Length - 1; i++)
-        //               if (NodesAreTooClose(l[i], l[i + 1]))
-        //                    Console.WriteLine("nodes are too close");
-        //        }
-        //
-        //        private bool NodesAreTooClose (int u, int v) {
-        //            Anchor a = dataBase.Anchors[u], side1 = dataBase.Anchors[v];
-        //           return a.Right + originalGraph.NodeSeparation > side1.Left;
-        //       }
-
         LayerArrays CalculateLayers() {
             CreateGluedDagSkeletonForLayering();
             LayerArrays layerArrays = CalculateLayersWithoutAspectRatio();
@@ -379,47 +365,14 @@ namespace Microsoft.Msagl.Layout.Layered {
             return layerArrays;
         }
 
-
-        /*
-                void CalculateXPositionsWithQP(LayerArrays layerArrays){
-                    ISolverShell solver = ConstrainedOrdering.CreateSolver();
-                    foreach (var layer in layerArrays.Layers)
-                        AddNotOverlappingConstraints(layer, solver);
-                    foreach (var list in database.Multiedges.Values)
-                        foreach (IntEdge edge in list)
-                            AddEdgeToSolverTarget(edge, solver, edge.Weight);
-
-
-                    int j = -1;
-                    for (int i = 0; i < intGraph.Nodes.Count; i++)
-                        if(intGraph.OutEdgesCount(i) != 0 || intGraph.InEdgesCount(i) != 0){
-                            j = i;
-                            break;
-                        }
-                    if(j != -1){
-                        for (int i = 0; i < intGraph.Nodes.Count; i++)
-                            if(intGraph.OutEdgesCount(i) == 0 && intGraph.InEdgesCount(i) == 0)
-                                solver.AddGoalTwoVariablesAreClose(i, j);
-                    }
-
-                    j = 0;
-                    foreach (Anchor a in database.Anchors)
-                        a.X = solver.GetVariableResolvedPosition(j++);
-
-                }
-        */
-
         void DecideIfUsingFastXCoordCalculation(LayerArrays layerArrays) {
             if (layerArrays.X.Length >= sugiyamaSettings.BrandesThreshold)
                 Brandes = true;
-#if SILVERLIGHT
-#else
             else {
                 string s = Environment.GetEnvironmentVariable("Brandes");
                 if (!String.IsNullOrEmpty(s) && String.Compare(s, "on", true, CultureInfo.CurrentCulture) == 0)
                     Brandes = true;
             }
-#endif
         }
 
         void StraightensShortEdges() {
@@ -649,7 +602,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                 anchors[i].X = xLayers[i];
         }
 
-        //[System.Diagnostics.Conditional("DEBUGGLEE")]
+        //[System.Diagnostics.Conditional("TEST_MSAGL")]
         //private void TestYXLayers(LayerArrays layerArrays, int[] xLayers) {
         //    foreach (IntEdge e in this.xLayoutGraph.Edges) {
         //        int s = e.Source; int targ = e.Target;
@@ -819,7 +772,6 @@ namespace Microsoft.Msagl.Layout.Layered {
                 }
 
                 aspectRatio = box.Width / box.Height;
-                //             Console.WriteLine("bb aspect ratio {0}", aspectRatio);
 
                 double delta = (box.LeftTop - box.RightBottom).Length / 2;
 

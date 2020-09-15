@@ -282,7 +282,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 #region TEST_MSAGL
 #if TEST_MSAGL
 // ReSharper disable UnusedMember.Local
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "len"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "newEntry"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "nbend"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "iters"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "hcost"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ccost"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "so"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "q"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "edges"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String,System.Object[])"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "len"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "newEntry"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "nbend"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "iters"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "hcost"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ccost"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "so"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "q"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "edges"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.Debug.WriteLine(System.String,System.Object[])"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private void TestShowAllPaths(VisibilityVertex source, VertexEntry mostRecentlyExtendedPath) {
 // ReSharper restore UnusedMember.Local
             var edges = GetAllEdgesTest(source).Select(e => (ICurve) (new LineSegment(e.SourcePoint, e.TargetPoint))).
@@ -316,14 +316,14 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                     pathEdges.Add(new DebugCurve(2, color, new LineSegment(entry.PreviousVertex.Point, vertex.Point)));
                 }
             }
-            Console.WriteLine("entry {0} seq = {1} len = {2} nbend = {3} ccost = {4} hcost = {5} iters = {6}/{7}", mostRecentlyExtendedPath,
+            System.Diagnostics.Debug.WriteLine("entry {0} seq = {1} len = {2} nbend = {3} ccost = {4} hcost = {5} iters = {6}/{7}", mostRecentlyExtendedPath,
                              this.lastDequeueTimestamp,
                              mostRecentlyExtendedPath.Length, mostRecentlyExtendedPath.NumberOfBends,
                              this.CombinedCost(mostRecentlyExtendedPath.Length, mostRecentlyExtendedPath.NumberOfBends),
                              this.HeuristicDistanceFromVertexToTarget(mostRecentlyExtendedPath.Vertex.Point, mostRecentlyExtendedPath.Direction),
                              this.currentIterations, totalIterations);
             foreach (var newEntry in newEntries) {
-                Console.WriteLine("   newEntry {0} len = {1} nbend = {2} ccost = {3} hcost = {4}", newEntry,
+                System.Diagnostics.Debug.WriteLine("   newEntry {0} len = {1} nbend = {2} ccost = {3} hcost = {4}", newEntry,
                                  newEntry.Length, newEntry.NumberOfBends,
                                  this.CombinedCost(newEntry.Length, newEntry.NumberOfBends),
                                  this.HeuristicDistanceFromVertexToTarget(newEntry.Vertex.Point, newEntry.Direction));
@@ -332,7 +332,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
 // ReSharper disable UnusedMember.Local
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "len"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "nbend"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "iters"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "so"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "pathEdges"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "edges"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String,System.Object[])"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "len"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "nbend"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "iters"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "so"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "pathEdges"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "edges"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.Debug.WriteLine(System.String,System.Object[])"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private void TestShowPath(VisibilityVertex source, IEnumerable<Point> pathPoints, double cost, double length, int numberOfBends) {
 // ReSharper restore UnusedMember.Local
             var edges = GetAllEdgesTest(source).Select(e => (ICurve) (new LineSegment(e.SourcePoint, e.TargetPoint))).
@@ -343,7 +343,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                           };
 
             List<DebugCurve> pathEdges = GetPathEdgeDebugCurves(pathPoints, "green");
-            Console.WriteLine("path {0} -> {1} cost = {2} len = {3} nbend = {4} iters = {5}/{6}",
+            System.Diagnostics.Debug.WriteLine("path {0} -> {1} cost = {2} len = {3} nbend = {4} iters = {5}/{6}",
                             source.Point, this.Target.Point, cost, length, numberOfBends, this.currentIterations, totalIterations);
             DevTraceDisplay(edges.Concat(so).Concat(pathEdges));
         }
@@ -680,7 +680,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                     this.TestShowPath(source, pathPoints, lastEntry.Cost, lastEntry.Length, lastEntry.NumberOfBends);
                     return;
                 }
-                Console.WriteLine("path abandoned; iters = {0}/{1}", this.currentIterations, totalIterations);
+                System.Diagnostics.Debug.WriteLine("path abandoned; iters = {0}/{1}", this.currentIterations, totalIterations);
             }
 #endif // DEVTRACE
         }
@@ -692,7 +692,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             if (ssstTrace.IsLevel(2))
             {
                 // Don't use this.Target as it hasn't been set yet.
-                Console.WriteLine("find path: {0} -> {1} distance {2} sourceAdjust {3} targetAdjust {4} bendPenalty {5}",
+                System.Diagnostics.Debug.WriteLine("find path: {0} -> {1} distance {2} sourceAdjust {3} targetAdjust {4} bendPenalty {5}",
                             source.Point, target.Point, ManhattanDistance(source.Point, target.Point),
                             this.sourceCostAdjustment, this.targetCostAdjustment, this.BendsImportance);
             }

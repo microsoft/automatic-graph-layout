@@ -54,9 +54,9 @@ namespace Microsoft.Msagl.Core.Geometry
                 if (value <= 0.0)
                 {
                     throw new ArgumentOutOfRangeException("value"
-#if DEBUG
+#if TEST_MSAGL
                                                           , @"Weight must be greater than zero"
-#endif // DEBUG
+#endif // TEST_MSAGL
                         );
                 }
                 this.borderWeight = value;
@@ -142,7 +142,7 @@ namespace Microsoft.Msagl.Core.Geometry
         internal void EnsureWeight()
         {
             // Weight must be > 0.0 (we'll divide by this later); use DefaultFreeWeight or DefaultFixedWeight,
-            // or call one of the parameterized ctors or SetFixed/SetUnfixed.  Assert this for DEBUG builds
+            // or call one of the parameterized ctors or SetFixed/SetUnfixed.  Assert this for TEST_MSAGL builds
             // but handle the default case for release.
             Debug.Assert(this.Weight > 0.0, "BorderInfo.Weight must be > 0.0; use DefaultFreeWeight or DefaultFixedWeight or a parameterized ctor");
             if (0.0 == this.Weight)

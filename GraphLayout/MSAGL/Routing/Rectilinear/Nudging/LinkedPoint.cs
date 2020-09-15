@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Msagl.Core.Geometry;
 
-#if DEBUG
+#if TEST_MSAGL
 using System.Linq;
 #endif
 

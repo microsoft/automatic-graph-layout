@@ -99,7 +99,7 @@ namespace VoronoiDiagramTest
                 Generate(10000);
             } else {
                 if (!int.TryParse(args[0], out n)) {
-                    Console.WriteLine("expecting an integer parameter, getting {0}", args[0]);
+                    System.Diagnostics.Debug.WriteLine("expecting an integer parameter, getting {0}", args[0]);
                     Environment.Exit(1);
                 }
                 Generate(n);
@@ -114,7 +114,7 @@ namespace VoronoiDiagramTest
             for (int i = 0; i < Iterations(n); i++) {
                 var fileName = CreateFileName(n, i, points);
                 points=ProcessPoints(points, fileName).ToArray();
-                Console.WriteLine(fileName);
+                System.Diagnostics.Debug.WriteLine(fileName);
             }
         }
 

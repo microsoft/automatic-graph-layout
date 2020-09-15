@@ -25,7 +25,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
             try {
                 Type memPressureType = typeof (BitmapImage).Assembly.GetType(TypeName_MSInternalMemoryPressure);
                 if (memPressureType == null) {
-                    Console.WriteLine("Could not find type: {0}", TypeName_MSInternalMemoryPressure);
+                    System.Diagnostics.Debug.WriteLine("Could not find type: {0}", TypeName_MSInternalMemoryPressure);
 
                     return;
                 }
@@ -33,7 +33,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 FieldInfo lockObjField = memPressureType.GetField(FieldName_LockObj,
                     BindingFlags.NonPublic | BindingFlags.Static);
                 if (lockObjField == null) {
-                    Console.WriteLine("Could not find field: {0}", FieldName_LockObj);
+                    System.Diagnostics.Debug.WriteLine("Could not find field: {0}", FieldName_LockObj);
 
                     return;
                 }
@@ -41,7 +41,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 FieldInfo collectionTimerField = memPressureType.GetField(FieldName_CollectionTimer,
                     BindingFlags.NonPublic | BindingFlags.Static);
                 if (collectionTimerField == null) {
-                    Console.WriteLine("Could not find field: {0}", FieldName_CollectionTimer);
+                    System.Diagnostics.Debug.WriteLine("Could not find field: {0}", FieldName_CollectionTimer);
 
                     return;
                 }
@@ -49,7 +49,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 FieldInfo allocationTimerField = memPressureType.GetField(FieldName_AllocationTimer,
                     BindingFlags.NonPublic | BindingFlags.Static);
                 if (lockObjField == null) {
-                    Console.WriteLine("Could not find field: {0}", FieldName_AllocationTimer);
+                    System.Diagnostics.Debug.WriteLine("Could not find field: {0}", FieldName_AllocationTimer);
 
                     return;
                 }
@@ -59,7 +59,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
                 allocationTimer = (Stopwatch) allocationTimerField.GetValue(null);
             }
             catch (Exception ex) {
-                Console.WriteLine("Failed to initialize {0}", ex);
+                System.Diagnostics.Debug.WriteLine("Failed to initialize {0}", ex);
             }
         }
 

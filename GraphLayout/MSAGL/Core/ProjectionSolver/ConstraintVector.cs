@@ -91,14 +91,14 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             firstActiveConstraintIndex = Vector.Length;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Conditional("DEBUG")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Conditional("TEST_MSAGL")]
         internal void Debug_AssertIsFull()
         {
             Debug.Assert(Vector.Length == nextConstraintIndex, "AllConstraints.Vector is not full");
             Debug_AssertConsistency();
         }
 
-        [Conditional("DEBUG")]
+        [Conditional("TEST_MSAGL")]
         internal void Debug_AssertConsistency()
         {
             for (int ii = 0; ii < Vector.Length; ++ii)

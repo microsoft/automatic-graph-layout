@@ -45,8 +45,12 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
         Line AttachmentLine { get; set; }
 
+#pragma warning disable 67
         public event EventHandler MarkedForDraggingEvent;
+
         public event EventHandler UnmarkedForDraggingEvent;
+#pragma warning restore 67
+
         public void Invalidate() {
             var label = (Drawing.Label)DrawingObject;
             Common.PositionFrameworkElement(FrameworkElement, label.Center, 1);

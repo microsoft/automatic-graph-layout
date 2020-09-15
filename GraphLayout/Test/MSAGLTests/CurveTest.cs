@@ -5,7 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System.Collections.Generic;
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.DebugHelpers;
 using Microsoft.Msagl.GraphViewerGdi;
@@ -25,7 +25,7 @@ namespace Microsoft.Msagl.UnitTests {
     [TestClass]
     public class CurveTest {
         /*public void ClosestPolyTest() {
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif
             Polyline pl1;
@@ -47,7 +47,7 @@ namespace Microsoft.Msagl.UnitTests {
         }
         [TestMethod]
         public void ClosestPolyToLineSegTest() {
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif
             Polyline pl1;
@@ -161,7 +161,7 @@ namespace Microsoft.Msagl.UnitTests {
             Polygon.Distance(new Polygon(pl5), new Polygon(pl2), out p, out q);
             Polygon.Distance(new Polygon(pl5), new Polygon(pl3), out p, out q);
         }
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
         [TestMethod]
         [DeploymentItem(@"Resources\polygons")]
         public void PolygonPolygonDistanceTest1() {
@@ -228,7 +228,7 @@ namespace Microsoft.Msagl.UnitTests {
 
         [TestMethod]
         public void PolygonPolygonDistanceTest() {
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
 #endif
             var a = new Polygon(new Polyline(new[] { new Point(0, 0), new Point(0, 100), new Point(42, 109), new Point(100, 100), new Point(100, 0) }));
@@ -253,7 +253,7 @@ namespace Microsoft.Msagl.UnitTests {
 
         [TestMethod]
         public void PolygonPolygonDistanceTest2() {
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
 #endif
             var a = new Polyline(new[] {   new Point(-3397.10020369428, 993.94470736826),
@@ -291,7 +291,7 @@ namespace Microsoft.Msagl.UnitTests {
         [TestMethod]
         [Description("Testing Curve.CurveIsInsideOther ")]
         public void CurveIsInsideOfAnother() {
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
             if (!MsaglTestBase.DontShowTheDebugViewer()) {
                 DisplayGeometryGraph.SetShowFunctions();
             }
@@ -353,7 +353,7 @@ namespace Microsoft.Msagl.UnitTests {
         [TestMethod]
         [Description("Testing ICurve.Length for Curve")]
         public void LengthTestingForCurve() {
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
 #endif
             var curve = new Curve(Getsegs());
@@ -414,7 +414,7 @@ namespace Microsoft.Msagl.UnitTests {
         [TestMethod]
         [Description("Testing ICurve.ClosestParameterWithinBounds ")]
         public void ClosestParameterWithinBounds() {
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
             if (!MsaglTestBase.DontShowTheDebugViewer()) {
                 DisplayGeometryGraph.SetShowFunctions();
             }
@@ -425,7 +425,7 @@ namespace Microsoft.Msagl.UnitTests {
             var low = t - 1;
             var high = t + 1;
             var t1 = ellipse.ClosestParameterWithinBounds(point, low, high);
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
             if (!MsaglTestBase.DontShowTheDebugViewer()) {
                 LayoutAlgorithmSettings.ShowDebugCurves(new DebugCurve(100, 0.1, "black", ellipse),
                         new DebugCurve(100, 0.01, "brown", new LineSegment(ellipse[t], point)),
@@ -435,7 +435,7 @@ namespace Microsoft.Msagl.UnitTests {
             var dist = point - ellipse[t];
             var dist1 = point - ellipse[t1];
             Assert.IsTrue(ApproximateComparer.Close(dist.Length, dist1.Length) && ApproximateComparer.Close(t, t1));
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
             if (!MsaglTestBase.DontShowTheDebugViewer()) {
                 LayoutAlgorithmSettings.ShowDebugCurves(new DebugCurve(ellipse), new DebugCurve("red", new LineSegment(point, ellipse[t])));
             }
@@ -450,13 +450,13 @@ namespace Microsoft.Msagl.UnitTests {
             Point p = new Point(11, 0);
             t = curve.ClosestParameter(p);
 
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
             if (!MsaglTestBase.DontShowTheDebugViewer()) {
                 LayoutAlgorithmSettings.ShowDebugCurves(new DebugCurve(curve), new DebugCurve("red", new LineSegment(p, curve[t])));
             }
 #endif
             t1 = curve.ClosestParameterWithinBounds(p, 1 + Math.PI / 4, 2);
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
             if (!MsaglTestBase.DontShowTheDebugViewer()) {
                 LayoutAlgorithmSettings.ShowDebugCurves(new DebugCurve(curve), new DebugCurve("red", new LineSegment(p, curve[t1])));
             }
@@ -473,7 +473,7 @@ namespace Microsoft.Msagl.UnitTests {
             const double l = 0.7;
             const double h = 1.3;
             t = poly.ClosestParameterWithinBounds(p, l, h);
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
             if (!MsaglTestBase.DontShowTheDebugViewer()) {
                 LayoutAlgorithmSettings.ShowDebugCurves(new DebugCurve(poly), new DebugCurve("red", new LineSegment(p, poly[t])));
             }
@@ -482,13 +482,13 @@ namespace Microsoft.Msagl.UnitTests {
 
             Assert.IsTrue(d <= (p - poly[l]).Length + ApproximateComparer.Tolerance && d < (p - poly[h]).Length + ApproximateComparer.Tolerance && d < (p - poly[(l + h) / 2]).Length + ApproximateComparer.Tolerance);
         }
-#if !DEBUG
+#if !TEST_MSAGL
         [Timeout(1000)]
 #endif
         [TestMethod]
         [Description("Testing Ellipse.BoundingBox ")]
         public void EllipseBoundingBox() {
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
             if (!MsaglTestBase.DontShowTheDebugViewer()) {
                 DisplayGeometryGraph.SetShowFunctions();
             }
@@ -511,7 +511,7 @@ namespace Microsoft.Msagl.UnitTests {
             var del = (ell.ParEnd - ell.ParStart) / steps;
             for (int i = 1; i <= steps; i++)
                 smallerBox.Add(ell[ell.ParStart + i * del]);
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
             if (!MsaglTestBase.DontShowTheDebugViewer()) {
                 LayoutAlgorithmSettings.ShowDebugCurves(
                     new DebugCurve(100, 0.1, "purple", ell),

@@ -52,7 +52,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // parameters (this assumes the LineSegment.End is not Curve.CloseIntersections to the intersection).
             Point point = xx.Segment0[xx.Par0];
 
-#if DEBUG
+#if TEST_MSAGL
             // This may legitimately be rounding-error'd in the same way as xx.IntersectionPoint (and the
             // caller addresses this later).  The purpose of the assert is to verify that the LineSegment
             // interception is not outside the bbox in the perpendicular direction.
@@ -63,7 +63,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             else {
                 Debug.Assert(PointComparer.Equal(point.Y, origin.Y), "segment0 obstacle intersection is off the horizontal line");
             }
-#endif // DEBUG
+#endif // TEST_MSAGL
             return ApproximateComparer.Round(point);
         }
     }

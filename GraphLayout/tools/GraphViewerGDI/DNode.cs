@@ -130,7 +130,9 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             }
         }
 
+#pragma warning disable 67
         public event Action<IViewerNode> IsCollapsedChanged;
+#pragma warning restore 67
 
         /// <summary>
         /// returns the corresponding drawing object

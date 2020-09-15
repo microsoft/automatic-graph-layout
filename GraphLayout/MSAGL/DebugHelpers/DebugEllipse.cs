@@ -1,6 +1,6 @@
 using Microsoft.Msagl.Core.Geometry.Curves;
 
-#if DEBUG && ! SILVERLIGHT
+#if TEST_MSAGL
 namespace Microsoft.Msagl.DebugHelpers {
     ///<summary>
     ///</summary>

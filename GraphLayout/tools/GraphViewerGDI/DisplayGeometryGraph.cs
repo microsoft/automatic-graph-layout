@@ -28,8 +28,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 using Microsoft.Msagl.Core.DataStructures;
 using Edge = Microsoft.Msagl.Core.Layout.Edge;
-#if TEST_MSAGL || DEVTRACE
 using System;
+#if TEST_MSAGL
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -205,7 +205,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
                 DisplayGraph(g, f);
             }
             catch (Exception e){
-                Console.WriteLine(e);
+                System.Diagnostics.Debug.WriteLine(e);
             }
         }
 
@@ -376,7 +376,6 @@ namespace Microsoft.Msagl.GraphViewerGdi{
                 float viewerX;
                 float viewerY;
                 gviewer.ScreenToSource(e.Location.X, e.Location.Y, out viewerX, out viewerY);
-                Console.WriteLine("{0} {1}", viewerX, viewerY);
             }
         }
 
@@ -420,7 +419,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
             try {
                 DisplayGraph(graph, new Form());
             } catch (Exception e) {
-                Console.WriteLine(e);
+                System.Diagnostics.Debug.WriteLine(e);
             }
         }
         
@@ -429,7 +428,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
             try {
                 DisplayGraph(graph, f);
             } catch (Exception e) {
-                Console.WriteLine(e);
+                System.Diagnostics.Debug.WriteLine(e);
             }
         }
 

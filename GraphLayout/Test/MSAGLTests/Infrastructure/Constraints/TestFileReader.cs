@@ -464,7 +464,7 @@ namespace Microsoft.Msagl.UnitTests.Constraints
                 return currentSection;
             }
 
-            // TODOclust: if we have clusters, then we get Lnn/Rnn (DEBUG) or blank (RELEASE) which 
+            // TODOclust: if we have clusters, then we get Lnn/Rnn (TEST_MSAGL) or blank (RELEASE) which 
             // we can't read.  Currently we don't use these constraints programmatically; eventually
             // I want to be able to test them for changes, but for right now they're just useful as
             // a windiffable comparison after regeneration.

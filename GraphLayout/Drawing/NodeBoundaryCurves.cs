@@ -54,16 +54,17 @@ namespace Microsoft.Msagl.Drawing
 
           case Shape.InvHouse:
               return CurveFactory.CreateInvertedHouse(width, height, new P2());
+          case Shape.Hexagon:
+              return CurveFactory.CreateHexagon(width, height, new P2());
           case Shape.Octagon:
               return CurveFactory.CreateOctagon(width, height, new P2());
-#if DEBUG
+#if TEST_MSAGL
           case Shape.TestShape:
               return CurveFactory.CreateTestShape(width, height);
 #endif
       
         default:
           {
-            //  Console.WriteLine("creating ellipse for shape {0}",nodeAttr.Shape);
             return new Ellipse(
               new P2(width / 2, 0), new P2(0, height / 2), new P2());
           }

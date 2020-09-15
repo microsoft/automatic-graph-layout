@@ -53,12 +53,6 @@ namespace Microsoft.Msagl.Layout.Incremental {
             }
             EdgeConstraintGenerator g = new EdgeConstraintGenerator(edges, settings, horizontalSolver, verticalSolver);
             g.GenerateSeparationConstraints();
-
-            // we have in the past used Circular constraints to better show cycles... it's a little experimental though
-            // so it's not currently enabled
-            //foreach (var c in g.CyclicComponents) {
-            //    constraints.Add(new ProcrustesCircleConstraint(c));
-            //}
         }
 
         internal EdgeConstraintGenerator(

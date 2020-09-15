@@ -8,7 +8,7 @@ using Microsoft.Msagl.Layout.MDS;
 namespace LoadingDgmlGraph {
     class Program {
         static void Main(string[] args) {
-#if DEBUG
+#if TEST_MSAGL
             Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
 #endif
             //create a form

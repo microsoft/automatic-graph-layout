@@ -2,7 +2,7 @@
 using System.ComponentModel;
 
 namespace Microsoft.Msagl.DebugHelpers {
-#if REPORTING
+#if TEST_MSAGL
     /// <summary>
     /// support for native method calls
     /// </summary>

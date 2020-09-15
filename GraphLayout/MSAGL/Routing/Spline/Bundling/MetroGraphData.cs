@@ -269,7 +269,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                 Stations.Insert(station);
             }
             else {
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
                 var s = PointToStations[pp.Point];
                 Debug.Assert(s.IsRealNode == isRealNode);
 #endif

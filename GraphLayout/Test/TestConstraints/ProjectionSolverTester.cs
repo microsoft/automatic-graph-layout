@@ -61,7 +61,7 @@ namespace TestConstraints
             var rng = TestConstraints.NewRng();
 
             // Print this so that in case of errors we can re-run with this seed.
-            Console.WriteLine("Creating test file with seed 0x{0}", TestConstraints.RandomSeed.ToString("X"));
+            System.Diagnostics.Debug.WriteLine("Creating test file with seed 0x{0}", TestConstraints.RandomSeed.ToString("X"));
 
             //
             // This code is adapted and extended from satisfy_inc.
@@ -218,7 +218,7 @@ namespace TestConstraints
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                System.Diagnostics.Debug.WriteLine(e.Message);
                 swOutFile.WriteLine();
                 swOutFile.WriteLine("// --- Exception thrown when generating results --- ");
                 swOutFile.WriteLine();

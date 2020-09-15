@@ -135,11 +135,7 @@ namespace Microsoft.Msagl.Core.Layout {
                     }
 
                     // Default to the cluster's content bounds
-#if SILVERLIGHT
-                return new Rectangle(nodes.Concat(clusters.Cast<Node>()).Select(n => n.BoundingBox));
-#else
                     return new Rectangle(nodes.Concat(clusters).Select(n => n.BoundingBox));
-#endif
                 }
 
                 return CollapsedBoundary.BoundingBox;

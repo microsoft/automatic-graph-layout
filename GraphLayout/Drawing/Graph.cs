@@ -205,15 +205,8 @@ namespace Microsoft.Msagl.Drawing {
             Subgraph subgraph;
             if (SubgraphMap.TryGetValue(nodeId, out subgraph))
                 return subgraph;
-#if SILVERLIGHT
-            object obj;
-            nodeMap.TryGetValue(nodeId, out obj);
-            if(obj!=null)
-                ret = (Node) obj;
-            else ret = null;
-#else
+
             ret = nodeMap[nodeId] as Node;
-#endif
             if (ret == null) {
                 ret = new Node(nodeId);
                 nodeMap[nodeId] = ret;
@@ -461,8 +454,6 @@ namespace Microsoft.Msagl.Drawing {
 
         void InitAttributes() {
             attr = new GraphAttr();
-            //     CreateSelectedNodeAttr();
-            //     CreateSelectedEdgeAttr();
         }
 
 
@@ -482,7 +473,7 @@ namespace Microsoft.Msagl.Drawing {
         /// underlying graph with pure geometry info
         /// </summary>
         public GeometryGraph GeometryGraph {
-            get { return geomGraph; // != null ? geomGraph : geomGraph = CreateLayoutGraph.Create(this);
+            get { return geomGraph;
             }
             set { geomGraph = value; }
         }
@@ -552,7 +543,7 @@ namespace Microsoft.Msagl.Drawing {
             set { GeometryGraph = (GeometryGraph) value; }
         }
             
-#if TEST_MSAGL && !SILVERLIGHT
+#if TEST_MSAGL
         ///<summary>
         ///</summary>
         public List<ICurve> DebugICurves {

@@ -225,8 +225,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             if (curve == null)
                 return this; //nothing happens
 #if TEST_MSAGL
-            if (segs.Count > 0 && !ApproximateComparer.Close(End, curve.Start, 0.001)) //Layout.Show(this, s);
-                //Console.WriteLine((segs[segs.Count - 1].End - s.Sta   rt).Length);
+            if (segs.Count > 0 && !ApproximateComparer.Close(End, curve.Start, 0.001))
                 throw new InvalidOperationException(); //discontinuous curve
 #endif
             ParStart = 0;
@@ -270,17 +269,6 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             r = r.AddSegment(c);
             return r.AddSegment(d);
         }
-
-        //internal Curve AddSegs(IEnumerable<ICurve> segments) {
-        //    Curve r = new Curve(this.Segs);
-        //    foreach (ICurve segment in segments)
-        //        r = r.AddSeg(segment);
-
-        //    return r;
-        //}
-        /// <summary>
-        /// Returns the list of the curve segments
-        /// </summary>
         public IList<ICurve> Segments {
             get { return segs; }
         }
@@ -323,7 +311,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             ValidateArg.IsNotNull(curve0, "curve0");
             ValidateArg.IsNotNull(curve1, "curve1");
             Debug.Assert(curve0 != curve1, "curve0 == curve1");
-#if DEBUGGLEE
+#if TEST_MSAGL
 //            double c0S = curve0.ParStart, c1S = curve1.ParStart;
 //            if (CurvesAreCloseAtParams(curve0, curve1, c0S, c1S)) {
 //                double mc0 = 0.5 * (curve0.ParStart + curve0.ParEnd);
@@ -359,7 +347,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             ValidateArg.IsNotNull(curve0, "curve0");
             ValidateArg.IsNotNull(curve1, "curve1");
             Debug.Assert(curve0 != curve1);
-#if DEBUGGLEE
+#if TEST_MSAGL
 //            var c0S = curve0.ParStart;
 //            var c1S = curve1.ParStart;
 //            var c0E = curve0.ParEnd;
@@ -576,17 +564,10 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             }
         }
 
-#if DEBUGGLEE
-        static bool CurvesAreCloseAtParams(ICurve c0, ICurve c1, double c0S, double c1S) {
-            return Close(c0[c0S], c1[c1S]) && Close(c0.Derivative(c0S), c1.Derivative(c1S));
-        }
-#endif
-
-
         static IntersectionInfo CurveCurveXWithParallelogramNodesOne(ParallelogramNodeOverICurve n0,
             ParallelogramNodeOverICurve n1) {
             if (!Parallelogram.Intersect(n0.Parallelogram, n1.Parallelogram))
-                //Console.WriteLine("Boxes {0} and {1} do not intersect", n0.Box, n1.Box);
+                // Boxes n0.Box and n1.Box do not intersect
                 return null;
             var n0Pb = n0 as ParallelogramInternalTreeNode;
             var n1Pb = n1 as ParallelogramInternalTreeNode;
@@ -616,10 +597,8 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         static void CurveCurveXWithParallelogramNodes(ParallelogramNodeOverICurve n0, ParallelogramNodeOverICurve n1,
             ref List<IntersectionInfo> intersections) {
             if (!Parallelogram.Intersect(n0.Parallelogram, n1.Parallelogram))
-                //Console.WriteLine("Boxes {0} and {1} do not intersect", n0.Box, n1.Box);
+                // Boxes n0.Box and n1.Box do not intersect
                 return;
-            //if(Routing.debug)
-            // Testing.InternalTest.Show(n0, n1, n0.Seg, n1.Seg); 
             var n0Pb = n0 as ParallelogramInternalTreeNode;
             var n1Pb = n1 as ParallelogramInternalTreeNode;
             if (n0Pb != null && n1Pb != null)
@@ -884,11 +863,9 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
 
         static IntersectionInfo GoDeeperOne(ParallelogramLeaf l0, ParallelogramLeaf l1) {
             double eps = ApproximateComparer.DistanceEpsilon;
-            //      Console.WriteLine("did not find an intersection");
+            // did not find an intersection
             if (l0.LeafBoxesOffset > eps && l1.LeafBoxesOffset > eps) {
-                //        Console.WriteLine("going deeper on both with offset {0} {1}", l0.LeafBoxesOffset / 2, l1.LeafBoxesOffset / 2);
-
-
+                // going deeper on both with offset l0.LeafBoxesOffset / 2, l1.LeafBoxesOffset / 2
                 ParallelogramNodeOverICurve nn0 = ParallelogramNodeOverICurve.CreateParallelogramNodeForCurveSeg(
                     l0.Low, l0.High, l0.Seg, l0.LeafBoxesOffset/2);
                 ParallelogramNodeOverICurve nn1 = ParallelogramNodeOverICurve.CreateParallelogramNodeForCurveSeg(
@@ -896,13 +873,13 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
                 return CurveCurveXWithParallelogramNodesOne(nn0, nn1);
             }
             if (l0.LeafBoxesOffset > eps) {
-                //        Console.WriteLine("go deeper on the left");
+                // go deeper on the left
                 ParallelogramNodeOverICurve nn0 = ParallelogramNodeOverICurve.CreateParallelogramNodeForCurveSeg(
                     l0.Low, l0.High, l0.Seg, l0.LeafBoxesOffset/2);
                 return CurveCurveXWithParallelogramNodesOne(nn0, l1);
             }
             if (l1.LeafBoxesOffset > eps) {
-                //        Console.WriteLine("go deeper on the right");
+                // go deeper on the right
                 ParallelogramNodeOverICurve nn1 = ParallelogramNodeOverICurve.CreateParallelogramNodeForCurveSeg(
                     l1.Low, l1.High, l1.Seg, l1.LeafBoxesOffset/2);
                 return CurveCurveXWithParallelogramNodesOne(l0, nn1);
@@ -931,11 +908,9 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
 
         static void GoDeeper(ref List<IntersectionInfo> intersections, ParallelogramLeaf l0, ParallelogramLeaf l1) {
             double eps = ApproximateComparer.DistanceEpsilon;
-            //      Console.WriteLine("did not find an intersection");
+            // did not find an intersection
             if (l0.LeafBoxesOffset > eps && l1.LeafBoxesOffset > eps) {
-                //        Console.WriteLine("going deeper on both with offset {0} {1}", l0.LeafBoxesOffset / 2, l1.LeafBoxesOffset / 2);
-
-
+                // going deeper on both with offset l0.LeafBoxesOffset / 2, l1.LeafBoxesOffset / 2
                 ParallelogramNodeOverICurve nn0 = ParallelogramNodeOverICurve.CreateParallelogramNodeForCurveSeg(
                     l0.Low, l0.High, l0.Seg, l0.LeafBoxesOffset/2);
                 ParallelogramNodeOverICurve nn1 = ParallelogramNodeOverICurve.CreateParallelogramNodeForCurveSeg(
@@ -943,13 +918,13 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
                 CurveCurveXWithParallelogramNodes(nn0, nn1, ref intersections);
             }
             else if (l0.LeafBoxesOffset > eps) {
-                //        Console.WriteLine("go deeper on the left");
+                // go deeper on the left
                 ParallelogramNodeOverICurve nn0 = ParallelogramNodeOverICurve.CreateParallelogramNodeForCurveSeg(
                     l0.Low, l0.High, l0.Seg, l0.LeafBoxesOffset/2);
                 CurveCurveXWithParallelogramNodes(nn0, l1, ref intersections);
             }
             else if (l1.LeafBoxesOffset > eps) {
-                //        Console.WriteLine("go deeper on the right");
+                // go deeper on the right
                 ParallelogramNodeOverICurve nn1 = ParallelogramNodeOverICurve.CreateParallelogramNodeForCurveSeg(
                     l1.Low, l1.High, l1.Seg, l1.LeafBoxesOffset/2);
                 CurveCurveXWithParallelogramNodes(l0, nn1, ref intersections);
@@ -990,79 +965,6 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
                 bsol = l1.Low + bsol*(l1.High - l1.Low);
         }
 
-        // static void ShowNodesWithCurves(Curve c0, Curve point0, ParallelogramNodeOverICurve n0, ParallelogramNodeOverICurve n1)
-        //{
-        //  System.Windows.Forms.Form f = new System.Windows.Forms.Form();
-        //  GViewer v = new GViewer();
-        //  f.SuspendLayout();
-        //  f.Controls.Add(v);
-        //  Graph g = new Graph("", "");
-
-        //  foreach (ICurve cs in c0.Segs)
-        //    if (cs is CubicBezierSeg)
-        //    {
-        //      g.bezierCurves.Add(cs as CubicBezierSeg);
-        //    }
-
-        //  foreach (ICurve cs in point0.Segs)
-        //    if (cs is CubicBezierSeg)
-        //    {
-        //      g.bezierCurves.Add(cs as CubicBezierSeg);
-        //    }
-        //    else if (cs is Ellipse)
-        //    {
-        //      Ellipse el = cs as Ellipse;
-        //      int n = 64;
-        //      double delta = (el.ParEnd - el.ParStart) / n;
-        //      for (int i = 0; i < n; i++)
-        //      {
-        //        Point s = el[el.ParStart + i * delta];
-        //        Point e = el[el.ParStart + (i + 1) * delta];
-        //        g.bezierCurves.Add(new CubicBezierSeg(s, 0.5 * (s + e), 0.5 * (s + e), e));
-        //      }
-
-
-        //    }
-
-        //  //          g.ellipses.Add(cs as Ellipse);
-
-        //  g.pBoxes.Add(n0.Box);
-        //  g.pBoxes.Add(n1.Box);
-        //  v.Graph = g;
-        //  Rectangle side1 = new Rectangle();
-        //  for (int i = 0; i < 4; i++)
-        //    side1.Add(n0.Box.Vertex(i));
-        //  for (int i = 0; i < 4; i++)
-        //    side1.Add(n0.Box.Vertex(i));
-        //  g.GraphAttr.BoundingBox = side1;
-
-        //  v.Dock = System.Windows.Forms.DockStyle.Fill;
-        //  f.Size = new Size(System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Size.Width / 2, System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Size.Height / 2);
-        //  f.ResumeLayout();
-        //  f.ShowDialog();
-
-        //}
-
-        //internal static void ShowBezierSegs(params CubicBezierSeg[] segs)
-        //{
-        //  System.Windows.Forms.Form f = new System.Windows.Forms.Form();
-        //  GViewer v = new GViewer();
-        //  f.SuspendLayout();
-        //  f.Controls.Add(v);
-        //  Graph g = new Graph("", "");
-
-        //  foreach (CubicBezierSeg cs in segs)
-        //    g.bezierCurves.Add(cs);
-
-
-        //  v.Graph = g;
-        //  v.Dock = System.Windows.Forms.DockStyle.Fill;
-        //  f.Size = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Size;
-        //  f.ResumeLayout();
-        //  f.ShowDialog();
-
-        //}
-
         static double lineSegThreshold = 0.05;
 
         /// <summary>
@@ -1095,22 +997,6 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             }
             segment = segs.Last();
             par = segment.ParEnd;
-            // throw new InvalidOperationException(); // parameter is out of domain of the curve
-            //            //remove later
-            //            par = 0;
-            //            segment = null;
-            /*g = Math.Max(t, Math.Min(t, nOfSegments));
-
-            if (t == nOfSegments)
-            {
-              seg = nOfSegments - 1;
-              g = 1;
-            }
-            else
-            {
-              seg = (int)t;
-              g = t - seg;
-              }*/
         }
 
         internal void GetSegmentAndParameter(double t, out double par, out int segIndex) {
@@ -1131,19 +1017,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
                 u += domLen;
             }
 
-            throw new InvalidOperationException(string.Format("Check, args t:{0}, par:{1}, segIndex:{2} and u:{3}", t, par, segIndex, u)); // parameter is out of domain of the curve*/
-            /*g = Math.Max(t, Math.Min(t, nOfSegments));
-
-            if (t == nOfSegments)
-            {
-              seg = nOfSegments - 1;
-              g = 1;
-            }
-            else
-            {
-              seg = (int)t;
-              g = t - seg;
-              }*/
+            throw new InvalidOperationException(string.Format("Check, args t:{0}, par:{1}, segIndex:{2} and u:{3}", t, par, segIndex, u));
         }
 
 
@@ -1553,28 +1427,6 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
                 return b;
             }
         }
-
-        ///// <summary>
-        ///// //sort intersections by the a parameter
-        ///// </summary>
-        ///// <param name="dictionary"></param>
-        ///// <param name="coeff"></param>
-        ///// <param name="side1"></param>
-        //internal static void AddRealIntersectionsToDictionaryForClosedCurve(SortedDictionary<double, IntersectionInfo> dictionary, ICurve coeff, Curve side1) {
-        //    StopIntersect si = new StopIntersect((new XExaminer(dictionary, coeff, side1)).IntersectionExaminerForClosedCurveWithIntersectionLifting);
-        //    Curve.GetAllIntersections(coeff, side1, si, true);
-        //}
-
-        //internal static void AddRealIntersectionsWithTreeToDictionaryForClosedCurves(SortedDictionary<double, IntersectionInfo> dictionary, ICurve coeff, ParallelogramNode bound) {
-        //    if( Parallelogram.Intersect( coeff.ParallelogramNodeOverICurve.Parallelogram, bound.Parallelogram)){
-        //        ParallelogramBinaryTreeNode treeNode = bound as ParallelogramBinaryTreeNode;
-        //        if (treeNode != null) {
-        //            AddRealIntersectionsWithTreeToDictionaryForClosedCurves(dictionary, coeff, treeNode.LeftSon);
-        //            AddRealIntersectionsWithTreeToDictionaryForClosedCurves(dictionary, coeff, treeNode.RightSon);
-        //        } else 
-        //            AddRealIntersectionsToDictionaryForClosedCurve(dictionary, coeff, (Curve)((ParallelogramNodeOverICurve)bound).Seg);
-        //    }
-        //}
 
         #region ICurve Members
 
@@ -2078,7 +1930,6 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
                 Point tan = l*(ellipse.Derivative(t).Normalize()); //make it long enough
 
                 var ls = new LineSegment(p - tan, p + tan);
-                //System.Diagnostics.Debug.Assert(ls.Start.X > -10000);
                 foreach (IntersectionInfo ix in GetAllIntersections(rect, ls, true))
                     dict[ix.Par0] = ix.IntersectionPoint;
             }

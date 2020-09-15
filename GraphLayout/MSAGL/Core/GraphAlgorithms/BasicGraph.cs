@@ -159,8 +159,6 @@ namespace Microsoft.Msagl.Core.GraphAlgorithms {
             selfEdges = new TEdge[numberOfVertices][];
 
             foreach (TEdge e in edges) {
-                //if (e.Source >= nov)
-                //Console.WriteLine("");
                 if (e.Source != e.Target) {
                     outEdgesCounts[e.Source]++;
                     inEdgesCounts[e.Target]++;

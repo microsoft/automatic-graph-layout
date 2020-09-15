@@ -64,7 +64,7 @@ namespace Microsoft.Msagl.Core.Layout {
         }
 
         double margins;
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
         /// <summary>
         /// curves to show debug stuff
         /// </summary>
@@ -170,7 +170,7 @@ namespace Microsoft.Msagl.Core.Layout {
                 node.Transform(matrix);
             foreach (var edge in Edges)
                 edge.Transform(matrix);
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
             if (DebugCurves != null)
                 foreach (var dc in DebugCurves)
                     dc.Curve = dc.Curve.Transform(matrix);
@@ -237,7 +237,7 @@ namespace Microsoft.Msagl.Core.Layout {
                 if (c.BoundaryCurve != null)
                     b.Add(c.BoundaryCurve.BoundingBox);
             }
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
             if(DebugCurves!=null)
                 foreach (var debugCurve in DebugCurves.Where(d => d.Curve != null))
                     b.Add(debugCurve.Curve.BoundingBox);
@@ -328,7 +328,7 @@ namespace Microsoft.Msagl.Core.Layout {
                 return;
             foreach (var child in cluster.Clusters.Concat(cluster.Nodes)) {
                 var inside=Curve.CurveIsInsideOther(child.BoundaryCurve, cluster.BoundaryCurve);
-#if TEST_MSAGL && DEBUG
+#if TEST_MSAGL && TEST_MSAGL
 //                if (!inside)
 //                    LayoutAlgorithmSettings.ShowDebugCurves(new DebugCurve("green", cluster.BoundaryCurve), new DebugCurve("red", child.BoundaryCurve));
 #endif

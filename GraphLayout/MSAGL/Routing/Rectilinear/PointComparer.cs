@@ -101,7 +101,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return Compare(a, b) < 0;
         }
 
-        [Conditional("DEBUG")]
+        [Conditional("TEST_MSAGL")]
 // ReSharper disable InconsistentNaming
         static void Assert_Rounded(double d) {
             // Be sure there is enough precision to round that far; anything larger than this is
@@ -111,7 +111,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             }
         }
 
-        [Conditional("DEBUG")]
+        [Conditional("TEST_MSAGL")]
         static void Assert_Rounded(Point p) {
             Assert_Rounded(p.X);
             Assert_Rounded(p.Y);

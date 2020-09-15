@@ -72,7 +72,7 @@ namespace Microsoft.Msagl.Core.Geometry
                 return disc.Contains(p);
             }
         }
-#if DEBUG
+#if TEST_MSAGL
          bool collinear3(List<int> b)
         {
             if (b.Count == 3)
@@ -99,7 +99,7 @@ namespace Microsoft.Msagl.Core.Geometry
                 {
                     List<int> _b = new List<int>(b);
                     _b.Add(p);
-#if DEBUG
+#if TEST_MSAGL
                     Debug.Assert(!collinear3(_b),"Collinear points on boundary of minimal enclosing disc");
 #endif
                     md = mtf_md(lnode, _b);

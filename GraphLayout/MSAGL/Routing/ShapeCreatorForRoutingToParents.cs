@@ -57,7 +57,7 @@ namespace Microsoft.Msagl.Routing {
         static void CreateShapeIfNeeeded(Node n, Dictionary<Node, Shape> nodesToShapes) {
             if (nodesToShapes.ContainsKey(n)) return;
             nodesToShapes[n] = new RelativeShape(() => n.BoundaryCurve)
-#if DEBUG
+#if TEST_MSAGL
         {
                         UserData = n.ToString()
         }
@@ -66,11 +66,7 @@ namespace Microsoft.Msagl.Routing {
         }
 
         static IEnumerable<Node> Children(Cluster parent) {
-#if SILVERLIGHT
-            return parent.Clusters.Cast<Node>().Concat(parent.Nodes);
-#else
             return parent.Clusters.Concat(parent.Nodes);
-#endif
         }
 
 

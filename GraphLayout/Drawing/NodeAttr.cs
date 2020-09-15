@@ -9,10 +9,8 @@ namespace Microsoft.Msagl.Drawing {
     /// <summary>
     /// Attribute of a Node.
     /// </summary>
-#if !SILVERLIGHT
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Attr"), Description("Node layout attributes."),
     TypeConverterAttribute(typeof(ExpandableObjectConverter))]
-#endif
     [Serializable]
     public class NodeAttr : AttributeBase {
 
@@ -104,35 +102,6 @@ namespace Microsoft.Msagl.Drawing {
                 RaiseVisualsChangedEvent(this, null);
             }
         }
-
-        
-
-        //void AddFilledStyle(){
-        //    if(Array.IndexOf(styles,Style.filled)==-1){
-        //        Style []st=new Style[styles.Length+1];
-        //        st[0]=Style.filled;
-        //        styles.CopyTo(st,1);
-        //        styles=st;
-        //    }
-        //}
-
-        //void RemoveFilledStyle()
-        //{
-
-        //  int index;
-        //  if ((index = Array.IndexOf(styles, Style.filled)) != -1)
-        //  {
-        //    Style[] st = new Style[styles.Length - 1];
-
-        //    int count = 0;
-        //    for (int j = 0; j < styles.Length; j++)
-        //    {
-        //      if (j != index)
-        //        st[count++] = styles[j];
-        //    }
-        //    styles = st;
-        //  }
-        //}
 
         
         internal Shape shape = Shape.Box;

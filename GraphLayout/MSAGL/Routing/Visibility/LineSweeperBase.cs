@@ -48,7 +48,7 @@ namespace Microsoft.Msagl.Routing.Visibility {
             set {
                 if (value > z + ApproximateComparer.Tolerance)
                     PreviousZ = z;
-#if DEBUGGLEE
+#if TEST_MSAGL
                 Debug.Assert(PreviousZ<=value); 
 #endif
                 z = value;

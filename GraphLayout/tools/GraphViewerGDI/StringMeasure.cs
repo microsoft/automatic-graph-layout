@@ -85,30 +85,6 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                 width = s.Width;
                 height = s.Height;
             }
-
-            //System.Drawing.StringFormat format = new System.Drawing.StringFormat();
-            //System.Drawing.RectangleF rect = new System.Drawing.RectangleF(0, 0,
-            //  1000, 1000);
-            //System.Drawing.CharacterRange[] ranges =  { new System.Drawing.CharacterRange(0, text.Length) };
-            //System.Drawing.Region[] regions = new System.Drawing.Region[1];
-
-            //format.SetMeasurableCharacterRanges(ranges);
-
-            //if (font == null)
-            //{
-            //  throw new Exception("font cannot be null");
-            //}
-
-            //if (font == null)
-            //  throw new InvalidOperationException();//"font cannot be null");
-
-            //regions = graphics.MeasureCharacterRanges(text, font, rect, format);
-            //rect = regions[0].GetBounds(graphics);
-
-            //Console.WriteLine("{0} {1}",rect.Width,width);
-
-            //width = rect.Width;
-            //height = rect.Height;
         }
     }
 }

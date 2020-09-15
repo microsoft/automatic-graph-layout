@@ -208,7 +208,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout.NodeRailLevelCalculator {
         
         private void ShowDebugInsertedSegments(GridTraversal grid, int zoomLevel, LgNodeInfo nodeToAdd, IEnumerable<SymmetricSegment> newToAdd, IEnumerable<SymmetricSegment> allOnNewEdges)
         {
-#if DEBUG && !SILVERLIGHT && !SHARPKIT && PREPARE_DEMO
+#if TEST_MSAGL && !SHARPKIT && PREPARE_DEMO
 
             var edges = _pathRouter.GetAllEdgesVisibilityEdges();
             var ll = new List<DebugCurve>();
@@ -275,7 +275,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout.NodeRailLevelCalculator {
 #endif
         }
 
-        public void PrintInsertedNodesLabels()
+        public string PrintInsertedNodesLabels()
         {
             var bbox = BoundingBox;
             var str = "<group>\n<path stroke=\"black\">";
@@ -294,9 +294,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout.NodeRailLevelCalculator {
                 i++;
             }
             str += "</group>";
-#if !SILVERLIGHT && !SHARPKIT && !NETCORE
-            System.Windows.Forms.Clipboard.SetText(str);
-#endif
+            return str;
         }
 
         bool TryAddingSegmentsUpdateTiles(IEnumerable<SymmetricSegment> segments, GridTraversal grid,
@@ -406,7 +404,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout.NodeRailLevelCalculator {
 
             if (!canInsertSegment)
             {
-                Console.WriteLine("maxNumRailPerTile = " + maxNumRailPerTile);
                 return false;
             }
 

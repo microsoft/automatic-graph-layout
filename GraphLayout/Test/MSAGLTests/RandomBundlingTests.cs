@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
 using Microsoft.Msagl.GraphViewerGdi;
 #endif
 using Microsoft.Msagl.Core;
@@ -174,7 +174,7 @@ namespace Microsoft.Msagl.UnitTests {
             int ntest = 10000;
             int iStart = 1; // 470;
 
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif   
             var graph = GeometryGraphReader.CreateFromFile(@"c:\tmp\graph0.msagl.geom");
@@ -183,7 +183,7 @@ namespace Microsoft.Msagl.UnitTests {
                 Random random = new Random(i);
              
                 double edgeSeparation = 5*random.NextDouble();
-                Console.WriteLine("i={0} es={1}", i, edgeSeparation);
+                System.Diagnostics.Debug.WriteLine("i={0} es={1}", i, edgeSeparation);
                 RouteEdges(graph, edgeSeparation);
                 // DisplayGeometryGraph.ShowGraph(graph);
 
@@ -198,8 +198,8 @@ namespace Microsoft.Msagl.UnitTests {
             int iStart = 1;
             for (int multiplier = 1; multiplier < 12; multiplier++)
             {
-                Console.WriteLine("multiplier " + multiplier);
-#if DEBUG && TEST_MSAGL
+                System.Diagnostics.Debug.WriteLine("multiplier " + multiplier);
+#if TEST_MSAGL && TEST_MSAGL
                 DisplayGeometryGraph.SetShowFunctions();
 #endif
                 for (int i = iStart; i < ntest; i++) {
@@ -210,7 +210,7 @@ namespace Microsoft.Msagl.UnitTests {
                     // DisplayGeometryGraph.ShowGraph(graph);
 
                     double edgeSeparation = 5 * random.NextDouble();
-                    Console.WriteLine("i={0} es={1}", i, edgeSeparation);
+                    System.Diagnostics.Debug.WriteLine("i={0} es={1}", i, edgeSeparation);
                     GeometryGraphWriter.Write(graph, "c:\\tmp\\graph");
                     RouteEdges(graph, edgeSeparation);
                     //DisplayGeometryGraph.ShowGraph(graph);

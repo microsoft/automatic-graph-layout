@@ -263,8 +263,8 @@ namespace Microsoft.Msagl.Core.Geometry
          void AddEvents(OverlapRemovalNode node, List<Event> events)
         {
             // Add/subtract only half the padding so they meet in the middle of the padding.
-            events.Add(new Event(true /* fForOpen */, node, node.OpenP - (NodePaddingP / 2)));
-            events.Add(new Event(false /* fForOpen */, node, node.CloseP + (NodePaddingP / 2)));
+            events.Add(new Event(true, node, node.OpenP - (NodePaddingP / 2)));
+            events.Add(new Event(false, node, node.CloseP + (NodePaddingP / 2)));
         }
 
         // This is internal rather than  so Test_OverlapRemoval can see it.
@@ -413,7 +413,7 @@ namespace Microsoft.Msagl.Core.Geometry
             {
                 CalculateBorderWidths(solver, events, boundaryRect, out leftBorderWidth, out rightBorderWidth);
 #if VERBOSE
-                Console.WriteLine(" {0} After CalculateBorderWidths: p {1:F5} s {2:F5} pP {3:F5} sP {4:F5}"
+                System.Diagnostics.Debug.WriteLine(" {0} After CalculateBorderWidths: p {1:F5} s {2:F5} pP {3:F5} sP {4:F5}"
                         , this.Name, this.Size, this.Position, this.Size, this.SizeP);
 #endif
             }
@@ -481,7 +481,7 @@ namespace Microsoft.Msagl.Core.Geometry
                     boundaryRect.Top = Math.Max(boundaryRect.Top, newTop);
 
 #if VERBOSE
-                    Console.WriteLine(" {0} BoundaryRect after AddEvents: L/R T/B {1:F5}/{2:F5} {3:F5}/{4:F5}"
+                    System.Diagnostics.Debug.WriteLine(" {0} BoundaryRect after AddEvents: L/R T/B {1:F5}/{2:F5} {3:F5}/{4:F5}"
                             , this.Name, boundaryRect.Left, boundaryRect.Right, boundaryRect.Top, boundaryRect.Bottom);
 #endif
                 }
@@ -503,7 +503,7 @@ namespace Microsoft.Msagl.Core.Geometry
                 }
 
 #if VERBOSE
-                Console.WriteLine(" {0} BoundaryRect after CreateEvents: L/R T/B {1:F5}/{2:F5} {3:F5}/{4:F5}"
+                System.Diagnostics.Debug.WriteLine(" {0} BoundaryRect after CreateEvents: L/R T/B {1:F5}/{2:F5} {3:F5}/{4:F5}"
                         , this.Name, boundaryRect.Left, boundaryRect.Right, boundaryRect.Top, boundaryRect.Bottom);
 #endif
 
@@ -621,7 +621,7 @@ namespace Microsoft.Msagl.Core.Geometry
                     this.LeftBorderNode.Variable, this.RightBorderNode.Variable, this.MinimumSize - leftBorderWidth/2 - rightBorderWidth/2);
                 Debug.Assert(null != cst, "Minimum Cluster size: unexpected null cst");
 #if VERBOSE
-                    Console.WriteLine(" {0} MinClusterSizeCst {1} -> {2} g {3:F5}", isHorizontal ? "H" : "V"
+                    System.Diagnostics.Debug.WriteLine(" {0} MinClusterSizeCst {1} -> {2} g {3:F5}", isHorizontal ? "H" : "V"
                             , cst.Left.Name, cst.Right.Name, cst.Gap);
 #endif
                 // VERBOSE
@@ -726,10 +726,10 @@ namespace Microsoft.Msagl.Core.Geometry
             events.Sort();
 
 #if VERBOSE
-            Console.WriteLine("Events:");
+            System.Diagnostics.Debug.WriteLine("Events:");
             foreach (Event evt in events)
             {
-                Console.WriteLine("    {0}", evt);
+                System.Diagnostics.Debug.WriteLine("    {0}", evt);
             }
 #endif // VERBOSE
 
@@ -742,7 +742,7 @@ namespace Microsoft.Msagl.Core.Geometry
                     // Insert the current node into the scan line.
                     scanLine.Insert(currentNode);
 #if VERBOSE
-                    Console.WriteLine("ScanAdd: {0}", currentNode);
+                    System.Diagnostics.Debug.WriteLine("ScanAdd: {0}", currentNode);
 #endif // VERBOSE
 
                     // Find the nodes that are currently open to either side of it and are either overlapping
@@ -785,7 +785,7 @@ namespace Microsoft.Msagl.Core.Geometry
                             if (leftNeighborNode.RightNeighbors.Remove(nodeToRemove))
                             {
 #if VERBOSE
-                                Console.WriteLine(" {0} RnbourRem {1} --> {2}", isHorizontal ? "H" : "V", leftNeighborNode, nodeToRemove);
+                                System.Diagnostics.Debug.WriteLine(" {0} RnbourRem {1} --> {2}", isHorizontal ? "H" : "V", leftNeighborNode, nodeToRemove);
 #endif // VERBOSE
                             }
                         }
@@ -800,7 +800,7 @@ namespace Microsoft.Msagl.Core.Geometry
                             if (rightNeighborNode.LeftNeighbors.Remove(nodeToRemove))
                             {
 #if VERBOSE
-                                Console.WriteLine(" {0} LnbourRem {1} --> {2}", isHorizontal ? "H" : "V", nodeToRemove, rightNeighborNode);
+                                System.Diagnostics.Debug.WriteLine(" {0} LnbourRem {1} --> {2}", isHorizontal ? "H" : "V", nodeToRemove, rightNeighborNode);
 #endif // VERBOSE
                             }
                         }
@@ -852,7 +852,7 @@ namespace Microsoft.Msagl.Core.Geometry
                         Constraint cst = solver.AddConstraint(leftNeighborNode.Variable, currentRightNode.Variable, separation);
                         Debug.Assert(null != cst, "LeftNeighbors: unexpected null cst");
 #if VERBOSE
-                        Console.WriteLine(" {0} LnbourCst {1} -> {2} g {3:F5}", isHorizontal ? "H" : "V"
+                        System.Diagnostics.Debug.WriteLine(" {0} LnbourCst {1} -> {2} g {3:F5}", isHorizontal ? "H" : "V"
                                 , cst.Left.Name, cst.Right.Name, cst.Gap);
 #endif // VERBOSE
                     }
@@ -881,7 +881,7 @@ namespace Microsoft.Msagl.Core.Geometry
                         Constraint cst = solver.AddConstraint(currentLeftNode.Variable, rightNeighborNode.Variable, separation);
                         Debug.Assert(null != cst, "RightNeighbors: unexpected null cst");
 #if VERBOSE
-                        Console.WriteLine(" {0} RnbourCst {1} -> {2} g {3:F5}", isHorizontal ? "H" : "V"
+                        System.Diagnostics.Debug.WriteLine(" {0} RnbourCst {1} -> {2} g {3:F5}", isHorizontal ? "H" : "V"
                                 , cst.Left.Name, cst.Right.Name, cst.Gap);
 #endif // VERBOSE
                     }
@@ -891,7 +891,7 @@ namespace Microsoft.Msagl.Core.Geometry
                     // currentNode.*Neighbour) when those Neighbors are closed.
                     scanLine.Remove(currentNode);
 #if VERBOSE
-                    Console.WriteLine("ScanRem: {0}", currentNode);
+                    System.Diagnostics.Debug.WriteLine("ScanRem: {0}", currentNode);
 #endif // VERBOSE
                 } // endelse !evt.IsForOpen
 
@@ -958,13 +958,13 @@ namespace Microsoft.Msagl.Core.Geometry
                 if (!isHorizontal && (OverlapP(currentNode, nextNode, NodePaddingP) <= parameters.SolverParameters.GapTolerance))
                 {
 #if VERBOSE
-                    Console.WriteLine(" V {0}nbourHTolSkipNO: {1}", isLeftNeighbor ? "L" : "R", nextNode);
+                    System.Diagnostics.Debug.WriteLine(" V {0}nbourHTolSkipNO: {1}", isLeftNeighbor ? "L" : "R", nextNode);
 #endif // VERBOSE
                     return true;
                 }
                 neighbors.Add(nextNode);
 #if VERBOSE
-                Console.WriteLine("{0}nbourAddNO: {1}", isLeftNeighbor ? "L" : "R", nextNode);
+                System.Diagnostics.Debug.WriteLine("{0}nbourAddNO: {1}", isLeftNeighbor ? "L" : "R", nextNode);
 #endif // VERBOSE
                 return false;
             }
@@ -1001,7 +1001,7 @@ namespace Microsoft.Msagl.Core.Geometry
                             // due to either or both of this.padding and the "create a constraint to the first
                             // non-overlapping node" logic.  This is expected and the latter helps retain stability.
 #if VERBOSE
-                            Console.WriteLine("{0}nbourDeferToV: {1}", isLeftNeighbor ? "L" : "R", nextNode);
+                            System.Diagnostics.Debug.WriteLine("{0}nbourDeferToV: {1}", isLeftNeighbor ? "L" : "R", nextNode);
 #endif // VERBOSE
                             // We need to track whether we skipped these so that we don't have a broken transition chain.
                             // See Test_OverlapRemoval.cs, Test_DeferToV_Causing_Missing_Cst() for more information.
@@ -1032,7 +1032,7 @@ namespace Microsoft.Msagl.Core.Geometry
                 if (OverlapP(currentNode, nextNode, NodePaddingP) <= parameters.SolverParameters.GapTolerance)
                 {
 #if VERBOSE
-                    Console.WriteLine(" V {0}nbourHTolSkipO: {1}", isLeftNeighbor ? "L" : "R", nextNode);
+                    System.Diagnostics.Debug.WriteLine(" V {0}nbourHTolSkipO: {1}", isLeftNeighbor ? "L" : "R", nextNode);
 #endif // VERBOSE
                     return true;
                 }
@@ -1041,7 +1041,7 @@ namespace Microsoft.Msagl.Core.Geometry
             // Add this overlapping neighbour and return true to keep looking for more overlapping neighbours.
             neighbors.Add(nextNode);
 #if VERBOSE
-            Console.WriteLine("{0}nbourAddO: {1}", isLeftNeighbor ? "L" : "R", nextNode);
+            System.Diagnostics.Debug.WriteLine("{0}nbourAddO: {1}", isLeftNeighbor ? "L" : "R", nextNode);
 #endif // VERBOSE
             return true;
         }

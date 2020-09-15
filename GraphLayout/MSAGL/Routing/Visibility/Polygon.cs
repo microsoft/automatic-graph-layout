@@ -1,9 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
-#if !SILVERLIGHT
 using System.Runtime.Serialization.Formatters.Binary;
-#endif
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;

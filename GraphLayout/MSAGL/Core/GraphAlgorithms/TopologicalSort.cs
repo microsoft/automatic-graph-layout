@@ -6,7 +6,6 @@ namespace Microsoft.Msagl.Core.GraphAlgorithms{
     /// Implements the topological sort
     /// </summary>
     public static class TopologicalSort{
-#if NET4
         /// <summary>
         /// Do a topological sort of a list of int edge tuples
         /// </summary>
@@ -19,7 +18,6 @@ namespace Microsoft.Msagl.Core.GraphAlgorithms{
             var dag = new BasicGraph<IntPair>(from e in edges select new IntPair(e.Item1, e.Item2), numberOfVertices);
             return GetOrder(dag);
         }
-#endif
 
         /// <summary>
         /// The function returns an array arr such that

@@ -9,10 +9,8 @@ namespace Microsoft.Msagl.Drawing
     /// <summary>
     /// Microsoft.Msagl.Drawing attribute.
     /// </summary>
-#if !SILVERLIGHT
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Attr"), Description("Graph or cluster layout attributes."),
     TypeConverterAttribute(typeof(ExpandableObjectConverter))]
-#endif
     [Serializable]
     public class GraphAttr : AttributeBase
     {
@@ -194,7 +192,7 @@ namespace Microsoft.Msagl.Drawing
         ///<summary>
         ///Separation between layers in
         ///</summary>
-        private double layersep = 72 * 0.5; //is equal to minLayerSep
+        private double layersep = 72 * 0.5; // is equal to minLayerSep
  /// <summary>
  /// the distance between two neigbor layers
  /// </summary>

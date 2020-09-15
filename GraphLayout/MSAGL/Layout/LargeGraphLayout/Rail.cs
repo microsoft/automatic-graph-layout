@@ -25,7 +25,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         public Point Right;
         public int Weight = 1;
        // public List<int> unnecessaryTransfer = new List<int>();
-#if DEBUG
+#if TEST_MSAGL
         static int railCount;
         int id;
 #endif
@@ -62,7 +62,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
         public int ZoomLevel;
         public List<object> Color;
-#if DEBUG
+#if TEST_MSAGL
         Rail() {
             railCount++;
             id = railCount;
@@ -92,7 +92,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 #endif
 
         internal Rail(ICurve curveSegment, LgEdgeInfo topRankedEdgeInfoOfTheRail, int zoomLevel)
-#if DEBUG
+#if TEST_MSAGL
             : this()
 #endif
         {
@@ -103,7 +103,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
         internal Rail(Arrowhead arrowhead, Point curveAttachmentPoint, LgEdgeInfo topRankedEdgeInfoOfTheRail,
             int zoomLevel)
-#if DEBUG
+#if TEST_MSAGL
             : this()
 #endif
         {
@@ -147,7 +147,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         public Rail(ICurve curveSegment, int zoomLevel)
         {
             ZoomLevel = zoomLevel;
-#if DEBUG
+#if TEST_MSAGL
             railCount++;
             id = railCount;
 #endif

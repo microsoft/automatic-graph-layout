@@ -707,7 +707,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                                 (float)sweepAngle);
         }
 
-#if DEBUG || DEVTRACE
+#if TEST_MSAGL || DEVTRACE
         static PointF PP(P2 point) {
             return new PointF((float)point.X, (float)point.Y);
         }

@@ -198,25 +198,6 @@ namespace Microsoft.Msagl.UnitTests
             LayoutAndValidate(graph, settings, LayerDirection.LeftToRight);
         }
 
-#if !NO_KOKOMO
-        [TestMethod]
-        [Description("Generate one random graph and do Sugiyam layout testing")]
-        public void RandomGraphTests()
-        {
-            GeometryGraph graph = GraphGenerator.GenerateOneGraph(new GeometryGraph(), 30, 30, true);
-            SugiyamaLayoutSettings settings = new SugiyamaLayoutSettings();
-            GraphGenerator.SetRandomNodeShapes(graph, random);
-            WriteLine("Trying Kokomo Graph with bottom to top layer direction");
-            LayoutAndValidate(graph, settings, LayerDirection.BottomToTop);
-            
-            graph = GraphGenerator.GenerateOneGraph(new GeometryGraph(), 30, 40, false);            
-            GraphGenerator.SetRandomNodeShapes(graph, random);
-            WriteLine("Trying Kokomo Graph with rigth to left layer direction");
-            Microsoft.Msagl.DebugHelpers.Persistence.GeometryGraphWriter.Write(graph, "wrongLayout");            
-            LayoutAndValidate(graph, settings, LayerDirection.RightToLeft);
-        }
-#endif // !NO_KOKOMO
-
         #endregion
 
         #region helpers

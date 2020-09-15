@@ -154,7 +154,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         }
 
         [TestMethod]
-#if DEBUG
+#if TEST_MSAGL
         [Timeout(30 * 1000)]
 #else 
         [Timeout(12 * 1000)]
@@ -757,7 +757,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         }
 
         [TestMethod]
-#if DEBUG
+#if TEST_MSAGL
         [Timeout(12000)]
 #else
         [Timeout(4000)]
@@ -850,7 +850,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         }
 
         [TestMethod]
-#if DEBUG
+#if TEST_MSAGL
         [Timeout(40 * 1000)]
 #else 
         [Timeout(10 * 1000)]
@@ -878,7 +878,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         }
 
         [TestMethod]
-#if DEBUG
+#if TEST_MSAGL
         [Timeout(35 * 1000)]
 #else
         [Timeout(5 * 1000)]
@@ -962,7 +962,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
 
         [TestMethod]
         [Ignore]    // TODOperf: Currently takes too long
-#if DEBUG
+#if TEST_MSAGL
         [Timeout(45 * 1000)]
 #else
         [Timeout(15 * 1000)]

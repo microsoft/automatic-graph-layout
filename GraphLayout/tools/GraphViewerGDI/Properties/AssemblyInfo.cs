@@ -52,5 +52,5 @@ using System.Resources;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("bda89cbd-7ad1-4cfb-ba7e-95c7279ab7e0")]
 
-[assembly: System.CLSCompliant(true)]
+[assembly: System.CLSCompliant(false)]
 #endif

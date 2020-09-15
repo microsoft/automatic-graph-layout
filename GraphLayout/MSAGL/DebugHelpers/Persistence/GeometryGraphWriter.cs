@@ -1,5 +1,5 @@
 ﻿using Microsoft.Msagl.Layout.LargeGraphLayout;
-#if PERSISTENCE
+#if TEST_MSAGL
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -597,40 +597,6 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
             return String.Format("{0} {1} {2}", PointToString(label.Center), DoubleToString(label.Width), DoubleToString(label.Height));
         }
 
-        /*
-                void WriteUnderlyingPolyline(SmoothedPolyline polylinePointsCollection) {
-                    WriteStartElement(GeometryToken.UnderlyingPolyline);
-                    if (polylinePointsCollection == null)
-                        WriteStringElement(GeometryToken.UnderlyingPolylineIsNull, true);
-                    else {
-                        WriteStringElement(GeometryToken.UnderlyingPolylineIsNull, false);
-                        WritePolylineSites(polylinePointsCollection);
-                    }
-                    WriteEndElement();
-                }
-        */
-
-        /*
-                void WritePolylineSites(SmoothedPolyline polylinePointsCollection) {
-                    Site site = polylinePointsCollection.HeadSite;
-                    do {
-                        WritePolylineSite(site);
-                        site = site.Next;
-                    } while (site != null);
-                }
-        */
-
-        /*
-                void WritePolylineSite(Site site) {
-                    WriteStartElement(GeometryToken.PolylineSite);
-                    WriteStringElement(GeometryToken.SiteK, site.PreviousBezierSegmentFitCoefficient);
-                    WriteStringElement(GeometryToken.SiteK, site.NextBezierSegmentFitCoefficient);
-                    WritePointElement(GeometryToken.SiteV, site.Point);
-                    WriteEndElement();
-                }
-        */
-
-
         void WriteNodes()
         {
             WriteStartElement(GeometryToken.Nodes);
@@ -766,12 +732,6 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
             XmlWriter.WriteString((x + width) + " " + (y + height) + " l\n");
             XmlWriter.WriteString(x + " " + (y + height) + " l\nh\n");
             XmlWriter.WriteEndElement();
-
-            //48 832 m
-            //48 752 l
-            //144 752 l
-            //144 832 l
-            //h
         }
 
 
@@ -989,7 +949,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
                     if (mds != null)
                     {
                         WriteAttribute(GeometryToken.LayoutAlgorithmType, GeometryToken.MdsLayoutSettings);
-#if REPORTING
+#if TEST_MSAGL
                         WriteAttribute(GeometryToken.Reporting, mds.Reporting);
 #endif
                         WriteAttribute(GeometryToken.Exponent, mds.Exponent);
@@ -1012,7 +972,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
             WriteAttribute(GeometryToken.MinNodeHeight, sugiyama.MinNodeHeight);
             WriteAttribute(GeometryToken.AspectRatio, sugiyama.AspectRatio);
             WriteAttribute(GeometryToken.NodeSeparation, sugiyama.NodeSeparation);
-#if REPORTING
+#if TEST_MSAGL
             WriteAttribute(GeometryToken.Reporting, sugiyama.Reporting);
 #endif
             WriteAttribute(GeometryToken.RandomSeedForOrdering, sugiyama.RandomSeedForOrdering);

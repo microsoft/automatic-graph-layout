@@ -76,7 +76,7 @@ namespace Microsoft.Msagl.Routing
                FixPortAtSource(shape, port, e);
                FixPortAtTarget(shape, port, e);
             }
-#if DEBUG
+#if TEST_MSAGL
            // shape.UserData = node.ToString();
 #endif
             return shape;
@@ -100,7 +100,7 @@ namespace Microsoft.Msagl.Routing
                 FixPortAtSource(shape, port, e);
                 FixPortAtTarget(shape, port, e);
             }
-#if DEBUG
+#if TEST_MSAGL
             shape.UserData = node.ToString();
 #endif
             return shape;

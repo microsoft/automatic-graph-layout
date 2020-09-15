@@ -83,55 +83,10 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 
         GeometryGraph mainGeomGraph; //needed for statistice only
-        
-//        public void ExtractRailsFromRouting(EdgeCollection edges, int levelZoom) {
-//            var level = AddLevel(levelZoom);
-//            level.CreateRailTree(edges);
-//
-//
-//
-//            Console.WriteLine("segs={0} rail count = {1}",
-//                              edges.Sum(
-//                                  e =>
-//                                  ((e.Curve is Curve) ? ((Curve) e.Curve).Segments.Count : 1) +
-//                                  (e.EdgeGeometry.SourceArrowhead != null ? 1 : 0) +
-//                                  (e.EdgeGeometry.TargetArrowhead != null ? 1 : 0)), level.Rails.Count());
-//        }
-
-        //        void UpdateEdgeGeometriesByLevel(int levelIndex, Rail rail) {
-        //            var edgeInfo = rail.EdgeInfo;
-        //            var edgeGeomsByLevels = edgeInfo.EdgeGeometriesByLevels;
-        //            if (edgeGeomsByLevels == null)
-        //                edgeInfo.EdgeGeometriesByLevels = edgeGeomsByLevels = new List<EdgePartialGeometryOnLevel>();
-        //
-        //            EdgePartialGeometryOnLevel edgePartialGeom;
-        //            if (edgeInfo.EdgeGeometriesByLevels.Count < levelIndex + 1)
-        //                edgeGeomsByLevels.Add(edgePartialGeom = new EdgePartialGeometryOnLevel());
-        //            else
-        //                edgePartialGeom = edgeGeomsByLevels[levelIndex];
-        //
-        //            var geom = rail.Geometry;
-        //            var edgeGeometry = edgeInfo.Edge.EdgeGeometry;
-        //            var arrowhead = geom as Arrowhead;
-        //            if (arrowhead != null) {
-        //                if (arrowhead == edgeGeometry.SourceArrowhead) {
-        //                    edgePartialGeom.SourceArrowhead = arrowhead;
-        //                } else {
-        //                    Debug.Assert(arrowhead == edgeGeometry.TargetArrowhead);
-        //                    edgePartialGeom.TargetArrowhead = arrowhead;
-        //                }
-        //            } else {
-        //                if (edgePartialGeom.ConnectedPiecesOfCurve == null)
-        //                    edgePartialGeom.ConnectedPiecesOfCurve = new List<ICurve>();
-        //                edgePartialGeom.ConnectedPiecesOfCurve.Add((ICurve) geom);
-        //            }
-        //        }
 
 
         internal int GetLevelIndexByScale(double scale) {
             if (scale <= 1) return 0;
-            //var last = _levels.Last().ZoomLevel;
-            //if (scale >= last) return _levels.Count - 1;
             var z = Math.Log(scale, 2);            
             int ret = (int)Math.Ceiling(z);
             if (z >= _levels.Last().ZoomLevel) return _levels.Count - 1;
@@ -139,35 +94,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             return ret;
         }
 
-
-
-        /*
-                void RemoveRailsOfPassingEdgesFromLowerLevelsAndReduceHighlights(List<Edge> passingEdges) {
-                    var dimmedRails = new Set<Rail>();
-                    foreach (var edge in passingEdges) {
-                        for (int i = levels.Count - 1; i >= 0; i--) {
-                            var level = levels[i];                    
-                            DiminishHighlightAndCollectDimmedRailOnLevel(edge, level, dimmedRails);
-                        }
-                    }
-      
-                    RemoveDimmedRailsFromLowerLevels(dimmedRails);
-                    foreach (var edge in passingEdges) {
-                        var ei = GeometryEdgesToLgEdgeInfos[edge];
-                        for (int i = 0; i<levels.Count; i++) {
-                            var level = levels[i];
-                            if (ei.ZoomLevel > level.ZoomLevel) {
-                                Set<Rail> railsOfEdgeOnLevel;
-                                if (level._railsOfEdges.TryGetValue(edge, out railsOfEdgeOnLevel))
-                                    if (railsOfEdgeOnLevel.Any(dimmedRails.Contains))
-                                        level._railsOfEdges.Remove(edge);
-                            }
-                            else break;
-                        }
-                    }
-                }
-        */
-#if DEBUG && !SILVERLIGHT && !SHARPKIT && !NETCORE
+#if TEST_MSAGL && !SHARPKIT
         static void ShowDimmedRails(Set<Rail> dimmedRails) {
             var l = new List<DebugHelpers.DebugCurve>();
             foreach (var r in dimmedRails) {
@@ -180,36 +107,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(l);
         }
 #endif
-//        void RemoveDimmedRailsFromLowerLevels(Set<Rail> dimmedRails) {
-//            foreach(var rail in dimmedRails)
-//                RemoveDimmedRailFromLowerLevels(rail);
-//        }
-//
-//        void RemoveDimmedRailFromLowerLevels(Rail rail) {
-//            Debug.Assert(rail.IsHighlighted==0);
-//            for (int i = 0; i < levels.Count; i++) {
-//                var level = levels[i];
-//                if (level.ZoomLevel < rail.ZoomLevel) {
-//                    //the rail does not belong to this level
-//                    var railTuple = rail.PointTuple();
-//                    var rect = new Rectangle(railTuple.Item1, railTuple.Item2);
-//                    level._railTree.Remove(rect, rail);                    
-//                }
-//                else break;
-//            }
-//
-//        }
-
-//        static void DiminishHighlightAndCollectDimmedRailOnLevel(Edge edge, Level level, Set<Rail> dimmedRails) {
-//            Set<Rail> railsOfEdge;
-//            if (!level._railsOfEdges.TryGetValue(edge, out railsOfEdge)) return;
-//            foreach (var rail in railsOfEdge) {
-//                if (rail.IsHighlighted == 0) continue;
-//                rail.IsHighlighted--;
-//                if (rail.IsHighlighted == 0)
-//                    dimmedRails.Insert(rail);
-//            }
-//        }
 
         internal void SelectEdges(List<Edge> passingEdges) {
             SelectedEdges.InsertRange(passingEdges);
@@ -288,7 +185,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 }
             }
             
-            //DEBUG comment out by jyoti
+            //TEST_MSAGL comment out by jyoti
             //var l = level.HighlightedRails.Select(r => new DebugCurve((ICurve) r.Geometry));
             //LayoutAlgorithmSettings.ShowDebugCurves(l.ToArray());
 
@@ -345,11 +242,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             //need to remove those rails later, when putting them off
             foreach (var rail in railsOfEdge)
             {
-                /*
-                if (rail.A.X <= 4154 && rail.A.X >= 4152)
-                {
-                    Console.WriteLine("NOW I SEE YOU");
-                }*/
                 AddRailToRailTreeOfLowerLevel(rail, level);
             }
             level._railsOfEdges[edge] = railsOfEdge;
@@ -499,11 +391,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                         
                         var railTuple = rail.PointTuple();  
                         var rect = new Rectangle(railTuple.Item1, railTuple.Item2);
-                        /*
-                        if (rail.A.X <= 4154 && rail.A.X >= 4152)
-                        {
-                            Console.WriteLine("NOW I SEE YOU = " + level._railTree.Contains(rect, rail));
-                        }*/
                         if (level._railTree.Contains(rect, rail) == false)
                         {                            
                             rect = new Rectangle(rail.A, rail.B);

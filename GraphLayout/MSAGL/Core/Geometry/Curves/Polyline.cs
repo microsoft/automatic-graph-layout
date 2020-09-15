@@ -46,7 +46,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
                 }
             }
         }
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
         /// <summary>
         /// 
         /// </summary>

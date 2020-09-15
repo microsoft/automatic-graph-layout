@@ -24,7 +24,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             this.end = end;
         }
 
-#if DEBUG || DEVTRACE
+#if TEST_MSAGL || DEVTRACE
         internal IEnumerable<CdtTriangle> Triangles() {
             while(MoveNext())
                 yield return CurrentTriangle;

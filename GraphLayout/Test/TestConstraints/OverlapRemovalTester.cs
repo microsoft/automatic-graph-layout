@@ -79,7 +79,7 @@ namespace TestConstraints
             Random rng = TestConstraints.NewRng();
 
             // Print this so that in case of errors we can re-run with this seed.
-            Console.WriteLine("Creating test file with seed 0x{0}", TestConstraints.RandomSeed.ToString("X"));
+            System.Diagnostics.Debug.WriteLine("Creating test file with seed 0x{0}", TestConstraints.RandomSeed.ToString("X"));
 
             //
             // This code was adapted from satisfy_inc for ProjSolver, and then the second dimension
@@ -133,7 +133,7 @@ namespace TestConstraints
                     };
                 if (TestGlobals.VerboseLevel >= 3)
                 {
-                    Console.WriteLine("Level-1 cluster: {0}", lstClusDefs[0].ClusterId);
+                    System.Diagnostics.Debug.WriteLine("Level-1 cluster: {0}", lstClusDefs[0].ClusterId);
                 }
 
                 // If we are doing a single hierarchy only, restrict the range to the current set of parents,
@@ -167,12 +167,12 @@ namespace TestConstraints
                         clusParent.AddClusterDef(clusNew);
                         if (TestGlobals.VerboseLevel >= 3)
                         {
-                            Console.Write("Nested cluster: {0}", clusNew.ClusterId);
+                            System.Diagnostics.Debug.Write($"Nested cluster: {clusNew.ClusterId}");
                             for (; null != clusParent; clusParent = clusParent.ParentClusterDef)
                             {
-                                Console.Write(" {0}", clusParent.ClusterId);
+                                System.Diagnostics.Debug.Write($" {clusParent.ClusterId}");
                             }
-                            Console.WriteLine();
+                            System.Diagnostics.Debug.WriteLine("");
                         }
                     }
                     else
@@ -181,7 +181,7 @@ namespace TestConstraints
                         clusNew.IsNewHierarchy = true;
                         if (TestGlobals.VerboseLevel >= 3)
                         {
-                            Console.WriteLine("Level-1 cluster: {0}", clusNew.ClusterId);
+                            System.Diagnostics.Debug.WriteLine("Level-1 cluster: {0}", clusNew.ClusterId);
                         }
                     }
                 }
@@ -196,7 +196,7 @@ namespace TestConstraints
                     }
                     else if (TestGlobals.VerboseLevel >= 3)
                     {
-                        Console.WriteLine("Root var: {0}", varDef.IdString);
+                        System.Diagnostics.Debug.WriteLine("Root var: {0}", varDef.IdString);
                     }
                 }
             } // endif MaxClusters > 0
@@ -228,7 +228,7 @@ namespace TestConstraints
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                System.Diagnostics.Debug.WriteLine(e.Message);
                 swOutFile.WriteLine();
                 swOutFile.WriteLine("// --- Exception thrown when generating results --- ");
                 swOutFile.WriteLine();

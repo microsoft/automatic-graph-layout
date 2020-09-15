@@ -53,8 +53,6 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         System.Drawing.Point mouseUpPoint;
         P2 rubberLineEnd;
         P2 rubberLineStart;
-        System.Drawing.Rectangle rubberRect;
-        const FrameStyle RubberRectStyle = FrameStyle.Dashed;
         bool zoomWindow;
         PlaneTransformation mouseDownTransform;
 
@@ -66,9 +64,9 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     
         DraggingMode MouseDraggingMode {
             get {
-                if (gViewer.panButton.Pushed)
+                if (gViewer.panButton.Checked)
                     return DraggingMode.Pan;
-                if (gViewer.windowZoomButton.Pushed)
+                if (gViewer.windowZoomButton.Checked)
                     return DraggingMode.WindowZoom;
                 return DraggingMode.Default;
             }

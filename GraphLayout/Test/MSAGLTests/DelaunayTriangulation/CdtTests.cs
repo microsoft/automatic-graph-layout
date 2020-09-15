@@ -111,7 +111,7 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
 
         [TestMethod]
         public void SmallTriangulation() {
-#if DEBUG&& TEST_MSAGL
+#if TEST_MSAGL&& TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
 #endif
             var cdt = new Cdt(Points(), null, new []{new SymmetricTuple<Point>(new Point(109,202),new Point(506,135) ),
@@ -143,7 +143,7 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
         [DeploymentItem(@"Resources\triangles")]
         [TestMethod]
         public void ThreadOverVertex() {
-#if DEBUG&&TEST_MSAGL
+#if TEST_MSAGL&&TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
 #endif
             var stream = File.Open("triangles", FileMode.Open);
@@ -179,7 +179,7 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
         }
         [TestMethod]
         public void TriangulationWithSizes() {
-#if DEBUG&&TEST_MSAGL
+#if TEST_MSAGL&&TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
 #endif
             int[] dimensions = { 2, 10, 100, 10000, 100000 };
@@ -193,7 +193,7 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
             var w = n * size;
             var cdt = new Cdt(PointsForCdt(random, n, w), null, SegmentsForCdt(w).ToList());
             cdt.Run();
-#if DEBUG&&TEST_MSAGL
+#if TEST_MSAGL&&TEST_MSAGL
             CdtSweeper.ShowFront(cdt.GetTriangles(), null, null,null);
 #endif
         }
@@ -215,7 +215,7 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
             return new Point(d * random.NextDouble(), d * random.NextDouble());
         }
 
-#if DEBUG&&TEST_MSAGL
+#if TEST_MSAGL&&TEST_MSAGL
         [DeploymentItem(@"Resources\polys")]
         [TestMethod]
         public void TestRepeatedSite() {

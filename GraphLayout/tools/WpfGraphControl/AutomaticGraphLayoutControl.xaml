@@ -1,0 +1,5 @@
+﻿<ScrollViewer x:Class="Microsoft.Msagl.WpfGraphControl.AutomaticGraphLayoutControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <DockPanel x:Name="dockPanel"/>
+</ScrollViewer>

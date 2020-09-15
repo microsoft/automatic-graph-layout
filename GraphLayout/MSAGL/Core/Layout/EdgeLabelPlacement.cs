@@ -57,7 +57,6 @@ namespace Microsoft.Msagl.Core.Layout {
         /// </summary>
         public bool ScaleCollisionGranularity { get; set; }
 
-#if NET4
         bool parallelProcessingEnabled = true;
 
         /// <summary>
@@ -67,7 +66,6 @@ namespace Microsoft.Msagl.Core.Layout {
             get { return parallelProcessingEnabled; }
             set { parallelProcessingEnabled = value; }
         }
-#endif
 
         /// <summary>
         ///     Constructs an edge label placer that places all labels in the graph.
@@ -170,7 +168,7 @@ namespace Microsoft.Msagl.Core.Layout {
             IEnumerable<Label> sortedLabels = lbs.OrderByDescending(l => Math.Abs(0.5 - l.PlacementOffset))
                                                  .ThenBy(l => edgePoints[((Edge) l.GeometryParent)].Count);
 
-#if NET4 && PARALLEL_SUPPORTED
+#if PARALLEL_SUPPORTED
             if (ParallelProcessingEnabled && lbs.Length > 50)
                 ParallelUtilities.ForEach(sortedLabels, PlaceLabel, ProgressSteps);
             else

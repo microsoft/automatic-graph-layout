@@ -104,7 +104,7 @@ namespace WindowsApplicationSample {
         void Form1Load(object sender, EventArgs e) {
             gViewer.ObjectUnderMouseCursorChanged += GViewerObjectUnderMouseCursorChanged;
 
-#if DEBUG
+#if TEST_MSAGL
             //DisplayGeometryGraph.SetShowFunctions();
 #endif
 
@@ -144,9 +144,10 @@ namespace WindowsApplicationSample {
                                                      (selectedObject as Microsoft.Msagl.Drawing.Node).Attr.Id));
                     gViewer.Invalidate(e.NewObject);
                 }
-                label1.Text = selectedObject.ToString();
+                label1.Text = selectedObject.ToString();                
             }
 
+            label1.Refresh();
         }
 
         void RestoreSelectedObjAttr() {
@@ -286,7 +287,7 @@ namespace WindowsApplicationSample {
         }
 
         void CreateGraph() {
-#if DEBUG
+#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif
             //Graph graph = new Graph();

@@ -3,35 +3,6 @@ using System.Collections.Generic;
 
 namespace Microsoft.Msagl.Core.DataStructures {
 
-    //public class TestRB :IComparer<int>{
-    //    public static void Test() {
-    //        var tree = new RBTree<int>(new TestRB());
-    //        tree.insert(1);
-    //        tree.insert(6);
-    //        tree.insert(8); 
-    //        tree.insert(11);
-    //        tree.insert(13);
-    //        tree.insert(17);
-    //        tree.insert(15);
-    //        tree.insert(25);
-    //        tree.insert(22);
-    //        tree.insert(27);
-    //        tree.insert(16);
-
-    //        var t = tree.findLast(delegate(int i) { return i <= 15.5; });
-
-    //    }
-
-        
-    //    #region IComparer<int> Members
-
-    //    public int Compare(int x, int y) {
-    //        return x - y;
-    //    }
-
-    //    #endregion
-    //}
-
 #if TEST_MSAGL
     [Serializable]
 #endif
@@ -146,15 +117,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
         internal RBNode<T> TreeMaximum() {
             return TreeMaximum(root);
         }
-
-
-        //RBTree<T> Clone() {
-        //    RBTree<T> clone = new RBTree<T>(this.Comparer);
-        //    foreach (T n in this) {
-        //        clone.insert(n);
-        //    }
-        //    return clone;
-        //}
 
 
         public override string ToString() {
@@ -362,8 +324,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
             }
 
             root.color = RBColor.Black;
-
-            //checkTheTree();
         }
 
         internal RBNode<T> Insert(T v) {
@@ -418,59 +378,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
         internal void Clear() {
             root = nil = new RBNode<T>(RBColor.Black);
         }
-
-        //void checkTheTree() {
-        //    int blacks = -1;
-        //    checkBlacks(root, 0, ref blacks);
-        //    checkColors(root);
-
-        //}
-
-
-
-        //void checkBlacks(RBNode<T> node, int nnow, ref int blacks) {
-        //    if (node != nil) {
-        //        RBNode<T> l = node.left, r = node.right;
-
-        //        if (l != nil)
-        //            if (Comparer.Compare(l.item,node.item) >= 0)
-        //                throw new Exception("order");
-
-        //        if (r != nil)
-        //            if (Comparer.Compare(r.item,node.item) <= 0)
-        //                throw new Exception("order");
-
-
-        //    }
-
-        //    if (node == nil) {
-        //        if (blacks != nnow + 1 && blacks != -1)
-        //            throw new Exception("blacks");
-
-        //        blacks = nnow + 1;
-
-        //    } else if (node.color == RBColor.Black) {
-        //        checkBlacks(node.left, nnow + 1, ref blacks);
-        //        checkBlacks(node.right, nnow + 1, ref blacks);
-        //    } else {
-        //        checkBlacks(node.left, nnow, ref blacks);
-        //        checkBlacks(node.right, nnow, ref blacks);
-        //    }
-
-
-        //}
-
-        //void checkColors(RBNode<T> x) {
-        //    if (x == nil)
-        //        return;
-        //    //property 3
-        //    if (x.color == RBColor.Red)
-        //        if (x.left.color == RBColor.Red || x.right.color == RBColor.Red)
-        //            throw new Exception("colors");
-
-        //    checkColors(x.left);
-        //    checkColors(x.right);
-        //}
 
         #region IEnumerable Members
 

@@ -56,7 +56,7 @@ namespace Microsoft.Msagl.Drawing
         bool isUpdated;
         
 
-#if DEBUG 
+#if TEST_MSAGL 
         /// <summary>
         /// to string
         /// </summary>

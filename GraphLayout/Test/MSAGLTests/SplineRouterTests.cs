@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
 using Microsoft.Msagl.GraphViewerGdi;
 #endif
 using Microsoft.Msagl.Core;
@@ -90,7 +90,7 @@ namespace Microsoft.Msagl.UnitTests
             splineRouter.Run();
 
             sw.Stop();
-            System.Console.WriteLine("Edge routing took: {0} seconds.", sw.ElapsedMilliseconds / 1000.0);
+            System.Diagnostics.Debug.WriteLine("Edge routing took: {0} seconds.", sw.ElapsedMilliseconds / 1000.0);
         }
 
         [TestMethod]
@@ -110,13 +110,13 @@ namespace Microsoft.Msagl.UnitTests
             SplineRouter splineRouter = new SplineRouter(g, TightPadding, loosePadding, Math.PI / 6, null);
             splineRouter.Run();
             sw.Stop();
-            Console.WriteLine("Edge routing took: {0} seconds.", sw.ElapsedMilliseconds / 1000.0);
+            System.Diagnostics.Debug.WriteLine("Edge routing took: {0} seconds.", sw.ElapsedMilliseconds / 1000.0);
             CheckEdgesForOverlapWithNodes(TightPadding, g);
         }
 
         private static void CheckEdgesForOverlapWithNodes(double tightPadding, GeometryGraph graph)
         {
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
             if (!DontShowTheDebugViewer())
             {
                 DisplayGeometryGraph.SetShowFunctions();
@@ -135,7 +135,7 @@ namespace Microsoft.Msagl.UnitTests
                     var box = v.BoundingBox;
                     var poly = InteractiveObstacleCalculator.CreatePaddedPolyline(Curve.PolylineAroundClosedCurve(v.BoundaryCurve), tightPadding / 2);
                     bool overlaps = CurveOverlapsBox(e.EdgeGeometry.Curve, ref box, poly);
-#if GDI_DEBUG_VIEWER
+#if TEST_MSAGL
     //uncomment to see the graph and the overlaps  
                     if (overlaps && !DontShowTheDebugViewer())
                     {
@@ -194,7 +194,7 @@ namespace Microsoft.Msagl.UnitTests
         [TestMethod]
         [Description("the run does not stop")]
         public void BundlingBug1GeomGraph() {
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif
             var graph = GeometryGraphReader.CreateFromFile(GetGeomGraphFileName("bug1.msagl.geom"));

@@ -46,7 +46,6 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
                     M[v1, v2] = 1;
                     M[v2, v1] = 1;
                 }
-                //Console.WriteLine(E);
             }
         }
     }

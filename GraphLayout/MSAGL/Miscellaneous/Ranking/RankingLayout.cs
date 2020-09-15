@@ -64,7 +64,6 @@ namespace Microsoft.Msagl.Prototype.Ranking {
 
             for (int i = 0; i < graphs.Length; i++)
             {
-                Console.WriteLine("laying out {0} connected component", i);
                 Calculate(graphs[i]);
             }
 

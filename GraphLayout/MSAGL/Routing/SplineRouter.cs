@@ -14,7 +14,7 @@ using Microsoft.Msagl.Routing.Spline.Bundling;
 using Microsoft.Msagl.Routing.Spline.ConeSpanner;
 using Microsoft.Msagl.Routing.Visibility;
 
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
 using Microsoft.Msagl.DebugHelpers;
 using System.Diagnostics.CodeAnalysis;
 #endif
@@ -749,7 +749,7 @@ namespace Microsoft.Msagl.Routing {
         }
         #region debugging
 
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         static internal void AnotherShowMethod(VisibilityGraph visGraph,
             Port sourcePort, Port targetPort, IEnumerable<Shape> obstacleShapes, ICurve curve) {

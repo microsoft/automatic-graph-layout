@@ -10,7 +10,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
     /// 
     /// </summary>
     public class LgEdgeInfo:LgInfoBase {
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
         /// <summary>
         /// to string for debugging
         /// </summary>

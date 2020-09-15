@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace Microsoft.Msagl.Layout.Layered {
-#if REPORTING
+#if TEST_MSAGL
 
     /// <summary>
     /// Log class
@@ -36,7 +36,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             sw.Write(message);
             sw.Flush();
 
-            Console.WriteLine(message);
+            System.Diagnostics.Debug.WriteLine(message);
         }
     }
 #endif

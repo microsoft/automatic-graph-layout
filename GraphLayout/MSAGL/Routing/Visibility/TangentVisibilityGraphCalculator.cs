@@ -118,7 +118,7 @@ namespace Microsoft.Msagl.Routing.Visibility {
                 RemoveDiagonalFromActiveNodes(diag);
             }
         }
-#if DEBUG && TEST_MSAGL
+#if TEST_MSAGL && TEST_MSAGL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private void AddPolylinesForShow(List<ICurve> curves) {
             foreach (Polygon p in this.polygons)

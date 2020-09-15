@@ -98,16 +98,16 @@ namespace Microsoft.Msagl.GraphViewerGdi{
             originalCursor = Cursor;
 
             
-            panButton.Pushed = false;
-            windowZoomButton.Pushed = false;
+            panButton.Checked = false;
+            windowZoomButton.Checked = false;
 
             layoutSettingsButton.ToolTipText = "Configures the layout algorithm settings";
 
             undoButton.ToolTipText = "Undo layout editing";
             redoButton.ToolTipText = "Redo layout editing";
             forwardButton.ToolTipText = "Forward";
-            panButton.ToolTipText = panButton.Pushed ? panButtonToolTipText : PanButtonDisabledToolTipText;
-            windowZoomButton.ToolTipText = windowZoomButton.Pushed
+            panButton.ToolTipText = panButton.Checked ? panButtonToolTipText : PanButtonDisabledToolTipText;
+            windowZoomButton.ToolTipText = windowZoomButton.Checked
                                                ? WindowZoomButtonToolTipText
                                                : windowZoomButtonDisabledToolTipText;
 
@@ -422,13 +422,15 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         /// 
         /// </summary>
+#pragma warning disable 67
         public event EventHandler<EventArgs> ViewChangeEvent;
+#pragma warning restore 67
 
         /// <summary>
         /// enables and disables the default editing of the viewer
         /// </summary>
         public bool LayoutEditingEnabled{
-            get { return !(panButton.Pushed || windowZoomButton.Pushed) && EditingEnabled; }
+            get { return !(panButton.Checked || windowZoomButton.Checked) && EditingEnabled; }
             set { EditingEnabled = value; }
         }
         /// <summary>

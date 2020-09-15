@@ -329,45 +329,6 @@ namespace Microsoft.Msagl.Drawing {
                 Arrowheads.CreateBigEnoughSpline(e);
         }
 
-
-        ///// <summary>
-        ///// Creates a curve by using the underlying polyline
-        ///// </summary>
-        ///// <param name="underlyingPoly"></param>
-        ///// <returns></returns>
-        //        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Polyline")]
-        //        static public Curve CreateCurveFromEdgeUnderlyingPolyline(UnderlyingPolyline underlyingPoly) {
-        //            Curve curve = new Curve();
-        //            Site a = underlyingPoly.HeadSite;//the corner start
-        //            Site b; //the corner origin
-        //            Site c;//the corner other end
-
-        //            while (SmoothedPolyline.FindCorner(a, out b, out c)) {
-        //                CubicBezierSegment seg = SmoothedPolyline.CreateBezierSeg(b.bezierSegmentShrinkCoefficient, a, b, c);
-        //                if (curve.Segments.Count == 0) {
-        //                    if (!ApproximateComparer.Close(a.Point, seg.Start))
-        //                        Curve.AddLineSeg(curve, a.Point, seg.Start);
-        //                    } else if (!ApproximateComparer.Close(curve.End, seg.Start))
-        //                    Routing.ContinueWithLineSeg(curve, seg.Start);
-        //                curve.AddSegment(seg);
-        //                a = b;
-        //            }
-
-        //            System.Diagnostics.Debug.Assert(a.Next.Next == null);
-
-        //            if (curve.Segments.Count == 0) {
-        //                if (!ApproximateComparer.Close(a.Point, a.Next.Point)) {
-        //                    Curve.AddLineSeg(curve, a.Point, a.Next.Point);
-        //                } else {
-        //                    double w=5;
-        //                    curve.Segments.Add(new CubicBezierSegment(a.Point, a.Point+new Point(w,w),a.Point+new Point(-w,w), b.Point));
-        //                }
-        //            } else if (!ApproximateComparer.Close(curve.End, a.Next.Point))
-        //                Routing.ContinueWithLineSeg(curve, a.Next.Point);
-
-        //            return curve;
-        //        }
-
         /// <summary>
         ///     prepares for node dragging
         /// </summary>
@@ -816,27 +777,6 @@ namespace Microsoft.Msagl.Drawing {
                 action.GraphBoundingBoxAfter = action.Graph.BoundingBox;
             }
         }
-
-
-        /*
-          void TestFixBrect() { //debug: todo , remove later
-            if (brect == null)
-                return;
-            var t = new Rect(graphCanvas.RenderSize);
-            var ntInAgl = new Rectangle(t.Left, t.Top, t.Right, t.Bottom);
-            var trans = Transform.Inverse;
-            ntInAgl = new Rectangle(trans*ntInAgl.LeftBottom, trans*ntInAgl.RightTop);
-            if (!graph.BoundingBox.Intersects(ntInAgl)) return;
-            var visiblePart = Rectangle.Intersect(graph.BoundingBox, ntInAgl);
-            
-            visiblePart.Pad(-5);
-            brect.Width = visiblePart.Width;
-            brect.Height = visiblePart.Height;
-            Canvas.SetLeft(brect, visiblePart.Left); Canvas.SetTop(brect, visiblePart.Bottom);
-
-        }
-
-         */
 
         internal void ReactOnViewChange() {
             LgLayoutSettings.Interactor.RunOnViewChange();

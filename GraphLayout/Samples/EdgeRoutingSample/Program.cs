@@ -22,7 +22,7 @@ namespace EdgeRoutingSample {
 #if TEST
             DisplayGeometryGraph.SetShowFunctions();
 #else 
-            Console.WriteLine("run the Debug version to see the edge routes");
+            System.Diagnostics.Debug.WriteLine("run the Debug version to see the edge routes");
 #endif
             var graph = GeometryGraphReader.CreateFromFile("channel.msagl.geom");
             foreach (var edge in graph.Edges) {
