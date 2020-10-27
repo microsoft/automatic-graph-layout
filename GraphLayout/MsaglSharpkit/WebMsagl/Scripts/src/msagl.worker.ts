@@ -405,6 +405,8 @@ export function handleMessage(e: any): void {
                     answer = { msgtype: "RunLayout", graph: worker.finalGraph.getJSON() };
                 }
                 catch (e) {
+                    if (e.message != null)
+                        e = e.message;
                     console.log("error in MSAGL.RunLayout: " + JSON.stringify(e));
                     answer = { msgtype: "Error", error: e };
                 }
@@ -418,6 +420,8 @@ export function handleMessage(e: any): void {
                     answer = { msgtype: "RouteEdges", graph: worker.finalGraph.getJSON(), edges: edges };
                 }
                 catch (e) {
+                    if (e.message != null)
+                        e = e.message;
                     console.log("error in MSAGL.RouteEdges: " + JSON.stringify(e));
                     answer = { msgtype: "Error", error: e };
                 }
@@ -439,6 +443,8 @@ export function handleMessage(e: any): void {
                     };
                 }
                 catch (e) {
+                    if (e.message != null)
+                        e = e.message;
                     console.log("error in MSAGL.SetPolyline: " + JSON.stringify(e));
                     answer = { msgtype: "Error", error: e };
                 }
