@@ -87,7 +87,7 @@ findJsType = function (name, idx) {
     // Most of the time, this will get called without the second parameter.
     if (isNaN(idx))
         idx = 0;
-    for (var i = 0; i < JsTypes.length ; i++)
+    for (var i = 0; i < JsTypes.length; i++)
         if (JsTypes[i].fullname == name && idx-- == 0)
             return JsTypes[i];
 }
@@ -160,14 +160,19 @@ System$Collections$Generic$Dictionary$2.definition.get_Count = function () {
     return this.get_Keys().get_Count();
 }
 
-// The jsclr version of TryGetValue behaves differently from the CLR version because when the value is not in the dictionary, it sets
-// the ref parameter to undefined. This implementation correctly reproduces the CLR behavior (i.e. if the value is not in the 
-// dictionary, it does not get changed.
+// The jsclr version of TryGetValue behaves differently from the CLR version because when the value is not in the dictionary, it sets the ref parameter to undefined. This implementation correctly reproduces the CLR behavior (i.e. if the value is not in the dictionary, it does not get changed.
+// Update 15/09/2020: it looks like it is not true that the CLR does not change the out value if the key is not in the dictionary. I observe this behavior in EdgePathInserter.WidenOriginalLayers. I am reverting this to the jsclr version, pending further investigation on the original issue.
+// Update 27/10/2020: the issue is that in .NET, if you have a dictionary of a value type, and the dictionary does not contain a key, you get the default value of the value type. In SharpKit, you get undefined (even though null would not be a valid value for a value type). I'm changing this to create a new object with default values in such a case.
 System$Collections$Generic$Dictionary$2.definition.TryGetValue = function (key, value) {
     var hashKey = this.GetHashKey(key);
     var v = this._table[hashKey];
-    if (v !== undefined)
-        value.Value = v;
+    if (v == undefined && value != null && value.Value != null && value.Value.getType != null) {
+        var type = value.Value.getType();
+        // If the dictionary doesn't contain the key, and the values are value types, replace the result (undefined) with a new instance of the same type.
+        if (type != null && type.baseTypeName == "System.ValueType")
+            v = new type.ctor();
+    }
+    value.Value = v;
     return typeof (v) != "undefined";
 }
 
@@ -522,7 +527,7 @@ System$Collections$Generic$Stack$1.definition.Pop = function () {
 }
 
 // .NET stacks are ordered in the opposite way compared to JS stacks. This is irrelevant if you're just using push and pop, but it's important if you're enumerating.
-System$Collections$Generic$Stack$1.definition.Peek = function (){
+System$Collections$Generic$Stack$1.definition.Peek = function () {
     if (this._list.length == 0)
         throw $CreateException(new Error("Cannot peek in stack - stack is empty"), new Error());
     return this._list[0];

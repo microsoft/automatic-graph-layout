@@ -131,7 +131,7 @@ namespace Microsoft.Msagl.Drawing
             return stringBuilder.ToString();
         }
 
-        void WriteStroke(DebugCurve debugCurve) {
+        protected void WriteStroke(DebugCurve debugCurve) {
             var color = ValidColor(debugCurve.Color);
             WriteAttribute("stroke", color);
             WriteAttribute("stroke-opacity", debugCurve.Transparency/255.0);
@@ -151,7 +151,7 @@ namespace Microsoft.Msagl.Drawing
             return true;
         }
 
-        void WriteLabel(Label label)
+        protected virtual void WriteLabel(Label label)
         {
             if (!LabelIsValid(label))
                 return;
@@ -171,7 +171,7 @@ namespace Microsoft.Msagl.Drawing
         }
 
 
-        string MsaglColorToSvgColor(Color color) {
+        protected string MsaglColorToSvgColor(Color color) {
             if (BlackAndWhite)
                 return "#000000";
             return "#" + Color.Xex(color.R) + Color.Xex(color.G) + Color.Xex(color.B);
@@ -182,7 +182,7 @@ namespace Microsoft.Msagl.Drawing
         /// </summary>
         public bool BlackAndWhite { get; set; }
 
-        void WriteAttribute(string attrName, object attrValue)
+        protected void WriteAttribute(string attrName, object attrValue)
         {
             if (attrValue is double)
                 attrValue = DoubleToString((double)attrValue);
@@ -191,7 +191,7 @@ namespace Microsoft.Msagl.Drawing
             xmlWriter.WriteAttributeString(attrName, attrValue.ToString());
         }
 
-        void WriteAttributeWithPrefix(string prefix, string attrName, object attrValue)
+        protected void WriteAttributeWithPrefix(string prefix, string attrName, object attrValue)
         {
             xmlWriter.WriteAttributeString(prefix, attrName, null, attrValue.ToString());
         }
@@ -228,14 +228,14 @@ namespace Microsoft.Msagl.Drawing
             xmlWriter.Close();
         }
 
-        void WriteEdges() {
+        protected void WriteEdges() {
             if (IgnoreEdges) return;
             WriteComment("Edges");
             foreach (Edge edge in _graph.Edges)
                 WriteEdge(edge);
         }
 
-        void WriteEdge(Edge edge)
+        protected virtual void WriteEdge(Edge edge)
         {
             WriteStartElement("path");
             WriteAttribute("fill", "none");
@@ -252,7 +252,7 @@ namespace Microsoft.Msagl.Drawing
                 WriteLabel(edge.Label);
         }
 
-        void AddArrow(Point start, Point end, Edge edge)
+        protected void AddArrow(Point start, Point end, Edge edge)
         {
             var dir = end - start;
             var h = dir;
@@ -266,7 +266,7 @@ namespace Microsoft.Msagl.Drawing
             DrawArrowPolygon(edge.Attr, points);
         }
 
-        void DrawPolygon(AttributeBase attr, Point[] points)
+        protected virtual void DrawPolygon(AttributeBase attr, Point[] points)
         {
             WriteStartElement("polygon");
             WriteStroke(attr);
@@ -285,7 +285,7 @@ namespace Microsoft.Msagl.Drawing
             WriteEndElement();
         }
 
-        void DrawArrowPolygon(AttributeBase attr, Point[] points)
+        protected virtual void DrawArrowPolygon(AttributeBase attr, Point[] points)
         {
             WriteStartElement("polygon");
             WriteStroke(attr);
@@ -305,7 +305,7 @@ namespace Microsoft.Msagl.Drawing
             WriteEndElement();
         }
 
-        void WriteNodes()
+        protected void WriteNodes()
         {
             WriteComment("nodes");
             foreach (Node node in _graph.Nodes)
@@ -314,12 +314,12 @@ namespace Microsoft.Msagl.Drawing
 
         }
 
-        void WriteComment(string comment)
+        protected void WriteComment(string comment)
         {
             xmlWriter.WriteComment(comment);
         }
 
-        void WriteNode(Node node)
+        protected void WriteNode(Node node)
         {
             if (node.IsVisible == false || node.GeometryNode == null)
                 return;
@@ -374,7 +374,7 @@ namespace Microsoft.Msagl.Drawing
                 WriteEndElement();
         }
 
-        void WriteFromMsaglCurve(Node node)
+        protected virtual void WriteFromMsaglCurve(Node node)
         {
             NodeAttr attr = node.Attr;
 
@@ -511,7 +511,7 @@ namespace Microsoft.Msagl.Drawing
             return ell.ParEnd == Math.PI * 2 && ell.ParStart == 0;
         }
 
-        string SegmentString(ICurve segment)
+        protected string SegmentString(ICurve segment)
         {
             var ls = segment as LineSegment;
             if (ls != null)
@@ -528,31 +528,31 @@ namespace Microsoft.Msagl.Drawing
             throw new NotImplementedException();
         }
 
-        
-        string EllipseToString(Ellipse ellipse) {
+
+        protected string EllipseToString(Ellipse ellipse) {
             string largeArc = Math.Abs(ellipse.ParEnd-ellipse.ParStart) >= Math.PI? "1":"0";
             string sweepFlag= ellipse.OrientedCounterclockwise()?"1":"0";
 
             return String.Join(" ", "A", EllipseRadiuses(ellipse), DoubleToString(Point.Angle(new Point(1, 0), ellipse.AxisA) / (Math.PI / 180.0)), largeArc, sweepFlag, PointsToString(ellipse.End));
         }
 
-        string EllipseRadiuses(Ellipse ellipse) {
+        protected string EllipseRadiuses(Ellipse ellipse) {
             return DoubleToString(ellipse.AxisA.Length) + "," + DoubleToString(ellipse.AxisB.Length);
         }
 
 
-        string CubicBezierSegmentToString(CubicBezierSegment cubic)
+        protected string CubicBezierSegmentToString(CubicBezierSegment cubic)
         {
             return "C" + PointsToString(cubic.B(1), cubic.B(2), cubic.B(3));
         }
 
 
-        string PointsToString(params Point[] points)
+        protected string PointsToString(params Point[] points)
         {
             return String.Join(" ", points.Select(p => PointToString(p)).ToArray());
         }
 
-        string LineSegmentString(LineSegment ls)
+        protected string LineSegmentString(LineSegment ls)
         {
             return "L " + PointToString(ls.End);
         }
@@ -586,17 +586,17 @@ namespace Microsoft.Msagl.Drawing
             set { allowedToWriteUri = value; }
         }
 
-        string PointToString(Point start)
+        protected string PointToString(Point start)
         {
             return DoubleToString(start.X) + " " + DoubleToString(start.Y);
         }
 
-        string DoubleToString(double d)
+        protected string DoubleToString(double d)
         {
             return (Math.Abs(d) < 1e-11) ? "0" : d.ToString(formatForDoubleString, CultureInfo.InvariantCulture);
         }
 
-        void WriteDiamond(Node node)
+        protected virtual void WriteDiamond(Node node)
         {
             NodeAttr nodeAttr = node.Attr;
             double w2 = node.GeometryNode.Width / 2.0f;
@@ -612,7 +612,7 @@ namespace Microsoft.Msagl.Drawing
             DrawPolygon(node.Attr, ps);
         }
 
-        void WriteBox(Node node)
+        protected virtual void WriteBox(Node node)
         {
             WriteStartElement("rect");
             WriteFill(node.Attr);
@@ -627,7 +627,7 @@ namespace Microsoft.Msagl.Drawing
             WriteEndElement();
         }
 
-        void WriteEllipse(Node node)
+        protected virtual void WriteEllipse(Node node)
         {
             var geomNode = node.GeometryNode;
             var center = geomNode.Center;
@@ -636,7 +636,7 @@ namespace Microsoft.Msagl.Drawing
             WriteEllipseOnPosition(node.Attr, center, rx, ry);
         }
 
-        void WriteDoubleCircle(Node node)
+        protected virtual void WriteDoubleCircle(Node node)
         {
             var geomNode = node.GeometryNode;
             var center = geomNode.Center;
@@ -647,7 +647,7 @@ namespace Microsoft.Msagl.Drawing
         }
 
 
-        void WriteEllipseOnPosition(NodeAttr nodeAttr, Point center, double rx, double ry)
+        protected virtual void WriteEllipseOnPosition(NodeAttr nodeAttr, Point center, double rx, double ry)
         {
             WriteStartElement("ellipse");
             WriteFill(nodeAttr);
@@ -657,7 +657,7 @@ namespace Microsoft.Msagl.Drawing
             WriteEndElement();
         }
 
-        void WriteFill(NodeAttr attr)
+        protected void WriteFill(NodeAttr attr)
         {
             var color = attr.FillColor;
             if (color.A == 0 && !attr.Styles.Contains(Style.Filled))
@@ -681,7 +681,7 @@ namespace Microsoft.Msagl.Drawing
             return color.A / 255.0;
         }
 
-        void WriteFullEllipseGeometry(Point cx, double rx, double ry)
+        protected void WriteFullEllipseGeometry(Point cx, double rx, double ry)
         {
             WriteAttribute("cx", cx.X);
             WriteAttribute("cy", cx.Y);
@@ -696,12 +696,12 @@ namespace Microsoft.Msagl.Drawing
         {
         }
 
-        void WriteEndElement()
+        protected void WriteEndElement()
         {
             xmlWriter.WriteEndElement();
         }
 
-        void WriteStartElement(string s)
+        protected void WriteStartElement(string s)
         {
             xmlWriter.WriteStartElement(s);
         }
