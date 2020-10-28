@@ -361,8 +361,6 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         internal Cursor panOpenCursor;
 
         internal DObject selectedDObject;
-        bool storeViewInfo = true;
-
         /// <summary>
         /// The color of the area outside of the graph.
         /// </summary>

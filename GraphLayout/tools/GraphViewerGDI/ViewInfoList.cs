@@ -40,7 +40,7 @@ namespace Microsoft.Msagl.GraphViewerGdi
 
     internal ViewInfo CurrentView { get { return current.viewInfo; } }
 
-    internal void AddNewViewInfo(ViewInfo viewInfo)
+    internal bool AddNewViewInfo(ViewInfo viewInfo)
     {
 
       if (current.viewInfo == null || current.viewInfo != viewInfo)
@@ -52,7 +52,9 @@ namespace Microsoft.Msagl.GraphViewerGdi
         current.next = n;
         n.prev = current;
         current = n;
+        return true;
       }
+      return false;
 
     }
 
@@ -75,6 +77,10 @@ namespace Microsoft.Msagl.GraphViewerGdi
     internal bool ForwardAvailable
     {
       get { return current.next != null && current.next.viewInfo != null; }
+    }
+
+    internal void Clear() {
+      current = new ViewInfoHolder();
     }
   }
 }
