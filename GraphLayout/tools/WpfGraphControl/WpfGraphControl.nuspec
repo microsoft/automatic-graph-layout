@@ -21,7 +21,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="./bin/Release/net472/Microsoft.Msagl.WpfGraphControl.dll" target="lib\net472" />
+    <file src="./bin/Release/net471/Microsoft.Msagl.WpfGraphControl.dll" target="lib\net471" />
     <file src="./bin/Release/netcoreapp3.1/Microsoft.Msagl.WpfGraphControl.dll" target="lib\netcoreapp3.1" />
   </files>
 </package>
