@@ -174,8 +174,8 @@ namespace Microsoft.Msagl.Drawing
 
         private void WriteLabelText(string text, double xContainer, double fontSize) 
         {
-            var endOfLine = new List<string> { "\r\n", "\r", "\n" };
-            var textLines = Regex.Split(NodeSanitizer(text), "(\r\n|\r|\n)").Where(it => !endOfLine.Contains(it)).ToList();
+            var endOfLines = new List<string> { "\r\n", "\r", "\n" };
+            var textLines = Regex.Split(NodeSanitizer(text), "(\r\n|\r|\n)").Where(it => !endOfLines.Contains(it)).ToList();
             var isFirstLine = true;
             textLines.ForEach(line => 
             {
