@@ -357,7 +357,7 @@ namespace Microsoft.Msagl.Drawing
                 case Shape.InvHouse:
                 case Shape.Ellipse:
                 case Shape.DrawFromGeometry:
-
+                case Shape.Hexagon:
 #if TEST_MSAGL
                 case Shape.TestShape:
 #endif
