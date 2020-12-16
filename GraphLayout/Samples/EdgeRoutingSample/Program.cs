@@ -15,45 +15,6 @@ using Node = Microsoft.Msagl.Core.Layout.Node;
 
 namespace EdgeRoutingSample {
     static class Program {
-        public static void RunSample() {
-            GeometryGraph geometryGraph = new GeometryGraph();
-            geometryGraph.Nodes.Add(new Node(CurveFactory.CreateRectangle(100, 100, new Microsoft.Msagl.Core.Geometry.Point(0, 0)), "1"));
-            geometryGraph.Nodes.Add(new Node(CurveFactory.CreateRectangle(300, 300, new Microsoft.Msagl.Core.Geometry.Point(0, 0)), "2"));
-            geometryGraph.Nodes.Add(new Node(CurveFactory.CreateRectangle(100, 100, new Microsoft.Msagl.Core.Geometry.Point(0, 0)), "3"));
-
-            Edge edge = new Edge(geometryGraph.Nodes[0], geometryGraph.Nodes[1], 0, 0, 1);
-            edge.UserData = "1 - 2";
-            geometryGraph.Edges.Add(edge);
-
-            edge = new Edge(geometryGraph.Nodes[1], geometryGraph.Nodes[2], 0, 0, 1);
-            edge.UserData = "2 - 3";
-            geometryGraph.Edges.Add(edge);
-
-            edge = new Edge(geometryGraph.Nodes[0], geometryGraph.Nodes[2], 0, 0, 1);
-            edge.UserData = "1 - 3";
-            geometryGraph.Edges.Add(edge);
-
-            SugiyamaLayoutSettings layoutSettings = new SugiyamaLayoutSettings();
-            layoutSettings.EdgeRoutingSettings.EdgeRoutingMode = Microsoft.Msagl.Core.Routing.EdgeRoutingMode.Spline;
-            layoutSettings.NodeSeparation = 125;
-            layoutSettings.LayerSeparation = 125;
-
-            //foreach (Edge tEdge in geometryGraph.Edges) {
-            //    if (tEdge.SourcePort == null)
-            //        tEdge.SourcePort = new FloatingPort(tEdge.Source.BoundaryCurve, tEdge.Source.Center);
-            //    if (tEdge.TargetPort == null)
-            //        tEdge.TargetPort = new FloatingPort(tEdge.Target.BoundaryCurve, tEdge.Target.Center);
-            //}
-
-            IEnumerable<GeometryGraph> subGraphs = GraphConnectedComponents.CreateComponents(geometryGraph.Nodes, geometryGraph.Edges);
-            foreach (GeometryGraph subgraph in subGraphs) {
-                LayeredLayout layout = new LayeredLayout(subgraph, layoutSettings);
-                subgraph.Margins = layoutSettings.NodeSeparation + 600;
-                layout.Run();
-            }
-
-            Microsoft.Msagl.Layout.MDS.MdsGraphLayout.PackGraphs(subGraphs, layoutSettings);
-        }
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -64,8 +25,6 @@ namespace EdgeRoutingSample {
 #else 
             System.Diagnostics.Debug.WriteLine("run the Debug version to see the edge routes");
 #endif
-            RunSample();
-            return;
             var graph = GeometryGraphReader.CreateFromFile("channel.msagl.geom");
             foreach (var edge in graph.Edges) {
                 if (edge.SourcePort == null)
