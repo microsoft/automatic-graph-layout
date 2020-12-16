@@ -9,26 +9,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
     [Serializable]
 #endif
     public class PlaneTransformation {
-        /// <summary>
-        /// hash function
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode() {
-            return (elements != null ? elements.GetHashCode() : 0);
-        }
-
-        /// <summary>
-        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
-        /// </summary>
-        /// <returns>
-        /// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
-        /// </returns>
-        /// <param name="obj">The object to compare with the current object. </param><filterpriority>2</filterpriority>
-        public override bool Equals(object obj) {
-            var t = obj as PlaneTransformation;
-            return t != null && t == this;
-        }
-
+        
         readonly double[][] elements = new double[2][];
         
 
@@ -207,36 +188,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static bool operator ==(PlaneTransformation a, PlaneTransformation b) {
-            if ((object)a == null &&(object)b == null)
-                return true;
-            if ((object)a == null)
-                return false;
-            if ((object)b == null)
-                return false;
-            for (int i = 0; i < 2; i++)
-                for (int j = 0; j < 3;j++ )
-                    if (a[i,j] != b[i,j])
-                        return false;
-            return true;
-        }
-
-        /// <summary>
-        /// the inequality operator
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static bool operator !=(PlaneTransformation a, PlaneTransformation b) {
-            return !(a == b);
-        }
-
+        
         /// <summary>
         /// clones the transform
         /// </summary>
