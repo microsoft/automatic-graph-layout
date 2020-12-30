@@ -401,7 +401,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         }
 
         void SetPortVerticesAndObstacles(Port port, bool sources, out Polyline poly) {
-            poly = null;
             var cbport = port as ClusterBoundaryPort;
             if (cbport != null) {
                 //SplineRouter.ShowVisGraph(this.VisibilityGraph, this.ObstacleHierarchy.GetAllLeaves(), null, new[]{cbport.LoosePolyline});
