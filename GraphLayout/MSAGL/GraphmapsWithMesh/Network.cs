@@ -33,7 +33,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             int v2;
             while (E < numE)
             {
-                Random r = new Random();
+                Random r = new Random(1);
                 var v1 = r.Next(1, numV);
                 v2 = r.Next(1, numV);
 

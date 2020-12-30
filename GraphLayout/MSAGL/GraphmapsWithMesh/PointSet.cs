@@ -69,7 +69,7 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
             pointMap = new int[g.NumOfnodes + 1, g.NumOfnodes + 1];
 #endif
             _selected = new int[g.NumOfnodes + 1];
-            Random r1 = new Random();
+            Random r1 = new Random(1);
 
 
             //generate points in random

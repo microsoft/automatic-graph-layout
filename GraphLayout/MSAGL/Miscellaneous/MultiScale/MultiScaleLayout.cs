@@ -89,7 +89,7 @@ namespace Microsoft.Msagl.Prototype.MultiScale
                 c += e.Target.Center;
                 ++count;
             }
-            Random r = new Random();
+            Random r = new Random(3);
             c += new Point(r.NextDouble(), r.NextDouble());
             u.Center = c / count;
         }

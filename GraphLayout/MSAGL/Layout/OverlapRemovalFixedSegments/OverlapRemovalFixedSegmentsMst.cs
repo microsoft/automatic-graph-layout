@@ -539,7 +539,7 @@ namespace Microsoft.Msagl.Layout.OverlapRemovalFixedSegments
 
         public TreeNode GetRandom(List<TreeNode> nodes)
         {
-            Random rand = new Random();
+            Random rand = new Random(1);
             int i = rand.Next(0, nodes.Count);
             return nodes[i];
         }
@@ -752,7 +752,7 @@ namespace Microsoft.Msagl.Layout.OverlapRemovalFixedSegments
                 ////test: small chance of extanding edge instead of contracting
                 //if (contractingEdge && a1 <= a2)
                 //{
-                //    Random rnd = new Random();
+                //    Random rnd = new Random(1);
                 //    int r = rnd.Next(0, 100);
                 //    if (r < 50)
                 //    {

@@ -26,7 +26,7 @@ namespace Microsoft.Msagl.Miscellaneous.ConstrainedSkeleton
         public VisibilityGraph _visGraph;
         readonly IEnumerable<LgNodeInfo> _nodeInfos;
         Rectangle _boundingBox;
-        readonly Random _random = new Random();
+        readonly Random _random = new Random(3);
         public SteinerCdt(VisibilityGraph visGraph, IEnumerable<LgNodeInfo> nodeInfos)
         {
             _visGraph = visGraph;
