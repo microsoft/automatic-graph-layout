@@ -92,8 +92,8 @@ namespace Microsoft.Msagl.Miscellaneous {
                 var initialBc = new InitialLayoutByCluster(geometryGraph, a => sugiyamaLayoutSettings);
                 initialBc.Run(cancelToken);
                 //route the rest of the edges, those between the clusters
-                RouteAndLabelEdges(geometryGraph, sugiyamaLayoutSettings,
-                    geometryGraph.Edges.Where(e => e.Curve == null).ToArray());
+                var edgesToRoute = sugiyamaLayoutSettings.EdgeRoutingSettings.EdgeRoutingMode == EdgeRoutingMode.SplineBundling ? geometryGraph.Edges.ToArray() : geometryGraph.Edges.Where(e => e.Curve == null).ToArray();
+                RouteAndLabelEdges(geometryGraph, sugiyamaLayoutSettings, edgesToRoute);
             }
             else
                 geometryGraph.AlgorithmData = SugiyamaLayoutSettings.CalculateLayout(geometryGraph,
