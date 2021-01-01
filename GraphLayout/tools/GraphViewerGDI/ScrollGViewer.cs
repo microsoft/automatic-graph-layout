@@ -236,7 +236,11 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         public bool ForwardEnabled{
             get { return forwardButton.ImageIndex == (int) ImageEnum.Forward; }
 
-            set { forwardButton.ImageIndex = (int) (value ? ImageEnum.Forward : ImageEnum.ForwardDis); }
+            set {
+                int i = (int)(value ? ImageEnum.Forward : ImageEnum.ForwardDis);
+                if (forwardButton.ImageIndex != i)
+                    forwardButton.ImageIndex = i;
+            }
         }
 
         /// <summary>
@@ -245,7 +249,11 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         public bool BackwardEnabled{
             get { return backwardButton.ImageIndex == (int) ImageEnum.Backward; }
 
-            set { backwardButton.ImageIndex = (int) (value ? ImageEnum.Backward : ImageEnum.BackwardDis); }
+            set {
+                int i = (int)(value ? ImageEnum.Backward : ImageEnum.BackwardDis);
+                if (backwardButton.ImageIndex != i)
+                    backwardButton.ImageIndex = i;
+            }
         }
 
         /// <summary>
