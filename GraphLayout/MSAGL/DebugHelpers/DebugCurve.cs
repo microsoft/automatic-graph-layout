@@ -7,7 +7,15 @@ namespace Microsoft.Msagl.DebugHelpers {
     ///<summary>
     ///</summary>
     [Serializable]
-    public class DebugCurve : DebugShape {
+    public class DebugCurve  {
+        public int Pen { get; set; }
+        ///<summary>
+        ///</summary>
+        public string Color { get; set; }
+        /// <summary>
+        /// Filling Color of the Shape.
+        /// </summary>
+        public string FillColor { get; set; }
         /// <summary>
         /// color transparency
         /// </summary>

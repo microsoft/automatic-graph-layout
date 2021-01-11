@@ -160,3 +160,4 @@ Desktop.ini
 $RECYCLE.BIN/
 
 # Mac desktop service store files
+/sh.exe.stackdump
