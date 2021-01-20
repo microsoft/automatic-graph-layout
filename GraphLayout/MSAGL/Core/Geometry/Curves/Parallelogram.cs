@@ -85,11 +85,11 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             get { return otherCorner; }
         }
 
-        Point aRot;//a rotated on 90 degrees towards side1
-        Point bRot; //side1 rotated on 90 degrees towards coeff
+        Point aRot;//a rotated on 90 degrees towards b
+        Point bRot; //b rotated on 90 degrees towards a
 
-        double abRot; //the scalar product coeff*bRot 
-        double baRot; //the scalar product side1*aRot;
+        double abRot; //the scalar product a*bRot 
+        double baRot; //the scalar product b*aRot;
 /// <summary>
 /// to string 
 /// </summary>
