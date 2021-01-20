@@ -40,7 +40,7 @@ namespace Microsoft.Msagl.Miscellaneous.LayoutEditing
             this.layoutSettings = layoutSettings;
             pushingNodesArray = pushingNodes as GeomNode[] ?? pushingNodes.ToArray();
             Debug.Assert(pushingNodesArray.All(n => DefaultClusterParent(n) == null) ||
-                          (new Set<GeomNode>(pushingNodesArray.Select(n => n.ClusterParents.First()))).Count == 1,
+                          (new Set<GeomNode>(pushingNodesArray.Select(n => n.ClusterParent))).Count == 1,
                                     "dragged nodes have to belong to the same cluster");
             InitBumperPushers();
         }
@@ -66,7 +66,7 @@ namespace Microsoft.Msagl.Miscellaneous.LayoutEditing
 
 
         static Cluster DefaultClusterParent(GeomNode n) {
-            return n.ClusterParents.FirstOrDefault();
+            return n.ClusterParent;
         }
 
         void RunPushers() {

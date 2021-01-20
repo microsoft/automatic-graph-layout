@@ -542,6 +542,8 @@ namespace Microsoft.Msagl.Layout.Incremental {
         {
             get
             {
+                if (algorithm == null)
+                    return 0;
                 return algorithm.CurrentConstraintLevel;
             }
             set

@@ -412,14 +412,14 @@ namespace Microsoft.Msagl.Drawing {
                 objectsToDrag.Insert(edge);
             foreach (GeomEdge edge in node.InEdges)
                 if (objectsToDrag.Contains(edge.Source) ||
-                    edge.Source.ClusterParents.Any(p => objectsToDrag.Contains(p)))
+                    edge.Source.ClusterParent != null && objectsToDrag.Contains(edge.Source.ClusterParent))
                     objectsToDrag.Insert(edge);
                 else
                     edgesDraggedWithTarget.Insert(edge);
 
             foreach (GeomEdge edge in node.OutEdges)
                 if (objectsToDrag.Contains(edge.Target) ||
-                    edge.Target.ClusterParents.Any(p => objectsToDrag.Contains(p)))
+                    edge.Target.ClusterParent!=null && objectsToDrag.Contains(edge.Target.ClusterParent))
                     objectsToDrag.Insert(edge);
                 else
                     edgesDraggedWithSource.Insert(edge);

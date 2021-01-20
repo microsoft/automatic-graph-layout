@@ -845,7 +845,7 @@ namespace Microsoft.Msagl.Drawing {
 
         static Cluster GetActiveObjectCluster(IViewerObject viewerObject) {
             var node = viewerObject.DrawingObject.GeometryObject as GeometryNode;
-            return node != null ? node.ClusterParents.FirstOrDefault() : null;
+            return node != null ? node.ClusterParent : null;
         }
 
 

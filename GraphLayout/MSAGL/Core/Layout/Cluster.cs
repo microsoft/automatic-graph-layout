@@ -313,12 +313,12 @@ namespace Microsoft.Msagl.Core.Layout {
         }
 
         /// <summary>
-        ///     get the edges incoming to the specified node where the source of the edge is an immediate child of this cluster.
+        ///     get the edges incoming to the specified node where the source of an edge is an immediate child of this cluster.
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
         IEnumerable<Edge> EdgesIncomingToNodeWithChildSource(Node node) {
-            return node.InEdges.Concat(node.SelfEdges).Where(e => e.Source.ClusterParents.Contains(this));
+            return node.InEdges.Concat(node.SelfEdges).Where(e => e.Source.ClusterParent==this);
         }
 
         /// <summary>

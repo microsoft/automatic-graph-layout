@@ -71,7 +71,7 @@ namespace Microsoft.Msagl.Routing {
 
 
         static Cluster Parent(Node node) {
-            return node.ClusterParents.First();
+            return node.ClusterParent;
         }
 
         internal static bool NumberOfActiveNodesIsUnderThreshold(List<Edge> inParentEdges, List<Edge> outParentEdges, int threshold) {

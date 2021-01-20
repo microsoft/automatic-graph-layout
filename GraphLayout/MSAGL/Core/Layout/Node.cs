@@ -122,15 +122,16 @@ namespace Microsoft.Msagl.Core.Layout {
             set { selfEdges_ = (Set<Edge>)value; }
         }
 
-        List<Cluster> clusterParents = new List<Cluster>();
+        Cluster clusterParent = null;
 
         /// <summary>
         /// Parents (if any) of which this node is a member
         /// </summary>
-        public IEnumerable<Cluster> ClusterParents
+        public Cluster ClusterParent
         {
-            get { return clusterParents; }
-            set { clusterParents = (List<Cluster>)value; }
+            get {
+                   return this.clusterParent;
+            }
         }
 
         /// <summary>
@@ -141,11 +142,11 @@ namespace Microsoft.Msagl.Core.Layout {
         {
             get
             {
-                Cluster parent = this.ClusterParents.FirstOrDefault();
+                Cluster parent = this.ClusterParent;
                 while (parent != null)
                 {
                     yield return parent;
-                    parent = parent.ClusterParents.FirstOrDefault();
+                    parent = parent.ClusterParent;
                 }
             }
         }
@@ -157,8 +158,10 @@ namespace Microsoft.Msagl.Core.Layout {
         public void AddClusterParent(Cluster parent)
         {
             ValidateArg.IsNotNull(parent, "parent");
+            Debug.Assert(this.clusterParent == null);
+
             Debug.Assert(parent != this);
-            clusterParents.Add(parent);
+            clusterParent = parent;
         }
 
         /// <summary>
@@ -338,28 +341,11 @@ namespace Microsoft.Msagl.Core.Layout {
         /// <returns>True if the node is a descendant of the cluster.  False otherwise.</returns>
         public bool IsDescendantOf(Cluster cluster)
         {
-            Queue<Cluster> parents = new Queue<Cluster>(this.ClusterParents);
-
-            while (parents.Count > 0)
-            {
-                Cluster parent = parents.Dequeue();
-
-                if (parent == cluster)
-                {
-                    return true;
-                }
-
-                foreach (Cluster grandParent in parent.ClusterParents)
-                {
-                    parents.Enqueue(grandParent);
-                }
-            }
-
-            return false;
+            return this.AllClusterAncestors.Contains(cluster);            
         }
 
         internal bool UnderCollapsedCluster() {
-            return ClusterParents.Any(c => c.IsCollapsed);
+            return ClusterParent != null && ClusterParent.IsCollapsed;
         }
     }
 }

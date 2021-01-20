@@ -61,7 +61,7 @@ namespace Microsoft.Msagl.Layout.Initial {
             if (addedNodes == null) return;
         
             foreach (var v in addedNodes)
-                CreateOrGetAddedChildrenOfParent(v.ClusterParents.First()).Add(v);
+                CreateOrGetAddedChildrenOfParent(v.ClusterParent).Add(v);
             ancestorsOfModifiedNodes.InsertRange(addedNodes.SelectMany(v => v.AllClusterAncestors));
         }
 

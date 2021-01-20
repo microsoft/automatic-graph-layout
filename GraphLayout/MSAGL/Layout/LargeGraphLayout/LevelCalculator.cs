@@ -80,7 +80,8 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
         static void UpdateRanksOfClusters(LgData lgData) {
             foreach (var lgInfo in lgData.GeometryNodesToLgNodeInfos.Values) {
-                foreach (var cluster in lgInfo.GeometryNode.ClusterParents) {
+                var cluster = lgInfo.GeometryNode.ClusterParent;
+                if (cluster != null) {
                     LgNodeInfo clusterLgInfo;
                     if (lgData.GeometryNodesToLgNodeInfos.TryGetValue(cluster, out clusterLgInfo))
                         if (clusterLgInfo.Rank < lgInfo.Rank)

@@ -29,373 +29,363 @@ using Edge = Microsoft.Msagl.Core.Layout.Edge;
 using Node = Microsoft.Msagl.Core.Layout.Node;
 
 namespace Test01 {
-  internal class Program {
-    static bool bundling;
-    const string QuietOption = "-quiet";
-    const string FileOption = "-file";
-    const string BundlingOption = "-bundling";
-    const string ListOfFilesOption = "-listoffiles";
-    const string TestCdtOption = "-tcdt";
-    const string TestCdtOption2 = "-tcdt2";
-    const string TestCdtOption0 = "-tcdt0";
-    const string TestCdtOption1 = "-tcdt1";
-    const string ReverseXOption = "-rx";
-    const string MdsOption = "-mds";
-    const string FdOption = "-fd";
-    const string EdgeSeparationOption = "-es";
-    const string RecoverSugiyamaTestOption = "-rst";
-    const string InkImportanceOption = "-ink";
-    const string ConstraintsTestOption = "-tcnstr";
-    const string TightPaddingOption = "-tpad";
-    const string LoosePaddingOption = "-lpad";
-    const string CapacityCoeffOption = "-cc";
-    const string PolygonDistanceTestOption = "-pd";
-    const string PolygonDistanceTestOption3 = "-pd3";
-    const string RandomBundlingTest = "-rbt";
-    const string TestCdtThreaderOption = "-tth";
-    const string AsyncLayoutOption = "-async";
+    internal class Program {
+        static bool bundling;
+        const string QuietOption = "-quiet";
+        const string FileOption = "-file";
+        const string BundlingOption = "-bundling";
+        const string ListOfFilesOption = "-listoffiles";
+        const string TestCdtOption = "-tcdt";
+        const string TestCdtOption2 = "-tcdt2";
+        const string TestCdtOption0 = "-tcdt0";
+        const string TestCdtOption1 = "-tcdt1";
+        const string ReverseXOption = "-rx";
+        const string MdsOption = "-mds";
+        const string FdOption = "-fd";
+        const string EdgeSeparationOption = "-es";
+        const string RecoverSugiyamaTestOption = "-rst";
+        const string InkImportanceOption = "-ink";
+        const string ConstraintsTestOption = "-tcnstr";
+        const string TightPaddingOption = "-tpad";
+        const string LoosePaddingOption = "-lpad";
+        const string CapacityCoeffOption = "-cc";
+        const string PolygonDistanceTestOption = "-pd";
+        const string PolygonDistanceTestOption3 = "-pd3";
+        const string RandomBundlingTest = "-rbt";
+        const string TestCdtThreaderOption = "-tth";
+        const string AsyncLayoutOption = "-async";
 
 
-    [STAThread]
-    static void Main(string[] args) {
+        [STAThread]
+        static void Main(string[] args) {
 #if TEST_MSAGL
-      DisplayGeometryGraph.SetShowFunctions();
+            DisplayGeometryGraph.SetShowFunctions();
 #endif
-      ArgsParser.ArgsParser argsParser = SetArgsParser(args);
-      if (argsParser.OptionIsUsed("-help")) {
-        Console.WriteLine(argsParser.UsageString());
-        Environment.Exit(0);
-      }
-      if (argsParser.OptionIsUsed(PolygonDistanceTestOption))
-        TestPolygonDistance();
-      else if (argsParser.OptionIsUsed(TestCdtThreaderOption))
-        TestCdtThreader();
-      else if (argsParser.OptionIsUsed(RandomBundlingTest))
-        RandomBundlingTests.RsmContent();
-
-
-      bundling = argsParser.OptionIsUsed(BundlingOption);
-
-      var gviewer = new GViewer();
-      gviewer.MouseMove += Draw.GviewerMouseMove;
-      if (argsParser.OptionIsUsed(FdOption)) {
-        TestFD();
-        gviewer.CurrentLayoutMethod = LayoutMethod.IcrementalLayout;
-      }
-      Form form = CreateForm(null, gviewer);
-      if (argsParser.OptionIsUsed(AsyncLayoutOption))
-        gviewer.AsyncLayout = true;
-
-      string listOfFilesFile = argsParser.GetStringOptionValue(ListOfFilesOption);
-      if (listOfFilesFile != null) {
-        ProcessListOfFiles(listOfFilesFile, argsParser);
-        return;
-      }
-      string fileName = argsParser.GetStringOptionValue(FileOption);
-      string ext = Path.GetExtension(fileName);
-      if (ext != null) {
-        ext = ext.ToLower();
-        if (ext == ".dot") {
-          ProcessDotFile(gviewer, argsParser, fileName);
-        }
-        else {
-          if (ext == ".geom") {
-            GeometryGraph geometryGraph = GeometryGraphReader.CreateFromFile(fileName);
-            geometryGraph.Margins = 10;
-
-            FixHookPorts(geometryGraph);
-            // if (argsParser.OptionIsUsed(BundlingOption)) {
-            for (int i = 0; i < 1; i++) {
-#if TEST_MSAGL
-              /*DisplayGeometryGraph.ShowGraph(geometryGraph);
-                  var l = new List<DebugCurve>(); l.AddRange(geometryGraph.Nodes.Select(n=>new DebugCurve(100,1,"black",n.BoundaryCurve)));
-                  l.AddRange(geometryGraph.Edges.Select(e=>new DebugCurve(100,1,"black", new LineSegment(e.Source.Center,e.Target.Center))));
-                  foreach (var cl in geometryGraph.RootCluster.AllClustersDepthFirst()) {
-                      l.Add(new DebugCurve(100,2,"blue",cl.BoundaryCurve));
-                      foreach (var node in cl.Nodes)
-                          l.Add(new DebugCurve(100, 2, "brown", node.BoundaryCurve));
-
-                      foreach (var e in cl.Edges)
-                          l.Add(new DebugCurve(100, 2, "pink", new LineSegment(e.Source.Center, e.Target.Center)));
-
-                  }
-
-                  DisplayGeometryGraph.ShowDebugCurves(l.ToArray());*/
-
-#endif
-              BundlingSettings bs = GetBundlingSettings(argsParser);
-
-              double loosePadding;
-              double tightPadding = GetPaddings(argsParser, out loosePadding);
-              if (argsParser.OptionIsUsed(MdsOption)) {
-                var mdsLayoutSettings = new MdsLayoutSettings { RemoveOverlaps = true, NodeSeparation = loosePadding * 3 };
-                var mdsLayout = new MdsGraphLayout(mdsLayoutSettings, geometryGraph);
-                mdsLayout.Run();
-              }
-              else {
-                if (argsParser.OptionIsUsed(FdOption)) {
-                  var settings = new FastIncrementalLayoutSettings { AvoidOverlaps = true };
-                  (new InitialLayout(geometryGraph, settings)).Run();
-                }
-              }
-              var splineRouter = new SplineRouter(geometryGraph, geometryGraph.Edges, tightPadding,
-                                                  loosePadding,
-                                                  Math.PI / 6, bs);
-              splineRouter.Run();
+            ArgsParser.ArgsParser argsParser = SetArgsParser(args);
+            if (argsParser.OptionIsUsed("-help")) {
+                Console.WriteLine(argsParser.UsageString());
+                Environment.Exit(0);
             }
-#if TEST_MSAGL
-            DisplayGeometryGraph.ShowGraph(geometryGraph);
-#endif
-            return;
-          }
-          else {
-            if (ext == ".msagl") {
-              Graph graph = Graph.Read(fileName);
-              //           DisplayGeometryGraph.ShowGraph(graph.GeometryGraph);
-              if (graph != null) {
-                if (argsParser.OptionIsUsed(BundlingOption)) {
-                  BundlingSettings bs = GetBundlingSettings(argsParser);
+            if (argsParser.OptionIsUsed(PolygonDistanceTestOption))
+                TestPolygonDistance();
+            else if (argsParser.OptionIsUsed(TestCdtThreaderOption))
+                TestCdtThreader();
+            else if (argsParser.OptionIsUsed(RandomBundlingTest))
+                RandomBundlingTests.RsmContent();
 
-                  double loosePadding;
-                  double tightPadding = GetPaddings(argsParser, out loosePadding);
-                  var br = new SplineRouter(graph.GeometryGraph, tightPadding, loosePadding, Math.PI / 6,
-                                            bs);
-                  br.Run();
-                  //                 DisplayGeometryGraph.ShowGraph(graph.GeometryGraph);
-                }
-              }
-              gviewer.NeedToCalculateLayout = false;
-              gviewer.Graph = graph;
-              gviewer.NeedToCalculateLayout = true;
+
+            bundling = argsParser.OptionIsUsed(BundlingOption);
+
+            var gviewer = new GViewer();
+            gviewer.MouseMove += Draw.GviewerMouseMove;
+            if (argsParser.OptionIsUsed(FdOption)) {
+                TestFD();
+                gviewer.CurrentLayoutMethod = LayoutMethod.IcrementalLayout;
             }
-          }
-        }
-      }
-      else if (argsParser.OptionIsUsed(TestCdtOption)) {
-        Triangulation(argsParser.OptionIsUsed(ReverseXOption));
-        Environment.Exit(0);
-      }
-      else if (argsParser.OptionIsUsed(TestCdtOption0)) {
-        TestTriangulationOnSmallGraph(argsParser);
-        Environment.Exit(0);
-      }
-      else if (argsParser.OptionIsUsed(TestCdtOption2)) {
-        TestTriangulationOnPolys();
-        Environment.Exit(0);
-      }
-      else if (argsParser.OptionIsUsed(TestCdtOption1)) {
-        ThreadThroughCdt();
-        Environment.Exit(0);
-      }
-      else if (argsParser.OptionIsUsed(ConstraintsTestOption))
-        TestGraphWithConstraints();
+            Form form = CreateForm(null, gviewer);
+            if (argsParser.OptionIsUsed(AsyncLayoutOption))
+                gviewer.AsyncLayout = true;
 
-      Application.Run(form);
+            string listOfFilesFile = argsParser.GetStringOptionValue(ListOfFilesOption);
+            if (listOfFilesFile != null) {
+                ProcessListOfFiles(listOfFilesFile, argsParser);
+                return;
+            }
+            string fileName = argsParser.GetStringOptionValue(FileOption);
+            string ext = Path.GetExtension(fileName);
+            if (ext != null) {
+                ext = ext.ToLower();
+                if (ext == ".dot") {
+                    ProcessDotFile(gviewer, argsParser, fileName);
+                }
+                else {
+                    if (ext == ".geom") {
+                        GeometryGraph geometryGraph = GeometryGraphReader.CreateFromFile(fileName);
+                        geometryGraph.Margins = 10;
 
-    }
-
-    static void TestFD() {
-      GeometryGraph graph = CreateGeometryGraphForFD();
-      //LayoutAlgorithmSettings.ShowGraph(graph);
-      var settings = new FastIncrementalLayoutSettings {
-        AvoidOverlaps = true,
-        ApplyForces = false,
-        RungeKuttaIntegration = true
-      };
-
-      var ir = new InitialLayout(graph, settings);
-      ir.Run();
-      RouteEdges(graph, settings);
-      //LayoutAlgorithmSettings.ShowGraph(graph);
-      //  AddNodeFd(graph);
-
-      var n = new Node(CurveFactory.CreateDiamond(200, 200, new Point(350, 230)));
-      var e = new Edge(n, graph.Nodes[42]);
-      graph.Edges.Add(e);
-      e = new Edge(n, graph.Nodes[6]);
-      graph.Edges.Add(e);
-      e = new Edge(n, graph.Nodes[12]);
-      graph.Edges.Add(e);
-
-      graph.Nodes.Add(n);
-      graph.RootCluster.AddChild(n);
-      settings.algorithm = new FastIncrementalLayout(graph, settings, settings.MaxConstraintLevel, f => settings);
-      settings.Unconverge();
-      settings.CreateLock(n, new Rectangle(200, 400, 500, 100));
-      do {
-        settings.IncrementalRun(graph);
-      } while (!settings.Converged);
-
-      RouteEdges(graph, settings);
+                        FixHookPorts(geometryGraph);
+                        // if (argsParser.OptionIsUsed(BundlingOption)) {
+                        for (int i = 0; i < 1; i++) {
 #if TEST_MSAGL
-      LayoutAlgorithmSettings.ShowGraph(graph);
+                            /*DisplayGeometryGraph.ShowGraph(geometryGraph);
+                                var l = new List<DebugCurve>(); l.AddRange(geometryGraph.Nodes.Select(n=>new DebugCurve(100,1,"black",n.BoundaryCurve)));
+                                l.AddRange(geometryGraph.Edges.Select(e=>new DebugCurve(100,1,"black", new LineSegment(e.Source.Center,e.Target.Center))));
+                                foreach (var cl in geometryGraph.RootCluster.AllClustersDepthFirst()) {
+                                    l.Add(new DebugCurve(100,2,"blue",cl.BoundaryCurve));
+                                    foreach (var node in cl.Nodes)
+                                        l.Add(new DebugCurve(100, 2, "brown", node.BoundaryCurve));
+
+                                    foreach (var e in cl.Edges)
+                                        l.Add(new DebugCurve(100, 2, "pink", new LineSegment(e.Source.Center, e.Target.Center)));
+
+                                }
+
+                                DisplayGeometryGraph.ShowDebugCurves(l.ToArray());*/
+
 #endif
-      Environment.Exit(0);
-    }
+                            BundlingSettings bs = GetBundlingSettings(argsParser);
 
-    static void RouteEdges(GeometryGraph graph, FastIncrementalLayoutSettings settings) {
-      if (graph.Edges.Count < 1000) {
-        var router = new SplineRouter(graph, settings.EdgeRoutingSettings.Padding,
-                                      settings.EdgeRoutingSettings.PolylinePadding,
-                                      settings.EdgeRoutingSettings.ConeAngle,
-                                      settings.EdgeRoutingSettings.BundlingSettings);
-
-        router.Run();
-      }
-      else {
-        var sr = new StraightLineEdges(graph.Edges, 1);
-        sr.Run();
-      }
-
-    }
-
-    static GeometryGraph CreateGeometryGraphForFD() {
-      var g = new GeometryGraph();
-
-      for (int i = 0; i < 50; i++) {
-        var a = new Node(CreateCurveAt(0, 0, 50));
-        g.Nodes.Add(a);
-        g.RootCluster.AddChild(a);
-      }
-      for (int i = 0; i < g.Nodes.Count; i++)
-        for (int j = i + g.Nodes.Count / 2; j < g.Nodes.Count; j++)
-          g.Edges.Add(NewEdge(g, i, j));
-
-
-      return g;
-    }
-
-    static Edge NewEdge(GeometryGraph g, int i, int j) {
-      var e = new Edge(g.Nodes[i], g.Nodes[j]) { LineWidth = 0.01 };
-      return e;
-    }
-
-    static ICurve CreateCurveAt(double x, double y, double size) {
-
-      return CurveFactory.CreateRectangleWithRoundedCorners(size, size, size / 10, size / 10, new Point(x, y));
-    }
-
-
-    static void TestTriangulationOnPolys() {
-      FileStream stream = File.Open("polys", FileMode.Open);
-      var bformatter = new BinaryFormatter();
-
-      var polys = (Polyline[])bformatter.Deserialize(stream);
-      stream.Close();
-      var cdt = new Cdt(null, polys, null);
-      cdt.Run();
-    }
-
-    static void TestCdtThreader() {
-      //            var rnd = new Random(1);
-      //            double boxSize = 100;
-      //            var obstacleSize = 10.0;
-      //            var separation = 2.0;
-      //            int numberOfObstacles = 5;
-      //            int numberOfTestRepetions = 1000;
-      //            for(int i=0;i<numberOfTestRepetions;i++) {
-      //                Polyline[] obstacles = GenerateObstacles(rnd);
-      //                Point a, b;
-      //                GetStartEndEnd(out a, out b, rnd);
-      //                Set<Polyline> obst0 = GetObstaclesByThreading();
-      //                Set<Polyline> obst1 = GetObstaclesByCrossing();
-      //                Debug.Assert(obst0==obst1);
-      //            }
-    }
-
-
-    private static void ThreadThroughCdt() {
-      FileStream stream = File.Open("triangles2", FileMode.Open);
-      var bformatter = new BinaryFormatter();
-
-      var trs = (CdtTriangle[])bformatter.Deserialize(stream);
-      var start = (Point)bformatter.Deserialize(stream);
-      var end = (Point)bformatter.Deserialize(stream);
-      stream.Close();
+                            double loosePadding;
+                            double tightPadding = GetPaddings(argsParser, out loosePadding);
+                            if (argsParser.OptionIsUsed(MdsOption)) {
+                                var mdsLayoutSettings = new MdsLayoutSettings { RemoveOverlaps = true, NodeSeparation = loosePadding * 3 };
+                                var mdsLayout = new MdsGraphLayout(mdsLayoutSettings, geometryGraph);
+                                mdsLayout.Run();
+                            }
+                            else {
+                                if (argsParser.OptionIsUsed(FdOption)) {
+                                    var settings = new FastIncrementalLayoutSettings { AvoidOverlaps = true };
+                                    (new InitialLayout(geometryGraph, settings)).Run();
+                                }
+                            }
+                            var splineRouter = new SplineRouter(geometryGraph, geometryGraph.Edges, tightPadding,
+                                                                loosePadding,
+                                                                Math.PI / 6, bs);
+                            splineRouter.Run();
+                        }
 #if TEST_MSAGL
-      foreach (var t in FindStartTriangle(trs, start)) {
-
-        var ll = ThreadOnTriangle(start, end, t);
-        foreach (var cdtTriangle in trs) {
-          AddTriangleToListOfDebugCurves(ll, cdtTriangle, 50, 1, "blue");
-        }
-        DisplayGeometryGraph.ShowDebugCurves(ll.ToArray());
-      }
+                        DisplayGeometryGraph.ShowGraph(geometryGraph);
 #endif
-    }
+                        return;
+                    }
+                    else {
+                        if (ext == ".msagl") {
+                            Graph graph = Graph.Read(fileName);
+                            //           DisplayGeometryGraph.ShowGraph(graph.GeometryGraph);
+                            if (graph != null) {
+                                if (argsParser.OptionIsUsed(BundlingOption)) {
+                                    BundlingSettings bs = GetBundlingSettings(argsParser);
+
+                                    double loosePadding;
+                                    double tightPadding = GetPaddings(argsParser, out loosePadding);
+                                    var br = new SplineRouter(graph.GeometryGraph, tightPadding, loosePadding, Math.PI / 6,
+                                                              bs);
+                                    br.Run();
+                                    //                 DisplayGeometryGraph.ShowGraph(graph.GeometryGraph);
+                                }
+                            }
+                            gviewer.NeedToCalculateLayout = false;
+                            gviewer.Graph = graph;
+                            gviewer.NeedToCalculateLayout = true;
+                        }
+                    }
+                }
+            }
+            else if (argsParser.OptionIsUsed(TestCdtOption)) {
+                Triangulation(argsParser.OptionIsUsed(ReverseXOption));
+                Environment.Exit(0);
+            }
+            else if (argsParser.OptionIsUsed(TestCdtOption0)) {
+                TestTriangulationOnSmallGraph(argsParser);
+                Environment.Exit(0);
+            }
+            else if (argsParser.OptionIsUsed(TestCdtOption2)) {
+                TestTriangulationOnPolys();
+                Environment.Exit(0);
+            }
+            else if (argsParser.OptionIsUsed(TestCdtOption1)) {
+                ThreadThroughCdt();
+                Environment.Exit(0);
+            }
+            else if (argsParser.OptionIsUsed(ConstraintsTestOption))
+                TestGraphWithConstraints();
+
+            Application.Run(form);
+
+        }
+
+        static void TestFD() {
+            GeometryGraph graph = CreateGeometryGraphForFD();
+            //LayoutAlgorithmSettings.ShowGraph(graph);
+            var settings = new FastIncrementalLayoutSettings {
+                AvoidOverlaps = true,
+                ApplyForces = false,
+                RungeKuttaIntegration = true
+            };
+
+            var ir = new InitialLayout(graph, settings);
+            ir.Run();
+            RouteEdges(graph, settings);
+            //LayoutAlgorithmSettings.ShowGraph(graph);
+            //  AddNodeFd(graph);
+
+            var n = new Node(CurveFactory.CreateDiamond(200, 200, new Point(350, 230)));
+            var e = new Edge(n, graph.Nodes[42]);
+            graph.Edges.Add(e);
+            e = new Edge(n, graph.Nodes[6]);
+            graph.Edges.Add(e);
+            e = new Edge(n, graph.Nodes[12]);
+            graph.Edges.Add(e);
+
+            graph.Nodes.Add(n);
+            graph.RootCluster.AddChild(n);
+            settings.algorithm = new FastIncrementalLayout(graph, settings, settings.MaxConstraintLevel, f => settings);
+            settings.Unconverge();
+            settings.CreateLock(n, new Rectangle(200, 400, 500, 100));
+            do {
+                settings.IncrementalRun(graph);
+            } while (!settings.Converged);
+
+            RouteEdges(graph, settings);
+#if TEST_MSAGL
+            LayoutAlgorithmSettings.ShowGraph(graph);
+#endif
+            Environment.Exit(0);
+        }
+
+        static void RouteEdges(GeometryGraph graph, FastIncrementalLayoutSettings settings) {
+            if (graph.Edges.Count < 1000) {
+                var router = new SplineRouter(graph, settings.EdgeRoutingSettings.Padding,
+                                              settings.EdgeRoutingSettings.PolylinePadding,
+                                              settings.EdgeRoutingSettings.ConeAngle,
+                                              settings.EdgeRoutingSettings.BundlingSettings);
+
+                router.Run();
+            }
+            else {
+                var sr = new StraightLineEdges(graph.Edges, 1);
+                sr.Run();
+            }
+
+        }
+
+        static GeometryGraph CreateGeometryGraphForFD() {
+            var g = new GeometryGraph();
+
+            for (int i = 0; i < 50; i++) {
+                var a = new Node(CreateCurveAt(0, 0, 50));
+                g.Nodes.Add(a);
+                g.RootCluster.AddChild(a);
+            }
+            for (int i = 0; i < g.Nodes.Count; i++)
+                for (int j = i + g.Nodes.Count / 2; j < g.Nodes.Count; j++)
+                    g.Edges.Add(NewEdge(g, i, j));
+
+
+            return g;
+        }
+
+        static Edge NewEdge(GeometryGraph g, int i, int j) {
+            var e = new Edge(g.Nodes[i], g.Nodes[j]) { LineWidth = 0.01 };
+            return e;
+        }
+
+        static ICurve CreateCurveAt(double x, double y, double size) {
+
+            return CurveFactory.CreateRectangleWithRoundedCorners(size, size, size / 10, size / 10, new Point(x, y));
+        }
+
+
+        static void TestTriangulationOnPolys() {
+            FileStream stream = File.Open("polys", FileMode.Open);
+            var bformatter = new BinaryFormatter();
+
+            var polys = (Polyline[])bformatter.Deserialize(stream);
+            stream.Close();
+            var cdt = new Cdt(null, polys, null);
+            cdt.Run();
+        }
+
+        static void TestCdtThreader() {
+            //            var rnd = new Random(1);
+            //            double boxSize = 100;
+            //            var obstacleSize = 10.0;
+            //            var separation = 2.0;
+            //            int numberOfObstacles = 5;
+            //            int numberOfTestRepetions = 1000;
+            //            for(int i=0;i<numberOfTestRepetions;i++) {
+            //                Polyline[] obstacles = GenerateObstacles(rnd);
+            //                Point a, b;
+            //                GetStartEndEnd(out a, out b, rnd);
+            //                Set<Polyline> obst0 = GetObstaclesByThreading();
+            //                Set<Polyline> obst1 = GetObstaclesByCrossing();
+            //                Debug.Assert(obst0==obst1);
+            //            }
+        }
+
+
+        private static void ThreadThroughCdt() {
+            FileStream stream = File.Open("triangles2", FileMode.Open);
+            var bformatter = new BinaryFormatter();
+
+            var trs = (CdtTriangle[])bformatter.Deserialize(stream);
+            var start = (Point)bformatter.Deserialize(stream);
+            var end = (Point)bformatter.Deserialize(stream);
+            stream.Close();
+#if TEST_MSAGL
+            foreach (var t in FindStartTriangle(trs, start)) {
+
+                var ll = ThreadOnTriangle(start, end, t);
+                foreach (var cdtTriangle in trs) {
+                    AddTriangleToListOfDebugCurves(ll, cdtTriangle, 50, 1, "blue");
+                }
+                DisplayGeometryGraph.ShowDebugCurves(ll.ToArray());
+            }
+#endif
+        }
 
 #if TEST_MSAGL
-    static List<DebugCurve> ThreadOnTriangle(Point start, Point end, CdtTriangle t) {
-      var l = new List<DebugCurve> { new DebugCurve(10, "red", new LineSegment(start, end)) };
-      AddTriangleToListOfDebugCurves(l, t, 100, 3, "brown");
-      var threader = new CdtThreader(t, start, end);
-      foreach (var triangle in threader.Triangles()) {
-        AddTriangleToListOfDebugCurves(l, triangle, 100, 3, "black");
-        //                CdtSweeper.ShowFront(trs, null, new ICurve[] { new LineSegment(start, end), new Polyline(triangle.Sites.Select(s => s.Point)) { Closed = true } }, new []{new LineSegment(threader.CurrentPiercedEdge.lowerSite.Point,threader.CurrentPiercedEdge.upperSite.Point) });
-      }
-      return l;
-    }
+        static List<DebugCurve> ThreadOnTriangle(Point start, Point end, CdtTriangle t) {
+            var l = new List<DebugCurve> { new DebugCurve(10, "red", new LineSegment(start, end)) };
+            AddTriangleToListOfDebugCurves(l, t, 100, 3, "brown");
+            var threader = new CdtThreader(t, start, end);
+            foreach (var triangle in threader.Triangles()) {
+                AddTriangleToListOfDebugCurves(l, triangle, 100, 3, "black");
+                //                CdtSweeper.ShowFront(trs, null, new ICurve[] { new LineSegment(start, end), new Polyline(triangle.Sites.Select(s => s.Point)) { Closed = true } }, new []{new LineSegment(threader.CurrentPiercedEdge.lowerSite.Point,threader.CurrentPiercedEdge.upperSite.Point) });
+            }
+            return l;
+        }
 
-    static void AddTriangleToListOfDebugCurves(List<DebugCurve> debugCurves, CdtTriangle triangle, byte transparency,
-                                               double width, string color) {
-      foreach (CdtEdge cdtEdge in triangle.Edges) {
-        debugCurves.Add(new DebugCurve(transparency, width, color,
-                                       new LineSegment(cdtEdge.upperSite.Point, cdtEdge.lowerSite.Point)));
-      }
-    }
+        static void AddTriangleToListOfDebugCurves(List<DebugCurve> debugCurves, CdtTriangle triangle, byte transparency,
+                                                   double width, string color) {
+            foreach (CdtEdge cdtEdge in triangle.Edges) {
+                debugCurves.Add(new DebugCurve(transparency, width, color,
+                                               new LineSegment(cdtEdge.upperSite.Point, cdtEdge.lowerSite.Point)));
+            }
+        }
 
-    static IEnumerable<CdtTriangle> FindStartTriangle(CdtTriangle[] trs, Point p) {
-      foreach (CdtTriangle t in trs) {
-        PointLocation loc = CdtIntersections.PointLocationInsideTriangle(p, t);
-        if (loc != PointLocation.Outside)
-          yield return t;
-      }
-    }
+        static IEnumerable<CdtTriangle> FindStartTriangle(CdtTriangle[] trs, Point p) {
+            foreach (CdtTriangle t in trs) {
+                PointLocation loc = CdtIntersections.PointLocationInsideTriangle(p, t);
+                if (loc != PointLocation.Outside)
+                    yield return t;
+            }
+        }
 #endif
 
-    static void TestPolygonDistance() {
-      IFormatter formatter = new BinaryFormatter();
-      var stream = new FileStream(@"data\polygons", FileMode.Open, FileAccess.Read, FileShare.None);
-      var a = (Polygon)formatter.Deserialize(stream);
-      var b = (Polygon)formatter.Deserialize(stream);
-      Polygon.Distance(a, b);
-    }
-
-    static void FixHookPorts(GeometryGraph geometryGraph) {
-      foreach (Edge edge in geometryGraph.Edges) {
-        Node s = edge.Source;
-        Node t = edge.Target;
-        var sc = s as Cluster;
-        if (sc != null && Ancestor(sc, t)) {
-          edge.SourcePort = new HookUpAnywhereFromInsidePort(() => s.BoundaryCurve);
+        static void TestPolygonDistance() {
+            IFormatter formatter = new BinaryFormatter();
+            var stream = new FileStream(@"data\polygons", FileMode.Open, FileAccess.Read, FileShare.None);
+            var a = (Polygon)formatter.Deserialize(stream);
+            var b = (Polygon)formatter.Deserialize(stream);
+            Polygon.Distance(a, b);
         }
-        else {
-          var tc = t as Cluster;
-          if (tc != null && Ancestor(tc, s)) {
-            edge.TargetPort = new HookUpAnywhereFromInsidePort(() => t.BoundaryCurve);
-          }
+
+        static void FixHookPorts(GeometryGraph geometryGraph) {
+            foreach (Edge edge in geometryGraph.Edges) {
+                Node s = edge.Source;
+                Node t = edge.Target;
+                var sc = s as Cluster;
+                if (sc != null && Ancestor(sc, t)) {
+                    edge.SourcePort = new HookUpAnywhereFromInsidePort(() => s.BoundaryCurve);
+                }
+                else {
+                    var tc = t as Cluster;
+                    if (tc != null && Ancestor(tc, s)) {
+                        edge.TargetPort = new HookUpAnywhereFromInsidePort(() => t.BoundaryCurve);
+                    }
+                }
+            }
         }
-      }
-    }
 
 
-    static bool Ancestor(Cluster root, Node node) {
-      if (node.ClusterParents.Contains(root)) return true;
-      var parents = new Queue<Cluster>(node.ClusterParents);
-      while (parents.Count > 0) {
-        Cluster parent = parents.Dequeue();
+        static bool Ancestor(Cluster root, Node node) {
+            if (node.ClusterParent == root)
+                return true;
+            return node.AllClusterAncestors.Any(p => p.ClusterParent == root);
+        }
 
-        if (root.Clusters.Contains(parent))
-          return true;
-
-        foreach (Cluster grandParent in parent.ClusterParents)
-          parents.Enqueue(grandParent);
-      }
-
-      return false;
-    }
-
-    static BundlingSettings GetBundlingSettings(ArgsParser.ArgsParser argsParser) {
+        static BundlingSettings GetBundlingSettings(ArgsParser.ArgsParser argsParser) {
       if (!argsParser.OptionIsUsed(BundlingOption))
         return null;
       var bs = new BundlingSettings();

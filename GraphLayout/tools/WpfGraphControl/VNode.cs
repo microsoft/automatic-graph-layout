@@ -35,16 +35,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 var geomNode = Node.GeometryNode;
                 if (geomNode == null)
                     return 0;
-                int ret = 0;
-                do {
-                    if (geomNode.ClusterParents == null)
-                        return ret;
-                    geomNode = geomNode.ClusterParents.FirstOrDefault();
-                    if (geomNode != null)
-                        ret++;
-                    else
-                        return ret;
-                } while (true);
+                return geomNode.AllClusterAncestors.Count();
             }
         }
 

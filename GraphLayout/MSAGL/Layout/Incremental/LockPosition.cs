@@ -169,14 +169,14 @@ namespace Microsoft.Msagl.Layout.Incremental {
             {
                 SetFINodeWeight(node, 1);
             }
-            Cluster parent = node.ClusterParents.FirstOrDefault();
+            Cluster parent = node.ClusterParent;
             while (parent != null)
             {
                 if (parent.RectangularBoundary != null)
                 {
                     parent.RectangularBoundary.GenerateFixedConstraints = parent.RectangularBoundary.GenerateFixedConstraintsDefault;
                 }
-                parent = parent.ClusterParents.FirstOrDefault();
+                parent = parent.ClusterParent;
             }
         }
 

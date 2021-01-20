@@ -1851,7 +1851,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                 var cluster = node as Cluster;
                 if (cluster != null)
                 {
-                    if (cluster.ClusterParents.First() == _mainGeometryGraph.RootCluster)
+                    if (cluster.ClusterParent == _mainGeometryGraph.RootCluster)
                     {
                         //MainGeometryGraph.RootCluster.RemoveCluster(cluster);
                         geomGraph.RootCluster.AddCluster(cluster);
@@ -2165,21 +2165,21 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
                     ret.Nodes.Add(newNode);
                 else
                 {
-                    if (!cl.ClusterParents.Any())
+                    if (cl.ClusterParent == null)
                         ret.RootCluster.AddCluster(cl);
                 }
             }
         }
 
-        static void ReplicateClusterStructure(GeometryGraph geometryGraph, Dictionary<Node, Node> onodesToNewNodes)
-        {
-            foreach (Node onode in geometryGraph.Nodes)
-                foreach (Cluster oclparent in onode.ClusterParents)
-                {
+        static void ReplicateClusterStructure(GeometryGraph geometryGraph, Dictionary<Node, Node> onodesToNewNodes) {
+            foreach (Node onode in geometryGraph.Nodes) {
+                Cluster oclparent = onode.ClusterParent;
+                if (oclparent != null) {
                     Node newParent;
                     if (onodesToNewNodes.TryGetValue(oclparent, out newParent))
                         ((Cluster)newParent).AddNode(onodesToNewNodes[onode]);
                 }
+            }
         }
 
         /*

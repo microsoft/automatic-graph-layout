@@ -711,7 +711,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
             FleshOutClusters();
             var rootClusterSet = new Set<Cluster>();
             foreach (var cluster in stringToClusters.Values.Select(c => c.Cluster))
-                if (cluster.ClusterParents == null || !cluster.ClusterParents.Any())
+                if (cluster.ClusterParent == null)
                     rootClusterSet.Insert(cluster);
 
             if (rootClusterSet.Count == 1)

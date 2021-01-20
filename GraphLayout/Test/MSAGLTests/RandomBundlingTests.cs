@@ -307,28 +307,16 @@ namespace Microsoft.Msagl.UnitTests {
 
         static bool Ancestor(Cluster root, Node node)
         {
-            if (node.ClusterParents.Contains(root))
+            if (node.ClusterParent == root)
                 return true;
-            var parents = new Queue<Cluster>(node.ClusterParents);
-            while (parents.Count > 0)
-            {
-                Cluster parent = parents.Dequeue();
-
-                if (root.Clusters.Contains(parent))
-                    return true;
-
-                foreach (Cluster grandParent in parent.ClusterParents)
-                    parents.Enqueue(grandParent);
-            }
-
-            return false;
+            return node.AllClusterAncestors.Any(p => p.ClusterParent == root);
         }
         
         static bool EdgeIsValid(Node snode, Node tnode)
         {
             if (snode == tnode) return false;
 
-            if (snode.ClusterParents.First() == tnode.ClusterParents.First())
+            if (snode.ClusterParent == tnode.ClusterParent)
                 return true;
             /*if (!(snode is Cluster) && snode.AllClusterAncestors.Contains(tnode))
                 return true;

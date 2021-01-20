@@ -461,18 +461,11 @@ namespace Microsoft.Msagl.Layout.Initial {
         /// <returns>returns highest ancestor of node (or node itself) that is a direct child of root, null if not 
         /// a descendent of root</returns>
         internal static Node Ancestor(Node node, Cluster root) {
-            if (node.ClusterParents.Contains(root)) return node;
-            var parents = new Queue<Cluster>(node.ClusterParents);
-            while (parents.Count > 0) {
-                Cluster parent = parents.Dequeue();
-
-                if (root.Clusters.Contains(parent))
-                    return parent;
-
-                foreach (Cluster grandParent in parent.ClusterParents)
-                    parents.Enqueue(grandParent);
-            }
-
+            if (node.ClusterParent == root)
+                return node;
+            foreach (var c in node.AllClusterAncestors)
+                if (c.ClusterParent == root)
+                    return c;
             return null;
         }
 

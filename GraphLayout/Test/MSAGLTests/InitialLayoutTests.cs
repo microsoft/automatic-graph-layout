@@ -355,7 +355,7 @@ namespace Microsoft.Msagl.UnitTests
 
             foreach (var e in clusteredGraph.Edges)
             {
-                if (e.Source.ClusterParents.Contains(clusteredGraph.RootCluster) || e.Target.ClusterParents.Contains(clusteredGraph.RootCluster))
+                if (e.Source.ClusterParent==clusteredGraph.RootCluster || e.Target.ClusterParent==clusteredGraph.RootCluster)
                 {
                     Assert.IsTrue(e.Source.Center.Y > e.Target.Center.Y, "Top level edges should be vertical");
                 }
