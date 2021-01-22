@@ -72,40 +72,42 @@ namespace Microsoft.Msagl.UnitTests
             List<Node> nodes =
                 new[]
                     {
-                        new Node(CurveFactory.CreateRectangle(30, 20, new Point())),
-                        new Node(CurveFactory.CreateRectangle(30, 20, new Point(100, 0))),
-                        new Node(CurveFactory.CreateRectangle(30, 20, new Point(200, 0)))
+                        new Node(CurveFactory.CreateRectangle(30, 20, new Point()), 0),
+                        new Node(CurveFactory.CreateRectangle(30, 20, new Point(100, 0)), 1),
+                        new Node(CurveFactory.CreateRectangle(30, 20, new Point(200, 0)), 2)
                     }
                     .ToList();
             var graph = new GeometryGraph();
             nodes.ForEach(graph.Nodes.Add);
-            nodes.Add(CreateCluster(nodes.Take(2), 10));
+            nodes.Add(CreateCluster(nodes.Take(2), 10, "first")); 
 
             Assert.AreEqual(nodes[3].BoundingBox.Width, 150, "Inner Cluster has incorrect width");
             Assert.AreEqual(nodes[3].BoundingBox.Height, 40, "Inner Cluster has incorrect height");
 
-            nodes.Add(CreateCluster(new[] { nodes[3], nodes[2] }, 10));
+            nodes.Add(CreateCluster(new[] { nodes[3], nodes[2] }, 10, "second"));
             graph.RootCluster = new Cluster(new Node[] { }, new[] { (Cluster)nodes[4] });
             List<Edge> edges = new[]
                 {
-                    new Edge(nodes[0], nodes[1]), new Edge(nodes[0], nodes[2]), new Edge(nodes[2], nodes[1]), new Edge(nodes[3], nodes[2]),
-                    new Edge(nodes[2], nodes[3])
-                }
-                .ToList();
+                new Edge(nodes[0], nodes[1]) {UserData= "01" },
+                new Edge(nodes[0], nodes[2]){UserData= "02" },
+                new Edge(nodes[2], nodes[1]){UserData= "21" },
+                new Edge(nodes[3], nodes[2]){UserData= "31" },
+                new Edge(nodes[2], nodes[3]){UserData= "23" }
+                }.ToList();
             edges.ForEach(graph.Edges.Add);
             RouteEdges(graph, 10);
             var clusterToMove = (Cluster)nodes[4];
 
             var translatedStuff = (from v in nodes where v.IsDescendantOf(clusterToMove) select v).Concat(from e in edges where e.Source.IsDescendantOf(clusterToMove) && e.Target.IsDescendantOf(clusterToMove) select (GeometryObject)e);
-            var bounds = from v in translatedStuff select v.BoundingBox;
+            var bounds = (from v in translatedStuff select v.BoundingBox).ToArray();
             var delta = new Point(10, 20);
             clusterToMove.DeepTranslation(delta, true);
             ShowGraphInDebugViewer(graph);
-            var newbounds = from v in translatedStuff select v.BoundingBox;
+            var newbounds = (from v in translatedStuff select v.BoundingBox).ToArray();
 
-            foreach (var b in newbounds.Zip(bounds, (translated, original) => new { T = translated, O = original }))
+            foreach (var b in translatedStuff.Zip(bounds, (translated, original) => new { T = translated, O = original }))
                 Assert.IsTrue(
-                    ApproximateComparer.Close(b.T, Rectangle.Translate(b.O, delta)), "object was not translated: ");
+                    ApproximateComparer.Close(b.T.BoundingBox, Rectangle.Translate(b.O, delta)), "object was not translated: "+ b.T);
         }
 
         private static void RouteEdges(GeometryGraph graph, double padding)
@@ -114,15 +116,21 @@ namespace Microsoft.Msagl.UnitTests
             router.Run();
         }
 
-        private static Cluster CreateCluster(IEnumerable<Node> nodes, double margin)
+        private static Cluster CreateCluster(IEnumerable<Node> nodes, double margin, string name = "")
         {
-            var cluster = new Cluster(nodes)
+            
+            var cluster = new Cluster(nodes.Where(n => !(n is Cluster)))
             {
                 RectangularBoundary =
                     new RectangularClusterBoundary { LeftMargin = margin, RightMargin = margin, BottomMargin = margin, TopMargin = margin },
                 BoundaryCurve = CurveFactory.CreateRectangle(1, 1, new Point())
             };
             cluster.CalculateBoundsFromChildren(0);
+            cluster.UserData = name;
+            var nc = nodes.Where(n => n is Cluster);
+            foreach (var b in nc) {
+                cluster.AddCluster((Cluster)b);
+            }
             return cluster;
         }
     }

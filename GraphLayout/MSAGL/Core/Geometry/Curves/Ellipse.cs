@@ -392,7 +392,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves{
         public void Translate(Point delta)
         {
             this.center += delta;
-            this.box = new Rectangle(center + bAxis + aAxis, center - bAxis - aAxis);
+            this.box.Center += delta;
             parallelogramNodeOverICurve = null;
         }
 
