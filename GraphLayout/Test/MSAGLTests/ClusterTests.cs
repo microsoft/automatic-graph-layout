@@ -67,8 +67,7 @@ namespace Microsoft.Msagl.UnitTests
 
         [TestMethod]
         [Description("Checks that edges between nodes and clusters and all bounds are correctly translated when nested")]
-        public void NestedDeepTranslationTest()
-        {
+        public void NestedDeepTranslationTest() {
             EnableDebugViewer();
             List<Node> nodes =
                 new[]
@@ -95,15 +94,18 @@ namespace Microsoft.Msagl.UnitTests
                 .ToList();
             edges.ForEach(graph.Edges.Add);
             RouteEdges(graph, 10);
-            var bounds = (from v in nodes select v.BoundingBox).Concat(from e in edges select e.BoundingBox).ToList();
+            var clusterToMove = (Cluster)nodes[4];
+
+            var translatedStuff = (from v in nodes where v.IsDescendantOf(clusterToMove) select v).Concat(from e in edges where e.Source.IsDescendantOf(clusterToMove) && e.Target.IsDescendantOf(clusterToMove) select (GeometryObject)e);
+            var bounds = from v in translatedStuff select v.BoundingBox;
             var delta = new Point(10, 20);
-            ((Cluster)nodes[4]).DeepTranslation(delta, true);
+            clusterToMove.DeepTranslation(delta, true);
             ShowGraphInDebugViewer(graph);
-            IEnumerable<GeometryObject> geometryObjects = (from v in nodes select (GeometryObject)v).Concat(from e in edges select (GeometryObject)e);
-            foreach (var b in geometryObjects.Zip(bounds, (g, b) => new { G = g, Original = b, Target = g.BoundingBox }))
-            {
-                Assert.IsTrue(ApproximateComparer.Close(Rectangle.Translate(b.Original, delta), b.Target), "object was not translated: " + b.G);
-            }
+            var newbounds = from v in translatedStuff select v.BoundingBox;
+
+            foreach (var b in newbounds.Zip(bounds, (translated, original) => new { T = translated, O = original }))
+                Assert.IsTrue(
+                    ApproximateComparer.Close(b.T, Rectangle.Translate(b.O, delta)), "object was not translated: ");
         }
 
         private static void RouteEdges(GeometryGraph graph, double padding)
