@@ -104,21 +104,20 @@ namespace Microsoft.Msagl.UnitTests {
         }
 
         internal static bool DontShowTheDebugViewer() {
-            if (runningUnitTests) {
-                return true;
-            }
-            bool v = false;
-            string s = Environment.GetEnvironmentVariable("nodebugviewer");
-            if (!String.IsNullOrEmpty(s) && String.Compare(s, "on", true, CultureInfo.CurrentCulture) == 0) {
-                v = true;
-            }
-            return v;
+            if (DebugViewerEnvVariableIsSet()) 
+                return false;
+            return runningUnitTests;
+        }
+
+        private static bool DebugViewerEnvVariableIsSet() {
+            string s = Environment.GetEnvironmentVariable("debugviewer");
+            return !String.IsNullOrEmpty(s) && String.Compare(s, "on", true, CultureInfo.CurrentCulture) == 0;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "graph")]
         protected static void ShowGraphInDebugViewer(GeometryGraph graph) {
 #if TEST_MSAGL
-            if (graph == null || LayoutAlgorithmSettings.ShowDebugCurvesEnumeration == null) {
+            if (graph == null || LayoutAlgorithmSettings.ShowDebugCurvesEnumeration == null || DontShowTheDebugViewer()) {
                 return;
             }
             GraphViewerGdi.DisplayGeometryGraph.ShowGraph(graph);

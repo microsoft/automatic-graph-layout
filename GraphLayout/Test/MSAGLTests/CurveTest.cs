@@ -161,22 +161,6 @@ namespace Microsoft.Msagl.UnitTests {
             Polygon.Distance(new Polygon(pl5), new Polygon(pl2), out p, out q);
             Polygon.Distance(new Polygon(pl5), new Polygon(pl3), out p, out q);
         }
-#if TEST_MSAGL
-        [TestMethod]
-        [DeploymentItem(@"Resources\polygons")]
-        public void PolygonPolygonDistanceTest1() {
-            //DisplayGeometryGraph.SetShowFunctions();
-
-            IFormatter formatter = new BinaryFormatter();
-            var stream = new FileStream("polygons", FileMode.Open, FileAccess.Read, FileShare.None);
-            var a = (Polygon)formatter.Deserialize(stream);
-            var b = (Polygon)formatter.Deserialize(stream);
-           // LayoutAlgorithmSettings.Show(a.Polyline, b.Polyline);
-            Polygon.Distance(a, b);
-            
-        }
-#endif
-
         [TestMethod]
         public void TestLineSegmentLineSegmentMinDist() {
             var count = 1000;
