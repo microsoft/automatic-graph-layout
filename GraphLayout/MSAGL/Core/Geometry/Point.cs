@@ -364,9 +364,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         public Point Rotate(double angle) {
             double c = Math.Cos(angle);
             double s = Math.Sin(angle);
-
             return new Point(c * X - s * Y, s * X + c * Y);
-
         }
 
         /// <summary>
