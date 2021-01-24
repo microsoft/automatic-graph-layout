@@ -10,7 +10,6 @@ using Microsoft.Msagl.Routing;
 using Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using Microsoft.Msagl.Routing.Spline.Bundling;
 
 namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
@@ -140,29 +139,7 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
             yield return new SymmetricTuple<Point>(new Point(61, 226), new Point(257, 253));
             yield return new SymmetricTuple<Point>(new Point(515, 228), new Point(666, 258));
         }
-        [DeploymentItem(@"Resources\triangles")]
-        [TestMethod]
-        public void ThreadOverVertex() {
-#if TEST_MSAGL&&TEST_MSAGL
-            GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
-            var stream = File.Open("triangles", FileMode.Open);
-            var bformatter = new BinaryFormatter();
-
-            var trs = (CdtTriangle[])bformatter.Deserialize(stream);
-            var start = (Point)bformatter.Deserialize(stream);
-            var end = (Point)bformatter.Deserialize(stream);
-            stream.Close();
-            int count = 0;
-            foreach (var t in FindStartTriangle(trs, start)) {
-                count++;
-                if (count == 1) continue;
-                ThreadOnTriangle(start, end, t);
-            }
-
-
-        }
-
+        
         private static void ThreadOnTriangle(Point start, Point end, CdtTriangle t) {
             var threader = new CdtThreader(t, start, end);
             while(threader.MoveNext()){}
@@ -215,20 +192,6 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
             return new Point(d * random.NextDouble(), d * random.NextDouble());
         }
 
-#if TEST_MSAGL&&TEST_MSAGL
-        [DeploymentItem(@"Resources\polys")]
-        [TestMethod]
-        public void TestRepeatedSite() {
-            //in this method the triangulation is such that a repeated site appears in EdgeEvent
-            var stream = File.Open("polys", FileMode.Open);
-            var bformatter = new BinaryFormatter();
-
-            var polys = (Polyline[])bformatter.Deserialize(stream);
-            stream.Close();
-            var cdt = new Cdt(null, polys, null);
-            cdt.Run();
-            TestTriangles(cdt.GetTriangles());
-        }
 
         void TestTriangles(IEnumerable<CdtTriangle>  triangles) {
             var usedSites = new Set<CdtSite>();
@@ -269,6 +232,5 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
             var a1 = ApproximateComparer.Sign(Point.SignedDoubledTriangleArea(site.Point, e.upperSite.Point, e.lowerSite.Point));
             return a0 * a1 <= 0;
         }
-#endif
     }
 }
