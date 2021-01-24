@@ -65,16 +65,7 @@ namespace Microsoft.Msagl.Core.Layout {
             set { source = value; }
         }
 
-        int sourceAnchorNumber;
-
-        /// <summary>
-        /// For future use: The index of the anchor at the source node. By default is zero.
-        /// </summary>
-        public int SourceAnchorNumber {
-            get { return sourceAnchorNumber; }
-            set { sourceAnchorNumber = value; }
-        }
-
+        
         Node target;
 
         /// <summary>
@@ -85,16 +76,6 @@ namespace Microsoft.Msagl.Core.Layout {
             set { target = value; }
         }
 
-
-        int targetAnchorNumber;
-
-        /// <summary>
-        /// For future use:The index of the anchor at the target node. By default is zero.
-        /// </summary>
-        public int TargetAnchorNumber {
-            get { return targetAnchorNumber; }
-            set { targetAnchorNumber = value; }
-        }
 
         /// <summary>
         /// Label width, need to backup it for transformation purposes
