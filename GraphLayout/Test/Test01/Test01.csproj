@@ -132,14 +132,6 @@
       <Link>Data\K20.msagl.geom</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\MSAGLTests\Resources\polygons">
-      <Link>Data\polygons</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\MSAGLTests\Resources\triangles">
-      <Link>triangles</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="app.config" />
     <None Include="Data\complex.msagl.geom">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

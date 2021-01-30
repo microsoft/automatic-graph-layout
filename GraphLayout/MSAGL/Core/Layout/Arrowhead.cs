@@ -39,11 +39,6 @@ namespace Microsoft.Msagl.Core.Layout
         ///</summary>
         public Point TipPosition { get; set; }
 
-        ///<summary>
-        /// A relative offset that moves the tip position 
-        ///</summary>
-        public double Offset { get; set; }
-
         /// <summary>
         /// Clone the arrowhead information
         /// </summary>
@@ -55,7 +50,6 @@ namespace Microsoft.Msagl.Core.Layout
                 Length = this.length,
                 Width = this.Width,
                 TipPosition = this.TipPosition,
-                Offset = this.Offset
             };
         }
     }
