@@ -313,7 +313,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         private void CreateClumps() {
-            var graph = new BasicGraph<IntPair>(this.overlapPairs);
+            var graph = new BasicGraphOnEdges<IntPair>(this.overlapPairs);
             var connectedComponents = ConnectedComponentCalculator<IntPair>.GetComponents(graph);
             foreach (var component in connectedComponents) {
                 // GetComponents returns at least one self-entry for each index - including the < FirstNonSentinelOrdinal ones.
@@ -329,7 +329,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
         private bool CreateConvexHulls() {
             var found = false;
-            var graph = new BasicGraph<IntPair>(this.overlapPairs);
+            var graph = new BasicGraphOnEdges<IntPair>(this.overlapPairs);
             var connectedComponents = ConnectedComponentCalculator<IntPair>.GetComponents(graph);
             foreach (var component in connectedComponents) {
                 // GetComponents returns at least one self-entry for each index - including the < FirstNonSentinelOrdinal ones.

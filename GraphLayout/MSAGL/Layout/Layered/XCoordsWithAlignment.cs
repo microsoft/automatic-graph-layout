@@ -616,7 +616,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                 }
             }
 
-            BasicGraph<IntEdge> blockGraph = new BasicGraph<IntEdge>(edges, nOfVertices);
+            BasicGraphOnEdges<IntEdge> blockGraph = new BasicGraphOnEdges<IntEdge>(edges, nOfVertices);
             //sort the graph in the topological order
             int[] topoSort = IntEdge.GetOrder(blockGraph);
             //start placing the blocks according to the order

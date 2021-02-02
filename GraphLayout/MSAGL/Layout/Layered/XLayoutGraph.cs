@@ -11,7 +11,7 @@ namespace Microsoft.Msagl.Layout.Layered
     /// Follows the idea from Gansner etc 93, creating a special graph
     /// for x-coordinates calculation
     /// </summary>
-    internal class XLayoutGraph : BasicGraph<IntEdge>
+    internal class XLayoutGraph : BasicGraphOnEdges<IntEdge>
     {
 
         ProperLayeredGraph layeredGraph;//the result of layering
@@ -27,7 +27,7 @@ namespace Microsoft.Msagl.Layout.Layered
         int weightMultOfOneVirtual = 3; //weight multiplier for edges with only one virtual node
         int weightMultiplierOfTwoVirtual = 8; //weight multiplier for edges with two virtual nodes
 
-        internal XLayoutGraph(BasicGraph<IntEdge> graph, //DAG of the original graph with no multiple edges
+        internal XLayoutGraph(BasicGraphOnEdges<IntEdge> graph, //DAG of the original graph with no multiple edges
                               ProperLayeredGraph layeredGraph,
                               LayerArrays layerArrays,
                               List<IntEdge> edges,

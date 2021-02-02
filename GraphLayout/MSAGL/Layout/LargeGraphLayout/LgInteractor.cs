@@ -1834,7 +1834,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         {
             Dictionary<Node, int> nodeToIndex;
             List<Node> listOfNodes = CreateNodeListForBasicGraph(out nodeToIndex);
-            var basicGraph = new BasicGraph<SimpleIntEdge>(GetSimpleIntEdges(nodeToIndex), listOfNodes.Count);
+            var basicGraph = new BasicGraphOnEdges<SimpleIntEdge>(GetSimpleIntEdges(nodeToIndex), listOfNodes.Count);
             IEnumerable<IEnumerable<int>> comps = ConnectedComponentCalculator<SimpleIntEdge>.GetComponents(basicGraph);
             foreach (var comp in comps)
                 _lgData.AddConnectedGeomGraph(GetConnectedSubgraph(comp, listOfNodes));

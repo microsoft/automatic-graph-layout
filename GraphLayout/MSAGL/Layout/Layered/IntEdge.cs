@@ -304,7 +304,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// </summary>
         /// <param name="graph"></param>
         /// <returns></returns>
-        internal static int[] GetOrder(BasicGraph<IntEdge> graph){
+        internal static int[] GetOrder(BasicGraphOnEdges<IntEdge> graph){
             var visited = new bool[graph.NodeCount];
 
             //no recursion! So we have to organize a stack

@@ -38,7 +38,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             get { return routing.LayerArrays.Y; }
         }
 
-        BasicGraph<IntEdge> IntGraph {
+        BasicGraphOnEdges<IntEdge> IntGraph {
             get { return routing.IntGraph; }
         }
 

@@ -119,7 +119,7 @@ namespace Microsoft.Msagl.Core.Layout {
                 intEdges.Add(new SimpleIntEdge {Source = nodeIndex[e.Source], Target = nodeIndex[e.Target]});
             }
             var components =
-                ConnectedComponentCalculator<SimpleIntEdge>.GetComponents(new BasicGraph<SimpleIntEdge>(intEdges,
+                ConnectedComponentCalculator<SimpleIntEdge>.GetComponents(new BasicGraphOnEdges<SimpleIntEdge>(intEdges,
                                                                                                         nodeCount));
             var nodeToGraph = new Dictionary<Node, GeometryGraph>();
             var graphs = new List<GeometryGraph>();
@@ -150,7 +150,7 @@ namespace Microsoft.Msagl.Core.Layout {
         /// </returns>
         public static IEnumerable<GeometryGraph> GetClusteredConnectedComponents(this GeometryGraph graph) {
             var flatGraph = FlatGraph(graph);
-            var basicFlatGraph = new BasicGraph<AlgorithmDataEdgeWrap>(
+            var basicFlatGraph = new BasicGraphOnEdges<AlgorithmDataEdgeWrap>(
                 from e in flatGraph.Edges
                 select (AlgorithmDataEdgeWrap) e.AlgorithmData,
                 flatGraph.Nodes.Count);

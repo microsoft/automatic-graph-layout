@@ -229,7 +229,7 @@ namespace Microsoft.Msagl.Routing {
             }
             var intToPoly = overlapping.ToArray();
             var polyToInt = MapToInt(intToPoly);
-            var graph = new BasicGraph<IntPair>(
+            var graph = new BasicGraphOnEdges<IntPair>(
                     overlappingPairSet.
                     Select(pair => new IntPair(polyToInt[pair.Item1], polyToInt[pair.Item2])));
             var connectedComponents = ConnectedComponentCalculator<IntPair>.GetComponents(graph);

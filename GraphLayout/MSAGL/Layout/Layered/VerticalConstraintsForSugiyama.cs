@@ -90,7 +90,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// <summary>
         /// this graph is obtained from intGraph by glueing together same layer vertices
         /// </summary>
-        BasicGraph<IntPair> gluedIntGraph;
+        BasicGraphOnEdges<IntPair> gluedIntGraph;
         int maxRepresentative;
         int minRepresentative;
         /// <summary>
@@ -112,7 +112,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         private void RemoveCyclesFromGluedConstraints() {
             var feedbackSet= CycleRemoval<IntPair>.
-                GetFeedbackSetWithConstraints(new BasicGraph<IntPair>(GluedUpDownIntConstraints, this.intGraph.NodeCount), null);
+                GetFeedbackSetWithConstraints(new BasicGraphOnEdges<IntPair>(GluedUpDownIntConstraints, this.intGraph.NodeCount), null);
             //feedbackSet contains all glued constraints making constraints cyclic
             foreach (IntPair p in feedbackSet)
                 GluedUpDownIntConstraints.Remove(p);
@@ -170,13 +170,13 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
         private void CreateDictionaryOfSameLayerRepresentatives() {
-            BasicGraph<IntPair> graphOfSameLayers = CreateGraphOfSameLayers();
+            BasicGraphOnEdges<IntPair> graphOfSameLayers = CreateGraphOfSameLayers();
             foreach (var comp in ConnectedComponentCalculator<IntPair>.GetComponents(graphOfSameLayers))
                 GlueSameLayerNodesOfALayer(comp);
         }
 
-        private BasicGraph<IntPair> CreateGraphOfSameLayers() {
-            return new BasicGraph<IntPair>(CreateEdgesOfSameLayers(), this.intGraph.NodeCount);
+        private BasicGraphOnEdges<IntPair> CreateGraphOfSameLayers() {
+            return new BasicGraphOnEdges<IntPair>(CreateEdgesOfSameLayers(), this.intGraph.NodeCount);
         }
 
         private IEnumerable<IntPair> CreateEdgesOfSameLayers() {
@@ -301,8 +301,8 @@ namespace Microsoft.Msagl.Layout.Layered {
                         yield return edge;
         }
 
-        private BasicGraph<IntPair> CreateGluedGraph() {
-            return new BasicGraph<IntPair>(new Set<IntPair>(from edge in this.intGraph.Edges select GluedIntPair(edge)), this.intGraph.NodeCount);
+        private BasicGraphOnEdges<IntPair> CreateGluedGraph() {
+            return new BasicGraphOnEdges<IntPair>(new Set<IntPair>(from edge in this.intGraph.Edges select GluedIntPair(edge)), this.intGraph.NodeCount);
         }
 
 

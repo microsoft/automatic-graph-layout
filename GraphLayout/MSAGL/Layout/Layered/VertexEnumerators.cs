@@ -108,7 +108,7 @@ namespace Microsoft.Msagl.Layout.Layered {
     internal class Pred : IEnumerable<int> {
         #region IEnumerable Members
 
-        BasicGraph<IntEdge> graph;
+        BasicGraphOnEdges<IntEdge> graph;
 
         int vert;
 
@@ -134,7 +134,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         }
 
-        internal Pred(BasicGraph<IntEdge> g, int v) {
+        internal Pred(BasicGraphOnEdges<IntEdge> g, int v) {
             this.graph = g;
             this.vert = v;
         }
@@ -148,7 +148,7 @@ namespace Microsoft.Msagl.Layout.Layered {
     internal class Succ {
         #region IEnumerable Members
 
-        BasicGraph<IntEdge> graph;
+        BasicGraphOnEdges<IntEdge> graph;
 
         int vert;
 
@@ -156,7 +156,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             return new SuccEnumerator(graph.OutEdges(vert).GetEnumerator());
         }
 
-        internal Succ(BasicGraph<IntEdge> g, int v) {
+        internal Succ(BasicGraphOnEdges<IntEdge> g, int v) {
             this.graph = g;
             this.vert = v;
         }

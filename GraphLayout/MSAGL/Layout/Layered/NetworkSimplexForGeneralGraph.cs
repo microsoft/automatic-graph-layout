@@ -6,7 +6,7 @@ using Microsoft.Msagl.Core.Layout;
 
 namespace Microsoft.Msagl.Layout.Layered {
     internal class NetworkSimplexForGeneralGraph:LayerCalculator {
-        BasicGraph<IntEdge> graph;
+        BasicGraphOnEdges<IntEdge> graph;
         /// <summary>
         /// a place holder for the cancel flag
         /// </summary>

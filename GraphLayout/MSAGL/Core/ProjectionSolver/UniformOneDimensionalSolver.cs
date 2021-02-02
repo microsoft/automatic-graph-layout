@@ -20,7 +20,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver{
         readonly List<UniformSolverVar> varList = new List<UniformSolverVar>();
 
         readonly Set<IntPair> constraints = new Set<IntPair>();
-        BasicGraph<IntPair> graph;
+        BasicGraphOnEdges<IntPair> graph;
 
 //        delegate IEnumerable<NudgerConstraint> Edges(int i);
 //
@@ -115,7 +115,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver{
         
         void CreateGraphAndRemoveCycles(){
             //edges in the graph go from a smaller value to a bigger value
-            graph = new BasicGraph<IntPair>(constraints, varList.Count+boundsToInt.Count);
+            graph = new BasicGraphOnEdges<IntPair>(constraints, varList.Count+boundsToInt.Count);
             //removing cycles
             var feedbackSet = CycleRemoval<IntPair>.GetFeedbackSet(graph);
             if(feedbackSet!=null)

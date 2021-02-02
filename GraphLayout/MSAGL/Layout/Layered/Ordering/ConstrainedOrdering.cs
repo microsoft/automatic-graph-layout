@@ -306,7 +306,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// </summary>
         /// <returns></returns>
         Dictionary<int, int> CreateVerticalComponents() {
-            var vertGraph = new BasicGraph<IntEdge>(from pair in horizontalConstraints.VerticalInts select new IntEdge(pair.Item1, pair.Item2));
+            var vertGraph = new BasicGraphOnEdges<IntEdge>(from pair in horizontalConstraints.VerticalInts select new IntEdge(pair.Item1, pair.Item2));
             var verticalComponents = ConnectedComponentCalculator<IntEdge>.GetComponents(vertGraph);
             var nodesToComponentRoots = new Dictionary<int, int>();
             foreach (var component in verticalComponents) {

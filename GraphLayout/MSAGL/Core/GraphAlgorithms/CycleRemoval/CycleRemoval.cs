@@ -13,14 +13,14 @@ namespace Microsoft.Msagl.Core.GraphAlgorithms {
         /// <param name="graph"></param>
         /// <param name="constraints"></param>
         /// <returns></returns>
-        static internal IEnumerable<IEdge> GetFeedbackSetWithConstraints(BasicGraph<TEdge> graph, Set<IntPair> constraints) {
+        static internal IEnumerable<IEdge> GetFeedbackSetWithConstraints(BasicGraphOnEdges<TEdge> graph, Set<IntPair> constraints) {
             if (constraints == null || constraints.Count == 0) {
                 return GetFeedbackSet(graph);
             } else
                 return GetFeedbackSetWithConstraintsLocal(graph, constraints);
         }
 
-        static IEnumerable<IEdge> GetFeedbackSetWithConstraintsLocal(BasicGraph<TEdge> graph, Set<IntPair> constraints) {
+        static IEnumerable<IEdge> GetFeedbackSetWithConstraintsLocal(BasicGraphOnEdges<TEdge> graph, Set<IntPair> constraints) {
             var v = new CycleRemovalWithConstraints<TEdge>(graph, constraints);
             return v.GetFeedbackSet();
         }
@@ -51,7 +51,7 @@ namespace Microsoft.Msagl.Core.GraphAlgorithms {
         /// </summary>
         /// <param name="graph"></param>
         /// <returns></returns>
-        static internal IEnumerable<IEdge> GetFeedbackSet(BasicGraph<TEdge> graph) {
+        static internal IEnumerable<IEdge> GetFeedbackSet(BasicGraphOnEdges<TEdge> graph) {
             if (graph != null && graph.NodeCount > 0 && graph.Edges.Count > 0) {
                 Set<IEdge> feedbackSet = new Set<IEdge>();
                 VertStatus[] status = new VertStatus[graph.NodeCount]; //will be Unvisited at the beginning

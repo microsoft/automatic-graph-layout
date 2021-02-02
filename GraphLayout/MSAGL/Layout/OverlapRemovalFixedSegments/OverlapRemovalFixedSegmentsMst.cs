@@ -871,7 +871,7 @@ namespace Microsoft.Msagl.Layout.OverlapRemovalFixedSegments
                 int targetId = pointToTreeNode[edge.B].id;
                 intEdges.Add(new SimpleIntEdge { Source = sourceId, Target = targetId });                              
             }
-            var components = ConnectedComponentCalculator<SimpleIntEdge>.GetComponents(new BasicGraph<SimpleIntEdge>(intEdges, pointToTreeNode.Count));
+            var components = ConnectedComponentCalculator<SimpleIntEdge>.GetComponents(new BasicGraphOnEdges<SimpleIntEdge>(intEdges, pointToTreeNode.Count));
 
             foreach (var component in components)
             {

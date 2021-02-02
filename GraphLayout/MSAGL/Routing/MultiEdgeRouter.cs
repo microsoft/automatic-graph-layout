@@ -93,7 +93,7 @@ namespace Microsoft.Msagl.Routing {
         }
 
         void UniteConnectedPreGraphs(ref List<PreGraph> preGraphs) {
-            BasicGraph<IntPair> intersectionGraph = GetIntersectionGraphOfPreGraphs(preGraphs);
+            BasicGraphOnEdges<IntPair> intersectionGraph = GetIntersectionGraphOfPreGraphs(preGraphs);
             if (intersectionGraph == null)
                 return;
             var connectedComponents = ConnectedComponentCalculator<IntPair>.GetComponents(intersectionGraph);
@@ -119,10 +119,10 @@ namespace Microsoft.Msagl.Routing {
                 pg.AddNodeBoundary(curve);
         }
 
-        static BasicGraph<IntPair> GetIntersectionGraphOfPreGraphs(List<PreGraph> preGraphs) {
+        static BasicGraphOnEdges<IntPair> GetIntersectionGraphOfPreGraphs(List<PreGraph> preGraphs) {
             var intersectingPairs = EnumeratePairsOfIntersectedPreGraphs(preGraphs);
             if (intersectingPairs.Any())
-                return new BasicGraph<IntPair>(intersectingPairs, preGraphs.Count);
+                return new BasicGraphOnEdges<IntPair>(intersectingPairs, preGraphs.Count);
             return null;
         }
 

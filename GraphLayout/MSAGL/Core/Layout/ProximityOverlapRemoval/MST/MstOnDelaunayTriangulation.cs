@@ -33,7 +33,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
             for (int i = 0; i < proximityEdges.Count; i++) {
                 weighting[intPairs[i]] = proximityEdges[i];
             }
-            var graph = new BasicGraph<IEdge>(intPairs, sizeId);
+            var graph = new BasicGraphOnEdges<IEdge>(intPairs, sizeId);
 
             var mstOnBasicGraph = new MinimumSpanningTreeByPrim(graph, intPair => weighting[(IntPair)intPair].Item5, intPairs[0].First);
 
@@ -55,7 +55,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
 
             Dictionary<IntPair, CdtEdge> intPairsToCdtEdges = GetEdges(siteArray, siteIndex);
 
-            var graph = new BasicGraph<IEdge>( intPairsToCdtEdges.Keys, siteArray.Length);
+            var graph = new BasicGraphOnEdges<IEdge>( intPairsToCdtEdges.Keys, siteArray.Length);
 
             var mstOnBasicGraph = new MinimumSpanningTreeByPrim(graph, intPair => weights(intPairsToCdtEdges[(IntPair)intPair]), 0);
 

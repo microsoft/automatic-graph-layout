@@ -11,7 +11,7 @@ namespace Microsoft.Msagl.Core.GraphAlgorithms {
     /// 
     /// </summary>
     public class MinimumSpanningTreeByPrim {
-        readonly BasicGraph<IEdge> graph;
+        readonly BasicGraphOnEdges<IEdge> graph;
         readonly Func<IEdge, double> weight;
         readonly int root;
         readonly BinaryHeapPriorityQueue q;
@@ -32,7 +32,7 @@ namespace Microsoft.Msagl.Core.GraphAlgorithms {
         /// <param name="graph"></param>
         /// <param name="weight"></param>
         /// <param name="root">the node we start building the tree</param>
-        internal MinimumSpanningTreeByPrim(BasicGraph<IEdge> graph, Func<IEdge, double> weight, int root) {
+        internal MinimumSpanningTreeByPrim(BasicGraphOnEdges<IEdge> graph, Func<IEdge, double> weight, int root) {
             this.graph = graph;
             this.weight = weight;
             this.root = root;

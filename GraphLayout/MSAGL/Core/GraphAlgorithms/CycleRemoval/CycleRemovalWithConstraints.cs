@@ -4,13 +4,13 @@ using Microsoft.Msagl.Core.DataStructures;
 
 namespace Microsoft.Msagl.Core.GraphAlgorithms {
     internal class CycleRemovalWithConstraints<TEdge> where TEdge : IEdge {
-        BasicGraph<TEdge> graph;
-        BasicGraph<IntPair> graphOfConstraints;
+        BasicGraphOnEdges<TEdge> graph;
+        BasicGraphOnEdges<IntPair> graphOfConstraints;
         IEnumerable<IntPair> constrainedEdges;
-        internal CycleRemovalWithConstraints(BasicGraph<TEdge> graph, Set<IntPair> constraints) {
+        internal CycleRemovalWithConstraints(BasicGraphOnEdges<TEdge> graph, Set<IntPair> constraints) {
             this.graph = graph;
             constrainedEdges = constraints;
-            graphOfConstraints=new BasicGraph<IntPair>(constrainedEdges, graph.NodeCount);
+            graphOfConstraints=new BasicGraphOnEdges<IntPair>(constrainedEdges, graph.NodeCount);
         }
 
         internal IEnumerable<IEdge> GetFeedbackSet() {
@@ -64,8 +64,8 @@ namespace Microsoft.Msagl.Core.GraphAlgorithms {
                 yield return CreateGraphForCycleRemoval(componentNodes);
         }
 
-         BasicGraph<IntPair> GetCommonGraph() {
-            return new BasicGraph<IntPair>((from edge in graph.Edges select new IntPair(edge.Source, edge.Target)).Concat(constrainedEdges), graph.NodeCount);
+         BasicGraphOnEdges<IntPair> GetCommonGraph() {
+            return new BasicGraphOnEdges<IntPair>((from edge in graph.Edges select new IntPair(edge.Source, edge.Target)).Concat(constrainedEdges), graph.NodeCount);
         }
 
          GraphForCycleRemoval CreateGraphForCycleRemoval(IEnumerable<int> componentNodes) {

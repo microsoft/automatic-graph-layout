@@ -909,7 +909,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// <returns>the height of the graph+spaceBeforeMargins</returns>
         internal static void CalcInitialYAnchorLocations(LayerArrays layerArrays, double spaceBeforeMargins,
                                                          GeometryGraph originalGraph, Database database,
-                                                         BasicGraph<IntEdge> intGraph,
+                                                         BasicGraphOnEdges<IntEdge> intGraph,
                                                          SugiyamaLayoutSettings settings,
                                                          bool layersAreDoubled) {
             Anchor[] anchors = database.Anchors;
@@ -941,7 +941,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
         static double SetFlatEdgesForLayer(Database database, LayerArrays layerArrays, int i,
-                                           BasicGraph<IntEdge> intGraph, SugiyamaLayoutSettings settings, double ymax) {
+                                           BasicGraphOnEdges<IntEdge> intGraph, SugiyamaLayoutSettings settings, double ymax) {
             double flatEdgesHeight = 0;
             if (i > 0) {
                 //looking for flat edges on the previous level                
@@ -975,7 +975,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
 
-        static IEnumerable<IntPair> GetFlatPairs(int[] layer, int[] layering, BasicGraph<IntEdge> intGraph) {
+        static IEnumerable<IntPair> GetFlatPairs(int[] layer, int[] layering, BasicGraphOnEdges<IntEdge> intGraph) {
             return new Set<IntPair>(from v in layer
                                     where v < intGraph.NodeCount
                                     from edge in intGraph.OutEdges(v)

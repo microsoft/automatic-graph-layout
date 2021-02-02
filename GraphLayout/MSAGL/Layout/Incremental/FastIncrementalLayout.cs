@@ -18,7 +18,7 @@ namespace Microsoft.Msagl.Layout.Incremental {
     /// Note that in debug mode lots of numerical checking is applied, which slows things down considerably.  So, run in Release mode unless you're actually debugging!
     /// </summary>
     public class FastIncrementalLayout : AlgorithmBase {
-        readonly BasicGraph<FiEdge> basicGraph;
+        readonly BasicGraphOnEdges<FiEdge> basicGraph;
         readonly List<FiNode[]> components;
         internal readonly Dictionary<int, List<IConstraint>> constraints = new Dictionary<int, List<IConstraint>>();
         readonly List<FiEdge> edges = new List<FiEdge>();
@@ -84,7 +84,7 @@ namespace Microsoft.Msagl.Layout.Incremental {
             SetLockNodeWeights();
             components = new List<FiNode[]>();
             if (!settings.InterComponentForces) {
-                basicGraph = new BasicGraph<FiEdge>(edges, nodes.Length);
+                basicGraph = new BasicGraphOnEdges<FiEdge>(edges, nodes.Length);
                 foreach (var componentNodes in ConnectedComponentCalculator<FiEdge>.GetComponents(basicGraph)) {
                     var vs = new FiNode[componentNodes.Count()];
                     int vi = 0;

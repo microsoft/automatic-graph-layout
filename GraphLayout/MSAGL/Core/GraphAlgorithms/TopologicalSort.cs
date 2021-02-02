@@ -15,7 +15,7 @@ namespace Microsoft.Msagl.Core.GraphAlgorithms{
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public static int[] GetOrder(int numberOfVertices, IEnumerable<System.Tuple<int,int>> edges)
         {
-            var dag = new BasicGraph<IntPair>(from e in edges select new IntPair(e.Item1, e.Item2), numberOfVertices);
+            var dag = new BasicGraphOnEdges<IntPair>(from e in edges select new IntPair(e.Item1, e.Item2), numberOfVertices);
             return GetOrder(dag);
         }
 
@@ -27,7 +27,7 @@ namespace Microsoft.Msagl.Core.GraphAlgorithms{
         /// </summary>
         /// <param name="graph"></param>
         /// <returns></returns>
-        internal static int[] GetOrder<TEdge>(BasicGraph<TEdge> graph) where TEdge : IEdge{
+        internal static int[] GetOrder<TEdge>(BasicGraphOnEdges<TEdge> graph) where TEdge : IEdge{
             var visited = new bool[graph.NodeCount];
 
             //no recursion! So we have to organize a stack

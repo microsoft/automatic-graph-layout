@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Msagl.Core;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.GraphAlgorithms;
-using Graph = Microsoft.Msagl.Core.GraphAlgorithms.BasicGraph<Microsoft.Msagl.Layout.Layered.IntEdge>;
+using Graph = Microsoft.Msagl.Core.GraphAlgorithms.BasicGraphOnEdges<Microsoft.Msagl.Layout.Layered.IntEdge>;
 
 namespace Microsoft.Msagl.Layout.Layered {
     /// <summary>

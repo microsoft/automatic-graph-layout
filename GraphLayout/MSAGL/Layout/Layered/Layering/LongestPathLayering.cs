@@ -13,7 +13,7 @@ namespace Microsoft.Msagl.Layout.Layered {
     /// </summary>
     internal class LongestPathLayering : LayerCalculator {
 
-        BasicGraph<IntEdge> graph;
+        BasicGraphOnEdges<IntEdge> graph;
 
         public int[] GetLayers() {
             //sort the vertices in topological order
@@ -35,7 +35,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         }
 
-        internal LongestPathLayering(BasicGraph<IntEdge> graph){
+        internal LongestPathLayering(BasicGraphOnEdges<IntEdge> graph){
             this.graph=graph;
         }
         

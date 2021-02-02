@@ -75,7 +75,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
 
         void CreateMappingOfNeibBlocks() {
-            BasicGraph<IntPair> graph = BasicGraphFromLeftRightIntNeibs();
+            BasicGraphOnEdges<IntPair> graph = BasicGraphFromLeftRightIntNeibs();
             for (int root = 0; root < graph.NodeCount; root++)
                 if (graph.InEdges(root).Count == 0 && !nodeToBlockRoot.ContainsKey(root)) {
                     var block = new List<int>();
@@ -91,8 +91,8 @@ namespace Microsoft.Msagl.Layout.Layered {
                 }
         }
 
-        BasicGraph<IntPair> BasicGraphFromLeftRightIntNeibs() {
-            return new BasicGraph<IntPair>(from p in LeftRightIntNeibs select new IntPair(p.Item1, p.Item2));
+        BasicGraphOnEdges<IntPair> BasicGraphFromLeftRightIntNeibs() {
+            return new BasicGraphOnEdges<IntPair>(from p in LeftRightIntNeibs select new IntPair(p.Item1, p.Item2));
         }
 
         int NodeIndex(Node node) {
@@ -136,7 +136,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                                                      select ipb);
             IEnumerable<IEdge> feedbackSet =
                 CycleRemoval<IntPair>.GetFeedbackSet(
-                    new BasicGraph<IntPair>(from p in LeftRighInts select new IntPair(p.Item1, p.Item2)));
+                    new BasicGraphOnEdges<IntPair>(from p in LeftRighInts select new IntPair(p.Item1, p.Item2)));
             foreach (IntPair ip in feedbackSet)
                 LeftRighInts.Remove(new Tuple<int, int>(ip.First, ip.Second));
         }

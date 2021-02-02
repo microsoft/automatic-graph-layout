@@ -13,19 +13,19 @@ namespace Microsoft.Msagl.Layout.Layered {
     /// </summary>
     internal class NetworkSimplex : AlgorithmBase, LayerCalculator {
 
-        static BasicGraph<IntEdge> CreateGraphWithIEEdges(BasicGraph<IntEdge> bg) {
+        static BasicGraphOnEdges<IntEdge> CreateGraphWithIEEdges(BasicGraphOnEdges<IntEdge> bg) {
             List<IntEdge> ieEdges = new List<IntEdge>();
 
             foreach (IntEdge e in bg.Edges)
                 ieEdges.Add(new NetworkEdge(e));
 
-            return new BasicGraph<IntEdge>(ieEdges, bg.NodeCount);
+            return new BasicGraphOnEdges<IntEdge>(ieEdges, bg.NodeCount);
         }
 
         int[] layers;
 
 
-        internal NetworkSimplex(BasicGraph<IntEdge> graph, CancelToken cancelToken)
+        internal NetworkSimplex(BasicGraphOnEdges<IntEdge> graph, CancelToken cancelToken)
         {
             this.graph = CreateGraphWithIEEdges(graph);
             inTree = new bool[graph.NodeCount];
@@ -817,7 +817,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         #endregion
 
   
-        BasicGraph<IntEdge> graph;
+        BasicGraphOnEdges<IntEdge> graph;
         private CancelToken NetworkCancelToken;
 
 
