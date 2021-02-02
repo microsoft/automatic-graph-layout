@@ -38,7 +38,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             get { return routing.LayerArrays.Y; }
         }
 
-        BasicGraphOnEdges<IntEdge> IntGraph {
+        BasicGraphOnEdges<PolyIntEdge> IntGraph {
             get { return routing.IntGraph; }
         }
 
@@ -105,7 +105,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                 PositionLabelsOfFlatEdges();
                 interactiveEdgeRouter = new InteractiveEdgeRouter(GetObstacles(), PaddingForEdges, PaddingForEdges/3, Math.PI/6);
                 interactiveEdgeRouter.CalculateWholeTangentVisibilityGraph();
-                foreach (IntEdge intEdge in IntEdges())
+                foreach (PolyIntEdge intEdge in IntEdges())
                 {
                     this.ProgressStep();
                     RouteEdge(intEdge);
@@ -137,18 +137,18 @@ namespace Microsoft.Msagl.Layout.Layered {
             return c;
         }
 
-        IEnumerable<IntEdge> IntEdges() {
+        IEnumerable<PolyIntEdge> IntEdges() {
             return from pair in pairArray from edge in Database.GetMultiedge(pair) select edge;
         }
 
-        void RouteEdge(IntEdge edge) {
+        void RouteEdge(PolyIntEdge edge) {
             if (edge.HasLabel)
                 RouteEdgeWithLabel(edge, edge.Edge.Label);
             else
                 RouteEdgeWithNoLabel(edge);
         }
 
-        void RouteEdgeWithLabel(IntEdge intEdge, Label label) {
+        void RouteEdgeWithLabel(PolyIntEdge intEdge, Label label) {
             //we allow here for the edge to cross its own label
             Node sourceNode = routing.IntGraph.Nodes[intEdge.Source];
             Node targetNode = routing.IntGraph.Nodes[intEdge.Target];
@@ -172,7 +172,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                                                              settings.EdgeRoutingSettings.KeepOriginalSpline);
         }
 
-        void RouteEdgeWithNoLabel(IntEdge intEdge) {
+        void RouteEdgeWithNoLabel(PolyIntEdge intEdge) {
             Node sourceNode = routing.IntGraph.Nodes[intEdge.Source];
             Node targetNode = routing.IntGraph.Nodes[intEdge.Target];
             var sourcePort = new FloatingPort(sourceNode.BoundaryCurve, sourceNode.Center);

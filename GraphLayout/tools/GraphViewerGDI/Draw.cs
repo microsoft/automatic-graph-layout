@@ -476,7 +476,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             myPen.Color = Color.Blue;
             Pen myOtherPen = new Pen(Color.FromArgb(100, 0, 0, 255), 1);
             foreach (var edges in dg.DataBase.Multiedges.Values)
-                foreach (IntEdge e in edges) {
+                foreach (PolyIntEdge e in edges) {
                     //                    if (e.LayerEdges != null)
                     //                        foreach (LayerEdge le in e.LayerEdges) {
                     //                            g.DrawLine(myPen, PointF(dg.DataBase.Anchors[le.Source].Origin),
@@ -491,7 +491,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             myPen.Color = Color.Red;
             if (dg.DataBase.nodesToShow == null)
                 foreach (var li in dg.DataBase.Multiedges.Values)
-                    foreach (IntEdge ie in li)
+                    foreach (PolyIntEdge ie in li)
                         if (ie.Edge.Curve is Curve) {
                             foreach (ICurve s in (ie.Edge.Curve as Curve).Segments) {
                                 var bs = s as CubicBezierSegment;

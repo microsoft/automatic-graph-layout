@@ -6,14 +6,14 @@ using Microsoft.Msagl.Core.Layout;
 
 namespace Microsoft.Msagl.Layout.Layered {
     internal class NetworkSimplexForGeneralGraph:LayerCalculator {
-        BasicGraphOnEdges<IntEdge> graph;
+        BasicGraphOnEdges<PolyIntEdge> graph;
         /// <summary>
         /// a place holder for the cancel flag
         /// </summary>
         internal CancelToken Cancel { get; set; }
 
         public int[] GetLayers() {
-            List<IEnumerable<int>> comps = new List<IEnumerable<int>>(ConnectedComponentCalculator<IntEdge>.GetComponents(graph));
+            List<IEnumerable<int>> comps = new List<IEnumerable<int>>(ConnectedComponentCalculator<PolyIntEdge>.GetComponents(graph));
             if (comps.Count == 1) {
                 NetworkSimplex ns = new NetworkSimplex(graph, this.Cancel);
                 return ns.GetLayers();
@@ -22,7 +22,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             int[][] layerings = new int[comps.Count][];
 
             for (int i = 0; i < comps.Count; i++) {
-                BasicGraph<Node, IntEdge> shrunkedComp = ShrunkComponent(mapToComponenents[i]);
+                BasicGraph<Node, PolyIntEdge> shrunkedComp = ShrunkComponent(mapToComponenents[i]);
                 NetworkSimplex ns = new NetworkSimplex(shrunkedComp, Cancel);
                 layerings[i] = ns.GetLayers();
             }
@@ -30,13 +30,13 @@ namespace Microsoft.Msagl.Layout.Layered {
             return UniteLayerings(layerings, mapToComponenents);
         }
 
-        private BasicGraph<Node, IntEdge> ShrunkComponent(Dictionary<int, int> dictionary) {
-            return new BasicGraph<Node, IntEdge>(
+        private BasicGraph<Node, PolyIntEdge> ShrunkComponent(Dictionary<int, int> dictionary) {
+            return new BasicGraph<Node, PolyIntEdge>(
                 from p in dictionary
                 let v = p.Key
                 let newEdgeSource = p.Value
                 from e in graph.OutEdges(v)
-                select new IntEdge(newEdgeSource, dictionary[e.Target]) { Separation = e.Separation, Weight = e.Weight },
+                select new PolyIntEdge(newEdgeSource, dictionary[e.Target]) { Separation = e.Separation, Weight = e.Weight },
                 dictionary.Count);
         }
 
@@ -72,7 +72,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
       
-        internal NetworkSimplexForGeneralGraph(BasicGraph<Node, IntEdge> graph, CancelToken cancelObject) {
+        internal NetworkSimplexForGeneralGraph(BasicGraph<Node, PolyIntEdge> graph, CancelToken cancelObject) {
             this.graph = graph;
             this.Cancel = cancelObject;
         }

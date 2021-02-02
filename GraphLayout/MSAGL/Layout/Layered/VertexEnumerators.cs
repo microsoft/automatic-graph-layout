@@ -32,7 +32,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         public int Current {
             get {
-                return((IntEdge)edges.Current).Target;
+                return((PolyIntEdge)edges.Current).Target;
             }
 
         }
@@ -68,13 +68,13 @@ namespace Microsoft.Msagl.Layout.Layered {
         int IEnumerator<int>.Current {
 #endif
             get {
-                return ((IntEdge)edges.Current).Source;
+                return ((PolyIntEdge)edges.Current).Source;
             }
         }
 
         object IEnumerator.Current {
             get {
-                IntEdge l = edges.Current as IntEdge;
+                PolyIntEdge l = edges.Current as PolyIntEdge;
                 return l.Source;
             }
         }
@@ -108,7 +108,7 @@ namespace Microsoft.Msagl.Layout.Layered {
     internal class Pred : IEnumerable<int> {
         #region IEnumerable Members
 
-        BasicGraphOnEdges<IntEdge> graph;
+        BasicGraphOnEdges<PolyIntEdge> graph;
 
         int vert;
 
@@ -134,7 +134,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         }
 
-        internal Pred(BasicGraphOnEdges<IntEdge> g, int v) {
+        internal Pred(BasicGraphOnEdges<PolyIntEdge> g, int v) {
             this.graph = g;
             this.vert = v;
         }
@@ -148,7 +148,7 @@ namespace Microsoft.Msagl.Layout.Layered {
     internal class Succ {
         #region IEnumerable Members
 
-        BasicGraphOnEdges<IntEdge> graph;
+        BasicGraphOnEdges<PolyIntEdge> graph;
 
         int vert;
 
@@ -156,7 +156,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             return new SuccEnumerator(graph.OutEdges(vert).GetEnumerator());
         }
 
-        internal Succ(BasicGraphOnEdges<IntEdge> g, int v) {
+        internal Succ(BasicGraphOnEdges<PolyIntEdge> g, int v) {
             this.graph = g;
             this.vert = v;
         }

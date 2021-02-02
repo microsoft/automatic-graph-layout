@@ -6,10 +6,10 @@ namespace Microsoft.Msagl.Layout.Layered {
     /// Differs from IntEdge in containing a flag indicating belonging to the tree
     /// and containing the cut value
     /// </summary>
-    internal class NetworkEdge : IntEdge {
+    internal class NetworkEdge : PolyIntEdge {
 
         internal const int Infinity = Int32.MaxValue;
-        internal NetworkEdge(IntEdge e)
+        internal NetworkEdge(PolyIntEdge e)
             : base(e.Source, e.Target) {
             Weight = e.Weight;
             Separation = e.Separation;

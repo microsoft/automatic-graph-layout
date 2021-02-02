@@ -22,7 +22,7 @@ namespace Microsoft.Msagl.Layout.Layered {
     internal class Routing : AlgorithmBase {
         readonly SugiyamaLayoutSettings settings;
         internal Database Database;
-        internal BasicGraph<Node, IntEdge> IntGraph;
+        internal BasicGraph<Node, PolyIntEdge> IntGraph;
 
         internal LayerArrays LayerArrays;
         internal GeometryGraph OriginalGraph;
@@ -32,7 +32,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         internal Routing(SugiyamaLayoutSettings settings, GeometryGraph originalGraph, Database dbP,
                          LayerArrays yLayerArrays,
                          ProperLayeredGraph properLayeredGraph,
-                         BasicGraph<Node, IntEdge> intGraph
+                         BasicGraph<Node, PolyIntEdge> intGraph
             ) {
             this.settings = settings;
             OriginalGraph = originalGraph;
@@ -90,7 +90,7 @@ foreach (var intEdgeList in Database.RegularMultiedges) {
 #endif
         }
 
-        private bool FanAtSourceOrTarget(IntEdge intEdge) {
+        private bool FanAtSourceOrTarget(PolyIntEdge intEdge) {
             return ProperLayeredGraph.OutDegreeIsMoreThanOne(intEdge.Source) || ProperLayeredGraph.InDegreeIsMoreThanOne(intEdge.Target);
         }
 
@@ -105,7 +105,7 @@ foreach (var intEdgeList in Database.RegularMultiedges) {
                 if (ip.x == ip.y) {
                     Anchor anchor = Database.Anchors[ip.x];
                     double offset = anchor.LeftAnchor;
-                    foreach (IntEdge intEdge in kv.Value) {
+                    foreach (PolyIntEdge intEdge in kv.Value) {
                         ProgressStep();
 
                         double dx = settings.NodeSeparation + settings.MinNodeWidth + offset;
@@ -146,7 +146,7 @@ foreach (var intEdgeList in Database.RegularMultiedges) {
                 }
             }
         }
-        void CreateSplineForNonSelfEdge(IntEdge es, bool optimizeShortEdges) {
+        void CreateSplineForNonSelfEdge(PolyIntEdge es, bool optimizeShortEdges) {
             this.ProgressStep();
 
             if (es.LayerEdges != null) {
@@ -161,7 +161,7 @@ foreach (var intEdgeList in Database.RegularMultiedges) {
             }
         }
 
-        void DrawSplineBySmothingThePolyline(IntEdge edgePath, bool optimizeShortEdges) {
+        void DrawSplineBySmothingThePolyline(PolyIntEdge edgePath, bool optimizeShortEdges) {
             var smoothedPolyline = new SmoothedPolylineCalculator(edgePath, Database.Anchors, OriginalGraph, settings,
                                                                   LayerArrays,
                                                                   ProperLayeredGraph, Database);
@@ -253,7 +253,7 @@ foreach (var intEdgeList in Database.RegularMultiedges) {
         }
 
 
-        internal static NodeKind GetNodeKind(int vertexOffset, IntEdge edgePath) {
+        internal static NodeKind GetNodeKind(int vertexOffset, PolyIntEdge edgePath) {
             return vertexOffset == 0
                        ? NodeKind.Top
                        : (vertexOffset < edgePath.Count ? NodeKind.Internal : NodeKind.Bottom);

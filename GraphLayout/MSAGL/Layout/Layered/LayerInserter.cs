@@ -8,7 +8,7 @@ namespace Microsoft.Msagl.Layout.Layered {
     /// Preparing the graph for x-coordinate calculation by inserting dummy nodes into the layers
     /// </summary>
     internal class LayerInserter {
-        BasicGraph<Node, IntEdge> intGraph;
+        BasicGraph<Node, PolyIntEdge> intGraph;
         Database database;
         /// <summary>
         /// Old layered graph: 
@@ -18,7 +18,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// new layered graph 
         /// </summary>
         ProperLayeredGraph nLayeredGraph;
-        IntEdge[] virtNodesToIntEdges;
+        PolyIntEdge[] virtNodesToIntEdges;
 
         internal ProperLayeredGraph NLayeredGraph {
             get { return nLayeredGraph; }
@@ -46,7 +46,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// <param name="database"></param>
         /// <param name="intGraphP"></param>
         LayerInserter(
-          ProperLayeredGraph layeredGraph, LayerArrays la, Database database, BasicGraph<Node, IntEdge> intGraphP) {
+          ProperLayeredGraph layeredGraph, LayerArrays la, Database database, BasicGraph<Node, PolyIntEdge> intGraphP) {
             this.la = la;
             this.database = database;
             this.layeredGraph = layeredGraph;
@@ -60,7 +60,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         ///// <param name="la"></param>
         ///// <param name="db"></param>
         static internal void InsertLayers(
-          ref ProperLayeredGraph layeredGraph, ref LayerArrays la, Database db, BasicGraph<Node, IntEdge> intGraphP) {
+          ref ProperLayeredGraph layeredGraph, ref LayerArrays la, Database db, BasicGraph<Node, PolyIntEdge> intGraphP) {
             LayerInserter li = new LayerInserter(layeredGraph, la, db, intGraphP);
             li.InsertLayers();
 
@@ -103,9 +103,9 @@ namespace Microsoft.Msagl.Layout.Layered {
         private void EditOldLayering() {
             int curVNode = this.intGraph.NodeCount;
 
-            foreach (List<IntEdge> list in database.RegularMultiedges) {
+            foreach (List<PolyIntEdge> list in database.RegularMultiedges) {
                 int span = 0;
-                IntEdge e = list[0];
+                PolyIntEdge e = list[0];
                 span = e.LayerSpan * 2;
                 if (span > 0) {//ignoring flat edges            
                     foreach (LayerEdge le in e.LayerEdges) {
@@ -138,12 +138,12 @@ namespace Microsoft.Msagl.Layout.Layered {
                 int[] layer = nla.Layers[i * 2];
                 int offset = 0;
                 foreach (int v in la.Layers[i]) {
-                    IntEdge e = virtNodesToIntEdges[v];
+                    PolyIntEdge e = virtNodesToIntEdges[v];
                     if (e != null) {
                         int layerOffsetInTheEdge = NLayering[e.Source] - NLayering[v];
-                        List<IntEdge> list = database.Multiedges[new IntPair(e.Source, e.Target)];
+                        List<PolyIntEdge> list = database.Multiedges[new IntPair(e.Source, e.Target)];
 
-                        foreach (IntEdge ie in list) {
+                        foreach (PolyIntEdge ie in list) {
                             if (ie != e) {
                                 int u = ie.LayerEdges[layerOffsetInTheEdge].Source;
                                 layer[offset] = u;
@@ -179,8 +179,8 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// create the mapping from the vertices to edges to which they belong
         /// </summary>
         void MapVirtualNodesToEdges() {
-            virtNodesToIntEdges = new IntEdge[this.NLayering.Length];
-            foreach (IntEdge e in database.AllIntEdges)
+            virtNodesToIntEdges = new PolyIntEdge[this.NLayering.Length];
+            foreach (PolyIntEdge e in database.AllIntEdges)
                 if (e.Source != e.Target && e.LayerEdges!=null)
                     foreach (LayerEdge le in e.LayerEdges)
                         if (le.Target != e.Target)
@@ -192,10 +192,10 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// </summary>
         private void CreateFullLayeredGraph() {
             totalNodes = this.intGraph.NodeCount;
-            foreach (List<IntEdge> list in database.RegularMultiedges) {
+            foreach (List<PolyIntEdge> list in database.RegularMultiedges) {
                 int span = 0;
                 bool first = true;
-                foreach (IntEdge e in list) {
+                foreach (PolyIntEdge e in list) {
                     if (first) {
                         first = false;
                         span = e.LayerSpan * 2;
@@ -283,12 +283,12 @@ namespace Microsoft.Msagl.Layout.Layered {
             for (int i = 0; i < layeredGraph.NodeCount; i++)
                 NLayering[i] = la.Y[i] * 2;
 
-            foreach (KeyValuePair<IntPair, List<IntEdge>> kv in database.Multiedges) {
+            foreach (KeyValuePair<IntPair, List<PolyIntEdge>> kv in database.Multiedges) {
                 IntPair ip = kv.Key;
 
                 if (ip.First != ip.Second && la.Y[ip.First] != la.Y[ip.Second]) {//not a self edge and not a flat edge
                     int top = la.Y[ip.x] * 2;
-                    foreach (IntEdge e in kv.Value) {
+                    foreach (PolyIntEdge e in kv.Value) {
                         int layer = top - 1;
                         foreach (LayerEdge le in e.LayerEdges)
                             if (le.Target != e.Target)
@@ -320,7 +320,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         ///// <param name="bucket"></param>
         ///// <param name="parent"></param>
         ///// <param name="i"></param>
-        internal static void RegisterDontStepOnVertex(Database db, IntEdge parent) {
+        internal static void RegisterDontStepOnVertex(Database db, PolyIntEdge parent) {
             if (db.Multiedges[new IntPair(parent.Source, parent.Target)].Count > 1) {
                 LayerEdge e = parent.LayerEdges[parent.LayerEdges.Count / 2];
                 db.MultipleMiddles.Insert(e.Source);

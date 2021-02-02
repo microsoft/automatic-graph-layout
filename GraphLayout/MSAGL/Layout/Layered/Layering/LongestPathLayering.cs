@@ -13,18 +13,18 @@ namespace Microsoft.Msagl.Layout.Layered {
     /// </summary>
     internal class LongestPathLayering : LayerCalculator {
 
-        BasicGraphOnEdges<IntEdge> graph;
+        BasicGraphOnEdges<PolyIntEdge> graph;
 
         public int[] GetLayers() {
             //sort the vertices in topological order
-            int[] topoOrder = IntEdge.GetOrder(graph);
+            int[] topoOrder = PolyIntEdge.GetOrder(graph);
             int[] layering = new int[graph.NodeCount];
 
             //going backward from leaves
             int k = graph.NodeCount;
             while (k-- > 0) {
                 int v = topoOrder[k];
-                foreach (IntEdge e in graph.InEdges(v)) {
+                foreach (PolyIntEdge e in graph.InEdges(v)) {
                     int u = e.Source;
                     int l = layering[v] + e.Separation;
                     if (layering[u] < l)
@@ -35,7 +35,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         }
 
-        internal LongestPathLayering(BasicGraphOnEdges<IntEdge> graph){
+        internal LongestPathLayering(BasicGraphOnEdges<PolyIntEdge> graph){
             this.graph=graph;
         }
         

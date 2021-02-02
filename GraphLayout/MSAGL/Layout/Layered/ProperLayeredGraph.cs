@@ -12,7 +12,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// <summary>
         /// the underlying basic graph
         /// </summary>
-        internal BasicGraph<Node, IntEdge>  BaseGraph;
+        internal BasicGraph<Node, PolyIntEdge>  BaseGraph;
         LayerEdge[] virtualNodesToInEdges;
         LayerEdge[] virtualNodesToOutEdges;
         int totalNumberOfNodes;
@@ -26,12 +26,12 @@ namespace Microsoft.Msagl.Layout.Layered {
 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
-        internal ProperLayeredGraph(BasicGraph<Node, IntEdge> intGraph) {
+        internal ProperLayeredGraph(BasicGraph<Node, PolyIntEdge> intGraph) {
             Initialize(intGraph);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
-        internal void Initialize(BasicGraph<Node, IntEdge> intGraph)
+        internal void Initialize(BasicGraph<Node, PolyIntEdge> intGraph)
         {
             BaseGraph = intGraph;
 
@@ -61,7 +61,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
             virtualNodesToInEdges = new LayerEdge[totalNumberOfNodes - FirstVirtualNode];
             virtualNodesToOutEdges = new LayerEdge[totalNumberOfNodes - FirstVirtualNode];
-            foreach (IntEdge e in BaseGraph.Edges)
+            foreach (PolyIntEdge e in BaseGraph.Edges)
                 if (e.LayerSpan > 0)
                     foreach (LayerEdge le in e.LayerEdges) {
                         if (le.Target != e.Target)
@@ -72,7 +72,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         }
 
-        static bool ExistVirtualNodes(ICollection<IntEdge> iCollection) {
+        static bool ExistVirtualNodes(ICollection<PolyIntEdge> iCollection) {
             foreach (var edge in iCollection)
                 if (edge.LayerEdges != null && edge.LayerEdges.Count > 1)
                     return true;
@@ -106,7 +106,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// </summary>
         public IEnumerable<LayerEdge> Edges {
             get {
-                foreach (IntEdge ie in BaseGraph.Edges) {
+                foreach (PolyIntEdge ie in BaseGraph.Edges) {
                     if (ie.LayerSpan > 0)
                         foreach (LayerEdge le in ie.LayerEdges)
                             yield return le;
@@ -120,7 +120,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// <returns></returns>
         public IEnumerable<LayerEdge> InEdges(int node) {
             if (node < BaseGraph.NodeCount)//original node
-                foreach (IntEdge e in BaseGraph.InEdges(node)) {
+                foreach (PolyIntEdge e in BaseGraph.InEdges(node)) {
                     if (e.Source != e.Target && e.LayerEdges != null)
                         yield return LastEdge(e);
                 }
@@ -129,7 +129,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         }
 
-        private static LayerEdge LastEdge(IntEdge e) {
+        private static LayerEdge LastEdge(PolyIntEdge e) {
             return e.LayerEdges[e.LayerEdges.Count - 1];
 
         }
@@ -144,7 +144,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 /// <returns></returns>
         public IEnumerable<LayerEdge> OutEdges(int node) {
             if (node < BaseGraph.NodeCount)//original node
-                foreach (IntEdge e in BaseGraph.OutEdges(node)) {
+                foreach (PolyIntEdge e in BaseGraph.OutEdges(node)) {
                     if (e.Source != e.Target && e.LayerEdges!=null)
                         yield return FirstEdge(e);
                 }
@@ -167,7 +167,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             return virtualNodesToOutEdges[node - FirstVirtualNode];
         }
 
-        private static LayerEdge FirstEdge(IntEdge e) {
+        private static LayerEdge FirstEdge(PolyIntEdge e) {
             return e.LayerEdges[0];
         }
         /// <summary>
@@ -213,13 +213,13 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
         internal ProperLayeredGraph ReversedClone() {
-            List<IntEdge> reversedEdges = CreateReversedEdges();
-            return new ProperLayeredGraph(new BasicGraph<Node, IntEdge>(reversedEdges, this.BaseGraph.NodeCount));
+            List<PolyIntEdge> reversedEdges = CreateReversedEdges();
+            return new ProperLayeredGraph(new BasicGraph<Node, PolyIntEdge>(reversedEdges, this.BaseGraph.NodeCount));
         }
 
-        private List<IntEdge> CreateReversedEdges() {
-            List<IntEdge> ret = new List<IntEdge>();
-            foreach (IntEdge e in BaseGraph.Edges) 
+        private List<PolyIntEdge> CreateReversedEdges() {
+            List<PolyIntEdge> ret = new List<PolyIntEdge>();
+            foreach (PolyIntEdge e in BaseGraph.Edges) 
                 if(!e.SelfEdge())
                    ret.Add(e.ReversedClone());
            return ret;

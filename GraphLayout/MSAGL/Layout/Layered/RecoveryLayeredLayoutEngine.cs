@@ -54,9 +54,9 @@ namespace Microsoft.Msagl.Layout.Layered {
             get { return database; }
         }
 
-        internal BasicGraph<Node, IntEdge> IntGraph; //the input graph
+        internal BasicGraph<Node, PolyIntEdge> IntGraph; //the input graph
 
-        BasicGraph<Node, IntEdge> GluedDagSkeletonForLayering { get; set; }
+        BasicGraph<Node, PolyIntEdge> GluedDagSkeletonForLayering { get; set; }
 
         //the graph obtained after X coord calculation
         XLayoutGraph xLayoutGraph;
@@ -88,9 +88,9 @@ namespace Microsoft.Msagl.Layout.Layered {
 
             InitNodesToIndex(nodes);
 
-            IntEdge[] intEdges = CreateIntEdges(geometryGraph);
+            PolyIntEdge[] intEdges = CreateIntEdges(geometryGraph);
 
-            IntGraph = new BasicGraph<Node, IntEdge>(intEdges, geometryGraph.Nodes.Count) { Nodes = nodes };
+            IntGraph = new BasicGraph<Node, PolyIntEdge>(intEdges, geometryGraph.Nodes.Count) { Nodes = nodes };
             originalGraph = geometryGraph;
             if (sugiyamaSettings == null)
                 sugiyamaSettings = new SugiyamaLayoutSettings();
@@ -99,21 +99,21 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         void CreateDatabaseAndRegisterIntEdgesInMultiEdges() {
             Database = new Database();
-            foreach (IntEdge e in IntGraph.Edges)
+            foreach (PolyIntEdge e in IntGraph.Edges)
                 database.RegisterOriginalEdgeInMultiedges(e);
         }
 
-        IntEdge[] CreateIntEdges(GeometryGraph geometryGraph) {
+        PolyIntEdge[] CreateIntEdges(GeometryGraph geometryGraph) {
             var edges = geometryGraph.Edges;
 
 
-            var intEdges = new IntEdge[edges.Count];
+            var intEdges = new PolyIntEdge[edges.Count];
             int i = 0;
             foreach (var edge in edges) {
                 if (edge.Source == null || edge.Target == null)
                     throw new InvalidOperationException(); //"creating an edge with null source or target");
 
-                var intEdge = new IntEdge(nodeIdToIndex[edge.Source], nodeIdToIndex[edge.Target], edge);
+                var intEdge = new PolyIntEdge(nodeIdToIndex[edge.Source], nodeIdToIndex[edge.Target], edge);
 
                 intEdges[i] = intEdge;
                 i++;
@@ -130,7 +130,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             }
         }
 
-        internal static int EdgeSpan(int[] layers, IntEdge e) {
+        internal static int EdgeSpan(int[] layers, PolyIntEdge e) {
             return layers[e.Source] - layers[e.Target];
         }
 
@@ -140,43 +140,43 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// upDown constraints will be added as edges
         /// </summary>
         void CreateGluedDagSkeletonForLayering() {
-            GluedDagSkeletonForLayering = new BasicGraph<Node, IntEdge>(GluedDagSkeletonEdges(),
+            GluedDagSkeletonForLayering = new BasicGraph<Node, PolyIntEdge>(GluedDagSkeletonEdges(),
                                                                         originalGraph.Nodes.Count);
             SetGluedEdgesWeights();
         }
 
         void SetGluedEdgesWeights() {
-            var gluedPairsToGluedEdge = new Dictionary<IntPair, IntEdge>();
-            foreach (IntEdge ie in GluedDagSkeletonForLayering.Edges)
+            var gluedPairsToGluedEdge = new Dictionary<IntPair, PolyIntEdge>();
+            foreach (PolyIntEdge ie in GluedDagSkeletonForLayering.Edges)
                 gluedPairsToGluedEdge[new IntPair(ie.Source, ie.Target)] = ie;
 
             foreach (var t in database.Multiedges)
                 if (t.Key.x != t.Key.y) {
                     IntPair gluedPair = VerticalConstraints.GluedIntPair(t.Key);
                     if (gluedPair.x == gluedPair.y) continue;
-                    IntEdge gluedIntEdge = gluedPairsToGluedEdge[gluedPair];
-                    foreach (IntEdge ie in t.Value)
+                    PolyIntEdge gluedIntEdge = gluedPairsToGluedEdge[gluedPair];
+                    foreach (PolyIntEdge ie in t.Value)
                         gluedIntEdge.Weight += ie.Weight;
                 }
         }
 
-        IEnumerable<IntEdge> GluedDagSkeletonEdges() {
+        IEnumerable<PolyIntEdge> GluedDagSkeletonEdges() {
             var ret =
-                new Set<IntEdge>(from kv in database.Multiedges
+                new Set<PolyIntEdge>(from kv in database.Multiedges
                                  where kv.Key.x != kv.Key.y
                                  let e = VerticalConstraints.GluedIntEdge(kv.Value[0])
                                  where e.Source != e.Target
                                  select e);
 
-            IEnumerable<IntEdge> gluedUpDownConstraints = from p in VerticalConstraints.GluedUpDownIntConstraints
+            IEnumerable<PolyIntEdge> gluedUpDownConstraints = from p in VerticalConstraints.GluedUpDownIntConstraints
                                                           select CreateUpDownConstrainedIntEdge(p);
-            foreach (IntEdge edge in gluedUpDownConstraints)
+            foreach (PolyIntEdge edge in gluedUpDownConstraints)
                 ret.Insert(edge);
             return ret;
         }
 
-        static IntEdge CreateUpDownConstrainedIntEdge(IntPair intPair) {
-            var intEdge = new IntEdge(intPair.x, intPair.y);
+        static PolyIntEdge CreateUpDownConstrainedIntEdge(IntPair intPair) {
+            var intEdge = new PolyIntEdge(intPair.x, intPair.y);
             intEdge.Weight = 0;
             //we do not want the edge weight to contribute in to the sum but just take the constraint into account
             intEdge.Separation = 1;
@@ -382,7 +382,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         bool StraightenEdgePaths() {
             bool ret = false;
-            foreach (IntEdge e in database.AllIntEdges)
+            foreach (PolyIntEdge e in database.AllIntEdges)
                 if (e.LayerSpan == 2)
                     ret =
                         ShiftVertexWithNeighbors(e.LayerEdges[0].Source, e.LayerEdges[0].Target, e.LayerEdges[1].Target) ||
@@ -638,7 +638,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             int n = layering.Length;
             int nOfVv = 0;
 
-            foreach (IntEdge e in database.SkeletonEdges()) {
+            foreach (PolyIntEdge e in database.SkeletonEdges()) {
                 int span = EdgeSpan(layering, e);
                 Debug.Assert(span >= 0);
                 if (span > 0)
@@ -667,7 +667,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
             var extendedVertexLayering = new int[originalGraph.Nodes.Count + nOfVv];
 
-            foreach (IntEdge e in database.SkeletonEdges())
+            foreach (PolyIntEdge e in database.SkeletonEdges())
                 if (e.LayerEdges != null) {
                     int l = layering[e.Source];
                     extendedVertexLayering[e.Source] = l--;
@@ -679,7 +679,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                 }
 
             properLayeredGraph =
-                new ProperLayeredGraph(new BasicGraph<Node, IntEdge>(database.SkeletonEdges(), layering.Length));
+                new ProperLayeredGraph(new BasicGraph<Node, PolyIntEdge>(database.SkeletonEdges(), layering.Length));
             properLayeredGraph.BaseGraph.Nodes = IntGraph.Nodes;
             layerArrays = new LayerArrays(extendedVertexLayering);
         }
@@ -719,7 +719,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                 GetXCoordinatesOfVirtualNodesOfTheProperLayeredGraphForSkeletonEdge(skeletonEdge, layerArrays);
         }
       
-        void GetXCoordinatesOfVirtualNodesOfTheProperLayeredGraphForSkeletonEdge(IntEdge intEdge, LayerArrays layerArrays) {
+        void GetXCoordinatesOfVirtualNodesOfTheProperLayeredGraphForSkeletonEdge(PolyIntEdge intEdge, LayerArrays layerArrays) {
             if (intEdge.LayerEdges == null || intEdge.LayerEdges.Count < 2) return;
             var edgeCurve = intEdge.Edge.Curve;
             var layerIndex = layerArrays.Y[intEdge.Source] - 1;//it is the layer of the highest virtual node of the edge
@@ -806,7 +806,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         bool LayersAreDoubled { get; set; }
 
         void RecreateIntGraphFromDataBase() {
-            var edges = new List<IntEdge>();
+            var edges = new List<PolyIntEdge>();
             foreach (var list in database.Multiedges.Values)
                 edges.AddRange(list);
             IntGraph.SetEdges(edges, IntGraph.NodeCount);
@@ -814,7 +814,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         void AnalyzeNeedToInsertLayersAndHasMultiedges(LayerArrays layerArrays, ref bool needToInsertLayers,
                                                        ref bool multipleEdges) {
-            foreach (IntEdge ie in IntGraph.Edges)
+            foreach (PolyIntEdge ie in IntGraph.Edges)
                 if (ie.HasLabel && layerArrays.Y[ie.Source] != layerArrays.Y[ie.Target]) {
                     //if an edge is a flat edge then
                     needToInsertLayers = true;
@@ -843,7 +843,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                 // If there are an even number of multi-edges between two nodes then
                 //  add a virtual edge in the multi-edge dict to improve the placement, but only in case when the edge goes down only one layer.         
                 if (kv.Value.Count % 2 == 0 && layerArrays.Y[kv.Key.First] - 1 == layerArrays.Y[kv.Key.Second]) {
-                    var newVirtualEdge = new IntEdge(kv.Key.First, kv.Key.Second);
+                    var newVirtualEdge = new PolyIntEdge(kv.Key.First, kv.Key.Second);
                     newVirtualEdge.Edge = new Edge();
                     newVirtualEdge.IsVirtualEdge = true;
                     kv.Value.Insert(kv.Value.Count / 2, newVirtualEdge);
@@ -861,7 +861,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         internal static void CalculateAnchorSizes(Database database, out Anchor[] anchors,
                                                   ProperLayeredGraph properLayeredGraph, GeometryGraph originalGraph,
-                                                  BasicGraph<Node, IntEdge> intGraph, SugiyamaLayoutSettings settings) {
+                                                  BasicGraph<Node, PolyIntEdge> intGraph, SugiyamaLayoutSettings settings) {
             database.Anchors = anchors = new Anchor[properLayeredGraph.NodeCount];
 
             for (int i = 0; i < anchors.Length; i++)
@@ -872,7 +872,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                 CalcAnchorsForOriginalNode(i, intGraph, anchors, database, settings);
 
             //go over virtual vertices
-            foreach (IntEdge intEdge in database.AllIntEdges)
+            foreach (PolyIntEdge intEdge in database.AllIntEdges)
                 if (intEdge.LayerEdges != null) {
                     foreach (LayerEdge layerEdge in intEdge.LayerEdges) {
                         int v = layerEdge.Target;
@@ -909,7 +909,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// <returns>the height of the graph+spaceBeforeMargins</returns>
         internal static void CalcInitialYAnchorLocations(LayerArrays layerArrays, double spaceBeforeMargins,
                                                          GeometryGraph originalGraph, Database database,
-                                                         BasicGraphOnEdges<IntEdge> intGraph,
+                                                         BasicGraphOnEdges<PolyIntEdge> intGraph,
                                                          SugiyamaLayoutSettings settings,
                                                          bool layersAreDoubled) {
             Anchor[] anchors = database.Anchors;
@@ -941,7 +941,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
         static double SetFlatEdgesForLayer(Database database, LayerArrays layerArrays, int i,
-                                           BasicGraphOnEdges<IntEdge> intGraph, SugiyamaLayoutSettings settings, double ymax) {
+                                           BasicGraphOnEdges<PolyIntEdge> intGraph, SugiyamaLayoutSettings settings, double ymax) {
             double flatEdgesHeight = 0;
             if (i > 0) {
                 //looking for flat edges on the previous level                
@@ -962,8 +962,8 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         static double SetFlatEdgesLabelsHeightAndPositionts(IntPair pair, double ymax, double dy, Database database) {
             double height = 0;
-            List<IntEdge> list = database.GetMultiedge(pair);
-            foreach (IntEdge edge in list) {
+            List<PolyIntEdge> list = database.GetMultiedge(pair);
+            foreach (PolyIntEdge edge in list) {
                 height += dy;
                 Label label = edge.Edge.Label;
                 if (label != null) {
@@ -975,7 +975,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
 
-        static IEnumerable<IntPair> GetFlatPairs(int[] layer, int[] layering, BasicGraphOnEdges<IntEdge> intGraph) {
+        static IEnumerable<IntPair> GetFlatPairs(int[] layer, int[] layering, BasicGraphOnEdges<PolyIntEdge> intGraph) {
             return new Set<IntPair>(from v in layer
                                     where v < intGraph.NodeCount
                                     from edge in intGraph.OutEdges(v)
@@ -1001,7 +1001,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             return false;
         }
 
-        static void CalcAnchorsForOriginalNode(int i, BasicGraph<Node, IntEdge> intGraph, Anchor[] anchors,
+        static void CalcAnchorsForOriginalNode(int i, BasicGraph<Node, PolyIntEdge> intGraph, Anchor[] anchors,
                                                Database database, SugiyamaLayoutSettings settings) {
             double leftAnchor = 0;
             double rightAnchor = leftAnchor;
@@ -1047,10 +1047,10 @@ namespace Microsoft.Msagl.Layout.Layered {
         static double WidthOfSelfEdge(Database database, int i, ref double rightAnchor, ref double topAnchor,
                                       ref double bottomAnchor, SugiyamaLayoutSettings settings) {
             double delta = 0;
-            List<IntEdge> multiedges = database.GetMultiedge(i, i);
+            List<PolyIntEdge> multiedges = database.GetMultiedge(i, i);
             //it could be a multiple self edge
             if (multiedges.Count > 0) {
-                foreach (IntEdge e in multiedges)
+                foreach (PolyIntEdge e in multiedges)
                     if (e.Edge.Label != null) {
                         rightAnchor += e.Edge.Label.Width;
                         if (topAnchor < e.Edge.Label.Height / 2.0)
@@ -1093,11 +1093,11 @@ namespace Microsoft.Msagl.Layout.Layered {
             int nOfVerts = properLayeredGraph.NodeCount;
 
             //create edges of XLayoutGraph
-            var edges = new List<IntEdge>();
+            var edges = new List<PolyIntEdge>();
 
             foreach (LayerEdge e in properLayeredGraph.Edges) {
-                var n1 = new IntEdge(nOfVerts, e.Source);
-                var n2 = new IntEdge(nOfVerts, e.Target);
+                var n1 = new PolyIntEdge(nOfVerts, e.Source);
+                var n2 = new PolyIntEdge(nOfVerts, e.Target);
                 n1.Weight = n2.Weight = 1;
                 n1.Separation = 0; //these edge have 0 separation
                 n2.Separation = 0;
@@ -1110,7 +1110,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                 for (int i = layer.Length - 1; i > 0; i--) {
                     int source = layer[i];
                     int target = layer[i - 1];
-                    var ie = new IntEdge(source, target);
+                    var ie = new PolyIntEdge(source, target);
                     Anchor sourceAnchor = database.Anchors[source];
                     Anchor targetAnchor = database.Anchors[target];
 

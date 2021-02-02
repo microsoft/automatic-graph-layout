@@ -15,7 +15,7 @@ namespace Microsoft.Msagl.Prototype.Phylo {
         ProperLayeredGraph properLayeredGraph;
         Database dataBase;
         PhyloTree tree;
-        BasicGraph<Node, IntEdge> intGraph;
+        BasicGraph<Node, PolyIntEdge> intGraph;
         LayerArrays layerArrays;
         SortedDictionary<int, double> gridLayerOffsets = new SortedDictionary<int, double>();
         double[] layerOffsets;
@@ -30,7 +30,7 @@ namespace Microsoft.Msagl.Prototype.Phylo {
         ///// </summary>
         internal SugiyamaLayoutSettings LayoutSettings { get; private set; }
 
-        internal PhyloTreeLayoutCalclulation(PhyloTree phyloTreeP, SugiyamaLayoutSettings settings, BasicGraph<Node, IntEdge> intGraphP, Database dataBase) {
+        internal PhyloTreeLayoutCalclulation(PhyloTree phyloTreeP, SugiyamaLayoutSettings settings, BasicGraph<Node, PolyIntEdge> intGraphP, Database dataBase) {
             this.dataBase = dataBase;
             this.tree = phyloTreeP;
             this.LayoutSettings = settings;
@@ -150,7 +150,7 @@ namespace Microsoft.Msagl.Prototype.Phylo {
 
 
         private  void FillDataBase() {
-            foreach (IntEdge e in intGraph.Edges)
+            foreach (PolyIntEdge e in intGraph.Edges)
                 dataBase.RegisterOriginalEdgeInMultiedges(e);
             SizeAnchors();
             FigureYCoordinates();
@@ -241,7 +241,7 @@ namespace Microsoft.Msagl.Prototype.Phylo {
         private void CalculateAnchorsY(int node, double m, double y) {
             //go over original nodes
             dataBase.Anchors[node].Y = -y;
-            foreach (IntEdge e in intGraph.OutEdges(node))
+            foreach (PolyIntEdge e in intGraph.OutEdges(node))
                 CalculateAnchorsY(e.Target, m, y + e.Edge.Length * m);
    
         }
@@ -257,7 +257,7 @@ namespace Microsoft.Msagl.Prototype.Phylo {
                 CalcAnchorsForOriginalNode(i);
 
             //go over virtual vertices
-            foreach (IntEdge intEdge in dataBase.AllIntEdges) {
+            foreach (PolyIntEdge intEdge in dataBase.AllIntEdges) {
                 if (intEdge.LayerEdges != null) {
                     foreach (LayerEdge layerEdge in intEdge.LayerEdges) {
                         int v = layerEdge.Target;
@@ -367,10 +367,10 @@ namespace Microsoft.Msagl.Prototype.Phylo {
 
         private double WidthOfSelfeEdge(int i, ref double rightAnchor, ref double topAnchor, ref double bottomAnchor) {
             double delta = 0;
-            List<IntEdge> multiedges = dataBase.GetMultiedge(i, i);
+            List<PolyIntEdge> multiedges = dataBase.GetMultiedge(i, i);
             //it could be a multiple self edge
             if (multiedges.Count > 0) {
-                foreach (IntEdge e in multiedges) {
+                foreach (PolyIntEdge e in multiedges) {
                     if (e.Edge.Label != null) {
                         rightAnchor += e.Edge.Label.Width;
                         if (topAnchor < e.Edge.Label.Height / 2.0)
@@ -434,13 +434,13 @@ namespace Microsoft.Msagl.Prototype.Phylo {
     
         private int CountTotalNodesIncludingVirtual(int node) {
             int ret = 1;
-            foreach (IntEdge edge in this.intGraph.OutEdges(node)) 
+            foreach (PolyIntEdge edge in this.intGraph.OutEdges(node)) 
                 ret += NumberOfVirtualNodesOnEdge(edge) + CountTotalNodesIncludingVirtual(edge.Target);
             
             return ret;
         }
 
-        private int NumberOfVirtualNodesOnEdge(IntEdge edge) {
+        private int NumberOfVirtualNodesOnEdge(PolyIntEdge edge) {
             return OriginalNodeLayer(edge.Source) - OriginalNodeLayer(edge.Target) - 1;
         }
 
@@ -458,11 +458,11 @@ namespace Microsoft.Msagl.Prototype.Phylo {
         }
 
         private void WalkTreeAndInsertLayerEdges(int[] layering, List<int>[] layers, int node, ref int virtualNode) {
-            foreach (IntEdge edge in this.intGraph.OutEdges(node)) 
+            foreach (PolyIntEdge edge in this.intGraph.OutEdges(node)) 
                 InsertLayerEdgesForEdge(edge, layering, ref virtualNode, layers);
         }
 
-        private void InsertLayerEdgesForEdge(IntEdge edge, int[] layering, ref int virtualNode, List<int>[] layers) {
+        private void InsertLayerEdgesForEdge(PolyIntEdge edge, int[] layering, ref int virtualNode, List<int>[] layers) {
             int span = OriginalNodeLayer(edge.Source) - OriginalNodeLayer(edge.Target);
             edge.LayerEdges=new LayerEdge[span];
             for (int i = 0; i < span; i++) 
@@ -479,14 +479,14 @@ namespace Microsoft.Msagl.Prototype.Phylo {
 
         }
 
-        static private int GetTarget(int i, int span, IntEdge edge, int virtualNode) {
+        static private int GetTarget(int i, int span, PolyIntEdge edge, int virtualNode) {
             if (i < span-1)
                 return virtualNode;
 
             return edge.Target;
         }
 
-        static private int GetSource(int i, IntEdge edge, ref int virtualNode) {
+        static private int GetSource(int i, PolyIntEdge edge, ref int virtualNode) {
             if (i > 0)
                 return virtualNode++; 
             

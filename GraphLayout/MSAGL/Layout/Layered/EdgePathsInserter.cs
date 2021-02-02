@@ -9,10 +9,10 @@ namespace Microsoft.Msagl.Layout.Layered {
     /// </summary>
     internal class EdgePathsInserter {
         Database database;
-        BasicGraph<Node, IntEdge> intGraph;
+        BasicGraph<Node, PolyIntEdge> intGraph;
         ProperLayeredGraph layeredGraph;
         ProperLayeredGraph nLayeredGraph;
-        Dictionary<int, IntEdge> virtNodesToIntEdges = new Dictionary<int, IntEdge>();
+        Dictionary<int, PolyIntEdge> virtNodesToIntEdges = new Dictionary<int, PolyIntEdge>();
 
         internal ProperLayeredGraph NLayeredGraph {
             get { return nLayeredGraph; }
@@ -32,7 +32,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         static internal void InsertPaths(
                                          ref ProperLayeredGraph layeredGraph, ref LayerArrays la,
-                                         Database db, BasicGraph<Node, IntEdge> intGraphP) {
+                                         Database db, BasicGraph<Node, PolyIntEdge> intGraphP) {
             EdgePathsInserter li = new EdgePathsInserter(layeredGraph, la, db, intGraphP);
             li.InsertPaths();
             layeredGraph = li.NLayeredGraph;
@@ -40,7 +40,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
         EdgePathsInserter(
-                          ProperLayeredGraph layeredGraph, LayerArrays la, Database database, BasicGraph<Node, IntEdge> intGraphP) {
+                          ProperLayeredGraph layeredGraph, LayerArrays la, Database database, BasicGraph<Node, PolyIntEdge> intGraphP) {
             this.la = la;
             this.database = database;
             this.layeredGraph = layeredGraph;
@@ -64,13 +64,13 @@ namespace Microsoft.Msagl.Layout.Layered {
                 int[] layer = nla.Layers[i];
                 int offset = 0;
                 foreach (int v in la.Layers[i]) {
-                    IntEdge e;
+                    PolyIntEdge e;
                     this.virtNodesToIntEdges.TryGetValue(v, out e);
                     if (e != null) {
                         int layerOffsetInTheEdge = NLayering[e.Source] - NLayering[v];
-                        List<IntEdge> list = database.Multiedges[new IntPair(e.Source, e.Target)];
+                        List<PolyIntEdge> list = database.Multiedges[new IntPair(e.Source, e.Target)];
 
-                        foreach (IntEdge ie in list) {
+                        foreach (PolyIntEdge ie in list) {
                             if (!EdgeIsFlat(ie)) {
                                 if (ie != e) {
                                     int u = ie.LayerEdges[layerOffsetInTheEdge].Source;
@@ -90,14 +90,14 @@ namespace Microsoft.Msagl.Layout.Layered {
             }
         }
 
-        private bool EdgeIsFlat(IntEdge ie) {
+        private bool EdgeIsFlat(PolyIntEdge ie) {
             return la.Y[ie.Source] == la.Y[ie.Target];
         }
 
 
         void MapVirtualNodesToEdges() {
-            foreach (List<IntEdge> list in this.database.RegularMultiedges)
-                foreach (IntEdge e in list)
+            foreach (List<PolyIntEdge> list in this.database.RegularMultiedges)
+                foreach (PolyIntEdge e in list)
                     if (! EdgeIsFlat(e))//the edge is not flat
                         foreach (LayerEdge le in e.LayerEdges)
                             if (le.Target != e.Target)
@@ -108,13 +108,13 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         private void CreateFullLayeredGraph() {
             int currentVV = this.layeredGraph.NodeCount;
-            foreach (KeyValuePair<IntPair, List<IntEdge>>
+            foreach (KeyValuePair<IntPair, List<PolyIntEdge>>
                     kv in database.Multiedges) {
                 if (kv.Key.x != kv.Key.y) { //not a self edge
-                    List<IntEdge> list = kv.Value;
+                    List<PolyIntEdge> list = kv.Value;
                     bool first = true;
                     int span = 0;
-                    foreach (IntEdge e in list) {
+                    foreach (PolyIntEdge e in list) {
                         if (first) {
                             first = false;
                             span = e.LayerSpan;
@@ -137,13 +137,13 @@ namespace Microsoft.Msagl.Layout.Layered {
             this.nLayeredGraph = new ProperLayeredGraph(this.intGraph);
         }
 
-        internal static int GetTarget(ref int currentVV, IntEdge e, int i, int span) {
+        internal static int GetTarget(ref int currentVV, PolyIntEdge e, int i, int span) {
             if (i < span - 1)
                 return currentVV;
             return e.Target;
         }
 
-        internal static int GetSource(ref int currentVV, IntEdge e, int i) {
+        internal static int GetSource(ref int currentVV, PolyIntEdge e, int i) {
             if (i == 0)
                 return e.Source;
             return currentVV++;
@@ -158,12 +158,12 @@ namespace Microsoft.Msagl.Layout.Layered {
             for (int i = 0; i < layeredGraph.NodeCount; i++)
                 NLayering[i] = la.Y[i];
 
-            foreach (KeyValuePair<IntPair,List<IntEdge>> kv in database.Multiedges) {
+            foreach (KeyValuePair<IntPair,List<PolyIntEdge>> kv in database.Multiedges) {
                 if (kv.Key.First != kv.Key.Second && la.Y[kv.Key.First]!=la.Y[kv.Key.Second]) { //not a self edge and not a flat edge
                     int layer = 0;
                     bool first = true;
-                    List<IntEdge> list = kv.Value;
-                    foreach (IntEdge e in list) {
+                    List<PolyIntEdge> list = kv.Value;
+                    foreach (PolyIntEdge e in list) {
                         if (first) {
                             first = false;
                             layer = la.Y[e.Source];

@@ -16,7 +16,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
     internal class SmoothedPolylineCalculator {
         Site headSite;// corresponds to the bottom point
-        IntEdge edgePath;
+        PolyIntEdge edgePath;
         Anchor[] anchors;
         GeometryGraph originalGraph;
         ParallelogramNode rightHierarchy;
@@ -33,7 +33,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// <summary>
         /// Creates a smoothed polyline
         /// </summary>
-        internal SmoothedPolylineCalculator(IntEdge edgePathPar, Anchor[] anchorsP, GeometryGraph origGraph, SugiyamaLayoutSettings settings, LayerArrays la, ProperLayeredGraph layerGraph, Database databaseP) {
+        internal SmoothedPolylineCalculator(PolyIntEdge edgePathPar, Anchor[] anchorsP, GeometryGraph origGraph, SugiyamaLayoutSettings settings, LayerArrays la, ProperLayeredGraph layerGraph, Database databaseP) {
             this.database = databaseP;
             edgePath = edgePathPar;
             anchors = anchorsP;

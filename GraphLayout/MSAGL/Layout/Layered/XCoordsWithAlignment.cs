@@ -601,7 +601,7 @@ namespace Microsoft.Msagl.Layout.Layered {
              * taking into account separation between the blocks.
              */
             //create the graph first
-            List<IntEdge> edges = new List<IntEdge>();
+            List<PolyIntEdge> edges = new List<PolyIntEdge>();
             for (int v = 0; v < nOfVertices; v++) {
                 if (v == root[v])//v is a root
                 {
@@ -609,16 +609,16 @@ namespace Microsoft.Msagl.Layout.Layered {
                     do {
                         int rightNeighbor;
                         if (TryToGetRightNeighbor(w, out rightNeighbor))
-                            edges.Add(new IntEdge(v, root[rightNeighbor]));
+                            edges.Add(new PolyIntEdge(v, root[rightNeighbor]));
                         w = align[w];
                     }
                     while (w != v);
                 }
             }
 
-            BasicGraphOnEdges<IntEdge> blockGraph = new BasicGraphOnEdges<IntEdge>(edges, nOfVertices);
+            BasicGraphOnEdges<PolyIntEdge> blockGraph = new BasicGraphOnEdges<PolyIntEdge>(edges, nOfVertices);
             //sort the graph in the topological order
-            int[] topoSort = IntEdge.GetOrder(blockGraph);
+            int[] topoSort = PolyIntEdge.GetOrder(blockGraph);
             //start placing the blocks according to the order
 
             foreach (int v in topoSort) {

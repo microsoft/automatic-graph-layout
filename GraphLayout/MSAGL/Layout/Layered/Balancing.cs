@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Msagl.Core;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.GraphAlgorithms;
-using Graph = Microsoft.Msagl.Core.GraphAlgorithms.BasicGraphOnEdges<Microsoft.Msagl.Layout.Layered.IntEdge>;
+using Graph = Microsoft.Msagl.Core.GraphAlgorithms.BasicGraphOnEdges<Microsoft.Msagl.Layout.Layered.PolyIntEdge>;
 
 namespace Microsoft.Msagl.Layout.Layered {
     /// <summary>
@@ -111,7 +111,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         void InitJumpers() {
             int[] deltas = new int[this.dag.NodeCount];
-            foreach (IntEdge ie in dag.Edges) {
+            foreach (PolyIntEdge ie in dag.Edges) {
                 deltas[ie.Source] -= ie.Weight;
                 deltas[ie.Target] += ie.Weight;
             }
@@ -173,7 +173,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         int Up(int i) {
             int ret = Int32.MaxValue;
             //minimum of incoming edge sources layeres
-            foreach (IntEdge ie in dag.InEdges(i)) {
+            foreach (PolyIntEdge ie in dag.InEdges(i)) {
                 int r = layering[ie.Source] - ie.Separation + 1;
                 if (r < ret)
                     ret = r;
@@ -192,7 +192,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         int Down(int i) {
             int ret = -Int32.MaxValue;
 
-            foreach (IntEdge ie in dag.OutEdges(i)) {
+            foreach (PolyIntEdge ie in dag.OutEdges(i)) {
                 int r = layering[ie.Target] + ie.Separation - 1;
                 if (r > ret)
                     ret = r;

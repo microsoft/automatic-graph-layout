@@ -86,7 +86,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             set { gluedUpDownIntConstraints = value; }
         }
         Dictionary<Node, int> nodeIdToIndex;
-        BasicGraph<Node, IntEdge> intGraph;
+        BasicGraph<Node, PolyIntEdge> intGraph;
         /// <summary>
         /// this graph is obtained from intGraph by glueing together same layer vertices
         /// </summary>
@@ -98,7 +98,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// </summary>
         Dictionary<int, int> sameLayerDictionaryOfRepresentatives = new Dictionary<int, int>();
         Dictionary<int, IEnumerable<int>> representativeToItsLayer = new Dictionary<int, IEnumerable<int>>();
-        internal IEnumerable<IEdge> GetFeedbackSet(BasicGraph<Node, IntEdge> intGraphPar, Dictionary<Node, int> nodeIdToIndexPar) {
+        internal IEnumerable<IEdge> GetFeedbackSet(BasicGraph<Node, PolyIntEdge> intGraphPar, Dictionary<Node, int> nodeIdToIndexPar) {
             this.nodeIdToIndex = nodeIdToIndexPar;
             this.intGraph = intGraphPar;
             this.maxRepresentative = -1;
@@ -143,7 +143,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             return new IntPair(NodeToRepr(p.Item1), NodeToRepr(p.Item2));
         }
      
-        private IntPair GluedIntPair(IntEdge p) {
+        private IntPair GluedIntPair(PolyIntEdge p) {
             return new IntPair(NodeToRepr(p.Source), NodeToRepr(p.Target));
         }
 
@@ -151,10 +151,10 @@ namespace Microsoft.Msagl.Layout.Layered {
             return new IntPair(NodeToRepr(p.First), NodeToRepr(p.Second));
         }
 
-        internal IntEdge GluedIntEdge(IntEdge intEdge) {
+        internal PolyIntEdge GluedIntEdge(PolyIntEdge intEdge) {
             int sourceRepr = NodeToRepr(intEdge.Source);
             int targetRepr = NodeToRepr(intEdge.Target);
-            IntEdge ie = new IntEdge(sourceRepr, targetRepr);
+            PolyIntEdge ie = new PolyIntEdge(sourceRepr, targetRepr);
             ie.Separation = intEdge.Separation;
             ie.Weight = 0;
             ie.Edge = intEdge.Edge;
@@ -296,7 +296,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         private IEnumerable<IEdge> UnglueEdge(IEdge gluedEdge) {
             foreach (int source in UnglueNode(gluedEdge.Source))
-                foreach (IntEdge edge in intGraph.OutEdges(source))
+                foreach (PolyIntEdge edge in intGraph.OutEdges(source))
                     if (NodeToRepr(edge.Target) == gluedEdge.Target)
                         yield return edge;
         }

@@ -16,7 +16,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 #else
     internal
 #endif
-        class IntEdge : IEnumerable<int>, IEdge {
+        class PolyIntEdge : IEnumerable<int>, IEdge {
         int source;
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        internal IntEdge(int source, int target) {
+        internal PolyIntEdge(int source, int target) {
             this.source = source;
             this.target = target;
 #if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=289 Support Dictionary directly based on object's GetHashCode
@@ -119,7 +119,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <param name="edge"></param>
-        internal IntEdge(int source, int target, Edge edge) {
+        internal PolyIntEdge(int source, int target, Edge edge) {
             this.source = source;
             this.target = target;
             Edge = edge;
@@ -138,7 +138,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj) {
-            var ie = obj as IntEdge;
+            var ie = obj as PolyIntEdge;
             if (ie == null)
                 return false;
             return ie.source == source &&
@@ -237,8 +237,8 @@ namespace Microsoft.Msagl.Layout.Layered {
             return source == target;
         }
 
-        internal IntEdge ReversedClone() {
-            var ret = new IntEdge(target, source, Edge);
+        internal PolyIntEdge ReversedClone() {
+            var ret = new PolyIntEdge(target, source, Edge);
             if (layerEdges != null) {
                 int len = layerEdges.Length;
                 ret.layerEdges = new LayerEdge[len];
@@ -304,7 +304,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// </summary>
         /// <param name="graph"></param>
         /// <returns></returns>
-        internal static int[] GetOrder(BasicGraphOnEdges<IntEdge> graph){
+        internal static int[] GetOrder(BasicGraphOnEdges<PolyIntEdge> graph){
             var visited = new bool[graph.NodeCount];
 
             //no recursion! So we have to organize a stack

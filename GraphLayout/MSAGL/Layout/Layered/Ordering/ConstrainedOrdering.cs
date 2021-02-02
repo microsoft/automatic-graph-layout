@@ -10,7 +10,7 @@ using Microsoft.Msagl.Core.ProjectionSolver;
 namespace Microsoft.Msagl.Layout.Layered {
     internal class ConstrainedOrdering {
         readonly GeometryGraph geometryGraph;
-        readonly BasicGraph<Node, IntEdge> intGraph;
+        readonly BasicGraph<Node, PolyIntEdge> intGraph;
         internal ProperLayeredGraph ProperLayeredGraph;
         readonly int[] initialLayering;
         LayerInfo[] layerInfos;
@@ -21,7 +21,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         double[][] xPositions;
         int[][] yetBestLayers;
 
-        readonly List<IntEdge> verticalEdges = new List<IntEdge>();
+        readonly List<PolyIntEdge> verticalEdges = new List<PolyIntEdge>();
 
         readonly AdjacentSwapsWithConstraints adjSwapper;
 
@@ -46,7 +46,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         internal ConstrainedOrdering(
             GeometryGraph geomGraph,
-            BasicGraph<Node, IntEdge> basicIntGraph,
+            BasicGraph<Node, PolyIntEdge> basicIntGraph,
             int[] layering,
             Dictionary<Node, int> nodeIdToIndex,
             Database database,
@@ -85,7 +85,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                    ExistsShortMultiEdge(layering, database.Multiedges);
         }
 
-        static bool ExistsShortMultiEdge(int[] layering, Dictionary<IntPair, List<IntEdge>> multiedges) {
+        static bool ExistsShortMultiEdge(int[] layering, Dictionary<IntPair, List<PolyIntEdge>> multiedges) {
             return multiedges.Any(multiedge => multiedge.Value.Count > 2 && layering[multiedge.Key.x] == 1 + layering[multiedge.Key.y]);
         }
 
@@ -106,7 +106,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             return ProperLayeredGraph.Edges.Any(le => le.CrossingWeight != 1);
         }
 
-        static bool ExistsShortLabeledEdge(int[] layering, IEnumerable<IntEdge> edges) {
+        static bool ExistsShortLabeledEdge(int[] layering, IEnumerable<PolyIntEdge> edges) {
             return edges.Any(edge => layering[edge.Source] == layering[edge.Target] + 1 && edge.Edge.Label != null);
         }
 
@@ -306,8 +306,8 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// </summary>
         /// <returns></returns>
         Dictionary<int, int> CreateVerticalComponents() {
-            var vertGraph = new BasicGraphOnEdges<IntEdge>(from pair in horizontalConstraints.VerticalInts select new IntEdge(pair.Item1, pair.Item2));
-            var verticalComponents = ConnectedComponentCalculator<IntEdge>.GetComponents(vertGraph);
+            var vertGraph = new BasicGraphOnEdges<PolyIntEdge>(from pair in horizontalConstraints.VerticalInts select new PolyIntEdge(pair.Item1, pair.Item2));
+            var verticalComponents = ConnectedComponentCalculator<PolyIntEdge>.GetComponents(vertGraph);
             var nodesToComponentRoots = new Dictionary<int, int>();
             foreach (var component in verticalComponents) {
                 var ca = component.ToArray();
@@ -476,7 +476,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         void CreateExtendedLayerArrays() {
             var layeringExt = new int[numberOfNodesOfProperGraph];
             Array.Copy(initialLayering, layeringExt, initialLayering.Length);
-            foreach (IntEdge edge in ProperLayeredGraph.BaseGraph.Edges) {
+            foreach (PolyIntEdge edge in ProperLayeredGraph.BaseGraph.Edges) {
                 var ledges = (LayerEdge[])edge.LayerEdges;
                 if (ledges != null && ledges.Length > 1) {
                     int layerIndex = initialLayering[edge.Source] - 1;
@@ -488,16 +488,16 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
         void CreateProperLayeredGraph() {
-            IEnumerable<IntEdge> edges = CreatePathEdgesOnIntGraph();
-            var nodeCount = Math.Max(intGraph.NodeCount, BasicGraph<Node, IntEdge>.VertexCount(edges));
-            var baseGraph = new BasicGraph<Node, IntEdge>(edges, nodeCount) { Nodes = intGraph.Nodes };
+            IEnumerable<PolyIntEdge> edges = CreatePathEdgesOnIntGraph();
+            var nodeCount = Math.Max(intGraph.NodeCount, BasicGraph<Node, PolyIntEdge>.VertexCount(edges));
+            var baseGraph = new BasicGraph<Node, PolyIntEdge>(edges, nodeCount) { Nodes = intGraph.Nodes };
             ProperLayeredGraph = new ProperLayeredGraph(baseGraph);
         }
 
-        IEnumerable<IntEdge> CreatePathEdgesOnIntGraph() {
+        IEnumerable<PolyIntEdge> CreatePathEdgesOnIntGraph() {
             numberOfNodesOfProperGraph = intGraph.NodeCount;
-            var ret = new List<IntEdge>();
-            foreach (IntEdge ie in intGraph.Edges) {
+            var ret = new List<PolyIntEdge>();
+            foreach (PolyIntEdge ie in intGraph.Edges) {
                 if (initialLayering[ie.Source] > initialLayering[ie.Target]) {
                     CreateLayerEdgesUnderIntEdge(ie);
                     ret.Add(ie);
@@ -510,7 +510,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
 
-        void CreateLayerEdgesUnderIntEdge(IntEdge ie) {
+        void CreateLayerEdgesUnderIntEdge(PolyIntEdge ie) {
             int source = ie.Source;
             int target = ie.Target;
 
@@ -530,7 +530,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
 
         void FillAboveBelow() {
-            foreach (IntEdge ie in verticalEdges) {
+            foreach (PolyIntEdge ie in verticalEdges) {
                 foreach (LayerEdge le in ie.LayerEdges) {
                     int upper = le.Source;
                     int lower = le.Target;
@@ -551,7 +551,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
         void FillFlatEdges() {
-            foreach (IntEdge edge in intGraph.Edges) {
+            foreach (PolyIntEdge edge in intGraph.Edges) {
                 int l = initialLayering[edge.Source];
                 if (l == initialLayering[edge.Target]) {
                     GetOrCreateLayerInfo(l).flatEdges.Insert(new Tuple<int, int>(edge.Source, edge.Target));

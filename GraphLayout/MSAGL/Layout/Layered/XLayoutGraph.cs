@@ -11,7 +11,7 @@ namespace Microsoft.Msagl.Layout.Layered
     /// Follows the idea from Gansner etc 93, creating a special graph
     /// for x-coordinates calculation
     /// </summary>
-    internal class XLayoutGraph : BasicGraphOnEdges<IntEdge>
+    internal class XLayoutGraph : BasicGraphOnEdges<PolyIntEdge>
     {
 
         ProperLayeredGraph layeredGraph;//the result of layering
@@ -27,10 +27,10 @@ namespace Microsoft.Msagl.Layout.Layered
         int weightMultOfOneVirtual = 3; //weight multiplier for edges with only one virtual node
         int weightMultiplierOfTwoVirtual = 8; //weight multiplier for edges with two virtual nodes
 
-        internal XLayoutGraph(BasicGraphOnEdges<IntEdge> graph, //DAG of the original graph with no multiple edges
+        internal XLayoutGraph(BasicGraphOnEdges<PolyIntEdge> graph, //DAG of the original graph with no multiple edges
                               ProperLayeredGraph layeredGraph,
                               LayerArrays layerArrays,
-                              List<IntEdge> edges,
+                              List<PolyIntEdge> edges,
                               int nov)
         {
             this.SetEdges(edges, nov);
@@ -46,7 +46,7 @@ namespace Microsoft.Msagl.Layout.Layered
         /// </summary>
         /// <param name="edge"></param>
         /// <returns></returns>
-        internal int EdgeWeightMultiplier(IntEdge edge)
+        internal int EdgeWeightMultiplier(PolyIntEdge edge)
         {
 
 
@@ -65,7 +65,7 @@ namespace Microsoft.Msagl.Layout.Layered
             //here (s0,t0) is the edge of underlying graph 
             int s0 = -1, t0 = -1; //t0 is set to -1 to only avoid the warning
             //there are only two edges in graph.OutEdges(s)
-            foreach (IntEdge intEdge in this.OutEdges(s))
+            foreach (PolyIntEdge intEdge in this.OutEdges(s))
             {
                 if (s0 == -1)
                     s0 = intEdge.Target;
@@ -89,7 +89,7 @@ namespace Microsoft.Msagl.Layout.Layered
         internal void SetEdgeWeights()
         {
 
-            foreach (IntEdge intEdge in this.Edges)
+            foreach (PolyIntEdge intEdge in this.Edges)
                 intEdge.Weight = intEdge.Weight * EdgeWeightMultiplier(intEdge);                            
         }
        

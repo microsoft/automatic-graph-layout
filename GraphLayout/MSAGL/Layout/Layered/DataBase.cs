@@ -39,12 +39,12 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// <summary>
         /// This table keeps multi edges
         /// </summary>
-        Dictionary<IntPair, List<IntEdge>> multiedges = new Dictionary<IntPair, List<IntEdge>>();
+        Dictionary<IntPair, List<PolyIntEdge>> multiedges = new Dictionary<IntPair, List<PolyIntEdge>>();
 
-        internal IEnumerable<IntEdge> AllIntEdges {
+        internal IEnumerable<PolyIntEdge> AllIntEdges {
             get {
-                foreach (List<IntEdge> l in Multiedges.Values)
-                    foreach (IntEdge e in l)
+                foreach (List<PolyIntEdge> l in Multiedges.Values)
+                    foreach (PolyIntEdge e in l)
                         yield return e;
             }
         }
@@ -75,8 +75,8 @@ namespace Microsoft.Msagl.Layout.Layered {
                 IntPair ipr = new IntPair(e.Target, e.Source);
 
                 //we shuffle reversed edges into the other multiedge
-                List<IntEdge> listToShuffle = multiedges[ip];
-                foreach (IntEdge er in listToShuffle)
+                List<PolyIntEdge> listToShuffle = multiedges[ip];
+                foreach (PolyIntEdge er in listToShuffle)
                     er.Revert();
 
                 if (multiedges.ContainsKey(ipr))
@@ -88,9 +88,9 @@ namespace Microsoft.Msagl.Layout.Layered {
             }
         }
 
-        internal IEnumerable<List<IntEdge>> RegularMultiedges {
+        internal IEnumerable<List<PolyIntEdge>> RegularMultiedges {
             get {
-                foreach (KeyValuePair<IntPair, List<IntEdge>>
+                foreach (KeyValuePair<IntPair, List<PolyIntEdge>>
                         kv in Multiedges)
                     if (kv.Key.x != kv.Key.y)
                         yield return kv.Value;
@@ -105,38 +105,38 @@ namespace Microsoft.Msagl.Layout.Layered {
 #else
         internal
 #endif
- Dictionary<IntPair, List<IntEdge>> Multiedges {
+ Dictionary<IntPair, List<PolyIntEdge>> Multiedges {
             get {
                 return this.multiedges;
             }
         }
 
 
-        internal List<IntEdge> GetMultiedge(int source, int target) {
+        internal List<PolyIntEdge> GetMultiedge(int source, int target) {
             return GetMultiedge(new IntPair(source, target));
         }
 
 
-        internal List<IntEdge> GetMultiedge(IntPair ip) {
+        internal List<PolyIntEdge> GetMultiedge(IntPair ip) {
             if (multiedges.ContainsKey(ip))
                 return multiedges[ip];
 
-            return new List<IntEdge>();
+            return new List<PolyIntEdge>();
         }
 
 
-        internal void RegisterOriginalEdgeInMultiedges(IntEdge edge) {
+        internal void RegisterOriginalEdgeInMultiedges(PolyIntEdge edge) {
             IntPair ip = new IntPair(edge.Source, edge.Target);
-            List<IntEdge> o;
+            List<PolyIntEdge> o;
             if (multiedges.ContainsKey(ip) == false)
-                multiedges[ip] = o = new List<IntEdge>();
+                multiedges[ip] = o = new List<PolyIntEdge>();
             else
                 o = multiedges[ip];
 
             o.Add(edge);
         }
 
-        internal IEnumerable<IntEdge> SkeletonEdges() {
+        internal IEnumerable<PolyIntEdge> SkeletonEdges() {
             return from kv in Multiedges where kv.Key.x != kv.Key.y select kv.Value[0];
         }
         }
