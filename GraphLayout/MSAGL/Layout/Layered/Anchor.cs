@@ -308,7 +308,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                 if (polygonalBoundary != null)
                     return polygonalBoundary;
                 return polygonalBoundary = Pad(CreatPolygonalBoundaryWithoutPadding(),Padding);
-            }
+                }
         }
 
         static Polyline Pad(Polyline curve, double padding) {
@@ -367,11 +367,14 @@ namespace Microsoft.Msagl.Layout.Layered {
             //if (uvPerp * (v - Origin) < 0)
             //    uvPerp *= -1;
 
+//l is bisector of the corner (u,v,w) pointing out of the corner - outside of the polyline
             Point l = (v - u).Normalize() + (v - w).Normalize();
             if (l.Length < ApproximateComparer.IntersectionEpsilon) {
                 a = b = v + padding * uvPerp;
                 return 1;
             }
+// flip uvPerp if it points inside of the polyline
+            if (uvPerp * l < 0) uvPerp = -uvPerp;
             Point d = l.Normalize() * padding;
             Point dp = d.Rotate(Math.PI / 2);
 
