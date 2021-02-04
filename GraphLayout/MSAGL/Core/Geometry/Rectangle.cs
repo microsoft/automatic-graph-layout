@@ -87,35 +87,7 @@ namespace Microsoft.Msagl.Core.Geometry{
             return true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj) {
-            if (obj is Rectangle)
-                Equals((Rectangle) obj);
-            return false;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="rec"></param>
-        /// <returns></returns>
-        public bool Equals(Rectangle rec) {
-            return rec.Left == Left && rec.Right == Right && rec.Top == Top && rec.Bottom == Bottom;
-
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode(){
-            return base.GetHashCode();
-        }
-
+        
         /// <summary>
         /// creates an empty rectangle
         /// </summary>

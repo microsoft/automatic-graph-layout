@@ -104,15 +104,13 @@ namespace Microsoft.Msagl.UnitTests
         public void RTreeQuery_Rectangles()
         {
             const int Seeds = 100;
-            const int RectCount = 1000;
+            const int RectCount = 100;
             const int RegionSize = 1000;
             const int RectSize = 10;
-            for (int seed = 0; seed < Seeds; ++seed)
-            {
+            for (int seed = 0; seed < Seeds; ++seed) {
                 var rects = new Rectangle[RectCount];
                 var rand = new Random(seed);
-                for (int i = 0; i < RectCount; ++i)
-                {
+                for (int i = 0; i < RectCount; ++i) {
                     rects[i] = new Rectangle(rand.Next(RegionSize), rand.Next(RegionSize), new Point(RectSize, RectSize));
                 }
                 var bsptree = new RTree<Rectangle>(
@@ -121,19 +119,23 @@ namespace Microsoft.Msagl.UnitTests
                 Assert.AreEqual(bsptree.GetAllLeaves().Count(), RectCount);
                 Assert.AreEqual(bsptree.GetAllIntersecting(new Rectangle(0, 0, RegionSize + RectSize, RegionSize + RectSize)).Count(), RectCount);
                 Assert.AreEqual(bsptree.GetAllIntersecting(new Rectangle(-2, -2, -1, -1)).Count(), 0);
-                var query = new Rectangle(rand.Next(RegionSize), rand.Next(RegionSize), rand.Next(RegionSize), rand.Next(RegionSize));
+                var rect = GetRandRect(RegionSize, rand);
                 var checkList = (from r in rects
-                                 where query.Intersects(r)
+                                 where rect.Intersects(r)
                                  select r).ToList();
-                var checkSet = new HashSet<Rectangle>(checkList);
-                var result = bsptree.GetAllIntersecting(query).ToList();
+                var checkSet = new HashSet<string>(checkList.Select(r=>r.ToString()));
+                var result = bsptree.GetAllIntersecting(rect).ToList();
                 Assert.AreEqual(result.Count, checkList.Count, "result and check are different sizes: seed={0}", seed);
-                foreach (var r in result)
-                {
-                    Assert.IsTrue(query.Intersects(r), "rect doesn't intersect query: seed={0}, rect={1}, query={2}", seed, r, query);
-                    Assert.IsTrue(checkSet.Contains(r), "check set does not contain rect: seed={0}", seed);
+                foreach (var r in result) {
+                    Assert.IsTrue(rect.Intersects(r), "rect doesn't intersect query: seed={0}, rect={1}, query={2}", seed, r, rect);
+
+                    Assert.IsTrue(checkSet.Contains(r.ToString()), "check set does not contain rect: seed={0}", seed);
                 }
             }
+        }
+
+        private static Rectangle GetRandRect(int RegionSize, Random rand) {
+            return new Rectangle(rand.Next(RegionSize), rand.Next(RegionSize), rand.Next(RegionSize), rand.Next(RegionSize));
         }
 
         [TestMethod]
@@ -175,13 +177,13 @@ namespace Microsoft.Msagl.UnitTests
                     var checkList = (from r in rects.Take(b)
                                      where query.Intersects(r)
                                      select r).ToList();
-                    var checkSet = new HashSet<Rectangle>(checkList);
+                    var checkSet = new HashSet<string>(checkList.Select(r=>r.ToString()));
                     var result = queryTree.GetAllIntersecting(query).ToList();
                     Assert.AreEqual(result.Count, checkList.Count, "result and check are different sizes: seed={0}", seed);
                     foreach (var r in result)
                     {
                         Assert.IsTrue(query.Intersects(r), "rect doesn't intersect query: seed={0}, rect={1}, query={2}", seed, r, query);
-                        Assert.IsTrue(checkSet.Contains(r), "check set does not contain rect: seed={0}", seed);
+                        Assert.IsTrue(checkSet.Contains(r.ToString()), "check set does not contain rect: seed={0}", seed);
                     }
                 }
             }

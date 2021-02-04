@@ -154,7 +154,7 @@ namespace Microsoft.Msagl.UnitTests {
                 //DisplayGeometryGraph.ShowGraph(graph);
             }
         }
-        [Timeout(10000)]
+        [Timeout(TestTimeout.Infinite)]
         [TestMethod]
         [Description("Random graph with groups")]
         public void RouteEdges_SmallGroups()
@@ -162,34 +162,31 @@ namespace Microsoft.Msagl.UnitTests {
             RsmContent();
         }
 
-       
-        public static void RsmContent()
-        {
-            const int ntest = 7000;
-            int iStart = 1;
-            for (int multiplier = 1; multiplier < 12; multiplier++)
-            {
-                System.Diagnostics.Debug.WriteLine("multiplier " + multiplier);
+
+        public static void RsmContent() {
+            const int ntest = 70;
+            int iStart = 1;            
 #if TEST_MSAGL && TEST_MSAGL
-                DisplayGeometryGraph.SetShowFunctions();
+            DisplayGeometryGraph.SetShowFunctions();
 #endif
-                for (int i = iStart; i < ntest; i++) {
-                    Random random = new Random(i);
-                    GeometryGraph graph = GenerateGraphWithGroups(random, multiplier);
-                    SetRandomNodeShapes(graph, random);
-                    Layout(graph, random);
-                    // DisplayGeometryGraph.ShowGraph(graph);
+            for (int i = iStart; i < ntest; i++) {
+                Random random = new Random(i);
+                int multiplier = random.Next() % 5 + 1;
+                GeometryGraph graph = GenerateGraphWithGroups(random, multiplier);
+                SetRandomNodeShapes(graph, random);
+                Layout(graph, random);
+                // DisplayGeometryGraph.ShowGraph(graph);
 
-                    double edgeSeparation = 5 * random.NextDouble();
-                    System.Diagnostics.Debug.WriteLine("i={0} es={1}", i, edgeSeparation);
-                    GeometryGraphWriter.Write(graph, "c:\\tmp\\graph");
-                    RouteEdges(graph, edgeSeparation);
-                    //DisplayGeometryGraph.ShowGraph(graph);
+                double edgeSeparation = 5 * random.NextDouble();
+                System.Diagnostics.Debug.WriteLine("i={0} es={1}", i, edgeSeparation);
+                // GeometryGraphWriter.Write(graph, "c:\\tmp\\graph");
+                RouteEdges(graph, edgeSeparation);
+                // DisplayGeometryGraph.ShowGraph(graph);
 
-                    //TODO: try to move it
-                }
-            }            
+                //TODO: try to move it
+            }
         }
+        
 
         static GeometryGraph GenerateGraphWithGroups(Random random, int multiplier)
         {
