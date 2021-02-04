@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
+using Microsoft.Msagl.DebugHelpers;
 
 namespace Microsoft.Msagl.Layout.Layered {
     /// <summary>
@@ -360,21 +362,21 @@ namespace Microsoft.Msagl.Layout.Layered {
             Point u = first.Point;
             Point v = second.Point;
             Point w = third.Point;
-            // System.Diagnostics.Debug.Assert(Point.GetTriangleOrientation(u, v, w) == TriangleOrientation.Clockwise);
-            
-            Point uvPerp = (v - u).Rotate(Math.PI / 2).Normalize();
-            ////uvPerp has to look outside of the curve
-            //if (uvPerp * (v - Origin) < 0)
-            //    uvPerp *= -1;
+            bool ccw = Point.GetTriangleOrientation(u, v, w) == TriangleOrientation.Counterclockwise;
 
-//l is bisector of the corner (u,v,w) pointing out of the corner - outside of the polyline
+            //uvPerp has to look outside of the curve
+            var uvPerp = (v - u).Rotate((ccw? - Math.PI:Math.PI) / 2).Normalize();
+
+
+
+            //l is bisector of the corner (u,v,w) pointing out of the corner - outside of the polyline
             Point l = (v - u).Normalize() + (v - w).Normalize();
+            Debug.Assert(l * uvPerp >= 0);
             if (l.Length < ApproximateComparer.IntersectionEpsilon) {
                 a = b = v + padding * uvPerp;
                 return 1;
             }
 // flip uvPerp if it points inside of the polyline
-            if (uvPerp * l < 0) uvPerp = -uvPerp;
             Point d = l.Normalize() * padding;
             Point dp = d.Rotate(Math.PI / 2);
 
@@ -386,17 +388,26 @@ namespace Microsoft.Msagl.Layout.Layered {
             return 2; //number of points to add 
         }
 
-        static bool CurveIsConvex(Polyline poly) {
-            TriangleOrientation orientation = Point.GetTriangleOrientation(poly.EndPoint.Point, poly.StartPoint.Point, poly.StartPoint.Next.Point);
-            if (Point.GetTriangleOrientation(poly.EndPoint.Prev.Point, poly.EndPoint.Point, poly.StartPoint.Point) != orientation)
-                return false;
-            PolylinePoint pp = poly.StartPoint;
-            while (pp.Next.Next != null) {
-                if (Point.GetTriangleOrientation(pp.Point, pp.Next.Point, pp.Next.Next.Point) != orientation)
-                    return false;
+        static IEnumerable<TriangleOrientation> Orientations(Polyline poly) {
+            yield return Point.GetTriangleOrientation(poly.EndPoint.Point, poly.StartPoint.Point, poly.StartPoint.Next.Point);
+            yield return Point.GetTriangleOrientation(poly.EndPoint.Prev.Point, poly.EndPoint.Point, poly.StartPoint.Point);
+              
+            var pp = poly.StartPoint;
+            while (pp.Next.Next != null ) {
+                yield return Point.GetTriangleOrientation(pp.Point, pp.Next.Point, pp.Next.Next.Point);
                 pp = pp.Next;
             }
-
+        }
+        static bool CurveIsConvex(Polyline poly) {
+            var orientation = TriangleOrientation.Collinear;
+            foreach (var or in Orientations(poly)) {
+                if (or == TriangleOrientation.Collinear)
+                    continue;
+                if (orientation == TriangleOrientation.Collinear)
+                    orientation = or;
+                else if (or != orientation)
+                    return false;
+            }
             return true;
         }
 
@@ -413,7 +424,6 @@ namespace Microsoft.Msagl.Layout.Layered {
                 ret = StandardRectBoundary();
             else 
                 ret = Curve.PolylineAroundClosedCurve(this.NodeBoundary);
-            
             return ret;
         }
 

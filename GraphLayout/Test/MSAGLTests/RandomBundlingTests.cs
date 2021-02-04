@@ -154,7 +154,7 @@ namespace Microsoft.Msagl.UnitTests {
                 //DisplayGeometryGraph.ShowGraph(graph);
             }
         }
-        [Timeout(TestTimeout.Infinite)]
+        [Timeout(10000)]
         [TestMethod]
         [Description("Random graph with groups")]
         public void RouteEdges_SmallGroups()
@@ -162,36 +162,7 @@ namespace Microsoft.Msagl.UnitTests {
             RsmContent();
         }
 
-        [Timeout(TestTimeout.Infinite)]
-        [TestMethod]
-        [Description("Random graph with groups")]
-        [DeploymentItem(@"Resources\MSAGLGeometryGraphs\graph0.msagl.geom")]
-        public void RouteEdges_SmallGroupsFromDisc() {
-            RsmContentFromDisc();
-        }
-
-        public static void RsmContentFromDisc() {
-            int ntest = 10000;
-            int iStart = 1; // 470;
-
-#if TEST_MSAGL && TEST_MSAGL
-            DisplayGeometryGraph.SetShowFunctions();
-#endif   
-            var graph = GeometryGraphReader.CreateFromFile(@"c:\tmp\graph0.msagl.geom");
-
-            for (int i = iStart; i < ntest; i++) {
-                Random random = new Random(i);
-             
-                double edgeSeparation = 5*random.NextDouble();
-                System.Diagnostics.Debug.WriteLine("i={0} es={1}", i, edgeSeparation);
-                RouteEdges(graph, edgeSeparation);
-                // DisplayGeometryGraph.ShowGraph(graph);
-
-                //TODO: try to move it
-            }
-
-        }
-
+       
         public static void RsmContent()
         {
             const int ntest = 7000;
