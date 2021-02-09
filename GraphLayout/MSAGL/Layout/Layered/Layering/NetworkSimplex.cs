@@ -278,17 +278,14 @@ namespace Microsoft.Msagl.Layout.Layered {
             low = new int[graph.NodeCount];
             parent = new NetworkEdge[graph.NodeCount];
 
-            int curLim = 1;
-            int v = 0;
-
-            InitLowLimParentAndLeavesOnSubtree(ref curLim, ref v);
+            InitLowLimParentAndLeavesOnSubtree(1, 0);
         }
         /// <summary>
         /// initializes lim and low in the subtree 
         /// </summary>
         /// <param name="curLim">the root of the subtree</param>
         /// <param name="v">the low[v]</param>
-        private void InitLowLimParentAndLeavesOnSubtree(ref int curLim, ref int v) {
+        private void InitLowLimParentAndLeavesOnSubtree(int curLim, int v) {
             Stack<StackStruct> stack = new Stack<StackStruct>();
             IEnumerator outEnum = this.graph.OutEdges(v).GetEnumerator();
             IEnumerator inEnum = this.graph.InEdges(v).GetEnumerator();
@@ -369,8 +366,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
             }
 
-            int v = l;
-            InitLowLimParentAndLeavesOnSubtree(ref llow, ref v);
+            InitLowLimParentAndLeavesOnSubtree(llow, l);
 
         }
 
