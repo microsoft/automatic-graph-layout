@@ -222,7 +222,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         void SortNewOddLayers() {
 
             for (int i = 1; i < nla.Layers.Length; i += 2) {
-                SortedDictionary<int, object> sd = new SortedDictionary<int, object>();
+                Dictionary<int, object> sd = new Dictionary<int, object>();
                 int[] layer = nla.Layers[i];
                 foreach (int v in layer) {
 
