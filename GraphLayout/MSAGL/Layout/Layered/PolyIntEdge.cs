@@ -190,10 +190,9 @@ namespace Microsoft.Msagl.Layout.Layered {
             set { weight = value; }
         }
 
-        int crossingWeight = 1;
-
+        
         internal int CrossingWeight {
-            get { return crossingWeight; }
+            get { return 1; }
         }
 
         int separation;
