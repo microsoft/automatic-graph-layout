@@ -12,7 +12,11 @@ namespace Microsoft.Msagl.Core.Geometry{
 #if TEST_MSAGL
     [Serializable]
 #endif
+#pragma warning disable CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
+#pragma warning disable CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
     public struct Rectangle{
+#pragma warning restore CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
+#pragma warning restore CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
         /// <summary>
         /// shows min and max coordinates of corners
         /// </summary>

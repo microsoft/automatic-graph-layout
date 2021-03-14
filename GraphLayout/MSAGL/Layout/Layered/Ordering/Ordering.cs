@@ -11,7 +11,6 @@ namespace Microsoft.Msagl.Layout.Layered {
     internal partial class Ordering : AlgorithmBase{
         #region Fields
 
-        bool balanceVirtAndOrigNodes;
         bool hasCrossWeights;
 
         LayerArrays layerArrays;
@@ -58,14 +57,13 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         int[] X;
 
-        Ordering(ProperLayeredGraph graphPar, bool tryReverse, LayerArrays layerArraysParam, int startOfVirtualNodes, bool balanceVirtualAndOrigNodes, bool hasCrossWeights, SugiyamaLayoutSettings settings) {
+        Ordering(ProperLayeredGraph graphPar, bool tryReverse, LayerArrays layerArraysParam, int startOfVirtualNodes, bool hasCrossWeights, SugiyamaLayoutSettings settings) {
             this.tryReverse = tryReverse;
             startOfVirtNodes = startOfVirtualNodes;
             layerArrays = layerArraysParam;
             layering = layerArraysParam.Y;
             nOfLayers = layerArraysParam.Layers.Length;
             layers = layerArraysParam.Layers;
-            balanceVirtAndOrigNodes = balanceVirtualAndOrigNodes;
             properLayeredGraph = graphPar;
             this.hasCrossWeights = hasCrossWeights;
             this.settings = settings;
@@ -85,7 +83,6 @@ namespace Microsoft.Msagl.Layout.Layered {
         internal static void OrderLayers(ProperLayeredGraph graph,
                                          LayerArrays layerArrays,
                                          int startOfVirtualNodes,
-                                         bool balanceVirtualAndOriginalNodes, 
                                          SugiyamaLayoutSettings settings, CancelToken cancelToken) {
             bool hasCrossWeight = false;
             foreach (LayerEdge le in graph.Edges)
@@ -94,7 +91,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                     break;
                 }
 
-            var o = new Ordering(graph, true, layerArrays, startOfVirtualNodes, balanceVirtualAndOriginalNodes, hasCrossWeight, settings);
+            var o = new Ordering(graph, true, layerArrays, startOfVirtualNodes, hasCrossWeight, settings);
             o.Run(cancelToken);
         }
 
@@ -142,7 +139,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             if ( /*orderingMeasure.x>0 &&*/ tryReverse) {
                 LayerArrays secondLayers = layerArrays.ReversedClone();
 
-                var revOrdering = new Ordering(properLayeredGraph.ReversedClone(), false, secondLayers, startOfVirtNodes, balanceVirtAndOrigNodes,
+                var revOrdering = new Ordering(properLayeredGraph.ReversedClone(), false, secondLayers, startOfVirtNodes, 
                                                hasCrossWeights, settings);
 
                 revOrdering.Run();
@@ -174,12 +171,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
                 LayerByLayerSweep(up);
 
-
-                if (!balanceVirtAndOrigNodes)
-                    AdjacentExchange();
-                else
-                    AdjacentExchangeWithBalancingVirtOrigNodes();
-
+                AdjacentExchange();
 
                 var newMeasure = new OrderingMeasure(layerArrays.Layers,
                                                      GetCrossingsTotal(properLayeredGraph, layerArrays),
@@ -400,8 +392,6 @@ namespace Microsoft.Msagl.Layout.Layered {
 
             X = layerArrays.X;
 
-            if (balanceVirtAndOrigNodes)
-                InitOptimalGroupSizes();
         }
 
         void InitOptimalGroupSizes() {

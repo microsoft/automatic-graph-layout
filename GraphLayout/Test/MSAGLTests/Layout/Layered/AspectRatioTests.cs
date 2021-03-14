@@ -62,7 +62,7 @@ namespace Microsoft.Msagl.UnitTests
         /// </summary>
         private static void VerifyAspectRatio(GeometryGraph graph, double aspectRatio)
         {
-            double ratioTolerance = aspectRatio * 0.05;
+            double ratioTolerance = aspectRatio * 0.2;
 
             // Verify the graph is the correct size
             Assert.AreEqual(aspectRatio, (graph.Width-(graph.Margins*2)) / (graph.Height-(graph.Margins*2)), ratioTolerance, "The graph does not conform to the aspect ratio.");

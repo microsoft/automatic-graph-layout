@@ -47,19 +47,6 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
 
-        void AdjacentExchangeWithBalancingVirtOrigNodes() {
-            InitArrays();
-            int count = 0;
-            bool progress = true;
-            while (progress && count++ < MaxNumberOfAdjacentExchanges) {
-                progress = false;
-                for (int i = 0; i < layers.Length; i++)
-                    progress = AdjExchangeLayerWithBalance(i) || progress;
-                for (int i = layers.Length - 2; i >= 0; i--)
-                    progress = AdjExchangeLayerWithBalance(i) || progress;
-            }
-        }
-
         void AdjacentExchange() {
             InitArrays();
             int count = 0;
@@ -229,19 +216,6 @@ namespace Microsoft.Msagl.Layout.Layered {
             return ExchangeWithGainWithNoDisturbance(layer);
         }
 
-        bool AdjExchangeLayerWithBalance(int i) {
-            this.ProgressStep();
-            int[] layer = layers[i];
-            bool gain = ExchangeWithGainWithNoDisturbanceWithBalance(layer);
-
-            if (gain)
-                return true;
-
-            DisturbLayerWithBalance(layer);
-
-            return ExchangeWithGainWithNoDisturbanceWithBalance(layer);
-        }
-
         //in this routine u and v are adjacent, and u is to the left of v before the swap
         void Swap(int u, int v) {
             int left = X[u];
@@ -336,11 +310,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                 AdjacentSwapToTheRight(layer, i);
         }
 
-        void DisturbLayerWithBalance(int[] layer) {
-            for (int i = 0; i < layer.Length - 1; i++)
-                AdjacentSwapToTheRightWithBalance(layer, i);
-        }
-
+        
         bool ExchangeWithGainWithNoDisturbance(int[] layer) {
             bool wasGain = false;
 
@@ -353,17 +323,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             return wasGain;
         }
 
-        bool ExchangeWithGainWithNoDisturbanceWithBalance(int[] layer) {
-            bool wasGain = false;
-
-            bool gain;
-            do {
-                gain = ExchangeWithGainWithBalance(layer);
-                wasGain = wasGain || gain;
-            } while (gain);
-
-            return wasGain;
-        }
+        
 
         bool ExchangeWithGain(int[] layer) {
             //find a first pair giving some gain
@@ -377,18 +337,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             return false;
         }
 
-        bool ExchangeWithGainWithBalance(int[] layer) {
-            //find a first pair giving some gain
-            for (int i = 0; i < layer.Length - 1; i++)
-                if (SwapWithGainWithBalance(layer[i], layer[i + 1])) {
-                    SwapToTheLeftWithBalance(layer, i);
-                    SwapToTheRightWithBalance(layer, i + 1);
-                    return true;
-                }
-
-            return false;
-        }
-
+        
         void SwapToTheLeft(int[] layer, int i) {
             for (int j = i - 1; j >= 0; j--)
                 AdjacentSwapToTheRight(layer, j);
@@ -397,16 +346,6 @@ namespace Microsoft.Msagl.Layout.Layered {
         void SwapToTheRight(int[] layer, int i) {
             for (int j = i; j < layer.Length - 1; j++)
                 AdjacentSwapToTheRight(layer, j);
-        }
-
-        void SwapToTheLeftWithBalance(int[] layer, int i) {
-            for (int j = i - 1; j >= 0; j--)
-                AdjacentSwapToTheRightWithBalance(layer, j);
-        }
-
-        void SwapToTheRightWithBalance(int[] layer, int i) {
-            for (int j = i; j < layer.Length - 1; j++)
-                AdjacentSwapToTheRightWithBalance(layer, j);
         }
 
         /// <summary>
@@ -423,31 +362,11 @@ namespace Microsoft.Msagl.Layout.Layered {
                 Swap(u, v);
         }
 
-        void AdjacentSwapToTheRightWithBalance(int[] layer, int i) {
-            int u = layer[i], v = layer[i + 1];
-
-            int gain = SwapGainWithBalance(u, v);
-
-            if (gain > 0 || (gain == 0 && HeadOfTheCoin()))
-                Swap(u, v);
-        }
-
         int SwapGain(int u, int v) {
             int cuv;
             int cvu;
             CalcPair(u, v, out cuv, out cvu);
             return cuv - cvu;
-        }
-
-        int SwapGainWithBalance(int u, int v) {
-            int cuv;
-            int cvu;
-            CalcPair(u, v, out cuv, out cvu);
-            int gain = cuv - cvu;
-            if (gain != 0 && UvAreOfSameKind(u, v))
-                return gain;
-            //maybe we gain something in the group sizes
-            return SwapGroupGain(u, v);
         }
 
         bool UvAreOfSameKind(int u, int v) {
@@ -547,16 +466,6 @@ namespace Microsoft.Msagl.Layout.Layered {
         ///// <returns></returns>
         bool SwapWithGain(int u, int v) {
             int gain = SwapGain(u, v);
-
-            if (gain > 0) {
-                Swap(u, v);
-                return true;
-            }
-            return false;
-        }
-
-        bool SwapWithGainWithBalance(int u, int v) {
-            int gain = SwapGainWithBalance(u, v);
 
             if (gain > 0) {
                 Swap(u, v);
