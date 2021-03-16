@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Msagl.Core;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.GraphAlgorithms;
@@ -57,7 +58,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// The function FeasibleTree constructs an initial feasible spanning tree.
         /// </summary>
         void FeasibleTree() {
-            InitLayer();
+            InitLayers();
 
             while (TightTree() < this.graph.NodeCount) {
 
@@ -623,15 +624,13 @@ namespace Microsoft.Msagl.Layout.Layered {
                         continue; //the value of this cut has not been changed
                     int cut = 0;
                     foreach (NetworkEdge ce in IncidentEdges(w)) {
-
                         if (ce.inTree == false) {
-                            int e0Val = EdgeSourceTargetVal(ce, cutEdge);
-                            if (e0Val != 0)
-                                cut += e0Val * ce.Weight;
-                        } else //e0 is a tree edge
-                        {
-                            if (ce == cutEdge)
+                            cut += EdgeSourceTargetVal(ce, cutEdge) * ce.Weight;
+                        }
+                        else { //e0 is a tree edge
+                            if (ce == cutEdge) {
                                 cut += ce.Weight;
+                            }
                             else {
                                 int impact = cutEdge.Source == ce.Target || cutEdge.Target == ce.Source ? 1 : -1;
                                 int edgeContribution = EdgeContribution(ce, w);
@@ -651,7 +650,6 @@ namespace Microsoft.Msagl.Layout.Layered {
                 front = newFront;
                 newFront = t;
             }
-
         }
 
         private void CreatePathForCutUpdates(NetworkEdge e, NetworkEdge f, int l) {
@@ -719,7 +717,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 #endif
 
-        void InitLayer() {
+        void InitLayers() {
             LongestPathLayering lp = new LongestPathLayering(this.graph);
             this.layers = lp.GetLayers();
         }
@@ -816,22 +814,29 @@ namespace Microsoft.Msagl.Layout.Layered {
         BasicGraphOnEdges<PolyIntEdge> graph;
         private CancelToken NetworkCancelToken;
 
+        public int Weight { get {
+                return this.graph.Edges.Select(e => e.Weight*(this.layers[e.Source]-this.layers[e.Target])).Sum();
+            }
+        }
 
-        protected override void RunInternal()
-        {
+        protected override void RunInternal() {
             if (graph.Edges.Count == 0 && graph.NodeCount == 0)
-                layers=new int[0];
+                layers = new int[0];
 
             FeasibleTree();
 
             Tuple<NetworkEdge, NetworkEdge> leaveEnter;
-            while ((leaveEnter = LeaveEnterEdge()) != null)
-            {
+            while ((leaveEnter = LeaveEnterEdge()) != null) {
                 ProgressStep();
                 Exchange(leaveEnter.Item1, leaveEnter.Item2);
             }
 
-            ShiftLayerToZero();    
+            ShiftLayerToZero();
+            int w = 0;
+            foreach (var e in this.graph.Edges) {
+                w += (this.layers[e.Source] - this.layers[e.Target]) * e.Weight;
+            }
+            Console.WriteLine("network simplex= " + w);
         }
     }
 }

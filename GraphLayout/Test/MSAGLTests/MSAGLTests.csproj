@@ -125,6 +125,7 @@
     <Compile Include="Layout\Layered\SugiyamaEdgeLabelTests.cs" />
     <Compile Include="Layout\Layered\SugiyamaSettingsTests.cs" />
     <Compile Include="EdgeLabelPlacementTest.cs" />
+    <Compile Include="NetworkSimplexTest.cs" />
     <Compile Include="RandomBundlingTests.cs" />
     <Compile Include="RectanglePackingTest.cs" />
     <Compile Include="SplineRouterTests.cs" />
