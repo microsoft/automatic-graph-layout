@@ -832,11 +832,6 @@ namespace Microsoft.Msagl.Layout.Layered {
             }
 
             ShiftLayerToZero();
-            int w = 0;
-            foreach (var e in this.graph.Edges) {
-                w += (this.layers[e.Source] - this.layers[e.Target]) * e.Weight;
-            }
-            Console.WriteLine("network simplex= " + w);
         }
     }
 }
