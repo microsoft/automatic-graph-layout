@@ -58,6 +58,18 @@ namespace Microsoft.Msagl.Core.GraphAlgorithms {
 
             throw new InvalidOperationException();
         }
+        public static bool operator !=(IntPair pair0, IntPair pair1) {
+            return !(pair0 == pair1);
+        }
+        public static bool operator ==(IntPair pair0, IntPair pair1) {
+            if (pair0 is null) {
+                return pair1 is null;
+            }
+            else if (pair1 is null) {
+                return false;
+            }
+            return pair0.x == pair1.x && pair0.y == pair1.y;
+        }
         /// <summary>
         /// the greater operator
         /// </summary>
@@ -90,7 +102,7 @@ namespace Microsoft.Msagl.Core.GraphAlgorithms {
         /// <returns></returns>
         public override bool Equals(object obj) {
             IntPair other = obj as IntPair;
-            if (other == null)
+            if (other is null)
                 return false;
 
             return x == other.x && y == other.y;
@@ -134,6 +146,7 @@ namespace Microsoft.Msagl.Core.GraphAlgorithms {
             return "(" + x + "," + y + ")";
         }
 
+        
 #if SHARPKIT //http://code.google.com/p/sharpkit/issues/detail?id=203 Explicitly implemented interfaces are not generate without any warning
         public int Source {
 #else
@@ -162,6 +175,10 @@ namespace Microsoft.Msagl.Core.GraphAlgorithms {
                 UpdateHashKey();
 #endif
             }
+        }
+        public int CompareTo(IntPair other) {
+            var r = x.CompareTo(other.x);
+            return r != 0 ? r : y.CompareTo(other.y);
         }
     }
 }
