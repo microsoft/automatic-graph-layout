@@ -21,11 +21,6 @@ namespace Microsoft.Msagl.Core.Layout {
         public abstract ICurve Curve { get; set; }
 
         /// <summary>
-        /// Defines one or more restrictions on where an edge can be routed relative to the port.
-        /// </summary>
-        public IPortEntry PortEntry { get; set; }
-
-        /// <summary>
         /// </summary>
         /// <returns></returns>
         public override string ToString() {

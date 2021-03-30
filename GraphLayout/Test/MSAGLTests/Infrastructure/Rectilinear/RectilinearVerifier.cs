@@ -747,80 +747,8 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             return DoRouting(obstacles, routings, null /*freePorts*/);
         }
 
-        // ReSharper disable InconsistentNaming
-        internal RectilinearEdgeRouterWrapper Run_PortEntry_ERSource_ERTarget()
-        // ReSharper restore InconsistentNaming
-        {
-            List<Shape> obstacles = this.CreateTwoTestSquaresWithSentinels();
-            var a = obstacles[0];
-            var b = obstacles[1];
-
-            // Put a bunch of PortEntry span with a midpoint collinear with the center on each side of the source and target.
-            var sourcePorts = this.CreateERPorts(a);
-            var targetPorts = this.CreateERPorts(b);
-
-            var routings =
-                (from sourcePort in sourcePorts
-                 from targetPort in targetPorts
-                 select this.CreateRouting(sourcePort, targetPort)).ToList();
-
-            return DoRouting(obstacles, routings, null /*freePorts*/);
-        }
-
-        // ReSharper disable InconsistentNaming
-        internal RectilinearEdgeRouterWrapper Run_PortEntry_ERSource_FullSideTarget()
-        // ReSharper restore InconsistentNaming
-        {
-            List<Shape> obstacles = this.CreateTwoTestSquaresWithSentinels();
-            var a = obstacles[0];
-            var b = obstacles[1];
-
-            // Put a bunch of PortEntry span with a midpoint collinear with the center on each side of the source.
-            var sourcePorts = this.CreateERPorts(a);
-
-            // Put a normal Relative port in the target.
-            var targetPort = this.MakeSingleRelativeObstaclePort(b, new Point());
-            var routings = sourcePorts.Select(sourcePort => this.CreateRouting(sourcePort, targetPort)).ToList();
-
-            return DoRouting(obstacles, routings, null /*freePorts*/);
-        }
-
-        // Create multiple ports to simulate an E-R diagram; each "row" has its own port with a PortEntry with
-        // spans on each side.
-        internal IEnumerable<Port> CreateERPorts(Shape obstacle)
-        {
-            var bbox = obstacle.BoundingBox;
-            var height = bbox.Height;
-            const int RowCount = 10;
-            var rowHeight = height / RowCount;
-            var portCenter = new Point(bbox.Center.X, bbox.Bottom + (rowHeight / 2));
-            const double ParamStep = 1.0 / RowCount;
-            const double HalfSpanHeight = ParamStep / 10;
-
-            // Side parameter indexes plus initial center of param span; rectangles are clockwise.
-            var parLeftStart = obstacle.BoundaryCurve.ClosestParameter(obstacle.BoundingBox.LeftBottom);
-            var leftSpanCenter = parLeftStart + (ParamStep / 2);
-            var rightSpanCenter = ((parLeftStart + 2.0) % obstacle.BoundaryCurve.ParEnd) + (ParamStep / 2);
-
-            var ports = new List<Port>();
-            for (int ii = 0; ii < RowCount; ++ii)
-            {
-                var port = MakeSingleRelativeObstaclePort(obstacle, bbox.Center - portCenter);
-                ports.Add(port);
-                portCenter.Y += rowHeight;
-
-                var spans = new List<Tuple<double, double>>
-                    {
-                        new Tuple<double, double>(leftSpanCenter - HalfSpanHeight, leftSpanCenter + HalfSpanHeight),
-                        new Tuple<double, double>(rightSpanCenter - HalfSpanHeight, rightSpanCenter + HalfSpanHeight)
-                    };
-                port.PortEntry = new PortEntryOnCurve(port.Curve, spans);
-                leftSpanCenter += ParamStep;
-                rightSpanCenter += ParamStep;
-            }
-            return ports;
-        }
-
+        
+        
         internal RectilinearEdgeRouterWrapper RunSimpleWaypoints(int numPoints, bool multiplePaths, bool wantTopRect)
         {
             var obstacles = CreateTwoTestSquares();

@@ -120,7 +120,6 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
 
             // Input detail
             ReadInputObstacles();
-            ReadPorts();
             ReadRoutingSpecs();
 
             // Output detail.
@@ -318,53 +317,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             return accretion;
         }
 
-        private void ReadPorts() {
-            Match m;
-            this.VerifyIsNextLine(RectFileStrings.BeginPorts);
-
-            // Get to the first line for consistency with the lookahead for multiPort offsets and/or any
-            // PortEntries, which will end up reading the following line.
-            this.NextLine();
-
-            for (; ; )
-            {
-                if (!(m = ParseOrDone(RectFileStrings.ParsePort, RectFileStrings.EndPorts)).Success) {
-                    break;
-                }
-
-                bool isMultiPort = IsString(m.Groups["type"].ToString(), RectFileStrings.Multi);
-                bool isRelative = IsString(m.Groups["type"].ToString(), RectFileStrings.Relative);
-                var x = double.Parse(m.Groups["X"].ToString());
-                var y = double.Parse(m.Groups["Y"].ToString());
-                var portId = int.Parse(m.Groups["portId"].ToString());
-                var shapeId = int.Parse(m.Groups["shapeId"].ToString());
-                Validate.IsFalse(idToPortMap.ContainsKey(portId), "PortId already exists");
-                var location = new Point(x, y);
-                Shape shape = GetShapeFromId(shapeId, isMultiPort || isRelative);
-                Port port;
-                if (isRelative) {
-                    // The location in the ParsePort line is the offset for the relative port.
-                    port = new RelativeFloatingPort(() => shape.BoundaryCurve, () => shape.BoundingBox.Center, location);
-                }
-                else {
-                    Validate.IsTrue(IsString(m.Groups["type"].ToString(), RectFileStrings.Floating), CurrentLineError("Unknown port type"));
-                    port = new FloatingPort((null == shape) ? null : shape.BoundaryCurve, location);
-                }
-                this.NextLine();    // Since we didn't read multiPort offsets
-
-                idToPortMap.Add(portId, port);
-                if (null != shape) {
-                    if (!this.UseFreePortsForObstaclePorts) {
-                        shape.Ports.Insert(port);
-                    }
-                    else {
-                        FreeRelativePortToShapeMap[port] = shape;
-                    }
-                }
-                ReadPortEntries(port);
-            }
-        }
-
+        
         private Shape GetShapeFromId(int shapeId, bool isMultiOrRelative)
         {
             Shape shape;
@@ -397,27 +350,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             return offsets;
         }
 
-        private void ReadPortEntries(Port port)
-        {
-            // We've already positioned ourselves to the next line in ReadPorts.
-            if (!IsLine(RectFileStrings.PortEntryOnCurve))
-            {
-                return;
-            }
-
-            var spans = new List<Tuple<double, double>>();
-            Match m;
-            while ((m = TryParseNext(RectFileStrings.ParsePoint)).Success)
-            {
-                // We reuse ParsePoint because a span is just two doubles as well.
-                var first = double.Parse(m.Groups["X"].ToString());
-                var second = double.Parse(m.Groups["Y"].ToString());
-                spans.Add(new Tuple<double, double>(first, second));
-            }
-            Validate.IsTrue(spans.Count > 0, CurrentLineError("Empty span list"));
-            port.PortEntry = new PortEntryOnCurve(port.Curve, spans);
-        }
-
+        
         private void ReadRoutingSpecs()
         {
             Match m;

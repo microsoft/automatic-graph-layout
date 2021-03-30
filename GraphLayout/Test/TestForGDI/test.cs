@@ -142,9 +142,6 @@ namespace TestForGdi {
                                 ShowDebugCurves(args[iarg + 1]);
 #endif
                                 return;
-                            case "-testportentry":
-                                TestPortEntry();
-                                return;
                             case "-geom": // must be before case "g":
                                 geomFileNames.Add(args[iarg + 1]);
                                 ++iarg;
@@ -822,109 +819,7 @@ namespace TestForGdi {
 #endif // UNREACHABLE_CODE
         }
 
-        static void TestPortEntry() {
-            {
-                ICurve c = CurveFactory.CreateRectangleWithRoundedCorners(100, 50, 3, 2, new Point());
-                const int x = 200;
-                const int y = 24;
-                var p0 = new Point(x, -y);
-                var p1 = new Point(x, y);
-                var p2 = new Point(-x, y/2.0);
-                var p3 = new Point(-x, -y/2.0);
-
-                double par0 = c.ClosestParameter(p0);
-                double par1 = c.ClosestParameter(p1);
-                double par2 = c.ClosestParameter(p2);
-                double par3 = c.ClosestParameter(p3);
-                double par4 = c.ClosestParameter(new Point(48, -27));
-                double par5 = c.ClosestParameter(new Point(44, -26));
-
-                double par6 = c.ClosestParameter(new Point(-52, -22));
-                double par7 = c.ClosestParameter(new Point(-49, -26.6));
-
-#if TEST_MSAGL
-
-                var portEntry = new PortEntryOnCurve(c, new[] {
-                                    new Tuple<double, double>(par5, par4),
-                                    new Tuple<double, double>(par2, par3),
-                                    new Tuple<double, double>(par0, par1),
-                                    new Tuple<double, double>(par6, par7),
-                                });
-
-                IEnumerable<DebugCurve> dc =
-                    portEntry.GetEntryPoints().Select(
-                        p => new DebugCurve(100, 1, "blue", CurveFactory.CreateEllipse(3, 3, p))).Concat(new[] {
-                                                                    new DebugCurve(100, 1, "brown", c)
-                                                                });
-                dc = dc.Concat(
-                    portEntry.Spans.SelectMany(
-                        span =>
-                        new[] {
-                                  new DebugCurve(100, 1, "green", CurveFactory.CreateDiamond(3, 3, c[span.Item1])),
-                                  new DebugCurve(100, 1, "green", CurveFactory.CreateDiamond(3, 3, c[span.Item2]))
-                              }));
-
-                LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(dc);
-
-#endif
-            }
-            {
-                ICurve c = CurveFactory.CreateEllipse(50, 25, new Point());
-                double par0 = c.ClosestParameter(new Point(31, -21));
-                double par1 = c.ClosestParameter(new Point(34, -19));
-                double par2 = c.ClosestParameter(new Point(49, -3));
-                double par3 = c.ClosestParameter(new Point(50, 3));
-                double par4 = c.ClosestParameter(new Point(-22, 23));
-                double par5 = c.ClosestParameter(new Point(-29, 20));
-
-
-                var portEntry = new PortEntryOnCurve(c,
-                                                     new[] {
-                                                               new Tuple<double, double>(par0, par1),
-                                                               //  new Tuple<double, double>(par0, par1)
-                                                           });
-#if TEST_MSAGL
-                IEnumerable<DebugCurve> dc =
-                    portEntry.GetEntryPoints().Select(
-                        p => new DebugCurve(100, 1, "blue", CurveFactory.CreateEllipse(3, 3, p))).Concat(new[] {
-                                                                                new DebugCurve(100, 1, "brown", c)
-                                                                            });
-                dc = dc.Concat(
-                    portEntry.Spans.SelectMany(
-                        span =>
-                        new[] {
-                                  new DebugCurve(100, 1, "green", CurveFactory.CreateDiamond(3, 3, c[span.Item1])),
-                                  new DebugCurve(100, 1, "green", CurveFactory.CreateDiamond(3, 3, c[span.Item2]))
-                              }));
-
-                LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(dc);
-
-                portEntry = new PortEntryOnCurve(c,
-                                                 new[] {
-                                                           new Tuple<double, double>(par4, par5),
-                                                           new Tuple<double, double>(par2, par3),
-                                                           new Tuple<double, double>(par0, par1),
-                                                       });
-
-                dc =
-                    portEntry.GetEntryPoints().Select(
-                        p => new DebugCurve(100, 1, "blue", CurveFactory.CreateEllipse(3, 3, p))).Concat(new[] {
-                                                                                new DebugCurve(100, 1, "brown", c)
-                                                                            });
-
-                dc = dc.Concat(
-                    portEntry.Spans.SelectMany(
-                        span =>
-                        new[] {
-                                  new DebugCurve(100, 1, "green", CurveFactory.CreateDiamond(3, 3, c[span.Item1])),
-                                  new DebugCurve(100, 1, "green", CurveFactory.CreateDiamond(3, 3, c[span.Item2]))
-                              }));
-
-                LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(dc);
-#endif
-            }
-        }
-
+     
         static void LoadGeomFiles(IEnumerable<string> fileList, EdgeRoutingSettings edgeRoutingSettings, bool show) {
             foreach (string s in fileList)
                 LoadGeomFile(s, edgeRoutingSettings, show);

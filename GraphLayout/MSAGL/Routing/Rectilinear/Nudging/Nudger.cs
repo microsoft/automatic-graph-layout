@@ -668,19 +668,12 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
 
 
         void BoundAxisEdgeAdjacentToObstaclePort(Port port, AxisEdge axisEdge) {
-            if (port is WaypointPort || (port.Curve == null && port.PortEntry == null))
+            if (port is WaypointPort || (port.Curve == null ))
                 BoundAxisByPoint(port.Location, axisEdge);
-            else if (port.PortEntry == null) {
+            else  {
                 if (port.Curve.BoundingBox.Contains(port.Location))
                     BoundAxisEdgeByRect(port.Curve.BoundingBox, axisEdge);
-            } else {
-                var portEntry = port.PortEntry as PortEntryOnCurve;
-                if (portEntry != null) {
-                    Rectangle rect;
-                    if (FindPortEntryRectCrossingAxisEdge(portEntry, axisEdge, out rect))
-                        BoundAxisEdgeByRect(rect, axisEdge);
-                }
-            }
+            } 
         }
 
         void BoundAxisByPoint(Point point, AxisEdge axisEdge) {
@@ -692,18 +685,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                     axisEdge.BoundFromLeft(-point.Y);
                     axisEdge.BoundFromRight(-point.Y);
                 }
-        }
-
-        static bool FindPortEntryRectCrossingAxisEdge(PortEntryOnCurve portEntry, AxisEdge axisEdge, out Rectangle rect) {
-            var ar = new Rectangle(axisEdge.SourcePoint, axisEdge.TargetPoint);           
-            foreach (Rectangle r in portEntry.AllowedRectangles) {
-                if(r.Intersects(ar)) {
-                    rect = r;
-                    return true;
-                }                    
-            }
-            rect = Rectangle.CreateAnEmptyBox();
-            return false;
         }
 
         void BoundAxisEdgesAdjacentToSourceAndTargetOnEdge(Path path) {

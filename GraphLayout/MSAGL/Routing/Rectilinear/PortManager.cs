@@ -425,11 +425,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             }
             
             // Create the PortEntrances with initial information:  border intersect and outer edge direction.
-            if (null == oport.Port.PortEntry) {
                 this.CreateObstaclePortEntrancesFromPoints(oport);
-            } else {
-                this.CreateObstaclePortEntrancesFromPortEntry(oport);
-            }
+            
         }
 
         public Point[] GetPortVisibilityIntersection(EdgeGeometry edgeGeometry) {
@@ -554,27 +551,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             if (!found) {
                 // This must be on a corner, else one of the above would have matched.
                 this.CreateEntrancesForCornerPort(curveBox, oport, location);
-            }
-        }
-
-        private void CreateObstaclePortEntrancesFromPortEntry(ObstaclePort oport) {
-            // Create a PortEntrance for each of one or more midpoints of each of the spans of the PortEntry. 
-            foreach (var midPoint in oport.Port.PortEntry.GetEntryPoints()) {
-                var borderPoint = ApproximateComparer.Round(midPoint);
-                Directions derivDirs = CompassVector.VectorDirection(GetDerivative(oport, borderPoint));
-
-                // The deriv is clockwise so if it moves East then it is on top and Port visibility extends to
-                // the North; otherwise it extends to the South. Similarly, if the deriv moves South then visibility
-                // must extend to the East, else West.  If it is flat or perpendicular then visibility extends in
-                // only one direction.  Due to clockwiseness, we can just RotateLeft to get to the desired extension.
-                Directions dir = derivDirs & (Directions.North | Directions.South);
-                if (Directions. None != dir) {
-                    oport.CreatePortEntrance(borderPoint, CompassVector.RotateLeft(dir), this.ObstacleTree);
-                }
-                dir = derivDirs & (Directions.East | Directions.West);
-                if (Directions. None != dir) {
-                    oport.CreatePortEntrance(borderPoint, CompassVector.RotateLeft(dir), this.ObstacleTree);
-                }
             }
         }
 

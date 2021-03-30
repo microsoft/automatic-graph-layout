@@ -1026,45 +1026,6 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             }
         }
 
-        private static void VerifyPortEntries(EdgeGeometry edgeGeom, ObstaclePort sourceOport, ObstaclePort targetOport) 
-        {
-            VerifyPortEntry(edgeGeom.SourcePort.PortEntry, edgeGeom.Curve.Start, sourceOport);
-            VerifyPortEntry(edgeGeom.TargetPort.PortEntry, edgeGeom.Curve.End, targetOport);
-        }
-
-        private static void VerifyPortEntry(IPortEntry portEntry, Point endpoint, ObstaclePort oport) 
-        {
-            if (portEntry == null) 
-            {
-                return;
-            }
-            Validate.IsNotNull(oport, "portEntry must have an ObstaclePort");
-            var peoc = (PortEntryOnCurve)portEntry; // at this time we have no other IPortEntry implementations
-            var endpointParam = oport.PortCurve.ClosestParameter(endpoint);
-            foreach (var span in peoc.Spans) 
-            {
-                if (span.Item1 < span.Item2)
-                {
-                    if ((endpointParam >= span.Item1) && (endpointParam <= span.Item2))
-                    {
-                        return;
-                    }
-                    continue;
-                }
-                
-                // The span wraps around from end to start
-                if ((endpointParam >= span.Item1) && (endpointParam <= oport.PortCurve.ParEnd))
-                {
-                    return;
-                }
-                if ((endpointParam >= oport.PortCurve.ParStart) && (endpointParam <= span.Item2))
-                {
-                    return;
-                }
-            }
-            Validate.Fail("Path endpoint is not in a PortEntry span");
-        }
-
         internal void VerifyPaths()
         {
             if (!this.WantPaths)
@@ -1089,8 +1050,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
                 var sourceObstacle = (null == sourceOport) ? null : sourceOport.Obstacle;
                 var targetObstacle = (null == targetOport) ? null : targetOport.Obstacle;
 
-                VerifyPortEntries(edgeGeom, sourceOport, targetOport);
-
+                
                 Validate.IsNotNull(edgeGeom.Curve, string.Format("Null path result between: {0}", GetSourceAndTargetString(edgeGeom, sourceObstacle, targetObstacle)));
                 foreach (var crossedObstacle in ObstaclesCrossedByPath(edgeGeom)) 
                 {
