@@ -94,7 +94,6 @@
     <Compile Include="Infrastructure\Rectilinear\RectFileStrings.cs" />
     <Compile Include="Infrastructure\Rectilinear\RectilinearEdgeRouterWrapper.cs" />
     <Compile Include="Infrastructure\Rectilinear\RectFileReader.cs" />
-    <Compile Include="Infrastructure\Rectilinear\RectFileWriter.cs" />
     <Compile Include="Infrastructure\Rectilinear\RectilinearVerifier.cs" />
     <Compile Include="Infrastructure\Rectilinear\SegmentOrderer.cs" />
     <Compile Include="Infrastructure\Rectilinear\TestPointComparer.cs" />

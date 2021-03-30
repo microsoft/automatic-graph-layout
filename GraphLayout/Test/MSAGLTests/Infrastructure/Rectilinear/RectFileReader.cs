@@ -318,8 +318,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             return accretion;
         }
 
-        private void ReadPorts()
-        {
+        private void ReadPorts() {
             Match m;
             this.VerifyIsNextLine(RectFileStrings.BeginPorts);
 
@@ -327,10 +326,9 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             // PortEntries, which will end up reading the following line.
             this.NextLine();
 
-            for (;;)
+            for (; ; )
             {
-                if (!(m = ParseOrDone(RectFileStrings.ParsePort, RectFileStrings.EndPorts)).Success)
-                {
+                if (!(m = ParseOrDone(RectFileStrings.ParsePort, RectFileStrings.EndPorts)).Success) {
                     break;
                 }
 
@@ -344,41 +342,22 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
                 var location = new Point(x, y);
                 Shape shape = GetShapeFromId(shapeId, isMultiPort || isRelative);
                 Port port;
-                if (isMultiPort)
-                {
-                    // 'location' was actually the active offset of the multiPort.  Recreate it and reset the
-                    // closest-location and verify the active offset index is the same.  This may fail if there
-                    // are two identical offsets in the offset list, in which case fix the test setup.
-                    int activeOffsetIndex;
-                    var offsets = ReadMultiPortOffsets(out activeOffsetIndex);
-                    var multiPort = new MultiLocationFloatingPort(() => shape.BoundaryCurve, () => shape.BoundingBox.Center, offsets);
-                    multiPort.SetClosestLocation(multiPort.CenterDelegate() + location);
-                    Validate.AreEqual(multiPort.ActiveOffsetIndex, activeOffsetIndex, CurrentLineError("ActiveOffsetIndex is not as expected"));
-                    port = multiPort;
+                if (isRelative) {
+                    // The location in the ParsePort line is the offset for the relative port.
+                    port = new RelativeFloatingPort(() => shape.BoundaryCurve, () => shape.BoundingBox.Center, location);
                 }
-                else
-                {
-                    if (isRelative)
-                    {
-                        // The location in the ParsePort line is the offset for the relative port.
-                        port = new RelativeFloatingPort(() => shape.BoundaryCurve, () => shape.BoundingBox.Center, location);
-                    }
-                    else
-                    {
-                        Validate.IsTrue(IsString(m.Groups["type"].ToString(), RectFileStrings.Floating), CurrentLineError("Unknown port type"));
-                        port = new FloatingPort((null == shape) ? null : shape.BoundaryCurve, location);
-                    }
-                    this.NextLine();    // Since we didn't read multiPort offsets
+                else {
+                    Validate.IsTrue(IsString(m.Groups["type"].ToString(), RectFileStrings.Floating), CurrentLineError("Unknown port type"));
+                    port = new FloatingPort((null == shape) ? null : shape.BoundaryCurve, location);
                 }
+                this.NextLine();    // Since we didn't read multiPort offsets
+
                 idToPortMap.Add(portId, port);
-                if (null != shape)
-                {
-                    if (!this.UseFreePortsForObstaclePorts)
-                    {
+                if (null != shape) {
+                    if (!this.UseFreePortsForObstaclePorts) {
                         shape.Ports.Insert(port);
                     }
-                    else
-                    {
+                    else {
                         FreeRelativePortToShapeMap[port] = shape;
                     }
                 }

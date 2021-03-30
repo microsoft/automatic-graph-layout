@@ -692,23 +692,6 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         }
 #endif // UNUSED
 
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Known bug in CA/FxCop won't recognize 'multi' in CustomDictionary.")]
-        protected FloatingPort MakeMultiRelativeObstaclePort(Shape obstacle, IList<Point> offsets)
-        {
-            var port = new MultiLocationFloatingPort(() => obstacle.BoundaryCurve, () => obstacle.BoundingBox.Center, new List<Point>(offsets));
-            RecordRelativePortAndObstacle(obstacle, port);
-            return port;
-        }
-
-#if UNUSED
-        protected FloatingPort MakeMultiRelativeObstaclePort(RectilinearEdgeRouter router, Shape obstacle, List<Point> offsets)
-        {
-            var port = MakeMultiRelativeObstaclePort(obstacle, offsets);
-            router.UpdateObstacle(obstacle); // Port changes are now auto-detected
-            return port;
-        }
-#endif // UNUSED
-
         protected static FloatingPort MakeAbsoluteFreePort(Point location)
         {
             return new FloatingPort(null /*curve*/, location);

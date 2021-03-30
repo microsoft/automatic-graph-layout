@@ -134,15 +134,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             return Path.Combine(dirName, graphName);
         }
 
-        private void WriteRectFile(RectilinearEdgeRouterWrapper router, string fileName)
-        {
-            // For these small tests we write everything and have no freeOports.
-            using (var writer = new RectFileWriter(router, this))
-            {
-                writer.WriteFile(fileName);
-            }
-        }
-
+        
         // ReSharper disable InconsistentNaming
 
         [TestMethod]
@@ -168,117 +160,8 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             this.RunGeomFile(this.GetGeomGraphFileName("GeometryGraph_1138bus.msagl.geom"));
         }
 
-        [TestMethod]
-        [Timeout(2000)]
-        [Description("Create and run a simple test file")]
-        public void Create_And_Run_Simple_Test()
-        {
-            var fileName = this.GetCurrentMethodTestFileName(FileAccess.ReadWrite);
-            
-            // Without groups this is a simple routing.
-            var router = this.GroupTest_Simple_Worker(wantGroup: false);
-            this.WriteRectFile(router, fileName);
-            this.RunRectFile(fileName);
-        }
-
-        [TestMethod]
-        [Timeout(2000)]
-        [Description("Create and run a simple group test file")]
-        public void Create_And_Run_Simple_GroupTest()
-        {
-            var fileName = this.GetCurrentMethodTestFileName(FileAccess.ReadWrite);
-
-            // Add a simple single group.
-            var router = this.GroupTest_Simple_Worker(wantGroup: true);
-            this.WriteRectFile(router, fileName);
-            this.RunRectFile(fileName);
-        }
-
-        [TestMethod]
-        [Timeout(2000)]
-        [Description("Create and run a simple waypoint test file")]
-        public void Create_And_Run_Simple_WaypointTest()
-        {
-            var fileName = this.GetCurrentMethodTestFileName(FileAccess.ReadWrite);
-
-            // Add a simple single group.
-            var router = this.RunSimpleWaypoints(numPoints: 4, multiplePaths: false, wantTopRect: true);
-            this.WriteRectFile(router, fileName);
-            this.RunRectFile(fileName);
-        }
-
-        [TestMethod]
-        [Timeout(3000)]
-        [Description("Create and run an E-R PortEntry test file")]
-        public void Create_And_Run_ER_PortEntryTest()
-        {
-            var fileName = this.GetCurrentMethodTestFileName(FileAccess.ReadWrite);
-
-            // Add a simple single group.
-            var router = this.Run_PortEntry_ERSource_FullSideTarget();
-            this.WriteRectFile(router, fileName);
-            this.RunRectFile(fileName);
-        }
-
-        [TestMethod]
-        [Timeout(3000)]
-        [Description("Create and run a simple test with a freePort and two multiPorts")]
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Known bug in CA/FxCop won't recognize 'multi' in CustomDictionary.")]
-        public void Create_And_Run_Free_And_MultiLocPortTest()
-        {
-            var fileName = this.GetCurrentMethodTestFileName(FileAccess.ReadWrite);
-
-            // Add a simple single group.
-            const int FirstMultiOffsetIndex = 2;
-            var routerWritten = this.CreateAndRouteTwoObstaclesWithFreeAndMultiLocPorts(FirstMultiOffsetIndex);
-            var firstMultiPortWritten = (MultiLocationFloatingPort)routerWritten.Obstacles.First().Ports.First();
-            Validate.AreEqual(firstMultiPortWritten.ActiveOffsetIndex, FirstMultiOffsetIndex, "FirstMultiOffsetIndex differ");
-
-            this.WriteRectFile(routerWritten, fileName);
-            var routerRead = this.RunRectFile(fileName);
-            var firstMultiPortRead = (MultiLocationFloatingPort)routerRead.Obstacles.First().Ports.First();
-            Validate.AreEqual(firstMultiPortWritten.ActiveOffsetIndex, firstMultiPortRead.ActiveOffsetIndex, "ActiveOffsetIndexes differ");
-            Validate.AreEqual(firstMultiPortWritten.Location, firstMultiPortRead.Location, "Locations differ");
-            Validate.AreEqual(firstMultiPortWritten.LocationOffsets.Count(), firstMultiPortRead.LocationOffsets.Count(), "LocationOffsets counts differ");
-            var enumWritten = firstMultiPortWritten.LocationOffsets.GetEnumerator();
-            var enumRead = firstMultiPortRead.LocationOffsets.GetEnumerator();
-            while (enumWritten.MoveNext())
-            {
-                Validate.IsTrue(enumRead.MoveNext(), "enumRead.MoveNext failed");
-                Validate.IsTrue(PointComparer.Equal(enumWritten.Current, enumRead.Current), "LocationOffset differs");
-            }
-        }
-
-        private RectilinearEdgeRouterWrapper CreateAndRouteTwoObstaclesWithFreeAndMultiLocPorts(int firstMultiOffsetIndex)
-        {
-            List<Shape> obstacles = CreateTwoTestSquaresWithSentinels();
-            var a = obstacles[0]; // left square
-            var b = obstacles[1]; // right square
-            var abox = a.BoundingBox;
-            var bbox = b.BoundingBox;
-
-            // Create one freeport between the obstacles.
-            var freePort1 = MakeAbsoluteFreePort(new Point(bbox.Left - 20, bbox.Center.Y));
-            
-            // Create MultiPorts (which are relative) for the obstacles.
-            var portA = MakeMultiRelativeObstaclePort(a, OffsetsFromRect(abox));
-            var portB = MakeMultiRelativeObstaclePort(b, OffsetsFromRect(bbox));
-
-            // Force the first obstacle's active index to be the desired one.  We'll return its location
-            // so the save/restore logic can be verified.
-            var multiPort = (MultiLocationFloatingPort)portA;
-            multiPort.SetClosestLocation(multiPort.CenterDelegate() + multiPort.LocationOffsets.ElementAt(firstMultiOffsetIndex));
-            Validate.AreEqual(multiPort.ActiveOffsetIndex, firstMultiOffsetIndex, "Failure trying to set ActiveOffsetIndex");
-
-            var routings = new List<EdgeGeometry>
-                {
-                    CreateRouting(portA, portB),
-                    CreateRouting(portA, freePort1),
-                    CreateRouting(portB, freePort1)
-                };
-            return DoRouting(obstacles, routings, null /*freePorts*/);
-        }
-
+        
+        
         [TestMethod]
         [Timeout(2000)]
         [Description("Verify intersections in scanline with overlaps")]

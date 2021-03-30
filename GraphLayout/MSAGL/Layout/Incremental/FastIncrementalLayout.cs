@@ -218,19 +218,6 @@ namespace Microsoft.Msagl.Layout.Incremental {
             e.target.force -= f*duv;
         }
 
-        static void CalculateMultiPorts(FiEdge e) {
-            var sourceLocation = e.source.Center;
-            var targetLocation = e.target.Center;
-            var sourceMultiPort = e.mEdge.SourcePort as MultiLocationFloatingPort;
-            if (sourceMultiPort != null) {
-                sourceMultiPort.SetClosestLocation(targetLocation);
-            }
-            var targetMultiPort = e.mEdge.TargetPort as MultiLocationFloatingPort;
-            if (targetMultiPort != null) {
-                targetMultiPort.SetClosestLocation(sourceLocation);
-            }
-        }
-
         void AddSpringForces(FiEdge e) {
             Point duv;
             if (settings.RespectEdgePorts) {
@@ -586,10 +573,7 @@ namespace Microsoft.Msagl.Layout.Incremental {
                 progress = 0;
             }
             this.StartListenToLocalProgress(settings.MinorIterations);
-            for (int i = 0; i < settings.MinorIterations; ++i) {
-                if (settings.RespectEdgePorts) {
-                    edges.ForEach(CalculateMultiPorts);
-                }
+            for (int i = 0; i < settings.MinorIterations; ++i) {                
                 double d2 = settings.RungeKuttaIntegration ? RungeKuttaIntegration() : VerletIntegration();
 
                 if (d2 < settings.DisplacementThreshold || settings.Iterations > settings.MaxIterations) {

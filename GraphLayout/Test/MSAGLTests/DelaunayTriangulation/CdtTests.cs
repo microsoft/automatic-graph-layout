@@ -171,7 +171,7 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
             var cdt = new Cdt(PointsForCdt(random, n, w), null, SegmentsForCdt(w).ToList());
             cdt.Run();
 #if TEST_MSAGL&&TEST_MSAGL
-            CdtSweeper.ShowFront(cdt.GetTriangles(), null, null,null);
+            //CdtSweeper.ShowFront(cdt.GetTriangles(), null, null,null);
 #endif
         }
 

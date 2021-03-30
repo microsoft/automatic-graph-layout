@@ -190,7 +190,7 @@ namespace Microsoft.Msagl.UnitTests
             sw.Stop();
             TestContext.WriteLine("Edge routing took: {0} seconds.", sw.ElapsedMilliseconds / 1000.0);
         }
-        
+        [Ignore]
         [TestMethod]
         [Description("the run does not stop")]
         public void BundlingBug1GeomGraph() {

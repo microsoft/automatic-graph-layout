@@ -286,8 +286,8 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         IEnumerable<int> UpperEdgeMedians(int target) {
             object medians = this.BT ? upperMedians[target] : lowMedians[target];
-            IntPair ip = medians as IntPair;
-            if (ip != null) {
+            if (medians is IntPair) {
+                IntPair ip = medians as IntPair;
                 if (this.LR) {
                     yield return ip.First; yield return ip.Second;
                 } else {
