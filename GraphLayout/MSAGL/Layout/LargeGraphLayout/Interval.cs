@@ -105,7 +105,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 
         public bool Contains(double p, double radius) {
-            return Contains(p - radius / 2) && Contains(p + radius / 2);
+            return Contains(p - radius) && Contains(p + radius);
         }
     }
 }
