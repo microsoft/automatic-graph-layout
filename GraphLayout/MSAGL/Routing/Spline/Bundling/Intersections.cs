@@ -21,10 +21,10 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         /// <summary>
         /// represents loose or tight hierarchy
         /// </summary>
-        internal RectangleNode<Polyline> obstacleTree { get; set; }
+        internal RectangleNode<Polyline, Point> obstacleTree { get; set; }
 
         public Intersections(MetroGraphData metroGraphData, BundlingSettings bundlingSettings,
-            RectangleNode<Polyline> obstacleTree, Func<Station, Set<Polyline>> obstaclesToIgnore) {
+            RectangleNode<Polyline, Point> obstacleTree, Func<Station, Set<Polyline>> obstaclesToIgnore) {
             this.metroGraphData = metroGraphData;
             this.obstaclesToIgnore = obstaclesToIgnore;
             this.bundlingSettings = bundlingSettings;
@@ -83,7 +83,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         /// <param name="touchedObstacles">list of pairs (obstacle, closest point on the obstacle)</param>
         /// <param name="minimalDistance">min distance from the center to an obstacle</param>
         /// <returns>false iff center is inside of an obstacle</returns>
-        static bool IntersectCircleWithTree(RectangleNode<Polyline> node, Point center, double radius, Set<Polyline> obstaclesToIgnore,
+        static bool IntersectCircleWithTree(RectangleNode<Polyline, Point> node, Point center, double radius, Set<Polyline> obstaclesToIgnore,
             List<Tuple<Polyline, Point>> touchedObstacles, ref double minimalDistance) {
             if (!node.Rectangle.Contains(center, radius))
                 return true;

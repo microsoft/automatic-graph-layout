@@ -13,13 +13,13 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         readonly RTree<SegWithIndex> segTree=new RTree<SegWithIndex>();
         Set<Path> crossedOutPaths = new Set<Path>();
 
-        StaircaseRemover(List<Path> paths, RectangleNode<Polyline> hierarchyOfObstacles) {
+        StaircaseRemover(List<Path> paths, RectangleNode<Polyline, Point> hierarchyOfObstacles) {
             HierarchyOfObstacles = new RTree<Polyline>(hierarchyOfObstacles);
             Paths = paths;
         }
 
 
-        internal static void RemoveStaircases(List<Path> paths, RectangleNode<Polyline> hierarchyOfObstacles) {
+        internal static void RemoveStaircases(List<Path> paths, RectangleNode<Polyline, Point> hierarchyOfObstacles) {
             var r = new StaircaseRemover(paths, hierarchyOfObstacles);
             r.Calculate();
         }

@@ -32,10 +32,10 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout.NodeRailLevelCalculator {
 
         readonly List<LgNodeInfo> _insertedNodes = new List<LgNodeInfo>();
         
-        readonly RTree<LgNodeInfo> _insertedNodesTree = new RTree<LgNodeInfo>();
-        readonly RTree<Rectangle> _insertedNodeRectsTree = new RTree<Rectangle>();
+        readonly RTree<LgNodeInfo, Point> _insertedNodesTree = new RTree<LgNodeInfo, Point>();
+        readonly RTree<Rectangle, Point> _insertedNodeRectsTree = new RTree<Rectangle, Point>();
 
-        readonly RTree<SymmetricSegment> _insertedSegmentsTree = new RTree<SymmetricSegment>();
+        readonly RTree<SymmetricSegment, Point> _insertedSegmentsTree = new RTree<SymmetricSegment, Point>();
 
         Dictionary<Tuple<int, int>, int> _nodeTileTable = new Dictionary<Tuple<int, int>, int>();
         Dictionary<Tuple<int, int>, int> _segmentTileTable = new Dictionary<Tuple<int, int>, int>();

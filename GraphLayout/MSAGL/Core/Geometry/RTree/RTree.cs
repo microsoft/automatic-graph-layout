@@ -9,17 +9,17 @@ namespace Microsoft.Msagl.Core.Geometry {
     /// A search tree for rapid lookup of TData objects keyed by rectangles inside a given rectangular region
     /// It is very similar to "R-TREES. A DYNAMIC INDEX STRUCTURE FOR SPATIAL SEARCHING" by Antonin Guttman
     /// </summary>
-    public class RTree<TData> {
+    public class RTree<T,P>  {
         /// <summary>
         /// 
         /// </summary>
-        public RectangleNode<TData> RootNode
+        public RectangleNode<T, P> RootNode
         {
             get { return _rootNode; }
             set { _rootNode=value; }
         }
 
-        RectangleNode<TData> _rootNode;
+        RectangleNode<T,P> _rootNode;
        
 
         /// <summary>
@@ -27,15 +27,15 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// </summary>
         /// <param name="rectsAndData"></param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public RTree(IEnumerable<KeyValuePair<Rectangle, TData>> rectsAndData) {
-            _rootNode = RectangleNode<TData>.CreateRectangleNodeOnEnumeration(GetNodeRects(rectsAndData));
+        public RTree(IEnumerable<KeyValuePair<Rectangle, T>> rectsAndData) {
+            _rootNode = RectangleNode<T, P>.CreateRectangleNodeOnEnumeration(GetNodeRects(rectsAndData));
         }
 
         /// <summary>
         /// Create a query tree for a given root node
         /// </summary>
         /// <param name="rootNode"></param>
-        public RTree(RectangleNode<TData> rootNode) {
+        public RTree(RectangleNode<T, P> rootNode) {
             this._rootNode = rootNode;
         }
 
@@ -58,15 +58,15 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public void Add(Rectangle key, TData value) {
-            Add(new RectangleNode<TData>(value, key));            
+        public void Add(IRectangle<P> key, T value) {
+            Add(new RectangleNode<T, P>(value, key));            
         }
 
-        internal void Add(RectangleNode<TData> node) {
+        internal void Add(RectangleNode<T, P> node) {
             if (_rootNode == null)
                 _rootNode = node;
             else if (Count <= 2)
-                _rootNode = RectangleNode<TData>.CreateRectangleNodeOnEnumeration(_rootNode.GetAllLeafNodes().Concat(new[] {node}));
+                _rootNode = RectangleNode<T, P>.CreateRectangleNodeOnEnumeration(_rootNode.GetAllLeafNodes().Concat(new[] {node}));
             else
                 AddNodeToTreeRecursive(node, _rootNode);
         }
@@ -74,19 +74,19 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// rebuild the whole tree
         /// </summary>
         public void Rebuild() {
-            _rootNode = RectangleNode<TData>.CreateRectangleNodeOnEnumeration(_rootNode.GetAllLeafNodes());
+            _rootNode = RectangleNode<T, P>.CreateRectangleNodeOnEnumeration(_rootNode.GetAllLeafNodes());
         }
 
-        static IEnumerable<RectangleNode<TData>> GetNodeRects(IEnumerable<KeyValuePair<Rectangle, TData>> nodes) {
-            return nodes.Select(v => new RectangleNode<TData>(v.Value, v.Key));
+        static IEnumerable<RectangleNode<T, P>> GetNodeRects(IEnumerable<KeyValuePair<IRectangle<P>, T>> nodes) {
+            return nodes.Select(v => new RectangleNode<T, P>(v.Value, v.Key));
         }
 
-        static void AddNodeToTreeRecursive(RectangleNode<TData> newNode, RectangleNode<TData> existingNode) {
+        static void AddNodeToTreeRecursive(RectangleNode<T, P> newNode, RectangleNode<T, P> existingNode) {
             if (existingNode.IsLeaf) {
-                existingNode.Left = new RectangleNode<TData>(existingNode.UserData, existingNode.Rectangle);
+                existingNode.Left = new RectangleNode<T, P>(existingNode.UserData, existingNode.Rectangle);
                 existingNode.Right = newNode;
                 existingNode.Count = 2;
-                existingNode.UserData = default(TData);                
+                existingNode.UserData = default(T);                
             } else {
                 existingNode.Count++;
                 Rectangle leftBox;
@@ -94,7 +94,7 @@ namespace Microsoft.Msagl.Core.Geometry {
                 if (2 * existingNode.Left.Count < existingNode.Right.Count) {
                     //keep the balance
                     AddNodeToTreeRecursive(newNode, existingNode.Left);
-                    existingNode.Left.Rectangle = new Rectangle(existingNode.Left.Rectangle, newNode.Rectangle);
+                    existingNode.Left.Rectangle = existingNode.Left.Rectangle.Unite( newNode.Rectangle);
                 } else if (2 * existingNode.Right.Count < existingNode.Left.Count) {
                     //keep the balance
                     AddNodeToTreeRecursive(newNode, existingNode.Right);
@@ -130,8 +130,8 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// </summary>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        public IEnumerable<TData> GetAllLeaves() {
-            return _rootNode!=null && Count>0 ? _rootNode.GetAllLeaves():new TData[0];
+        public IEnumerable<T> GetAllLeaves() {
+            return _rootNode!=null && Count>0 ? _rootNode.GetAllLeaves():new T[0];
         }
 
         /// <summary>
@@ -139,19 +139,19 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// </summary>
         /// <param name="queryRegion"></param>
         /// <returns></returns>
-        public TData[] GetAllIntersecting(Rectangle queryRegion)
+        public T[] GetAllIntersecting(Rectangle queryRegion)
         {
-            return _rootNode == null || Count == 0 ? new TData[0] : _rootNode.GetNodeItemsIntersectingRectangle(queryRegion).ToArray();
+            return _rootNode == null || Count == 0 ? new T[0] : _rootNode.GetNodeItemsIntersectingRectangle(queryRegion).ToArray();
         }
 
-        public bool OneIntersecting(Rectangle queryRegion, out TData intersectedLeaf) {
+        public bool OneIntersecting(Rectangle queryRegion, out T intersectedLeaf) {
             if (_rootNode == null || Count == 0) {
-                intersectedLeaf = default(TData);
+                intersectedLeaf = default(T);
                 return false;
             }
-            RectangleNode<TData> ret = _rootNode.FirstIntersectedNode(queryRegion);
+            RectangleNode<T, P> ret = _rootNode.FirstIntersectedNode(queryRegion);
             if (ret == null) {
-                intersectedLeaf = default(TData);
+                intersectedLeaf = default(T);
                 return false;
             }
             intersectedLeaf = ret.UserData;
@@ -163,8 +163,8 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// </summary>
         /// <param name="queryRegion"></param>
         /// <returns></returns>
-        internal IEnumerable<RectangleNode<TData>> GetAllLeavesIntersectingRectangle(Rectangle queryRegion) {
-            return _rootNode == null || Count == 0 ? new RectangleNode<TData>[0] : _rootNode.GetLeafRectangleNodesIntersectingRectangle(queryRegion);
+        internal IEnumerable<RectangleNode<T, P>> GetAllLeavesIntersectingRectangle(Rectangle queryRegion) {
+            return _rootNode == null || Count == 0 ? new RectangleNode<T, P>[0] : _rootNode.GetLeafRectangleNodesIntersectingRectangle(queryRegion);
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// <param name="rectangle"></param>
         /// <param name="userData"></param>
         /// <returns></returns>
-        public bool Contains(Rectangle rectangle, TData userData) {
+        public bool Contains(Rectangle rectangle, T userData) {
             if (_rootNode == null) return false;
             return
                 _rootNode.GetLeafRectangleNodesIntersectingRectangle(rectangle)
@@ -194,14 +194,14 @@ namespace Microsoft.Msagl.Core.Geometry {
         ///<param name="rectangle"></param>
         ///<param name="userData"></param>
         ///<returns></returns>
-        public TData Remove(Rectangle rectangle, TData userData) {
+        public T Remove(Rectangle rectangle, T userData) {
             if (_rootNode==null)
             {
-                return default(TData);
+                return default(T);
             }
             var ret = _rootNode.GetLeafRectangleNodesIntersectingRectangle(rectangle).FirstOrDefault(node => node.UserData.Equals(userData));
             if (ret == null)
-                return default(TData);
+                return default(T);
             if (RootNode.Count == 1)
                 RootNode = null;
             else
@@ -209,7 +209,7 @@ namespace Microsoft.Msagl.Core.Geometry {
             return ret.UserData;
         }
 
-        void RemoveLeaf(RectangleNode<TData> leaf) {
+        void RemoveLeaf(RectangleNode<T, P> leaf) {
             Debug.Assert(leaf.IsLeaf);
             
             var unbalancedNode = FindTopUnbalancedNode(leaf);
@@ -221,7 +221,7 @@ namespace Microsoft.Msagl.Core.Geometry {
                 var parent = leaf.Parent;
                 if (parent == null) {
                     Debug.Assert(_rootNode == leaf);
-                    _rootNode = new RectangleNode<TData>();
+                    _rootNode = new RectangleNode<T, P>();
                 } else {
                     TransferFromSibling(parent, leaf.IsLeftChild ? parent.Right : parent.Left);
                     UpdateParent(parent);
@@ -241,14 +241,14 @@ namespace Microsoft.Msagl.Core.Geometry {
 //            return TreeIsCorrect(node.Left) && TreeIsCorrect(node.Right);
 //        }
 
-        static void UpdateParent(RectangleNode<TData> parent) {
+        static void UpdateParent(RectangleNode<T, P> parent) {
             for(var node=parent.Parent; node!=null; node=node.Parent) {
                 node.Count--;
                 node.Rectangle=new Rectangle(node.Left.Rectangle, node.Right.Rectangle);
             }
         } 
 
-        static void TransferFromSibling(RectangleNode<TData> parent, RectangleNode<TData> sibling) {
+        static void TransferFromSibling(RectangleNode<T, P> parent, RectangleNode<T, P> sibling) {
             parent.UserData=sibling.UserData;
             parent.Left = sibling.Left;
             parent.Right=sibling.Right;
@@ -256,12 +256,12 @@ namespace Microsoft.Msagl.Core.Geometry {
             parent.Rectangle = sibling.Rectangle;
         }
 
-        static void RebuildUnderNodeWithoutLeaf(RectangleNode<TData> nodeForRebuild, RectangleNode<TData> leaf)
+        static void RebuildUnderNodeWithoutLeaf(RectangleNode<T, P> nodeForRebuild, RectangleNode<T, P> leaf)
         {
             Debug.Assert(leaf.IsLeaf);
             Debug.Assert(!nodeForRebuild.IsLeaf);
             var newNode =
-                RectangleNode<TData>.CreateRectangleNodeOnEnumeration(
+                RectangleNode<T, P>.CreateRectangleNodeOnEnumeration(
                     nodeForRebuild.GetAllLeafNodes().Where(n => !(n.Equals(leaf))));
             nodeForRebuild.Count = newNode.Count;
             nodeForRebuild.Left = newNode.Left;
@@ -269,14 +269,14 @@ namespace Microsoft.Msagl.Core.Geometry {
             nodeForRebuild.Rectangle = new Rectangle(newNode.Left.rectangle, newNode.Right.rectangle);
         }
 
-        static RectangleNode<TData> FindTopUnbalancedNode(RectangleNode<TData> node) {
+        static RectangleNode<T, P> FindTopUnbalancedNode(RectangleNode<T, P> node) {
             for (var parent = node.Parent; parent != null; parent = parent.Parent)
                 if (! Balanced(parent))
                     return parent;
             return null;
         }
 
-        static bool Balanced(RectangleNode<TData> rectangleNode) {
+        static bool Balanced(RectangleNode<T, P> rectangleNode) {
             return 2*rectangleNode.Left.Count >= rectangleNode.Right.Count &&
                    2*rectangleNode.Right.Count >= rectangleNode.Left.Count;
         }
@@ -288,11 +288,11 @@ namespace Microsoft.Msagl.Core.Geometry {
             RootNode = null;
         }
 
-        public bool NumberOfIntersectedIsLessThanBound(Rectangle rect, int bound, Func<TData, bool> conditionFunc ) {
+        public bool NumberOfIntersectedIsLessThanBound(Rectangle rect, int bound, Func<T, bool> conditionFunc ) {
             return NumberOfIntersectedIsLessThanBoundOnNode(_rootNode, rect, ref bound, conditionFunc);
         }
 
-        static bool NumberOfIntersectedIsLessThanBoundOnNode(RectangleNode<TData> node, Rectangle rect, ref int bound, Func<TData, bool> conditionFunc) {
+        static bool NumberOfIntersectedIsLessThanBoundOnNode(RectangleNode<T, P> node, Rectangle rect, ref int bound, Func<T, bool> conditionFunc) {
             Debug.Assert(bound > 0);
             if (!node.Rectangle.Intersects(rect)) return true;
             if (node.IsLeaf) {

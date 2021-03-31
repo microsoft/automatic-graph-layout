@@ -14,7 +14,7 @@ namespace Microsoft.Msagl.Routing {
     /// We assume that the boundaries are not set for the shape children yet
     /// </summary>
     internal class ShapeObstacleCalculator {
-        RectangleNode<Polyline> tightHierarchy;
+        RectangleNode<Polyline, Point> tightHierarchy;
         RectangleNode<TightLooseCouple> coupleHierarchy;
 
         public RectangleNode<Shape> RootOfLooseHierarchy { get; set; }

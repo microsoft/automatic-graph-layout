@@ -22,7 +22,7 @@ namespace Microsoft.Msagl.Prototype.NonOverlappingBoundaries {
         /// <summary>
         /// Bounding box
         /// </summary>
-        RectangleNode<IHull> RectangleNode { get; }
+        RectangleNode<IHull,Point> RectangleNode { get; }
         /// <summary>
         /// Remove overlap between this and another IHull by moving them both as little as possible
         /// </summary>
@@ -35,7 +35,7 @@ namespace Microsoft.Msagl.Prototype.NonOverlappingBoundaries {
     /// </summary>
     internal class ProximityQuery {
         internal ProximityQuery(List<IHull> nodeHulls) {
-            hierarchy = RectangleNode<IHull>.CreateRectangleNodeOnEnumeration(GetNodeRects(nodeHulls));
+            hierarchy = RectangleNode<IHull,Point>.CreateRectangleNodeOnEnumeration(GetNodeRects(nodeHulls));
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Microsoft.Msagl.Prototype.NonOverlappingBoundaries {
             GetClosePairs(hierarchy, hierarchy, closePairs);
             return closePairs;
         }
-        private RectangleNode<IHull> hierarchy;
+        private RectangleNode<IHull,Point> hierarchy;
         /// <summary>
         /// Search in the hierarchy for rectangles that intersect with leafNode.
         /// </summary>
@@ -55,7 +55,7 @@ namespace Microsoft.Msagl.Prototype.NonOverlappingBoundaries {
         /// <param name="intersecting"></param>
         /// <param name="internalNode"></param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        private void GetIntersecting(RectangleNode<IHull> leafNode, RectangleNode<IHull> internalNode, List<IHull> intersecting) {
+        private void GetIntersecting(RectangleNode<IHull,Point> leafNode, RectangleNode<IHull,Point> internalNode, List<IHull> intersecting) {
             Debug.Assert(leafNode.UserData != null);
             if (!leafNode.Rectangle.Intersects(internalNode.Rectangle))
                 return;
@@ -68,7 +68,7 @@ namespace Microsoft.Msagl.Prototype.NonOverlappingBoundaries {
                 GetIntersecting(leafNode, internalNode.Right, intersecting);
             }
         }
-        private void GetClosePairs(RectangleNode<IHull> a, RectangleNode<IHull> b, List<Tuple<IHull, IHull>> closePairs) {
+        private void GetClosePairs(RectangleNode<IHull,Point> a, RectangleNode<IHull,Point> b, List<Tuple<IHull, IHull>> closePairs) {
             if (!a.Rectangle.Intersects(b.Rectangle))
                 return;
             if (a.UserData != null && b.UserData != null) {
@@ -93,7 +93,7 @@ namespace Microsoft.Msagl.Prototype.NonOverlappingBoundaries {
             }
         }
 
-        private IEnumerable<RectangleNode<IHull>> GetNodeRects(List<IHull> nodes) {
+        private IEnumerable<RectangleNode<IHull,Point>> GetNodeRects(List<IHull> nodes) {
             foreach (var v in nodes) {
                 yield return v.RectangleNode;
             }

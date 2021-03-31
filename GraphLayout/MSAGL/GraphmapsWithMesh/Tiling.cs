@@ -33,8 +33,8 @@ namespace Microsoft.Msagl.GraphmapsWithMesh
         public bool isPlanar;
         public double thinness;
 
-        public RTree<int> nodeTree = new RTree<int>();
-        public RTree<int> edgeTree = new RTree<int>();
+        public RTree<int, Point> nodeTree = new RTree<int, Point>();
+        public RTree<int, Point> edgeTree = new RTree<int, Point>();
         
 
         public Tiling(int nodeCount, bool isGraph)

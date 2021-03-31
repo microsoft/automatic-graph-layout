@@ -16,7 +16,7 @@ namespace Microsoft.Msagl.Routing {
         readonly InteractiveEdgeRouter interactiveEdgeRouter;
         readonly BundlingSettings bundlingSettings;
         readonly Func<EdgeGeometry, List<Shape>> transparentShapeSetter;
-        readonly RectangleNode<ICurve> nodeTree;
+        readonly RectangleNode<ICurve,Point> nodeTree;
 
 
         internal MultiEdgeRouter(List<Edge[]> multiEdgeGeoms, InteractiveEdgeRouter interactiveEdgeRouter, IEnumerable<ICurve> nodeBoundaryCurves, BundlingSettings bundlingSettings, Func<EdgeGeometry, List<Shape>> transparentShapeSetter) {
@@ -25,7 +25,7 @@ namespace Microsoft.Msagl.Routing {
             this.interactiveEdgeRouter = interactiveEdgeRouter;
             this.bundlingSettings = bundlingSettings;
             this.transparentShapeSetter = transparentShapeSetter;
-            nodeTree = RectangleNode<ICurve>.CreateRectangleNodeOnData(nodeBoundaryCurves, c => c.BoundingBox);
+            nodeTree = RectangleNode<ICurve,Point>.CreateRectangleNodeOnData(nodeBoundaryCurves, c => c.BoundingBox);
         }
 
         internal void Run() {

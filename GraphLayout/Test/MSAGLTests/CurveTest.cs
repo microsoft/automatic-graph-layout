@@ -33,7 +33,7 @@ namespace Microsoft.Msagl.UnitTests {
             Polyline pl3;
             Polyline pl0 = GetPolylines(out pl1, out pl2, out pl3);
             var point = new Point(373, 274);
-            var tree = RectangleNode<Polyline>.CreateRectangleNodeOnData(new[] { pl0, pl1, pl2, pl3 }, p => p.BoundingBox);
+            var tree = RectangleNode<Polyline, Point>.CreateRectangleNodeOnData(new[] { pl0, pl1, pl2, pl3 }, p => p.BoundingBox);
             Polyline closestPoly;
             Point closestPoint;
             Routing.Spline.Bundling.SteinerDijkstraOnVisibilityGraph.GetClosestObstacle(
@@ -56,7 +56,7 @@ namespace Microsoft.Msagl.UnitTests {
             Polyline pl0 = GetPolylines(out pl1, out pl2, out pl3);
             var point = new Point(392, -187);
             var ls = new LineSegment(point, new Point(314, -303));
-            var tree = RectangleNode<Polyline>.CreateRectangleNodeOnData(new[] { pl0, pl1, pl2, pl3 }, p => p.BoundingBox);
+            var tree = RectangleNode<Polyline, Point>.CreateRectangleNodeOnData(new[] { pl0, pl1, pl2, pl3 }, p => p.BoundingBox);
             Polyline closestPoly;
             Point closestPoint;
             Point closestOnLineSeg;

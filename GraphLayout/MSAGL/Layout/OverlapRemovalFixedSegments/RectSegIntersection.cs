@@ -345,7 +345,7 @@ namespace Microsoft.Msagl.Layout.OverlapRemovalFixedSegments
             return scaled;
         }
 
-        public static bool IsSegmentTouchingSomeRectangle(Point p1, Point p2, RTree<Rectangle> rtree, double tolerance)
+        public static bool IsSegmentTouchingSomeRectangle(Point p1, Point p2, RTree<Rectangle, Point> rtree, double tolerance)
         {
             var searchRect = new Rectangle(p1, p2);
             searchRect = GetDilated(searchRect, tolerance);
@@ -359,7 +359,7 @@ namespace Microsoft.Msagl.Layout.OverlapRemovalFixedSegments
             return touching.Any();
         }
 
-        public static bool IsSegmentInsideBoundaryOfSomeRectangle(Point p1, Point p2, RTree<Rectangle> rtree,
+        public static bool IsSegmentInsideBoundaryOfSomeRectangle(Point p1, Point p2, RTree<Rectangle, Point> rtree,
             double tolerance)
         {
             var searchRect = new Rectangle(p1, p2);

@@ -37,7 +37,7 @@ namespace Microsoft.Msagl.UnitTests
                 {
                     points[i] = new Point(rand.NextDouble() * scale, rand.NextDouble() * scale);
                 }
-                var queryTree = new RTree<Point>(
+                var queryTree = new RTree<Point,Point>(
                     from p in points
                     select new KeyValuePair<Rectangle, Point>(new Rectangle(p), p));
                 Assert.AreEqual(queryTree.GetAllLeaves().Count(), n);
@@ -80,7 +80,7 @@ namespace Microsoft.Msagl.UnitTests
                 {
                     points[i] = new Point(rand.NextDouble() * scale, rand.NextDouble() * scale);
                 }
-                var bsptree = new RTree<Point>(
+                var bsptree = new RTree<Point,Point>(
                     from p in points
                     select new KeyValuePair<Rectangle, Point>(new Rectangle(p), p));
                 Assert.AreEqual(bsptree.GetAllLeaves().Count(), n);
@@ -113,7 +113,7 @@ namespace Microsoft.Msagl.UnitTests
                 for (int i = 0; i < RectCount; ++i) {
                     rects[i] = new Rectangle(rand.Next(RegionSize), rand.Next(RegionSize), new Point(RectSize, RectSize));
                 }
-                var bsptree = new RTree<Rectangle>(
+                var bsptree = new RTree<Rectangle, Point>(
                     from r in rects
                     select new KeyValuePair<Rectangle, Rectangle>(r, r));
                 Assert.AreEqual(bsptree.GetAllLeaves().Count(), RectCount);
@@ -158,7 +158,7 @@ namespace Microsoft.Msagl.UnitTests
                             {
                                 new KeyValuePair<Rectangle, Rectangle>(rects[0], rects[0])
                             };
-                var queryTree = new RTree<Rectangle>(l);
+                var queryTree = new RTree<Rectangle, Point>(l);
 
                 // add remaining rectangles 10 at a time
                 for (int a = 1, b = 10; b < RectsCount; a = b, b += 10)

@@ -271,7 +271,7 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
             return LineIntersectsRectangleNode(ls, obstacleCalculator.RootOfTightHierararchy);
         }
 
-        static bool LineIntersectsRectangleNode(LineSegment ls, RectangleNode<Polyline> rectNode) {
+        static bool LineIntersectsRectangleNode(LineSegment ls, RectangleNode<Polyline, Point> rectNode) {
             if (!ls.BoundingBox.Intersects(rectNode.Rectangle))
                 return false;
             if (rectNode.UserData != null) {

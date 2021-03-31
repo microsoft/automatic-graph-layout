@@ -14,7 +14,7 @@ namespace Microsoft.Msagl.Miscellaneous.LayoutEditing {
     public class BumperPusher {
         readonly double separation;
         readonly Set<Node> fixedNodes = new Set<Node>();
-        readonly RTree<Node> rtree;
+        readonly RTree<Node,Point> rtree;
         Node[] pushingNodes;
 
         /// <summary>
@@ -25,8 +25,8 @@ namespace Microsoft.Msagl.Miscellaneous.LayoutEditing {
         /// <param name="pushingNodes"></param>
         public BumperPusher(IEnumerable<Node> pushedNodes, double separation, Node[] pushingNodes) {
             this.separation = separation;
-            rtree = new RTree<Node>(RectangleNode<Node>.CreateRectangleNodeOnEnumeration(
-                pushedNodes.Select(n => new RectangleNode<Node>(n, GetPaddedBoxOfNode(n)))));
+            rtree = new RTree<Node, Point>(RectangleNode<Node, Point>.CreateRectangleNodeOnEnumeration(
+                pushedNodes.Select(n => new RectangleNode<Node, Point>(n, GetPaddedBoxOfNode(n)))));
 
             //LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(rtree.GetAllLeaves().Select(n=>new DebugCurve(n.BoundaryCurve)));
             this.pushingNodes = pushingNodes;
@@ -76,7 +76,7 @@ namespace Microsoft.Msagl.Miscellaneous.LayoutEditing {
             return ret;
         }
 
-        bool PushNodeAndUpdateRTree(Node pushingNode, RectangleNode<Node> pushed) {
+        bool PushNodeAndUpdateRTree(Node pushingNode, RectangleNode<Node,Point> pushed) {
             var del = pushed.UserData.Center - pushingNode.Center;
             var w = pushingNode.Width / 2 + pushed.UserData.Width / 2;
             var h = pushingNode.Height / 2 + pushed.UserData.Height / 2;
@@ -100,28 +100,28 @@ namespace Microsoft.Msagl.Miscellaneous.LayoutEditing {
         }
         
 
-        void PushByX(double del, RectangleNode<Node> pushed) {
+        void PushByX(double del, RectangleNode<Node,Point> pushed) {
             var delPoint = new Point(del, 0);
             PushByPoint(pushed, delPoint);
         }
 
-        static void PushByPoint(RectangleNode<Node> pushed, Point delPoint) {
+        static void PushByPoint(RectangleNode<Node,Point> pushed, Point delPoint) {
             pushed.UserData.Center += delPoint;
             var cluster = pushed.UserData as Cluster;
             if (cluster != null)
                 cluster.DeepContentsTranslation(delPoint, true);
         }
 
-        void PushByY(double del, RectangleNode<Node> pushed) {
+        void PushByY(double del, RectangleNode<Node, Point> pushed) {
             var delPoint = new Point(0, del);
             PushByPoint(pushed, delPoint);
         }
 
-        void UpdateBoundingBoxesOfPushedAndUpParents(RectangleNode<Node> pushed) {
+        void UpdateBoundingBoxesOfPushedAndUpParents(RectangleNode<Node,Point> pushed) {
             pushed.Rectangle = GetPaddedBoxOfNode(pushed.UserData);
             var parent = pushed.Parent;
             while (parent != null) {
-                parent.Rectangle = new Rectangle(parent.Left.Rectangle, parent.Right.Rectangle);
+                parent.Rectangle = parent.Left.Rectangle.Unite(parent.Right.Rectangle);
                 parent = parent.Parent;
             }
 
@@ -134,24 +134,24 @@ namespace Microsoft.Msagl.Miscellaneous.LayoutEditing {
         /// <param name="cluster"></param>
         /// <param name="previousBox"></param>
         public void UpdateRTreeByChangedNodeBox(Node cluster, Rectangle previousBox) {
-            RectangleNode<Node> rectNode = FindClusterNode(cluster, previousBox);
+            RectangleNode<Node, Point> rectNode = FindClusterNode(cluster, previousBox);
             UpdateBoundingBoxesOfPushedAndUpParents(rectNode);
         }
 
-        RectangleNode<Node> FindClusterNode(Node cluster, Rectangle previousBox) {
+        RectangleNode<Node, Point> FindClusterNode(Node cluster, Rectangle previousBox) {
             var node = rtree.RootNode;
             return FindClusterNodeRecurse(node, cluster, previousBox);
         }
 
-        RectangleNode<Node> FindClusterNodeRecurse(RectangleNode<Node> node, Node cluster, Rectangle previousBox) {
+        RectangleNode<Node, Point> FindClusterNodeRecurse(RectangleNode<Node, Point> node, Node cluster, Rectangle previousBox) {
             if (node.UserData != null)
                 return node.UserData == cluster ? node : null;
             
-            RectangleNode<Node> n0=null;
-            if (previousBox.Intersects(node.Left.Rectangle))
+            RectangleNode<Node, Point> n0=null;
+            if (previousBox.Intersects((Rectangle)node.Left.Rectangle))
                 n0 = FindClusterNodeRecurse(node.Left, cluster, previousBox);
             if (n0 != null) return n0;
-            if (previousBox.Intersects(node.Right.Rectangle))
+            if (previousBox.Intersects((Rectangle)node.Right.Rectangle))
                 return FindClusterNodeRecurse(node.Right, cluster, previousBox);
             return null;
         }

@@ -18,7 +18,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
     {
         VisibilityGraph _visGraph; // = new VisibilityGraph();
         internal const double searchEps = 1e-5;
-        readonly RTree<VisibilityVertex> _visGraphVerticesTree = new RTree<VisibilityVertex>();
+        readonly RTree<VisibilityVertex, Point> _visGraphVerticesTree = new RTree<VisibilityVertex, Point>();
 
         readonly Dictionary<VisibilityEdge, int> _usedEdges = new Dictionary<VisibilityEdge, int>();
 

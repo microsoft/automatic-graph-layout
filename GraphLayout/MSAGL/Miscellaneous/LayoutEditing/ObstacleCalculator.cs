@@ -16,8 +16,8 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
     public class ObstacleCalculator {
         List<Polyline> looseObstacles = new List<Polyline>();
         Set<ICurve> portObstacles = new Set<ICurve>();
-        RectangleNode<Polyline> rootOfLooseHierarchy;
-        RectangleNode<Polyline> rootOfTightHierarachy;
+        RectangleNode<Polyline, Point> rootOfLooseHierarchy;
+        RectangleNode<Polyline, Point> rootOfTightHierarachy;
         RouterBetweenTwoNodes router;
         LineSegment sourceFilterLine;
         LineSegment targetFilterLine;
@@ -37,12 +37,12 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
             //            set { looseObstacles = value; }
         }
 
-        internal RectangleNode<Polyline> RootOfTightHierararchy {
+        internal RectangleNode<Polyline, Point> RootOfTightHierararchy {
             get { return rootOfTightHierarachy; }
             private set { rootOfTightHierarachy = value; }
         }
 
-        RectangleNode<Polyline> RootOfLooseHierarchy {
+        RectangleNode<Polyline, Point> RootOfLooseHierarchy {
             get { return rootOfLooseHierarchy; }
             set { rootOfLooseHierarchy = value; }
         }
@@ -73,7 +73,7 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
         void CreateLooseObstacles() {
             RootOfLooseHierarchy = RootOfTightHierararchy.Clone();
 
-            TraverseHierarchy(RootOfLooseHierarchy, delegate(RectangleNode<Polyline> node) {
+            TraverseHierarchy(RootOfLooseHierarchy, delegate(RectangleNode<Polyline, Point> node) {
                 if (node.UserData != null) {
                     Polyline tightPolyline = node.UserData;
                     double distance =
@@ -91,13 +91,13 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
         }
 
 
-        //internal void ShowRectangleNodesHierarchy(RectangleNode<Polyline> node) {
+        //internal void ShowRectangleNodesHierarchy(RectangleNode<Polyline, Point> node) {
         //    List<ICurve> ls = new List<ICurve>();
         //    FillList(ls, node);
         //    SugiyamaLayoutSettings.Show(ls.ToArray());
         //}
 
-        //internal void FillList(List<ICurve> ls, RectangleNode<Polyline> node) {
+        //internal void FillList(List<ICurve> ls, RectangleNode<Polyline, Point> node) {
         //    if (node == null)
         //        return;
         //    if (node.UserData != null)
@@ -109,7 +109,7 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
         //}
 
 
-        static void TraverseHierarchy(RectangleNode<Polyline> node, Visitor visitor) {
+        static void TraverseHierarchy(RectangleNode<Polyline, Point> node, Visitor visitor) {
             visitor(node);
             if (node.Left != null)
                 TraverseHierarchy(node.Left, visitor);
@@ -217,19 +217,19 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
         }
 
         void CalculateTightHierarchy() {
-            var rectNodes = new List<RectangleNode<Polyline>>();
+            var rectNodes = new List<RectangleNode<Polyline, Point>>();
             foreach (Polyline polyline in TightObstacles)
                 rectNodes.Add(CreateRectNodeOfPolyline(polyline));
-            RootOfTightHierararchy = RectangleNode<Polyline>.CreateRectangleNodeOnListOfNodes(rectNodes);
+            RootOfTightHierararchy = RectangleNode<Polyline, Point>.CreateRectangleNodeOnListOfNodes(rectNodes);
         }
 
 
-        static RectangleNode<Polyline> CreateRectNodeOfPolyline(Polyline polyline) {
-            return new RectangleNode<Polyline>(polyline, (polyline as ICurve).BoundingBox);
+        static RectangleNode<Polyline, Point> CreateRectNodeOfPolyline(Polyline polyline) {
+            return new RectangleNode<Polyline, Point>(polyline, (polyline as ICurve).BoundingBox);
         }
 
 
-        void CreateEdgesUnderTwoNodes(RectangleNode<Polyline> a, RectangleNode<Polyline> b,
+        void CreateEdgesUnderTwoNodes(RectangleNode<Polyline, Point> a, RectangleNode<Polyline, Point> b,
                                       PolylineGraph overlapGraph) {
             //if (a.GetHashCode() < b.GetHashCode())
             //    return;
@@ -488,7 +488,7 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
             foreach (var poly in RootOfLooseHierarchy.GetAllLeaves().Where(p => p != polyline))
                 dist = Math.Min(dist, Polygon.Distance(polygon, new Polygon(poly)));
 
-            //            TraverseHierarchy(RootOfLooseHierarchy, delegate(RectangleNode<Polyline> node) {
+            //            TraverseHierarchy(RootOfLooseHierarchy, delegate(RectangleNode<Polyline, Point> node) {
             //                                                        if (node.UserData != null)
             //                                                            if (node.UserData != polyline)
             //                                                                dist = Math.Min(dist,
@@ -518,12 +518,12 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
                    (TargetFilterLine != null && CurvesIntersect(curve, TargetFilterLine));
         }
 
-        internal static bool CurveIntersectsRectangleNode(ICurve curve, RectangleNode<Polyline> rectNode) {
+        internal static bool CurveIntersectsRectangleNode(ICurve curve, RectangleNode<Polyline, Point> rectNode) {
             Rectangle boundingBox = curve.BoundingBox;
             return CurveIntersectsRectangleNode(curve, ref boundingBox, rectNode);
         }
 
-        static bool CurveIntersectsRectangleNode(ICurve curve, ref Rectangle curveBox, RectangleNode<Polyline> rectNode) {
+        static bool CurveIntersectsRectangleNode(ICurve curve, ref Rectangle curveBox, RectangleNode<Polyline, Point> rectNode) {
             if (!rectNode.Rectangle.Intersects(curveBox))
                 return false;
 
@@ -550,7 +550,7 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
 
         #region Nested type: Visitor
 
-        delegate void Visitor(RectangleNode<Polyline> node);
+        delegate void Visitor(RectangleNode<Polyline, Point> node);
 
         #endregion
         /// <summary>
@@ -560,13 +560,13 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
         /// <param name="rectangleNode"></param>
         /// <param name="polylineToIgnore"></param>
         /// <returns></returns>
-        public static bool CurveIntersectsRectangleNode(Polyline quadrilateral, RectangleNode<Polyline> rectangleNode, Polyline polylineToIgnore) {
+        public static bool CurveIntersectsRectangleNode(Polyline quadrilateral, RectangleNode<Polyline, Point> rectangleNode, Polyline polylineToIgnore) {
             Rectangle boundingBox = quadrilateral.BoundingBox;
             return CurveIntersectsRectangleNode(quadrilateral, ref boundingBox, rectangleNode, polylineToIgnore);
 
         }
 
-        static bool CurveIntersectsRectangleNode(ICurve curve, ref Rectangle curveBox, RectangleNode<Polyline> rectNode, Polyline polylineToIgnore) {
+        static bool CurveIntersectsRectangleNode(ICurve curve, ref Rectangle curveBox, RectangleNode<Polyline, Point> rectNode, Polyline polylineToIgnore) {
             if (!rectNode.Rectangle.Intersects(curveBox))
                 return false;
 

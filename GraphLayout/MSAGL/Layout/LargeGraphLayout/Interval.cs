@@ -4,7 +4,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
     /// <summary>
     /// represents a range of doubles
     /// </summary>
-    public class Interval {
+    public class Interval:IRectangle<double> {
         /// <summary>
         /// constructor
         /// </summary>
@@ -53,8 +53,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         /// <summary>
         /// the length
         /// </summary>
-        public double Length { get { return End - Start; } }
-
+        public double Area { get { return End - Start; } }
         /// <summary>
         /// return true if the value is inside the range
         /// </summary>
@@ -83,6 +82,32 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                 return false;
 
             return !(other.End < Start - ApproximateComparer.DistanceEpsilon);
+        }
+
+        public void Add(IRectangle<double> rectangle) {
+            var r = (Interval)rectangle;
+            this.Add(r.Start);
+            this.Add(r.End);
+        }
+
+        public bool Contains(IRectangle<double> rect) {
+            var r = (Interval)rect;
+            return this.Contains(r);
+        }
+
+        public IRectangle<double> Intersection(IRectangle<double> rectangle) {
+            var r = (Interval)rectangle;
+            return this.Intersection(r);
+        }
+
+        public bool Intersects(IRectangle<double> rectangle) {
+            var r = (Interval)rectangle;
+            return this.Intersects(r);
+        }
+
+        public IRectangle<double> Unite(IRectangle<double> rectangle) {
+            var r = (Interval)rectangle;
+            return new Interval(this, r);
         }
     }
 }

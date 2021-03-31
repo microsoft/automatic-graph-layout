@@ -50,8 +50,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             EdgeSeparation = 2 * cornerFitRad;
             Paths = new List<Path>(paths);
             HierarchyOfObstacles =
-                RectangleNode<Polyline>.CreateRectangleNodeOnEnumeration(
-                    obstacles.Select(p => new RectangleNode<Polyline>(p, p.BoundingBox)));
+                RectangleNode<Polyline, Point>.CreateRectangleNodeOnEnumeration(
+                    obstacles.Select(p => new RectangleNode<Polyline, Point>(p, p.BoundingBox)));
             MapPathsToTheirObstacles();
         }
 
@@ -80,7 +80,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         /// <summary>
         /// 
         /// </summary>
-        protected RectangleNode<Polyline> HierarchyOfObstacles { get; set; }
+        protected RectangleNode<Polyline, Point> HierarchyOfObstacles { get; set; }
         /// <summary>
         /// 
         /// </summary>

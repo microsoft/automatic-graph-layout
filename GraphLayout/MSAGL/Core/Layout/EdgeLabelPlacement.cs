@@ -16,8 +16,8 @@ namespace Microsoft.Msagl.Core.Layout {
         /// </summary>
         ICollection<Label> labels;
 
-        readonly RTree<IObstacle>[] obstacleMaps = new RTree<IObstacle>[3];
-        RTree<IObstacle> labelObstacleMap;
+        readonly RTree<IObstacle, Point>[] obstacleMaps = new RTree<IObstacle, Point>[3];
+        RTree<IObstacle, Point> labelObstacleMap;
 
         readonly Dictionary<Edge, List<KeyValuePair<double, Point>>> edgePoints =
             new Dictionary<Edge, List<KeyValuePair<double, Point>>>();
@@ -103,14 +103,14 @@ namespace Microsoft.Msagl.Core.Layout {
             var edgeObstacles = GetEdgeObstacles(edges, modifiedGranularity);
 
             var edgeObstacleMap =
-                new RTree<IObstacle>(edgeObstacles.Select(e => new KeyValuePair<Rectangle, IObstacle>(e.Rectangle, e)));
+                new RTree<IObstacle, Point>(edgeObstacles.Select(e => new KeyValuePair<Rectangle, IObstacle>(e.Rectangle, e)));
 
             var nodeObstacles = new List<IObstacle>();
             foreach (Node v in nodes)
                 nodeObstacles.Add(new RectangleObstacle(v.BoundingBox, v));
 
             var nodeObstacleMap =
-                new RTree<IObstacle>(nodeObstacles.Select(n => new KeyValuePair<Rectangle, IObstacle>(n.Rectangle, n)));
+                new RTree<IObstacle, Point>(nodeObstacles.Select(n => new KeyValuePair<Rectangle, IObstacle>(n.Rectangle, n)));
             //later we init obstacleMaps[0] to lableObstacleMap
             obstacleMaps[1] = nodeObstacleMap;
             obstacleMaps[2] = edgeObstacleMap; // Avoiding edge overlaps is lowest priority, so put it last            
@@ -149,7 +149,7 @@ namespace Microsoft.Msagl.Core.Layout {
             lock (this)
                 if (labelObstacleMap == null) {
                     labelObstacleMap =
-                        new RTree<IObstacle>(new[] {new KeyValuePair<Rectangle, IObstacle>(label.Rectangle, label)});
+                        new RTree<IObstacle, Point>(new[] {new KeyValuePair<Rectangle, IObstacle>(label.Rectangle, label)});
                     obstacleMaps[0] = labelObstacleMap;
                 }
                 else

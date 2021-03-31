@@ -11,9 +11,9 @@ using SymmetricSegment = Microsoft.Msagl.Core.DataStructures.SymmetricTuple<Micr
 namespace Microsoft.Msagl.Layout.LargeGraphLayout {
     public class RouteSimplifier {
         readonly LgPathRouter _pathRouter;
-        readonly RTree<LgNodeInfo> _nodesTree = new RTree<LgNodeInfo>();
+        readonly RTree<LgNodeInfo, Point> _nodesTree = new RTree<LgNodeInfo, Point>();
         readonly Set<Point> _fixedPoints;
-        readonly RTree<SymmetricSegment> _symmetricSegmentsTree=new RTree<SymmetricSegment>();
+        readonly RTree<SymmetricSegment, Point> _symmetricSegmentsTree=new RTree<SymmetricSegment, Point>();
 
         internal RouteSimplifier(LgPathRouter pathRouter, IEnumerable<LgNodeInfo> nodes, Set<Point> fixedPoints) {
             _pathRouter = pathRouter;

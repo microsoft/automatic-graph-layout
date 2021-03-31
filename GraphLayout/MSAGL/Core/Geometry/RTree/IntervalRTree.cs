@@ -102,9 +102,9 @@ namespace Microsoft.Msagl.Core.Geometry {
                     existingNode.Right.Interval = new Interval(existingNode.Right.Interval, newNode.Interval);
                 } else { //decide basing on the boxes
                     leftBox = new Interval(existingNode.Left.Interval, newNode.Interval);
-                    var delLeft = leftBox.Length - existingNode.Left.Interval.Length;
+                    var delLeft = leftBox.Area - existingNode.Left.Interval.Area;
                     rightBox = new Interval(existingNode.Right.Interval, newNode.Interval);
-                    var delRight = rightBox.Length - existingNode.Right.Interval.Length;
+                    var delRight = rightBox.Area - existingNode.Right.Interval.Area;
                     if (delLeft < delRight) {
                         AddNodeToTreeRecursive(newNode, existingNode.Left);
                         existingNode.Left.Interval = leftBox;
@@ -112,7 +112,7 @@ namespace Microsoft.Msagl.Core.Geometry {
                         AddNodeToTreeRecursive(newNode, existingNode.Right);
                         existingNode.Right.Interval = rightBox;
                     } else { //the deltas are the same; add to the smallest
-                        if(leftBox.Length<rightBox.Length) {
+                        if(leftBox.Area<rightBox.Area) {
                             AddNodeToTreeRecursive(newNode, existingNode.Left);
                             existingNode.Left.Interval = leftBox;
                         }else {

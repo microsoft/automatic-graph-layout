@@ -241,11 +241,11 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
             return true;
         }
 
-        RectangleNode<CdtTriangle> cdtTree = null;
+        RectangleNode<CdtTriangle,Point> cdtTree = null;
 
-        internal RectangleNode<CdtTriangle> GetCdtTree() {
+        internal RectangleNode<CdtTriangle,Point> GetCdtTree() {
             if (cdtTree == null) {
-                cdtTree = RectangleNode<CdtTriangle>.CreateRectangleNodeOnEnumeration(GetTriangles().Select(t => new RectangleNode<CdtTriangle>(t, t.BoundingBox())));
+                cdtTree = RectangleNode<CdtTriangle,Point>.CreateRectangleNodeOnEnumeration(GetTriangles().Select(t => new RectangleNode<CdtTriangle,Point>(t, t.BoundingBox())));
             }
 
             return cdtTree;

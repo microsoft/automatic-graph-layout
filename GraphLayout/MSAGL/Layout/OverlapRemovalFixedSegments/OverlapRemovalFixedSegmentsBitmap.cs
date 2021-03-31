@@ -104,8 +104,8 @@ namespace Microsoft.Msagl.Layout.OverlapRemovalFixedSegments {
             return IsFree(PointToPixel(p));
         }
 
-        public int PositionAllMoveableRectsSameSize(int startInd, RTree<Rectangle> fixedRectanglesTree,
-            RTree<SymmetricSegment> fixedSegmentsTree) {
+        public int PositionAllMoveableRectsSameSize(int startInd, RTree<Rectangle, Point> fixedRectanglesTree,
+            RTree<SymmetricSegment, Point> fixedSegmentsTree) {
             int i;
             if (_moveableRectangles.Length == 0) return 0;
 
@@ -139,8 +139,8 @@ namespace Microsoft.Msagl.Layout.OverlapRemovalFixedSegments {
         }
 
 
-        void DrawFixedRectsSegments(RTree<Rectangle> fixedRectanglesTree,
-            RTree<SymmetricSegment> fixedSegmentsTree) {
+        void DrawFixedRectsSegments(RTree<Rectangle, Point> fixedRectanglesTree,
+            RTree<SymmetricSegment, Point> fixedSegmentsTree) {
             foreach (var fr in fixedRectanglesTree.GetAllLeaves())
                 DrawRectDilated(fr);
             foreach (var seg in fixedSegmentsTree.GetAllLeaves()) {

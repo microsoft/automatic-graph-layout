@@ -28,7 +28,7 @@ namespace Microsoft.Msagl.Prototype.NonOverlappingBoundaries {
         /// <summary>
         /// see IHull
         /// </summary>
-        public abstract RectangleNode<IHull> RectangleNode { get; }
+        public abstract RectangleNode<IHull,Point> RectangleNode { get; }
         /// <summary>
         /// 
         /// </summary>
@@ -87,10 +87,10 @@ namespace Microsoft.Msagl.Prototype.NonOverlappingBoundaries {
         /// <summary>
         /// RectangleNode is used in region queries
         /// </summary>
-        public override RectangleNode<IHull> RectangleNode {
+        public override RectangleNode<IHull,Point> RectangleNode {
             get {
                 var r = new Rectangle(Center.X - w2, Center.Y - h2, Center.X + w2, Center.Y + h2);
-                return new RectangleNode<IHull>(this, r);
+                return new RectangleNode<IHull,Point>(this, r);
             }
         }
         /// <summary>
@@ -166,13 +166,13 @@ namespace Microsoft.Msagl.Prototype.NonOverlappingBoundaries {
         /// <summary>
         /// Bounding box used in region queries
         /// </summary>
-        public override RectangleNode<IHull> RectangleNode {
+        public override RectangleNode<IHull,Point> RectangleNode {
             get {
                 var r = new Rectangle(Center);
                 foreach (var node in cluster.Nodes)
                     r.Add(node.BoundingBox);
 
-                return new RectangleNode<IHull>(this, r);
+                return new RectangleNode<IHull,Point>(this, r);
             }
         }
         /// <summary>

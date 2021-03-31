@@ -47,7 +47,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         }
 
         internal void UpdateCostCache(Station node) {
-            RectangleNode<CdtTriangle> cdtTree = cdt.GetCdtTree();
+            RectangleNode<CdtTriangle,Point> cdtTree = cdt.GetCdtTree();
             node.CdtTriangle = cdtTree.FirstHitNode(node.Position, Test).UserData;
 
             node.cachedIdealRadius = HubRadiiCalculator.CalculateIdealHubRadiusWithNeighbors(metroGraphData, bundlingSettings, node);

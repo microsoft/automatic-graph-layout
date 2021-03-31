@@ -53,7 +53,7 @@ namespace Microsoft.Msagl.Routing {
     Dictionary<Port, Set<Shape>> portsToEnterableShapes;
 
 
-    RTree<Point> portRTree;
+    RTree<Point,Point> portRTree;
     readonly Dictionary<Point, Polyline> portLocationsToLoosePolylines = new Dictionary<Point, Polyline>();
     Shape looseRoot;
     internal BundlingSettings BundlingSettings { get; set; }
@@ -582,14 +582,14 @@ namespace Microsoft.Msagl.Routing {
       }
     }
 
-    RectangleNode<Polyline> GetTightHierarchy() {
-      return RectangleNode<Polyline>.CreateRectangleNodeOnEnumeration(shapesToTightLooseCouples.Values.
-          Select(tl => new RectangleNode<Polyline>(tl.TightPolyline, tl.TightPolyline.BoundingBox)));
+    RectangleNode<Polyline, Point> GetTightHierarchy() {
+      return RectangleNode<Polyline, Point>.CreateRectangleNodeOnEnumeration(shapesToTightLooseCouples.Values.
+          Select(tl => new RectangleNode<Polyline, Point>(tl.TightPolyline, tl.TightPolyline.BoundingBox)));
     }
 
-    RectangleNode<Polyline> GetLooseHierarchy() {
+    RectangleNode<Polyline, Point> GetLooseHierarchy() {
       var loosePolylines = new Set<Polyline>(shapesToTightLooseCouples.Values.Select(tl => (Polyline)(tl.LooseShape.BoundaryCurve)));
-      return RectangleNode<Polyline>.CreateRectangleNodeOnEnumeration(loosePolylines.Select(p => new RectangleNode<Polyline>(p, p.BoundingBox)));
+      return RectangleNode<Polyline, Point>.CreateRectangleNodeOnEnumeration(loosePolylines.Select(p => new RectangleNode<Polyline, Point>(p, p.BoundingBox)));
     }
 
     void ScaleLooseShapesDown() {
@@ -857,18 +857,18 @@ namespace Microsoft.Msagl.Routing {
             }
     */
 
-    static RectangleNode<Polyline> CreateLooseObstacleHierarachy(IEnumerable<Polyline> loosePolys) {
+    static RectangleNode<Polyline, Point> CreateLooseObstacleHierarachy(IEnumerable<Polyline> loosePolys) {
       return
-          RectangleNode<Polyline>.CreateRectangleNodeOnEnumeration(
+          RectangleNode<Polyline, Point>.CreateRectangleNodeOnEnumeration(
               loosePolys.Select(
-                  poly => new RectangleNode<Polyline>(poly, poly.BoundingBox)));
+                  poly => new RectangleNode<Polyline, Point>(poly, poly.BoundingBox)));
     }
 
-    RectangleNode<Polyline> CreateTightObstacleHierarachy(IEnumerable<Shape> obstacles) {
+    RectangleNode<Polyline, Point> CreateTightObstacleHierarachy(IEnumerable<Shape> obstacles) {
       var tightPolys = obstacles.Select(sh => shapesToTightLooseCouples[sh].TightPolyline);
       return
-          RectangleNode<Polyline>.CreateRectangleNodeOnEnumeration(
-              tightPolys.Select(tightPoly => new RectangleNode<Polyline>(
+          RectangleNode<Polyline, Point>.CreateRectangleNodeOnEnumeration(
+              tightPolys.Select(tightPoly => new RectangleNode<Polyline, Point>(
                                                  tightPoly,
                                                  tightPoly.BoundingBox)));
     }
@@ -877,7 +877,7 @@ namespace Microsoft.Msagl.Routing {
       var setOfPortLocations = LineSweeperPorts != null ? new Set<Point>(LineSweeperPorts) : new Set<Point>();
       ProcessHookAnyWherePorts(setOfPortLocations);
       portRTree =
-          new RTree<Point>(
+          new RTree<Point,Point>(
               setOfPortLocations.Select(p => new KeyValuePair<Rectangle, Point>(new Rectangle(p), p)));
       visGraph = new VisibilityGraph();
 

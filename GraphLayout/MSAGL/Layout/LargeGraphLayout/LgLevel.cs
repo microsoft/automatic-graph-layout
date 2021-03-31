@@ -25,12 +25,12 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         internal Set<Rail> HighlightedRails = new Set<Rail>();
         internal readonly int ZoomLevel;
         readonly GeometryGraph _geomGraph;
-        internal RTree<Rail> _railTree = new RTree<Rail>();
-        internal RTree<Rail> RailTree {
+        internal RTree<Rail,Point> _railTree = new RTree<Rail,Point>();
+        internal RTree<Rail,Point> RailTree {
             get { return _railTree; }
         }
 
-        RTree<LgNodeInfo> _nodeInfoTree = new RTree<LgNodeInfo>();
+        RTree<LgNodeInfo, Point> _nodeInfoTree = new RTree<LgNodeInfo, Point>();
 
         internal readonly Dictionary<Edge, List<Rail>> _orderedRailsOfEdges = new Dictionary<Edge, List<Rail>>();
 
@@ -44,17 +44,17 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             ZoomLevel = zoomLevel;
         }
 
-        internal RTree<LgNodeInfo> NodeInfoTree {
+        internal RTree<LgNodeInfo, Point> NodeInfoTree {
             get { return _nodeInfoTree; }            
         }
 
 
         internal void CreateEmptyRailTree() {
-            _railTree = new RTree<Rail>();
+            _railTree = new RTree<Rail,Point>();
         }
 
         //public void CreateRailTree() {
-        //    RailTree = new RTree<Rail>(
+        //    RailTree = new RTree<Rail,Point>(
         //        RailDictionary.Values.Select(rail => new KeyValuePair<Rectangle, Rail>(rail.BoundingBox, rail)));
         //}
 

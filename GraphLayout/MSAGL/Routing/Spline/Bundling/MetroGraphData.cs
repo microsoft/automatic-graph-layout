@@ -55,7 +55,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         internal Cdt Cdt;
 
         internal MetroGraphData(EdgeGeometry[] regularEdges,
-            RectangleNode<Polyline> looseTree, RectangleNode<Polyline> tightTree,
+            RectangleNode<Polyline, Point> looseTree, RectangleNode<Polyline, Point> tightTree,
             BundlingSettings bundlingSettings, Cdt cdt,
             Dictionary<EdgeGeometry, Set<Polyline>> edgeLooseEnterable, Dictionary<EdgeGeometry, Set<Polyline>> edgeTightEnterable, Func<Port, Polyline> loosePolylineOfPort) {
             //Debug.Assert(cdt != null);
@@ -90,9 +90,9 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
         internal List<Metroline> Metrolines { get { return metrolines; } }
 
-        internal RectangleNode<Polyline> LooseTree { get { return looseIntersections.obstacleTree; } }
+        internal RectangleNode<Polyline, Point> LooseTree { get { return looseIntersections.obstacleTree; } }
 
-        internal RectangleNode<Polyline> TightTree { get { return tightIntersections.obstacleTree; } }
+        internal RectangleNode<Polyline, Point> TightTree { get { return tightIntersections.obstacleTree; } }
 
         internal IEnumerable<Tuple<Station, Station>> VirtualEdges() {
             return edgeInfoDictionary.Keys;
@@ -464,7 +464,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
        }
 
         void InitializeCdtInfo() {
-            RectangleNode<CdtTriangle> cdtTree = Cdt.GetCdtTree();
+            RectangleNode<CdtTriangle,Point> cdtTree = Cdt.GetCdtTree();
             foreach (var station in Stations) {
                 station.CdtTriangle = cdtTree.FirstHitNode(station.Position, IntersectionCache.Test).UserData;
                 Debug.Assert(station.CdtTriangle != null);

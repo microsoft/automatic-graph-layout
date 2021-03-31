@@ -63,13 +63,13 @@ namespace Microsoft.Msagl.Routing {
         /// Root of binary space partition tree used for rapid region queries over TightObstacles.
         /// </summary>
         // TODO: replace these with the BinarySpacePartitionTree wrapper class
-        internal RectangleNode<Polyline> RootOfTightHierarchy { get; set; }
+        internal RectangleNode<Polyline, Point> RootOfTightHierarchy { get; set; }
 
         /// <summary>
         /// Root of binary space partition tree used for rapid region queries over LooseObstacles.
         /// </summary>
         // TODO: replace these with the BinarySpacePartitionTree wrapper class
-        internal RectangleNode<Polyline> RootOfLooseHierarchy { get; set; }
+        internal RectangleNode<Polyline, Point> RootOfLooseHierarchy { get; set; }
 
         internal bool IgnoreTightPadding {
             get;
@@ -110,13 +110,13 @@ namespace Microsoft.Msagl.Routing {
         }
 
 
-        //internal void ShowRectangleNodesHierarchy(RectangleNode<Polyline> node) {
+        //internal void ShowRectangleNodesHierarchy(RectangleNode<Polyline, Point> node) {
         //    List<ICurve> ls = new List<ICurve>();
         //    FillList(ls, node);
         //    SugiyamaLayoutSettings.Show(ls.ToArray());
         //}
 
-        //internal void FillList(List<ICurve> ls, RectangleNode<Polyline> node) {
+        //internal void FillList(List<ICurve> ls, RectangleNode<Polyline, Point> node) {
         //    if (node == null)
         //        return;
         //    if (node.UserData != null)
@@ -127,7 +127,7 @@ namespace Microsoft.Msagl.Routing {
         //    }
         //}
 
-        internal static void UpdateRectsForParents(RectangleNode<Polyline> node) {
+        internal static void UpdateRectsForParents(RectangleNode<Polyline, Point> node) {
             while (node.Parent != null) {
                 node.Parent.rectangle.Add(node.Rectangle);
                 node = node.Parent;
@@ -160,7 +160,7 @@ namespace Microsoft.Msagl.Routing {
             OverlapsDetected = TightObstacles.Count < Obstacles.Count();
         }
 
-        static internal RectangleNode<Polyline> CreateTightObstacles(IEnumerable<ICurve> obstacles, double tightPadding, Set<Polyline> tightObstacleSet) {
+        static internal RectangleNode<Polyline, Point> CreateTightObstacles(IEnumerable<ICurve> obstacles, double tightPadding, Set<Polyline> tightObstacleSet) {
             Debug.Assert(tightObstacleSet!=null);
             if(obstacles.Count()==0)
                 return null;
@@ -170,7 +170,7 @@ namespace Microsoft.Msagl.Routing {
             return RemovePossibleOverlapsInTightPolylinesAndCalculateHierarchy(tightObstacleSet);
         }
 
-        static internal RectangleNode<Polyline> RemovePossibleOverlapsInTightPolylinesAndCalculateHierarchy(Set<Polyline> tightObstacleSet) {
+        static internal RectangleNode<Polyline, Point> RemovePossibleOverlapsInTightPolylinesAndCalculateHierarchy(Set<Polyline> tightObstacleSet) {
             var hierarchy = CalculateHierarchy(tightObstacleSet);
             Set<Tuple<Polyline, Polyline>> overlappingPairSet;
             while ((overlappingPairSet = GetOverlappedPairSet(hierarchy)).Count > 0)
@@ -221,7 +221,7 @@ namespace Microsoft.Msagl.Routing {
         }
 
 
-        internal static RectangleNode<Polyline> ReplaceTightObstaclesWithConvexHulls(Set<Polyline> tightObsts, IEnumerable<Tuple<Polyline, Polyline>> overlappingPairSet) {
+        internal static RectangleNode<Polyline, Point> ReplaceTightObstaclesWithConvexHulls(Set<Polyline> tightObsts, IEnumerable<Tuple<Polyline, Polyline>> overlappingPairSet) {
             var overlapping = new Set<Polyline>();
             foreach (var pair in overlappingPairSet) {
                 overlapping.Insert(pair.Item1);
@@ -256,7 +256,7 @@ namespace Microsoft.Msagl.Routing {
             return TightObstacles == null || TightObstacles.Count == 0;
         }
 
-        internal static Set<Tuple<Polyline, Polyline>> GetOverlappedPairSet(RectangleNode<Polyline> rootOfObstacleHierarchy)
+        internal static Set<Tuple<Polyline, Polyline>> GetOverlappedPairSet(RectangleNode<Polyline, Point> rootOfObstacleHierarchy)
         {
             var overlappingPairSet = new Set<Tuple<Polyline, Polyline>>();
             RectangleNodeUtils.CrossRectangleNodes<Polyline>(rootOfObstacleHierarchy, rootOfObstacleHierarchy,
@@ -278,14 +278,14 @@ namespace Microsoft.Msagl.Routing {
         }
 
 
-        internal static RectangleNode<Polyline> CalculateHierarchy(IEnumerable<Polyline> polylines) {
+        internal static RectangleNode<Polyline, Point> CalculateHierarchy(IEnumerable<Polyline> polylines) {
             var rectNodes = polylines.Select(polyline => CreateRectNodeOfPolyline(polyline)).ToList();
-            return RectangleNode<Polyline>.CreateRectangleNodeOnListOfNodes(rectNodes);
+            return RectangleNode<Polyline, Point>.CreateRectangleNodeOnListOfNodes(rectNodes);
         }
 
 
-        static RectangleNode<Polyline> CreateRectNodeOfPolyline(Polyline polyline) {
-            return new RectangleNode<Polyline>(polyline, (polyline as ICurve).BoundingBox);
+        static RectangleNode<Polyline, Point> CreateRectNodeOfPolyline(Polyline polyline) {
+            return new RectangleNode<Polyline, Point>(polyline, (polyline as ICurve).BoundingBox);
         }
 
         internal static bool OneCurveLiesInsideOfOther(ICurve polyA, ICurve polyB) {
@@ -476,7 +476,7 @@ namespace Microsoft.Msagl.Routing {
         /// <param name="polyline">a polyline to pad (tightObstacle)</param>
         /// <param name="desiredPadding">desired amount to pad</param>
         /// <returns>maximum amount we can pad without creating overlaps</returns>
-        internal static double FindMaxPaddingForTightPolyline(RectangleNode<Polyline> hierarchy, Polyline polyline, double desiredPadding ) {
+        internal static double FindMaxPaddingForTightPolyline(RectangleNode<Polyline, Point> hierarchy, Polyline polyline, double desiredPadding ) {
             var dist = desiredPadding;
             var polygon = new Polygon(polyline);
 #if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
@@ -502,7 +502,7 @@ namespace Microsoft.Msagl.Routing {
             return CurveIntersectsRectangleNode(curve, ref rect, RootOfTightHierarchy);
         }
 
-        static bool CurveIntersectsRectangleNode(ICurve curve, ref Rectangle curveBox, RectangleNode<Polyline> rectNode) {
+        static bool CurveIntersectsRectangleNode(ICurve curve, ref Rectangle curveBox, RectangleNode<Polyline, Point> rectNode) {
             if (!rectNode.Rectangle.Intersects(curveBox))
                 return false;
 

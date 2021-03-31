@@ -36,7 +36,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             if (metroGraphData.Edges.Count() == 0) return false;
 
             var splittingPoints = new Dictionary<PointPair, List<Point>>();
-            var treeOfVertices = new RTree<Point>();
+            var treeOfVertices = new RTree<Point,Point>();
             foreach (var vertex in Vertices()) {
                 var r = new Rectangle(vertex.Point);
                 r.Pad(ApproximateComparer.IntersectionEpsilon);
@@ -186,7 +186,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             return removed;
         }
 
-        void IntersectTwoEdges(PointPair a, PointPair b, Dictionary<PointPair, List<Point>> splittingPoints, RTree<Point> tree) {
+        void IntersectTwoEdges(PointPair a, PointPair b, Dictionary<PointPair, List<Point>> splittingPoints, RTree<Point,Point> tree) {
             Point x;
             if (LineSegment.Intersect(a.First, a.Second, b.First, b.Second, out x)) {
                 Point vertex = FindExistingVertexOrCreateNew(tree, x);
@@ -196,7 +196,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             }
         }
 
-        Point FindExistingVertexOrCreateNew(RTree<Point> tree, Point x) {
+        Point FindExistingVertexOrCreateNew(RTree<Point,Point> tree, Point x) {
             var p = tree.RootNode.FirstHitNode(x);
             if (p != null)
                 return p.UserData;

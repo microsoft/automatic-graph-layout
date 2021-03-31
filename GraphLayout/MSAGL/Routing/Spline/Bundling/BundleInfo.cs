@@ -42,12 +42,12 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             }
         }
 
-        internal void SetParamsFeasiblySymmetrically(RectangleNode<Polyline> tightTree) {
+        internal void SetParamsFeasiblySymmetrically(RectangleNode<Polyline, Point> tightTree) {
             CalculateTightObstaclesForBundle(tightTree, obstaclesToIgnore);
             SetEndParamsSymmetrically();
         }
 
-        void CalculateTightObstaclesForBundle(RectangleNode<Polyline> tightTree, Set<Polyline> obstaclesToIgnore) {
+        void CalculateTightObstaclesForBundle(RectangleNode<Polyline, Point> tightTree, Set<Polyline> obstaclesToIgnore) {
             double sRadius = SourceBase.Curve.BoundingBox.Diagonal / 2;
             double tRadius = TargetBase.Curve.BoundingBox.Diagonal / 2;
 

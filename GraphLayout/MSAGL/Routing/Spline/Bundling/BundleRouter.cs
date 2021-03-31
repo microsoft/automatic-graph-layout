@@ -28,8 +28,8 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         internal const double SuperLoosePaddingCoefficient = 1.1;
 
         readonly SdShortestPath shortestPathRouter;
-        RectangleNode<Polyline> TightHierarchy { get; set; }
-        RectangleNode<Polyline> LooseHierarchy { get; set; }
+        RectangleNode<Polyline, Point> TightHierarchy { get; set; }
+        RectangleNode<Polyline, Point> LooseHierarchy { get; set; }
 
         ///<summary>
         /// reports the status of the bundling
@@ -57,8 +57,8 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 #endif
 
         internal BundleRouter(GeometryGraph geometryGraph, SdShortestPath shortestPathRouter,
-                              VisibilityGraph visibilityGraph, BundlingSettings bundlingSettings, double loosePadding, RectangleNode<Polyline> tightHierarchy,
-                              RectangleNode<Polyline> looseHierarchy,
+                              VisibilityGraph visibilityGraph, BundlingSettings bundlingSettings, double loosePadding, RectangleNode<Polyline, Point> tightHierarchy,
+                              RectangleNode<Polyline, Point> looseHierarchy,
                               Dictionary<EdgeGeometry, Set<Polyline>> edgeLooseEnterable, Dictionary<EdgeGeometry, Set<Polyline>> edgeTightEnterable, Func<Port, Polyline> loosePolylineOfPort) {
             ValidateArg.IsNotNull(geometryGraph, "geometryGraph");
             ValidateArg.IsNotNull(bundlingSettings, "bundlingSettings");
@@ -76,7 +76,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             this.loosePolylineOfPort = loosePolylineOfPort;
         }
 
-        bool ThereAreOverlaps(RectangleNode<Polyline> hierarchy) {
+        bool ThereAreOverlaps(RectangleNode<Polyline, Point> hierarchy) {
             return RectangleNodeUtils.FindIntersectionWithProperty(hierarchy, hierarchy, Curve.CurvesIntersect);
         }
 
@@ -140,7 +140,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             }
         }
 
-        static internal Cdt CreateConstrainedDelaunayTriangulation(RectangleNode<Polyline> looseHierarchy) {
+        static internal Cdt CreateConstrainedDelaunayTriangulation(RectangleNode<Polyline, Point> looseHierarchy) {
             IEnumerable<Polyline> obstacles = looseHierarchy.GetAllLeaves();
 
             Rectangle rectangle = looseHierarchy.Rectangle;

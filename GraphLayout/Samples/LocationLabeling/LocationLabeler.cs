@@ -424,8 +424,8 @@ namespace LocationLabeling {
         }
 
         private bool OverlapsFound() {
-            IList<RectangleNode<Node>> rects;
-            var rectNode = RectangleNode<Node>.CreateRectangleNodeOnListOfNodes(rects = CreateRectanglesAroundNodes());
+            IList<RectangleNode<Node, Point>> rects;
+            var rectNode = RectangleNode<Node, Point>.CreateRectangleNodeOnListOfNodes(rects = CreateRectanglesAroundNodes());
             foreach (var r in rects) {
                 if ((from rn in rectNode.GetNodeItemsIntersectingRectangle(r.Rectangle) where rn != r.UserData select rn).Any())
                     return true;
@@ -434,11 +434,11 @@ namespace LocationLabeling {
 
         }
 
-        private IList<RectangleNode<Node>> CreateRectanglesAroundNodes() {
+        private IList<RectangleNode<Node, Point>> CreateRectanglesAroundNodes() {
             return
-                new List<RectangleNode<Node>>(
+                new List<RectangleNode<Node, Point>>(
                     from n in this.labels
-                    select new RectangleNode<Node>(n, ExtendedBoundingBoxOfNode(n))
+                    select new RectangleNode<Node, Point>(n, ExtendedBoundingBoxOfNode(n))
                     );
         }
 

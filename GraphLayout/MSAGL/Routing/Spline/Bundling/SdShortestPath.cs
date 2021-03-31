@@ -17,7 +17,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         internal Func<EdgeGeometry, List<Shape>> MakeTransparentShapesOfEdgeGeometry { get; set; }
         internal BundlingSettings BundlingSettings { get; set; }
         internal EdgeGeometry[] EdgeGeometries { get; set; }
-        internal RectangleNode<Polyline> ObstacleHierarchy { get; set; }
+        internal RectangleNode<Polyline, Point> ObstacleHierarchy { get; set; }
 
         SdVertex[] vertexArray;
         internal Cdt Cdt { get; set; }
@@ -496,8 +496,8 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
         void SetVertexTriangles() {
             var triangleTree =
-                RectangleNode<CdtTriangle>.CreateRectangleNodeOnEnumeration(
-                    Cdt.GetTriangles().Select(t => new RectangleNode<CdtTriangle>(t, t.BoundingBox())));
+                RectangleNode<CdtTriangle,Point>.CreateRectangleNodeOnEnumeration(
+                    Cdt.GetTriangles().Select(t => new RectangleNode<CdtTriangle,Point>(t, t.BoundingBox())));
             var vertexTree =
                 RectangleNode<SdVertex>.CreateRectangleNodeOnEnumeration(
                     vertexArray.Select(v => new RectangleNode<SdVertex>(v, new Rectangle(v.Point))));

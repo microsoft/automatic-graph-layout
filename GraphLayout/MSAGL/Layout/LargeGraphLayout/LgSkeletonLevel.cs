@@ -12,12 +12,12 @@ using Microsoft.Msagl.Routing.Visibility;
 using SymmetricSegment = Microsoft.Msagl.Core.DataStructures.SymmetricTuple<Microsoft.Msagl.Core.Geometry.Point>;
 namespace Microsoft.Msagl.Layout.LargeGraphLayout {
     internal class LgSkeletonLevel {
-        //internal RTree<Rail> RailTree = new RTree<Rail>();
+        //internal RTree<Rail,Point> RailTree = new RTree<Rail,Point>();
 
         //internal Dictionary<SymmetricSegment, Rail> RailDictionary =
         //    new Dictionary<SymmetricSegment, Rail>();
 
-        readonly RTree<Point> _visGraphVertices = new RTree<Point>();
+        readonly RTree<Point,Point> _visGraphVertices = new RTree<Point,Point>();
 
         internal int ZoomLevel;
 

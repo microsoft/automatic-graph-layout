@@ -37,7 +37,7 @@ namespace VoronoiDiagramTest
 {
     internal class VoronoiDiagram {
         IEnumerable<Point> cites;
-        RTree<Point> voronoiSiteTree = new RTree<Point>();
+        RTree<Point,Point> voronoiSiteTree = new RTree<Point,Point>();
             
         internal Rectangle BoundingBox;
         private double eps=0.00001;
