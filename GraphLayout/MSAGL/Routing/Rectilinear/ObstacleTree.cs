@@ -1,6 +1,6 @@
 //
 // ObstacleTree.cs
-// MSAGL class for wrapping a RectangleNode<Obstacle> hierarchy for Rectilinear Edge Routing.
+// MSAGL class for wrapping a RectangleNode<Obstacle, Point> hierarchy for Rectilinear Edge Routing.
 //
 // Copyright Microsoft Corporation.
 using System.Collections.Generic;
@@ -18,8 +18,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         /// <summary>
         /// The root of the hierarchy.
         /// </summary>
-        internal RectangleNode<Obstacle> Root { get; private set; }
-        internal Rectangle GraphBox { get { return Root.Rectangle; } }
+        internal RectangleNode<Obstacle, Point> Root { get; private set; }
+        internal Rectangle GraphBox { get { return (Rectangle)Root.Rectangle; } }
 
         /// <summary>
         /// Dictionary of sets of ancestors for each shape, for evaluating necessary group-boundary crossings.
@@ -107,7 +107,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             if (this.Root == null) {
                 return false;
             }
-            RectangleNodeUtils.CrossRectangleNodes<Obstacle>(this.Root, this.Root, this.CheckForInitialOverlaps);
+            RectangleNodeUtils.CrossRectangleNodes<Obstacle,Point>(this.Root, this.Root, this.CheckForInitialOverlaps);
             return this.hasOverlaps;
         }
 
@@ -164,9 +164,9 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             }
         }
 
-        internal static RectangleNode<Obstacle> CalculateHierarchy(IEnumerable<Obstacle> obstacles) {
-            var rectNodes = obstacles.Select(obs => new RectangleNode<Obstacle>(obs, obs.VisibilityBoundingBox)).ToList();
-            return RectangleNode<Obstacle>.CreateRectangleNodeOnListOfNodes(rectNodes);
+        internal static RectangleNode<Obstacle,Point> CalculateHierarchy(IEnumerable<Obstacle> obstacles) {
+            var rectNodes = obstacles.Select(obs => new RectangleNode<Obstacle, Point>(obs, obs.VisibilityBoundingBox)).ToList();
+            return RectangleNode<Obstacle, Point>.CreateRectangleNodeOnListOfNodes(rectNodes);
         }
 
         private void AccumulateObstaclesForClumps() {
@@ -175,7 +175,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             if (rectangularObstacles == null) {
                 return;
             }
-            RectangleNodeUtils.CrossRectangleNodes<Obstacle>(rectangularObstacles, rectangularObstacles, this.EvaluateOverlappedPairForClump);
+            RectangleNodeUtils.CrossRectangleNodes<Obstacle, Point>(rectangularObstacles, rectangularObstacles, this.EvaluateOverlappedPairForClump);
         }
 
         private void EvaluateOverlappedPairForClump(Obstacle a, Obstacle b) {
@@ -198,7 +198,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             if (allPrimaryNonGroupObstacles == null) {
                 return;
             }
-            RectangleNodeUtils.CrossRectangleNodes<Obstacle>(allPrimaryNonGroupObstacles, allPrimaryNonGroupObstacles, this.EvaluateOverlappedPairForConvexHull);
+            RectangleNodeUtils.CrossRectangleNodes<Obstacle,Point>(allPrimaryNonGroupObstacles, allPrimaryNonGroupObstacles, this.EvaluateOverlappedPairForConvexHull);
         }
 
         private void EvaluateOverlappedPairForConvexHull(Obstacle a, Obstacle b) {
@@ -243,7 +243,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             if ((groupObstacles == null) || (allPrimaryObstacles == null)) {
                 return;
             }
-            RectangleNodeUtils.CrossRectangleNodes<Obstacle>(groupObstacles, allPrimaryObstacles, this.EvaluateOverlappedPairForGroup);
+            RectangleNodeUtils.CrossRectangleNodes<Obstacle,Point>(groupObstacles, allPrimaryObstacles, this.EvaluateOverlappedPairForGroup);
         }
 
         private void EvaluateOverlappedPairForGroup(Obstacle a, Obstacle b) {
@@ -537,7 +537,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             insideHitTestIgnoreObstacle1 = eventObstacle;
             insideHitTestIgnoreObstacle2 = sideObstacle;
             insideHitTestScanDirection = scanDirection;
-            RectangleNode<Obstacle> obstacleNode = Root.FirstHitNode(intersect, InsideObstacleHitTest);
+            RectangleNode<Obstacle, Point> obstacleNode = Root.FirstHitNode(intersect, InsideObstacleHitTest);
             return (null != obstacleNode);
         }
 
@@ -549,7 +549,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             insideHitTestIgnoreObstacle1 = null;
             insideHitTestIgnoreObstacle2 = null;
             insideHitTestScanDirection = scanDirection;
-            RectangleNode<Obstacle> obstacleNode = Root.FirstHitNode(intersect, InsideObstacleHitTest);
+            RectangleNode<Obstacle, Point> obstacleNode = Root.FirstHitNode(intersect, InsideObstacleHitTest);
             return (null != obstacleNode);
         }
 
@@ -660,9 +660,9 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         bool stopAtGroups;
         double restrictedRayLengthSquared;
 
-        private void RecurseRestrictRayWithObstacles(RectangleNode<Obstacle> rectNode) {
+        private void RecurseRestrictRayWithObstacles(RectangleNode<Obstacle, Point> rectNode) {
             // A lineSeg that moves along the boundary of an obstacle is not blocked by it.
-            if (!StaticGraphUtility.RectangleInteriorsIntersect(currentRestrictedRay.BoundingBox, rectNode.Rectangle)) {
+            if (!StaticGraphUtility.RectangleInteriorsIntersect(currentRestrictedRay.BoundingBox, (Rectangle)rectNode.Rectangle)) {
                 return;
             }
 

@@ -11,7 +11,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
         readonly Size[] _nodeSizes;
         readonly Point[] _nodePositions;
         readonly bool _forLayers;
-        IntervalRTree<int> _intervalTree;
+        RTree<int, double> _intervalTree;
         BinaryHeapPriorityQueue _q;
         int _numberOfOverlaps = 0;
 
@@ -51,7 +51,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
         void AddIntervalToTree(int i) {
             var interval = GetInterval(i);
             if (_intervalTree == null)
-                _intervalTree = new IntervalRTree<int>();
+                _intervalTree = new RTree<int, double>();
 
             _intervalTree.Add(interval, i);
             

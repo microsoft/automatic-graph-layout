@@ -143,7 +143,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         static internal Cdt CreateConstrainedDelaunayTriangulation(RectangleNode<Polyline, Point> looseHierarchy) {
             IEnumerable<Polyline> obstacles = looseHierarchy.GetAllLeaves();
 
-            Rectangle rectangle = looseHierarchy.Rectangle;
+            Rectangle rectangle = (Rectangle)looseHierarchy.Rectangle;
             double d = rectangle.Diagonal / 4;
             Point lb = rectangle.LeftBottom + new Point(-d, -d);
             Point lt = rectangle.LeftTop + new Point(-d, d);

@@ -338,7 +338,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
         public void CreateNodeTree(IEnumerable<LgNodeInfo> nodeInfos, double nodeDotWidth) {
             foreach (var n in nodeInfos)
-                NodeInfoTree.Add(new RectangleNode<LgNodeInfo>(n,
+                NodeInfoTree.Add(new RectangleNode<LgNodeInfo,Point>(n,
                     new Rectangle(new Size(nodeDotWidth, nodeDotWidth),n.Center)));
         }
 

@@ -18,7 +18,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear {
     internal class SuperClump 
     {
         private readonly Set<Obstacle> groupsAndClumps = new Set<Obstacle>();
-        private RectangleNode<Obstacle> hierarchy;
+        private RectangleNode<Obstacle,Point> hierarchy;
 
         internal void Insert(Obstacle obstacle) 
         {
@@ -32,16 +32,16 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear {
             this.hierarchy = ObstacleTree.CalculateHierarchy(groupsAndClumps);
         }
 
-        internal Rectangle Rectangle { get { return this.hierarchy.Rectangle; } }
+        internal Rectangle Rectangle { get { return (Rectangle)this.hierarchy.Rectangle; } }
 
         internal bool LandlocksPoint(Point location)
         {
             return LandlocksPoint(this.hierarchy, location);
         }
 
-        internal static bool LandlocksPoint(RectangleNode<Obstacle> root, Point location) 
+        internal static bool LandlocksPoint(RectangleNode<Obstacle,Point> root, Point location) 
         {
-            var bbox = root.Rectangle;
+            Rectangle bbox = (Rectangle)root.Rectangle;
             if (!bbox.Contains(location)) 
             {
                 return false;
@@ -54,7 +54,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear {
                 || IntersectsSegment(root, location, StaticGraphUtility.RectangleBorderIntersect(bbox, location, Directions.West));
         }
 
-        internal static bool IntersectsSegment(RectangleNode<Obstacle> root, Point start, Point end) 
+        internal static bool IntersectsSegment(RectangleNode<Obstacle,Point> root, Point start, Point end) 
         {
             return root.GetLeafRectangleNodesIntersectingRectangle(new Rectangle(start, end)).Any();
         }

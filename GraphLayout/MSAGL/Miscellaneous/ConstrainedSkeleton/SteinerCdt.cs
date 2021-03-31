@@ -234,7 +234,7 @@ namespace Microsoft.Msagl.Miscellaneous.ConstrainedSkeleton
             }
 
             var tree =
-                new RTree<Point,Point>(_pointsToIndices.Keys.Select(p => new KeyValuePair<Rectangle, Point>(new Rectangle(p), p)));
+                new RTree<Point,Point>(_pointsToIndices.Keys.Select(p => new KeyValuePair<IRectangle<Point>, Point>(new Rectangle(p), p)));
             var badSegs = (from e in _segments let overlaps = GetPointsOverlappingSeg(e, tree, indexToPoints) where overlaps.Count > 2 select e).ToList();
 
 #if TEST_MSAGL

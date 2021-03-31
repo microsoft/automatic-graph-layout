@@ -109,5 +109,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             var r = (Interval)rectangle;
             return new Interval(this, r);
         }
+
+        public bool Contains(double p, double radius) {
+            return Contains(p - radius / 2) && Contains(p + radius / 2);
+        }
     }
 }

@@ -14,10 +14,10 @@ namespace Microsoft.Msagl.Routing {
     /// We assume that the boundaries are not set for the shape children yet
     /// </summary>
     internal class ShapeObstacleCalculator {
-        RectangleNode<Polyline, Point> tightHierarchy;
-        RectangleNode<TightLooseCouple> coupleHierarchy;
+        RectangleNode<Polyline,Point> tightHierarchy;
+        RectangleNode<TightLooseCouple,Point> coupleHierarchy;
 
-        public RectangleNode<Shape> RootOfLooseHierarchy { get; set; }
+        public RectangleNode<Shape,Point> RootOfLooseHierarchy { get; set; }
 
         internal ShapeObstacleCalculator(Shape shape, double tightPadding, double loosePadding, 
             Dictionary<Shape, TightLooseCouple> shapeToTightLooseCouples) {
@@ -46,8 +46,8 @@ namespace Microsoft.Msagl.Routing {
 
         void FillTheMapOfShapeToTightLooseCouples() {
             var childrenShapeHierarchy =
-                RectangleNode<Shape>.CreateRectangleNodeOnEnumeration(
-                    MainShape.Children.Select(s => new RectangleNode<Shape>(s, s.BoundingBox)));
+                RectangleNode<Shape,Point>.CreateRectangleNodeOnEnumeration(
+                    MainShape.Children.Select(s => new RectangleNode<Shape,Point>(s, s.BoundingBox)));
             RectangleNodeUtils.CrossRectangleNodes(childrenShapeHierarchy, coupleHierarchy,
                                                    TryMapShapeToTightLooseCouple);
         }
@@ -79,8 +79,8 @@ namespace Microsoft.Msagl.Routing {
                 var loosePoly = InteractiveObstacleCalculator.LoosePolylineWithFewCorners(tightPolyline, distance);
                 couples.Add(new TightLooseCouple(tightPolyline, new Shape(loosePoly), distance));
             }
-            coupleHierarchy = RectangleNode<TightLooseCouple>.
-                CreateRectangleNodeOnEnumeration(couples.Select(c => new RectangleNode<TightLooseCouple>(c, c.TightPolyline.BoundingBox)));
+            coupleHierarchy = RectangleNode<TightLooseCouple,Point>.
+                CreateRectangleNodeOnEnumeration(couples.Select(c => new RectangleNode<TightLooseCouple,Point>(c, c.TightPolyline.BoundingBox)));
         }
 
         void CreateTightObstacles() {

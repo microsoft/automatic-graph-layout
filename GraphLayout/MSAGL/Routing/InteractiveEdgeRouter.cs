@@ -454,7 +454,7 @@ namespace Microsoft.Msagl.Routing {
         }
 
         bool PolylineIntersectsPolyRectangleNodeOfTightHierarchy(LineSegment ls, RectangleNode<Polyline, Point> rect) {
-            if (!ls.BoundingBox.Intersects(rect.Rectangle))
+            if (!ls.BoundingBox.Intersects((Rectangle)rect.Rectangle))
                 return false;
             if (rect.UserData != null) {
                 foreach (IntersectionInfo ii in Curve.GetAllIntersections(ls, rect.UserData, false)) {
@@ -481,10 +481,14 @@ namespace Microsoft.Msagl.Routing {
 
         static void IntersectionsOfLineAndRectangleNodeOverPolyline(LineSegment ls, RectangleNode<Polyline, Point> rectNode,
                                                                     List<IntersectionInfo> listOfIntersections) {
-            if (rectNode == null)
+            if (rectNode == null) {
                 return;
-            if (!ls.BoundingBox.Intersects(rectNode.Rectangle))
+            }
+
+            if (!ls.BoundingBox.Intersects((Rectangle)rectNode.Rectangle)) {
                 return;
+            }
+
             if (rectNode.UserData != null) {
                 listOfIntersections.AddRange(Curve.GetAllIntersections(ls, rectNode.UserData, true));
                 return;

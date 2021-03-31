@@ -259,7 +259,7 @@ namespace Microsoft.Msagl.Routing {
         internal static Set<Tuple<Polyline, Polyline>> GetOverlappedPairSet(RectangleNode<Polyline, Point> rootOfObstacleHierarchy)
         {
             var overlappingPairSet = new Set<Tuple<Polyline, Polyline>>();
-            RectangleNodeUtils.CrossRectangleNodes<Polyline>(rootOfObstacleHierarchy, rootOfObstacleHierarchy,
+            RectangleNodeUtils.CrossRectangleNodes<Polyline,Point>(rootOfObstacleHierarchy, rootOfObstacleHierarchy,
                                                    (a, b) =>
                                                        {
                                                            if (PolylinesIntersect(a, b))

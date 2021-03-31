@@ -94,7 +94,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             if (circlesHierarchy == null) return false;
             var gluingMap = new Dictionary<Station, Station>();
             var gluedDomain = new Set<Station>();
-            RectangleNodeUtils.CrossRectangleNodes<Station>(circlesHierarchy, circlesHierarchy,
+            RectangleNodeUtils.CrossRectangleNodes<Station, Point>(circlesHierarchy, circlesHierarchy,
                                                             (i, j) => TryToGlueNodes(i, j, gluingMap, gluedDomain));
             if (gluingMap.Count == 0)
                 return false;
@@ -118,17 +118,17 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             return true;
         }
 
-        RectangleNode<Station> GetCirclesHierarchy() {
+        RectangleNode<Station, Point> GetCirclesHierarchy() {
             foreach (var v in metroGraphData.VirtualNodes()) {
                 v.Radius = GetCurrentHubRadius(v);
             }
 
-            return RectangleNode<Station>.CreateRectangleNodeOnEnumeration(from i in metroGraphData.VirtualNodes()
+            return RectangleNode<Station, Point>.CreateRectangleNodeOnEnumeration(from i in metroGraphData.VirtualNodes()
                                                                            let p = i.Position
                                                                            let r = Math.Max(i.Radius, 5)
                                                                            let del = new Point(r, r)
                                                                            let b = new Rectangle(p + del, p - del)
-                                                                           select new RectangleNode<Station>(i, b));
+                                                                           select new RectangleNode<Station, Point>(i, b));
         }
 
         double GetCurrentHubRadius(Station node) {

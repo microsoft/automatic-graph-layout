@@ -569,11 +569,11 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             foreach (var proximityEdge in proximityEdges) {
                 edgeSet.Add(Tuple.Create(proximityEdge.Item1, proximityEdge.Item2));
             }
-            RectangleNode<int> rootNode =
-                RectangleNode<int>.CreateRectangleNodeOnEnumeration(
-                    nodeSizes.Select((size, index) => new RectangleNode<int>(index, new Rectangle(size, nodePositions[index]))));
+            RectangleNode<int,Point> rootNode =
+                RectangleNode<int,Point>.CreateRectangleNodeOnEnumeration(
+                    nodeSizes.Select((size, index) => new RectangleNode<int,Point>(index, new Rectangle(size, nodePositions[index]))));
             int numCrossings = 0;
-             RectangleNodeUtils.CrossRectangleNodes<int, int>(rootNode, rootNode,
+             RectangleNodeUtils.CrossRectangleNodes<int, int, Point>(rootNode, rootNode,
                  (a, b) => {
                      if (a == b) return;
                      double t;
@@ -605,11 +605,11 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
 
 #if TEST_MSAGL
          int CountCrossingsWithRTree(Size[] nodeSizes) {
-            RectangleNode<int> rootNode =
-                RectangleNode<int>.CreateRectangleNodeOnEnumeration(
-                    nodeSizes.Select((r, index) => new RectangleNode<int>(index, new Rectangle(r,nodePositions[index]))));
+            RectangleNode<int,Point> rootNode =
+                RectangleNode<int,Point>.CreateRectangleNodeOnEnumeration(
+                    nodeSizes.Select((r, index) => new RectangleNode<int,Point>(index, new Rectangle(r,nodePositions[index]))));
             int numCrossings = 0;
-            RectangleNodeUtils.CrossRectangleNodes<int, int>(rootNode, rootNode,
+            RectangleNodeUtils.CrossRectangleNodes<int, int, Point>(rootNode, rootNode,
                                                              (a, b) => {
                                                                  if (a == b) return;
                                                                  numCrossings++;

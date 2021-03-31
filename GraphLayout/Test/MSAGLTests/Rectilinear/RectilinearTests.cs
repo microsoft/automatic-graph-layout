@@ -28,7 +28,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
     /// Tests for Rectilinear edge routing.
     /// </summary>
     [TestClass]
-    [Ignore]
+    //[Ignore]
     public class RectilinearTests : RectilinearVerifier
     {
         // ReSharper disable InconsistentNaming

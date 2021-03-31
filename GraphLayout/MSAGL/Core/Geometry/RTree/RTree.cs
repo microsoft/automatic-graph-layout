@@ -27,7 +27,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// </summary>
         /// <param name="rectsAndData"></param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public RTree(IEnumerable<KeyValuePair<Rectangle, T>> rectsAndData) {
+        public RTree(IEnumerable<KeyValuePair<IRectangle<P>, T>> rectsAndData) {
             _rootNode = RectangleNode<T, P>.CreateRectangleNodeOnEnumeration(GetNodeRects(rectsAndData));
         }
 
@@ -89,8 +89,8 @@ namespace Microsoft.Msagl.Core.Geometry {
                 existingNode.UserData = default(T);                
             } else {
                 existingNode.Count++;
-                Rectangle leftBox;
-                Rectangle rightBox;
+                IRectangle<P> leftBox;
+                IRectangle<P> rightBox;
                 if (2 * existingNode.Left.Count < existingNode.Right.Count) {
                     //keep the balance
                     AddNodeToTreeRecursive(newNode, existingNode.Left);
@@ -98,11 +98,11 @@ namespace Microsoft.Msagl.Core.Geometry {
                 } else if (2 * existingNode.Right.Count < existingNode.Left.Count) {
                     //keep the balance
                     AddNodeToTreeRecursive(newNode, existingNode.Right);
-                    existingNode.Right.Rectangle = new Rectangle(existingNode.Right.Rectangle, newNode.Rectangle);
+                    existingNode.Right.Rectangle = existingNode.Right.Rectangle.Unite( newNode.Rectangle);
                 } else { //decide basing on the boxes
-                    leftBox = new Rectangle(existingNode.Left.Rectangle, newNode.Rectangle);
+                    leftBox = existingNode.Left.Rectangle.Unite( newNode.Rectangle);
                     var delLeft = leftBox.Area - existingNode.Left.Rectangle.Area;
-                    rightBox = new Rectangle(existingNode.Right.Rectangle, newNode.Rectangle);
+                    rightBox = existingNode.Right.Rectangle.Unite(newNode.Rectangle);
                     var delRight = rightBox.Area - existingNode.Right.Rectangle.Area;
                     if (delLeft < delRight) {
                         AddNodeToTreeRecursive(newNode, existingNode.Left);
@@ -121,7 +121,7 @@ namespace Microsoft.Msagl.Core.Geometry {
                     }
                 }
             }
-            existingNode.Rectangle = new Rectangle(existingNode.Left.Rectangle, existingNode.Right.Rectangle);
+            existingNode.Rectangle = existingNode.Left.Rectangle.Unite( existingNode.Right.Rectangle);
         }
 
 
@@ -139,12 +139,12 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// </summary>
         /// <param name="queryRegion"></param>
         /// <returns></returns>
-        public T[] GetAllIntersecting(Rectangle queryRegion)
+        public T[] GetAllIntersecting(IRectangle<P> queryRegion)
         {
             return _rootNode == null || Count == 0 ? new T[0] : _rootNode.GetNodeItemsIntersectingRectangle(queryRegion).ToArray();
         }
 
-        public bool OneIntersecting(Rectangle queryRegion, out T intersectedLeaf) {
+        public bool OneIntersecting(IRectangle<P> queryRegion, out T intersectedLeaf) {
             if (_rootNode == null || Count == 0) {
                 intersectedLeaf = default(T);
                 return false;
@@ -163,7 +163,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// </summary>
         /// <param name="queryRegion"></param>
         /// <returns></returns>
-        internal IEnumerable<RectangleNode<T, P>> GetAllLeavesIntersectingRectangle(Rectangle queryRegion) {
+        internal IEnumerable<RectangleNode<T, P>> GetAllLeavesIntersectingRectangle(IRectangle<P> queryRegion) {
             return _rootNode == null || Count == 0 ? new RectangleNode<T, P>[0] : _rootNode.GetLeafRectangleNodesIntersectingRectangle(queryRegion);
         }
 
@@ -172,7 +172,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// </summary>
         /// <param name="queryRegion"></param>
         /// <returns></returns>
-        public bool IsIntersecting(Rectangle queryRegion) {
+        public bool IsIntersecting(IRectangle<P> queryRegion) {
             return GetAllIntersecting(queryRegion).Any();
         }
 
@@ -182,7 +182,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// <param name="rectangle"></param>
         /// <param name="userData"></param>
         /// <returns></returns>
-        public bool Contains(Rectangle rectangle, T userData) {
+        public bool Contains(IRectangle<P> rectangle, T userData) {
             if (_rootNode == null) return false;
             return
                 _rootNode.GetLeafRectangleNodesIntersectingRectangle(rectangle)
@@ -194,7 +194,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         ///<param name="rectangle"></param>
         ///<param name="userData"></param>
         ///<returns></returns>
-        public T Remove(Rectangle rectangle, T userData) {
+        public T Remove(IRectangle<P> rectangle, T userData) {
             if (_rootNode==null)
             {
                 return default(T);
@@ -230,7 +230,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         //   Debug.Assert(TreeIsCorrect(RootNode));
         }
 
-//        static bool TreeIsCorrect(RectangleNode<TData> node)
+//        static bool TreeIsCorrect(RectangleNode<TData,Point> node)
 //        {
 //            if (node == null)
 //                return true;
@@ -244,7 +244,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         static void UpdateParent(RectangleNode<T, P> parent) {
             for(var node=parent.Parent; node!=null; node=node.Parent) {
                 node.Count--;
-                node.Rectangle=new Rectangle(node.Left.Rectangle, node.Right.Rectangle);
+                node.Rectangle=node.Left.Rectangle.Unite( node.Right.Rectangle);
             }
         } 
 
@@ -266,7 +266,7 @@ namespace Microsoft.Msagl.Core.Geometry {
             nodeForRebuild.Count = newNode.Count;
             nodeForRebuild.Left = newNode.Left;
             nodeForRebuild.Right = newNode.Right;
-            nodeForRebuild.Rectangle = new Rectangle(newNode.Left.rectangle, newNode.Right.rectangle);
+            nodeForRebuild.Rectangle = newNode.Left.rectangle.Unite(newNode.Right.rectangle);
         }
 
         static RectangleNode<T, P> FindTopUnbalancedNode(RectangleNode<T, P> node) {
@@ -288,11 +288,11 @@ namespace Microsoft.Msagl.Core.Geometry {
             RootNode = null;
         }
 
-        public bool NumberOfIntersectedIsLessThanBound(Rectangle rect, int bound, Func<T, bool> conditionFunc ) {
+        public bool NumberOfIntersectedIsLessThanBound(IRectangle<P> rect, int bound, Func<T, bool> conditionFunc ) {
             return NumberOfIntersectedIsLessThanBoundOnNode(_rootNode, rect, ref bound, conditionFunc);
         }
 
-        static bool NumberOfIntersectedIsLessThanBoundOnNode(RectangleNode<T, P> node, Rectangle rect, ref int bound, Func<T, bool> conditionFunc) {
+        static bool NumberOfIntersectedIsLessThanBoundOnNode(RectangleNode<T, P> node, IRectangle<P> rect, ref int bound, Func<T, bool> conditionFunc) {
             Debug.Assert(bound > 0);
             if (!node.Rectangle.Intersects(rect)) return true;
             if (node.IsLeaf) {

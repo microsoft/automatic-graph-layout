@@ -229,7 +229,7 @@ namespace Microsoft.Msagl.Layout.MDS {
            // var l = new List<Point>();
             int numberOfHits = 0;
             for (int i = 0; i < numberOfChecks; i++) {
-                Point point = RandomPointFromBox(random, ref tree.rectangle);
+                Point point = RandomPointFromBox(random, (Rectangle)tree.rectangle);
              //   l.Add(point);
                 if ((tree.FirstHitNode(point, (p, t) => HitTestBehavior.Stop)) != null)
                     numberOfHits++;
@@ -255,7 +255,7 @@ namespace Microsoft.Msagl.Layout.MDS {
         }
 
 
-        static Point RandomPointFromBox(Random random, ref Rectangle boundingBox) {
+        static Point RandomPointFromBox(Random random, Rectangle boundingBox) {
             var x=random.NextDouble();
             var y=random.NextDouble();
             var p= new Point(boundingBox.Left + boundingBox.Width * x, boundingBox.Bottom + boundingBox.Height * y);

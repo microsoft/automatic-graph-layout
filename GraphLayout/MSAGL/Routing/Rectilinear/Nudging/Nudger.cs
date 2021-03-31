@@ -44,8 +44,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         internal Nudger(IEnumerable<Path> paths, double cornerFitRad, IEnumerable<Polyline> obstacles, 
             Dictionary<Shape, Set<Shape>> ancestorsSets) {
             AncestorsSets = ancestorsSets;
-            HierarchyOfGroups = RectangleNode<Shape>.CreateRectangleNodeOnEnumeration(
-                    ancestorsSets.Keys.Where(shape => shape.IsGroup).Select(group => new RectangleNode<Shape>(group, group.BoundingBox)));
+            HierarchyOfGroups = RectangleNode<Shape, Point>.CreateRectangleNodeOnEnumeration(
+                    ancestorsSets.Keys.Where(shape => shape.IsGroup).Select(group => new RectangleNode<Shape, Point>(group, group.BoundingBox)));
             Obstacles = obstacles;
             EdgeSeparation = 2 * cornerFitRad;
             Paths = new List<Path>(paths);
@@ -84,7 +84,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         /// <summary>
         /// 
         /// </summary>
-        protected RectangleNode<Shape> HierarchyOfGroups { get; set; }
+        protected RectangleNode<Shape, Point> HierarchyOfGroups { get; set; }
 
         internal void Calculate(Directions direction, bool mergePaths) {
             NudgingDirection = direction;

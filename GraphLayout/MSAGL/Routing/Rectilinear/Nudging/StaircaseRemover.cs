@@ -9,12 +9,12 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
     internal class StaircaseRemover {
         protected List<Path> Paths { get; set; }
 
-        protected RTree<Polyline> HierarchyOfObstacles { get; set; }
-        readonly RTree<SegWithIndex> segTree=new RTree<SegWithIndex>();
+        protected RTree<Polyline,Point> HierarchyOfObstacles { get; set; }
+        readonly RTree<SegWithIndex, Point> segTree=new RTree<SegWithIndex, Point>();
         Set<Path> crossedOutPaths = new Set<Path>();
 
         StaircaseRemover(List<Path> paths, RectangleNode<Polyline, Point> hierarchyOfObstacles) {
-            HierarchyOfObstacles = new RTree<Polyline>(hierarchyOfObstacles);
+            HierarchyOfObstacles = new RTree<Polyline, Point>(hierarchyOfObstacles);
             Paths = paths;
         }
 
@@ -104,7 +104,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         /// <param name="rTree"></param>
         /// <param name="segsToIgnore"></param>
         /// <returns></returns>
-        static bool IsCrossing(LineSegment ls, RTree<SegWithIndex> rTree, SegWithIndex[] segsToIgnore) {
+        static bool IsCrossing(LineSegment ls, RTree<SegWithIndex,Point> rTree, SegWithIndex[] segsToIgnore) {
             return rTree.GetAllIntersecting(ls.BoundingBox).Where(seg => !segsToIgnore.Contains(seg)).Any();
         }
 

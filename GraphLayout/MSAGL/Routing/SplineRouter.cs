@@ -878,7 +878,7 @@ namespace Microsoft.Msagl.Routing {
       ProcessHookAnyWherePorts(setOfPortLocations);
       portRTree =
           new RTree<Point,Point>(
-              setOfPortLocations.Select(p => new KeyValuePair<Rectangle, Point>(new Rectangle(p), p)));
+              setOfPortLocations.Select(p => new KeyValuePair<IRectangle<Point>, Point>(new Rectangle(p), p)));
       visGraph = new VisibilityGraph();
 
       FillVisibilityGraphUnderShape(root);

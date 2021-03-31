@@ -8,5 +8,7 @@
         bool Intersects(IRectangle<P> rectangle);
         IRectangle<P> Unite(IRectangle<P> b);
         double Area { get; }
+
+        bool Contains(P p, double radius);
     }
 }

@@ -81,7 +81,7 @@ namespace FindEmptySpotSample {
 
 
         private void button1_Click(object sender, EventArgs e) {//this is abstract.dot of GraphViz
-            var tree = RectangleNode<object>.CreateRectangleNodeOnEnumeration(GetRectangleNodesFromGraph());
+            var tree = RectangleNode<object,Point>.CreateRectangleNodeOnEnumeration(GetRectangleNodesFromGraph());
 
             var numberOfTries=10000;
             Random random=new Random(1);
@@ -135,10 +135,10 @@ namespace FindEmptySpotSample {
             return new Point(x, y);
         }
 
-        IEnumerable<RectangleNode<object>> GetRectangleNodesFromGraph() {
+        IEnumerable<RectangleNode<object,Point>> GetRectangleNodesFromGraph() {
             var graph = gViewer.Graph.GeometryGraph;
             foreach (var node in graph.Nodes) 
-                yield return new RectangleNode<object>(node, node.BoundingBox);
+                yield return new RectangleNode<object,Point>(node, node.BoundingBox);
             foreach (var edge in graph.Edges) {
                 foreach (var edgeRectNode in EdgeRectNodes(edge))
                     yield return edgeRectNode;
@@ -146,19 +146,19 @@ namespace FindEmptySpotSample {
             }
         }
 
-        IEnumerable<RectangleNode<object >> EdgeRectNodes(GeomEdge edge) {
+        IEnumerable<RectangleNode<object, Point >> EdgeRectNodes(GeomEdge edge) {
             const int parts = 64; //divide each edge into 64 segments
             var curve=edge.Curve;
             double delta=(curve.ParEnd-curve.ParStart)/parts;
              Point p0=curve.Start;
              for (int i = 1; i <= parts; i++) 
-                 yield return new RectangleNode<object>(edge, new Rectangle(p0, p0=curve[curve.ParStart+i*delta]));
+                 yield return new RectangleNode<object,Point>(edge, new Rectangle(p0, p0=curve[curve.ParStart+i*delta]));
 
              if (edge.ArrowheadAtSource)
-                 yield return new RectangleNode<object>(edge, new Rectangle(edge.EdgeGeometry.SourceArrowhead.TipPosition, curve.Start));
+                 yield return new RectangleNode<object,Point>(edge, new Rectangle(edge.EdgeGeometry.SourceArrowhead.TipPosition, curve.Start));
 
              if (edge.ArrowheadAtTarget)
-                 yield return new RectangleNode<object>(edge, new Rectangle(edge.EdgeGeometry.TargetArrowhead.TipPosition, curve.End));
+                 yield return new RectangleNode<object,Point>(edge, new Rectangle(edge.EdgeGeometry.TargetArrowhead.TipPosition, curve.End));
 
         }
 

@@ -127,9 +127,9 @@ namespace Microsoft.Msagl.Routing {
         }
 
         static IEnumerable<IntPair> EnumeratePairsOfIntersectedPreGraphs(List<PreGraph> preGraphs) {
-            var rn = RectangleNode<int>.CreateRectangleNodeOnData(Enumerable.Range(0, preGraphs.Count), i => preGraphs[i].boundingBox);
+            var rn = RectangleNode<int,Point>.CreateRectangleNodeOnData(Enumerable.Range(0, preGraphs.Count), i => preGraphs[i].boundingBox);
             var list = new List<IntPair>();
-            RectangleNodeUtils.CrossRectangleNodes<int>(rn, rn, (a, b) => list.Add(new IntPair(a, b)));
+            RectangleNodeUtils.CrossRectangleNodes<int,Point>(rn, rn, (a, b) => list.Add(new IntPair(a, b)));
             return list;
         }
 

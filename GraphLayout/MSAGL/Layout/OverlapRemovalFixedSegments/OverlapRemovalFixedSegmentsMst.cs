@@ -32,13 +32,13 @@ namespace Microsoft.Msagl.Layout.OverlapRemovalFixedSegments
 
         Dictionary<Point, TreeNode> pointToTreeNode = new Dictionary<Point, TreeNode>();
 
-        RTree<Segment> _segmentTree = new RTree<Segment>();
+        RTree<Segment, Point> _segmentTree = new RTree<Segment, Point>();
 
-        RTree<TreeNode> _moveableRectanglesTree = new RTree<TreeNode>();
+        RTree<TreeNode, Point> _moveableRectanglesTree = new RTree<TreeNode, Point>();
 
-        RTree<TreeNode> _fixedRectanglesTree = new RTree<TreeNode>();
+        RTree<TreeNode, Point> _fixedRectanglesTree = new RTree<TreeNode, Point>();
 
-        RTree<TreeNode> _rectNodesRtree = new RTree<TreeNode>();
+        RTree<TreeNode, Point> _rectNodesRtree = new RTree<TreeNode, Point>();
 
         Dictionary<TreeNode, List<TreeNode>> movedCriticalNodes = new Dictionary<TreeNode, List<TreeNode>>();
 

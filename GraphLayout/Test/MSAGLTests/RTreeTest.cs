@@ -39,7 +39,7 @@ namespace Microsoft.Msagl.UnitTests
                 }
                 var queryTree = new RTree<Point,Point>(
                     from p in points
-                    select new KeyValuePair<Rectangle, Point>(new Rectangle(p), p));
+                    select new KeyValuePair<IRectangle<Point>, Point>(new Rectangle(p), p));
                 Assert.AreEqual(queryTree.GetAllLeaves().Count(), n);
                 Assert.AreEqual(queryTree.GetAllIntersecting(new Rectangle(-2, -2, -1, -1)).Count(), 0);
                 Assert.AreEqual(queryTree.GetAllIntersecting(new Rectangle(0, 0, scale, scale)).Count(), n);
@@ -82,7 +82,7 @@ namespace Microsoft.Msagl.UnitTests
                 }
                 var bsptree = new RTree<Point,Point>(
                     from p in points
-                    select new KeyValuePair<Rectangle, Point>(new Rectangle(p), p));
+                    select new KeyValuePair<IRectangle<Point>, Point>(new Rectangle(p), p));
                 Assert.AreEqual(bsptree.GetAllLeaves().Count(), n);
                 Assert.AreEqual(bsptree.GetAllIntersecting(new Rectangle(-2, -2, -1, -1)).Count(), 0);
                 Assert.AreEqual(bsptree.GetAllIntersecting(new Rectangle(0, 0, scale, scale)).Count(), n);
@@ -115,7 +115,7 @@ namespace Microsoft.Msagl.UnitTests
                 }
                 var bsptree = new RTree<Rectangle, Point>(
                     from r in rects
-                    select new KeyValuePair<Rectangle, Rectangle>(r, r));
+                    select new KeyValuePair<IRectangle<Point>, Rectangle>(r, r));
                 Assert.AreEqual(bsptree.GetAllLeaves().Count(), RectCount);
                 Assert.AreEqual(bsptree.GetAllIntersecting(new Rectangle(0, 0, RegionSize + RectSize, RegionSize + RectSize)).Count(), RectCount);
                 Assert.AreEqual(bsptree.GetAllIntersecting(new Rectangle(-2, -2, -1, -1)).Count(), 0);
@@ -154,9 +154,9 @@ namespace Microsoft.Msagl.UnitTests
                 }
 
                 // create rTree with just the first rectangle
-                var l = new List<KeyValuePair<Rectangle, Rectangle>>
+                var l = new List<KeyValuePair<IRectangle<Point>, Rectangle>>
                             {
-                                new KeyValuePair<Rectangle, Rectangle>(rects[0], rects[0])
+                                new KeyValuePair<IRectangle<Point>, Rectangle>(rects[0], rects[0])
                             };
                 var queryTree = new RTree<Rectangle, Point>(l);
 

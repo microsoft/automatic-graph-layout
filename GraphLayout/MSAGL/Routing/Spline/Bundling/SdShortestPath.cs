@@ -499,8 +499,8 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                 RectangleNode<CdtTriangle,Point>.CreateRectangleNodeOnEnumeration(
                     Cdt.GetTriangles().Select(t => new RectangleNode<CdtTriangle,Point>(t, t.BoundingBox())));
             var vertexTree =
-                RectangleNode<SdVertex>.CreateRectangleNodeOnEnumeration(
-                    vertexArray.Select(v => new RectangleNode<SdVertex>(v, new Rectangle(v.Point))));
+                RectangleNode<SdVertex,Point>.CreateRectangleNodeOnEnumeration(
+                    vertexArray.Select(v => new RectangleNode<SdVertex,Point>(v, new Rectangle(v.Point))));
 
             RectangleNodeUtils.CrossRectangleNodes(triangleTree, vertexTree, TryToAssigenTriangleToVertex);
             foreach (var v in vertexArray) {

@@ -942,7 +942,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             buildTiles(0, 0, maxX, maxY, 0, 0, 0);
 
             int count = 0;
-            RTree<int> TreeOfNodes = new RTree<int>();
+            RTree<int,Point> TreeOfNodes = new RTree<int,Point>();
             for (int index = 0; index < g.N; index++)
             {
                 TreeOfNodes.Add(new Rectangle(new Point(g.VList[index].XLoc, g.VList[index].YLoc)), index);
@@ -2315,7 +2315,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
         //        void CountContainingNodesOfLevelLeq(double zoomLevel, IEnumerable<LgCellInfo> cellInfos) {
         //            throw new NotImplementedException();
-        ////            var ciRtree = new RTree<LgCellInfo>();
+        ////            var ciRtree = new RTree<LgCellInfo,Point>();
         ////            var visCellsRect = new Rectangle();
         ////            visCellsRect.SetToEmpty();
         ////            foreach (LgCellInfo ci in cellInfos) {

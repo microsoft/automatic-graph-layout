@@ -140,31 +140,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         }
 
         // Initializer from file
-        internal void InitializeMembers(RectFileReader reader)
-        {
-            this.RouterPadding = reader.Padding;
-            this.RouterEdgeSeparation = reader.EdgeSeparation;
-            this.RouteToCenterOfObstacles = reader.RouteToCenter;
-            this.RouterArrowheadLength = reader.ArrowheadLength;
-
-            this.UseFreePortsForObstaclePorts = reader.UseFreePortsForObstaclePorts;
-            this.UseSparseVisibilityGraph = reader.UseSparseVisibilityGraph;
-            this.UseObstacleRectangles = reader.UseObstacleRectangles;
-            this.LimitPortVisibilitySpliceToEndpointBoundingBox = reader.LimitPortVisibilitySpliceToEndpointBoundingBox;
-
-            this.WantPaths = reader.WantPaths;
-            this.WantNudger = reader.WantNudger;
-            this.WantVerify = reader.WantVerify;
-
-            this.StraightTolerance = reader.StraightTolerance;
-            this.CornerTolerance = reader.CornerTolerance;
-            this.BendPenalty = reader.BendPenalty;
-
-            this.FreeRelativePortToShapeMap.Clear();
-
-            this.OverrideMembers();
-        }
-
+        
         // After initializing from file, some members may need to be further overridden,
         // either in a particular unit test or by a TestRectilinear commandline argument.
         protected void OverrideMembers()
@@ -436,11 +412,6 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             var sourceShape = obstacles[sourceIndex];
             return obstacles.Where((t, ii) => (ii != sourceIndex) && ((targetIndex < 0) || (targetIndex == ii)))
                         .Select(targetShape => this.CreateRouting(sourceShape.Ports.First(), targetShape.Ports.First())).ToList();
-        }
-
-        internal RectilinearEdgeRouterWrapper DoRouting(RectFileReader reader)
-        {
-            return DoRouting(reader.UnpaddedObstacles, reader.RoutingSpecs);
         }
 
         internal void DoRouting(IEnumerable<Shape> obstacleEnum)

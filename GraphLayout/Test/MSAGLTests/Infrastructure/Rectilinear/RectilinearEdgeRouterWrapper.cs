@@ -50,10 +50,10 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         internal bool NoPorts { get; set; }
 
         private Dictionary<Obstacle, List<Obstacle>> spatialChildrenToGroups;
-        private Dictionary<Clump, RectangleNode<Obstacle>> clumpToRectNode;
+        private Dictionary<Clump, RectangleNode<Obstacle,Point>> clumpToRectNode;
         private SuperClumpMap superClumpMap;
         private Dictionary<Shape, Set<Shape>> originalAncestorSets;
-        private RectangleNode<Obstacle> allObstacleHierarchy;
+        private RectangleNode<Obstacle,Point> allObstacleHierarchy;
         
         internal TestContext TestContext { get; set; }
 
@@ -614,7 +614,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
                 }
             }
 
-            RectangleNodeUtils.CrossRectangleNodes<Obstacle>(this.allObstacleHierarchy, this.allObstacleHierarchy, VerifyIntersectingObstacleBoundingBoxes);
+            RectangleNodeUtils.CrossRectangleNodes<Obstacle,Point>(this.allObstacleHierarchy, this.allObstacleHierarchy, VerifyIntersectingObstacleBoundingBoxes);
 
             // Now verify all non-group spatial overlaps within a convex hull are part of that hull (we did groups already).
             foreach (var obstacleWithHull in this.allObstacleHierarchy.GetAllLeaves().Where(obs => obs.IsInConvexHull && obs.IsPrimaryObstacle && !obs.IsGroup)) 
@@ -1004,7 +1004,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             {
                 return;
             }
-            RectangleNodeUtils.CrossRectangleNodes<Obstacle>(groupHierarchy, this.allObstacleHierarchy, this.VerifyAndPopulateGroupSpatialChildren);
+            RectangleNodeUtils.CrossRectangleNodes<Obstacle,Point>(groupHierarchy, this.allObstacleHierarchy, this.VerifyAndPopulateGroupSpatialChildren);
         }
 
         private void CreateSuperClumpMap()
@@ -1014,7 +1014,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
 
         private void CreateClumpMap()
         {
-            this.clumpToRectNode = new Dictionary<Clump, RectangleNode<Obstacle>>();
+            this.clumpToRectNode = new Dictionary<Clump, RectangleNode<Obstacle,Point>>();
             foreach (var clumpee in this.ObstacleTree.GetAllObstacles().Where(obs => obs.IsOverlapped))
             {
                 this.clumpToRectNode[clumpee.Clump] = null;
@@ -1111,7 +1111,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             // See if obstacles form a roadblock.  First try simple clumps...
             if (crossedObstacle.Clump != null)
             {
-                var crossedClumpRect = this.clumpToRectNode[crossedObstacle.Clump].Rectangle;
+                Rectangle crossedClumpRect = (Rectangle)this.clumpToRectNode[crossedObstacle.Clump].Rectangle;
                 if (this.CheckDirectRouteAcrossGroupThroughClumpRect(edgeGeom, routeAsTheCrowFlies, crossedClumpRect)) 
                 {
                     return true;

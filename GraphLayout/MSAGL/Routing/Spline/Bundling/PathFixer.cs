@@ -43,8 +43,8 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                 treeOfVertices.Add(r, vertex.Point);
             }
 
-            var treeOfEdges = RectangleNode<PointPair>.CreateRectangleNodeOnData(Edges(), e => new Rectangle(e.First, e.Second));
-            RectangleNodeUtils.CrossRectangleNodes<PointPair>(treeOfEdges, treeOfEdges, (a, b) => IntersectTwoEdges(a, b, splittingPoints, treeOfVertices));
+            var treeOfEdges = RectangleNode<PointPair,Point>.CreateRectangleNodeOnData(Edges(), e => new Rectangle(e.First, e.Second));
+            RectangleNodeUtils.CrossRectangleNodes<PointPair, Point>(treeOfEdges, treeOfEdges, (a, b) => IntersectTwoEdges(a, b, splittingPoints, treeOfVertices));
 
             SortInsertedPoints(splittingPoints);
             bool pointsInserted = InsertPointsIntoPolylines(splittingPoints);

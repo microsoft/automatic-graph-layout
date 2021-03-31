@@ -272,7 +272,7 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
         }
 
         static bool LineIntersectsRectangleNode(LineSegment ls, RectangleNode<Polyline, Point> rectNode) {
-            if (!ls.BoundingBox.Intersects(rectNode.Rectangle))
+            if (!ls.BoundingBox.Intersects((Rectangle)rectNode.Rectangle))
                 return false;
             if (rectNode.UserData != null) {
                 // SugiyamaLayoutSettings.Show(ls, rectNode.UserData);
