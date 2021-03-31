@@ -168,17 +168,7 @@ namespace Microsoft.Msagl.Layout.MDS {
 
             if (settings.RemoveOverlaps)
             {
-                switch (settings.OverlapRemovalMethod)
-                {
-                    case OverlapRemovalMethod.Prism:
-                        ProximityOverlapRemoval.RemoveOverlaps(compGraph, settings.NodeSeparation);
-                        break;
-                    case OverlapRemovalMethod.MinimalSpanningTree:
-                        GTreeOverlapRemoval.RemoveOverlaps(compGraph.Nodes.ToArray(), settings.NodeSeparation);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                GTreeOverlapRemoval.RemoveOverlaps(compGraph.Nodes.ToArray(), settings.NodeSeparation);
             }
             compGraph.BoundingBox = compGraph.PumpTheBoxToTheGraphWithMargins();
         }

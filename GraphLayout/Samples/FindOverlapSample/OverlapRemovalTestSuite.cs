@@ -161,9 +161,7 @@ namespace OverlapGraphExperiments
         }
 
         private IOverlapRemoval GetOverlapRemover(OverlapRemovalSettings settings, GeometryGraph geomGraph) {
-            if (settings.Method == OverlapRemovalMethod.MinimalSpanningTree) return new GTreeOverlapRemoval(settings, geomGraph.Nodes.ToArray());
-            else if (settings.Method==OverlapRemovalMethod.Prism) return new ProximityOverlapRemoval(settings, geomGraph);
-            return null;
+             return new GTreeOverlapRemoval(settings, geomGraph.Nodes.ToArray());
         }
 
         private static void GetProximityRelations(GeometryGraph graphOriginal, out HashSet<Tuple<int, int>> proximityEdges, out HashSet<Tuple<int, int, int>> proximityTriangles) {
@@ -480,7 +478,6 @@ namespace OverlapGraphExperiments
 
             //set OverlapRemovalSettings so that we can be sure that the wanted parameters are used.
             OverlapRemovalSettings settings=new OverlapRemovalSettings();
-            settings.Method=OverlapRemovalMethod.Prism;
             settings.Epsilon=1E-6;
             settings.IterationsMax = 1000;
             settings.StopOnMaxIterat = false;
@@ -516,7 +513,6 @@ namespace OverlapGraphExperiments
             //testList.Add(Tuple.Create("PRISM-LM",settings));
 
             settings = settings.Clone();
-            settings.Method=OverlapRemovalMethod.MinimalSpanningTree;
             testList.Add(Tuple.Create("GTree", settings));
 
             return testList;

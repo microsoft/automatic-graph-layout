@@ -891,16 +891,8 @@ namespace TestWpfViewer {
             SetLayoutSettings(gwgraph);
             if (argsParser.OptionIsUsed(RunRemoveOverlapsOption)) {
                 var compGraph = gwgraph.GeometryGraph;
-                switch (new MdsLayoutSettings().OverlapRemovalMethod) {
-                    case OverlapRemovalMethod.Prism:
-                        ProximityOverlapRemoval.RemoveOverlaps(compGraph, gwgraph.LayoutAlgorithmSettings.NodeSeparation);
-                        break;
-                    case OverlapRemovalMethod.MinimalSpanningTree:
-                        GTreeOverlapRemoval.RemoveOverlaps(compGraph.Nodes.ToArray(), gwgraph.LayoutAlgorithmSettings.NodeSeparation);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                GTreeOverlapRemoval.RemoveOverlaps(compGraph.Nodes.ToArray(), gwgraph.LayoutAlgorithmSettings.NodeSeparation);
+                
                 if (graphViewer.MsaglFileToSave != null) {
                     gwgraph.Write(graphViewer.MsaglFileToSave);
                     System.Diagnostics.Debug.WriteLine("saved into {0}", graphViewer.MsaglFileToSave);

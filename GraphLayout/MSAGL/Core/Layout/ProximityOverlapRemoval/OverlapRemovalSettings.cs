@@ -11,8 +11,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
     /// Settings for Overlap Removal process. Usage of the properties depends on the algorithm.
     /// </summary>
     public class OverlapRemovalSettings {
-        OverlapRemovalMethod method=OverlapRemovalMethod.MinimalSpanningTree;
-
+        
         double epsilon = 0.01;
         int iterationsMax=1000;
         bool stopOnMaxIterat = false;
@@ -90,21 +89,13 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
             set { workInInches = value; }
         }
 
-        /// <summary>
-        /// Method to be used for overlap removal.
-        /// </summary>
-        public OverlapRemovalMethod Method {
-            get { return method; }
-            set { method = value; }
-        }
-
+        
         /// <summary>
         /// Clones the settings together with the stressmajorization settings
         /// </summary>
         /// <returns></returns>
         public OverlapRemovalSettings Clone() {
             OverlapRemovalSettings settings = new OverlapRemovalSettings();
-            settings.Method = Method;
             settings.Epsilon = this.Epsilon;
             settings.IterationsMax = this.IterationsMax;
             settings.StopOnMaxIterat = StopOnMaxIterat;
