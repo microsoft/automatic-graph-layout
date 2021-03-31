@@ -84,12 +84,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             return !(other.End < Start - ApproximateComparer.DistanceEpsilon);
         }
 
-        public void Add(IRectangle<double> rectangle) {
-            var r = (Interval)rectangle;
-            this.Add(r.Start);
-            this.Add(r.End);
-        }
-
         public bool Contains(IRectangle<double> rect) {
             var r = (Interval)rect;
             return this.Contains(r);
@@ -105,7 +99,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             return this.Intersects(r);
         }
 
-        public IRectangle<double> Unite(IRectangle<double> rectangle) {
+        public IRectangle<double> Add(IRectangle<double> rectangle) {
             var r = (Interval)rectangle;
             return new Interval(this, r);
         }

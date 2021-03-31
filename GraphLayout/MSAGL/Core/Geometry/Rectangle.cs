@@ -556,8 +556,9 @@ namespace Microsoft.Msagl.Core.Geometry{
             Add(new Point(point.X + w, point.Y + h));
         }
 
-        void IRectangle<Point>.Add(IRectangle<Point> rectangle) {
+        IRectangle<Point> IRectangle<Point>.Add(IRectangle<Point> rectangle) {
             this.Add((Rectangle)rectangle);
+            return this;
         }
 
         bool IRectangle<Point>.Contains(IRectangle<Point> rect) {
@@ -570,10 +571,6 @@ namespace Microsoft.Msagl.Core.Geometry{
 
         bool IRectangle<Point>.Intersects(IRectangle<Point> rectangle) {
             return this.Intersects((Rectangle)rectangle);
-        }
-
-        public IRectangle<Point> Unite(IRectangle<Point> b) {
-            return new Rectangle(this, (Rectangle)b);
         }
 
         double IRectangle<Point>.Area { get { return this.Area; } }

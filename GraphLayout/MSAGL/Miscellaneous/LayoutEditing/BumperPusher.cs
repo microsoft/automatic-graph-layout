@@ -121,7 +121,7 @@ namespace Microsoft.Msagl.Miscellaneous.LayoutEditing {
             pushed.Rectangle = GetPaddedBoxOfNode(pushed.UserData);
             var parent = pushed.Parent;
             while (parent != null) {
-                parent.Rectangle = parent.Left.Rectangle.Unite(parent.Right.Rectangle);
+                parent.Rectangle = parent.Left.Rectangle.Add(parent.Right.Rectangle);
                 parent = parent.Parent;
             }
 
