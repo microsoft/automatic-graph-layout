@@ -299,11 +299,6 @@ namespace Microsoft.Msagl.Routing.Visibility {
     }
 
     internal VisibilityVertex FindVertex(Point point) {
-      var p = new Point(43764.972237238435, 17219.289729042284);
-
-      if (ApproximateComparer.Close(point, p)) {
-        Console.WriteLine("uff");
-      }
       return PointToVertexMap.TryGetValue(point, out VisibilityVertex v) ? v : null;
     }
 
