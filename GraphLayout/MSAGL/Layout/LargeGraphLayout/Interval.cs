@@ -1,4 +1,5 @@
-﻿using Microsoft.Msagl.Core.Geometry;
+﻿using System;
+using Microsoft.Msagl.Core.Geometry;
 
 namespace Microsoft.Msagl.Layout.LargeGraphLayout {
     /// <summary>
@@ -91,7 +92,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
         public IRectangle<double> Intersection(IRectangle<double> rectangle) {
             var r = (Interval)rectangle;
-            return this.Intersection(r);
+            return new Interval(Math.Max(Start, r.Start), Math.Min(End, r.End));
         }
 
         public bool Intersects(IRectangle<double> rectangle) {
