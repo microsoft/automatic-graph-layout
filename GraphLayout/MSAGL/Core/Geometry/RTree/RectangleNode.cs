@@ -362,12 +362,11 @@ namespace Microsoft.Msagl.Core.Geometry {
             if (nodes.Count == 1)return nodes[0];
 
             //Finding the seeds
-            var b0 = nodes[0].Rectangle;
-
+            
             //the first seed
             int seed0 = 1;
 
-            int seed1 = ChooseSeeds(nodes, ref b0, ref seed0);
+            int seed1 = ChooseSeeds(nodes, ref seed0);
 
             //We have two seeds at hand. Build two groups.
             var gr0 = new List<RectangleNode<T,  P>>();
@@ -382,7 +381,7 @@ namespace Microsoft.Msagl.Core.Geometry {
             DivideNodes(nodes, seed0, seed1, gr0, gr1, ref box0, ref box1, GroupSplitThreshold);
 
             var ret = new RectangleNode<T,  P>(nodes.Count) {
-                    Rectangle = box0.Add( box1),
+                    Rectangle = box0.Unite( box1),
                     Left = CreateRectangleNodeOnListOfNodes(gr0),
                     Right = CreateRectangleNodeOnListOfNodes(gr1)
             };
@@ -391,10 +390,11 @@ namespace Microsoft.Msagl.Core.Geometry {
 
         }
 
-        static int ChooseSeeds(IList<RectangleNode<T,  P>> nodes, ref IRectangle<P> b0, ref int seed0) {
-            double area = b0.Add(nodes[seed0].Rectangle).Area;
+        static int ChooseSeeds(IList<RectangleNode<T,  P>> nodes, ref int seed0) {
+            var b0 = nodes[seed0].Rectangle;
+            double area = b0.Unite(nodes[seed0].Rectangle).Area;
             for (int i = 2; i < nodes.Count; i++) {
-                double area0 = b0.Add(nodes[i].Rectangle).Area;
+                double area0 = b0.Unite(nodes[i].Rectangle).Area;
                 if (area0 > area) {
                     seed0 = i;
                     area = area0;
@@ -413,13 +413,13 @@ namespace Microsoft.Msagl.Core.Geometry {
                 }
             }
 
-            area = nodes[seed0].Rectangle.Add( nodes[seed1].Rectangle).Area;
+            area = nodes[seed0].Rectangle.Unite(nodes[seed1].Rectangle).Area;
             //Now try to improve the second seed
 
             for (int i = 0; i < nodes.Count; i++) {
                 if (i == seed0)
                     continue;
-                double area1 = nodes[seed0].Rectangle.Add( nodes[i].Rectangle).Area;
+                double area1 = nodes[seed0].Rectangle.Unite(nodes[i].Rectangle).Area;
                 if (area1 > area) {
                     seed1 = i;
                     area = area1;
@@ -436,10 +436,10 @@ namespace Microsoft.Msagl.Core.Geometry {
                     continue;
 
 // ReSharper disable InconsistentNaming
-                var box0_ = box0.Add(nodes[i].Rectangle);
+                var box0_ = box0.Unite(nodes[i].Rectangle);
                 double delta0 = box0_.Area - box0.Area;
 
-                var box1_ = box1.Add( nodes[i].Rectangle);
+                var box1_ = box1.Unite( nodes[i].Rectangle);
                 double delta1 = box1_.Area - box1.Area;
 // ReSharper restore InconsistentNaming
 

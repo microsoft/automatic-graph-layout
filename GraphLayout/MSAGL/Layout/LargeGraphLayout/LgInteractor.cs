@@ -1638,7 +1638,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             _railGraph = new RailGraph();
     
 #if TEST_GRAPHMAPS
-#if TEST_MSAGL && TEST_MSAGL
+#if TEST_MSAGL
             _mainGeometryGraph.SetDebugIds();
 #endif
 
@@ -2180,7 +2180,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
                     {
                         CollapsedBoundary = cluster.CollapsedBoundary,
                         BoundaryCurve = oNode.BoundaryCurve,
-#if TEST_MSAGL && TEST_MSAGL
+#if TEST_MSAGL
                         DebugId = oNode.DebugId
 #endif
                     }

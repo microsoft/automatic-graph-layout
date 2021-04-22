@@ -36,7 +36,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         /// apply a number of heuristics to improve current routing
         /// </summary>
         internal static void FixRouting(MetroGraphData metroGraphData, BundlingSettings bundlingSettings) {
-#if TEST_MSAGL && TEST_MSAGL
+#if TEST_MSAGL
             Debug.Assert(metroGraphData.looseIntersections.HubPositionsAreOK());
 #endif
             //TimeMeasurer.DebugOutput("Initial cost = " + CostCalculator.Cost(metroGraphData, bundlingSettings));
@@ -49,7 +49,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             var step = 0;
             int MaxSteps = 10;
             while (++step < MaxSteps) {
-/*#if TEST_MSAGL && TEST_MSAGL
+/*#if TEST_MSAGL
                 Debug.Assert(metroGraphData.looseIntersections.HubPositionsAreOK());
 #endif*/
                 //heuristics to improve routing

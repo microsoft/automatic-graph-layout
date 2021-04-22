@@ -40,7 +40,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
         Func<Port, Polyline> loosePolylineOfPort;
     
-#if TEST_MSAGL && TEST_MSAGL
+#if TEST_MSAGL
         void CheckGraph() {
             foreach (var e in geometryGraph.Edges) {
                 if (e.Source == e.Target)
@@ -161,7 +161,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             constrainedDelaunayTriangulation.Run();
             return constrainedDelaunayTriangulation;
         }
-#if TEST_MSAGL && TEST_MSAGL
+#if TEST_MSAGL
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         // ReSharper disable UnusedMember.Local
         void ShowGraphLocal() {

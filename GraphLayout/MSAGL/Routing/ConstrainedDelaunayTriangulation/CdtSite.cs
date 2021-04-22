@@ -46,7 +46,7 @@ namespace Microsoft.Msagl.Routing
                 Edges = new List<CdtEdge>();
             Edges.Add(edge);
         }
-#if TEST_MSAGL && TEST_MSAGL
+#if TEST_MSAGL
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// </summary>

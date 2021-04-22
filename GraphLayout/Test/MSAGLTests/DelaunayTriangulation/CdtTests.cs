@@ -65,17 +65,17 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
             Assert.IsTrue(!CdtSweeper.InCircle(s, a, b, c));
             Assert.IsTrue(!CdtSweeper.InCircle(s, c, a, b)); 
         }
-        
+
         static void RotateSites(CdtSite a, CdtSite b, CdtSite c, CdtSite s) {
-            const double angle = Math.PI / 3;
+            double angle = Math.PI / 3;
             a.Point = a.Point.Rotate(angle);
             b.Point = b.Point.Rotate(angle);
             c.Point = c.Point.Rotate(angle);
             s.Point = s.Point.Rotate(angle);
         }
-        
+
         static void MoveSites(CdtSite a, CdtSite b, CdtSite c, CdtSite s) {
-            var del=new Point(20,-30);
+            var del = new Point(20, -30);
             a.Point = a.Point + del;
             b.Point = b.Point + del;
             c.Point = c.Point + del;
@@ -97,25 +97,27 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
             Assert.IsTrue(e.upperSite == c);
             Assert.IsTrue(e.lowerSite == b);
             Assert.IsTrue(e.CwTriangle == tri && e.CcwTriangle == null);
-            
+
             e = tri.Edges[2];
             Assert.IsTrue(e.upperSite == c);
             Assert.IsTrue(e.lowerSite == a);
             Assert.IsTrue(e.CcwTriangle == tri && e.CwTriangle == null);
 
-            var tri0=new CdtTriangle(new CdtSite(new Point(2,2)), tri.Edges[1], Cdt.GetOrCreateEdge );
-            Assert.IsTrue(tri0.Edges[0]==tri.Edges[1]);
-            Assert.IsTrue(tri.Edges[1].CcwTriangle != null && tri.Edges[1].CwTriangle != null );
+            var tri0 = new CdtTriangle(new CdtSite(new Point(2, 2)), tri.Edges[1], Cdt.GetOrCreateEdge);
+            Assert.IsTrue(tri0.Edges[0] == tri.Edges[1]);
+            Assert.IsTrue(tri.Edges[1].CcwTriangle != null && tri.Edges[1].CwTriangle != null);
         }
 
         [TestMethod]
         public void SmallTriangulation() {
-#if TEST_MSAGL&& TEST_MSAGL
+            #if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
-            var cdt = new Cdt(Points(), null, new []{new SymmetricTuple<Point>(new Point(109,202),new Point(506,135) ),
+            #endif
+            var cdt = new Cdt(Points(), null, new[]{new SymmetricTuple<Point>(new Point(109,202),new Point(506,135) ),
             new SymmetricTuple<Point>(new Point(139,96),new Point(452,96) )}.ToList());
             cdt.Run();
+//            CdtSweeper.ShowFront(cdt.GetTriangles(), null, new[]{new LineSegment(new Point(109,202),new Point(506,135) ),
+  //          new LineSegment(new Point(139,96),new Point(452,96) )}.ToList(), null);
         }
 
         static IEnumerable<Point> Points() {
@@ -123,7 +125,7 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
                 yield return segment.A;
                 yield return segment.B;
             }
-            yield return new Point(157,198);
+            yield return new Point(157, 198);
         }
 
         static IEnumerable<SymmetricTuple<Point>> Segments() {
@@ -139,10 +141,10 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
             yield return new SymmetricTuple<Point>(new Point(61, 226), new Point(257, 253));
             yield return new SymmetricTuple<Point>(new Point(515, 228), new Point(666, 258));
         }
-        
+
         private static void ThreadOnTriangle(Point start, Point end, CdtTriangle t) {
             var threader = new CdtThreader(t, start, end);
-            while(threader.MoveNext()){}
+            while (threader.MoveNext()) { }
 
         }
 
@@ -152,15 +154,15 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
                 var loc = CdtIntersections.PointLocationInsideTriangle(p, t);
                 if (loc != PointLocation.Outside)
                     yield return t;
-            }            
+            }
         }
         [TestMethod]
         public void TriangulationWithSizes() {
-#if TEST_MSAGL&&TEST_MSAGL
+#if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
 #endif
             int[] dimensions = { 2, 10, 100, 10000, 100000 };
-            const double size=10.0;
+            double size = 10.0;
             foreach (var n in dimensions)
                 Triangulate(n, size);
         }
@@ -170,15 +172,15 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
             var w = n * size;
             var cdt = new Cdt(PointsForCdt(random, n, w), null, SegmentsForCdt(w).ToList());
             cdt.Run();
-#if TEST_MSAGL&&TEST_MSAGL
+#if TEST_MSAGL
             //CdtSweeper.ShowFront(cdt.GetTriangles(), null, null,null);
 #endif
         }
 
         IEnumerable<SymmetricTuple<Point>> SegmentsForCdt(double size) {
             var w = size / 2;
-            var corners=new []{ new Point(0, 0), new Point(0, size), new Point(size,0), new Point(size,size)};
-            var center=new Point(w,w);
+            var corners = new[] { new Point(0, 0), new Point(0, size), new Point(size, 0), new Point(size, size) };
+            var center = new Point(w, w);
             foreach (var corner in corners)
                 yield return new SymmetricTuple<Point>(center, corner);
         }
@@ -193,7 +195,7 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
         }
 
 
-        void TestTriangles(IEnumerable<CdtTriangle>  triangles) {
+        void TestTriangles(IEnumerable<CdtTriangle> triangles) {
             var usedSites = new Set<CdtSite>();
             foreach (var t in triangles)
                 usedSites.InsertRange(t.Sites);
@@ -206,14 +208,14 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
             var tsites = triangle.Sites;
             foreach (var site in usedSites) {
                 if (!tsites.Contains(site)) {
-                    Assert.IsTrue(SeparatedByConstrainedEdge(triangle, site) || !CdtSweeper.InCircle(site, tsites[0], tsites[1], tsites[2])); 
-//                    {
-//                        List<ICurve> redCurves = new List<ICurve>();
-//                        redCurves.Add(new Ellipse(2, 2, site.Point));
-//                        List<ICurve> blueCurves = new List<ICurve>();
-//                        blueCurves.Add(Circumcircle(tsites[0].Point, tsites[1].Point, tsites[2].Point));
-//                        ShowFront(Triangles, front, redCurves, blueCurves);
-//                    }
+                    Assert.IsTrue(SeparatedByConstrainedEdge(triangle, site) || !CdtSweeper.InCircle(site, tsites[0], tsites[1], tsites[2]));
+                    //                    {
+                    //                        List<ICurve> redCurves = new List<ICurve>();
+                    //                        redCurves.Add(new Ellipse(2, 2, site.Point));
+                    //                        List<ICurve> blueCurves = new List<ICurve>();
+                    //                        blueCurves.Add(Circumcircle(tsites[0].Point, tsites[1].Point, tsites[2].Point));
+                    //                        ShowFront(Triangles, front, redCurves, blueCurves);
+                    //                    }
                 }
             }
         }
@@ -232,5 +234,62 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
             var a1 = ApproximateComparer.Sign(Point.SignedDoubledTriangleArea(site.Point, e.upperSite.Point, e.lowerSite.Point));
             return a0 * a1 <= 0;
         }
+
+        [TestMethod]
+        public void TwoHoles() {
+            #if TEST_MSAGL
+            GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
+            #endif
+            var corners = new[]{
+            new Point(0, 0),
+            new Point(100, 0),
+            new Point(100, 100),
+            new Point(0, 100),
+        };
+            var triangle = new Polyline();
+            triangle.AddPoint(35.0, 50);
+            triangle.AddPoint(40, 31);
+            triangle.AddPoint(30, 30);
+            triangle.Closed = true;
+
+            var holes = new Polyline[] {
+    new Rectangle(new Point(10, 10), new Point(20, 20)).Perimeter(),
+    triangle,
+  };
+            var cut = new SymmetricTuple<Point>[] { new SymmetricTuple<Point>(new Point(80, 80), new Point(90, 75)) };
+            var cdt = new Cdt(corners, holes, cut.ToList());
+            cdt.Run();
+          //  CdtSweeper.ShowFront(cdt.GetTriangles(), null, holes, cut.Select((c) => new LineSegment(c.A, c.B)));
+        }
+        [TestMethod]
+        public void Grid() {
+            var corners = new List<Point>();
+            for (var i = 0; i < 10; i++) {
+                for (var j = 0; j < 10; j++) {
+                    corners.Add(new Point(10 * i, 10 * j));
+                }
+            }
+            var cdt = new Cdt(corners, null, null);
+            cdt.Run();
+        }
+        [TestMethod]
+        public void GridRotated() {
+            #if TEST_MSAGL
+            GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
+            #endif
+            var corners = new List<Point>();
+            var ang = Math.PI / 6;
+            for (var i = 0; i < 10; i++) {
+                for (var j = 0; j < 10; j++) {
+                    corners.Add(new Point(10 * i, 10 * j).Rotate(ang));
+                }
+            }
+            var cdt = new Cdt(corners, null, null);
+            cdt.Run();
+			#if TEST_MSAGL
+          //  CdtSweeper.ShowFront(cdt.GetTriangles(), null, null, null);
+			#endif
+        }
     }
+
 }

@@ -5,28 +5,19 @@
 //-----------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 #if TEST_MSAGL
 using Microsoft.Msagl.GraphViewerGdi;
 #endif
-using Microsoft.Msagl.Core;
-using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Routing;
-using Microsoft.Msagl.DebugHelpers.Persistence;
 using Microsoft.Msagl.Layout.Incremental;
 using Microsoft.Msagl.Layout.Initial;
 using Microsoft.Msagl.Routing;
-using Microsoft.Msagl.Routing.Rectilinear;
-using Microsoft.Msagl.Routing.Spline.Bundling;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Msagl.Layout.Layered;
-using Microsoft.Msagl.Layout.MDS;
 
 namespace Microsoft.Msagl.UnitTests {
     /// <summary>
@@ -157,7 +148,7 @@ namespace Microsoft.Msagl.UnitTests {
         [Timeout(TestTimeout.Infinite)]
         [TestMethod]
         [Description("Random graph with groups")]
-        [Ignore]
+        [Ignore] // todo: investigate the failure
         public void RouteEdges_SmallGroups()
         {
             RsmContent();
@@ -167,7 +158,7 @@ namespace Microsoft.Msagl.UnitTests {
         public static void RsmContent() {
             const int ntest = 70;
             int iStart = 1;            
-#if TEST_MSAGL && TEST_MSAGL
+#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif
             for (int i = iStart; i < ntest; i++) {

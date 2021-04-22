@@ -111,7 +111,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
         [SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#")]
         public static GeometryGraph CreateFromFile(string fileName, out LayoutAlgorithmSettings settings)
         {
-#if TEST_MSAGL && TEST_MSAGL
+#if TEST_MSAGL
             if (FirstCharacter(fileName) != '<') {
                 settings = null;
                 return null;
@@ -126,7 +126,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
             }
         }
 
-#if TEST_MSAGL && TEST_MSAGL
+#if TEST_MSAGL
         static char FirstCharacter(string fileName) {
             using (TextReader reader = File.OpenText(fileName))
             {

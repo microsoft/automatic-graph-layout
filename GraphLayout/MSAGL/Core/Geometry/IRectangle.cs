@@ -6,9 +6,10 @@
         bool Contains(IRectangle<P> rect);
         IRectangle<P> Intersection(IRectangle<P> rectangle);
         bool Intersects(IRectangle<P> rectangle);
-        IRectangle<P> Add(IRectangle<P> b);
+        void Add(IRectangle<P> b);
         double Area { get; }
 
         bool Contains(P p, double radius);
+        IRectangle<P> Unite(IRectangle<P> rectangle);
     }
 }

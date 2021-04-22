@@ -162,7 +162,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
 
        
-#if TEST_MSAGL && TEST_MSAGL
+#if TEST_MSAGL
         /// <summary>
         /// check the validness of the drawing:
         /// 1. hubs are not inside loose obstacles

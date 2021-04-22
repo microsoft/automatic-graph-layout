@@ -33,7 +33,7 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
             this.p_1 = p_1;
             this.p_2 = p_2;
             this.createEdgeDelegate = createEdgeDelegate;
-            //ShowFront();
+         //   ShowFront();
         }
 
         internal Set<CdtTriangle> Triangles {
@@ -169,16 +169,16 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
 
         void ProcessSite(CdtSite site) {
             PointEvent(site);
-            //ShowFrontWithSite(site);
             for (int i = 0; i < site.Edges.Count; i++) {
                 var edge = site.Edges[i];
                 if (edge.Constrained)
                     EdgeEvent(edge);
             }
+            //    ShowFrontWithSite(site);
             // TestThatFrontIsConnected();
         }
-#if TEST_MSAGL&& TEST_MSAGL
-      void TestThatFrontIsConnected() {
+#if TEST_MSAGL
+        void TestThatFrontIsConnected() {
           CdtFrontElement p = null;
           foreach (var cdtFrontElement in front) {
               if(p!=null) 
@@ -200,7 +200,7 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
             return edge.CwTriangle != null || edge.CcwTriangle != null;
         }
 
-#if TEST_MSAGL && TEST_MSAGL
+#if TEST_MSAGL
         void ShowFrontWithSite(CdtSite site, params ICurve[] redCurves) {
             var ls = new List<DebugCurve>();
 
@@ -277,7 +277,7 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
             TriangulateEmptySpaceToTheLeft(piNode);
         }
 
-#if TEST_MSAGL && TEST_MSAGL
+#if TEST_MSAGL
         void TestTriangles() {
             var usedSites = new Set<CdtSite>();
             foreach(var t in Triangles)
@@ -559,7 +559,7 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
             }
         }
 
-#if TEST_MSAGL && TEST_MSAGL
+#if TEST_MSAGL
         List<DebugCurve> ShowIllegalEdge(CdtEdge edge, CdtSite pi, int i) {
             List<DebugCurve> ls = new List<DebugCurve>();
             ls.Add(new DebugCurve(new Ellipse(2, 2, pi.Point)));
@@ -606,7 +606,7 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
                 LegalizeEdge(pi, e.CcwTriangle.OppositeEdge(pi));
             }
         }
-#if TEST_MSAGL && TEST_MSAGL
+#if TEST_MSAGL
         void ShowIllegalEdge(CdtEdge edge, int i, CdtSite pi) {
             List<DebugCurve> ls=new List<DebugCurve>();
             ls.Add(new DebugCurve(new Ellipse(2, 2, pi.Point)));
@@ -718,7 +718,7 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
             edge.upperSite.Edges.Remove(edge); //forget the edge 
             return newEdge;
         }
-#if TEST_MSAGL && TEST_MSAGL
+#if TEST_MSAGL
         static void ShowFlip(CdtSite pi, CdtTriangle t, CdtTriangle ot) {
             List<DebugCurve> ls=new List<DebugCurve>();
             ls.Add(new DebugCurve(new Ellipse(2,2, pi.Point)));

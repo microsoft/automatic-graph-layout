@@ -86,7 +86,7 @@ namespace Microsoft.Msagl.Drawing
                 WriteEdges();
                 WriteNodes();
                 
-#if TEST_MSAGL && TEST_MSAGL
+#if TEST_MSAGL
                 WriteDebugCurves();
 #endif
                 Close();
@@ -98,7 +98,7 @@ namespace Microsoft.Msagl.Drawing
                 Thread.CurrentThread.CurrentCulture = currentCulture;
             }
         }
-#if TEST_MSAGL && TEST_MSAGL
+#if TEST_MSAGL
         void WriteDebugCurves() {
             if(_graph.DebugCurves!=null)
                 foreach (var debugCurve in _graph.DebugCurves) {

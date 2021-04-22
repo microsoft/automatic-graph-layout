@@ -94,15 +94,15 @@ namespace Microsoft.Msagl.Core.Geometry {
                 if (2 * existingNode.Left.Count < existingNode.Right.Count) {
                     //keep the balance
                     AddNodeToTreeRecursive(newNode, existingNode.Left);
-                    existingNode.Left.Rectangle = existingNode.Left.Rectangle.Add( newNode.Rectangle);
+                    existingNode.Left.Rectangle = existingNode.Left.Rectangle.Unite( newNode.Rectangle);
                 } else if (2 * existingNode.Right.Count < existingNode.Left.Count) {
                     //keep the balance
                     AddNodeToTreeRecursive(newNode, existingNode.Right);
-                    existingNode.Right.Rectangle = existingNode.Right.Rectangle.Add( newNode.Rectangle);
+                    existingNode.Right.Rectangle = existingNode.Right.Rectangle.Unite( newNode.Rectangle);
                 } else { //decide basing on the boxes
-                    leftBox = existingNode.Left.Rectangle.Add( newNode.Rectangle);
+                    leftBox = existingNode.Left.Rectangle.Unite( newNode.Rectangle);
                     var delLeft = leftBox.Area - existingNode.Left.Rectangle.Area;
-                    rightBox = existingNode.Right.Rectangle.Add(newNode.Rectangle);
+                    rightBox = existingNode.Right.Rectangle.Unite(newNode.Rectangle);
                     var delRight = rightBox.Area - existingNode.Right.Rectangle.Area;
                     if (delLeft < delRight) {
                         AddNodeToTreeRecursive(newNode, existingNode.Left);
@@ -121,7 +121,7 @@ namespace Microsoft.Msagl.Core.Geometry {
                     }
                 }
             }
-            existingNode.Rectangle = existingNode.Left.Rectangle.Add( existingNode.Right.Rectangle);
+            existingNode.Rectangle = existingNode.Left.Rectangle.Unite( existingNode.Right.Rectangle);
         }
 
 
@@ -244,7 +244,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         static void UpdateParent(RectangleNode<T, P> parent) {
             for(var node=parent.Parent; node!=null; node=node.Parent) {
                 node.Count--;
-                node.Rectangle=node.Left.Rectangle.Add( node.Right.Rectangle);
+                node.Rectangle=node.Left.Rectangle.Unite( node.Right.Rectangle);
             }
         } 
 
@@ -266,7 +266,7 @@ namespace Microsoft.Msagl.Core.Geometry {
             nodeForRebuild.Count = newNode.Count;
             nodeForRebuild.Left = newNode.Left;
             nodeForRebuild.Right = newNode.Right;
-            nodeForRebuild.Rectangle = newNode.Left.rectangle.Add(newNode.Right.rectangle);
+            nodeForRebuild.Rectangle = newNode.Left.rectangle.Unite(newNode.Right.rectangle);
         }
 
         static RectangleNode<T, P> FindTopUnbalancedNode(RectangleNode<T, P> node) {

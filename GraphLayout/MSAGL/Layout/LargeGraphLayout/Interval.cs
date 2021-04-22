@@ -100,13 +100,18 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             return this.Intersects(r);
         }
 
-        public IRectangle<double> Add(IRectangle<double> rectangle) {
+        public void Add(IRectangle<double> rectangle) {
             var r = (Interval)rectangle;
-            return new Interval(this, r);
+            Add(r.Start);
+            Add(r.End);
         }
 
         public bool Contains(double p, double radius) {
             return Contains(p - radius) && Contains(p + radius);
+        }
+
+        public IRectangle<double> Unite(IRectangle<double> rectangle) {
+            return new Interval(this, (Interval)rectangle);
         }
     }
 }

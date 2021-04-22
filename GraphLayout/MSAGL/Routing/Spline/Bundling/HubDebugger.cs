@@ -14,7 +14,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
     /// </summary>
     public class HubDebugger {
         
-#if TEST_MSAGL && TEST_MSAGL
+#if TEST_MSAGL
         readonly MetroGraphData mgd;
         readonly BundlingSettings bundlingSettings;
         static internal void ShowHubs(MetroGraphData mgd, BundlingSettings bundlingSettings, params ICurve[] iCurves
