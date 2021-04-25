@@ -518,24 +518,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         }
 
 
-        /// <summary>
-        /// figures out the triangle on the plane orientation: positive- counterclockwise, negative - clockwise
-        /// </summary>
-        /// <param name="cornerA"></param>
-        /// <param name="cornerB"></param>
-        /// <param name="cornerC"></param>
-        /// <returns></returns>
-        static public TriangleOrientation GetTriangleOrientationNoEps(Point cornerA, Point cornerB, Point cornerC)
-        {
-            var area = Point.SignedDoubledTriangleArea(cornerA, cornerB, cornerC);
-            if (area > 0)
-                return TriangleOrientation.Counterclockwise;
-            if (area < 0)
-                return TriangleOrientation.Clockwise;
-            return TriangleOrientation.Collinear;
-        }
-
-
+      
         /// <summary>
         /// returns true if an orthogonal projection of point on [segmentStart,segmentEnd] exists
         /// </summary>
