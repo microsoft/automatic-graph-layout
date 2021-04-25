@@ -148,7 +148,6 @@ namespace Microsoft.Msagl.UnitTests {
         [Timeout(TestTimeout.Infinite)]
         [TestMethod]
         [Description("Random graph with groups")]
-        [Ignore] // todo: investigate the failure
         public void RouteEdges_SmallGroups()
         {
             RsmContent();

@@ -525,7 +525,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// <param name="cornerB"></param>
         /// <param name="cornerC"></param>
         /// <returns></returns>
-        static public TriangleOrientation GetTriangleOrientationWithNoEpsilon(Point cornerA, Point cornerB, Point cornerC)
+        static public TriangleOrientation GetTriangleOrientationNoEps(Point cornerA, Point cornerB, Point cornerC)
         {
             var area = Point.SignedDoubledTriangleArea(cornerA, cornerB, cornerC);
             if (area > 0)

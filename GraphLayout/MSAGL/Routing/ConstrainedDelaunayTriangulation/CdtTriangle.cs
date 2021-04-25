@@ -20,9 +20,10 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
         ///</summary>
         public readonly ThreeArray<CdtSite> Sites = new ThreeArray<CdtSite>();
 
+        public TriangleOrientation Orientation { get { return Point.GetTriangleOrientation(Sites[0].Point, Sites[1].Point, Sites[2].Point); } }
 
         internal CdtTriangle(CdtSite a, CdtSite b, CdtSite c, Func<CdtSite, CdtSite, CdtEdge> createEdgeDelegate) {
-            var orientation = Point.GetTriangleOrientationWithNoEpsilon(a.Point, b.Point, c.Point);
+            var orientation = Point.GetTriangleOrientation(a.Point, b.Point, c.Point);
             switch (orientation) {
                 case TriangleOrientation.Counterclockwise:
                     FillCcwTriangle(a, b, c, createEdgeDelegate);
@@ -35,7 +36,7 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
         }
 
         internal CdtTriangle(CdtSite pi, CdtEdge edge, Func<CdtSite, CdtSite, CdtEdge> createEdgeDelegate) {
-            switch (Point.GetTriangleOrientationWithNoEpsilon(edge.upperSite.Point, edge.lowerSite.Point, pi.Point)) {
+            switch (Point.GetTriangleOrientation(edge.upperSite.Point, edge.lowerSite.Point, pi.Point)) {
                 case TriangleOrientation.Counterclockwise:
                     edge.CcwTriangle = this;
                     Sites[0] = edge.upperSite;
@@ -66,6 +67,7 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
             BindEdgeToTriangle(aLeft, a);
             BindEdgeToTriangle(aRight, b);
             CreateEdge(2, createEdgeDelegate);
+            Debug.Assert(Orientation != TriangleOrientation.Collinear);
         }
         /// <summary>
         /// in the trianlge, which is always oriented counterclockwise, the edge starts at site 
