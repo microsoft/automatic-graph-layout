@@ -153,12 +153,12 @@ namespace Microsoft.Msagl.Routing.Visibility {
                     bf.Serialize(stream, a);
                     bf.Serialize(stream, b);                    
                 }
-
-                LayoutAlgorithmSettings.ShowDebugCurves(
+                LayoutAlgorithmSettings.ShowDebugCurves?.Invoke(
                     new DebugCurve(100, 0.1, "red", a.Polyline),
                     new DebugCurve(100, 0.1, "blue", b.Polyline),
                     new DebugCurve(100, 0.1, "black", new LineSegment(p, q)));
                 System.Diagnostics.Debug.Fail("wrong distance between two polygons");
+
             }
 #endif
             return (p - q).Length;

@@ -140,26 +140,55 @@ namespace Microsoft.Msagl.UnitTests {
         static Point[] PointsFromData(int[] data) {
             var ps = new Point[data.Length / 2];
             for (int i = 0; i < data.Length; i += 2) {
-                ps[i / 2] = new Point(data[i], -data[i + 1]);
+                ps[i / 2] = new Point(data[i], data[i + 1]);
             }
             return ps;
         }
         [TestMethod]
+        public void TwoTriangles() {
+            var points = new List<Point> {
+              new Point(0, 0),
+              new Point(1, 1),
+              new Point(2, 0),
+              new Point(3, 0),
+              new Point(3, 3),
+              new Point(4, 1)
+
+            };
+            var p = new Polyline();
+  p.AddPoint(points[0]);
+            p.AddPoint(points[1]);
+            p.AddPoint(points[2]);
+            p.Closed = true;
+            var q = new Polyline();
+            q.AddPoint(points[0 + 3]);
+            q.AddPoint(points[1 + 3]);
+            q.AddPoint(points[2 + 3]);
+            q.Closed = true;
+            var P = new Polygon(p);
+            var Q = new Polygon(q);
+            var di = Polygon.Distance(P, Q);
+            Assert.IsTrue(di > 0);
+        }
+
+        [TestMethod]
         public void PolygonPolygonDistanceTest0() {
-            //DisplayGeometryGraph.SetShowFunctions();
+#if TEST_MSAGL
+            DisplayGeometryGraph.SetShowFunctions();
+#endif
             Polyline pl1;
             Polyline pl2;
             Polyline pl3;
             Polyline pl0 = GetPolylines(out pl1, out pl2, out pl3);
-            var point = new Point(373, 274);
-            var ls = new LineSegment(point, new Point(314, 303));
+            var point = new Point(373, -274);
+            var ls = new LineSegment(point, new Point(314, -303));
             var pl5 = new Polyline(ls.Start, ls.End);
             Point p, q;
             //LayoutAlgorithmSettings.Show(pl0);
-            Polygon.Distance(new Polygon(pl5), new Polygon(pl0), out p, out q);
-            Polygon.Distance(new Polygon(pl5), new Polygon(pl1), out p, out q);
-            Polygon.Distance(new Polygon(pl5), new Polygon(pl2), out p, out q);
-            Polygon.Distance(new Polygon(pl5), new Polygon(pl3), out p, out q);
+            var dist = Polygon.Distance(new Polygon(pl5), new Polygon(pl0), out p, out q);
+            dist = Polygon.Distance(new Polygon(pl5), new Polygon(pl1), out p, out q);
+            dist = Polygon.Distance(new Polygon(pl5), new Polygon(pl2), out p, out q);
+            dist = Polygon.Distance(new Polygon(pl5), new Polygon(pl3), out p, out q);
         }
         [TestMethod]
         public void TestLineSegmentLineSegmentMinDist() {
