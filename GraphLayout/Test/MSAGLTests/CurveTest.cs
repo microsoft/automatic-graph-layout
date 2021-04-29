@@ -140,7 +140,7 @@ namespace Microsoft.Msagl.UnitTests {
         static Point[] PointsFromData(int[] data) {
             var ps = new Point[data.Length / 2];
             for (int i = 0; i < data.Length; i += 2) {
-                ps[i / 2] = new Point(data[i], data[i + 1]);
+                ps[i / 2] = new Point(data[i], -data[i + 1]); // to orient the polyline
             }
             return ps;
         }
@@ -180,8 +180,8 @@ namespace Microsoft.Msagl.UnitTests {
             Polyline pl2;
             Polyline pl3;
             Polyline pl0 = GetPolylines(out pl1, out pl2, out pl3);
-            var point = new Point(373, -274);
-            var ls = new LineSegment(point, new Point(314, -303));
+            var point = new Point(373, 274);
+            var ls = new LineSegment(point, new Point(314, 303));
             var pl5 = new Polyline(ls.Start, ls.End);
             Point p, q;
             //LayoutAlgorithmSettings.Show(pl0);
