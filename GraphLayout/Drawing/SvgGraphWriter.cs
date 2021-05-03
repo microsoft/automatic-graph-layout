@@ -271,7 +271,7 @@ namespace Microsoft.Msagl.Drawing
                 AddArrow(iCurve.Start, geometryEdge.EdgeGeometry.SourceArrowhead.TipPosition, edge);
             if (geometryEdge.EdgeGeometry != null && geometryEdge.EdgeGeometry.TargetArrowhead != null)
                 AddArrow(iCurve.End, geometryEdge.EdgeGeometry.TargetArrowhead.TipPosition, edge);
-            if (edge.Label != null && edge.Label.GeometryLabel != null && edge.GeometryEdge.Label != null)
+            if (edge.Label != null && edge.Label.GeometryLabel != null)
                 WriteLabel(edge.Label);
         }
 
