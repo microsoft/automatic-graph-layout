@@ -104,4 +104,5 @@ WebMSAGL is a version of MSAGL that was transcompiled to JavaScript with [SharpK
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
 # Build
+
 [![Build Status](https://dev.azure.com/MSAGL/MSAGLBuild/_apis/build/status/microsoft.automatic-graph-layout?branchName=master)](https://dev.azure.com/MSAGL/MSAGLBuild/_build/latest?definitionId=1&branchName=master)
