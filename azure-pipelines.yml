@@ -21,7 +21,11 @@ steps:
     msbuildArchitecture: 'x64'
     configuration: release
     platform: 'any cpu'
-
+- task: DownloadPipelineArtifact@2
+  displayName: 'Download Build artifacts'
+  inputs:
+    artifact: 'MSAGL DLLs'
+    path: $(Agent.TempDirectory)/GraphLayout/MSAGL/bin/Release/netstandard2.0
 - task: GitHubRelease@1
   inputs:
     gitHubConnection: 'MSAGLRelease'
@@ -34,7 +38,7 @@ steps:
     isPreRelease: true
     changeLogCompareToRelease: 'lastNonDraftRelease'
     changeLogType: 'commitBased'
-    assets: $(Build.ArtifactStagingDirectory)/GraphLayout/MSAGL/bin/Release/netstandard2.0/*
+    assets: $(Build.ArtifactStagingDirectory)/*
 
 
 
