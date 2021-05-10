@@ -34,7 +34,7 @@ steps:
     isPreRelease: true
     changeLogCompareToRelease: 'lastNonDraftRelease'
     changeLogType: 'commitBased'
-    assets: $(Build.ArtifactStagingDirectory)/*
+    assets: $(Build.ArtifactStagingDirectory)/GraphLayout/MSAGL/bin/Release/netstandard2.0/*
 
 
 
