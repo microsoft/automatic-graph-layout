@@ -24,7 +24,7 @@ steps:
   inputs:
     gitHubConnection: 'MSAGLRelease'
     repositoryName: '$(Build.Repository.Name)'
-    action: 'create'
+    action: edit
     target: '$(Build.SourceVersion)'
     tagSource: 'userSpecifiedTag'
     tag: 'MSAGL-Build'
