@@ -26,7 +26,8 @@ steps:
     repositoryName: '$(Build.Repository.Name)'
     action: 'create'
     target: '$(Build.SourceVersion)'
-    tagSource: 'gitTag'
+    tagSource: 'userSpecifiedTag'
+    tag: 'MSAGL Build'
     title: 'Latest build'
     isPreRelease: true
     changeLogCompareToRelease: 'lastNonDraftRelease'
