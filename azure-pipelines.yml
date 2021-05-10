@@ -26,7 +26,7 @@ steps:
     targetPath: tmp    
 - task: GitHubRelease@0
   inputs:
-    gitHubConnection: MSAGLBuild
+    gitHubConnection: MSAGLRelease
     repositoryName: 'microsoft/automatic-graph-layout/'
     action: 'create'
     tagSource: 'manual'
