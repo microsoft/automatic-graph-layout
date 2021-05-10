@@ -13,4 +13,4 @@ steps:
 - task: MSBuild@1
   inputs:
     solution: 'GraphLayout/GraphLayout.sln'
-
+    msbuildArchitecture: 'x64'
