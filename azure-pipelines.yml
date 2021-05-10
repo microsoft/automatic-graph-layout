@@ -19,6 +19,8 @@ steps:
   inputs:
     solution: 'GraphLayout/GraphLayout.sln'
     msbuildArchitecture: 'x64'
+    configuration: release
+    platform: 'any cpu'
 
 - task: GitHubRelease@1
   inputs:
