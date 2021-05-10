@@ -32,4 +32,7 @@ steps:
     isPreRelease: true
     changeLogCompareToRelease: 'lastNonDraftRelease'
     changeLogType: 'commitBased'
+    assets: $(Build.ArtifactStagingDirectory)/*
+
+
 
