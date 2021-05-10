@@ -10,12 +10,13 @@ pool:
   vmImage: windows-latest
 
 steps:
-- task: MSBuild@1
-  inputs:
-    solution: 'GraphLayout/GraphLayout.sln'
-    msbuildArchitecture: 'x64'
 - task: NuGetCommand@2
   inputs:
     command: 'restore'
     restoreSolution: 'GraphLayout/GraphLayout.sln'
     feedsToUse: 'select'
+- task: MSBuild@1
+  inputs:
+    solution: 'GraphLayout/GraphLayout.sln'
+    msbuildArchitecture: 'x64'
+
