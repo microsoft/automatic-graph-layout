@@ -19,4 +19,23 @@ steps:
   inputs:
     solution: 'GraphLayout/GraphLayout.sln'
     msbuildArchitecture: 'x64'
+- task: DownloadPipelineArtifact@2
+  displayName: "Download artifact"
+  inputs:
+    artifactName: 'Build Results'
+    targetPath: tmp    
+- task: GitHubRelease@0
+  inputs:
+    gitHubConnection: MSAGLGitHub
+    repositoryName: 'microsoft/automatic-graph-layout/'
+    action: 'create'
+    tagSource: 'manual'
+    tag: 'Latest'
+    title: 'Latest'
+    releaseNotesSource: 'input'
+    releaseNotes: 'latest build'
+    assets: 'tmp/*'
+    assetUploadMode: 'replace'
+    isDraft: false
+    isPreRelease: true
 
