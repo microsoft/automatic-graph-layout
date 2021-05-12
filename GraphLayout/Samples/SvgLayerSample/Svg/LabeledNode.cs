@@ -46,7 +46,7 @@ namespace SvgLayerSample.Svg {
             writer.WriteAttribute("width", this.BoundingBox.Width);
             writer.WriteAttribute("height", this.BoundingBox.Height);
 
-            new Rectangle {
+            new SvgRect {
                 X = 0,
                 Y = 0,
                 Width = this.BoundingBox.Width,
