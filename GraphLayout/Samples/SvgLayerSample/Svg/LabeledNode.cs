@@ -11,19 +11,19 @@ namespace SvgLayerSample.Svg {
     /// be printed in a vertical column.
     /// </summary>
     public class LabeledNode : Node {
-        public List<Label> Labels { get; }
+        public List<SvgLabel> Labels { get; }
         public SvgElement SvgElement { get; } = SvgElement.DefaultElement();
 
         public LabeledNode(string id) : base(id) {
-            this.Labels = new List<Label> {
-                new Label(id)
+            this.Labels = new List<SvgLabel> {
+                new SvgLabel(id)
             };
         }
-        public LabeledNode(string id, List<Label> labels) : base(id) {
+        public LabeledNode(string id, List<SvgLabel> labels) : base(id) {
             this.Labels = labels;
         }
         public LabeledNode(string id, List<string> labels) : base(id) {
-            this.Labels = labels.Where(s => s != null).Select(s => new Svg.Label(s)).ToList();
+            this.Labels = labels.Where(s => s != null).Select(s => new Svg.SvgLabel(s)).ToList();
         }
 
         public void CreateBoundary() {
@@ -46,7 +46,7 @@ namespace SvgLayerSample.Svg {
             writer.WriteAttribute("width", this.BoundingBox.Width);
             writer.WriteAttribute("height", this.BoundingBox.Height);
 
-            new Rectangle {
+            new SvgRectangle {
                 X = 0,
                 Y = 0,
                 Width = this.BoundingBox.Width,

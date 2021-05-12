@@ -4,16 +4,16 @@ using dwg = System.Drawing;
 using System.Xml;
 
 namespace SvgLayerSample.Svg {
-    public class Label {
+    public class SvgLabel : SvgElement {
 
-        public string LabelText { get; }
-        public double Height => TextElement.TextHeight + PaddingTop;
-        public double Width => TextElement.TextWidth;
+        public string Text { get; }
+        public override double Height => TextElement.Height + PaddingTop;
+        public override double Width => TextElement.Width;
         public double MarginToPreviousLabel { get; set; } = 12d;
 
         public Color? Color { get; set; } = null;
 
-        private readonly Text TextElement;
+        private readonly SvgText TextElement;
         public double PaddingTop { get; set; } = 0d;
 
         public dwg.Font Font  {
@@ -25,18 +25,17 @@ namespace SvgLayerSample.Svg {
             }
         }
 
-
-        public Label(string labelText) {
-            this.LabelText = Utils.WordWrap(labelText, 25);
-            this.TextElement = new Text(this.LabelText);
+        public SvgLabel(string labelText) {
+            this.Text = Utils.WordWrap(labelText, 25);
+            this.TextElement = new SvgText(this.Text);
         }
-        public Label(string labelText, dwg.Font font) {
-            this.LabelText = Utils.WordWrap(labelText, 25);
-            this.TextElement = new Text(this.LabelText);
+        public SvgLabel(string labelText, dwg.Font font) {
+            this.Text = Utils.WordWrap(labelText, 25);
+            this.TextElement = new SvgText(this.Text);
             this.Font = font;
         }
 
-        public void WriteTo(XmlWriter writer) {
+        public override void WriteTo(XmlWriter writer) {
             this.WriteTo(writer, this.Width, 0);
         }
 
@@ -54,7 +53,7 @@ namespace SvgLayerSample.Svg {
 
 
             var index = 0;
-            foreach (var part in this.LabelText.Split(Environment.NewLine)) {
+            foreach (var part in this.Text.Split(Environment.NewLine)) {
                 writer.WriteStartElement("tspan");
                 if (index > 0) writer.WriteAttribute("x", "50%");
                 if (index > 0) writer.WriteAttribute("dy", "20");

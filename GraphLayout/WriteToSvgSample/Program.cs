@@ -18,15 +18,27 @@ namespace WriteToSvgSample {
                                                     // the geometry graph is still null, so we are going to create it
             e.LabelText = "from " + e.SourceNode.LabelText + " to " + e.TargetNode.LabelText;
             drawingGraph.CreateGeometryGraph();
-            
-            
+
+
             // Now the drawing graph elements point to the corresponding geometry elements, 
             // however the node boundary curves are not set.
             // Setting the node boundaries
+            int i = 0;
             foreach (var n in drawingGraph.Nodes) {
-                // Ideally we should look at the drawing node attributes, and figure out, the required node size
-                // I am not sure how to find out the size of a string rendered in SVG. Here, we just blindly assign to each node a rectangle with width 60 and height 40, and round its corners.
-                n.GeometryNode.BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(60, 40, 3, 2, new Point(0, 0));
+
+                if (i % 2 == 0) {
+
+                    // Ideally we should look at the drawing node attributes, and figure out, the required node size
+                    // I am not sure how to find out the size of a string rendered in SVG. Here, we just blindly assign 
+                    // to each node a rectangle with width 60 and height 40, and round its corners.
+                    n.GeometryNode.BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(60, 40, 3, 2, new Point(0, 0));
+                }
+                else {
+                    n.GeometryNode.BoundaryCurve = CurveFactory.CreateDiamond(60, 80, new Point(0, 0));
+                    n.Attr.Shape = Shape.Diamond;
+                }
+
+                ++i;
             }
            
             AssignLabelsDimensions(drawingGraph);

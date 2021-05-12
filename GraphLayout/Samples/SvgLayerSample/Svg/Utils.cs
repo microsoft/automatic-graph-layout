@@ -8,8 +8,8 @@ using System.Linq;
 using System.Xml;
 
 namespace SvgLayerSample.Svg {
-    public static class Utils {
-        public static void WriteAttribute(this XmlWriter xmlWriter, string attrName, object attrValue) {
+    internal static class Utils {
+        internal static void WriteAttribute(this XmlWriter xmlWriter, string attrName, object attrValue) {
             if (attrValue is double)
                 attrValue = DoubleToString((double)attrValue);
             else if (attrValue is Point)
@@ -56,11 +56,11 @@ namespace SvgLayerSample.Svg {
             return DoubleToString(ellipse.AxisA.Length) + "," + DoubleToString(ellipse.AxisB.Length);
         }
 
-        public static Color backgroundColor = new Color(67, 141, 213);
-        public static Color borderColor = new Color(60, 127, 192);
-        public static Color fontColor = new Color(255, 255, 255);
+        internal static Color backgroundColor = new Color(67, 141, 213);
+        internal static Color borderColor = new Color(60, 127, 192);
+        internal static Color fontColor = new Color(255, 255, 255);
 
-        public static string WordWrap(string text, int maxLineLength, string wrapString) {
+        internal static string WordWrap(string text, int maxLineLength, string wrapString) {
             var list = new List<string>();
 
             int currentIndex;
@@ -76,7 +76,7 @@ namespace SvgLayerSample.Svg {
 
             return string.Join(wrapString, list);
         }
-        public static string WordWrap(string text, int maxLineLength) {
+        internal static string WordWrap(string text, int maxLineLength) {
             return WordWrap(text, maxLineLength, Environment.NewLine);
 
         }

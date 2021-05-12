@@ -71,7 +71,7 @@ namespace SvgLayerSample.Svg {
 
                     if (sg.Id == "the root subgraph's boundary") continue;
 
-                    new Rectangle {
+                    new SvgRectangle {
                         X = sg.BoundingBox.Left,
                         Y = -sg.BoundingBox.Top,
                         Width = sg.BoundingBox.Width,

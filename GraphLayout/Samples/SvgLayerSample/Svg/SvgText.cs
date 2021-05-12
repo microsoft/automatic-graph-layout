@@ -2,22 +2,20 @@
 using dwg = System.Drawing;
 
 namespace SvgLayerSample.Svg {
-    public class Text : SvgElement {
+    public class SvgText : SvgElement {
         public string Content { get; set; }
-        public double TextWidth { get; set; }
-        public double TextHeight { get; set; }
 
         private dwg.Font _font = new dwg.Font(dwg.FontFamily.GenericSerif, 16);
         public dwg.Font Font { get { return _font; }
             set {
                 _font = value;
-                (this.TextWidth, this.TextHeight) = CalculateTextWidth(this.Content);
+                (this.Width, this.Height) = CalculateTextWidth(this.Content);
             }
         } 
 
-        public Text(string text) {
+        public SvgText(string text) {
             this.Content = text;
-            (this.TextWidth, this.TextHeight) = CalculateTextWidth(this.Content);
+            (this.Width, this.Height) = CalculateTextWidth(this.Content);
         }
 
         public override string ToString() {

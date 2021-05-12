@@ -2,7 +2,7 @@
 using System.Xml;
 
 namespace SvgLayerSample.Svg {
-    public class Rectangle : SvgElement {
+    public class SvgRectangle : SvgElement {
         
         public override void WriteTo(XmlWriter writer) {
             writer.WriteStartElement("rect");

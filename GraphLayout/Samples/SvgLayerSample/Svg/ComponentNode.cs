@@ -7,12 +7,12 @@ namespace SvgLayerSample.Svg {
 
             if (technology is null) technology = "[component]";
 
-            this.Labels.Add(new Svg.Label(title ?? id));
+            this.Labels.Add(new SvgLabel(title ?? id));
             if (technology != null) {
-                this.Labels.Add(new Svg.Label(technology, new System.Drawing.Font("Verdana", 8f, System.Drawing.FontStyle.Bold)));
+                this.Labels.Add(new SvgLabel($"[{technology}]", new System.Drawing.Font("Verdana", 8f, System.Drawing.FontStyle.Bold)));
             }
             if (description != null) {
-                var descriptionLabel = new Svg.Label(description);
+                var descriptionLabel = new SvgLabel(description);
                 descriptionLabel.PaddingTop = 10;
                 this.Labels.Add(descriptionLabel);
             }
