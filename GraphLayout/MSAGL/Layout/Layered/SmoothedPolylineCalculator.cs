@@ -15,7 +15,6 @@ using Microsoft.Msagl.Layout.MDS;
 namespace Microsoft.Msagl.Layout.Layered {
 
     internal class SmoothedPolylineCalculator {
-        private const bool V = false;
         Site headSite;// corresponds to the bottom point
         PolyIntEdge edgePath;
         Anchor[] anchors;
@@ -341,7 +340,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             }
 
             if ((s.Turn > 0 && SegIntersectEastBound(s.Previous, s.Next)) || (s.Turn < 0 && SegIntersectWestBound(s.Previous, s.Next))) {
-                cut = V;
+                cut = false;
                 return s.Next;
             }
             Site ret = s.Next;
