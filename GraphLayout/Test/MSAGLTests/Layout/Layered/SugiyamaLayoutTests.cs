@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Dot2Graph;
+using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Layout.Incremental;
@@ -107,6 +108,20 @@ namespace Microsoft.Msagl.UnitTests
                 }
                 LayoutAndValidate(graph, (SugiyamaLayoutSettings)drawGraph.LayoutAlgorithmSettings, direction);
             }
+        }
+
+        [TestMethod]
+        [Description("Generate one simple graph and do Sugiyam layout testing")]
+        public void OnlyNodes() {
+            // GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
+            var graph = new GeometryGraph();
+            graph.Nodes.Add(new Node() { BoundaryCurve = CurveFactory.CreateCircle(80, new Point(0, 0)) });
+            graph.Nodes.Add(new Node() { BoundaryCurve = CurveFactory.CreateCircle(20, new Point(0, 0)) });
+            graph.Nodes.Add(new Node() { BoundaryCurve = CurveFactory.CreateCircle(100, new Point(0, 0)) });
+            SugiyamaLayoutSettings settings = new SugiyamaLayoutSettings();
+            WriteLine("Trying nodes only graph with ");
+            LayoutAndValidate(graph, settings);
+            
         }
 
         [TestMethod]
