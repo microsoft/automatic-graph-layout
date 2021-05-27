@@ -51,10 +51,6 @@ namespace TestFormForGViewer {
             form.StartPosition = FormStartPosition.CenterScreen;
             form.Size = new System.Drawing.Size(Screen.PrimaryScreen.WorkingArea.Width,
                               Screen.PrimaryScreen.WorkingArea.Height);
-            var statusStrip = new StatusStrip();
-            var toolStribLbl = new ToolStripStatusLabel("test");
-            statusStrip.Items.Add(toolStribLbl);
-            form.Controls.Add(statusStrip);
             form.MainMenuStrip = GetMainMenuStrip();
             form.Controls.Add(form.MainMenuStrip);
             form.ResumeLayout();

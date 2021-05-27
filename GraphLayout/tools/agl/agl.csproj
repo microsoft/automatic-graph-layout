@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1E85BCE2-6C50-4148-B4AE-B873BFDE77CE}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <!-- TODO: Fix up the code that triggers these warnings -->
+    <NoWarn>CA1303;CA1801;CA2000;CA1304;CA1031</NoWarn>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Agl</RootNamespace>
+    <AssemblyName>agl</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;TEST_MSAGL </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;TEST_MSAGL</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;TEST_MSAGL</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Drawing\AutomaticGraphLayout.Drawing.csproj">
+      <Project>{B76F8F71-4B00-4242-BE36-C9F0732511F7}</Project>
+      <Name>AutomaticGraphLayout.Drawing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\tools\GraphViewerGDI\GraphViewerGDI.csproj">
+      <Project>{725CD2CB-CF37-414E-A5A6-F1D87D4D6EDE}</Project>
+      <Name>GraphViewerGDI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\tools\ArgsParser\ArgsParser.csproj">
+      <Project>{b9ab0b32-d315-4ed1-83f6-5dbb2f832070}</Project>
+      <Name>ArgsParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\tools\Dot2Graph\Dot2Graph.csproj">
+      <Project>{ba8fed53-458e-4cb3-8eb3-cbfcadd87e5d}</Project>
+      <Name>Dot2Graph</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\tools\QUT.ShiftReduceParser\QUT.ShiftReduceParser.csproj">
+      <Project>{ef5cf15e-5645-433b-8a23-af93e3f2682f}</Project>
+      <Name>QUT.ShiftReduceParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Test\MSAGLTests\MSAGLTests.csproj">
+      <Project>{a6d1f09a-3db0-4cb2-a7f0-422bf1afe222}</Project>
+      <Name>MSAGLTests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj">
+      <Project>{415D3E3F-7105-46C1-84D2-7ECB34213D92}</Project>
+      <Name>AutomaticGraphLayout</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Test\TestFormForGViewer\TestFormForGViewer.csproj">
+      <Project>{AF9121C3-E4B7-464F-8EBB-96C9CF627C06}</Project>
+      <Name>TestFormForGViewer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
+      <Version>2.9.6</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

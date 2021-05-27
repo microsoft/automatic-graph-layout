@@ -307,7 +307,6 @@ namespace Microsoft.Msagl.GraphViewerGdi{
             form.Controls.Add(statusStrip);
             form.ResumeLayout();
             gviewer.ObjectUnderMouseCursorChanged += DisplayGeometryGraph_ObjectUnderMouseCursorChanged;
-            gviewer.MouseMove += Draw.GviewerMouseMove;
             gviewer.NeedToCalculateLayout = false;
             gviewer.MouseClick += GviewerMouseClick;
            
