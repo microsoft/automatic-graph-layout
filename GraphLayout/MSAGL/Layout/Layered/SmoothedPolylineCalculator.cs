@@ -19,10 +19,10 @@ namespace Microsoft.Msagl.Layout.Layered {
         PolyIntEdge edgePath;
         Anchor[] anchors;
         GeometryGraph originalGraph;
-        ParallelogramNode rightHierarchy;
-        ParallelogramNode leftHierarchy;
-        ParallelogramNode thinRightHierarchy;
-        ParallelogramNode thinLeftHierarchy;
+        ParallelogramNode eastHierarchy;
+        ParallelogramNode westHierarchy;
+        ParallelogramNode thinEastHierarchy;
+        ParallelogramNode thinWestHierarchy;
         List<ParallelogramNode> thinRightNodes = new List<ParallelogramNode>();
         List<ParallelogramNode> thinLefttNodes = new List<ParallelogramNode>();
         Database database;
@@ -41,33 +41,33 @@ namespace Microsoft.Msagl.Layout.Layered {
             this.originalGraph = origGraph;
             this.settings = settings;
             this.layeredGraph = layerGraph;
-            rightHierarchy = BuildRightHierarchy();
-            leftHierarchy = BuildLeftHierarchy();
+            eastHierarchy = BuildEastHierarchy();
+            westHierarchy = BuildWestHierarchy();
         }
 
-        private ParallelogramNode BuildRightHierarchy() {
-            List<Polyline> boundaryAnchorsCurves = FindRightBoundaryAnchorCurves();
+        private ParallelogramNode BuildEastHierarchy() {
+            List<Polyline> boundaryAnchorsCurves = FindEastBoundaryAnchorCurves();
             List<ParallelogramNode> l = new List<ParallelogramNode>();
             foreach (Polyline c in boundaryAnchorsCurves)
                 l.Add(c.ParallelogramNodeOverICurve);
 
-            this.thinRightHierarchy = HierarchyCalculator.Calculate(thinRightNodes, this.settings.GroupSplit);
+            this.thinEastHierarchy = HierarchyCalculator.Calculate(thinRightNodes, this.settings.GroupSplit);
 
             return HierarchyCalculator.Calculate(l, this.settings.GroupSplit);
         }
 
-        private ParallelogramNode BuildLeftHierarchy() {
-            List<Polyline> boundaryAnchorCurves = FindLeftBoundaryAnchorCurves();
+        private ParallelogramNode BuildWestHierarchy() {
+            List<Polyline> boundaryAnchorCurves = FindWestBoundaryAnchorCurves();
             List<ParallelogramNode> l = new List<ParallelogramNode>();
             foreach (Polyline a in boundaryAnchorCurves)
                 l.Add(a.ParallelogramNodeOverICurve);
 
-            this.thinLeftHierarchy = HierarchyCalculator.Calculate(thinLefttNodes, this.settings.GroupSplit);
+            this.thinWestHierarchy = HierarchyCalculator.Calculate(thinLefttNodes, this.settings.GroupSplit);
 
             return HierarchyCalculator.Calculate(l, this.settings.GroupSplit);
         }
 
-        List<Polyline> FindRightBoundaryAnchorCurves() {
+        List<Polyline> FindEastBoundaryAnchorCurves() {
             List<Polyline> ret = new List<Polyline>();
             int uOffset = 0;
 
@@ -101,7 +101,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             return ret;
         }
 
-        private List<Polyline> FindLeftBoundaryAnchorCurves() {
+        private List<Polyline> FindWestBoundaryAnchorCurves() {
             List<Polyline> ret = new List<Polyline>();
             int uOffset = 0;
 
@@ -320,61 +320,35 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         bool LineSegIntersectBound(Point a, Point b) {
             var l = new LineSegment(a, b);
-            return CurveIntersectsHierarchy(l, leftHierarchy) || CurveIntersectsHierarchy(l, thinLeftHierarchy) ||
-                CurveIntersectsHierarchy(l, rightHierarchy) || CurveIntersectsHierarchy(l, thinRightHierarchy);
+            return CurveIntersectsHierarchy(l, westHierarchy) || CurveIntersectsHierarchy(l, thinWestHierarchy) ||
+                CurveIntersectsHierarchy(l, eastHierarchy) || CurveIntersectsHierarchy(l, thinEastHierarchy);
         }
 
-        bool SegIntersectRightBound(Site a, Site b) {
-            return SegIntersectsBound(a, b, leftHierarchy) || SegIntersectsBound(a, b, this.thinLeftHierarchy);
+        bool SegIntersectEastBound(Site a, Site b) {
+            return SegIntersectsBound(a, b, westHierarchy) || SegIntersectsBound(a, b, this.thinWestHierarchy);
         }
 
-        bool SegIntersectLeftBound(Site a, Site b) {
-            return SegIntersectsBound(a, b, rightHierarchy) || SegIntersectsBound(a, b, this.thinRightHierarchy);
+        bool SegIntersectWestBound(Site a, Site b) {
+            return SegIntersectsBound(a, b, eastHierarchy) || SegIntersectsBound(a, b, this.thinEastHierarchy);
         }
 
-        private bool TryToRemoveInflectionEdge(ref Site s) {
-            if (s.Next.Next == null)
-                return false;
-            if (s.Previous == null)
-                return false;
+        private Site TryToRemoveInflectionEdge(Site s, out bool cut) {
 
-            if (s.Turn < 0) {//left turn at s
-                if (!SegIntersectRightBound(s, s.Next.Next) && !SegIntersectLeftBound(s, s.Next.Next)) {
-                    Site n = s.Next.Next;
-                    s.Next = n;                  //forget about s.next
-                    n.Previous = s;
-                    s = n;
-                    return true;
-                }
-
-                if (!SegIntersectLeftBound(s.Previous, s.Next) && !SegIntersectRightBound(s.Previous, s.Next)) {
-                    Site a = s.Previous; //forget s
-                    Site b = s.Next;
-                    a.Next = b;
-                    b.Previous = a;
-                    s = b;
-                    return true;
-                }
+            if (s.Next == null || s.Previous == null) {
+                cut = false;
+                return s.Next;
             }
-            else {//right turn at s
-                if (!SegIntersectLeftBound(s, s.Next.Next) && !SegIntersectRightBound(s, s.Next.Next)) {
-                    Site n = s.Next.Next;
-                    s.Next = n;                  //forget about s.next
-                    n.Previous = s;
-                    s = n;
-                    return true;
-                }
 
-                if (!SegIntersectRightBound(s.Previous, s.Next) && SegIntersectLeftBound(s.Previous, s.Next)) {
-                    Site a = s.Previous; //forget s
-                    Site b = s.Next;
-                    a.Next = b;
-                    b.Previous = a;
-                    s = b;
-                    return true;
-                }
+            if ((s.Turn > 0 && SegIntersectEastBound(s.Previous, s.Next)) || (s.Turn < 0 && SegIntersectWestBound(s.Previous, s.Next))) {
+                cut = false;
+                return s.Next;
             }
-            return false;
+            Site ret = s.Next;
+            s.Previous.Next = s.Next;                  //forget about s
+            s.Next.Previous = s.Previous;
+            cut = true;
+            return ret;
+
         }
 
 
@@ -630,8 +604,10 @@ namespace Microsoft.Msagl.Layout.Layered {
             bool progress = true;
             while (progress) {
                 progress = false;
-                for (Site s = this.headSite; s != null && s.Next != null; s = s.Next) {
-                    progress = TryToRemoveInflectionEdge(ref s) || progress;
+                for (Site s = this.headSite; s != null; ) {
+                    bool cut;
+                    s = TryToRemoveInflectionEdge(s, out cut);
+                    progress |= cut;
                 }
             }
         }
@@ -760,9 +736,9 @@ namespace Microsoft.Msagl.Layout.Layered {
         private bool BezierSegIntersectsBoundary(CubicBezierSegment seg) {
             double side = Point.SignedDoubledTriangleArea(seg.B(0), seg.B(1), seg.B(2));
             if (side > 0)
-                return BezierSegIntersectsTree(seg, thinLeftHierarchy) || BezierSegIntersectsTree(seg, leftHierarchy);
+                return BezierSegIntersectsTree(seg, thinWestHierarchy) || BezierSegIntersectsTree(seg, westHierarchy);
             else
-                return BezierSegIntersectsTree(seg, thinRightHierarchy) || BezierSegIntersectsTree(seg, rightHierarchy);
+                return BezierSegIntersectsTree(seg, thinEastHierarchy) || BezierSegIntersectsTree(seg, eastHierarchy);
         }
 
         private bool BezierSegIntersectsTree(CubicBezierSegment seg, ParallelogramNode tree) {
