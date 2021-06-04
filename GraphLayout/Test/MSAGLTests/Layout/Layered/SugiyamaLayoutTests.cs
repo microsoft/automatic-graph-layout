@@ -69,8 +69,17 @@ namespace Microsoft.Msagl.UnitTests
         [TestMethod]
         [Description("Randomly selects some DOT files and do Sugiyam layout testing")]
         [DeploymentItem(@"Resources\DotFiles\LevFiles", "Dots")]
-        public void RandomDotFileTests()
-        {
+        public void RandomDotFileTests() {
+            int line, column;
+            string msg;
+
+            string fileName = Path.Combine(this.TestContext.TestDir, "Out\\Dots\\fsm.dot");
+            Drawing.Graph drawGraph = Parser.Parse(fileName, out line, out column, out msg);
+            drawGraph.CreateGeometryGraph();
+            GeometryGraph graph = drawGraph.GeometryGraph;
+            GraphGenerator.SetRandomNodeShapes(graph, random);
+            LayeredLayout layeredLayout = new LayeredLayout(graph, new SugiyamaLayoutSettings() { BrandesThreshold = 1 });
+            layeredLayout.Run();
             string[] allFiles = Directory.GetFiles(Path.Combine(this.TestContext.TestDir, "Out\\Dots"), "*.dot");
             List<int> selected = new List<int>();
 
@@ -83,11 +92,9 @@ namespace Microsoft.Msagl.UnitTests
                 }
                 selected.Add(next);
                 WriteLine("Now handling dot file: " + allFiles[next]);
-                int line, column;
-                string msg;
-                Drawing.Graph drawGraph = Parser.Parse(allFiles[next], out line, out column, out msg);
+                drawGraph = Parser.Parse(allFiles[next], out line, out column, out msg);
                 drawGraph.CreateGeometryGraph();
-                GeometryGraph graph = drawGraph.GeometryGraph;
+                graph = drawGraph.GeometryGraph;
                 GraphGenerator.SetRandomNodeShapes(graph, random);
 
                 LayerDirection direction = LayerDirection.None;

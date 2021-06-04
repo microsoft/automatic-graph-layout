@@ -43,7 +43,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// <summary>
         /// Returns true if v is a virtual vertex
         /// </summary>
-        /// <param name="v"></param>
+        /// <param name="v"></param>GG
         /// <returns></returns>
         bool IsVirtual(int v) { return v >= nOfOriginalVertices; }
 
@@ -465,8 +465,6 @@ namespace Microsoft.Msagl.Layout.Layered {
                             innerSourcePos = newInnerSourcePos;
                         }
                     }
-
-                    positionOfInnerEdgeSource = Pos(Source(innerEdge));
 
                     //look for conflicting edges with targets to the right from the target of innerEdge
                     for (int k = NextRight(Pos(Target(innerEdge))); IsNotRightFrom(k, lastTargetPos); k = NextRight(k)) {
