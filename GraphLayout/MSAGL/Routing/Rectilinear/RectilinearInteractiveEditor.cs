@@ -135,7 +135,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear{
             }
 
             if (!Arrowheads.TrimSplineAndCalculateArrowheads(edge.EdgeGeometry, edge.Source.BoundaryCurve, edge.Target.BoundaryCurve, edge.Curve,
-                true, false))
+                true))
                 Arrowheads.CreateBigEnoughSpline(edge);
         }
 
@@ -163,7 +163,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear{
                 edge.Curve = edge.UnderlyingPolyline.CreateCurve();
             }
 
-            if (!Arrowheads.TrimSplineAndCalculateArrowheads(edge.EdgeGeometry, edge.Source.BoundaryCurve, edge.Target.BoundaryCurve, edge.Curve, true, false))
+            if (!Arrowheads.TrimSplineAndCalculateArrowheads(edge.EdgeGeometry, edge.Source.BoundaryCurve, edge.Target.BoundaryCurve, edge.Curve, true))
                 Arrowheads.CreateBigEnoughSpline(edge);
         }
 

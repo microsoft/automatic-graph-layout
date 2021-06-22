@@ -691,7 +691,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
         private static void CalculateArrowheads(EdgeGeometry edgeGeom)
         {
-            Arrowheads.TrimSplineAndCalculateArrowheads(edgeGeom, edgeGeom.SourcePort.Curve, edgeGeom.TargetPort.Curve, edgeGeom.Curve, true, false);
+            Arrowheads.TrimSplineAndCalculateArrowheads(edgeGeom, edgeGeom.SourcePort.Curve, edgeGeom.TargetPort.Curve, edgeGeom.Curve, true);
         }
 
         #region Private functions

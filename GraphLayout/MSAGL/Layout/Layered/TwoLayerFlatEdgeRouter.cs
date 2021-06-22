@@ -167,9 +167,8 @@ namespace Microsoft.Msagl.Layout.Layered {
             site.Previous = lastSite;
             var eg = intEdge.Edge.EdgeGeometry;
             eg.SetSmoothedPolylineAndCurve(poly0);
-            Arrowheads.TrimSplineAndCalculateArrowheads(eg,  intEdge.Edge.Source.BoundaryCurve,
-                                                             intEdge.Edge.Target.BoundaryCurve, eg.Curve, false, 
-                                                             settings.EdgeRoutingSettings.KeepOriginalSpline);
+            Arrowheads.TrimSplineAndCalculateArrowheads(eg, intEdge.Edge.Source.BoundaryCurve,
+                                                             intEdge.Edge.Target.BoundaryCurve, eg.Curve, false);
         }
 
         void RouteEdgeWithNoLabel(PolyIntEdge intEdge) {
@@ -180,9 +179,8 @@ namespace Microsoft.Msagl.Layout.Layered {
             var eg = intEdge.Edge.EdgeGeometry;
             SmoothedPolyline sp;
             eg.Curve = interactiveEdgeRouter.RouteSplineFromPortToPortWhenTheWholeGraphIsReady(sourcePort, targetPort, true, out sp);
-            Arrowheads.TrimSplineAndCalculateArrowheads(eg,  intEdge.Edge.Source.BoundaryCurve,
-                                                             intEdge.Edge.Target.BoundaryCurve, eg.Curve, false, 
-                                                             settings.EdgeRoutingSettings.KeepOriginalSpline);
+            Arrowheads.TrimSplineAndCalculateArrowheads(eg, intEdge.Edge.Source.BoundaryCurve,
+                                                             intEdge.Edge.Target.BoundaryCurve, eg.Curve, false);
             intEdge.Edge.EdgeGeometry = eg;
         }
 

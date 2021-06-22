@@ -334,8 +334,8 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             foreach (var edge in geometryGraph.Edges)
                 Arrowheads.TrimSplineAndCalculateArrowheads(edge.EdgeGeometry,
                                                                  edge.Source.BoundaryCurve,
-                                                                 edge.Target.BoundaryCurve, 
-                                                                 edge.Curve, false, this.bundlingSettings.KeepOriginalSpline);
+                                                                 edge.Target.BoundaryCurve,
+                                                                 edge.Curve, false);
         }
     }
 }

@@ -325,7 +325,7 @@ namespace Microsoft.Msagl.Drawing {
             Curve curve = e.UnderlyingPolyline.CreateCurve();
             if (
                 !Arrowheads.TrimSplineAndCalculateArrowheads(e.EdgeGeometry, e.Source.BoundaryCurve,
-                    e.Target.BoundaryCurve, curve, false, false))
+                    e.Target.BoundaryCurve, curve, false))
                 Arrowheads.CreateBigEnoughSpline(e);
         }
 

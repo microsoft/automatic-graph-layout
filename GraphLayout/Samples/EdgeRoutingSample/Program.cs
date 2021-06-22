@@ -92,8 +92,7 @@ namespace EdgeRoutingSample {
             Arrowheads.TrimSplineAndCalculateArrowheads(edge.EdgeGeometry,
                                                          edge.Source.BoundaryCurve,
                                                          edge.Target.BoundaryCurve,
-                                                         spline, true,
-                                                         false);
+                                                         spline, true);
 
         }
     }

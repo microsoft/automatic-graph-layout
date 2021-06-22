@@ -80,7 +80,7 @@ namespace Microsoft.Msagl.Routing
             }
 
             Arrowheads.TrimSplineAndCalculateArrowheads(eg, eg.SourcePort.Curve,
-                                                         eg.TargetPort.Curve, edge.Curve, false, false);
+                                                         eg.TargetPort.Curve, edge.Curve, false);
                       
         }
 
@@ -218,8 +218,8 @@ namespace Microsoft.Msagl.Routing
             }
             Arrowheads.TrimSplineAndCalculateArrowheads(edge.EdgeGeometry,
                                                                  edge.Source.BoundaryCurve,
-                                                                 edge.Target.BoundaryCurve, 
-                                                                 edge.Curve, false, false);
+                                                                 edge.Target.BoundaryCurve,
+                                                                 edge.Curve, false);
             
         }
 

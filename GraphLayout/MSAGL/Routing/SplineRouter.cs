@@ -679,7 +679,7 @@ namespace Microsoft.Msagl.Routing {
 
       Arrowheads.TrimSplineAndCalculateArrowheads(edgeGeometry, edgeGeometry.SourcePort.Curve,
                                                   edgeGeometry.TargetPort.Curve, edgeGeometry.Curve,
-                                                  false, KeepOriginalSpline);
+                                                  false);
       if (ReplaceEdgeByRails != null)
         ReplaceEdgeByRails(edge);
       //  SetTransparency(transparentShapes, false);

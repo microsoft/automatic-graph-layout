@@ -947,9 +947,7 @@ namespace Microsoft.Msagl.Drawing {
                 Arrowheads.TrimSplineAndCalculateArrowheads(EdgeGeometry,
                                                             GeometryNode(SourceOfInsertedEdge).BoundaryCurve,
                                                             GeometryNode(TargetOfInsertedEdge).BoundaryCurve,
-                                                            EdgeGeometry.Curve, true,
-                                                            graph.LayoutAlgorithmSettings.EdgeRoutingSettings
-                                                                 .KeepOriginalSpline);
+                                                            EdgeGeometry.Curve, true);
 
             }
             else {

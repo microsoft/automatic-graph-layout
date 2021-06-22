@@ -140,8 +140,7 @@ foreach (var intEdgeList in Database.RegularMultiedges) {
                         }
                         Arrowheads.TrimSplineAndCalculateArrowheads(intEdge.Edge.EdgeGeometry,
                                                                intEdge.Edge.Source.BoundaryCurve,
-                                                               intEdge.Edge.Target.BoundaryCurve, c, false, 
-                                                               settings.EdgeRoutingSettings.KeepOriginalSpline);
+                                                               intEdge.Edge.Target.BoundaryCurve, c, false);
                     }
                 }
             }
@@ -155,8 +154,7 @@ foreach (var intEdgeList in Database.RegularMultiedges) {
                 {
                     es.UpdateEdgeLabelPosition(Database.Anchors);
                     Arrowheads.TrimSplineAndCalculateArrowheads(es.Edge.EdgeGeometry, es.Edge.Source.BoundaryCurve,
-                                                                     es.Edge.Target.BoundaryCurve, es.Curve, true,
-                                                                     settings.EdgeRoutingSettings.KeepOriginalSpline);
+                                                                     es.Edge.Target.BoundaryCurve, es.Curve, true);
                 }
             }
         }
