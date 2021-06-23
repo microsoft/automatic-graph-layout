@@ -5,7 +5,7 @@ namespace Microsoft.Msagl.Core.Geometry {
  /// enumerates the compass directions
  /// </summary>
     [Flags]
-    public enum Directions {
+    public enum Direction {
         /// <summary>
         /// no direction defined
         /// </summary>

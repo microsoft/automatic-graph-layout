@@ -643,7 +643,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             this.SkipToNeighbor(this.ScanDirection.Direction, sideNode.Item, sideReferencePoint, initialHighNbor, neighborSides);
         }
 
-        void SkipToNeighbor(Directions nborSearchDir, BasicObstacleSide side, Point sideReferencePoint,
+        void SkipToNeighbor(Direction nborSearchDir, BasicObstacleSide side, Point sideReferencePoint,
                             RBNode<BasicObstacleSide> nborNode, NeighborSides neighborSides) {
             // Find the first neighbor side (LowObstacleSide if going high, HighObstacleSide if going low) and
             // the side of opposite type (which would potentially end overlap), that that we cross *through*, if any.
@@ -682,7 +682,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         private bool ProcessGroupSideEncounteredOnTraversalToNeighbor(RBNode<BasicObstacleSide> nborNode, Point sideReferencePoint,
-                                                                                Directions nborSearchDir) {
+                                                                                Direction nborSearchDir) {
             if (!this.ScanLineCrossesObstacle(sideReferencePoint, nborNode.Item.Obstacle)) {
                 return false;
             }
@@ -690,7 +690,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // We don't stop overlap or neighbor-traversal for groups, because we must go through the boundary;
             // neither do we create overlapped edges (unless we're inside a non-group obstacle).  Instead we turn
             // the boundary crossing on or off based on group membership at ShortestPath-time.
-            Directions dirToInsideOfGroup = ((nborNode.Item is LowObstacleSide) == StaticGraphUtility.IsAscending(nborSearchDir))
+            Direction dirToInsideOfGroup = ((nborNode.Item is LowObstacleSide) == StaticGraphUtility.IsAscending(nborSearchDir))
                     ? nborSearchDir : CompassVector.OppositeDir(nborSearchDir);
             var intersect = this.ScanLineIntersectSide(sideReferencePoint, nborNode.Item);
             this.CurrentGroupBoundaryCrossingMap.AddIntersection(intersect, nborNode.Item.Obstacle, dirToInsideOfGroup);

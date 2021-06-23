@@ -50,7 +50,7 @@ namespace Microsoft.Msagl.Layout.Incremental
                 hsSolver.OverlapRemovalParameters = new Core.Geometry.OverlapRemovalParameters
                 {
                     AllowDeferToVertical = true,
-                    ConsiderProportionalOverlap = settings.IdealEdgeLength.EdgeDirectionConstraints != Core.Geometry.Directions.None
+                    ConsiderProportionalOverlap = settings.IdealEdgeLength.Direction != Core.Geometry.Direction.None
                 };
                 hsSolver.Initialize(dblHpad, dblVpad, dblCHpad, dblCVpad, v => v.Center);
                 hsSolver.SetDesiredPositions();

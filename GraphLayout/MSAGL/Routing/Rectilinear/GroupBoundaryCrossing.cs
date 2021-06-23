@@ -17,9 +17,9 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         internal Obstacle Group { get; set; }
 
         // The direction from the vertex on the group boundary toward the inside of the group.
-        internal Directions DirectionToInside { get; private set; }
+        internal Direction DirectionToInside { get; private set; }
 
-        internal GroupBoundaryCrossing(Obstacle group, Directions dirToInside) {
+        internal GroupBoundaryCrossing(Obstacle group, Direction dirToInside) {
             Debug.Assert(CompassVector.IsPureDirection(dirToInside), "Impure direction");
             this.Group = group;
             this.DirectionToInside = dirToInside;

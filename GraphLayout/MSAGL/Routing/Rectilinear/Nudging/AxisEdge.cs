@@ -11,13 +11,13 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
     /// but oriented along the X or the Y axis
     /// </summary>
     internal class AxisEdge:VisibilityEdge {
-        internal Directions Direction { get; set; }
+        internal Direction Direction { get; set; }
         internal AxisEdge(VisibilityVertex source, VisibilityVertex target)
             : base(source, target){
             RightBound = double.PositiveInfinity;
             LeftBound = double.NegativeInfinity;
             Direction = CompassVector.DirectionsFromPointToPoint(source.Point, target.Point);
-            Debug.Assert(Direction == Directions.East || Direction == Directions.North);
+            Debug.Assert(Direction == Direction.East || Direction == Direction.North);
         }
 
         readonly internal Set<AxisEdge> RightNeighbors = new Set<AxisEdge>();

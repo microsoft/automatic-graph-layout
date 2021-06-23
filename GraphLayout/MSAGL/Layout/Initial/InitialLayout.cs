@@ -170,7 +170,7 @@ namespace Microsoft.Msagl.Layout.Initial
         {
             var keys = (from c in this.settings.StructuralConstraints select c.Level).ToList();
             keys.Add(0);
-            if (this.settings.IdealEdgeLength.EdgeDirectionConstraints != Directions.None) { 
+            if (this.settings.IdealEdgeLength.Direction != Direction.None) { 
                 keys.Add(1); 
             }
             if (this.settings.AvoidOverlaps && component.Nodes.Count < 2000) { keys.Add(2); }

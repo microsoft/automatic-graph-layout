@@ -108,7 +108,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
         // For a single vertex point, split its List of crossings in both directions into an array in each (opposite)
         // direction.  CLR Array iteration is much faster than List.
-        static internal GroupBoundaryCrossing[] ToCrossingArray(List<GroupBoundaryCrossing> crossings, Directions dirToInside){
+        static internal GroupBoundaryCrossing[] ToCrossingArray(List<GroupBoundaryCrossing> crossings, Direction dirToInside){
 
             // First find the number in each (opposite) direction, then create the arrays. 
             // We expect a very small number of groups to share a boundary point so this is not optimized.

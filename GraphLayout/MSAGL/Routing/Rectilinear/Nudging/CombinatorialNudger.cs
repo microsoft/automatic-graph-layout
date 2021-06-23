@@ -61,11 +61,11 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         PathEdge CreatePathEdge(Point p0, Point p1, double width){
             var dir = CompassVector.DirectionsFromPointToPoint(p0, p1);
             switch (dir){
-                case Directions.East:
-                case Directions.North:
+                case Direction.East:
+                case Direction.North:
                     return new PathEdge(GetAxisEdge(p0, p1), width);
-                case Directions.South:
-                case Directions.West:
+                case Direction.South:
+                case Direction.West:
                 
                 return new PathEdge(GetAxisEdge(p1,p0), width){Reversed = true};
                 default:
@@ -124,7 +124,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         /// <param name="axisEdge">axisEdge together with the axisEdgeIsReversed parameter define direction of the movement over the paths</param>
         /// <param name="direction"></param>
         /// <returns></returns>
-        static int CompareInDirectionStartingFromAxisEdge(PathEdge x, PathEdge y, AxisEdge axisEdge, Directions direction){
+        static int CompareInDirectionStartingFromAxisEdge(PathEdge x, PathEdge y, AxisEdge axisEdge, Direction direction){
             while (true) {
                 x = GetNextPathEdgeInDirection(x, axisEdge, direction);
                 if (x == null)
@@ -148,7 +148,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             }
         }
 
-        static Directions FindContinuedDirection(AxisEdge edge, Directions direction, AxisEdge nextAxisEdge) {
+        static Direction FindContinuedDirection(AxisEdge edge, Direction direction, AxisEdge nextAxisEdge) {
             if (edge.Direction == direction)
                 return nextAxisEdge.Source == edge.Target
                            ? nextAxisEdge.Direction
@@ -164,12 +164,12 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         }
 
         static PointProjection ProjectionForCompare(AxisEdge axisEdge, bool isReversed) {
-            if (axisEdge.Direction == Directions.North)
+            if (axisEdge.Direction == Direction.North)
                 return isReversed ? (p => -p.X) : (PointProjection)(p => p.X);
             return isReversed ? (p => p.Y) : (PointProjection)(p => -p.Y);
         }
 
-        static PathEdge GetNextPathEdgeInDirection(PathEdge e, AxisEdge axisEdge, Directions direction) {
+        static PathEdge GetNextPathEdgeInDirection(PathEdge e, AxisEdge axisEdge, Direction direction) {
             Debug.Assert(e.AxisEdge==axisEdge);
             return axisEdge.Direction == direction ? (e.Reversed ? e.Prev : e.Next) : (e.Reversed ? e.Next : e.Prev);
         }

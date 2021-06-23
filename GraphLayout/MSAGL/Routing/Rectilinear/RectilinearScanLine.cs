@@ -80,7 +80,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return succ;
         }
 
-        internal RBNode<BasicObstacleSide> Next(Directions dir, RBNode<BasicObstacleSide> sideNode) {
+        internal RBNode<BasicObstacleSide> Next(Direction dir, RBNode<BasicObstacleSide> sideNode) {
             var succ = (StaticGraphUtility.IsAscending(dir)) ? SideTree.Next(sideNode) : SideTree.Previous(sideNode);
             return succ;
         }

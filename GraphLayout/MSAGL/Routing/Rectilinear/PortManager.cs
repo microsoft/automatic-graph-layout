@@ -193,9 +193,9 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                             this.TransUtil.ConnectVertexToTargetVertex(lastOobWaypoint.Vertex, freePoint.Vertex, dirs, ScanSegment.NormalWeight);
                         } else {
                             this.TransUtil.ConnectVertexToTargetVertex(lastOobWaypoint.Vertex, freePoint.Vertex, 
-                                dirs & (Directions.North | Directions.South), ScanSegment.NormalWeight);
+                                dirs & (Direction.North | Direction.South), ScanSegment.NormalWeight);
                             this.TransUtil.ConnectVertexToTargetVertex(lastOobWaypoint.Vertex, freePoint.Vertex,
-                                dirs & (Directions.East | Directions.West), ScanSegment.NormalWeight);
+                                dirs & (Direction.East | Direction.West), ScanSegment.NormalWeight);
                         }
                     } else {
                         // They are both out of bounds but not to the same side, so create a single turn around the corner.
@@ -224,15 +224,15 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // Connect to the graphbox side at points collinear with the vertices.  The waypoint may be
             // OOB in two directions so call once for each axis.
             var endpointVertices = this.FindVertices(port);
-            var dirFromGraph = oobWaypoint.OutOfBoundsDirectionFromGraph & (Directions.North | Directions.South);
+            var dirFromGraph = oobWaypoint.OutOfBoundsDirectionFromGraph & (Direction.North | Direction.South);
             ConnectToGraphAtPointsCollinearWithVertices(oobWaypoint, dirFromGraph, endpointVertices);
-            dirFromGraph = oobWaypoint.OutOfBoundsDirectionFromGraph & (Directions.East | Directions.West);
+            dirFromGraph = oobWaypoint.OutOfBoundsDirectionFromGraph & (Direction.East | Direction.West);
             ConnectToGraphAtPointsCollinearWithVertices(oobWaypoint, dirFromGraph, endpointVertices);
         }
 
-        private void ConnectToGraphAtPointsCollinearWithVertices(FreePoint oobWaypoint, Directions dirFromGraph,
+        private void ConnectToGraphAtPointsCollinearWithVertices(FreePoint oobWaypoint, Direction dirFromGraph,
                     List<VisibilityVertex> endpointVertices) {
-            if (Directions. None == dirFromGraph) {
+            if (Direction. None == dirFromGraph) {
                 // Not out of bounds on this axis.
                 return;
             }
@@ -567,7 +567,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         private void CreatePortEntrancesAtBorderIntersections(Rectangle curveBox, ObstaclePort oport, Point location
                                     , Point unpaddedBorderIntersect0, Point unpaddedBorderIntersect1) {
             // Allow entry from both sides, except from the opposite side of a point on the border.
-            Directions dir = PointComparer.GetPureDirection(unpaddedBorderIntersect0, unpaddedBorderIntersect1);
+            Direction dir = PointComparer.GetPureDirection(unpaddedBorderIntersect0, unpaddedBorderIntersect1);
             if (!PointComparer.Equal(unpaddedBorderIntersect0, location)) {
                 CreatePortEntrance(curveBox, oport, unpaddedBorderIntersect1, dir);
             }
@@ -587,7 +587,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return deriv;
         }
 
-        private void CreatePortEntrance(Rectangle curveBox, ObstaclePort oport, Point unpaddedBorderIntersect, Directions outDir) {
+        private void CreatePortEntrance(Rectangle curveBox, ObstaclePort oport, Point unpaddedBorderIntersect, Direction outDir) {
             oport.CreatePortEntrance(unpaddedBorderIntersect, outDir, this.ObstacleTree);
             ScanDirection scanDir = ScanDirection.GetInstance(outDir);
             double axisDistanceBetweenIntersections = StaticGraphUtility.GetRectangleBound(curveBox, outDir) - scanDir.Coord(unpaddedBorderIntersect);
@@ -598,9 +598,9 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                 // This is not on an extreme boundary of the unpadded curve (it's on a sloping (nonrectangular) boundary),
                 // so we need to generate another entrance in one of the perpendicular directions (depending on which
                 // way the side slopes).  Derivative is always clockwise.
-                Directions perpDirs = CompassVector.VectorDirection(GetDerivative(oport, unpaddedBorderIntersect));
-                Directions perpDir = perpDirs & ~(outDir | CompassVector.OppositeDir(outDir));
-                if (Directions. None != (outDir & perpDirs)) {
+                Direction perpDirs = CompassVector.VectorDirection(GetDerivative(oport, unpaddedBorderIntersect));
+                Direction perpDir = perpDirs & ~(outDir | CompassVector.OppositeDir(outDir));
+                if (Direction. None != (outDir & perpDirs)) {
                     // If the derivative is in the same direction as outDir then perpDir is toward the obstacle
                     // interior and must be reversed.
                     perpDir = CompassVector.OppositeDir(perpDir);
@@ -613,18 +613,18 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // This must be a corner or it would have been within one of the bounds and handled elsewhere.
             // Therefore create an entrance in both directions, with the first direction selected so that
             // the second can be obtained via RotateRight.
-            Directions outDir = Directions.North;
+            Direction outDir = Direction.North;
             if (PointComparer.Equal(location, curveBox.LeftBottom)) {
-                outDir = Directions.South;
+                outDir = Direction.South;
             }
             else if (PointComparer.Equal(location, curveBox.LeftTop)) {
-                outDir = Directions.West;
+                outDir = Direction.West;
             }
             else if (PointComparer.Equal(location, curveBox.RightTop)) {
-                outDir = Directions.North;
+                outDir = Direction.North;
             }
             else if (PointComparer.Equal(location, curveBox.RightBottom)) {
-                outDir = Directions.East;
+                outDir = Direction.East;
             }
             else {
                 Debug.Assert(false, "Expected Port to be on corner of curveBox");
@@ -655,16 +655,16 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             }
         }
 
-        private Point InBoundsGraphBoxIntersect(Point point, Directions dir) {
+        private Point InBoundsGraphBoxIntersect(Point point, Direction dir) {
             return StaticGraphUtility.RectangleBorderIntersect(graphGenerator.ObstacleTree.GraphBox, point, dir);
         }
 
-        private VisibilityEdge FindorCreateNearestPerpEdge(Point first, Point second, Directions dir, double weight) {
+        private VisibilityEdge FindorCreateNearestPerpEdge(Point first, Point second, Direction dir, double weight) {
             VisibilityVertex targetVertex;
             return this.FindorCreateNearestPerpEdge(first, second, dir, weight, out targetVertex);
         }
 
-        private VisibilityEdge FindorCreateNearestPerpEdge(Point first, Point second, Directions dir, double weight, out VisibilityVertex targetVertex) {
+        private VisibilityEdge FindorCreateNearestPerpEdge(Point first, Point second, Direction dir, double weight, out VisibilityVertex targetVertex) {
             // Find the closest perpendicular ScanSegment that intersects a segment with endpoints
             // first and second, then find the closest parallel ScanSegment that intersects that
             // perpendicular ScanSegment.  This gives us a VisibilityVertex location from which we
@@ -726,8 +726,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // pointLocation is not on the initial scanSeg, so see if there is a transient edge between
             // pointLocation and edgeIntersect.  edgeIntersect == segsegVertex.Point if pointLocation is
             // collinear with intSegBefore (pointLocation is before or after intSegBefore's VisibilityVertices).
-            Directions dirTowardLocation = PointComparer.GetPureDirection(edgeIntersect, pointLocation);
-            Directions perpDir = PointComparer.GetDirections(segsegVertex.Point, pointLocation);
+            Direction dirTowardLocation = PointComparer.GetPureDirection(edgeIntersect, pointLocation);
+            Direction perpDir = PointComparer.GetDirections(segsegVertex.Point, pointLocation);
             if (dirTowardLocation == perpDir) {
                 // intSegBefore is collinear with pointLocation so walk to the vertex closest to pointLocation.
                 VisibilityVertex bracketTarget;
@@ -741,7 +741,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
             // Now make perpDir have only the perpendicular component.
             perpDir &= ~dirTowardLocation;              // if this is Directions. None, pointLocation == edgeIntersect
-            StaticGraphUtility.Assert(Directions. None != perpDir
+            StaticGraphUtility.Assert(Direction. None != perpDir
                     , "pointLocation == initial segsegVertex.Point should already have exited", ObstacleTree, VisGraph);
 
             // Other TransientVE edge chains may have been added between the control point and the
@@ -930,7 +930,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                 edge = FindOrCreateNearestPerpEdgeFromNearestPerpSegment(location, scanSegment, location, freePoint.InitialWeight, out targetVertex);
             }
 
-            Directions edgeDir = Directions.South;
+            Direction edgeDir = Direction.South;
             if (null != edge) {
                 // The freePoint is on one (but not two) segments, and has already been spliced into 
                 // that segment's edge chain.  Add edges laterally to the parallel edges.
@@ -958,7 +958,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // to do any more because multiple waypoints are processed as multiple subpaths.
             var oobLocation = freePoint.Point;
             Point inboundsLocation = graphGenerator.MakeInBoundsLocation(oobLocation);
-            Directions dirFromGraph = PointComparer.GetDirections(inboundsLocation, oobLocation);
+            Direction dirFromGraph = PointComparer.GetDirections(inboundsLocation, oobLocation);
             freePoint.OutOfBoundsDirectionFromGraph = dirFromGraph;
             if (!PointComparer.IsPureDirection(dirFromGraph)) {
                 // It's OOB in two directions so will need a bend, but we know inboundsLocation
@@ -995,7 +995,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             }
         }
 
-        private void ConnectFreePointToLateralEdge(FreePoint freePoint, Directions lateralDir) {
+        private void ConnectFreePointToLateralEdge(FreePoint freePoint, Direction lateralDir) {
             // Turn on pivot vertex to either side to find the next edge to connect to.  If the freepoint is
             // overlapped (inside an obstacle), just find the closest ScanSegment outside the obstacle and 
             // start extending from there; otherwise, we can have the FreePoint calculate its max visibility.

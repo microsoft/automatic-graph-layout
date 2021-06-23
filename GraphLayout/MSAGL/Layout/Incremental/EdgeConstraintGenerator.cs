@@ -23,7 +23,7 @@ namespace Microsoft.Msagl.Layout.Incremental {
     /// </summary>
     public class EdgeConstraintGenerator
     {
-        IdealEdgeLengthSettings settings;
+        EdgeConstraints settings;
         IEnumerable<Edge> edges;
         Dictionary<Node, TNode> nodeMap = new Dictionary<Node, TNode>();
         LinkedList<TNode> stack = new LinkedList<TNode>();
@@ -43,11 +43,11 @@ namespace Microsoft.Msagl.Layout.Incremental {
         /// <param name="verticalSolver"></param>
         internal static void GenerateEdgeConstraints(
             IEnumerable<Edge> edges,
-            IdealEdgeLengthSettings settings,
+            EdgeConstraints settings,
             AxisSolver horizontalSolver,
             AxisSolver verticalSolver)
         {
-            if (settings.EdgeDirectionConstraints == Directions.None)
+            if (settings.Direction == Direction.None)
             {
                 return;
             }
@@ -57,7 +57,7 @@ namespace Microsoft.Msagl.Layout.Incremental {
 
         internal EdgeConstraintGenerator(
             IEnumerable<Edge> edges,
-            IdealEdgeLengthSettings settings,
+            EdgeConstraints settings,
             AxisSolver horizontalSolver,
             AxisSolver verticalSolver)
         {
@@ -92,17 +92,17 @@ namespace Microsoft.Msagl.Layout.Incremental {
                 }
             }
 
-            switch (settings.EdgeDirectionConstraints) {
-                case Directions.South:
+            switch (settings.Direction) {
+                case Direction.South:
                     this.addConstraint = this.AddSConstraint;
                     break;
-                case Directions.North:
+                case Direction.North:
                     this.addConstraint = this.AddNConstraint;
                     break;
-                case Directions.West:
+                case Direction.West:
                     this.addConstraint = this.AddWConstraint;
                     break;
-                case Directions.East:
+                case Direction.East:
                     this.addConstraint = this.AddEConstraint;
                     break;
             }
@@ -114,25 +114,25 @@ namespace Microsoft.Msagl.Layout.Incremental {
         private void AddSConstraint(Node u, Node v)
         {
             verticalSolver.AddStructuralConstraint(
-                new VerticalSeparationConstraint(u, v, (u.Height + v.Height) / 2 + settings.ConstrainedEdgeSeparation));
+                new VerticalSeparationConstraint(u, v, (u.Height + v.Height) / 2 + settings.Separation));
         }
 
         private void AddNConstraint(Node u, Node v)
         {
             verticalSolver.AddStructuralConstraint(
-                new VerticalSeparationConstraint(v, u, (u.Height + v.Height) / 2 + settings.ConstrainedEdgeSeparation));
+                new VerticalSeparationConstraint(v, u, (u.Height + v.Height) / 2 + settings.Separation));
         }
 
         private void AddEConstraint(Node u, Node v)
         {
             horizontalSolver.AddStructuralConstraint(
-                new HorizontalSeparationConstraint(v, u, (u.Width + v.Width) / 2 + settings.ConstrainedEdgeSeparation));
+                new HorizontalSeparationConstraint(v, u, (u.Width + v.Width) / 2 + settings.Separation));
         }
 
         private void AddWConstraint(Node u, Node v)
         {
             horizontalSolver.AddStructuralConstraint(
-                new HorizontalSeparationConstraint(u, v, (u.Width + v.Width) / 2 + settings.ConstrainedEdgeSeparation));
+                new HorizontalSeparationConstraint(u, v, (u.Width + v.Width) / 2 + settings.Separation));
         }
 
         /// <summary>

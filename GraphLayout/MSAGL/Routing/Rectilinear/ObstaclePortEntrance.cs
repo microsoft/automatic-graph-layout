@@ -23,7 +23,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         // The intersection point on the obstacle border (e.g. intersection with a port point, or
         // midpoint of PortEntry) and the direction from that point to find the outer vertex.
         internal Point UnpaddedBorderIntersect { get; private set; }
-        internal Directions OutwardDirection { get; private set; }
+        internal Direction OutwardDirection { get; private set; }
         internal Point VisibilityBorderIntersect { get; private set; }
         internal bool IsOverlapped { get; private set; }
         internal double InitialWeight { get { return this.IsOverlapped ? ScanSegment.OverlappedWeight : ScanSegment.NormalWeight; } }
@@ -42,9 +42,9 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         internal bool WantVisibilityIntersection {
             get { return !this.IsOverlapped && this.CanExtend && (!this.ObstaclePort.HasCollinearEntrances || this.IsCollinearWithPort); }
         }
-        internal bool CanExtend { get { return PointComparer.GetDirections(this.MaxVisibilitySegment.Start, this.MaxVisibilitySegment.End) != Directions. None; } }
+        internal bool CanExtend { get { return PointComparer.GetDirections(this.MaxVisibilitySegment.Start, this.MaxVisibilitySegment.End) != Direction. None; } }
 
-        internal ObstaclePortEntrance(ObstaclePort oport, Point unpaddedBorderIntersect, Directions outDir, ObstacleTree obstacleTree) {
+        internal ObstaclePortEntrance(ObstaclePort oport, Point unpaddedBorderIntersect, Direction outDir, ObstacleTree obstacleTree) {
             ObstaclePort = oport;
             UnpaddedBorderIntersect = unpaddedBorderIntersect;
             OutwardDirection = outDir;

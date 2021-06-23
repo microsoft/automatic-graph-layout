@@ -18,7 +18,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         /// <summary>
         /// has to be North or East
         /// </summary>
-        internal Directions CompassDirection { get; set; }
+        internal Direction CompassDirection { get; set; }
 
         //the segment can go only North or East independently of the edge directions
         readonly List<PathEdge> edges = new List<PathEdge>();
@@ -40,11 +40,11 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             if (Edges.Count == 0) {
                 var dir = (edge.Target - edge.Source).CompassDirection;
                 switch (dir) {
-                    case Core.Geometry.Directions.South:
-                        dir = Core.Geometry.Directions.North;
+                    case Core.Geometry.Direction.South:
+                        dir = Core.Geometry.Direction.North;
                         break;
-                    case Core.Geometry.Directions.West:
-                        dir = Core.Geometry.Directions.East;
+                    case Core.Geometry.Direction.West:
+                        dir = Core.Geometry.Direction.East;
                         break;
                 }
                 CompassDirection = dir;
@@ -53,11 +53,11 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             }
 
             switch (CompassDirection) {
-                case Core.Geometry.Directions.North:
+                case Core.Geometry.Direction.North:
                     TryPointForStartAndEndNorth(edge.Source);
                     TryPointForStartAndEndNorth(edge.Target);
                     break;
-                case Core.Geometry.Directions.East:
+                case Core.Geometry.Direction.East:
                     TryPointForStartAndEndEast(edge.Source);
                     TryPointForStartAndEndEast(edge.Target);
                     break;
@@ -104,7 +104,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         internal double GetLeftBound() {
             if (!IsFixed)
                 return Edges.Max(edge => edge.AxisEdge.LeftBound);
-            return CompassDirection == Core.Geometry.Directions.North ? Edges[0].Source.X : -Edges[0].Source.Y;
+            return CompassDirection == Core.Geometry.Direction.North ? Edges[0].Source.X : -Edges[0].Source.Y;
         }
 
         internal double GetRightBound() {
@@ -114,7 +114,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         }
 
         double Position() {
-            return CompassDirection == Core.Geometry.Directions.North ? Edges[0].Source.X : -Edges[0].Source.Y;
+            return CompassDirection == Core.Geometry.Direction.North ? Edges[0].Source.X : -Edges[0].Source.Y;
         }
 
         internal double IdealPosition {get;set;}

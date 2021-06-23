@@ -502,9 +502,9 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         /// <summary>
         /// Create a LineSegment that contains the max visibility from startPoint in the desired direction.
         /// </summary>
-        internal LineSegment CreateMaxVisibilitySegment(Point startPoint, Directions dir, out PointAndCrossingsList pacList) {
+        internal LineSegment CreateMaxVisibilitySegment(Point startPoint, Direction dir, out PointAndCrossingsList pacList) {
             var graphBoxBorderIntersect = StaticGraphUtility.RectangleBorderIntersect(this.GraphBox, startPoint, dir);
-            if (PointComparer.GetDirections(startPoint, graphBoxBorderIntersect) == Directions. None) {
+            if (PointComparer.GetDirections(startPoint, graphBoxBorderIntersect) == Direction. None) {
                 pacList = null;
                 return new LineSegment(startPoint, startPoint);
             }
@@ -541,7 +541,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return (null != obstacleNode);
         }
 
-        internal bool PointIsInsideAnObstacle(Point intersect, Directions direction) {
+        internal bool PointIsInsideAnObstacle(Point intersect, Direction direction) {
             return PointIsInsideAnObstacle(intersect, ScanDirection.GetInstance(direction));
         }
 
@@ -645,11 +645,11 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
         private void GetRestrictedIntersectionTestSegment(Point startPoint, Point endPoint) {
             // Due to rounding issues use a larger line span for intersection calculations.
-            Directions segDir = PointComparer.GetPureDirection(startPoint, endPoint);
-            double startX = (Directions.West == segDir) ? GraphBox.Right : ((Directions.East == segDir) ? GraphBox.Left : startPoint.X);
-            double endX = (Directions.West == segDir) ? GraphBox.Left : ((Directions.East == segDir) ? GraphBox.Right : endPoint.X);
-            double startY = (Directions.South == segDir) ? GraphBox.Top * 2: ((Directions.North == segDir) ? GraphBox.Bottom : startPoint.Y);
-            double endY = (Directions.South == segDir) ? GraphBox.Bottom : ((Directions.North == segDir) ? GraphBox.Top : startPoint.Y);
+            Direction segDir = PointComparer.GetPureDirection(startPoint, endPoint);
+            double startX = (Direction.West == segDir) ? GraphBox.Right : ((Direction.East == segDir) ? GraphBox.Left : startPoint.X);
+            double endX = (Direction.West == segDir) ? GraphBox.Left : ((Direction.East == segDir) ? GraphBox.Right : endPoint.X);
+            double startY = (Direction.South == segDir) ? GraphBox.Top * 2: ((Direction.North == segDir) ? GraphBox.Bottom : startPoint.Y);
+            double endY = (Direction.South == segDir) ? GraphBox.Bottom : ((Direction.North == segDir) ? GraphBox.Top : startPoint.Y);
             restrictedIntersectionTestSegment = new LineSegment(new Point(startX, startY), new Point(endX, endY));
         }
 
@@ -703,7 +703,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                 }
                 ++numberOfGoodIntersections;
                 
-                if (Directions. None == dirToIntersect) {
+                if (Direction. None == dirToIntersect) {
                     localLeastDistSquared = 0.0;
                     closestIntersectionInfo = intersectionInfo;
                     continue;

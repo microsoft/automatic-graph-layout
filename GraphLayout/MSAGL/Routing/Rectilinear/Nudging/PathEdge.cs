@@ -73,7 +73,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                                       pathEdge.AxisEdge.TargetPoint-pathEdge.AxisEdge.SourcePoint);
         }
 
-        internal Directions Direction { get { return Reversed ? CompassVector.OppositeDir(AxisEdge.Direction) : AxisEdge.Direction;} }
+        internal Direction Direction { get { return Reversed ? CompassVector.OppositeDir(AxisEdge.Direction) : AxisEdge.Direction;} }
         /// <summary>
         /// if set to true then in the path the edge is reversed
         /// </summary>

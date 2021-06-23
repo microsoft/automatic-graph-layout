@@ -24,7 +24,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
         private VisibilityVertexRectilinear Target { get; set; }
         private VisibilityVertexRectilinear Source { get; set; }
-        private Directions EntryDirectionsToTarget { get; set; }
+        private Direction EntryDirectionsToTarget { get; set; }
         private double upperBoundOnCost;
         private double sourceCostAdjustment;
         private double targetCostAdjustment;
@@ -89,7 +89,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             }
             this.Target = target;
             this.Source = source;
-            double cost = this.TotalCostFromSourceToVertex(0, 0) + HeuristicDistanceFromVertexToTarget(source.Point, Directions. None);
+            double cost = this.TotalCostFromSourceToVertex(0, 0) + HeuristicDistanceFromVertexToTarget(source.Point, Direction. None);
             if (cost >= this.upperBoundOnCost) {
                 return false;
             }
@@ -107,7 +107,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         private bool InitEntryDirectionsAtTarget(VisibilityVertex vert) {
-            EntryDirectionsToTarget = Directions. None;
+            EntryDirectionsToTarget = Direction. None;
 
             // This routine is only called once so don't worry about optimizing foreach.
             foreach (var edge in vert.OutEdges) {
@@ -125,10 +125,10 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 #endif
             }
             // If this returns false then the target is isolated.
-            return EntryDirectionsToTarget != Directions. None;
+            return EntryDirectionsToTarget != Direction. None;
         }
 
-        private static bool IsInDirs(Directions direction, Directions dirs) {
+        private static bool IsInDirs(Direction direction, Direction dirs) {
             return direction == (direction & dirs);
         }
 
@@ -143,17 +143,17 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         /// <param name="point"></param>
         /// <param name="entryDirToVertex"></param>
         /// <returns></returns>
-        private double HeuristicDistanceFromVertexToTarget(Point point, Directions entryDirToVertex) {
+        private double HeuristicDistanceFromVertexToTarget(Point point, Direction entryDirToVertex) {
             Point vectorToTarget = Target.Point - point;
             if (ApproximateComparer.Close(vectorToTarget.X, 0) && ApproximateComparer.Close(vectorToTarget.Y, 0)) {
                 // We are at the target.
                 return this.targetCostAdjustment;
             }
-            Directions dirToTarget = CompassVector.VectorDirection(vectorToTarget);
+            Direction dirToTarget = CompassVector.VectorDirection(vectorToTarget);
 
             int numberOfBends;
-            if (entryDirToVertex == Directions. None) {
-                entryDirToVertex = Directions.East | Directions.North | Directions.West | Directions.South;
+            if (entryDirToVertex == Direction. None) {
+                entryDirToVertex = Direction.East | Direction.North | Direction.West | Direction.South;
                 numberOfBends = GetNumberOfBends(entryDirToVertex, dirToTarget);
             } else {
                 numberOfBends = GetNumberOfBends(entryDirToVertex, dirToTarget);
@@ -161,13 +161,13 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return CombinedCost(ManhattanDistance(point, Target.Point), numberOfBends) + this.targetCostAdjustment;
         }
 
-        private int GetNumberOfBends(Directions entryDirToVertex, Directions dirToTarget) {
+        private int GetNumberOfBends(Direction entryDirToVertex, Direction dirToTarget) {
             return CompassVector.IsPureDirection(dirToTarget)
                                     ? GetNumberOfBendsForPureDirection(entryDirToVertex, dirToTarget)
                                     : GetBendsForNotPureDirection(dirToTarget, entryDirToVertex, EntryDirectionsToTarget);
         }
 
-        private int GetNumberOfBendsForPureDirection(Directions entryDirToVertex, Directions dirToTarget) {
+        private int GetNumberOfBendsForPureDirection(Direction entryDirToVertex, Direction dirToTarget) {
             if ( (dirToTarget & entryDirToVertex) == dirToTarget) {
                 if (IsInDirs(dirToTarget, EntryDirectionsToTarget)) {
                     return 0;
@@ -180,66 +180,66 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return GetNumberOfBendsForPureDirection(AddOneTurn[(int)entryDirToVertex], dirToTarget) + 1;
         }
 
-        private static int GetBendsForNotPureDirection(Directions dirToTarget, Directions entryDirToVertex, Directions entryDirectionsToTarget) {
-            Directions a = dirToTarget & entryDirToVertex;
-            if (a == Directions. None) {
+        private static int GetBendsForNotPureDirection(Direction dirToTarget, Direction entryDirToVertex, Direction entryDirectionsToTarget) {
+            Direction a = dirToTarget & entryDirToVertex;
+            if (a == Direction. None) {
                 return GetBendsForNotPureDirection(dirToTarget, AddOneTurn[(int)entryDirToVertex], entryDirectionsToTarget) + 1;
             }
-            Directions b = dirToTarget & entryDirectionsToTarget;
-            if (b == Directions. None) {
+            Direction b = dirToTarget & entryDirectionsToTarget;
+            if (b == Direction. None) {
                 return GetBendsForNotPureDirection(dirToTarget, entryDirToVertex, AddOneTurn[(int)entryDirectionsToTarget]) + 1;
             }
             return (a | b) == dirToTarget ? 1 : 2;
         }
 
-        private static readonly Directions[] AddOneTurn=new[] {
-            Directions.None,  //Directions. None-> None
-            Directions.North|Directions.East|Directions.West, // 1=N -> N,E,W
-            Directions.North|Directions.East|Directions.South, // 2 =E->E|N|S
-            (Directions)15, // 3 =E|N->E|N|S
-            Directions.East|Directions.South|Directions.West, // 4 =S->E|S|W
-            (Directions)15, // 5 =E|N->E|N|S|W
-            (Directions)15,          //6 - S|E
-            (Directions)15,  //7
-            (Directions)13,  //8=W
-            (Directions)15,  //9
-            (Directions)15,    //10
-            (Directions)15,  //11
-            (Directions)15,  //12
-            (Directions)15,  //13
-            (Directions)15,  //14
-            (Directions)15,  //15
+        private static readonly Direction[] AddOneTurn=new[] {
+            Direction.None,  //Directions. None-> None
+            Direction.North|Direction.East|Direction.West, // 1=N -> N,E,W
+            Direction.North|Direction.East|Direction.South, // 2 =E->E|N|S
+            (Direction)15, // 3 =E|N->E|N|S
+            Direction.East|Direction.South|Direction.West, // 4 =S->E|S|W
+            (Direction)15, // 5 =E|N->E|N|S|W
+            (Direction)15,          //6 - S|E
+            (Direction)15,  //7
+            (Direction)13,  //8=W
+            (Direction)15,  //9
+            (Direction)15,    //10
+            (Direction)15,  //11
+            (Direction)15,  //12
+            (Direction)15,  //13
+            (Direction)15,  //14
+            (Direction)15,  //15
         };
 
-        private static Directions Left(Directions direction) {
+        private static Direction Left(Direction direction) {
             switch (direction) {
-                case Directions. None:
-                    return Directions. None;
-                case Directions.North:
-                    return Directions.West;
-                case Directions.East:
-                    return Directions.North;
-                case Directions.South:
-                    return Directions.East;
-                case Directions.West:
-                    return Directions.South;
+                case Direction. None:
+                    return Direction. None;
+                case Direction.North:
+                    return Direction.West;
+                case Direction.East:
+                    return Direction.North;
+                case Direction.South:
+                    return Direction.East;
+                case Direction.West:
+                    return Direction.South;
                 default:
                     throw new ArgumentOutOfRangeException("direction");
             }
         }
 
-        private static Directions Right(Directions direction) {
+        private static Direction Right(Direction direction) {
             switch (direction) {
-                case Directions. None:
-                    return Directions. None;
-                case Directions.North:
-                    return Directions.East;
-                case Directions.East:
-                    return Directions.South;
-                case Directions.South:
-                    return Directions.West;
-                case Directions.West:
-                    return Directions.North;
+                case Direction. None:
+                    return Direction. None;
+                case Direction.North:
+                    return Direction.East;
+                case Direction.East:
+                    return Direction.South;
+                case Direction.South:
+                    return Direction.West;
+                case Direction.West:
+                    return Direction.North;
                 default:
                     throw new ArgumentOutOfRangeException("direction");
             }
@@ -255,7 +255,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             }
             var list = new List<Point>();
             bool skippedCollinearEntry = false;
-            Directions lastEntryDir = Directions. None;
+            Direction lastEntryDir = Direction. None;
             while (true) {
                 // Reduce unnecessary AxisEdge creations in Nudger by including only bend points, not points in the middle of a segment.
                 if (lastEntryDir == entry.Direction) {
@@ -450,12 +450,12 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             this.queue.Enqueue(entry, entry.Cost);
         }
 
-        private static Directions GetLengthAndNumberOfBendsToNeighborVertex(VertexEntry prevEntry, 
+        private static Direction GetLengthAndNumberOfBendsToNeighborVertex(VertexEntry prevEntry, 
                     VisibilityVertex vertex, double weight, out int numberOfBends, out double length) {
             length = prevEntry.Length + ManhattanDistance(prevEntry.Vertex.Point, vertex.Point)*weight;
-            Directions directionToVertex = CompassVector.PureDirectionFromPointToPoint(prevEntry.Vertex.Point, vertex.Point);
+            Direction directionToVertex = CompassVector.PureDirectionFromPointToPoint(prevEntry.Vertex.Point, vertex.Point);
             numberOfBends = prevEntry.NumberOfBends;
-            if (prevEntry.Direction != Directions. None && directionToVertex != prevEntry.Direction) {
+            if (prevEntry.Direction != Direction. None && directionToVertex != prevEntry.Direction) {
                 numberOfBends++;
             }
             return directionToVertex;
@@ -500,7 +500,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 #else
                     this.EntryDirectionsToTarget &= ~bestEntry.Direction;
 #endif
-                    if (this.EntryDirectionsToTarget == Directions. None) {
+                    if (this.EntryDirectionsToTarget == Direction. None) {
                         this.Target.VertexEntries.CopyTo(targetVertexEntries, 0); 
                         Cleanup();
                         return null;
@@ -538,7 +538,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return null;
         }
 
-        private void ExtendPathAlongInEdges(VertexEntry bestEntry, List<VisibilityEdge> edges, Directions preferredBendDir) {
+        private void ExtendPathAlongInEdges(VertexEntry bestEntry, List<VisibilityEdge> edges, Direction preferredBendDir) {
             // Iteration is faster than foreach and much faster than .Where.
             int count = edges.Count;
             for (int ii = 0; ii < count; ++ii) {
@@ -547,7 +547,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             }
         }
 
-        private void ExtendPathAlongOutEdges(VertexEntry bestEntry, RbTree<VisibilityEdge> edges, Directions preferredBendDir) {
+        private void ExtendPathAlongOutEdges(VertexEntry bestEntry, RbTree<VisibilityEdge> edges, Direction preferredBendDir) {
             // Avoid GetEnumerator overhead.
             var outEdgeNode = edges.IsEmpty() ? null : edges.TreeMinimum();
             for (; outEdgeNode != null; outEdgeNode = edges.Next(outEdgeNode)) {
@@ -555,7 +555,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             }
         }
 
-        private void ExtendPathAlongEdge(VertexEntry bestEntry, VisibilityEdge edge, bool isInEdges, Directions preferredBendDir) {
+        private void ExtendPathAlongEdge(VertexEntry bestEntry, VisibilityEdge edge, bool isInEdges, Direction preferredBendDir) {
             if (!IsPassable(edge)) {
                 return;
             }

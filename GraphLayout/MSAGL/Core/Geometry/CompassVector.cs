@@ -32,7 +32,7 @@ namespace Microsoft.Msagl.Core.Geometry {
             return a.Dir != b.Dir;
         }
 
-        internal CompassVector(Directions direction)
+        internal CompassVector(Direction direction)
             : this() {
             Dir = direction;
         }
@@ -49,71 +49,71 @@ namespace Microsoft.Msagl.Core.Geometry {
         }
 
 
-        internal Directions Dir { get; set; }
+        internal Direction Dir { get; set; }
         internal CompassVector Right {
             get { return new CompassVector(RotateRight(Dir)); }
         }
 
-        internal static Directions RotateRight(Directions direction) {
+        internal static Direction RotateRight(Direction direction) {
             switch (direction) {
-                case Directions.North:
-                    return Directions.East;
-                case Directions.East:
-                    return Directions.South;
-                case Directions.South:
-                    return Directions.West;
-                case Directions.West:
-                    return Directions.North;
+                case Direction.North:
+                    return Direction.East;
+                case Direction.East:
+                    return Direction.South;
+                case Direction.South:
+                    return Direction.West;
+                case Direction.West:
+                    return Direction.North;
                 default:
                     throw new InvalidOperationException();
             }
         }
 
-        internal static Directions RotateLeft(Directions direction) {
+        internal static Direction RotateLeft(Direction direction) {
             switch (direction) {
-                case Directions.North:
-                    return Directions.West;
-                case Directions.West:
-                    return Directions.South;
-                case Directions.South:
-                    return Directions.East;
-                case Directions.East:
-                    return Directions.North;
+                case Direction.North:
+                    return Direction.West;
+                case Direction.West:
+                    return Direction.South;
+                case Direction.South:
+                    return Direction.East;
+                case Direction.East:
+                    return Direction.North;
                 default:
                     throw new InvalidOperationException();
             }
         }
 
-        internal static int ToIndex(Directions direction) {
+        internal static int ToIndex(Direction direction) {
             switch (direction) {
-                case Directions.North:
+                case Direction.North:
                     return 0;
-                case Directions.East:
+                case Direction.East:
                     return 1;
-                case Directions.South:
+                case Direction.South:
                     return 2;
-                case Directions.West:
+                case Direction.West:
                     return 3;
                 default:
                     throw new InvalidOperationException();
             }
         }
 
-        internal static Directions VectorDirection(Point d){
-            Directions r = Directions.None;
+        internal static Direction VectorDirection(Point d){
+            Direction r = Direction.None;
             if(d.X > ApproximateComparer.DistanceEpsilon)
-                r = Directions.East;
+                r = Direction.East;
             else if(d.X < -ApproximateComparer.DistanceEpsilon)
-                r = Directions.West;
+                r = Direction.West;
             if(d.Y > ApproximateComparer.DistanceEpsilon)
-                r |= Directions.North;
+                r |= Direction.North;
             else if(d.Y < -ApproximateComparer.DistanceEpsilon)
-                r |= Directions.South;
+                r |= Direction.South;
             return r;
         }
 
-        internal static Directions VectorDirection(Point a, Point b) {
-            Directions r = Directions.None;
+        internal static Direction VectorDirection(Point a, Point b) {
+            Direction r = Direction.None;
 
             // This method is called a lot as part of rectilinear layout.
             // Try to keep it quick.
@@ -122,50 +122,50 @@ namespace Microsoft.Msagl.Core.Geometry {
             double halfEpsilon = ApproximateComparer.DistanceEpsilon / 2;
 
             if (horizontalDiff > halfEpsilon)
-                r = Directions.East;
+                r = Direction.East;
             else if (-horizontalDiff > halfEpsilon)
-                r = Directions.West;
+                r = Direction.West;
             if (verticalDiff > halfEpsilon)
-                r |= Directions.North;
+                r |= Direction.North;
             else if (-verticalDiff > halfEpsilon)
-                r |= Directions.South;
+                r |= Direction.South;
             return r;
         }
 
-        internal static Directions DirectionsFromPointToPoint(Point a, Point b) {
+        internal static Direction DirectionsFromPointToPoint(Point a, Point b) {
             return VectorDirection(a, b);
         }
 
-        internal static Directions PureDirectionFromPointToPoint(Point a, Point b) {
-            Directions dir = VectorDirection(a, b);
+        internal static Direction PureDirectionFromPointToPoint(Point a, Point b) {
+            Direction dir = VectorDirection(a, b);
             Debug.Assert(IsPureDirection(dir), "Impure direction found");
             return dir;
         }
 
-        internal static Directions OppositeDir(Directions direction) {
+        internal static Direction OppositeDir(Direction direction) {
             switch (direction) {
-                case Directions.North:
-                    return Directions.South;
-                case Directions.West:
-                    return Directions.East;
-                case Directions.South:
-                    return Directions.North;
-                case Directions.East:
-                    return Directions.West;
+                case Direction.North:
+                    return Direction.South;
+                case Direction.West:
+                    return Direction.East;
+                case Direction.South:
+                    return Direction.North;
+                case Direction.East:
+                    return Direction.West;
                 default:
-                    return Directions.None;
+                    return Direction.None;
             }
         }
 
-        internal static bool IsPureDirection(Directions direction) {
+        internal static bool IsPureDirection(Direction direction) {
             switch (direction) {
-                case Directions.North:
+                case Direction.North:
                     return true;
-                case Directions.East:
+                case Direction.East:
                     return true;
-                case Directions.South:
+                case Direction.South:
                     return true;
-                case Directions.West:
+                case Direction.West:
                     return true;
                 default:
                     return false;
@@ -186,7 +186,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         }
 
 
-        internal static bool DirectionsAreParallel(Directions a, Directions b){
+        internal static bool DirectionsAreParallel(Direction a, Direction b){
             return a == b || a == OppositeDir(b);
         }
         /// <summary>
@@ -214,13 +214,13 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// <returns></returns>
         public Point ToPoint() {
             var p = new Point();
-            if ((Dir & Directions.East) == Directions.East)
+            if ((Dir & Direction.East) == Direction.East)
                 p.X += 1;
-            if ((Dir & Directions.North) == Directions.North)
+            if ((Dir & Direction.North) == Direction.North)
                 p.Y += 1;
-            if ((Dir & Directions.West) == Directions.West)
+            if ((Dir & Direction.West) == Direction.West)
                 p.X -= 1;
-            if ((Dir & Directions.South) == Directions.South)
+            if ((Dir & Direction.South) == Direction.South)
                 p.Y -= 1;
             return p;
         }
@@ -229,7 +229,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// Translates a direction into a Point.
         /// </summary>
         /// <returns></returns>
-        public static Point ToPoint(Directions dir) {
+        public static Point ToPoint(Direction dir) {
             return (new CompassVector(dir)).ToPoint();
         }
 

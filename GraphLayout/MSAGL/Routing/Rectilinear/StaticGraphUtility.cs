@@ -21,20 +21,20 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
     // Static utilities for the visibility graph.
     internal static class StaticGraphUtility {
         // Determine the direction of an edge.
-        static internal Directions EdgeDirection(VisibilityEdge edge) {
+        static internal Direction EdgeDirection(VisibilityEdge edge) {
             return EdgeDirection(edge.Source, edge.Target);
         }
-        static internal Directions EdgeDirection(VisibilityVertex source, VisibilityVertex target) {
+        static internal Direction EdgeDirection(VisibilityVertex source, VisibilityVertex target) {
             return PointComparer.GetPureDirection(source.Point, target.Point);
         }
 
-        static internal VisibilityVertex GetVertex(VisibilityEdge edge, Directions dir) {
-            Directions edgeDir = EdgeDirection(edge);
+        static internal VisibilityVertex GetVertex(VisibilityEdge edge, Direction dir) {
+            Direction edgeDir = EdgeDirection(edge);
             Debug.Assert(0 != (dir & (edgeDir | CompassVector.OppositeDir(edgeDir))), "dir is orthogonal to edge");
             return (dir == edgeDir) ? edge.Target : edge.Source;
         }
         
-        static internal VisibilityVertex FindNextVertex(VisibilityVertex vertex, Directions dir) {
+        static internal VisibilityVertex FindNextVertex(VisibilityVertex vertex, Direction dir) {
             // This function finds the next vertex in the desired direction relative to the
             // current vertex, not necessarily the edge orientation, hence it does not use
             // EdgeDirection().  This is so the caller can operate on a desired movement
@@ -59,15 +59,15 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return null;
         }
 
-        static internal VisibilityEdge FindNextEdge(VisibilityGraph vg, VisibilityVertex vertex, Directions dir) {
+        static internal VisibilityEdge FindNextEdge(VisibilityGraph vg, VisibilityVertex vertex, Direction dir) {
             VisibilityVertex nextVertex = FindNextVertex(vertex, dir);
             return (null == nextVertex) ? null : vg.FindEdge(vertex.Point, nextVertex.Point);
         }
 
-        static internal Point FindBendPointBetween(Point sourcePoint, Point targetPoint, Directions finalEdgeDir) {
-            Directions targetDir = PointComparer.GetDirections(sourcePoint, targetPoint);
+        static internal Point FindBendPointBetween(Point sourcePoint, Point targetPoint, Direction finalEdgeDir) {
+            Direction targetDir = PointComparer.GetDirections(sourcePoint, targetPoint);
             Debug.Assert(!PointComparer.IsPureDirection(targetDir), "pure direction has no bend");
-            Directions firstDir = targetDir & ~finalEdgeDir;
+            Direction firstDir = targetDir & ~finalEdgeDir;
             Debug.Assert(PointComparer.IsPureDirection(firstDir), "firstDir is not pure");
 
             // Move along the first direction. If the first direction is horizontal then 
@@ -78,7 +78,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         static internal Point SegmentIntersection(Point first, Point second, Point from) {
-            Directions dir = PointComparer.GetPureDirection(first, second);
+            Direction dir = PointComparer.GetPureDirection(first, second);
             Point intersect = IsVertical(dir) ? new Point(first.X, from.Y) : new Point(from.X, first.Y);
             return intersect;
         }
@@ -147,8 +147,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return PointIsOnSegment(seg.Start, seg.End, test);
         }
 
-        static internal bool IsVertical(Directions dir) {
-            return (0 != (dir & (Directions.North | Directions.South)));
+        static internal bool IsVertical(Direction dir) {
+            return (0 != (dir & (Direction.North | Direction.South)));
         }
         static internal bool IsVertical(VisibilityEdge edge) {
             return IsVertical(PointComparer.GetPureDirection(edge.SourcePoint, edge.TargetPoint));
@@ -161,8 +161,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return IsVertical(PointComparer.GetPureDirection(seg.Start, seg.End));
         }
 
-        static internal bool IsAscending(Directions dir) {
-            return (0 != (dir & (Directions.North | Directions.East)));
+        static internal bool IsAscending(Direction dir) {
+            return (0 != (dir & (Direction.North | Direction.East)));
         }
 
         static internal double Slope(Point start, Point end, ScanDirection scanDir) {
@@ -172,18 +172,18 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         static internal Tuple<Point, Point> SortAscending(Point a, Point b) {
-            Directions dir = PointComparer.GetDirections(a, b);
-            Debug.Assert((Directions. None == dir) || PointComparer.IsPureDirection(dir), "SortAscending with impure direction");
-            return ((Directions. None == dir) || IsAscending(dir)) ? new Tuple<Point, Point>(a, b) : new Tuple<Point, Point>(b, a);
+            Direction dir = PointComparer.GetDirections(a, b);
+            Debug.Assert((Direction. None == dir) || PointComparer.IsPureDirection(dir), "SortAscending with impure direction");
+            return ((Direction. None == dir) || IsAscending(dir)) ? new Tuple<Point, Point>(a, b) : new Tuple<Point, Point>(b, a);
         }
 
-        static internal Point RectangleBorderIntersect(Rectangle boundingBox, Point point, Directions dir) {
+        static internal Point RectangleBorderIntersect(Rectangle boundingBox, Point point, Direction dir) {
             switch (dir) {
-                case Directions.North:
-                case Directions.South:
+                case Direction.North:
+                case Direction.South:
                     return new Point(point.X, GetRectangleBound(boundingBox, dir));
-                case Directions.East:
-                case Directions.West:
+                case Direction.East:
+                case Direction.West:
                     return new Point(GetRectangleBound(boundingBox, dir), point.Y);
                 default:
                     throw new InvalidOperationException(
@@ -194,15 +194,15 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             }
         }
 
-        static internal double GetRectangleBound(Rectangle rect, Directions dir) {
+        static internal double GetRectangleBound(Rectangle rect, Direction dir) {
             switch (dir) {
-                case Directions.North:
+                case Direction.North:
                     return rect.Top;
-                case Directions.South:
+                case Direction.South:
                     return rect.Bottom;
-                case Directions.East:
+                case Direction.East:
                     return rect.Right;
-                case Directions.West:
+                case Direction.West:
                     return rect.Left;
                 default:
                     throw new InvalidOperationException(

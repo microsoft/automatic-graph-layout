@@ -123,7 +123,7 @@ namespace Microsoft.Msagl.Layout.Initial {
             cluster.UnsetInitialLayoutState();
             FastIncrementalLayoutSettings settings = null;
             LayoutAlgorithmSettings s = clusterSettings(cluster);
-            Directions layoutDirection = Directions.None;
+            Direction layoutDirection = Direction.None;
             if (s is SugiyamaLayoutSettings) {
                 var ss = s as SugiyamaLayoutSettings;
                 settings = ss.FallbackLayoutSettings != null
@@ -139,9 +139,9 @@ namespace Microsoft.Msagl.Layout.Initial {
             settings.MinorIterations = 10;
             settings.AvoidOverlaps = true;
             settings.InterComponentForces = false;
-            settings.IdealEdgeLength = new IdealEdgeLengthSettings {
-                EdgeDirectionConstraints = layoutDirection,
-                ConstrainedEdgeSeparation = 30
+            settings.IdealEdgeLength = new EdgeConstraints {
+                Direction = layoutDirection,
+                Separation = 30
             };
             settings.EdgeRoutingSettings.EdgeRoutingMode = EdgeRoutingMode.Spline;
 

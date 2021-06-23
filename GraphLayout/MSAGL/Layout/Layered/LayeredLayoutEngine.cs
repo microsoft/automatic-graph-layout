@@ -1358,8 +1358,8 @@ namespace Microsoft.Msagl.Layout.Layered {
             var layerMap = new Dictionary<int, Point>();
             double width, height;
 
-            Directions layoutDirection = GetLayoutDirection(sugiyamaSettings);
-            if (layoutDirection == Directions.North || layoutDirection == Directions.South) {
+            Direction layoutDirection = GetLayoutDirection(sugiyamaSettings);
+            if (layoutDirection == Direction.North || layoutDirection == Direction.South) {
                 for (int i = 0; i < layers.Length; ++i) {
                     Node v = originalGraph.Nodes[i];
 #if SHARPKIT //https://github.com/SharpKit/SharpKit/issues/6 structs are not initialized
@@ -1421,7 +1421,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             return flatEdgesHeight;
         }
 
-        internal static Directions GetLayoutDirection(SugiyamaLayoutSettings settings) {
+        internal static Direction GetLayoutDirection(SugiyamaLayoutSettings settings) {
             Point dir = settings.Transformation*new Point(0, 1);
             return dir.CompassDirection;
         }

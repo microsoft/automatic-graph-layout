@@ -48,10 +48,10 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear {
             }
 
             // This is just a simple test; a more robust one would actually look for a bendy path.);
-            return IntersectsSegment(root, location, StaticGraphUtility.RectangleBorderIntersect(bbox, location, Directions.North))
-                || IntersectsSegment(root, location, StaticGraphUtility.RectangleBorderIntersect(bbox, location, Directions.South))
-                || IntersectsSegment(root, location, StaticGraphUtility.RectangleBorderIntersect(bbox, location, Directions.East))
-                || IntersectsSegment(root, location, StaticGraphUtility.RectangleBorderIntersect(bbox, location, Directions.West));
+            return IntersectsSegment(root, location, StaticGraphUtility.RectangleBorderIntersect(bbox, location, Direction.North))
+                || IntersectsSegment(root, location, StaticGraphUtility.RectangleBorderIntersect(bbox, location, Direction.South))
+                || IntersectsSegment(root, location, StaticGraphUtility.RectangleBorderIntersect(bbox, location, Direction.East))
+                || IntersectsSegment(root, location, StaticGraphUtility.RectangleBorderIntersect(bbox, location, Direction.West));
         }
 
         internal static bool IntersectsSegment(RectangleNode<Obstacle,Point> root, Point start, Point end) 

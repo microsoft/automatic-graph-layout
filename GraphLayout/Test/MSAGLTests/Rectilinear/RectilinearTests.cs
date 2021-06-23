@@ -3768,7 +3768,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             for (var ii = 30; ii > 0; --ii)
             {
                 var pas = pointsAndShapes[ii - 1];
-                map.AddIntersection(pas.Intersect, pas.Group, Directions.East);
+                map.AddIntersection(pas.Intersect, pas.Group, Direction.East);
             }
 
             var crossings = map.GetOrderedListBetween(pointsAndShapes[10].Intersect, pointsAndShapes[20].Intersect);

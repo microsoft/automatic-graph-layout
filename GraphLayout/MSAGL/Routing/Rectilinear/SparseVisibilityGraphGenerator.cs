@@ -340,7 +340,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // neither do we create overlapped edges (unless we're inside a non-group obstacle).  Instead we turn
             // the boundary crossing on or off based on group membership at ShortestPath-time.  Even though this is
             // the sparse VG, we always create these edges at group boundaries so we don't skip over them.
-            Directions dirToInsideOfGroup = (groupSide is LowObstacleSide) ? base.ScanDirection.Direction : base.ScanDirection.OppositeDirection;
+            Direction dirToInsideOfGroup = (groupSide is LowObstacleSide) ? base.ScanDirection.Direction : base.ScanDirection.OppositeDirection;
             var intersect = this.ScanLineIntersectSide(site, groupSide);
             var crossing = base.CurrentGroupBoundaryCrossingMap.AddIntersection(intersect, groupSide.Obstacle, dirToInsideOfGroup);
 

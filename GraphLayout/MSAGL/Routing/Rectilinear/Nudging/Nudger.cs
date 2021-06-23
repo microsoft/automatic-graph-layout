@@ -86,7 +86,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         /// </summary>
         protected RectangleNode<Shape, Point> HierarchyOfGroups { get; set; }
 
-        internal void Calculate(Directions direction, bool mergePaths) {
+        internal void Calculate(Direction direction, bool mergePaths) {
             NudgingDirection = direction;
             PathRefiner.RefinePaths(Paths, mergePaths);
            // ShowPathsDebug(Paths);
@@ -159,7 +159,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             PathVisibilityGraph = combinatorialNudger.PathVisibilityGraph;
         }
 
-        Directions NudgingDirection { get; set; }
+        Direction NudgingDirection { get; set; }
 
         #region debugging
 #if TEST_MSAGL
@@ -276,7 +276,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             if (segment == null)
                 return point;
             var t = Solver.GetVariablePosition(segment.Id);
-            return NudgingDirection == Directions.North ? new Point(t, point.Y) : new Point(point.X, -t);
+            return NudgingDirection == Direction.North ? new Point(t, point.Y) : new Point(point.X, -t);
         }
 
         #region debug
@@ -394,7 +394,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
 
         // ReSharper disable UnusedMember.Local
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        void ShowLongSegsWithIdealPositions(Directions dir) {
+        void ShowLongSegsWithIdealPositions(Direction dir) {
             // ReSharper restore UnusedMember.Local
             var debCurves = GetObstacleBoundaries(Obstacles, "black");
             int i = 0;
@@ -406,19 +406,19 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(debCurves);
         }
 
-        static DebugCurve DebugCurveOfLongSeg(LongestNudgedSegment ls, string s, Directions dir) {
+        static DebugCurve DebugCurveOfLongSeg(LongestNudgedSegment ls, string s, Direction dir) {
             return new DebugCurve(1, s, LineSegOfLongestSeg(ls, dir));
         }
 
-        static ICurve LineSegOfLongestSeg(LongestNudgedSegment ls, Directions dir) {
-            var projectionToDir = dir == Directions.East ? (PointProjection)(p => p.X) : (p => p.Y);
+        static ICurve LineSegOfLongestSeg(LongestNudgedSegment ls, Direction dir) {
+            var projectionToDir = dir == Direction.East ? (PointProjection)(p => p.X) : (p => p.Y);
             var min = Double.PositiveInfinity;
             var max = Double.NegativeInfinity;
             foreach (var edge in ls.Edges) {
                 UpdateMinMaxWithPoint(ref min, ref max, projectionToDir, edge.Source);
                 UpdateMinMaxWithPoint(ref min, ref max, projectionToDir, edge.Target);
             }
-            return dir == Directions.East
+            return dir == Direction.East
                        ? new LineSegment(min, -ls.IdealPosition, max, -ls.IdealPosition)
                        : new LineSegment(ls.IdealPosition, min, ls.IdealPosition, max);
         }
@@ -526,10 +526,10 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                     CreateConstraintsOfThePathOrder(kv.Value);
         }
 
-        static bool ParallelToDirection(VisibilityEdge edge, Directions direction) {
+        static bool ParallelToDirection(VisibilityEdge edge, Direction direction) {
             switch (direction) {
-                case Directions.North:
-                case Directions.South:
+                case Direction.North:
+                case Direction.South:
                     return ApproximateComparer.Close(edge.SourcePoint.X, edge.TargetPoint.X);
                 default:
                     return ApproximateComparer.Close(edge.SourcePoint.Y, edge.TargetPoint.Y);
@@ -572,8 +572,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                 Solver.AddFixedVariable(segment.Id, SegmentPosition(segment, NudgingDirection));
         }
 
-        static double SegmentPosition(SegmentBase segment, Directions direction) {
-            return direction == Directions.North ? segment.Start.X : -segment.Start.Y;
+        static double SegmentPosition(SegmentBase segment, Direction direction) {
+            return direction == Direction.North ? segment.Start.X : -segment.Start.Y;
         }
 
 #if TEST_MSAGL
@@ -678,7 +678,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
 
         void BoundAxisByPoint(Point point, AxisEdge axisEdge) {
             if (axisEdge != null && axisEdge.Direction == NudgingDirection)
-                if (NudgingDirection == Directions.North) {
+                if (NudgingDirection == Direction.North) {
                     axisEdge.BoundFromLeft(point.X);
                     axisEdge.BoundFromRight(point.X);
                 } else {
@@ -694,7 +694,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
 
         void BoundAxisEdgeByRect(Rectangle rectangle, AxisEdge axisEdge) {
             if (axisEdge != null && axisEdge.Direction == NudgingDirection)
-                if (NudgingDirection == Directions.North) {
+                if (NudgingDirection == Direction.North) {
                     axisEdge.BoundFromLeft(rectangle.Left);
                     axisEdge.BoundFromRight(rectangle.Right);
                 } else {
@@ -706,7 +706,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
      
         void CreateLongestNudgedSegments() {
             var projectionToPerp =
-                NudgingDirection == Directions.East ? (PointProjection)FreeSpaceFinder.MinusY : FreeSpaceFinder.X;
+                NudgingDirection == Direction.East ? (PointProjection)FreeSpaceFinder.MinusY : FreeSpaceFinder.X;
 
             LongestNudgedSegs = new List<LongestNudgedSegment>();
             foreach (var path in Paths)
@@ -828,14 +828,14 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                 points = points.Take(n).ToArray();
                 return;
             }
-            if (dir == Directions.East || dir == Directions.West)
+            if (dir == Direction.East || dir == Direction.West)
                 points[n].X = location.X;
             else
                 points[n].Y = location.Y;
         }
 
-        static bool ProjectionsAreClose(Point a, Directions dir, Point b) {
-            if (dir == Directions.East || dir == Directions.West)
+        static bool ProjectionsAreClose(Point a, Direction dir, Point b) {
+            if (dir == Direction.East || dir == Direction.West)
                 return ApproximateComparer.Close(a.X, b.X);
             return ApproximateComparer.Close(a.Y, b.Y);
         }
@@ -848,7 +848,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                 points = points.Skip(1).ToArray();
                 return;
             }
-            if (dir == Directions.East || dir == Directions.West)
+            if (dir == Direction.East || dir == Direction.West)
                 points[0].X = location.X;
             else
                 points[0].Y = location.Y;
@@ -865,7 +865,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
 
             while (en.MoveNext()) {
                 var dir = (en.Current - b).CompassDirection;
-                if (dir == prevDir || CompassVector.OppositeDir(dir) == prevDir || dir == Directions.None) //we continue walking along the same straight line, maybe going backwards!
+                if (dir == prevDir || CompassVector.OppositeDir(dir) == prevDir || dir == Direction.None) //we continue walking along the same straight line, maybe going backwards!
                     b = en.Current;
                 else {
                     if (!ApproximateComparer.Close(a, b)) {//make sure that we are not returning the same point twice                        
@@ -893,9 +893,9 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             if (!paths.Any())
                 return;
             var nudger = new Nudger(paths, cornerFitRadius, paddedObstacles, ancestorsSets);
-            nudger.Calculate(Directions.North, true);
-            nudger.Calculate(Directions.East, false);
-            nudger.Calculate(Directions.North, false);
+            nudger.Calculate(Direction.North, true);
+            nudger.Calculate(Direction.East, false);
+            nudger.Calculate(Direction.North, false);
             if (removeStaircases)
                 nudger.RemoveStaircases();
             foreach (var path in paths)

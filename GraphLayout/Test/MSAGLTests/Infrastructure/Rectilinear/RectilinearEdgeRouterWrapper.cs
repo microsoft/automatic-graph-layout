@@ -277,7 +277,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             return true;
         }
 
-        private VisibilityVertex FurthestVertexInDirection(VisibilityVertex start, Directions dir, bool wantOverlapped) 
+        private VisibilityVertex FurthestVertexInDirection(VisibilityVertex start, Direction dir, bool wantOverlapped) 
         {
             var furthest = start;
             for ( ; ; ) 

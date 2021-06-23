@@ -758,7 +758,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// <summary>
         /// 
         /// </summary>
-        internal Directions CompassDirection {
+        internal Direction CompassDirection {
             get { return CompassVector.VectorDirection(this); }
         }
         /// <summary>

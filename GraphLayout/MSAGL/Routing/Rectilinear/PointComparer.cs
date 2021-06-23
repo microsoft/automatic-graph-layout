@@ -59,8 +59,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             }
 
             // Just to be sure we're in sync with CompassVector
-            Debug.Assert((cmp < 0) == (Directions.East == CompassVector.VectorDirection(new Point(lhs, 0), new Point(rhs, 0))));
-            Debug.Assert((0 == cmp) == (Directions. None == CompassVector.VectorDirection(new Point(lhs, 0), new Point(rhs, 0))));
+            Debug.Assert((cmp < 0) == (Direction.East == CompassVector.VectorDirection(new Point(lhs, 0), new Point(rhs, 0))));
+            Debug.Assert((0 == cmp) == (Direction. None == CompassVector.VectorDirection(new Point(lhs, 0), new Point(rhs, 0))));
             return cmp;
         }
 
@@ -121,16 +121,16 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         #region Direction_Utilities
 
         // These call through to CompassVector methods, assuming operands that use PointComparer rounding.
-        internal static Directions GetDirections(Point a, Point b) {
+        internal static Direction GetDirections(Point a, Point b) {
             Assert_Rounded(a);
             Assert_Rounded(b);
             return CompassVector.DirectionsFromPointToPoint(a, b);
         }
 
-        internal static Directions GetPureDirection(Point a, Point b) {
+        internal static Direction GetPureDirection(Point a, Point b) {
             Assert_Rounded(a);
             Assert_Rounded(b);
-            Directions dir = GetDirections(a, b);
+            Direction dir = GetDirections(a, b);
             Debug.Assert(CompassVector.IsPureDirection(dir), "Impure direction found");
             return dir;
         }
@@ -140,7 +140,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             Assert_Rounded(b);
             return CompassVector.IsPureDirection(GetDirections(a, b));
         }
-        internal static bool IsPureDirection(Directions dir) {
+        internal static bool IsPureDirection(Direction dir) {
             return CompassVector.IsPureDirection(dir);
         }
 
@@ -150,11 +150,11 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
             // Is a lower than b along the orthogonal line segment?  That means moving
             // from a to b is in the increasing direction.
-            Directions dir = GetDirections(a, b);
-            return (Directions.East == dir) || (Directions.North == dir);
+            Direction dir = GetDirections(a, b);
+            return (Direction.East == dir) || (Direction.North == dir);
         }
 
-        static internal Directions GetPureDirection(VisibilityVertex first, VisibilityVertex second) {
+        static internal Direction GetPureDirection(VisibilityVertex first, VisibilityVertex second) {
             Assert_Rounded(first.Point);
             Assert_Rounded(second.Point);
             return GetPureDirection(first.Point, second.Point);

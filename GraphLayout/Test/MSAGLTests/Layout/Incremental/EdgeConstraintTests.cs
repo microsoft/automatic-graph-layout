@@ -78,10 +78,10 @@ namespace Microsoft.Msagl.UnitTests
         {
             const double downwardEdgeSeparation = 70;
             FastIncrementalLayoutSettings settings = new FastIncrementalLayoutSettings();
-            settings.IdealEdgeLength = new IdealEdgeLengthSettings
+            settings.IdealEdgeLength = new EdgeConstraints
             {
-                ConstrainedEdgeSeparation = downwardEdgeSeparation,
-                EdgeDirectionConstraints = Directions.South
+                Separation = downwardEdgeSeparation,
+                Direction = Direction.South
             };
             settings.AvoidOverlaps = true;            
 

@@ -630,7 +630,7 @@ namespace Microsoft.Msagl.Layout.Incremental {
         /// <summary>
         /// Settings for calculation of ideal edge length
         /// </summary>
-        public IdealEdgeLengthSettings IdealEdgeLength { get; set; }
+        public EdgeConstraints IdealEdgeLength { get; set; }
 
         bool updateClusterBoundaries = true;
 

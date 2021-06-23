@@ -37,11 +37,11 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         /// <param name="axisEdgesToObstaclesTheyOriginatedFrom"></param>
         /// <param name="pathOrders"></param>
         /// <param name="axisEdges">edges to find the empty space around</param>
-        internal FreeSpaceFinder(Directions direction, IEnumerable<Polyline> obstacles, Dictionary<AxisEdge,Polyline> axisEdgesToObstaclesTheyOriginatedFrom, Dictionary<AxisEdge, List<PathEdge>> pathOrders, 
+        internal FreeSpaceFinder(Direction direction, IEnumerable<Polyline> obstacles, Dictionary<AxisEdge,Polyline> axisEdgesToObstaclesTheyOriginatedFrom, Dictionary<AxisEdge, List<PathEdge>> pathOrders, 
             IEnumerable<AxisEdge> axisEdges): base(obstacles, new CompassVector(direction).ToPoint()) {
             DirectionPerp = new CompassVector(direction).Right.ToPoint();
             PathOrders = pathOrders;
-            xProjection = direction == Directions.North ? (PointProjection)X : MinusY;
+            xProjection = direction == Direction.North ? (PointProjection)X : MinusY;
 #if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=301
             edgeContainersTree = new RbTree<AxisEdgesContainer>(new FreeSpaceFinderComparer(this));
 #else
@@ -56,7 +56,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
 
         Dictionary<AxisEdge, Polyline> AxisEdgesToObstaclesTheyOriginatedFrom { get; set; }
 
-        protected Directions SweepPole { get; set; }
+        protected Direction SweepPole { get; set; }
 
      //   List<Path> EdgePaths { get; set; }
 
@@ -126,7 +126,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         }
 
         bool ProjectionsOfEdgesOverlap(AxisEdge leftEdge, AxisEdge rightEdge) {
-            return SweepPole == Directions.North
+            return SweepPole == Direction.North
                        ? !(leftEdge.TargetPoint.Y < rightEdge.SourcePoint.Y - ApproximateComparer.DistanceEpsilon ||
                            rightEdge.TargetPoint.Y < leftEdge.SourcePoint.Y - ApproximateComparer.DistanceEpsilon)
                        : !(leftEdge.TargetPoint.X < rightEdge.SourcePoint.X - ApproximateComparer.DistanceEpsilon ||
@@ -298,7 +298,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                 var color = DebugCurve.Colors[i];
                 dd.Add(new DebugCurve(200, 1, color,
                                        new LineSegment(axisEdge.Source.Point, axisEdge.Target.Point)));
-                Point perp = axisEdge.Direction == Directions.East ? new Point(0, 1) : new Point(-1, 0);
+                Point perp = axisEdge.Direction == Direction.East ? new Point(0, 1) : new Point(-1, 0);
                 if (axisEdge.LeftBound != double.NegativeInfinity) {
                     dd.Add(new DebugCurve(200, 0.5, color,
                         new LineSegment(axisEdge.Source.Point + axisEdge.LeftBound * perp, axisEdge.Target.Point + axisEdge.LeftBound * perp)));

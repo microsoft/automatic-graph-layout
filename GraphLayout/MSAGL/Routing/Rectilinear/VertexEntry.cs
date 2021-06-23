@@ -14,7 +14,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         /// <param name="cost">Cost of the path up to this vertex</param>
         internal VertexEntry(VisibilityVertexRectilinear vertex, VertexEntry prevEntry, double length, int numberOfBends, double cost) {
             this.Vertex = vertex;
-            this.Direction = (prevEntry != null) ? CompassVector.PureDirectionFromPointToPoint(prevEntry.Vertex.Point, vertex.Point) : Directions. None;
+            this.Direction = (prevEntry != null) ? CompassVector.PureDirectionFromPointToPoint(prevEntry.Vertex.Point, vertex.Point) : Direction. None;
             this.ResetEntry(prevEntry, length, numberOfBends, cost);
         }
 
@@ -54,7 +54,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         /// <summary>
         /// The direction of entry to the vertex for this path (i.e. the direction from PreviousVertex to this.Vertex).
         /// </summary>
-        internal Directions Direction { get; private set; }
+        internal Direction Direction { get; private set; }
 
         /// <summary>
         /// The length of the path up to this vertex

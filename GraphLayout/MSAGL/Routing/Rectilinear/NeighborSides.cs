@@ -64,7 +64,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                 this.GroupSideInterveningBeforeHighNeighbor = null;
             }
 
-            internal void SetSides(Directions dir, RBNode<BasicObstacleSide> neighborNode, RBNode<BasicObstacleSide> overlapEndNode,
+            internal void SetSides(Direction dir, RBNode<BasicObstacleSide> neighborNode, RBNode<BasicObstacleSide> overlapEndNode,
                                     BasicObstacleSide interveningGroupSide) {
                 if (StaticGraphUtility.IsAscending(dir)) {
                     HighNeighbor = neighborNode;

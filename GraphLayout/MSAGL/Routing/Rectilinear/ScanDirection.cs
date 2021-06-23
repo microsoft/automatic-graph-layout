@@ -12,29 +12,29 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         // The direction of primary interest, either the direction of the sweep (the
         // coordinate the scanline sweeps "up" in) or along the scan line ("sideways"
         // to the sweep direction, scanning for obstacles).
-        internal Directions Direction { get; private set; }
+        internal Direction Direction { get; private set; }
         internal Point DirectionAsPoint { get; private set; }
 
         // The perpendicular direction - opposite of comments for Direction.
-        internal Directions PerpDirection { get; private set; }
+        internal Direction PerpDirection { get; private set; }
         internal Point PerpDirectionAsPoint { get; private set; }
 
         // The oppposite direction of the primary direction.
-        internal Directions OppositeDirection { get; private set; }
+        internal Direction OppositeDirection { get; private set; }
 
         // Use the internal static xxxInstance properties to get an instance.
-        private ScanDirection(Directions directionAlongScanLine) {
+        private ScanDirection(Direction directionAlongScanLine) {
             System.Diagnostics.Debug.Assert(StaticGraphUtility.IsAscending(directionAlongScanLine),
                 "directionAlongScanLine must be ascending");
             Direction = directionAlongScanLine;
             DirectionAsPoint = CompassVector.ToPoint(Direction);
-            PerpDirection = (Directions.North == directionAlongScanLine) ? Directions.East : Directions.North;
+            PerpDirection = (Direction.North == directionAlongScanLine) ? Direction.East : Direction.North;
             PerpDirectionAsPoint = CompassVector.ToPoint(PerpDirection);
             OppositeDirection = CompassVector.OppositeDir(directionAlongScanLine);
         }
 
-        internal bool IsHorizontal { get { return Directions.East == Direction; } }
-        internal bool IsVertical { get { return Directions.North == Direction; } }
+        internal bool IsHorizontal { get { return Direction.East == Direction; } }
+        internal bool IsVertical { get { return Direction.North == Direction; } }
 
         // Compare in perpendicular direction first, then parallel direction.
         internal int Compare(Point lhs, Point rhs) {
@@ -76,13 +76,13 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
 // ReSharper disable InconsistentNaming
-        private static readonly ScanDirection horizontalInstance = new ScanDirection(Directions.East);
-        private static readonly ScanDirection verticalInstance = new ScanDirection(Directions.North);
+        private static readonly ScanDirection horizontalInstance = new ScanDirection(Direction.East);
+        private static readonly ScanDirection verticalInstance = new ScanDirection(Direction.North);
 // ReSharper restore InconsistentNaming
         internal static ScanDirection HorizontalInstance { get { return horizontalInstance; } }
         internal static ScanDirection VerticalInstance { get { return verticalInstance; } }
         internal ScanDirection PerpendicularInstance { get { return IsHorizontal ? VerticalInstance : HorizontalInstance; } }
-        static internal ScanDirection GetInstance(Directions dir) { return StaticGraphUtility.IsVertical(dir) ? VerticalInstance : HorizontalInstance; }
+        static internal ScanDirection GetInstance(Direction dir) { return StaticGraphUtility.IsVertical(dir) ? VerticalInstance : HorizontalInstance; }
 
         /// <summary/>
         public override string ToString() {

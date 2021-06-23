@@ -78,8 +78,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         }
 
         static void Refine(IEnumerable<LinkedPoint> pathFirstPoints) {
-            RefineInDirection(Directions.North, pathFirstPoints);
-            RefineInDirection(Directions.East, pathFirstPoints);
+            RefineInDirection(Direction.North, pathFirstPoints);
+            RefineInDirection(Direction.East, pathFirstPoints);
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         /// </summary>
         /// <param name="direction"></param>
         /// <param name="pathFirstPoints"></param>
-        static void RefineInDirection(Directions direction, IEnumerable<LinkedPoint> pathFirstPoints) {
+        static void RefineInDirection(Direction direction, IEnumerable<LinkedPoint> pathFirstPoints) {
 
             PointProjection projectionToDirection, projectionToPerp;
             GetProjectionsDelegates(direction, out projectionToPerp, out projectionToDirection);
@@ -99,10 +99,10 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                 RefineCollinearBucket(pathLinkedPointBucket, projectionToDirection);
         }
 
-        static void GetProjectionsDelegates(Directions direction,
+        static void GetProjectionsDelegates(Direction direction,
             out PointProjection projectionToPerp,
             out PointProjection projectionToDirection) {
-            if (direction == Directions.East) {
+            if (direction == Direction.East) {
                 projectionToDirection = delegate(Point p) { return p.X; };
                 projectionToPerp = delegate(Point p) { return p.Y; };
             } else {

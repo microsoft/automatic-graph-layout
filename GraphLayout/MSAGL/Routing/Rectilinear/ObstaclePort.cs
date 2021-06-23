@@ -34,7 +34,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             this.Location = ApproximateComparer.Round(this.Port.Location);
         }
 
-        internal void CreatePortEntrance(Point unpaddedBorderIntersect, Directions outDir, ObstacleTree obstacleTree) {
+        internal void CreatePortEntrance(Point unpaddedBorderIntersect, Direction outDir, ObstacleTree obstacleTree) {
             var entrance = new ObstaclePortEntrance(this, unpaddedBorderIntersect, outDir, obstacleTree);
             PortEntrances.Add(entrance);
             this.VisibilityRectangle.Add(entrance.MaxVisibilitySegment.End);
