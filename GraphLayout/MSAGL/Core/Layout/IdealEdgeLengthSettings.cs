@@ -15,59 +15,8 @@ namespace Microsoft.Msagl.Core.Layout
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes")]
     public struct IdealEdgeLengthSettings
     {
-        #region DefaultLength
-
-        /// <summary>
-        /// Basic desired length for edges
-        /// </summary>
-        public double DefaultLength
-        {
-            get;
-            set;
-        }
-
-        #endregion DefaultLength
-
-        #region EdgeLengthsProportionalToSymmetricDifferenceProperty
-
-        /// <summary>
-        /// Gets or sets whether to set the ideal edge length based on the degree and number of shared
-        /// neighbors of end nodes.
-        /// </summary>
-        public bool ProportionalToSymmetricDifference
-        {
-            get;
-            set;
-        }
-
-        #endregion ProportionalToSymmetricDifference
-
-        #region ProportionalEdgeLengthAdjustmentProperty
-
-        /// <summary>
-        /// Gets or sets the fraction that ideal edge length grows based on the degree of its endpoints.
-        /// </summary>
-        public double ProportionalEdgeLengthAdjustment
-        {
-            get;
-            set;
-        }
-
-        #endregion ProportionalEdgeLengthAdjustmentProperty
-
-        #region ProportionalEdgeLengthOffsetProperty
-
-        /// <summary>
-        /// Gets or sets the fraction that the ideal edge length is initially modified prior to the proportional adjustments.
-        /// </summary>
-        public double ProportionalEdgeLengthOffset
-        {
-            get;
-            set;
-        }
-
-        #endregion ProportionalEdgeLengthOffsetProperty
-
+       
+        
         #region EdgeSeparationConstraints
 
         /// <summary>

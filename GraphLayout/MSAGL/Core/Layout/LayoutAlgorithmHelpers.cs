@@ -62,13 +62,10 @@ namespace Microsoft.Msagl.Core.Layout
 
                 // use larger of DefaultLength and
                 // minimum of the diagonal of a square of area equal to the bounding box of the source and that of the target
-                e.Length = Math.Max(settings.DefaultLength,
-                    Math.Sqrt(2d * Math.Min(e.Source.BoundingBox.Width * e.Source.BoundingBox.Height, e.Target.BoundingBox.Width * e.Target.BoundingBox.Height)));
+                e.Length = 
+                    Math.Sqrt(2d * Math.Min(e.Source.BoundingBox.Width * e.Source.BoundingBox.Height, e.Target.BoundingBox.Width * e.Target.BoundingBox.Height));
             }
-            if (settings.ProportionalToSymmetricDifference)
-            {
-                SetEdgeLengthsProportionalToSymmetricDifference(component, settings.ProportionalEdgeLengthOffset, settings.ProportionalEdgeLengthAdjustment);
-            }
+            
         }
 
         ///<summary>
