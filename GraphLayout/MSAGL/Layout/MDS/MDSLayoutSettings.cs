@@ -137,7 +137,7 @@ namespace Microsoft.Msagl.Layout.MDS
         /// <summary>
         /// Settings for calculation of ideal edge length
         /// </summary>
-        public EdgeConstraints IdealEdgeLength { get; set; }
+        public EdgeConstraints EdgeConstraints { get; set; }
 
         /// <summary>
         /// Adjust the scale of the graph if there is not enough whitespace between nodes

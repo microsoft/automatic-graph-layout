@@ -500,7 +500,7 @@ namespace Microsoft.Msagl.Layout.Initial {
         }
 
         void MDSLayout(MdsLayoutSettings settings, GeometryGraph component) {
-            LayoutAlgorithmHelpers.ComputeDesiredEdgeLengths(settings.IdealEdgeLength, component);
+            LayoutAlgorithmHelpers.ComputeDesiredEdgeLengths(settings.EdgeConstraints, component);
             var layout = new MdsGraphLayout(settings, component);
             layout.Run(this.CancelToken);
             InitialLayoutHelpers.RouteEdges(component, settings, this.CancelToken);
