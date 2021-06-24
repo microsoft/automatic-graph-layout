@@ -34,14 +34,14 @@ namespace Microsoft.Msagl.Miscellaneous {
                 var rankingLayoutSettings = settings as RankingLayoutSettings;
                 var rankingLayout = new RankingLayout(rankingLayoutSettings, geometryGraph);
                 rankingLayout.Run(cancelToken);
-                RouteAndLabelEdges(geometryGraph, settings, geometryGraph.Edges);
+                RouteAndLabelEdges(geometryGraph, settings, geometryGraph.Edges, 0, cancelToken);
             }
             else if (settings is MdsLayoutSettings) {
                 var mdsLayoutSettings = settings as MdsLayoutSettings;
                 var mdsLayout = new MdsGraphLayout(mdsLayoutSettings, geometryGraph);
                 mdsLayout.Run(cancelToken);
                 if (settings.EdgeRoutingSettings.EdgeRoutingMode != EdgeRoutingMode.None)
-                    RouteAndLabelEdges(geometryGraph, settings, geometryGraph.Edges);
+                    RouteAndLabelEdges(geometryGraph, settings, geometryGraph.Edges, 0, cancelToken);
             }
             else if (settings is FastIncrementalLayoutSettings) {
                 var incrementalSettings = settings as FastIncrementalLayoutSettings;
@@ -49,7 +49,7 @@ namespace Microsoft.Msagl.Miscellaneous {
                 var initialLayout = new InitialLayout(geometryGraph, incrementalSettings);
                 initialLayout.Run(cancelToken);
                 if (settings.EdgeRoutingSettings.EdgeRoutingMode != EdgeRoutingMode.None)
-                    RouteAndLabelEdges(geometryGraph, settings, geometryGraph.Edges);
+                    RouteAndLabelEdges(geometryGraph, settings, geometryGraph.Edges, 0, cancelToken);
                 //incrementalSettings.IncrementalRun(geometryGraph);
             }
             else {
@@ -93,7 +93,7 @@ namespace Microsoft.Msagl.Miscellaneous {
                 initialBc.Run(cancelToken);
                 //route the rest of the edges, those between the clusters
                 var edgesToRoute = sugiyamaLayoutSettings.EdgeRoutingSettings.EdgeRoutingMode == EdgeRoutingMode.SplineBundling ? geometryGraph.Edges.ToArray() : geometryGraph.Edges.Where(e => e.Curve == null).ToArray();
-                RouteAndLabelEdges(geometryGraph, sugiyamaLayoutSettings, edgesToRoute);
+                RouteAndLabelEdges(geometryGraph, sugiyamaLayoutSettings, edgesToRoute, 0, cancelToken);
             }
             else
                 geometryGraph.AlgorithmData = SugiyamaLayoutSettings.CalculateLayout(geometryGraph,
@@ -182,44 +182,46 @@ namespace Microsoft.Msagl.Miscellaneous {
         /// <param name="geometryGraph"></param>
         /// <param name="layoutSettings"></param>
         /// <param name="edgesToRoute"></param>
-        public static void RouteAndLabelEdges(GeometryGraph geometryGraph, LayoutAlgorithmSettings layoutSettings, IEnumerable<Edge> edgesToRoute) {
+        public static void RouteAndLabelEdges(GeometryGraph geometryGraph, LayoutAlgorithmSettings layoutSettings, IEnumerable<Edge> edgesToRoute, int straighLineRoutingThreshold, CancelToken cancelToken) {
             //todo: what about parent edges!!!!
             var filteredEdgesToRoute =
                 edgesToRoute.Where(e => !e.UnderCollapsedCluster()).ToArray();
+            
             var ers = layoutSettings.EdgeRoutingSettings;
-            if (ers.EdgeRoutingMode == EdgeRoutingMode.Rectilinear ||
-                ers.EdgeRoutingMode == EdgeRoutingMode.RectilinearToCenter) {
+            var mode = (straighLineRoutingThreshold == 0 || geometryGraph.Nodes.Count < straighLineRoutingThreshold) ? ers.EdgeRoutingMode : EdgeRoutingMode.StraightLine; 
+            if (mode == EdgeRoutingMode.Rectilinear ||
+                mode == EdgeRoutingMode.RectilinearToCenter) {
                 RectilinearInteractiveEditor.CreatePortsAndRouteEdges(
                     layoutSettings.NodeSeparation / 3,
                     layoutSettings.NodeSeparation / 3,
                     geometryGraph.Nodes,
                     edgesToRoute,
-                    ers.EdgeRoutingMode,
+                    mode,
                     true,
                     ers.UseObstacleRectangles,
-                    ers.BendPenalty);
+                    ers.BendPenalty, cancelToken);
             }
-            else if (ers.EdgeRoutingMode == EdgeRoutingMode.Spline || ers.EdgeRoutingMode == EdgeRoutingMode.SugiyamaSplines) {
+            else if (mode == EdgeRoutingMode.Spline || mode == EdgeRoutingMode.SugiyamaSplines) {
                 new SplineRouter(geometryGraph, filteredEdgesToRoute, ers.Padding, ers.PolylinePadding, ers.ConeAngle, null) {
                     ContinueOnOverlaps = true,
                     KeepOriginalSpline = ers.KeepOriginalSpline
-                }.Run();
+                }.Run(cancelToken);
             }
-            else if (ers.EdgeRoutingMode == EdgeRoutingMode.SplineBundling) {
+            else if (mode == EdgeRoutingMode.SplineBundling) {
                 var edgeBundlingSettings = ers.BundlingSettings ?? new BundlingSettings();
                 var bundleRouter = new SplineRouter(geometryGraph, filteredEdgesToRoute, ers.Padding, ers.PolylinePadding, ers.ConeAngle,
                                                     edgeBundlingSettings) {
                     KeepOriginalSpline = ers.KeepOriginalSpline
                 };
-                bundleRouter.Run();
+                bundleRouter.Run(cancelToken);
                 if (bundleRouter.OverlapsDetected) {
                     new SplineRouter(geometryGraph, filteredEdgesToRoute, ers.Padding, ers.PolylinePadding, ers.ConeAngle, null) {
                         ContinueOnOverlaps = true,
                         KeepOriginalSpline = ers.KeepOriginalSpline
-                    }.Run();
+                    }.Run(cancelToken);
                 }
             }
-            else if (ers.EdgeRoutingMode == EdgeRoutingMode.StraightLine) {
+            else if (mode == EdgeRoutingMode.StraightLine) {
                 var router = new StraightLineEdges(filteredEdgesToRoute, ers.Padding);
                 router.Run();
             }

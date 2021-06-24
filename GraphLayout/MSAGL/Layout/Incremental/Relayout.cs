@@ -87,7 +87,7 @@ namespace Microsoft.Msagl.Layout.Initial {
             // routing edges that cross cluster boundaries
             InitialLayoutByCluster.RouteParentEdges(graph, clusterSettings(graph.RootCluster).EdgeRoutingSettings);
             LayoutHelpers.RouteAndLabelEdges(graph, clusterSettings(graph.RootCluster),
-                graph.Edges.Where(BetweenClusterOnTheRightLevel));
+                graph.Edges.Where(BetweenClusterOnTheRightLevel), 0, this.CancelToken);
 
             graph.UpdateBoundingBox();
 

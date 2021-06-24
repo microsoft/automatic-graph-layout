@@ -3063,7 +3063,7 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
         {
             var geomEdge = GeometryGraphCreator.CreateGeometryEdgeFromDrawingEdge(drawingEdge);
             var geomGraph = _drawingGraph.GeometryGraph;
-            LayoutHelpers.RouteAndLabelEdges(geomGraph, _drawingGraph.LayoutAlgorithmSettings, new[] { geomEdge });
+            LayoutHelpers.RouteAndLabelEdges(geomGraph, _drawingGraph.LayoutAlgorithmSettings, new[] { geomEdge }, 0, null);
             return CreateEdge(drawingEdge);
         }
 

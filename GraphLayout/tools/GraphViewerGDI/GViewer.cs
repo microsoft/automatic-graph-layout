@@ -970,7 +970,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       geometryEdge.SourcePort = drawingEdge.SourcePort;
       geometryEdge.TargetPort = drawingEdge.TargetPort;
       LayoutHelpers.RouteAndLabelEdges(this.Graph.GeometryGraph, Graph.LayoutAlgorithmSettings,
-                                       new[] { geometryEdge });
+                                       new[] { geometryEdge }, 0, null);
 
       var dEdge = new DEdge(DGraph.FindDNode(drawingEdge.SourceNode.Id), DGraph.FindDNode(drawingEdge.TargetNode.Id),
                             drawingEdge, ConnectionToGraph.Disconnected, this);
@@ -1828,24 +1828,14 @@ namespace Microsoft.Msagl.GraphViewerGdi {
           if (!(settings is SugiyamaLayoutSettings)) //fix wrong settings coming from the Sugiyama
             if (settings.EdgeRoutingSettings.EdgeRoutingMode == EdgeRoutingMode.SugiyamaSplines)
               settings.EdgeRoutingSettings.EdgeRoutingMode = EdgeRoutingMode.Spline;
-          if (layoutSettingsForm.Wrapper.RerouteOnly == false)
-            Graph = Graph; //recalculate the layout
-          else {
-            EdgeRoutingSettings ers = settings.EdgeRoutingSettings;
-
-            if (ers.EdgeRoutingMode == EdgeRoutingMode.SplineBundling) {
-              var br = new SplineRouter(Graph.GeometryGraph, ers.Padding, ers.PolylinePadding,
-                                        ers.ConeAngle, ers.BundlingSettings);
-              br.Run();
-            }
-            else {
-              var sp = new SplineRouter(Graph.GeometryGraph, ers.Padding,
-                                        ers.PolylinePadding, ers.ConeAngle, ers.BundlingSettings);
-              sp.Run();
-            }
-            foreach (IViewerObject e in Entities.Where(e => e is IViewerEdge))
-              Invalidate(e);
-          }
+                    if (layoutSettingsForm.Wrapper.RerouteOnly == false)
+                        Graph = Graph; //recalculate the layout
+                    else {
+                        LayoutHelpers.RouteAndLabelEdges(Graph.GeometryGraph, settings, Graph.GeometryGraph.Edges, 0, null);
+                     
+                        foreach (IViewerObject e in Entities.Where(e => e is IViewerEdge))
+                            Invalidate(e);
+                    }
         }
       }
       else if (Graph != null)

@@ -28,10 +28,10 @@ namespace Microsoft.Msagl.Routing.Rectilinear{
         static public void CreatePortsAndRouteEdges(double cornerFitRadius, double padding
                             , IEnumerable<Node> obstacleNodes, IEnumerable<Edge> geometryEdges
                             , EdgeRoutingMode edgeRoutingMode, bool useSparseVisibilityGraph
-                            , bool useObstacleRectangles, double bendPenaltyAsAPercentageOfDistance) {
+                            , bool useObstacleRectangles, double bendPenaltyAsAPercentageOfDistance, CancelToken ct = null) {
             var r = FillRouter(cornerFitRadius, padding, obstacleNodes, geometryEdges, edgeRoutingMode, useSparseVisibilityGraph
                             , useObstacleRectangles, bendPenaltyAsAPercentageOfDistance);
-            r.Run();
+            r.Run(ct);
             CreateSelfEdges(geometryEdges.Where(e => e.SourcePort.Location == e.TargetPort.Location), cornerFitRadius);
         }
 
