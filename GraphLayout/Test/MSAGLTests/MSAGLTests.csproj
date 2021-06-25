@@ -140,6 +140,7 @@
     <Compile Include="RTreeTest.cs" />
     <Compile Include="Layout\Layered\SugiyamaConstraintTests.cs" />
     <Compile Include="Layout\Layered\SugiyamaLayoutTests.cs" />
+    <Compile Include="GenericBinaryHeapPriorityQueue.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\MsaglGeometryGraphs\graph0.msagl.geom">

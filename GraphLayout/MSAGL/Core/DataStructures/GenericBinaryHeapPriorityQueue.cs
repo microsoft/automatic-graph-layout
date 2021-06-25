@@ -56,9 +56,7 @@ namespace Microsoft.Msagl.Core.DataStructures {
 
             heapSize++;
             int i = heapSize;
-            GenericHeapElement<T> h;
-
-            A[i] = cache[element] = h = new GenericHeapElement<T>(i, priority, element);
+            A[i] = cache[element] = new GenericHeapElement<T>(i, priority, element);
             while (i > 1 && A[i >> 1].priority.CompareTo(priority) > 0) {
                 SwapWithParent(i);
                 i >>= 1;
@@ -146,26 +144,7 @@ namespace Microsoft.Msagl.Core.DataStructures {
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static void Test() {
-            var q = new GenericBinaryHeapPriorityQueue<int>();
-            q.Enqueue(2, 2);
-            q.Enqueue(1, 1);
-            q.Enqueue(9, 9);
-            q.Enqueue(8, 8);
-            q.Enqueue(5, 5);
-            q.Enqueue(3, 3);
-            q.Enqueue(4, 4);
-            q.Enqueue(7, 7);
-            q.Enqueue(6, 6);
-            q.Enqueue(0, 0);
-
-            q.DecreasePriority(4, 2.5);
-
-            while (q.IsEmpty() == false)
-                System.Diagnostics.Debug.WriteLine(q.Dequeue());
-
-
-        }
+        
         /// <summary>
         /// enumerator
         /// </summary>

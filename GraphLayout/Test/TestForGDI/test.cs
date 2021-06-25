@@ -118,10 +118,7 @@ namespace TestForGdi {
 
                     // Start with some specific tests that we'll just pass arguments to.
                     // These are not "-" prefixed.
-                    if ("testbinaryqueue" == s) {
-                        GenericBinaryHeapPriorityQueue<int>.Test();
-                        showForm = false;
-                    } else {
+                    {
                         switch (s) {
                             case "deb11":
                                 TestDeb11();
