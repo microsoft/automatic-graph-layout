@@ -57,7 +57,7 @@ namespace Microsoft.Msagl.Layout.MDS
             Node pivot = nodes[0];
             pivotArray[0] = 0;
             for (int i = 0; ; i++) {
-                var ssd = new SingleSourceDistances(graph, pivot, directed);
+                var ssd = new SingleSourceDistances(graph, pivot);
                 ssd.Run();
                 Result[i] = ssd.Result;
                 if (i + 1 < pivotArray.Length)

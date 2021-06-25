@@ -15,8 +15,7 @@ namespace Microsoft.Msagl.Layout.MDS
     {
         private GeometryGraph graph;
 
-        private bool directed;
-
+        
         /// <summary>
         /// The resulting distances between every pair of nodes in the graph.
         /// </summary>
@@ -30,10 +29,10 @@ namespace Microsoft.Msagl.Layout.MDS
         /// <param name="graph">A graph.</param>
         /// <param name="directed">Whether shortest paths are directed.</param>
         /// <returns>A square matrix with shortest path distances.</returns>
-        public AllPairsDistances(GeometryGraph graph, bool directed)
+        public AllPairsDistances(GeometryGraph graph)
         {
             this.graph = graph;
-            this.directed = directed;
+           
         }
 
         /// <summary>
@@ -46,7 +45,7 @@ namespace Microsoft.Msagl.Layout.MDS
             int i = 0;
             foreach (Node source in graph.Nodes)
             {
-                SingleSourceDistances distances = new SingleSourceDistances(graph, source, directed);
+                SingleSourceDistances distances = new SingleSourceDistances(graph, source);
                 distances.Run();
 
                 Result[i] = distances.Result;
@@ -82,7 +81,7 @@ namespace Microsoft.Msagl.Layout.MDS
             {
                 return stress;
             }
-            var apd = new AllPairsDistances(graph, false);
+            var apd = new AllPairsDistances(graph);
             apd.Run();
             var D = apd.Result;
             double l = graph.Edges.Average(e => e.Length);

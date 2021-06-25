@@ -15,8 +15,7 @@ namespace Microsoft.Msagl.Layout.MDS {
 
         private Node source;
 
-        private bool directed;
-
+        
         /// <summary>
         /// Dijkstra algorithm. Computes graph-theoretic distances from a node to
         /// all other nodes in a graph with nonnegative edge lengths.
@@ -26,11 +25,10 @@ namespace Microsoft.Msagl.Layout.MDS {
         /// <param name="graph">A graph.</param>
         /// <param name="source">The source node.</param>
         /// <param name="directed">Whether the graph is directed.</param>
-        public SingleSourceDistances(GeometryGraph graph, Node source, bool directed)
+        public SingleSourceDistances(GeometryGraph graph, Node source)
         {
             this.graph = graph;
             this.source = source;
-            this.directed = directed;
         }
 
         /// <summary>
@@ -64,9 +62,7 @@ namespace Microsoft.Msagl.Layout.MDS {
                 Node u = q.Dequeue(out prio);
                 d[u] = prio;
                 IEnumerator<Edge> enumerator;
-                if (directed)
-                    enumerator = u.OutEdges.GetEnumerator();
-                else
+                
                     enumerator = u.Edges.GetEnumerator();
                 while (enumerator.MoveNext()) {
                     Edge uv = enumerator.Current;

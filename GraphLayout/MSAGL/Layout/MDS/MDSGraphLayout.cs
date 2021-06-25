@@ -98,7 +98,7 @@ namespace Microsoft.Msagl.Layout.MDS {
             ScaleToAverageEdgeLength(geometryGraph, x, y);
             
             if (iter > 0) {
-                AllPairsDistances apd = new AllPairsDistances(geometryGraph, false);
+                AllPairsDistances apd = new AllPairsDistances(geometryGraph);
                 apd.Run();
                 double[][] d = apd.Result;
                 double[][] w = MultidimensionalScaling.ExponentialWeightMatrix(d, exponent);
