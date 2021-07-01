@@ -106,7 +106,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SvgLayerSample", "Samples\S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "agl", "tools\agl\agl.csproj", "{1E85BCE2-6C50-4148-B4AE-B873BFDE77CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PopulateGViwerWithPrecalculatedDrawingGraph", "Samples\PopulateGViwerWithPrecalculatedDrawingGraph\PopulateGViwerWithPrecalculatedDrawingGraph.csproj", "{02053710-70B8-4CEB-80DB-DC55BEDAA2C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PopulateGViewerWithPrecalculatedDrawingGraph", "Samples\PopulateGViwerWithPrecalculatedDrawingGraph\PopulateGViewerWithPrecalculatedDrawingGraph.csproj", "{02053710-70B8-4CEB-80DB-DC55BEDAA2C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
