@@ -481,8 +481,8 @@ namespace Microsoft.Msagl.Drawing {
         /// <summary>
         /// Creates the corresponding geometry graph
         /// </summary>
-        public virtual void CreateGeometryGraph() {
-            GeometryGraph = new GeometryGraphCreator(this).Create();
+        public virtual GeometryGraph CreateGeometryGraph() {
+            return GeometryGraph = new GeometryGraphCreator(this).Create();
         }
 
         /// <summary>

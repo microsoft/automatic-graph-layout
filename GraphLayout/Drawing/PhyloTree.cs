@@ -11,8 +11,8 @@ namespace Microsoft.Msagl.Drawing {
         /// <summary>
         /// creates the geometry graph corresponding to the tree
         /// </summary>
-        public override void CreateGeometryGraph() {
-            this.GeometryGraph = GeometryGraphCreator.CreatePhyloTree(this);
+        public override Core.Layout.GeometryGraph CreateGeometryGraph() {
+            return this.GeometryGraph = GeometryGraphCreator.CreatePhyloTree(this);
         }
 
         /// <summary>

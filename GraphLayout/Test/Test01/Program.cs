@@ -29,16 +29,6 @@ using Edge = Microsoft.Msagl.Core.Layout.Edge;
 using Node = Microsoft.Msagl.Core.Layout.Node;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace TTT {
-    [TestClass]
-
-    public class Foo {
-        [TestMethod]
-        public void Testtest() {
-            Console.WriteLine();
-        }
-    }
-}
 namespace Test01 {
     internal class Program {
         static bool bundling;
