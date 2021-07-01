@@ -3,13 +3,20 @@ digraph G {
 		label = "hello world";
 		a -> b;
 		a -> c;
-		color = pink;
+		color = hot_pink;
 	}
+
 	subgraph cluster_1 {
-		label = "hello world";
-		c -> d;
-		color = pink;
+		label = "MSDOT";
+		style= "dashed";
+		color=purple;
+		x -> y;
+		x -> z;
+		y -> z;
+		y -> q;
 	}
 
-
+	top -> a;
+	top -> y;
+	y -> b;
 }
