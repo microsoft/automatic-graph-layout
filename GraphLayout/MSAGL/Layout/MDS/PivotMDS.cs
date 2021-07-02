@@ -32,7 +32,7 @@ namespace Microsoft.Msagl.Layout.MDS
 
         /// <summary>
         /// Layout graph by the PivotMds method.  Uses spectral techniques to obtain a layout in
-        /// O(n^2) time.
+        /// O(n^2) time if iterations with majorization are used, otherwise it is more like 0(PivotNumber*n).
         /// </summary>
         /// <param name="graph"></param>
         public PivotMDS(GeometryGraph graph)
