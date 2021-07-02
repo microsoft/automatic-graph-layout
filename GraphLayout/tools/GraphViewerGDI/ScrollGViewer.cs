@@ -56,7 +56,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         internal static double Dpi = GetDotsPerInch();
         internal static double dpix;
         internal static double dpiy;
-        readonly MdsLayoutSettings mdsLayoutSettings;
+        public MdsLayoutSettings mdsLayoutSettings;
         readonly RankingLayoutSettings rankingSettings = new RankingLayoutSettings();
         readonly SugiyamaLayoutSettings sugiyamaSettings;
         LayoutMethod currentLayoutMethod = LayoutMethod.UseSettingsOfTheGraph;
@@ -76,7 +76,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// Default constructor
         /// </summary>
         public GViewer(){
-            mdsLayoutSettings = new MdsLayoutSettings();
+            mdsLayoutSettings = new MdsLayoutSettings() { RunInParallel = this.AsyncLayout };
             sugiyamaSettings = new SugiyamaLayoutSettings();
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();

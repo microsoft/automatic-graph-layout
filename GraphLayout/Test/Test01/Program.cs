@@ -454,7 +454,7 @@ namespace Test01 {
             }
 
             if (argsParser.OptionIsUsed(MdsOption))
-                graph.LayoutAlgorithmSettings = new MdsLayoutSettings();
+                graph.LayoutAlgorithmSettings = gviewer.mdsLayoutSettings;
             else if (argsParser.OptionIsUsed(FdOption))
                 graph.LayoutAlgorithmSettings = new FastIncrementalLayoutSettings();
 
