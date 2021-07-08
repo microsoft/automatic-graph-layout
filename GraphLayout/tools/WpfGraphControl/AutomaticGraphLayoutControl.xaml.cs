@@ -3,6 +3,7 @@ using Microsoft.Msagl.Drawing;
 
 namespace Microsoft.Msagl.WpfGraphControl {
     public partial class AutomaticGraphLayoutControl {
+        GraphViewer _graphViewer;
         public AutomaticGraphLayoutControl() {
             InitializeComponent();
             Loaded += (s, e) => SetGraph();
@@ -20,9 +21,11 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 dockPanel.Children.Clear();
                 return;
             }
-            var graphViewer = new GraphViewer();
-            graphViewer.BindToPanel(dockPanel);
-            graphViewer.Graph = Graph;
+            if (_graphViewer == null) {
+                _graphViewer = new GraphViewer();
+                _graphViewer.BindToPanel(dockPanel);
+            }
+            _graphViewer.Graph = Graph;
         }
     }
 }
