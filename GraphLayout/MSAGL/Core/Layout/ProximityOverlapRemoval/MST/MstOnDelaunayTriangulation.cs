@@ -21,23 +21,23 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
         /// Computes the minimum spanning tree on a set of edges
         /// </summary>
         /// <param name="proximityEdges">list of tuples, each representing an edge with: nodeId1, nodeId2, t(overlapFactor), ideal distance, edge weight.</param>
-        /// <param name="sizeId"></param>
+        /// <param name="sizeId"></par­am>
         /// <returns></returns>
-        static internal List<Tuple<int, int, double, double, double>> GetMstOnTuple(List<Tuple<int,int,double,double,double>> proximityEdges, int sizeId) {
+        static internal List<OverlappedEdge> GetMstOnTuple(List<OverlappedEdge> proximityEdges, int sizeId) {
             if (proximityEdges.Count == 0)
             {
                 return null;
             }
-            var intPairs = proximityEdges.Select(t => new IntPair(t.Item1, t.Item2)).ToArray();
-            var weighting = new Dictionary<IntPair, Tuple<int, int, double, double, double>>(intPairs.Count());
+            var intPairs = proximityEdges.Select(t => new IntPair(t.source, t.target)).ToArray();
+            var weighting = new Dictionary<IntPair, OverlappedEdge>(intPairs.Count());
             for (int i = 0; i < proximityEdges.Count; i++) {
                 weighting[intPairs[i]] = proximityEdges[i];
             }
             var graph = new BasicGraphOnEdges<IEdge>(intPairs, sizeId);
 
-            var mstOnBasicGraph = new MinimumSpanningTreeByPrim(graph, intPair => weighting[(IntPair)intPair].Item5, intPairs[0].First);
+            var mstOnBasicGraph = new MinimumSpanningTreeByPrim(graph, intPair => weighting[(IntPair)intPair].weight, intPairs[0].First);
 
-            List<Tuple<int, int, double, double, double>> treeEdges = mstOnBasicGraph.GetTreeEdges().Select(e => weighting[(IntPair) e]).ToList();
+            List<OverlappedEdge> treeEdges = mstOnBasicGraph.GetTreeEdges().Select(e => weighting[(IntPair) e]).ToList();
             return treeEdges;
         }
 

@@ -7,7 +7,7 @@ using Microsoft.Msagl.Layout.LargeGraphLayout;
 
 namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTree {
     internal class MstLineSweeper {
-        readonly List<Tuple<int, int, double, double, double>> _proximityEdges;
+        readonly List<OverlappedEdge> _proximityEdges;
         readonly Size[] _nodeSizes;
         readonly Point[] _nodePositions;
         readonly bool _forLayers;
@@ -15,7 +15,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
         BinaryHeapPriorityQueue _q;
         int _numberOfOverlaps = 0;
 
-        public MstLineSweeper(List<Tuple<int, int, double, double, double>> proximityEdges, Size[] nodeSizes, Point[] nodePositions, bool forLayers) {
+        public MstLineSweeper(List<OverlappedEdge> proximityEdges, Size[] nodeSizes, Point[] nodePositions, bool forLayers) {
             _proximityEdges = proximityEdges;
             _nodeSizes = nodeSizes;
             _nodePositions = nodePositions;
@@ -65,7 +65,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
                 var tuple = GTreeOverlapRemoval.GetIdealEdgeLength(i, j,
                     _nodePositions[i], _nodePositions[j], _nodeSizes, _forLayers);
 
-                if (!(tuple.Item3 > 1))
+                if (!(tuple.overlapFactor > 1))
                     return;
                 _proximityEdges.Add(tuple);
                 _numberOfOverlaps++;

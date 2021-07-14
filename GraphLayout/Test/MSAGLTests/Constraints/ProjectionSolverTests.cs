@@ -19,6 +19,7 @@ namespace Microsoft.Msagl.UnitTests.Constraints
     ///  File-independent tests for ProjectionSolver.
     /// </summary>
     [TestClass]
+    [Ignore]
     public class ProjectionSolverTests : ProjectionSolverVerifier
     {
         [TestMethod]

@@ -14,6 +14,7 @@ namespace Microsoft.Msagl.UnitTests.Constraints
     ///  File-dependent tests for ProjectionSolver.
     /// </summary>
     [TestClass]
+    [Ignore]
     [DeploymentItem(@"Resources\Constraints\ProjectionSolver\Data", @"Constraints\ProjectionSolver\Data")]
     public class ProjectionSolverFileTests : ProjectionSolverVerifier
     {
