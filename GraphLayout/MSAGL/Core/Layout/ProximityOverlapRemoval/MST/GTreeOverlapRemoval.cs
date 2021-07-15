@@ -180,7 +180,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
                     var nodeId2 = siteIndex[edge.lowerSite];
                     Debug.Assert(ApproximateComparer.Close(point1, nodePositions[nodeId1]));
                     Debug.Assert(ApproximateComparer.Close(point2, nodePositions[nodeId2]));
-                    var tuple = GetIdealEdgeLength(nodeId1, nodeId2, point1, point2, nodeSizes, _overlapForLayers);
+                    var tuple = GetIdealEdge(nodeId1, nodeId2, point1, point2, nodeSizes, _overlapForLayers);
                     proximityEdges.Add(tuple);
                     if (tuple.overlapFactor > 1) numCrossings++;
                 }
@@ -223,7 +223,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
         /// <param name="nodeSizes"></param>
         /// <param name="forLayers"></param>
         /// <returns></returns>
-        internal static OverlappedEdge GetIdealEdgeLength(int nodeId1, int nodeId2,
+        internal static OverlappedEdge GetIdealEdge(int nodeId1, int nodeId2,
             Point point1,
             Point point2,
             Size[] nodeSizes, bool forLayers) {

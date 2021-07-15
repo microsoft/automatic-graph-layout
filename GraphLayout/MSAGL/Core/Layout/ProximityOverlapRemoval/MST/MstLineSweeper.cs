@@ -62,7 +62,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
                 return;
             var interval = GetInterval(i);
             foreach (int j in _intervalTree.GetAllIntersecting(interval)) {
-                var tuple = GTreeOverlapRemoval.GetIdealEdgeLength(i, j,
+                var tuple = GTreeOverlapRemoval.GetIdealEdge(i, j,
                     _nodePositions[i], _nodePositions[j], _nodeSizes, _forLayers);
 
                 if (!(tuple.overlapFactor > 1))
