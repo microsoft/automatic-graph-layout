@@ -276,7 +276,7 @@ namespace Microsoft.Msagl.Layout.Initial {
                 foreach (var cl in cluster.Clusters)
                     LayoutCluster(cl);
 
-            List<GeometryGraph> components = (List<GeometryGraph>)GetComponents(cluster, settings.LiftCrossEdges);
+            List<GeometryGraph> components = (List<GeometryGraph>)GetComponents(cluster, settings.LiftCrossEdges, settings.NodeSeparation);
 
             //currentComponentFraction = (1.0 / clusterCount) / components.Count;
 
@@ -353,7 +353,7 @@ namespace Microsoft.Msagl.Layout.Initial {
         /// <param name="cluster">cluster to break into components</param>
         /// <param name="liftCrossEdges">set this to consider lower-level edges while arranging subclusters</param>
         /// <returns>GeometryGraphs that are each a connected component</returns>
-        static IEnumerable<GeometryGraph> GetComponents(Cluster cluster, bool liftCrossEdges) {
+        static IEnumerable<GeometryGraph> GetComponents(Cluster cluster, bool liftCrossEdges, double nodeSeparation) {
             // Create a copy of the cluster's nodes. Some or all of these may also be clusters. We call these "top nodes".
             Dictionary<Node, Node> originalToCopyNodeMap = ShallowNodeCopyDictionary(cluster);
             var copiedEdges = new List<Edge>();
@@ -387,7 +387,7 @@ namespace Microsoft.Msagl.Layout.Initial {
                 }
             }
 
-            return GraphConnectedComponents.CreateComponents(originalToCopyNodeMap.Values.ToArray(), copiedEdges);
+            return GraphConnectedComponents.CreateComponents(originalToCopyNodeMap.Values.ToArray(), copiedEdges, nodeSeparation);
         }
 
         /// <summary>

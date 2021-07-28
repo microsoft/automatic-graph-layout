@@ -59,7 +59,7 @@ namespace Microsoft.Msagl.Prototype.Ranking {
         /// </summary>
         protected override void RunInternal()
         {
-            GeometryGraph[] graphs = GraphConnectedComponents.CreateComponents(graph.Nodes, graph.Edges).ToArray();
+            GeometryGraph[] graphs = GraphConnectedComponents.CreateComponents(graph.Nodes, graph.Edges, this.settings.NodeSeparation).ToArray();
             // layout components, compute bounding boxes
 
             for (int i = 0; i < graphs.Length; i++)

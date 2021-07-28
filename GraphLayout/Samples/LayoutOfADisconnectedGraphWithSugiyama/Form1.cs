@@ -66,8 +66,9 @@ namespace LayoutOfADisconnectedGraphWithSugiyama {
 
             var geomGraph=graph.GeometryGraph;
 
-            var geomGraphComponents = GraphConnectedComponents.CreateComponents(geomGraph.Nodes, geomGraph.Edges);
             var settings = new SugiyamaLayoutSettings();
+            var geomGraphComponents = GraphConnectedComponents.
+                CreateComponents(geomGraph.Nodes, geomGraph.Edges, 0 );
             foreach (var subgraph in geomGraphComponents) {
                
                 var layout=new LayeredLayout(subgraph, settings);

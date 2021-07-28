@@ -104,7 +104,7 @@ namespace Microsoft.Msagl.Core.Layout {
         /// result in the Node InEdges and OutEdges lists containing duplicates.
         /// </remarks>
         /// <returns></returns>
-        public static IEnumerable<GeometryGraph> CreateComponents(IList<Node> nodes, IEnumerable<Edge> edges) {
+        public static IEnumerable<GeometryGraph> CreateComponents(IList<Node> nodes, IEnumerable<Edge> edges, double nodeSeparation) {
             ValidateArg.IsNotNull(nodes, "nodes");
             ValidateArg.IsNotNull(edges, "edges");
             var nodeIndex = new Dictionary<Node, int>();
@@ -124,7 +124,8 @@ namespace Microsoft.Msagl.Core.Layout {
             var nodeToGraph = new Dictionary<Node, GeometryGraph>();
             var graphs = new List<GeometryGraph>();
             foreach (var c in components) {
-                var g = new GeometryGraph();
+                var g = new GeometryGraph() { Margins = nodeSeparation/2 };
+
                 foreach (var i in c) {
                     var v = nodes[i];
                     g.Nodes.Add(v);

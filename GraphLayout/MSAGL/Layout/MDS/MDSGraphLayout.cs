@@ -119,7 +119,7 @@ namespace Microsoft.Msagl.Layout.MDS {
         /// the layouts for connected components together.
         /// </summary>
         internal void LayoutConnectedComponents() {           
-            GeometryGraph[] graphs = GraphConnectedComponents.CreateComponents(graph.Nodes, graph.Edges).ToArray();
+            GeometryGraph[] graphs = GraphConnectedComponents.CreateComponents(graph.Nodes, graph.Edges, this.settings.NodeSeparation).ToArray();
             // layout components, compute bounding boxes
 
             if (settings.RunInParallel) {
@@ -170,6 +170,8 @@ namespace Microsoft.Msagl.Layout.MDS {
             {
                 GTreeOverlapRemoval.RemoveOverlaps(compGraph.Nodes.ToArray(), settings.NodeSeparation);
             }
+            
+
             compGraph.BoundingBox = compGraph.PumpTheBoxToTheGraphWithMargins();
         }
 

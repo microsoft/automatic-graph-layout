@@ -13,6 +13,8 @@ using System.IO;
 using Microsoft.Msagl.Routing.Spline.Bundling;
 using Microsoft.Msagl.GraphViewerGdi;
 
+
+
 namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
     [TestClass]
     public class CdtTests { 
@@ -108,7 +110,19 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
             Assert.IsTrue(tri0.Edges[0] == tri.Edges[1]);
             Assert.IsTrue(tri.Edges[1].CcwTriangle != null && tri.Edges[1].CwTriangle != null);
         }
-
+        [Ignore]
+        [TestMethod]
+        public void FlatLine() {
+#if TEST_MSAGL
+            GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
+#endif
+            var points = new List<Point> { new Point(0, 0), new Point(100, 0), new Point(300, 0) };
+            var cdt = new Cdt(points, null, null);
+            cdt.Run();
+#if TEST_MSAGL
+CdtSweeper.ShowFront(cdt.GetTriangles(), null, null, null);
+#endif
+        }
         [TestMethod]
         public void SmallTriangulation() {
 #if TEST_MSAGL
