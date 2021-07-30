@@ -3217,6 +3217,8 @@ namespace Microsoft.Msagl.GraphmapsWpfControl
             get { return _visibleRailsToFrameworkElems.Count; }
         }
 
+        public bool IncrementalDraggingModeAlways => false;
+
         public void DrawRubberLine(Point rubberEnd)
         {
             if (_rubberLinePath == null)

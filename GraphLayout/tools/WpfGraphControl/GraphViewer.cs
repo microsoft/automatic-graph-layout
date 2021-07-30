@@ -1709,5 +1709,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
                     ve.Invalidate();
             }
         }
+        public bool IncrementalDraggingModeAlways { get; set; }
     }
 }

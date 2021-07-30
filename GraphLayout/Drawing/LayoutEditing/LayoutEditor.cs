@@ -815,7 +815,9 @@ namespace Microsoft.Msagl.Drawing {
         }
         
         DraggingMode GetDraggingMode() {
-            return (viewer.ModifierKeys & ModifierKeys.Shift) == ModifierKeys.Shift
+            bool incremental = (viewer.ModifierKeys & ModifierKeys.Shift) == ModifierKeys.Shift
+                            || viewer.IncrementalDraggingModeAlways;
+            return incremental
                     ? DraggingMode.Incremental
                     : DraggingMode.Default;
 

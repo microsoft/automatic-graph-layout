@@ -452,6 +452,8 @@ namespace Microsoft.Msagl.GraphViewerGdi{
             get { return UnderlyingPolylineCircleRadius*2; }
         }
 
+        public bool IncrementalDraggingModeAlways { get; set; }
+
         #endregion
 
         void CalcDestRect() {
