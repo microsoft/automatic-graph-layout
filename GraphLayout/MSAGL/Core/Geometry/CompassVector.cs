@@ -3,51 +3,12 @@ using System.Diagnostics;
 
 namespace Microsoft.Msagl.Core.Geometry {
     internal struct CompassVector {
-
-        /// <summary>
-        /// Override op==
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static bool operator ==(CompassVector a, CompassVector b) {
-            return a.Dir == b.Dir;
-        }
-
-        /// <summary>
-        /// Return the hash code.
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode() {
-            return (int)Dir;
-        }
-
-        /// <summary>
-        /// Override op!=
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static bool operator !=(CompassVector a, CompassVector b) {
-            return a.Dir != b.Dir;
-        }
-
         internal CompassVector(Direction direction)
             : this() {
             Dir = direction;
         }
 
-        // Warning: do not use for VisibilityGraph generation.  See VectorDirection(a) comments.
-        internal CompassVector(Point a)
-            : this() {
-            Dir = VectorDirection(a);
-        }
-
-        internal CompassVector(Point a, Point b)
-            : this() {
-            Dir = VectorDirection(a, b);
-        }
-
+        
 
         internal Direction Dir { get; set; }
         internal CompassVector Right {
@@ -176,37 +137,10 @@ namespace Microsoft.Msagl.Core.Geometry {
             return IsPureDirection(DirectionsFromPointToPoint(a, b));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(CompassVector other) {
-            return Equals(other.Dir, Dir);
-        }
-
-
         internal static bool DirectionsAreParallel(Direction a, Direction b){
             return a == b || a == OppositeDir(b);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj) {
-            if (ReferenceEquals(null, obj)) return false;
-            if (obj.GetType() != typeof(CompassVector)) return false;
-            return Equals((CompassVector)obj);
-        }
-
-        /// <summary>
-        /// Returns a string representing the direction.
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString() {
-            return Dir.ToString();
-        }
+        
 
         /// <summary>
         /// Translates the CompassVector's direction into a new Point.
@@ -232,23 +166,6 @@ namespace Microsoft.Msagl.Core.Geometry {
         public static Point ToPoint(Direction dir) {
             return (new CompassVector(dir)).ToPoint();
         }
-
-        /// <summary>
-        ///  the negation operator
-        /// </summary>
-        /// <param name="directionVector"></param>
-        /// <returns></returns>
-        public static CompassVector operator -(CompassVector directionVector) {
-            return new CompassVector(OppositeDir(directionVector.Dir));
-        }
-        /// <summary>
-        /// the negation operator
-        /// </summary>
-        /// <returns></returns>
-        public CompassVector Negate() {
-            return -this;
-        }
-
 
     }
 }
