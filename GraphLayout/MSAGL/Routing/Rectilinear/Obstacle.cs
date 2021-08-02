@@ -43,10 +43,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
             RoundVertices(this.PaddedPolyline);
             this.IsRectangle = this.IsPolylineRectangle();
-            if (!this.IsRectangle) {
-                this.ConvertToRectangleIfClose();
-            }
-            InputShape = shape;
+                     InputShape = shape;
             Ports = new Set<Port>(InputShape.Ports);
         }
 
@@ -262,43 +259,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return true;
         }
 
-        // Internal for testing
-        internal void ConvertToRectangleIfClose() {
-            if (this.PaddedPolyline.PolylinePoints.Count() != 4) {
-                return;
-            }
-
-            // We're not a rectangle now but that may be due to rounding error, so we may be close to one.
-            // First check that it's close to an axis.
-            var ppt = this.PaddedPolyline.StartPoint;
-            var nextPpt = ppt.NextOnPolyline;
-            var testPoint = ppt.Point - nextPpt.Point;
-            var slope = ((testPoint.X == 0) || (testPoint.Y == 0)) ? 0 : Math.Abs(testPoint.Y / testPoint.X);
-            const double factor = 1000.0;
-            if ((slope < factor) && (slope > (1.0/factor))) {
-                return;
-            }
-            const double radian90 = 90.0 * (Math.PI/180.0);
-            const double maxAngleDiff = radian90/factor;
-
-            // Now check angles.
-            do {
-                var nextNextPpt = nextPpt.NextOnPolyline;
-                var angle = Point.Angle(ppt.Point, nextPpt.Point, nextNextPpt.Point);
-                if (Math.Abs(radian90 - angle) > maxAngleDiff) {
-                    return;
-                }
-
-                ppt = nextPpt;
-                nextPpt = nextNextPpt;
-            } while (ppt != this.PaddedPolyline.StartPoint);
-
-            this.PaddedPolyline = Curve.PolyFromBox(this.PaddedPolyline.BoundingBox);
-            this.IsRectangle = true;
-            Debug.Assert(this.IsPolylineRectangle(), "PaddedPolyline is not rectangular");
-            return;
-        }
-
+        
         // Return whether there were any port changes, and if so which were added and removed.
         internal bool GetPortChanges(out Set<Port> addedPorts, out Set<Port> removedPorts) {
             addedPorts = InputShape.Ports - Ports;
