@@ -1207,19 +1207,17 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         }
 
 
-        //    static bool debug;
         static bool AllIntersectionsAreGood(IList<IntersectionInfo> intersections, ICurve polygon) {
-            // If this isn't a Curve, try a Polyline.
-            //TODO: fix this to avoid the cast
-            var polyCurve = polygon as Curve;
-            if (null == polyCurve) {
+            var curve = polygon as Curve;
+            if (curve == null) {
+                // If this isn't a Curve, try a Polyline.
                 var polyLine = polygon as Polyline;
-                if (null != polyLine)
-                    polyCurve = polyLine.ToCurve();
+                if (polyLine != null)
+                    curve = polyLine.ToCurve();
             }
-            if (null != polyCurve)
+            if (curve != null)
                 foreach (IntersectionInfo xx in intersections)
-                    if (!RealCut(DropIntersectionToSegs(xx), polyCurve, false))
+                    if (!RealCut(DropIntersectionToSegs(xx), curve, false))
                         return false;
             return true;
         }

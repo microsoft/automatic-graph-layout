@@ -44,6 +44,8 @@ namespace Test01 {
         const string TestCdtOption1 = "-tcdt1";
         const string ReverseXOption = "-rx";
         const string MdsOption = "-mds";
+        const string RectRoutingOption = "-rect";
+
         const string FdOption = "-fd";
         const string EdgeSeparationOption = "-es";
         const string RecoverSugiyamaTestOption = "-rst";
@@ -488,6 +490,9 @@ namespace Test01 {
                     }
                 }
             }
+            if (argsParser.OptionIsUsed(RectRoutingOption)) {
+                graph.LayoutAlgorithmSettings.EdgeRoutingSettings.EdgeRoutingMode = EdgeRoutingMode.Rectilinear;                
+            }
 
             gviewer.Graph = graph;
             string svgout = argsParser.GetStringOptionValue(SvgFileNameOption);
@@ -741,6 +746,7 @@ namespace Test01 {
             argsParser.AddAllowedOptionWithHelpString(ReverseXOption, "reversing X coordinate");
             argsParser.AddOptionWithAfterStringWithHelp(EdgeSeparationOption, "use specified edge separation");
             argsParser.AddAllowedOptionWithHelpString(MdsOption, "use mds layout");
+            argsParser.AddAllowedOptionWithHelpString(RectRoutingOption, "use rect layout");
             argsParser.AddAllowedOptionWithHelpString(FdOption, "use force directed layout");
             argsParser.AddAllowedOptionWithHelpString(ConstraintsTestOption, "test constraints");
             argsParser.AddOptionWithAfterStringWithHelp(InkImportanceOption, "ink importance coefficient");
@@ -754,6 +760,7 @@ namespace Test01 {
             argsParser.AddAllowedOptionWithHelpString(AsyncLayoutOption, "test viewer in the async mode");
 
             if (!argsParser.Parse()) {
+Console.WriteLine(argsParser.ErrorMessage);
                 System.Diagnostics.Debug.WriteLine(argsParser.UsageString());
                 Environment.Exit(1);
             }

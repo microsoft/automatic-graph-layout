@@ -5440,52 +5440,6 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
 
         [TestMethod]
         [Timeout(2000)]
-        [Description("Verify near-rectangle detection in Obstacle")]
-        public void NearRectangleDetection() 
-        {
-            // Currently the test allows an angle of 1/1000.  Start is nonzero so all operations are on positive values.
-            const double sideLen = 1000.0;
-            const double start = 10.0;
-            var origPoints = new[]
-                {
-                    new Point(start, start),
-                    new Point(start, sideLen + start),
-                    new Point(sideLen + start, sideLen + start),
-                    new Point(sideLen + start, start)
-                };
-
-            // Verify the initial basePoints detect a rectangle.
-            var obstacle = new Obstacle(PolylineFromPoints(origPoints), false, RectilinearEdgeRouter.DefaultPadding);
-            Validate.AreEqual(true, obstacle.IsRectangle, "(obstacle from basePoints).IsRectangle");
-
-            // Now test the variations on each corner, in and out of range.  Be a little soft on the ranges
-            // due to the creation of the padded polyline adding some variation.
-            TestRectangleDetection(0.5, origPoints, expected: true);
-            TestRectangleDetection(3.0, origPoints, expected: false);
-        }
-
-        private static void TestRectangleDetection(double offset, Point[] origPoints, bool expected) 
-        {
-            var testPoints = (Point[])origPoints.Clone();
-            for (int ii = 0; ii < testPoints.Length; ++ii) 
-            {
-                testPoints[ii] = origPoints[ii] + new Point(0, offset);
-                TestRectangleDetection(testPoints, expected);
-                testPoints[ii] = origPoints[ii] + new Point(offset, 0);
-                TestRectangleDetection(testPoints, expected);
-                testPoints[ii] = origPoints[ii];
-            }
-        }
-
-        private static void TestRectangleDetection(Point[] testPoints, bool expected)
-        {
-            // obstacle ctor calls ConvertToRectangleIfClose()
-            var obstacle = new Obstacle(PolylineFromPoints(testPoints), false, RectilinearEdgeRouter.DefaultPadding);
-            Validate.AreEqual(expected, obstacle.IsRectangle, "(obstacle from testPoints).IsRectangle");
-        }
-
-        [TestMethod]
-        [Timeout(2000)]
         [Description("Verify the correct removal of vertices that are ApproximateComparer.Close")]
         public void RemoveCloseVerticesFromPolyline() 
         {
