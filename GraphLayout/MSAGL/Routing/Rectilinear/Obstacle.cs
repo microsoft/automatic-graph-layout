@@ -41,7 +41,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 #endif // TEST || VERIFY
             }
 
-            RoundVertices(this.PaddedPolyline);
+            RoundVerticesAndSimplify(this.PaddedPolyline);
             this.IsRectangle = this.IsPolylineRectangle();
                      InputShape = shape;
             Ports = new Set<Port>(InputShape.Ports);
@@ -87,7 +87,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
         internal static Polyline CreateLoosePolyline(Polyline polyline) {
             var loosePolyline = InteractiveObstacleCalculator.CreatePaddedPolyline(polyline, ApproximateComparer.IntersectionEpsilon * 10);
-            RoundVertices(loosePolyline);
+            RoundVerticesAndSimplify(loosePolyline);
             return loosePolyline;
         }
 
@@ -188,7 +188,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return sentinel;
         }
 
-        internal static void RoundVertices(Polyline polyline) {
+        internal static void RoundVerticesAndSimplify(Polyline polyline) {
             // Following creation of the padded border, round off the vertices for consistency
             // in later operations (intersections and event ordering).
             PolylinePoint ppt = polyline.StartPoint;

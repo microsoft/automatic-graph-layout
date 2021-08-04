@@ -29,7 +29,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             this.Obstacles = obstacles.ToList();
             this.PrimaryObstacle = this.Obstacles[0];
 
-            Obstacle.RoundVertices(this.Polyline);
+            Obstacle.RoundVerticesAndSimplify(this.Polyline);
         }
 
         /// <summary>
