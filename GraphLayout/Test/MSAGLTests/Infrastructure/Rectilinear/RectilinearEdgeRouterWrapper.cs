@@ -394,9 +394,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         private void ShowGraphPerPath(Path edgePath, bool lastChance)
         {
             // This is the non-virtual form that calls the virtual/overridden form for the pathPoints.
-            IEnumerable<Path> paths = edgePath.EdgeGeometry.HasWaypoints
-                                    ? base.edgeGeomsToSplittedEdgePaths[edgePath.EdgeGeometry] 
-                                    : new List<Path> { edgePath };
+            IEnumerable<Path> paths =  new List<Path> { edgePath };
             foreach (var path in paths) {
                 // Only verify that this result is non-null if lastChance; otherwise we will retry with additional groups enabled.
                 if (lastChance) {
@@ -443,16 +441,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
                 }
             }
         }
-
-        internal override void UniteEdgeCurvesBetweenWaypoints()
-        {
-            if (this.WantPaths)
-            {
-                base.UniteEdgeCurvesBetweenWaypoints();
-            }
-        }
-
-        internal override void FinaliseEdgeGeometries()
+internal override void FinaliseEdgeGeometries()
         {
             if (this.WantPaths)
             {

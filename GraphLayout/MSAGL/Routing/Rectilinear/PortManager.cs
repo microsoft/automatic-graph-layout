@@ -159,63 +159,10 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
             // Now that we've set any active ancestors, splice in the port visibility.
             AddPortToGraph(edgeGeom.SourcePort, sourceOport);
-            AddPortToGraph(edgeGeom.TargetPort, targetOport);
-
-            AddWaypointsToGraph(edgeGeom);
+            AddPortToGraph(edgeGeom.TargetPort, targetOport);            
         }
 
-        private void AddWaypointsToGraph(EdgeGeometry edgeGeom) {
-            if (null == edgeGeom.Waypoints) {
-                return;
-            }
-
-            // Waypoints form part of a composite path and therefore we want more than just a single entry to out-of-bounds
-            // waypoints, so we can go out from graph, through waypoint, and back to the graph without backtracking along the
-            // same edge. If two waypoints are out of bounds to the same side, make sure there is a single-bend (or 0-bend
-            // if collinear) path between them.
-            FreePoint lastOobWaypoint = null;
-            FreePoint firstWaypoint = null;
-            foreach (var point in edgeGeom.Waypoints) {
-                var freePoint = this.AddFreePointToGraph(point);
-                if (firstWaypoint == null) {
-                    firstWaypoint = freePoint;
-                }
-                if (!freePoint.IsOutOfBounds) {
-                    lastOobWaypoint = null;
-                    continue;
-                }
-
-                if (null != lastOobWaypoint) {
-                    if (!this.ObstacleTree.GraphBox.Intersects(new Rectangle(lastOobWaypoint.Point, freePoint.Point))) {
-                        // They are oob to the same side.
-                        var dirs = PointComparer.GetDirections(lastOobWaypoint.Point, freePoint.Point);
-                        if (CompassVector.IsPureDirection(dirs)) {
-                            this.TransUtil.ConnectVertexToTargetVertex(lastOobWaypoint.Vertex, freePoint.Vertex, dirs, ScanSegment.NormalWeight);
-                        } else {
-                            this.TransUtil.ConnectVertexToTargetVertex(lastOobWaypoint.Vertex, freePoint.Vertex, 
-                                dirs & (Direction.North | Direction.South), ScanSegment.NormalWeight);
-                            this.TransUtil.ConnectVertexToTargetVertex(lastOobWaypoint.Vertex, freePoint.Vertex,
-                                dirs & (Direction.East | Direction.West), ScanSegment.NormalWeight);
-                        }
-                    } else {
-                        // They are both out of bounds but not to the same side, so create a single turn around the corner.
-                        // Nudger doesn't seem to always remove the staircase if we don't.  Don't bother if they are at 
-                        // opposite sides of the graph, including diagonal corners.
-                        if (PointComparer.IsPureDirection(freePoint.OutOfBoundsDirectionFromGraph)
-                                && PointComparer.IsPureDirection(lastOobWaypoint.OutOfBoundsDirectionFromGraph)
-                                && (lastOobWaypoint.OutOfBoundsDirectionFromGraph != CompassVector.OppositeDir(freePoint.OutOfBoundsDirectionFromGraph))) {
-                            this.TransUtil.ConnectVertexToTargetVertex(freePoint.Vertex, lastOobWaypoint.Vertex, 
-                                CompassVector.OppositeDir(freePoint.OutOfBoundsDirectionFromGraph), ScanSegment.NormalWeight);
-                        }
-                    }
-                }
-                lastOobWaypoint = freePoint;
-            }
-
-            ConnectOobWaypointToEndpointVisibilityAtGraphBoundary(firstWaypoint, edgeGeom.SourcePort);
-            ConnectOobWaypointToEndpointVisibilityAtGraphBoundary(lastOobWaypoint, edgeGeom.TargetPort);
-        }
-
+        
         private void ConnectOobWaypointToEndpointVisibilityAtGraphBoundary(FreePoint oobWaypoint, Port port) {
             if ((oobWaypoint == null) || !oobWaypoint.IsOutOfBounds) {
                 return;
@@ -846,11 +793,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // Return the endpoint-containing rectangle marking the limits of edge-chain extension for a single path.
             this.portSpliceLimitRectangle = GetPortRectangle(edgeGeom.SourcePort);
             this.portSpliceLimitRectangle.Add(GetPortRectangle(edgeGeom.TargetPort));
-            if (null != edgeGeom.Waypoints) {
-                foreach (Point waypoint in edgeGeom.Waypoints) {
-                    AddToLimitRectangle(waypoint);
-                }
-            }
+            
         }
 
         Rectangle GetPortRectangle(Port port)

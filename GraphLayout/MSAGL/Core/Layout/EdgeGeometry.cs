@@ -47,18 +47,7 @@ namespace Microsoft.Msagl.Core.Layout {
         /// </summary>
         public Port TargetPort { get; set; }
 
-        /// <summary>
-        ///     A sequence of points that the edge has to pass through
-        /// </summary>
-        public IEnumerable<Point> Waypoints { get; set; }
-
-        /// <summary>
-        ///     Indicates if this EdgeGeometry has waypoints.
-        /// </summary>
-        public bool HasWaypoints {
-            get { return (Waypoints != null) && Waypoints.Any(); }
-        }
-
+        
         /// <summary>
         /// </summary>
         /// <returns></returns>

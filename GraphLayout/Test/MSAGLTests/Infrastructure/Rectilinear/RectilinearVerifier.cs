@@ -501,7 +501,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
                     var sourceLocal = source;
                     foreach (var target in targetEnum.Where(target => sourceLocal != target))
                     {
-                        this.AddRoutingPorts(router, this.GetPort(router, ports, source), this.GetPort(router, ports, target), waypoints);
+                        this.AddRoutingPorts(router, this.GetPort(router, ports, source), this.GetPort(router, ports, target));
                     }
                 }
             } // endifelse all the create-port combinations.
@@ -583,23 +583,21 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
 
         #region Port_Creation
 
-        protected EdgeGeometry AddRoutingPorts(RectilinearEdgeRouter router, Port sourcePort, Port targetPort,
-                                IEnumerable<Point> waypoints = null)
+        protected EdgeGeometry AddRoutingPorts(RectilinearEdgeRouter router, Port sourcePort, Port targetPort
+                                )
         {
             Validate.IsNotNull(router, "Router should not be null");
             var eg = CreateRouting(sourcePort, targetPort);
-            eg.Waypoints = waypoints;
             router.AddEdgeGeometryToRoute(eg);
             return eg;
         }
 
-        protected EdgeGeometry AddRoutingPorts(RectilinearEdgeRouter router, IList<Shape> obstacles, int source, int target,
-                                IEnumerable<Point> waypoints = null)
+        protected EdgeGeometry AddRoutingPorts(RectilinearEdgeRouter router, IList<Shape> obstacles, int source, int target
+                                )
         {
             Validate.IsNotNull(router, "Router should not be null");
             Validate.IsNotNull(obstacles, "Obstacles should not be null");
             var eg = CreateRouting(obstacles[source].Ports.First(), obstacles[target].Ports.First());
-            eg.Waypoints = waypoints;
             router.AddEdgeGeometryToRoute(eg);
             return eg;
         }
@@ -744,60 +742,6 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
 
             var router = CreateRouter(obstacles);
             var connectAtoB = AddRoutingPorts(router, portA, portB);
-
-            // Add the waypoints in a line above the obstacles
-            switch (numPoints)
-            {
-                case 2:
-                    connectAtoB.Waypoints = new List<Point>
-                        {
-                            abox.RightTop + new Point(25, 15),       // between obstacles, left and above
-                            bbox.LeftTop + new Point(-25, 15)        // between obstacles, right and above
-                        };
-                    break;
-                case 3:
-                    connectAtoB.Waypoints = new List<Point>
-                        {
-                            abox.RightTop + new Point(25, -5),       // between obstacles, left and above center but below top
-                            abox.RightBottom + new Point((bbox.Left - abox.Right) / 2, 5), // between obstacles, middle and below center but above bottom
-                            bbox.LeftTop + new Point(-25, -5)        // between obstacles, right and above center but below top
-                        };
-                    break;
-                case 4:
-                    connectAtoB.Waypoints = new List<Point>
-                        {
-                            new Point(abox.Center.X, abox.Top + 15), // above left obstacle
-                            abox.RightTop + new Point(25, 15),       // between obstacles, left and above
-                            bbox.LeftTop + new Point(-25, 15),       // between obstacles, right and above
-                            new Point(bbox.Center.X, bbox.Top + 15)  // above right obstacle
-                        };
-                    break;
-                case 11:
-                    connectAtoB.Waypoints = new List<Point>
-                        {
-                            abox.RightTop + new Point(10, -5),
-                            abox.RightBottom + new Point(20, 5),
-                            abox.RightTop + new Point(30, -5),
-                            abox.RightBottom + new Point(40, 5),
-                            abox.RightTop + new Point(50, -5),
-                            abox.RightBottom + new Point(60, 5),
-                            abox.RightTop + new Point(70, -5),
-                            abox.RightBottom + new Point(80, 5),
-                            abox.RightTop + new Point(90, -5),
-                            abox.RightBottom + new Point(100, 5),
-                            abox.RightTop + new Point(110, -5)
-                        };
-                    break;
-                default:
-                    Validate.Fail("unknown point count");
-                    break;  // StyleCop doesn't know Validate.Fail throws.
-            }
-
-            if (multiplePaths)
-            {
-                var connectCtoB = AddRoutingPorts(router, portC, portB);
-                connectCtoB.Waypoints = new List<Point>(connectAtoB.Waypoints);
-            }
 
             router.Run();
             ShowGraph(router);

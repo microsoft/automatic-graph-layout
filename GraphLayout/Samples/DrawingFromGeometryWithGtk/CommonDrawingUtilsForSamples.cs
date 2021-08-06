@@ -110,10 +110,6 @@ namespace CommonDrawingUtilsForSamples
 
         }
 
-        static PointF PointF(Point point) {
-            return new PointF((float)point.X, (float)point.Y);
-        }
-
         static void DrawArrow(Cairo.Color pen, Cairo.Context graphics, Point start, Point end) {
             float arrowAngle = 30;
 

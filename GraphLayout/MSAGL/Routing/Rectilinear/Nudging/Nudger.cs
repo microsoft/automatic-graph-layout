@@ -668,7 +668,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
 
 
         void BoundAxisEdgeAdjacentToObstaclePort(Port port, AxisEdge axisEdge) {
-            if (port is WaypointPort || (port.Curve == null ))
+            if (port.Curve == null )
                 BoundAxisByPoint(port.Location, axisEdge);
             else  {
                 if (port.Curve.BoundingBox.Contains(port.Location))

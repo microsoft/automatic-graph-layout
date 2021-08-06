@@ -6,21 +6,18 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
-using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.DebugHelpers;
 using Microsoft.Msagl.Routing.Rectilinear.Nudging;
-using Microsoft.Msagl.Routing.Spline.Bundling;
 using Microsoft.Msagl.Routing.Visibility;
 using Microsoft.Msagl.Core;
 
 namespace Microsoft.Msagl.Routing.Rectilinear {
-    
+
     /// <summary>
     /// Provides rectilinear edge routing functionality 
     /// </summary>
@@ -421,8 +418,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             RouteEdges();
         }
 
-        internal Dictionary<EdgeGeometry, IEnumerable<Path>> edgeGeomsToSplittedEdgePaths;
-
+        
         /// <summary>
         /// Calculates the routed edges geometry, optionally forcing re-routing for existing paths.
         /// </summary>
@@ -434,44 +430,21 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         internal virtual void GeneratePaths() {
-            // Split EdgeGeometries with waypoints into a separate Path (containing a separate EdgeGeometry) for each stage.
-            this.edgeGeomsToSplittedEdgePaths = SplitEdgeGeomsWithWaypoints(this.EdgeGeometries);
-
-            // Create a Path for each EdgeGeometry.  GeneratePaths will map from a Path wrapping an EdgeGeometry with waypoints
-            // to the list of split Paths.  Wrapping the EdgeGeometries that do have waypoints with a Path is just to make
-            // GeneratePath easier; those Paths are not used because we must do nudging on each stage, otherwise it will
-            // nudge the path off the waypoints.
-            var edgePathsForGeomsWithNoWaypoints = new List<Path>(this.EdgeGeometries.Where(eg => !eg.HasWaypoints).Select(eg => new Path(eg)));
-            var edgePathsForGeomsWithWaypoints = new List<Path>(this.edgeGeomsToSplittedEdgePaths.Keys.Select(eg => new Path(eg)));
-                
-            this.FillEdgePathsWithShortestPaths(edgePathsForGeomsWithNoWaypoints.Concat(edgePathsForGeomsWithWaypoints));
-            this.NudgePaths(edgePathsForGeomsWithNoWaypoints.Concat(this.edgeGeomsToSplittedEdgePaths.Values.SelectMany(path => path)));
-
-            this.UniteEdgeCurvesBetweenWaypoints();
+            var edgePaths = this.EdgeGeometries.Select(eg => new Path(eg)).ToList();
+            this.FillEdgePathsWithShortestPaths(edgePaths);
+            this.NudgePaths(edgePaths);
             this.RouteSelfEdges();
             this.FinaliseEdgeGeometries();
         }
 
         void RouteSelfEdges() {
             foreach (var edge in selfEdges) {
-                SmoothedPolyline sp;
-                edge.Curve = Edge.RouteSelfEdge(edge.SourcePort.Curve, Math.Max(Padding, 2*edge.GetMaxArrowheadLength()), out sp);
+                edge.Curve = Edge.RouteSelfEdge(edge.SourcePort.Curve, Math.Max(Padding, 2 * edge.GetMaxArrowheadLength()), out SmoothedPolyline sp);
             }
         }
         
 
-        internal virtual void UniteEdgeCurvesBetweenWaypoints() {
-            foreach (var pair in this.edgeGeomsToSplittedEdgePaths) {
-                EdgeGeometry edgeGeom = pair.Key;
-                IEnumerable<Path> splittedPieces = pair.Value;
-                var polyline = new Polyline(splittedPieces.First().EdgeGeometry.Curve as Polyline);
-                foreach (EdgeGeometry piece in splittedPieces.Skip(1).Select(path => path.EdgeGeometry)) {
-                    polyline.AddRangeOfPoints((piece.Curve as Polyline).Skip(1));
-                }
-                edgeGeom.Curve = polyline;
-            }
-        }
-
+       
 #if TEST_MSAGL
         private IEnumerable<DebugCurve> GetGraphDebugCurves() {
             List<DebugCurve> l = 
@@ -480,31 +453,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return l;
         }
 #endif
-
-        private static Dictionary<EdgeGeometry, IEnumerable<Path>> SplitEdgeGeomsWithWaypoints(IEnumerable<EdgeGeometry> edgeGeometries) {
-            var ret = new Dictionary<EdgeGeometry, IEnumerable<Path>>();
-            foreach (EdgeGeometry edgeGeometry in edgeGeometries.Where(eg => eg.HasWaypoints)) {
-                ret[edgeGeometry] = SplitEdgeGeomWithWaypoints(edgeGeometry, edgeGeometry.Waypoints);
-            }
-            return ret;
-        }
-
-        private static IEnumerable<Path> SplitEdgeGeomWithWaypoints(EdgeGeometry edgeGeom, IEnumerable<Point> waypoints) {
-            var ret = new List<Path>();
-            IEnumerator<Point> wp0 = waypoints.GetEnumerator();
-            wp0.MoveNext();
-            ret.Add(new Path(new EdgeGeometry(edgeGeom.SourcePort, new WaypointPort(wp0.Current))));
-
-            IEnumerator<Point> wp1 = waypoints.GetEnumerator();
-            wp1.MoveNext();
-            while (wp1.MoveNext())
-            {
-                ret.Add(new Path(new EdgeGeometry(new WaypointPort(wp0.Current), new WaypointPort(wp1.Current))));
-                wp0.MoveNext();
-            }
-            ret.Add(new Path(new EdgeGeometry(new WaypointPort(wp0.Current), edgeGeom.TargetPort)));
-            return ret;
-        }
 
         private void FillEdgePathsWithShortestPaths(IEnumerable<Path> edgePaths) {
             this.PortManager.BeginRouteEdges();
@@ -517,13 +465,12 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         private void AddControlPointsAndGeneratePath(MsmtRectilinearPath shortestPathRouter, Path edgePath) {
-            if (!edgePath.EdgeGeometry.HasWaypoints) {
-                Point[] intersectPoints = PortManager.GetPortVisibilityIntersection(edgePath.EdgeGeometry);
+            Point[] intersectPoints = PortManager.GetPortVisibilityIntersection(edgePath.EdgeGeometry);
                 if (intersectPoints != null) {
                     GeneratePathThroughVisibilityIntersection(edgePath, intersectPoints);
                     return;
                 }
-            }
+            
             this.SpliceVisibilityAndGeneratePath(shortestPathRouter, edgePath);
         }
 
@@ -556,9 +503,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         internal virtual bool GeneratePath(MsmtRectilinearPath shortestPathRouter, Path edgePath, bool lastChance = false) {
             var sourceVertices = PortManager.FindVertices(edgePath.EdgeGeometry.SourcePort);
             var targetVertices = PortManager.FindVertices(edgePath.EdgeGeometry.TargetPort);
-            return edgePath.EdgeGeometry.HasWaypoints 
-                    ? this.GetMultiStagePath(edgePath, shortestPathRouter, sourceVertices, targetVertices, lastChance) 
-                    : GetSingleStagePath(edgePath, shortestPathRouter, sourceVertices, targetVertices, lastChance);
+            return GetSingleStagePath(edgePath, shortestPathRouter, sourceVertices, targetVertices, lastChance);
         }
 
         private static bool GetSingleStagePath(Path edgePath, MsmtRectilinearPath shortestPathRouter,
@@ -569,35 +514,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             }
             return (edgePath.PathPoints != null);
         }
-
-        private bool GetMultiStagePath(Path edgePath, MsmtRectilinearPath shortestPathRouter,
-                    List<VisibilityVertex> sourceVertices, List<VisibilityVertex> targetVertices, bool lastChance) {
-            var waypointVertices = PortManager.FindWaypointVertices(edgePath.EdgeGeometry.Waypoints);
-            var paths = shortestPathRouter.GetPath(sourceVertices, waypointVertices, targetVertices);
-            if (paths == null) {
-                if (!lastChance) {
-                    return false;
-                }
-
-                // Get each stage individually.  They won't necessarily be ideal but this should be very rare and
-                // with at least one stage being "forced" through obstacles, the path is not good anyway.
-                foreach (var stagePath in this.edgeGeomsToSplittedEdgePaths[edgePath.EdgeGeometry]) {
-                    var stageGeom = stagePath.EdgeGeometry;
-                    GetSingleStagePath(stagePath, shortestPathRouter, this.PortManager.FindVertices(stageGeom.SourcePort),
-                            this.PortManager.FindVertices(stageGeom.TargetPort), lastChance:true);
-                }
-                return true;
-            }
-            
-            // Record the path for each state.
-            var pathsEnum = paths.GetEnumerator();
-            foreach (var stagePath in this.edgeGeomsToSplittedEdgePaths[edgePath.EdgeGeometry]) {
-                pathsEnum.MoveNext();
-                stagePath.PathPoints = pathsEnum.Current;
-            }
-            return true;
-        }
-
+        
         private static void EnsureNonNullPath(Path edgePath) {
             if (null == edgePath.PathPoints) {
                 // Probably a fully-landlocked obstacle such as RectilinearTests.Route_Between_Two_Separately_Landlocked_Obstacles

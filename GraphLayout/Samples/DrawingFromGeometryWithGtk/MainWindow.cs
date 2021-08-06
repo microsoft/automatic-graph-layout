@@ -19,8 +19,6 @@ namespace DrawingFromGeometryWithGtk
         private GeometryGraph graph;
         private double width, height;
 
-        private int _counter;
-
         public MainWindow() : this(new Builder("MainWindow.glade")) { }
 
         private MainWindow(Builder builder) : base(builder.GetRawOwnedObject("MainWindow"))
