@@ -105,18 +105,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // direction during this sweep.
             InitializeEventQueue(ScanDirection.HorizontalInstance);
 
-            // For the first sweep, EnqueueBottomVertexEvents calculates our min/max boundaries.
-            // Validate them here; we need to have enough room to create the sentinels.  We need
-            // only the Padding of the adjacent obstacle(s) for correct line spacing outside these
-            // extreme obstacles, so don't need to pad the sentinels.
-            if ((ObstacleTree.GraphBox.Left <= (Double.MinValue + SentinelOffset))
-                || (ObstacleTree.GraphBox.Bottom <= (Double.MinValue + SentinelOffset))
-                || (ObstacleTree.GraphBox.Right >= (Double.MaxValue - SentinelOffset))
-                || (ObstacleTree.GraphBox.Top >= (Double.MaxValue - SentinelOffset))
-                ) {
-                throw new InvalidOperationException("One or more obstacle boundaries are out of range");
-            }
-
             // Create the sentinels and add them to the scanline.  Do NOT add them to the event queue
             // because we're not going to close them.  We're also effectively adding only the inner side
             // perpendicular to the scan, but we need the polyline for segment-subsumption tracking.
