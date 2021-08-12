@@ -820,8 +820,8 @@ internal override void FinaliseEdgeGeometries()
         private static void GetAscendingRawIntersections(LineSegment hitTestSeg, IList<IntersectionInfo> xxs,
                                             out Point rawInt0, out Point rawInt1, out double par0, out double par1)
         {
-            rawInt0 = SpliceUtility.RawIntersection(xxs[0], hitTestSeg.Start);
-            rawInt1 = SpliceUtility.RawIntersection(xxs[1], hitTestSeg.Start);
+            rawInt0 = ApproximateComparer.Round(xxs[0].IntersectionPoint);
+            rawInt1 = ApproximateComparer.Round(xxs[1].IntersectionPoint);
             par0 = xxs[0].Par1;
             par1 = xxs[1].Par1;
             if (rawInt0 > rawInt1)

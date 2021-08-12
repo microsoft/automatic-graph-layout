@@ -54,7 +54,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                                             oport.Obstacle.VisibilityBoundingBox, UnpaddedBorderIntersect, outDir));
             IList<IntersectionInfo> xxs = Curve.GetAllIntersections(lineSeg, oport.Obstacle.VisibilityPolyline, true /*liftIntersections*/);
             Debug.Assert(1 == xxs.Count, "Expected one intersection");
-            this.VisibilityBorderIntersect = ApproximateComparer.Round(SpliceUtility.RawIntersection(xxs[0], UnpaddedBorderIntersect));
+            this.VisibilityBorderIntersect = ApproximateComparer.Round(xxs[0].IntersectionPoint);
 
             this.MaxVisibilitySegment = obstacleTree.CreateMaxVisibilitySegment(this.VisibilityBorderIntersect,
                     this.OutwardDirection, out this.pointAndCrossingsList);

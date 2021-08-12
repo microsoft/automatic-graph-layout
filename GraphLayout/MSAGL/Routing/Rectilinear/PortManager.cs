@@ -507,8 +507,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // Important:  the LineSegment must be the first arg to GetAllIntersections so RawIntersection works.
             IList<IntersectionInfo> xxs = Curve.GetAllIntersections(lineSeg, curve, true /*liftIntersections*/);
             StaticGraphUtility.Assert(2 == xxs.Count, "Expected two intersections", this.ObstacleTree, this.VisGraph);
-            xx0 = SpliceUtility.RawIntersection(xxs[0], location);
-            xx1 = SpliceUtility.RawIntersection(xxs[1], location);
+            xx0 = ApproximateComparer.Round(xxs[0].IntersectionPoint);
+            xx1 = ApproximateComparer.Round(xxs[1].IntersectionPoint);
         }
 
         private void CreatePortEntrancesAtBorderIntersections(Rectangle curveBox, ObstaclePort oport, Point location

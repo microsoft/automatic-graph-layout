@@ -12,7 +12,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 #if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369
             Point closest = RawIntersection(closestIntersection, rayOrigin).Clone();
 #else
-            Point closest = RawIntersection(closestIntersection, rayOrigin);
+            Point closest = RawIntersection(closestIntersection);
 #endif
             if (isHorizontal) {
                 closest.X = MungeIntersect(rayOrigin.X, closest.X, bbox.Left, bbox.Right);
@@ -41,30 +41,9 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "origin")]
-        static internal Point RawIntersection(IntersectionInfo xx, Point origin) {
-            // If this fires, then you didn't pass the LineSegment as the first argument to GetAllIntersections.
-            Debug.Assert(xx.Segment0 is LineSegment, "LineSegment was not first arg to GetAllIntersections");
+        static internal Point RawIntersection(IntersectionInfo xx) {
 
-            // The intersection snaps the end of the intersection to the PolylinePoint at the start/end
-            // of the interesecting segment on the obstacle if the intersection is Curve.CloseIntersections
-            // to that segment endpoint, which can return a point that is just more than Curve.DistanceEpsilon
-            // off the line.  Therefore, re-create the intersection using the LineSegment and intersection
-            // parameters (this assumes the LineSegment.End is not Curve.CloseIntersections to the intersection).
-            Point point = xx.Segment0[xx.Par0];
-
-#if TEST_MSAGL
-            // This may legitimately be rounding-error'd in the same way as xx.IntersectionPoint (and the
-            // caller addresses this later).  The purpose of the assert is to verify that the LineSegment
-            // interception is not outside the bbox in the perpendicular direction.
-            var lineSeg = (LineSegment)xx.Segment0;
-            if (StaticGraphUtility.IsVertical(PointComparer.GetDirections(lineSeg.Start, lineSeg.End))) {
-                Debug.Assert(PointComparer.Equal(point.X, origin.X), "segment0 obstacle intersection is off the vertical line");
-            }
-            else {
-                Debug.Assert(PointComparer.Equal(point.Y, origin.Y), "segment0 obstacle intersection is off the horizontal line");
-            }
-#endif // TEST_MSAGL
-            return ApproximateComparer.Round(point);
+            return ApproximateComparer.Round(xx.IntersectionPoint);
         }
     }
 }

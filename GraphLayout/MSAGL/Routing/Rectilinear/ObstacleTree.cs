@@ -592,8 +592,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // means we're on the border (and 3 shouldn't happen anymore with the curve intersection fixes and 
             // PointIsInsideRectangle check above).  So the interesting case is that we have 2 intersections.
             if (2 == xxs.Count) {
-                Point firstInt = SpliceUtility.RawIntersection(xxs[0], location);
-                Point secondInt = SpliceUtility.RawIntersection(xxs[1], location);
+                Point firstInt = ApproximateComparer.Round(xxs[0].IntersectionPoint);
+                Point secondInt = ApproximateComparer.Round(xxs[1].IntersectionPoint);
 
                 // If we're on either intersection, we're on the border rather than inside.
                 if (!PointComparer.Equal(location, firstInt) && !PointComparer.Equal(location, secondInt)
@@ -695,7 +695,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             var localLeastDistSquared = this.restrictedRayLengthSquared;
             var testDirection = PointComparer.GetDirections(restrictedIntersectionTestSegment.Start, restrictedIntersectionTestSegment.End);
             foreach (var intersectionInfo in intersections) {
-                var intersect = SpliceUtility.RawIntersection(intersectionInfo, currentRestrictedRay.Start);
+                var intersect = ApproximateComparer.Round(intersectionInfo.IntersectionPoint);
                 var dirToIntersect = PointComparer.GetDirections(currentRestrictedRay.Start, intersect);
 
                 if (dirToIntersect == CompassVector.OppositeDir(testDirection)) {
@@ -726,7 +726,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                 // If there was only one intersection and it is quite close to an end, ignore it.
                 // If there is more than one intersection, we have crossed the obstacle so we want it.
                 if (numberOfGoodIntersections == 1) {
-                    var intersect = SpliceUtility.RawIntersection(closestIntersectionInfo, currentRestrictedRay.Start);
+                    var intersect = ApproximateComparer.Round(closestIntersectionInfo.IntersectionPoint);
                     if (ApproximateComparer.CloseIntersections(intersect, this.currentRestrictedRay.Start) ||
                             ApproximateComparer.CloseIntersections(intersect, this.currentRestrictedRay.End)) {
                         return;
@@ -741,7 +741,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         private void AddGroupIntersectionsToRestrictedRay(Obstacle obstacle, IList<IntersectionInfo> intersections) {
             // We'll let the lines punch through any intersections with groups, but track the location so we can enable/disable crossing.
             foreach (var intersectionInfo in intersections) {
-                var intersect = SpliceUtility.RawIntersection(intersectionInfo, currentRestrictedRay.Start);
+                var intersect = ApproximateComparer.Round(intersectionInfo.IntersectionPoint);
 
                 // Skip intersections that are past the end of the restricted segment (though there may still be some
                 // there if we shorten it later, but we'll skip them later).
