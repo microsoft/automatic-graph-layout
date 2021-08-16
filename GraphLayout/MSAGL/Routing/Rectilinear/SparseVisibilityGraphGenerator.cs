@@ -399,7 +399,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         private void GenerateSparseIntersectionsAlongHorizontalAxis() {
             this.currentAxisPointComparer = new HorizontalPointComparer();
             var vertexPoints = this.horizontalVertexPoints.OrderBy(point => point, this.currentAxisPointComparer).GetEnumerator();
-            var bboxSteinerPoints = new EnumeratorWrapper<Point>(this.boundingBoxSteinerPoints.OrderBy(point => point, this.currentAxisPointComparer));
+            var bboxSteinerPoints = this.boundingBoxSteinerPoints.OrderBy(point => point, this.currentAxisPointComparer).ToList();
             base.ScanDirection = ScanDirection.HorizontalInstance;
             SetVectorsAndCoordMaps(base.ScanDirection);
             this.GenerateSparseIntersections(vertexPoints, bboxSteinerPoints);
@@ -408,7 +408,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         private void GenerateSparseIntersectionsAlongVerticalAxis() {
             this.currentAxisPointComparer = new VerticalPointComparer();
             var vertexPoints = this.verticalVertexPoints.OrderBy(point => point, this.currentAxisPointComparer).GetEnumerator();
-            var bboxSteinerPoints = new EnumeratorWrapper<Point>(this.boundingBoxSteinerPoints.OrderBy(point => point, this.currentAxisPointComparer));
+            var bboxSteinerPoints = this.boundingBoxSteinerPoints.OrderBy(point => point, this.currentAxisPointComparer).ToList();
             base.ScanDirection = ScanDirection.VerticalInstance;
             SetVectorsAndCoordMaps(base.ScanDirection);
             this.GenerateSparseIntersections(vertexPoints, bboxSteinerPoints);
@@ -448,25 +448,25 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             }
         }
 
-        private void GenerateSparseIntersections(IEnumerator<Point> vertexPoints, EnumeratorWrapper<Point> bboxSteinerPoints) {
+        private void GenerateSparseIntersections(IEnumerator<Point> vertexPoints, List<Point> bboxSteinerPoints) {
             this.perpendicularSegmentVector.ResetForIntersections();
             this.parallelSegmentVector.ResetForIntersections();
 
             // Position the enumerations to the first point.
             vertexPoints.MoveNext();
-            bboxSteinerPoints.MoveNext();
+            int j = 0;
             foreach (var item in parallelSegmentVector.Items) {
                 for (;;) {
                     if (!item.CurrentSegment.ContainsPoint(vertexPoints.Current)) {
                         // Done accumulating intersections for the current segment; move to the next segment.
-                        if (!this.AddSteinerPointsToInterveningSegments(vertexPoints.Current, bboxSteinerPoints, item)
+                        if (!this.AddSteinerPointsToInterveningSegments(vertexPoints.Current, bboxSteinerPoints, j, item)
                                 || !item.TraverseToSegmentContainingPoint(vertexPoints.Current)) {
                             // Done with this vectorItem, move to the next item.
                             break;
                         }
                     }
 
-                    this.AddPointsToCurrentSegmentIntersections(bboxSteinerPoints, item);
+                    this.AddPointsToCurrentSegmentIntersections(bboxSteinerPoints, ref j, item);
                     this.GenerateIntersectionsFromVertexPointForCurrentSegment(vertexPoints.Current, item);
 
                     if (item.PointIsCurrentEndAndNextStart(vertexPoints.Current)) {
@@ -478,7 +478,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
                     if (!vertexPoints.MoveNext()) {
                         // No more vertexPoints; we're done.
-                        Debug.Assert(!bboxSteinerPoints.HasCurrent, "Some boundingBoxSteinerPoints remain");
                         return;
                     }
                 }
@@ -488,24 +487,24 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             Debug.Assert(false, "Mismatch in points and segments");
         }
 
-        private bool AddSteinerPointsToInterveningSegments(Point currentVertexPoint, EnumeratorWrapper<Point> bboxSteinerPoints, ScanSegmentVectorItem item) {
+        private bool AddSteinerPointsToInterveningSegments(Point currentVertexPoint, List<Point> bboxSteinerPoints, int j, ScanSegmentVectorItem item) {
             // With overlaps, we may have bboxSteinerPoints on segments that do not contain vertices.
-            while (bboxSteinerPoints.HasCurrent && (this.currentAxisPointComparer.Compare(bboxSteinerPoints.Current, currentVertexPoint) == -1)) {
-                if (!item.TraverseToSegmentContainingPoint(bboxSteinerPoints.Current)) {
+            while (j < boundingBoxSteinerPoints.Count && (this.currentAxisPointComparer.Compare(bboxSteinerPoints[j], currentVertexPoint) == -1)) {
+                if (!item.TraverseToSegmentContainingPoint(bboxSteinerPoints[j])) {
                     // Done with this vectorItem, move to the next item.
                     return false;
                 }
-                this.AddPointsToCurrentSegmentIntersections(bboxSteinerPoints, item);
+                this.AddPointsToCurrentSegmentIntersections(bboxSteinerPoints, ref j, item);
             }
             return true;
         }
 
-        private void AddPointsToCurrentSegmentIntersections(EnumeratorWrapper<Point> pointsToAdd, ScanSegmentVectorItem parallelItem) {
+        private void AddPointsToCurrentSegmentIntersections(List<Point> pointsToAdd, ref int j, ScanSegmentVectorItem parallelItem) {
             // The first Steiner point should be in the segment, unless we have a non-orthogonal or overlapped or both situation
             // that results in no Steiner points having been generated, or Steiner points being generated on a segment that has
             // the opposite overlap state from the segment containing the corresponding vertex.
-            for (; pointsToAdd.HasCurrent && parallelItem.CurrentSegment.ContainsPoint(pointsToAdd.Current); pointsToAdd.MoveNext()) {
-                int steinerSlot = this.FindPerpendicularSlot(pointsToAdd.Current, 0);
+            for (; j < pointsToAdd.Count && parallelItem.CurrentSegment.ContainsPoint(pointsToAdd[j]); j++) {
+                int steinerSlot = this.FindPerpendicularSlot(pointsToAdd[j], 0);
                 this.AddSlotToSegmentIntersections(parallelItem, steinerSlot);
             }
         }

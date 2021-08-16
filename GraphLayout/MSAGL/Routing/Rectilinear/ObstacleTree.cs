@@ -320,10 +320,14 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                 if (component.Count() == 1) {
                     continue;
                 }
-                var clump = new Clump(component.Select(this.OrdinalToObstacle));
-                foreach (var obstacle in clump) {
-                    obstacle.Clump = clump;
-                }
+                createClump(component);
+            }
+        }
+
+        private void createClump(IEnumerable<int> component) {
+            var clump = new Clump(component.Select(this.OrdinalToObstacle));
+            foreach (var obstacle in clump) {
+                obstacle.Clump = clump;
             }
         }
 
