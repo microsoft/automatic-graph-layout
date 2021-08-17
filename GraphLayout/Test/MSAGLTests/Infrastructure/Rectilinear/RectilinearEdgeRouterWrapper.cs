@@ -282,7 +282,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             var furthest = start;
             for ( ; ; ) 
             {
-                var next = StaticGraphUtility.FindNextVertex(furthest, dir);
+                var next = StaticGraphUtility.FindAdjacentVertex(furthest, dir);
                 if (next == null)
                 {
                     break;

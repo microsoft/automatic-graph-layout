@@ -718,7 +718,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // We have an intersecting perp edge, which may be on the original scanSeg or closer to pointLocation.
             // Get one of its vertices and re-find the intersection on it (it doesn't matter which vertex of the
             // edge we use, but for consistency use the "lower in perpDir" one).
-            segsegVertex = StaticGraphUtility.GetVertex(perpendicularEdge, CompassVector.OppositeDir(perpDir));
+            segsegVertex = StaticGraphUtility.GetEdgeEnd(perpendicularEdge, CompassVector.OppositeDir(perpDir));
             edgeIntersect = StaticGraphUtility.SegmentIntersection(pointLocation, edgeIntersect, segsegVertex.Point);
             
             // By this point we've verified there's no intervening Transient edge, so if we have an identical
@@ -928,11 +928,11 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // This may be an oob waypoint, in which case we want to add additional edges so we can
             // go outside graph, cross the waypoint, and come back in.  Shortest-paths will do the
             // work of determining the optimal path, to avoid backtracking.
-            var inboundsLeftVertex = StaticGraphUtility.FindNextVertex(inboundsVertex, CompassVector.RotateLeft(dirToGraph));
+            var inboundsLeftVertex = StaticGraphUtility.FindAdjacentVertex(inboundsVertex, CompassVector.RotateLeft(dirToGraph));
             if (inboundsLeftVertex != null) {
                 this.TransUtil.ConnectVertexToTargetVertex(freePoint.Vertex, inboundsLeftVertex, dirToGraph, ScanSegment.NormalWeight);
             }
-            var inboundsRightVertex = StaticGraphUtility.FindNextVertex(inboundsVertex, CompassVector.RotateRight(dirToGraph));
+            var inboundsRightVertex = StaticGraphUtility.FindAdjacentVertex(inboundsVertex, CompassVector.RotateRight(dirToGraph));
             if (inboundsRightVertex != null) {
                 this.TransUtil.ConnectVertexToTargetVertex(freePoint.Vertex, inboundsRightVertex, dirToGraph, ScanSegment.NormalWeight);
             }

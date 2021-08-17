@@ -97,7 +97,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // in the desired direction.
             bracketSource = sourceVertex;
             for (; ; ) {
-                bracketTarget = StaticGraphUtility.FindNextVertex(bracketSource, dirToTarget);
+                bracketTarget = StaticGraphUtility.FindAdjacentVertex(bracketSource, dirToTarget);
                 if (null == bracketTarget) {
                     break;
                 }
@@ -272,7 +272,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                                 & PointComparer.GetDirections(startVertex.Point, pointLocation))
                          , "the ray from 'dir' is away from pointLocation", ObstacleTree, VisGraph);
             while (true) {
-                VisibilityVertex nextVertex = StaticGraphUtility.FindNextVertex(startVertex, dir);
+                VisibilityVertex nextVertex = StaticGraphUtility.FindAdjacentVertex(startVertex, dir);
                 if (null == nextVertex) {
                     break;
                 }
@@ -299,7 +299,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
             // First move toward pointLocation far as we can.
             while (Direction. None != currentDirTowardLocation) {
-                VisibilityVertex nextVertex = StaticGraphUtility.FindNextVertex(currentVertex, dirTowardLocation);
+                VisibilityVertex nextVertex = StaticGraphUtility.FindAdjacentVertex(currentVertex, dirTowardLocation);
                 if (null == nextVertex) {
                     break;
                 }
@@ -319,7 +319,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                 if ((null != perpEdge) || (currentVertex == startVertex)) {
                     break;
                 }
-                currentVertex = StaticGraphUtility.FindNextVertex(currentVertex, CompassVector.OppositeDir(dirTowardLocation));
+                currentVertex = StaticGraphUtility.FindAdjacentVertex(currentVertex, CompassVector.OppositeDir(dirTowardLocation));
             }
             return perpEdge;
         }
@@ -468,10 +468,10 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // We'll find the segment to the left (or right if to the left doesn't exist),
             // then splice across in the opposite direction.
             Direction spliceSourceDir = CompassVector.RotateLeft(extendDir);
-            VisibilityVertex spliceSource = StaticGraphUtility.FindNextVertex(startVertex, spliceSourceDir);
+            VisibilityVertex spliceSource = StaticGraphUtility.FindAdjacentVertex(startVertex, spliceSourceDir);
             if (null == spliceSource) {
                 spliceSourceDir = CompassVector.OppositeDir(spliceSourceDir);
-                spliceSource = StaticGraphUtility.FindNextVertex(startVertex, spliceSourceDir);
+                spliceSource = StaticGraphUtility.FindAdjacentVertex(startVertex, spliceSourceDir);
                 if (null == spliceSource) {
                     return;
                 }
@@ -509,7 +509,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             startVertex = TraverseToFirstVertexAtOrAbove(startVertex, start, CompassVector.OppositeDir(dir));
 
             // Splice into the Vertices between and including the start/end points.
-            for (var currentVertex = startVertex; null != currentVertex; currentVertex = StaticGraphUtility.FindNextVertex(currentVertex, dir)) {
+            for (var currentVertex = startVertex; null != currentVertex; currentVertex = StaticGraphUtility.FindAdjacentVertex(currentVertex, dir)) {
                 bool isFinalVertex = (PointComparer.Compare(currentVertex.Point, end) >= 0);
                 while (crossingList.CurrentIsBeforeOrAt(currentVertex.Point)) {
                     PointAndCrossings pac = crossingList.Pop();
@@ -541,7 +541,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             var oppositeDir = CompassVector.OppositeDir(dir);
 
             for ( ; ; ) {
-                var nextVertex = StaticGraphUtility.FindNextVertex(returnVertex, dir);
+                var nextVertex = StaticGraphUtility.FindAdjacentVertex(returnVertex, dir);
 
                 // This returns Directions. None on a match.
                 if ((null == nextVertex) || (PointComparer.GetDirections(nextVertex.Point, start) == oppositeDir)) {
@@ -578,8 +578,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // This is called after having created at least one extension vertex (initially, the
             // first one added outside the obstacle), so we know extendVertex will be there. spliceSource
             // is the vertex to the OppositeDir(spliceTargetDir) of that extendVertex.
-            VisibilityVertex extendVertex = StaticGraphUtility.FindNextVertex(spliceSource, spliceTargetDir);
-            spliceTarget = StaticGraphUtility.FindNextVertex(extendVertex, spliceTargetDir);
+            VisibilityVertex extendVertex = StaticGraphUtility.FindAdjacentVertex(spliceSource, spliceTargetDir);
+            spliceTarget = StaticGraphUtility.FindAdjacentVertex(extendVertex, spliceTargetDir);
             for (; ; ) {
                 if (!GetNextSpliceSource(ref spliceSource, spliceTargetDir, extendDir)) {
                     break;
@@ -632,7 +632,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                     // This should always have been found in the find-the-next-target loop above if there is
                     // a vertex (which would be nextExtendVertex, which we just found) between spliceSource
                     // and spliceTarget.  Even for a sparse graph, an edge should not skip over a vertex.
-                    StaticGraphUtility.Assert(spliceTarget == StaticGraphUtility.FindNextVertex(nextExtendVertex, spliceTargetDir)
+                    StaticGraphUtility.Assert(spliceTarget == StaticGraphUtility.FindAdjacentVertex(nextExtendVertex, spliceTargetDir)
                                , "no edge exists between an existing nextExtendVertex and spliceTarget"
                                , ObstacleTree, VisGraph);
                 }
@@ -703,18 +703,18 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         private static bool GetNextSpliceSource(ref VisibilityVertex spliceSource, Direction spliceTargetDir, Direction extendDir) {
-            VisibilityVertex nextSpliceSource = StaticGraphUtility.FindNextVertex(spliceSource, extendDir);
+            VisibilityVertex nextSpliceSource = StaticGraphUtility.FindAdjacentVertex(spliceSource, extendDir);
             if (null == nextSpliceSource) {
                 // See if there is a source further away from the extension line - we might have
                 // been on freePoint line (or another nearby PortEntry line) that dead-ended.
                 // Look laterally from the previous spliceSource first.
                 nextSpliceSource = spliceSource;
                 for (;;) {
-                    nextSpliceSource = StaticGraphUtility.FindNextVertex(nextSpliceSource, CompassVector.OppositeDir(spliceTargetDir));
+                    nextSpliceSource = StaticGraphUtility.FindAdjacentVertex(nextSpliceSource, CompassVector.OppositeDir(spliceTargetDir));
                     if (null == nextSpliceSource) {
                         return false;
                     }
-                    var nextSpliceSourceExtend = StaticGraphUtility.FindNextVertex(nextSpliceSource, extendDir);
+                    var nextSpliceSourceExtend = StaticGraphUtility.FindAdjacentVertex(nextSpliceSource, extendDir);
                     if (null != nextSpliceSourceExtend) {
                         nextSpliceSource = nextSpliceSourceExtend;
                         break;
@@ -734,14 +734,14 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             var spliceTarget = spliceSource;
             while (nextDir == prevDir) {
                 spliceSource = spliceTarget;
-                spliceTarget = StaticGraphUtility.FindNextVertex(spliceSource, spliceTargetDir);
+                spliceTarget = StaticGraphUtility.FindAdjacentVertex(spliceSource, spliceTargetDir);
                 if (null == spliceTarget) {
                     break;
                 }
                 if (PointComparer.Equal(spliceTarget.Point, nextExtendPoint)) {
                     // If we encountered an existing vertex for the extension chain, update spliceTarget
                     // to be after it and we're done with this loop.
-                    spliceTarget = StaticGraphUtility.FindNextVertex(spliceTarget, spliceTargetDir);
+                    spliceTarget = StaticGraphUtility.FindAdjacentVertex(spliceTarget, spliceTargetDir);
                     break;
                 }
                 nextDir = PointComparer.GetPureDirection(spliceTarget.Point, nextExtendPoint);

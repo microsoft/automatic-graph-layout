@@ -135,9 +135,9 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             Debug.Assert(PointComparer.IsPureLower(source.Point, target.Point), "Impure or reversed direction encountered");
 
             // Make sure we aren't adding two edges in the same direction to the same vertex.
-            Debug.Assert(null == StaticGraphUtility.FindNextVertex(source, StaticGraphUtility.EdgeDirection(source, target))
+            Debug.Assert(null == StaticGraphUtility.FindAdjacentVertex(source, StaticGraphUtility.EdgeDirection(source, target))
                     , "Duplicate outEdge from Source vertex");
-            Debug.Assert(null == StaticGraphUtility.FindNextVertex(target, StaticGraphUtility.EdgeDirection(target, source))
+            Debug.Assert(null == StaticGraphUtility.FindAdjacentVertex(target, StaticGraphUtility.EdgeDirection(target, source))
                     , "Duplicate inEdge to Target vertex");
             var edge = new VisibilityEdge(source, target, this.Weight);
             VisibilityGraph.AddEdge(edge);
