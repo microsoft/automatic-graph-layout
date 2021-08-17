@@ -56,7 +56,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return null;
         }
 
-        static internal VisibilityEdge FindNextEdge(VisibilityGraph vg, VisibilityVertex vertex, Direction dir) {
+        static internal VisibilityEdge FindAdjacentEdge(VisibilityGraph vg, VisibilityVertex vertex, Direction dir) {
             VisibilityVertex nextVertex = FindAdjacentVertex(vertex, dir);
             return (null == nextVertex) ? null : vg.FindEdge(vertex.Point, nextVertex.Point);
         }
