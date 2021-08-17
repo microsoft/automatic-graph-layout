@@ -260,7 +260,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         internal VisibilityEdge FindNextEdge(VisibilityVertex vertex, Direction dir) {
-            return StaticGraphUtility.FindAdjacentEdge(VisGraph, vertex, dir);
+            return StaticGraphUtility.FindAdjacentEdge(vertex, dir);
         }
 
         internal VisibilityEdge FindPerpendicularOrContainingEdge(VisibilityVertex startVertex
@@ -764,10 +764,10 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         bool IsSkippableSpliceSourceWithNullSpliceTarget(VisibilityVertex spliceSource, Direction extendDir) {
-            if (IsSkippableSpliceSourceEdgeWithNullTarget(StaticGraphUtility.FindAdjacentEdge(VisGraph, spliceSource, extendDir))) {
+            if (IsSkippableSpliceSourceEdgeWithNullTarget(StaticGraphUtility.FindAdjacentEdge(spliceSource, extendDir))) {
                 return true;
             }
-            var spliceSourceEdge = StaticGraphUtility.FindAdjacentEdge(this.VisGraph, spliceSource, CompassVector.OppositeDir(extendDir));
+            var spliceSourceEdge = StaticGraphUtility.FindAdjacentEdge(spliceSource, CompassVector.OppositeDir(extendDir));
 
             // Since target is null, if this is a reflection, it is bouncing off an outer side of a group or 
             // obstacle at spliceSource.  In that case, we don't want to splice from it because then we could

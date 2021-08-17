@@ -459,7 +459,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                 for (;;) {
                     if (!item.CurrentSegment.ContainsPoint(vertexPoints.Current)) {
                         // Done accumulating intersections for the current segment; move to the next segment.
-                        if (!this.AddSteinerPointsToInterveningSegments(vertexPoints.Current, bboxSteinerPoints, j, item)
+                        if (!this.AddSteinerPointsToInterveningSegments(vertexPoints.Current, bboxSteinerPoints, ref j, item)
                                 || !item.TraverseToSegmentContainingPoint(vertexPoints.Current)) {
                             // Done with this vectorItem, move to the next item.
                             break;
@@ -487,7 +487,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             Debug.Assert(false, "Mismatch in points and segments");
         }
 
-        private bool AddSteinerPointsToInterveningSegments(Point currentVertexPoint, List<Point> bboxSteinerPoints, int j, ScanSegmentVectorItem item) {
+        private bool AddSteinerPointsToInterveningSegments(Point currentVertexPoint, List<Point> bboxSteinerPoints, ref int j, ScanSegmentVectorItem item) {
             // With overlaps, we may have bboxSteinerPoints on segments that do not contain vertices.
             while (j < boundingBoxSteinerPoints.Count && (this.currentAxisPointComparer.Compare(bboxSteinerPoints[j], currentVertexPoint) == -1)) {
                 if (!item.TraverseToSegmentContainingPoint(bboxSteinerPoints[j])) {
