@@ -48,10 +48,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                 }
             }
 
-            // Avoid GetEnumerator overhead.
-            var outEdgeNode = vertex.OutEdges.IsEmpty() ? null : vertex.OutEdges.TreeMinimum();
-            for (; outEdgeNode != null; outEdgeNode = vertex.OutEdges.Next(outEdgeNode)) {
-                var edge = outEdgeNode.Item;
+            foreach (var edge in vertex.OutEdges) {
                 if (PointComparer.GetPureDirection(vertex.Point, edge.TargetPoint) == dir) {
                     return edge.Target;
                 }
