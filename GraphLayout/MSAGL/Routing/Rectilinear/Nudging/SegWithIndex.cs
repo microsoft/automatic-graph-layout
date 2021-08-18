@@ -11,9 +11,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging
             Debug.Assert(i<pts.Length&&i>=0);
             Points = pts;
             I = i;
-#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=289 Support Dictionary directly based on object's GetHashCode
-            UpdateHashKey();
-#endif
         }
 
         internal Point Start {get{return Points[I];}}
