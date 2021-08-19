@@ -108,14 +108,14 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             containerNode.Item.AddEdge(edge);
             var prev = edgeContainersTree.Previous(containerNode);
             if (prev != null)
-                foreach (var prevEdge in prev.Item)
-                    foreach (var ed in containerNode.Item)
+                foreach (var prevEdge in prev.Item.Edges)
+                    foreach (var ed in containerNode.Item.Edges)
                         TryToAddRightNeighbor(prevEdge, ed);
                         
             var next = edgeContainersTree.Next(containerNode);
             if (next != null)
-                foreach (var ed in containerNode.Item)
-                    foreach (var neEdge in next.Item)
+                foreach (var ed in containerNode.Item.Edges)
+                    foreach (var neEdge in next.Item.Edges)
                         TryToAddRightNeighbor(ed, neEdge);
             ConstraintEdgeWithObstaclesAtZ(edge, edge.Source.Point);
         }
@@ -262,7 +262,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             var curves = new List<DebugCurve>(Obstacles.Select(o => new DebugCurve(100, 1, "black", o)))
                          {new DebugCurve(100, 1, "red", ellipse)};
             curves.AddRange(from e in edgeContainersTree
-                             from axisEdge in e
+                             from axisEdge in e.Edges
                              let a = axisEdge.Source.Point
                              let b = axisEdge.Target.Point
                              select new DebugCurve(100, 1, "green", new LineSegment(a, b)));
@@ -276,7 +276,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         static IEnumerable<DebugCurve> RightNeighborsCurvesTest(IEnumerable<AxisEdgesContainer> rbTree) {
             foreach (var container in rbTree) {
-                foreach (var edge  in container) {
+                foreach (var edge  in container.Edges) {
                     foreach (var rn in edge.RightNeighbors) {
                         yield return new DebugCurve(100,1,"brown",new LineSegment(EdgeMidPoint(edge), EdgeMidPoint(rn)));
                     }
@@ -397,7 +397,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                     (container => siteX <= xProjection(container.Source));
 
             if (containerNode != null)
-                foreach (var edge in containerNode.Item)
+                foreach (var edge in containerNode.Item.Edges)
                     if (!NotRestricting(edge, polylinePoint.Polyline))
                         edge.BoundFromLeft(DirectionPerp*site);
         }
@@ -453,7 +453,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             RBNode<AxisEdgesContainer> containerNode = GetContainerNodeToTheLeftOfEvent(site);
 
             if (containerNode != null)
-                foreach (var edge in containerNode.Item)
+                foreach (var edge in containerNode.Item.Edges)
                     if (!NotRestricting(edge, polylinePoint.Polyline))
                         edge.BoundFromRight(site*DirectionPerp);
         }
