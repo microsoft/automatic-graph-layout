@@ -53,6 +53,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                 RectangleNode<Polyline, Point>.CreateRectangleNodeOnEnumeration(
                     obstacles.Select(p => new RectangleNode<Polyline, Point>(p, p.BoundingBox)));
             MapPathsToTheirObstacles();
+            this.ShowPathsDebug(new List<Path>());
         }
 
         Dictionary<Shape, Set<Shape>> AncestorsSets { get; set; }

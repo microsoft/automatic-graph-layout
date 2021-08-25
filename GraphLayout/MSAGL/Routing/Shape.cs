@@ -112,15 +112,7 @@ namespace Microsoft.Msagl.Routing {
                 }
             }
         }
-        ///<summary>
-        /// Adds a parent. A shape can have several parents
-        ///</summary>
-        ///<param name="shape"></param>
-        public void AddParent(Shape shape) {
-            ValidateArg.IsNotNull(shape, "shape");
-            parents.Insert(shape);
-            shape.children.Insert(this);
-        }
+       
 
         ///<summary>
         ///</summary>
@@ -130,16 +122,6 @@ namespace Microsoft.Msagl.Routing {
             shape.parents.Insert(this);
             children.Insert(shape);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="shape"></param>
-        public void RemoveChild(Shape shape) {
-            ValidateArg.IsNotNull(shape, "shape");
-            children.Remove(shape);
-            shape.parents.Remove(this);
-        }
-
         /// <summary>
         /// 
         /// </summary>
