@@ -13,7 +13,7 @@ namespace Microsoft.Msagl.Core.Routing {
     [TypeConverter(typeof(ExpandableObjectConverter))]
     [DisplayName("Edge bundling settings")]
     public sealed class BundlingSettings {
-
+        internal bool RectRouting;
         ///<summary>
         ///the default value of CapacityOverflowCoefficient
         ///</summary>

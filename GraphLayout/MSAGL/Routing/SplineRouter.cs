@@ -740,7 +740,7 @@ namespace Microsoft.Msagl.Routing {
     }
 
     Polyline LoosePolyOfOriginalShape(Shape s) {
-      return (Polyline)(LooseShapeOfOriginalShape(s).BoundaryCurve);
+      return (Polyline)LooseShapeOfOriginalShape(s).BoundaryCurve;
     }
     Polyline TightPolyOfOriginalShape(Shape s) {
       if (s == root)

@@ -37,6 +37,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
         readonly EdgeGeometry[] regularEdges;
 
+
         ///  objects to check crossings and calculate distances
         internal Intersections looseIntersections;
         internal Intersections tightIntersections;
@@ -49,21 +50,23 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
         internal Func<Port, Polyline> LoosePolylineOfPort;
 
+        private Cdt cdt_;
         /// <summary>
         /// triangulation
         /// </summary>
-        internal Cdt Cdt;
+        internal Cdt Cdt {
+            get {
+                return cdt_ ?? (this.cdt_ = BundleRouter.CreateConstrainedDelaunayTriangulation(this.looseIntersections.obstacleTree));
+            }
+        }
 
         internal MetroGraphData(EdgeGeometry[] regularEdges,
-            RectangleNode<Polyline, Point> looseTree, RectangleNode<Polyline, Point> tightTree,
-            BundlingSettings bundlingSettings, Cdt cdt,
-            Dictionary<EdgeGeometry, Set<Polyline>> edgeLooseEnterable, Dictionary<EdgeGeometry, Set<Polyline>> edgeTightEnterable, Func<Port, Polyline> loosePolylineOfPort) {
+           RectangleNode<Polyline, Point> looseTree, RectangleNode<Polyline, Point> tightTree,
+           BundlingSettings bundlingSettings, Cdt cdt,
+           Dictionary<EdgeGeometry, Set<Polyline>> edgeLooseEnterable, Dictionary<EdgeGeometry, Set<Polyline>> edgeTightEnterable, Func<Port, Polyline> loosePolylineOfPort) {
             //Debug.Assert(cdt != null);
             this.regularEdges = regularEdges;
-            if (cdt != null)
-                Cdt = cdt;
-            else
-                Cdt = BundleRouter.CreateConstrainedDelaunayTriangulation(looseTree);
+            this.cdt_ = cdt;
 
             EdgeLooseEnterable = edgeLooseEnterable;
             EdgeTightEnterable = edgeTightEnterable;
@@ -154,7 +157,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             //update neighbors order
             SortNeighbors(node);
             foreach (var adj in node.Neighbors)
-                SortNeighbors(adj);            
+                SortNeighbors(adj);
         }
 
         internal double GetWidth(Station u, Station v, double edgeSeparation) {
@@ -194,9 +197,9 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
             InitializeCdtInfo();
 
-//            Debug.Assert(looseIntersections.HubPositionsAreOK());
-  //          Debug.Assert(tightIntersections.HubPositionsAreOK());
-        
+            //            Debug.Assert(looseIntersections.HubPositionsAreOK());
+            //          Debug.Assert(tightIntersections.HubPositionsAreOK());
+
         }
 
         /// <summary>
@@ -280,7 +283,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         void InitializeEdgeData() {
             metrolines = new List<Metroline>();
             for (int i = 0; i < regularEdges.Length; i++) {
-                EdgeGeometry geomEdge=regularEdges[i];
+                EdgeGeometry geomEdge = regularEdges[i];
                 InitEdgeData(geomEdge, i);
             }
         }
@@ -367,7 +370,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             //If we have groups, EdgeLooseEnterable are precomputed.
             var metrolineEnterable = EdgeLooseEnterable != null ? EdgeLooseEnterable[regularEdge] : new Set<Polyline>();
 
-            for (var p = metroline.Polyline.StartPoint.Next; p!=null && p.Next != null; p = p.Next) {
+            for (var p = metroline.Polyline.StartPoint.Next; p != null && p.Next != null; p = p.Next) {
                 var v = PointToStations[p.Point];
                 if (v.EnterableLoosePolylines != null)
                     v.EnterableLoosePolylines *= metrolineEnterable;
@@ -394,9 +397,9 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             Station station = PointToStations[point];
             if (!cachedEnterableLooseForEnd.ContainsKey(point)) {
                 foreach (var poly in LooseTree.AllHitItems(point))
-                    if (Curve.PointRelativeToCurveLocation(point, poly) == PointLocation.Inside) 
+                    if (Curve.PointRelativeToCurveLocation(point, poly) == PointLocation.Inside)
                         station.AddEnterableLoosePolyline(poly);
-                    
+
                 cachedEnterableLooseForEnd.Add(point, station.EnterableLoosePolylines);
             }
             else {
@@ -419,7 +422,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             //If we have groups, EdgeTightEnterable are precomputed.
             var metrolineEnterable = EdgeTightEnterable != null ? EdgeTightEnterable[regularEdge] : new Set<Polyline>();
 
-            for (var p = metroline.Polyline.StartPoint.Next; p!=null && p.Next != null; p = p.Next) {
+            for (var p = metroline.Polyline.StartPoint.Next; p != null && p.Next != null; p = p.Next) {
                 var v = PointToStations[p.Point];
                 Set<Polyline> nodeEnterable = v.EnterableTightPolylines;
                 if (nodeEnterable != null)
@@ -443,9 +446,9 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
             Point pivot = station.Neighbors[0].Position;
             Point center = station.Position;
-            Array.Sort(station.Neighbors, delegate(Station u, Station v) {
+            Array.Sort(station.Neighbors, delegate (Station u, Station v) {
                 return Point.GetOrientationOf3Vectors(pivot - center, u.Position - center, v.Position - center);
-            });              
+            });
         }
 
         void InitEdgeIjInfos() {
@@ -461,10 +464,10 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                     info.Metrolines.Add(metroLine);
                 }
             }
-       }
+        }
 
         void InitializeCdtInfo() {
-            RectangleNode<CdtTriangle,Point> cdtTree = Cdt.GetCdtTree();
+            RectangleNode<CdtTriangle, Point> cdtTree = Cdt.GetCdtTree();
             foreach (var station in Stations) {
                 station.CdtTriangle = cdtTree.FirstHitNode(station.Position, IntersectionCache.Test).UserData;
                 Debug.Assert(station.CdtTriangle != null);

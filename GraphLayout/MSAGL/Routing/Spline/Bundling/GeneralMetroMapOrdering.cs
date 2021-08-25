@@ -58,9 +58,9 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         int IMetroMapOrderingAlgorithm.GetLineIndexInOrder(Station u, Station v, Metroline Metroline) {
 #endif
             var edge = new PointPair(u.Position, v.Position);
-            var reversed = u.Position != edge.First;
+            var aligned = u.Position == edge.First;
             var d = bundles[edge].LineIndexInOrder;
-            return !reversed ? d[Metroline] : d.Count - 1 - d[Metroline];
+            return aligned? d[Metroline] : d.Count - 1 - d[Metroline];
         }
 
 
