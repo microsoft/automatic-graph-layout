@@ -18,7 +18,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
     internal class EdgeNudger : AlgorithmBase {
         readonly BundlingSettings bundlingSettings;
         readonly MetroGraphData metroGraphData;
-        IMetroMapOrderingAlgorithm metroOrdering;
+        GeneralMetroMapOrdering metroOrdering;
 
         /// <summary>
         /// Constructor
@@ -48,10 +48,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         /// bundle-map ordering
         /// </summary>
         void CreateMetroOrdering() {
-            if (bundlingSettings.UseGreedyMetrolineOrdering)
-                metroOrdering = new GeneralMetroMapOrdering(metroGraphData.Metrolines);
-            else
-                metroOrdering = new LinearMetroMapOrdering(metroGraphData.Metrolines, metroGraphData.PointToStations);
+            metroOrdering = new GeneralMetroMapOrdering(metroGraphData.Metrolines);            
         }
 
         void FinalizePaths() {
@@ -92,21 +89,21 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                 edge.SmoothedPolyline = BuildUnderlyingPolyline(start, currentEnd, hubSegsOfLine);
         }
 
-        static Point FindCurveStart(MetroGraphData metroGraphData, IMetroMapOrderingAlgorithm metroOrdering, Metroline metroline) {
+        static Point FindCurveStart(MetroGraphData metroGraphData, GeneralMetroMapOrdering metroOrdering, Metroline metroline) {
             Station u = metroGraphData.PointToStations[metroline.Polyline.StartPoint.Point];
             Station v = metroGraphData.PointToStations[metroline.Polyline.StartPoint.Next.Point];
 
             BundleBase bb = u.BundleBases[v];
-            int index = (!bb.IsParent ? metroOrdering.GetLineIndexInOrder(v, u, metroline) : metroOrdering.GetLineIndexInOrder(u, v, metroline));
+            int index = !bb.IsParent ? metroOrdering.GetLineIndexInOrder(v.Position, u.Position, metroline) : metroOrdering.GetLineIndexInOrder(u.Position, v.Position, metroline);
             return bb.Points[index];
         }
 
-        static Point FindCurveEnd(MetroGraphData metroGraphData, IMetroMapOrderingAlgorithm metroOrdering, Metroline metroline) {
+        static Point FindCurveEnd(MetroGraphData metroGraphData, GeneralMetroMapOrdering metroOrdering, Metroline metroline) {
             Station u = metroGraphData.PointToStations[metroline.Polyline.EndPoint.Prev.Point];
             Station v = metroGraphData.PointToStations[metroline.Polyline.EndPoint.Point];
 
             BundleBase bb = v.BundleBases[u];
-            int index = (!bb.IsParent ? metroOrdering.GetLineIndexInOrder(u, v, metroline) : metroOrdering.GetLineIndexInOrder(v, u, metroline));
+            int index = !bb.IsParent ? metroOrdering.GetLineIndexInOrder(u.Position, v.Position, metroline) : metroOrdering.GetLineIndexInOrder(v.Position, u.Position, metroline);
             return bb.Points[index];
         }
 
@@ -117,20 +114,20 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             return sp;*/
         }
 
-        static IEnumerable<ICurve> HubSegsOfLine(MetroGraphData metroGraphData, IMetroMapOrderingAlgorithm metroOrdering, Metroline line) {
+        static IEnumerable<ICurve> HubSegsOfLine(MetroGraphData metroGraphData, GeneralMetroMapOrdering metroOrdering, Metroline line) {
             for (PolylinePoint i = line.Polyline.StartPoint.Next; i.Next != null; i = i.Next)
                 yield return SegOnLineVertex(metroGraphData, metroOrdering, line, i);
         }
 
-        static ICurve SegOnLineVertex(MetroGraphData metroGraphData, IMetroMapOrderingAlgorithm metroOrdering, Metroline line, PolylinePoint i) {
+        static ICurve SegOnLineVertex(MetroGraphData metroGraphData, GeneralMetroMapOrdering metroOrdering, Metroline line, PolylinePoint i) {
             Station u = metroGraphData.PointToStations[i.Prev.Point];
             Station v = metroGraphData.PointToStations[i.Point];
             BundleBase h0 = v.BundleBases[u];
-            int j0 = metroOrdering.GetLineIndexInOrder(u, v, line);
+            int j0 = metroOrdering.GetLineIndexInOrder(u.Position, v.Position, line);
             if (h0.OrientedHubSegments[j0] == null || h0.OrientedHubSegments[j0].Segment == null) {
                 var w = metroGraphData.PointToStations[i.Next.Point];
                 var otherBase = v.BundleBases[w];
-                var j1 = metroOrdering.GetLineIndexInOrder(w, v, line);
+                var j1 = metroOrdering.GetLineIndexInOrder(w.Position, v.Position, line);
                 return new LineSegment(h0.Points[j0], otherBase.Points[j1]);
             }
 
@@ -156,8 +153,8 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             Station w = metroGraphData.PointToStations[polyPoint.Next.Point];
             BundleBase h0 = v.BundleBases[u];
             BundleBase h1 = v.BundleBases[w];
-            int j0 = metroOrdering.GetLineIndexInOrder(u, v, line);
-            int j1 = metroOrdering.GetLineIndexInOrder(w, v, line);
+            int j0 = metroOrdering.GetLineIndexInOrder(u.Position, v.Position, line);
+            int j1 = metroOrdering.GetLineIndexInOrder(w.Position, v.Position, line);
             var seg = bundlingSettings.UseCubicBezierSegmentsInsideOfHubs ?
                 StandardBezier(h0.Points[j0], h0.Tangents[j0], h1.Points[j1], h1.Tangents[j1]) :
                 BiArc(h0.Points[j0], h0.Tangents[j0], h1.Points[j1], h1.Tangents[j1]);
@@ -170,7 +167,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
 #if TEST_MSAGL
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        static internal void ShowHubs(MetroGraphData metroGraphData, IMetroMapOrderingAlgorithm metroMapOrdering, Station station) {
+        static internal void ShowHubs(MetroGraphData metroGraphData, GeneralMetroMapOrdering metroMapOrdering, Station station) {
             var ttt = GetAllDebugCurves(metroMapOrdering, metroGraphData);
             if (station != null)
                 ttt = ttt.Concat(new[] { new DebugCurve(255, 3, "pink", CurveFactory.CreateDiamond(20, 20, station.Position)) });
@@ -178,7 +175,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        static internal IEnumerable<DebugCurve> GetAllDebugCurves(IMetroMapOrderingAlgorithm metroMapOrdering, MetroGraphData metroGraphData) {
+        static internal IEnumerable<DebugCurve> GetAllDebugCurves(GeneralMetroMapOrdering metroMapOrdering, MetroGraphData metroGraphData) {
             return GraphNodes(metroGraphData).Concat(VertexDebugCurves(metroMapOrdering, metroGraphData)).Concat(DebugEdges(metroGraphData));
         }
 
@@ -187,14 +184,14 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        static IEnumerable<DebugCurve> VertexDebugCurves(IMetroMapOrderingAlgorithm metroMapOrdering, MetroGraphData metroGraphData) {
+        static IEnumerable<DebugCurve> VertexDebugCurves(GeneralMetroMapOrdering metroMapOrdering, MetroGraphData metroGraphData) {
             return DebugCircles(metroGraphData).Concat(DebugHubBases(metroGraphData)).
                 Concat(DebugSegs(metroGraphData, metroMapOrdering)).
                 Concat(BetweenHubs(metroMapOrdering, metroGraphData));
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        static IEnumerable<DebugCurve> BetweenHubs(IMetroMapOrderingAlgorithm metroMapOrdering, MetroGraphData metroGraphData) {
+        static IEnumerable<DebugCurve> BetweenHubs(GeneralMetroMapOrdering metroMapOrdering, MetroGraphData metroGraphData) {
             foreach (Metroline ml in metroGraphData.Metrolines) {
                 List<Tuple<Point, Point>> segs = GetInterestingSegs(metroGraphData, metroMapOrdering, ml);
                 string color = GetMonotoneColor(ml.Polyline.Start, ml.Polyline.End, segs);
@@ -203,7 +200,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             }
         }
 
-        static List<Tuple<Point, Point>> GetInterestingSegs(MetroGraphData metroGraphData, IMetroMapOrderingAlgorithm metroMapOrdering, Metroline line) {
+        static List<Tuple<Point, Point>> GetInterestingSegs(MetroGraphData metroGraphData, GeneralMetroMapOrdering metroMapOrdering, Metroline line) {
             var ret = new List<Tuple<Point, Point>>();
             Point start = FindCurveStart(metroGraphData, metroMapOrdering, line);
             var cubicSegs = HubSegsOfLine(metroGraphData, metroMapOrdering, line);
@@ -246,7 +243,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        static IEnumerable<DebugCurve> DebugSegs(MetroGraphData metroGraphData, IMetroMapOrderingAlgorithm metroMapOrdering) {
+        static IEnumerable<DebugCurve> DebugSegs(MetroGraphData metroGraphData, GeneralMetroMapOrdering metroMapOrdering) {
 
             var ls = new List<ICurve>();
             foreach (var s in metroGraphData.VirtualNodes()) {

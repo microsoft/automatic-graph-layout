@@ -12,7 +12,7 @@ using Microsoft.Msagl.Core.DataStructures;
 
 namespace Microsoft.Msagl.Routing.Spline.Bundling {
     internal class BundleBasesCalculator {
-        readonly IMetroMapOrderingAlgorithm metroOrdering;
+        readonly GeneralMetroMapOrdering metroOrdering;
         readonly MetroGraphData metroGraphData;
         readonly BundlingSettings bundlingSettings;
 
@@ -22,15 +22,15 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         //boundary curve with bases going inside the cluster
         Dictionary<ICurve, List<BundleBase>> internalBases;
 
-        internal BundleBasesCalculator(IMetroMapOrderingAlgorithm metroOrdering, MetroGraphData metroGraphData, BundlingSettings bundlingSettings) {
+        internal BundleBasesCalculator(GeneralMetroMapOrdering metroOrdering, MetroGraphData metroGraphData, BundlingSettings bundlingSettings) {
             this.metroOrdering = metroOrdering;
             this.metroGraphData = metroGraphData;
             this.bundlingSettings = bundlingSettings;
         }
 
         internal void Run() {
-            HubDebugger.ShowHubs(metroGraphData, bundlingSettings, true);
-            HubDebugger.ShowHubs(metroGraphData, bundlingSettings);
+            //HubDebugger.ShowHubs(metroGraphData, bundlingSettings, true);
+            //HubDebugger.ShowHubs(metroGraphData, bundlingSettings);
 
             AllocateBundleBases();
             SetBasesRightLeftParamsToTheMiddles();
@@ -98,7 +98,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                         }
 
                         Set<Polyline> obstaclesToIgnore = metroGraphData.tightIntersections.ObstaclesToIgnoreForBundle(station, neighbor);
-                        var bundle = new BundleInfo(bb, bb2, obstaclesToIgnore, bundlingSettings.EdgeSeparation, metroOrdering.GetOrder(station, neighbor).Select(l => l.Width / 2).ToArray());
+                        var bundle = new BundleInfo(bb, bb2, obstaclesToIgnore, bundlingSettings.EdgeSeparation, metroOrdering.GetOrder(station.Position, neighbor.Position).Select(l => l.Width / 2).ToArray());
                         bb.OutgoingBundleInfo = bb2.IncomingBundleInfo = bundle;
                         Bundles.Add(bundle);
                     }
@@ -165,8 +165,8 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             Station w = metroGraphData.PointToStations[polyPoint.Next.Point];
             BundleBase h0 = v.BundleBases[u];
             BundleBase h1 = v.BundleBases[w];
-            int j0 = metroOrdering.GetLineIndexInOrder(u, v, line);
-            int j1 = metroOrdering.GetLineIndexInOrder(w, v, line);
+            int j0 = metroOrdering.GetLineIndexInOrder(u.Position, v.Position, line);
+            int j1 = metroOrdering.GetLineIndexInOrder(w.Position, v.Position, line);
             OrientedHubSegment or0 = h0.OrientedHubSegments[j0] = new OrientedHubSegment(null, false, j0, h0);
             OrientedHubSegment or1 = h1.OrientedHubSegments[j1] = new OrientedHubSegment(null, true, j1, h1);
             or1.Other = or0;

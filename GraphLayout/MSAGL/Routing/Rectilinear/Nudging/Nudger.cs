@@ -21,6 +21,25 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         internal
 #endif
     class Nudger {
+        UniformOneDimensionalSolver Solver { get; set; }
+
+        List<LongestNudgedSegment> LongestNudgedSegs { get; set; }
+        Dictionary<AxisEdge, List<PathEdge>> PathOrders { get; set; }
+        /// <summary>
+        /// maps each path to the pair of obstacles; the first element of the pair is 
+        /// where the path starts and the second where the path ends
+        /// </summary>
+        Dictionary<Path, Tuple<Polyline, Polyline>> PathToObstacles { get; set; }
+
+
+        protected Dictionary<Port, Shape> PortToShapes { get; private set; }
+
+        Direction NudgingDirection { get; set; }
+        protected RectangleNode<Polyline, Point> HierarchyOfObstacles { get; set; }
+        protected RectangleNode<Shape, Point> HierarchyOfGroups { get; set; }
+
+
+        Dictionary<Shape, Set<Shape>> AncestorsSets { get; set; }
 
         bool HasGroups {
             get { return (null != HierarchyOfGroups) && (HierarchyOfGroups.Count > 0); }
@@ -53,11 +72,9 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                 RectangleNode<Polyline, Point>.CreateRectangleNodeOnEnumeration(
                     obstacles.Select(p => new RectangleNode<Polyline, Point>(p, p.BoundingBox)));
             MapPathsToTheirObstacles();
-            this.ShowPathsDebug(new List<Path>());
         }
 
-        Dictionary<Shape, Set<Shape>> AncestorsSets { get; set; }
-
+        
         void MapPathsToTheirObstacles() {
             PathToObstacles = new Dictionary<Path, Tuple<Polyline, Polyline>>();
             foreach (var path in Paths)
@@ -78,15 +95,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                                                       ? HitTestBehavior.Stop
                                                       : HitTestBehavior.Continue;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        protected RectangleNode<Polyline, Point> HierarchyOfObstacles { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        protected RectangleNode<Shape, Point> HierarchyOfGroups { get; set; }
-
         internal void Calculate(Direction direction, bool mergePaths) {
             NudgingDirection = direction;
             PathRefiner.RefinePaths(Paths, mergePaths);
@@ -160,7 +168,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             PathVisibilityGraph = combinatorialNudger.PathVisibilityGraph;
         }
 
-        Direction NudgingDirection { get; set; }
+    
 
         #region debugging
 #if TEST_MSAGL
@@ -552,8 +560,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                 Solver.AddConstraint(prevSeg.Id, seg.Id);
         }
 
-        UniformOneDimensionalSolver Solver { get; set; }
-
+        
         void CreateVariablesOfLongestSegment(LongestNudgedSegment segment) {
             if (!segment.IsFixed) {
                 var leftBound = segment.GetLeftBound();
@@ -609,16 +616,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         }
 #endif
 
-        List<LongestNudgedSegment> LongestNudgedSegs { get; set; }
-
-        Dictionary<AxisEdge, List<PathEdge>> PathOrders { get; set; }
-        /// <summary>
-        /// maps each path to the pair of obstacles; the first element of the pair is 
-        /// where the path starts and the second where the path ends
-        /// </summary>
-        Dictionary<Path, Tuple<Polyline, Polyline>> PathToObstacles { get; set; }
-
-
         void FindFreeSpaceInDirection(IEnumerable<AxisEdge> axisEdges) {
             BoundAxisEdgesByRectsKnownInAdvance();
             var freeSpaceFinder = new FreeSpaceFinder(NudgingDirection, Obstacles,
@@ -652,11 +649,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                                   AncestorsForPort(edgeGeometry.TargetPort);
             return commonAncestors.Where(anc => !anc.Children.Any(child=>commonAncestors.Contains(child)));
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        protected Dictionary<Port, Shape> PortToShapes { get; private set; }
-
+        
         Set<Shape> AncestorsForPort(Port port) {
             Shape shape;
             if (PortToShapes.TryGetValue(port, out shape)) {

@@ -97,16 +97,7 @@ namespace Microsoft.Msagl.Core.Routing {
             set { useCubicBezierSegmentsInsideOfHubs = value; }
         }
 
-        bool useGreedyMetrolineOrdering = true;
-
-        ///<summary>
-        ///if is set to true will be using greedy ordering algorithm, otherwise will be using linear
-        ///</summary>
-        public bool UseGreedyMetrolineOrdering {
-            get { return useGreedyMetrolineOrdering; }
-            set { useGreedyMetrolineOrdering = value; }
-        }
-
+        
         double angleThreshold = Math.PI / 180 * 45; //45 degrees;
         ///<summary>
         ///min angle for gluing edges

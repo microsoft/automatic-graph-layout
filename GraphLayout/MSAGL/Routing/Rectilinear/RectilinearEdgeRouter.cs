@@ -430,7 +430,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         internal virtual void GeneratePaths() {
-            var edgePaths = this.EdgeGeometries.Select(eg => new Path(eg)).ToList();
+            var edgePaths = this.EdgeGeometries.Zip(Enumerable.Range(0, EdgeGeometries.Count - 1), (eg, i) => new Path(i, eg)).ToList();
+            // this.EdgeGeometries.Select(eg => new Path(eg)).ToList();
             this.FillEdgePathsWithShortestPaths(edgePaths);
             this.NudgePaths(edgePaths);
             this.RouteSelfEdges();
@@ -568,41 +569,14 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
         internal virtual void NudgePaths(IEnumerable<Path> edgePaths) {
         
-
             // If we adjusted for spatial ancestors, this nudging can get very weird, so refetch in that case.
             var ancestorSets = this.ObstacleTree.SpatialAncestorsAdjusted ? SplineRouter.GetAncestorSetsMap(Obstacles) : this.AncestorsSets;
-            EdgeGeometry[] regularEdges = this.EdgeGeometries.ToArray();
-            var looseRectNodes = this.ObstacleTree.GetAllPrimaryObstacles().Select(obs => 
-            new RectangleNode<Polyline, Point>(obs.LooseVisibilityPolyline, obs.VisibilityBoundingBox)).ToList();
-            RectangleNode<Polyline, Point> looseTree = RectangleNode<Polyline, Point>.CreateRectangleNodeOnListOfNodes(looseRectNodes);
-            var tightRectNodes = this.ObstacleTree.GetAllPrimaryObstacles().Select(obs =>
-            new RectangleNode<Polyline, Point>(obs.PaddedPolyline, obs.VisibilityBoundingBox)).ToList();
-
-            RectangleNode<Polyline, Point > tightTree = RectangleNode<Polyline, Point>.CreateRectangleNodeOnListOfNodes(tightRectNodes);
-            Core.Routing.BundlingSettings bundlingSettings = new Core.Routing.BundlingSettings() { RectRouting = true, EdgeSeparation = 2*CornerFitRadius };
-            // Cdt cdt;
-            Dictionary<EdgeGeometry, Set<Polyline>> edgeLooseEnterable = null;
-            Dictionary<EdgeGeometry, Set<Polyline>> edgeTightEnterable = null;
-            Func<Port, Polyline> loosePolylineOfPort = null;
-            foreach (var path in edgePaths)
-                path.EdgeGeometry.Curve = new Polyline(Nudger.BuildPolylineForPath(path));
-
-            
-           Spline.Bundling.MetroGraphData metroGraphData = new Spline.Bundling.MetroGraphData(regularEdges,
-           looseTree,
-           tightTree,
-           bundlingSettings, /*Cdt */ null,
-           edgeLooseEnterable, edgeTightEnterable, loosePolylineOfPort);
-            var nudger = new Spline.Bundling.EdgeNudger(metroGraphData, bundlingSettings);
-            nudger.Run();
-            /*
 
             // Using VisibilityPolyline retains any reflection/staircases on the convex hull borders; using
             // PaddedPolyline removes them.
-
             Nudger.NudgePaths(edgePaths, CornerFitRadius, PaddedObstacles, ancestorSets, RemoveStaircases);
             //Nudger.NudgePaths(edgePaths, CornerFitRadius, this.ObstacleTree.GetAllPrimaryObstacles().Select(obs => obs.VisibilityPolyline), ancestorSets, RemoveStaircases);
-             */
+             
         }
         private bool removeStaircases = true;
         readonly List<EdgeGeometry> selfEdges = new List<EdgeGeometry>();

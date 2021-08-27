@@ -10,7 +10,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
     /// <summary>
     /// greedy bundle map ordering based on path comparison
     /// </summary>
-    public class GeneralMetroMapOrdering : IMetroMapOrderingAlgorithm {
+    public class GeneralMetroMapOrdering  {
         /// <summary>
         /// bundle lines
         /// </summary>
@@ -33,11 +33,11 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         //SharpKit/Colin - Interface implementations
         public IEnumerable<Metroline> GetOrder(Station u, Station v) {
 #else
-        IEnumerable<Metroline> IMetroMapOrderingAlgorithm.GetOrder(Station u, Station v) {
+        internal IEnumerable<Metroline> GetOrder(Point u, Point v) {
 #endif
-            var pointPair = new PointPair(u.Position, v.Position);
+            var pointPair = new PointPair(u, v);
             var orderedMetrolineListForUv = bundles[pointPair].Metrolines;
-            if (u.Position == pointPair.First) {
+            if (u == pointPair.First) {
                 foreach (var Metroline in orderedMetrolineListForUv) {
                     yield return Metroline;
                 }
@@ -55,10 +55,10 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         //SharpKit/Colin - Interface implementations
         public int GetLineIndexInOrder(Station u, Station v, Metroline Metroline) {
 #else
-        int IMetroMapOrderingAlgorithm.GetLineIndexInOrder(Station u, Station v, Metroline Metroline) {
+        internal int GetLineIndexInOrder(Point u, Point v, Metroline Metroline) {
 #endif
-            var edge = new PointPair(u.Position, v.Position);
-            var aligned = u.Position == edge.First;
+            var edge = new PointPair(u, v);
+            var aligned = u == edge.First;
             var d = bundles[edge].LineIndexInOrder;
             return aligned? d[Metroline] : d.Count - 1 - d[Metroline];
         }
@@ -201,11 +201,11 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
         /// <summary>
         /// Compare polar angles of v1 and v2 with respect to v0
-        /// (v1 lyes to the left of v2 ?)
+        /// (v1 lies to the left of v2 ?)
         /// </summary>
         /// <returns>
-        ///  -1  if v1 lyes to the left of v2
-        ///   1  if v1 lyes to the right of v2
+        ///  -1  if v1 lies to the left of v2
+        ///   1  if v1 lies to the right of v2
         ///   0  if v1 and v2 are collinear (and codirectinal)
         /// </returns>
         static int IsLeft(Point v0, Point v1, Point v2) {
