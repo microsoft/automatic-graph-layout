@@ -96,7 +96,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             }
             else {
                 Polyline obstacle = node.UserData;
-                if (obstaclesToIgnore.Contains(obstacle)) return true;
+                if (obstaclesToIgnore == null || obstaclesToIgnore.Contains(obstacle)) return true;
 
                 PointLocation pl = Curve.PointRelativeToCurveLocation(center, obstacle);
                 if (pl != PointLocation.Outside) return false;

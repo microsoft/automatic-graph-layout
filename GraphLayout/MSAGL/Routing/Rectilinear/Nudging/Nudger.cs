@@ -793,7 +793,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             }
         }
 
-        static IEnumerable<Point> BuildPolylineForPath(Path path) {
+        internal static IEnumerable<Point> BuildPolylineForPath(Path path) {
 #if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369
             var points = path.PathPoints.Select(p=>p.Clone()).ToArray();
 #else

@@ -29,8 +29,8 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         }
 
         internal void Run() {
-            //HubDebugger.ShowHubs(metroGraphData, bundlingSettings, true);
-            //HubDebugger.ShowHubs(metroGraphData, bundlingSettings);
+            HubDebugger.ShowHubs(metroGraphData, bundlingSettings, true);
+            HubDebugger.ShowHubs(metroGraphData, bundlingSettings);
 
             AllocateBundleBases();
             SetBasesRightLeftParamsToTheMiddles();

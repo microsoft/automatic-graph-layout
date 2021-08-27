@@ -42,17 +42,19 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             }
 
             //TimeMeasurer.DebugOutput("Initial cost of radii: " + Cost());
-
-            GrowHubs(false);
-            //maximally use free space
-            GrowHubs(true);
-
+                GrowHubs(false);
+            
+                //maximally use free space
+          //  if (!this.bundlingSettings.RectRouting)
+                GrowHubs(true);
+            
             //TimeMeasurer.DebugOutput("Optimized cost of radii: " + Cost());
 
             //ensure radii are not zero
             foreach (var v in metroGraphData.VirtualNodes()) {
                 v.Radius = Math.Max(v.Radius, bundlingSettings.MinHubRadius);
             }
+
         }
 
         /// <summary>
@@ -82,13 +84,13 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         }
 
         bool TryGrowHub(Station v, bool useHalfEdgesAsIdealR) {
-            double oldR = v.Radius;
+            //double oldR = v.Radius;
             double allowedRadius = CalculateAllowedHubRadius(v);
             Debug.Assert(allowedRadius > 0);
             if (v.Radius >= allowedRadius)
                 return false;
             double idealR = useHalfEdgesAsIdealR ?
-                                  CalculateIdealHubRadiusWithAdjacentEdges(metroGraphData, bundlingSettings, v) :
+                                  CalculateIdealHubRadiusWithAdjacentEdges(bundlingSettings, v) :
                                   v.cachedIdealRadius;
 
             Debug.Assert(idealR > 0);
@@ -109,7 +111,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
         double CalculatePotential(Station v, bool useHalfEdgesAsIdealR) {
             double idealR = useHalfEdgesAsIdealR ?
-                            CalculateIdealHubRadiusWithAdjacentEdges(metroGraphData, bundlingSettings, v) :
+                            CalculateIdealHubRadiusWithAdjacentEdges(bundlingSettings, v) :
                             v.cachedIdealRadius;
 
             if (idealR <= v.Radius)
@@ -185,7 +187,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         /// <summary>
         /// Returns the ideal radius of the hub
         /// </summary>
-        static double CalculateIdealHubRadiusWithAdjacentEdges(MetroGraphData metroGraphData, BundlingSettings bundlingSettings, Station node) {
+        static double CalculateIdealHubRadiusWithAdjacentEdges(BundlingSettings bundlingSettings, Station node) {
             double r = bundlingSettings.MaxHubRadius;
             foreach (var adj in node.Neighbors) {
                 r = Math.Min(r, (node.Position - adj.Position).Length / 2);

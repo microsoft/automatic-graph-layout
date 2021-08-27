@@ -43,7 +43,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
             RoundVerticesAndSimplify(this.PaddedPolyline);
             this.IsRectangle = this.IsPolylineRectangle();
-                     InputShape = shape;
+            InputShape = shape;
             Ports = new Set<Port>(InputShape.Ports);
         }
 

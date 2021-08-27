@@ -425,10 +425,10 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             for (var p = metroline.Polyline.StartPoint.Next; p != null && p.Next != null; p = p.Next) {
                 var v = PointToStations[p.Point];
                 Set<Polyline> nodeEnterable = v.EnterableTightPolylines;
-                if (nodeEnterable != null)
+                if (nodeEnterable.Count > 0)
                     v.EnterableTightPolylines = nodeEnterable * metrolineEnterable;
                 else
-                    v.EnterableTightPolylines = new Set<Polyline>(metrolineEnterable);
+                    v.EnterableTightPolylines += metrolineEnterable;
             }
 
             AddTightEnterableForMetrolineStartEndPoints(metroline);

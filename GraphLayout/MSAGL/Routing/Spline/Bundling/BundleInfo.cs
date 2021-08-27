@@ -96,7 +96,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                 }
             }
 
-            Debug.Assert(mw > FeasibleWidthEpsilon);
+         //   Debug.Assert(mw > FeasibleWidthEpsilon);
 
             SetInitialMidParams();
         }

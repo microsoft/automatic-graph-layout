@@ -57,7 +57,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         /// <summary>
         /// it maps a node to a set of tight polylines that can contain the node
         /// </summary>
-        internal Set<Polyline> EnterableTightPolylines;
+        internal Set<Polyline> EnterableTightPolylines = new Set<Polyline>();
 
         /// <summary>
         /// it maps a node to a set of loose polylines that can contain the node
@@ -105,8 +105,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             EnterableLoosePolylines.Insert(poly);
         }
         internal void AddEnterableTightPolyline(Polyline poly) {
-            if (EnterableTightPolylines == null)
-                EnterableTightPolylines = new Set<Polyline>();
             EnterableTightPolylines.Insert(poly);
         }
     }

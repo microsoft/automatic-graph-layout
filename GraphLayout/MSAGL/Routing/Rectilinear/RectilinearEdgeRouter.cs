@@ -568,17 +568,27 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
         internal virtual void NudgePaths(IEnumerable<Path> edgePaths) {
         
+
             // If we adjusted for spatial ancestors, this nudging can get very weird, so refetch in that case.
             var ancestorSets = this.ObstacleTree.SpatialAncestorsAdjusted ? SplineRouter.GetAncestorSetsMap(Obstacles) : this.AncestorsSets;
             EdgeGeometry[] regularEdges = this.EdgeGeometries.ToArray();
-            RectangleNode<Polyline, Point> looseTree = null;
-            RectangleNode<Polyline, Point > tightTree = null;
-            Core.Routing.BundlingSettings bundlingSettings = new Core.Routing.BundlingSettings() { RectRouting = true };
+            var looseRectNodes = this.ObstacleTree.GetAllPrimaryObstacles().Select(obs => 
+            new RectangleNode<Polyline, Point>(obs.LooseVisibilityPolyline, obs.VisibilityBoundingBox)).ToList();
+            RectangleNode<Polyline, Point> looseTree = RectangleNode<Polyline, Point>.CreateRectangleNodeOnListOfNodes(looseRectNodes);
+            var tightRectNodes = this.ObstacleTree.GetAllPrimaryObstacles().Select(obs =>
+            new RectangleNode<Polyline, Point>(obs.PaddedPolyline, obs.VisibilityBoundingBox)).ToList();
+
+            RectangleNode<Polyline, Point > tightTree = RectangleNode<Polyline, Point>.CreateRectangleNodeOnListOfNodes(tightRectNodes);
+            Core.Routing.BundlingSettings bundlingSettings = new Core.Routing.BundlingSettings() { RectRouting = true, EdgeSeparation = 2*CornerFitRadius };
             // Cdt cdt;
             Dictionary<EdgeGeometry, Set<Polyline>> edgeLooseEnterable = null;
             Dictionary<EdgeGeometry, Set<Polyline>> edgeTightEnterable = null;
             Func<Port, Polyline> loosePolylineOfPort = null;
-            Spline.Bundling.MetroGraphData metroGraphData = new Spline.Bundling.MetroGraphData(regularEdges,
+            foreach (var path in edgePaths)
+                path.EdgeGeometry.Curve = new Polyline(Nudger.BuildPolylineForPath(path));
+
+            
+           Spline.Bundling.MetroGraphData metroGraphData = new Spline.Bundling.MetroGraphData(regularEdges,
            looseTree,
            tightTree,
            bundlingSettings, /*Cdt */ null,

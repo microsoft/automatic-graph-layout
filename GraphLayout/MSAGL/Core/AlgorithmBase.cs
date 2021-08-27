@@ -11,22 +11,22 @@ namespace Microsoft.Msagl.Core
         /// Runs the algorithm.
         /// Inherits any preexisting cancel tokens.
         /// </summary>
-        public void Run()
-        {
+        public void Run() {
+            PreRun();
+            this.RunInternal();
+            if (!this.IsCanceled) {
+                this.ProgressComplete();
+            }
+        }
+
+        private void PreRun() {
             this.progressRatio = 0;
             this.localStepCount = 0;
-            
+
             this.cancelToken = threadStaticCancelToken;
             this.ThrowIfCanceled();
 
             this.ProgressSteps(0); // Initial progress
-
-            this.RunInternal();
-
-            if (!this.IsCanceled)
-            {
-                this.ProgressComplete();
-            }
         }
 
         /// <summary>
