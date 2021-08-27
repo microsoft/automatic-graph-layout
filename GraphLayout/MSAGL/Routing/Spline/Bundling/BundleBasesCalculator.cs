@@ -12,7 +12,7 @@ using Microsoft.Msagl.Core.DataStructures;
 
 namespace Microsoft.Msagl.Routing.Spline.Bundling {
     internal class BundleBasesCalculator {
-        readonly GeneralMetroMapOrdering metroOrdering;
+        readonly MetroMapOrdering metroOrdering;
         readonly MetroGraphData metroGraphData;
         readonly BundlingSettings bundlingSettings;
 
@@ -22,7 +22,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         //boundary curve with bases going inside the cluster
         Dictionary<ICurve, List<BundleBase>> internalBases;
 
-        internal BundleBasesCalculator(GeneralMetroMapOrdering metroOrdering, MetroGraphData metroGraphData, BundlingSettings bundlingSettings) {
+        internal BundleBasesCalculator(MetroMapOrdering metroOrdering, MetroGraphData metroGraphData, BundlingSettings bundlingSettings) {
             this.metroOrdering = metroOrdering;
             this.metroGraphData = metroGraphData;
             this.bundlingSettings = bundlingSettings;

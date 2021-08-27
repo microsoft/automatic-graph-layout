@@ -11,12 +11,12 @@ namespace Microsoft.Msagl.Layout.Layered {
     /// "Two polynomial time algorithms for the bundle-Line crossing minimization problem"
     /// Postprocessing minimizing crossings step that works on the layered graph
     /// </summary>
-    internal class MetroMapOrdering {
+    internal class MetroMapOrderingForLayers {
         LayerArrays layerArrays;
         Dictionary<int, IntPair> nodePositions;
         ProperLayeredGraph properLayeredGraph;
 
-        MetroMapOrdering(ProperLayeredGraph properLayeredGraph, LayerArrays layerArrays,
+        MetroMapOrderingForLayers(ProperLayeredGraph properLayeredGraph, LayerArrays layerArrays,
                          Dictionary<int, IntPair> nodePositions) {
             this.properLayeredGraph = properLayeredGraph;
             this.layerArrays = layerArrays;
@@ -28,7 +28,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// </summary>
         internal static void UpdateLayerArrays(ProperLayeredGraph properLayeredGraph, LayerArrays layerArrays,
                                                Dictionary<int, IntPair> nodePositions) {
-            new MetroMapOrdering(properLayeredGraph, layerArrays, nodePositions).UpdateLayerArrays();
+            new MetroMapOrderingForLayers(properLayeredGraph, layerArrays, nodePositions).UpdateLayerArrays();
         }
 
         /// <summary>

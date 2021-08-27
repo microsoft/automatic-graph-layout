@@ -10,7 +10,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
     /// <summary>
     /// greedy bundle map ordering based on path comparison
     /// </summary>
-    public class GeneralMetroMapOrdering  {
+    public class MetroMapOrdering  {
         /// <summary>
         /// bundle lines
         /// </summary>
@@ -20,7 +20,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         /// <summary>
         /// Initialize bundle graph and build the ordering
         /// </summary>
-        internal GeneralMetroMapOrdering(List<Metroline> Metrolines) {
+        internal MetroMapOrdering(List<Metroline> Metrolines) {
             this.Metrolines = Metrolines;
 
             BuildOrder();

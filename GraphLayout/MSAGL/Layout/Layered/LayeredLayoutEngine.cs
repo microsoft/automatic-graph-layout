@@ -1076,7 +1076,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             CreaeteProperLayeredGraph(layerArrays.Y, out layerArrays);
             Ordering.OrderLayers(properLayeredGraph, layerArrays, originalGraph.Nodes.Count,
                  sugiyamaSettings, CancelToken);
-            MetroMapOrdering.UpdateLayerArrays(properLayeredGraph, layerArrays);
+            MetroMapOrderingForLayers.UpdateLayerArrays(properLayeredGraph, layerArrays);
             return layerArrays;
         }
 

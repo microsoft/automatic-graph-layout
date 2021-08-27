@@ -710,7 +710,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             CreateProperLayeredGraph(layerArrays.Y, out layerArrays);
             GetXCoordinatesOfVirtualNodesOfTheProperLayeredGraph(layerArrays);
             OrderLayers(layerArrays);
-             MetroMapOrdering.UpdateLayerArrays(properLayeredGraph, layerArrays);
+             MetroMapOrderingForLayers.UpdateLayerArrays(properLayeredGraph, layerArrays);
             return layerArrays;
         }
 
