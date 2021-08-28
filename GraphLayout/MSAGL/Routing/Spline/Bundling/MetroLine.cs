@@ -14,7 +14,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
     // FP: this needs to be public because it is referenced by interfaces elsewhere. It's not public in the .NET version because that version can use explicitly-defined interfaces.
     public class Metroline {
 #else
-    internal class Metroline {
+    internal class Metroline : IPolyWithIndex{
 #endif
         internal double Width;
         internal double Length { get; set; }
@@ -24,11 +24,13 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         internal Polyline Polyline { get; set; }
         public int Index { get; set; }
 
+        public Polyline Poly => Polyline;
+
         internal Metroline(Polyline polyline, double width, Func<Tuple<Polyline, Polyline>> sourceAndTargetLoosePolys, int index) {
             Width = width;
             Polyline = polyline;
-            this.sourceAndTargetLoosePolylines = sourceAndTargetLoosePolys;
-            this.Index = index;
+            sourceAndTargetLoosePolylines = sourceAndTargetLoosePolys;
+            Index = index;
         }
 
         internal void UpdateLengths() {

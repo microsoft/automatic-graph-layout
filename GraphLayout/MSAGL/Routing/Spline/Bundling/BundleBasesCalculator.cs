@@ -98,7 +98,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                         }
 
                         Set<Polyline> obstaclesToIgnore = metroGraphData.tightIntersections.ObstaclesToIgnoreForBundle(station, neighbor);
-                        var bundle = new BundleInfo(bb, bb2, obstaclesToIgnore, bundlingSettings.EdgeSeparation, metroOrdering.GetOrder(station.Position, neighbor.Position).Select(l => l.Width / 2).ToArray());
+                        var bundle = new BundleInfo(bb, bb2, obstaclesToIgnore, bundlingSettings.EdgeSeparation, metroOrdering.GetOrder(station.Position, neighbor.Position).Select(l => (l as Metroline).Width / 2).ToArray());
                         bb.OutgoingBundleInfo = bb2.IncomingBundleInfo = bundle;
                         Bundles.Add(bundle);
                     }
