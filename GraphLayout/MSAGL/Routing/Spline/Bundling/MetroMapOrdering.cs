@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
-using Microsoft.Msagl.Core.Layout;
-using Microsoft.Msagl.DebugHelpers;
 
 namespace Microsoft.Msagl.Routing.Spline.Bundling {
+    struct PolyWithIndex {
+       internal Polyline poly;
+       internal int index;
+    }
     /// <summary>
     /// greedy bundle map ordering based on path comparison
     /// </summary>
@@ -14,14 +16,14 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         /// <summary>
         /// bundle lines
         /// </summary>
-        readonly List<Metroline> Metrolines;
+        readonly PolyWithIndex[] Metrolines;
         Dictionary<PointPair, PointPairOrder> bundles;
 
         /// <summary>
         /// Initialize bundle graph and build the ordering
         /// </summary>
-        internal MetroMapOrdering(List<Metroline> Metrolines) {
-            this.Metrolines = Metrolines;
+        internal MetroMapOrdering(IEnumerable<PolyWithIndex> metrolines) {
+            this.Metrolines = metrolines.ToArray();
 
             BuildOrder();
         }
@@ -33,7 +35,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         //SharpKit/Colin - Interface implementations
         public IEnumerable<Metroline> GetOrder(Station u, Station v) {
 #else
-        internal IEnumerable<Metroline> GetOrder(Point u, Point v) {
+        internal IEnumerable<PolyWithIndex> GetOrder(Point u, Point v) {
 #endif
             var pointPair = new PointPair(u, v);
             var orderedMetrolineListForUv = bundles[pointPair].Metrolines;
@@ -55,7 +57,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         //SharpKit/Colin - Interface implementations
         public int GetLineIndexInOrder(Station u, Station v, Metroline Metroline) {
 #else
-        internal int GetLineIndexInOrder(Point u, Point v, Metroline Metroline) {
+        internal int GetLineIndexInOrder(Point u, Point v, PolyWithIndex Metroline) {
 #endif
             var edge = new PointPair(u, v);
             var aligned = u == edge.First;
@@ -72,13 +74,13 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             bundles = new Dictionary<PointPair, PointPairOrder>();
             
             //initialization
-            foreach (var Metroline in Metrolines) {
-                for (var p = Metroline.Polyline.StartPoint; p.Next != null; p = p.Next) {
+            foreach (var ml in Metrolines) {
+                for (var p = ml.poly.StartPoint; p.Next != null; p = p.Next) {
                     var e = new PointPair(p.Point, p.Next.Point);
                     PointPairOrder li;
                     if (!bundles.TryGetValue(e, out li))
                         bundles[e] = li = new PointPairOrder();
-                    li.Add(Metroline);
+                    li.Add(ml);
                 }
             }
 
@@ -106,7 +108,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         /// <summary>
         /// Compare two lines on station u with respect to edge (u->v)
         /// </summary>
-        int CompareLines(Metroline ml0, Metroline ml1, Point u, Point v) {
+        int CompareLines(PolyWithIndex ml0, PolyWithIndex ml1, Point u, Point v) {
             PolylinePoint polylinePoint0;
             Func<PolylinePoint, PolylinePoint> next0;
             Func<PolylinePoint, PolylinePoint> prev0;
@@ -161,7 +163,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             return ml0.Index.CompareTo(ml1.Index);
         }
 
-        int CompareOnFixedOrder(PointPair edge, Metroline ml0, Metroline ml1, bool reverse) {
+        int CompareOnFixedOrder(PointPair edge, PolyWithIndex ml0, PolyWithIndex ml1, bool reverse) {
             var mlToIndex = bundles[edge].LineIndexInOrder;
             int r = reverse ? -1 : 1;
             return r * mlToIndex[ml0].CompareTo(mlToIndex[ml1]);

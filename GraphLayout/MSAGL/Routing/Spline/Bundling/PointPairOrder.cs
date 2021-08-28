@@ -3,11 +3,11 @@
 namespace Microsoft.Msagl.Routing.Spline.Bundling {
     internal class PointPairOrder {
         //order for node u of edge u->v
-        internal List<Metroline> Metrolines = new List<Metroline>();
+        internal List<PolyWithIndex> Metrolines = new List<PolyWithIndex>();
         internal bool orderFixed;
-        internal Dictionary<Metroline, int> LineIndexInOrder;
+        internal Dictionary<PolyWithIndex, int> LineIndexInOrder;
 
-        internal void Add(Metroline metroline) {
+        internal void Add(PolyWithIndex metroline) {
             Metrolines.Add(metroline);
         }
     }

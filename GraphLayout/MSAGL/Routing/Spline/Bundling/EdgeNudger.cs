@@ -48,7 +48,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         /// bundle-map ordering
         /// </summary>
         void CreateMetroOrdering() {
-            metroOrdering = new MetroMapOrdering(metroGraphData.Metrolines);            
+            metroOrdering = new MetroMapOrdering(metroGraphData.Metrolines.Cast<PolyWithIndex>);            
         }
 
         void FinalizePaths() {
