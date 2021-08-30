@@ -5,8 +5,13 @@ using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 
 namespace Microsoft.Msagl.Routing.Spline.Bundling {
-    internal interface IPolyWithIndex {
-       Polyline Poly { get; }
+    interface IPolylinePoint {
+        Point Point { get; }
+        IPolylinePoint Next { get; }
+        IPolylinePoint Prev { get; }
+    }
+    interface IPolyWithIndex {
+       IPolylinePoint PPoint { get; }
        int Index { get; }
     }
     /// <summary>
@@ -75,7 +80,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             
             //initialization
             foreach (var ml in Metrolines) {
-                for (var p = ml.Poly.StartPoint; p.Next != null; p = p.Next) {
+                for (var p = ml.PPoint; p.Next != null; p = p.Next) {
                     var e = new PointPair(p.Point, p.Next.Point);
                     PointPairOrder li;
                     if (!bundles.TryGetValue(e, out li))
@@ -109,19 +114,19 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         /// Compare two lines on station u with respect to edge (u->v)
         /// </summary>
         int CompareLines(IPolyWithIndex ml0, IPolyWithIndex ml1, Point u, Point v) {
-            PolylinePoint polylinePoint0;
-            Func<PolylinePoint, PolylinePoint> next0;
-            Func<PolylinePoint, PolylinePoint> prev0;
+            IPolylinePoint polylinePoint0;
+            Func<IPolylinePoint, IPolylinePoint> next0;
+            Func<IPolylinePoint, IPolylinePoint> prev0;
             FindStationOnLine(u, v, ml0, out polylinePoint0, out next0, out prev0);
-            PolylinePoint polylinePoint1;
-            Func<PolylinePoint, PolylinePoint> next1;
-            Func<PolylinePoint, PolylinePoint> prev1;
+            IPolylinePoint polylinePoint1;
+            Func<IPolylinePoint, IPolylinePoint> next1;
+            Func<IPolylinePoint, IPolylinePoint> prev1;
             FindStationOnLine(u, v, ml1, out polylinePoint1, out next1, out prev1);
 
             //go backward
             var p0 = polylinePoint0;
             var p1 = polylinePoint1;
-            PolylinePoint p00, p11 = null;
+            IPolylinePoint p00, p11 = null;
 
             while ((p00 = prev0(p0)) != null && (p11 = prev1(p1)) != null && p00.Point == p11.Point) {
                 var edge = new PointPair(p00.Point, p0.Point);
@@ -173,10 +178,10 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         /// <summary>
         /// Reimplement it in more efficient way!!! (cache indexes)
         /// </summary>
-        void FindStationOnLine(Point u, Point v, IPolyWithIndex line, out PolylinePoint polyPoint, out Func<PolylinePoint, PolylinePoint> next,
-            out Func<PolylinePoint, PolylinePoint> prev) {
+        void FindStationOnLine(Point u, Point v, IPolyWithIndex line, out IPolylinePoint polyPoint, out Func<IPolylinePoint, IPolylinePoint> next,
+            out Func<IPolylinePoint, IPolylinePoint> prev) {
 
-            for (var p = line.Poly.StartPoint; p.Next != null; p = p.Next) {
+            for (var p = line.PPoint; p.Next != null; p = p.Next) {
                 if (p.Point == u && p.Next.Point == v) {
                     next = Next;
                     prev = Prev;
@@ -194,10 +199,10 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             throw new InvalidOperationException();
         }
 
-        static PolylinePoint Next(PolylinePoint p) {
+        static IPolylinePoint Next(IPolylinePoint p) {
             return p.Next;
         }
-        static PolylinePoint Prev(PolylinePoint p) {
+        static IPolylinePoint Prev(IPolylinePoint p) {
             return p.Prev;
         }
 

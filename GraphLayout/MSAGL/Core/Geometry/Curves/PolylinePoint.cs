@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.Msagl.Routing.Spline.Bundling;
 
 namespace Microsoft.Msagl.Core.Geometry.Curves {
 	/// <summary>
@@ -8,7 +9,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
 #if TEST_MSAGL
     [Serializable]
 #endif
-	public class PolylinePoint {
+	public class PolylinePoint:IPolylinePoint {
 		/// <summary>
 		/// 
 		/// </summary>
@@ -105,5 +106,8 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             get { return Polyline.Prev(this); }
         }
 
+        IPolylinePoint IPolylinePoint.Next => Next;
+
+        IPolylinePoint IPolylinePoint.Prev => Prev;
     }
 }

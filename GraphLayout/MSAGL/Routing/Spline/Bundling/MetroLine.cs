@@ -26,6 +26,8 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
         public Polyline Poly => Polyline;
 
+        IPolylinePoint IPolyWithIndex.PPoint => Poly.StartPoint;
+
         internal Metroline(Polyline polyline, double width, Func<Tuple<Polyline, Polyline>> sourceAndTargetLoosePolys, int index) {
             Width = width;
             Polyline = polyline;
