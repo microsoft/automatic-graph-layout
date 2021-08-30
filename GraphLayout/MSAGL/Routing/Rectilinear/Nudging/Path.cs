@@ -11,7 +11,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
     /// represents the path for an EdgeGeometry 
     /// </summary>
     internal class Path {
-        internal int id;
         /// <summary>
         /// the corresponding edge geometry
         /// </summary>
@@ -27,8 +26,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         /// constructor
         /// </summary>
         /// <param name="edgeGeometry"></param>
-        internal Path(int id, EdgeGeometry edgeGeometry) {
-            this.id = id;
+        internal Path(EdgeGeometry edgeGeometry) {
             EdgeGeometry = edgeGeometry;
         }
 

@@ -430,7 +430,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         internal virtual void GeneratePaths() {
-            var edgePaths = this.EdgeGeometries.Zip(Enumerable.Range(0, EdgeGeometries.Count - 1), (eg, i) => new Path(i, eg)).ToList();
+            var edgePaths = this.EdgeGeometries.Select(eg => new Path(eg)).ToList();
             // this.EdgeGeometries.Select(eg => new Path(eg)).ToList();
             this.FillEdgePathsWithShortestPaths(edgePaths);
             this.NudgePaths(edgePaths);
