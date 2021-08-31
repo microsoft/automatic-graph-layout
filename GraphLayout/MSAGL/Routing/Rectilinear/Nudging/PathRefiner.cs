@@ -170,14 +170,14 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         }
 
         static LinkedPoint CreateLinkedVertexOfEdgePath(Path path) {
-            var pathPoint = new LinkedPoint(path.PathPoints.First());
-            var first = pathPoint;
+            var ret = new LinkedPoint(path.PathPoints.First());
+            
 #if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=368
             path.PathPoints.Skip(1).Aggregate(pathPoint, (lp, p) => { lp.Next = new LinkedPoint(p); return lp.Next; });
 #else
-            path.PathPoints.Skip(1).Aggregate(pathPoint, (lp, p) => lp.Next = new LinkedPoint(p));
+            path.PathPoints.Skip(1).Aggregate(ret, (lp, p) => lp.Next = new LinkedPoint(p));
 #endif
-            return first;
+            return ret;
         }
     }
 }
