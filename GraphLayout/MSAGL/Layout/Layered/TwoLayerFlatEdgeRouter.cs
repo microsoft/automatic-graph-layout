@@ -193,7 +193,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         void CalculateLabelsX() {
             int i;
-            ISolverShell solver = ConstrainedOrdering.CreateSolver();
+            var solver = new SolverShell();
             for (i = 0; i < pairArray.Length; i++)
                 solver.AddVariableWithIdealPosition(i, labelCenters[i], GetLabelWeight(pairArray[i]));
 

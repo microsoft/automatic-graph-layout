@@ -141,7 +141,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
         void SetXPositions() {
-            ISolverShell solver = InitSolverWithoutOrder();
+            SolverShell solver = InitSolverWithoutOrder();
             ImproveWithAdjacentSwaps();
             PutLayerNodeSeparationsIntoSolver(solver);
             solver.Solve();
@@ -151,8 +151,8 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         }
 
-        ISolverShell InitSolverWithoutOrder() {
-            ISolverShell solver=CreateSolver();
+        SolverShell InitSolverWithoutOrder() {
+            var solver=new SolverShell();
             InitSolverVars(solver);
             
             PutLeftRightConstraintsIntoSolver(solver);
@@ -163,40 +163,40 @@ namespace Microsoft.Msagl.Layout.Layered {
             return solver;
         }
 
-        void SortLayers(ISolverShell solver) {
+        void SortLayers(SolverShell solver) {
             for (int i = 0; i < LayerArrays.Layers.Length; i++)
                 SortLayerBasedOnSolution(LayerArrays.Layers[i], solver);
         }
 
-        void AddGoalsToKeepFlatEdgesShort(ISolverShell solver) {
+        void AddGoalsToKeepFlatEdgesShort(SolverShell solver) {
             foreach (var layerInfo in layerInfos)
                 AddGoalToKeepFlatEdgesShortOnBlockLevel(layerInfo, solver);
         }
 
-        void InitSolverVars(ISolverShell solver) {
+        void InitSolverVars(SolverShell solver) {
             for (int i = 0; i < LayerArrays.Y.Length; i++)
                 solver.AddVariableWithIdealPosition(i, 0);
         }
 
-        void AddGoalsToKeepProperEdgesShort(ISolverShell solver) {
+        void AddGoalsToKeepProperEdgesShort(SolverShell solver) {
             foreach (var edge in ProperLayeredGraph.Edges)
                 solver.AddGoalTwoVariablesAreClose(edge.Source, edge.Target, PositionOverBaricenterWeight);
 
         }
 
-        void PutVerticalConstraintsIntoSolver(ISolverShell solver) {
+        void PutVerticalConstraintsIntoSolver(SolverShell solver) {
             foreach (var pair in horizontalConstraints.VerticalInts) {
                 solver.AddGoalTwoVariablesAreClose(pair.Item1, pair.Item2, ConstrainedVarWeight);
             }
         }
 
-        void PutLeftRightConstraintsIntoSolver(ISolverShell solver) {
+        void PutLeftRightConstraintsIntoSolver(SolverShell solver) {
             foreach (var pair in horizontalConstraints.LeftRighInts) {
                 solver.AddLeftRightSeparationConstraint(pair.Item1, pair.Item2, SimpleGapBetweenTwoNodes(pair.Item1, pair.Item2));
             }
         }
 
-        void PutLayerNodeSeparationsIntoSolver(ISolverShell solver) {
+        void PutLayerNodeSeparationsIntoSolver(SolverShell solver) {
             foreach (var layer in LayerArrays.Layers) {
                 for (int i = 0; i < layer.Length - 1; i++) {
                     int l = layer[i];
@@ -344,7 +344,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 #endif
 
 
-        void SortLayerBasedOnSolution(int[] layer, ISolverShell solver) {
+        void SortLayerBasedOnSolution(int[] layer, SolverShell solver) {
             int length = layer.Length;
             var positions = new double[length];
             int k = 0;
@@ -365,7 +365,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             return layerInfo.nodeToBlockRoot.TryGetValue(node, out root) ? root : node;
         }
 
-        static void AddGoalToKeepFlatEdgesShortOnBlockLevel(LayerInfo layerInfo, ISolverShell solver) {
+        static void AddGoalToKeepFlatEdgesShortOnBlockLevel(LayerInfo layerInfo, SolverShell solver) {
             if (layerInfo != null)
                 foreach (var couple in layerInfo.flatEdges) {
                     int sourceBlockRoot = NodeToBlockRootSoftOnLayerInfo(layerInfo, couple.Item1);
@@ -429,10 +429,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                    NodeSeparation() + database.anchors[rightNode].LeftAnchor;
         }
 
-        internal static ISolverShell CreateSolver() {
-            return new SolverShell();
-        }
-
+        
         void PrepareProperLayeredGraphAndFillLayerInfos() {
             layerInfos = new LayerInfo[NumberOfLayers];
             CreateProperLayeredGraph();

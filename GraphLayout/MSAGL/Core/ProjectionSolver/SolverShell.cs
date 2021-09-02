@@ -20,7 +20,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver{
     /// <summary>
     /// just a convenient interface to the real solver
     /// </summary>
-    public class SolverShell : ISolverShell{
+    public class SolverShell {
 
         const double FixedVarWeight = 10e8;
 
