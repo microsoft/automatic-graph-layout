@@ -212,37 +212,7 @@ namespace Microsoft.Msagl.Core.Geometry
             return newCluster;
         }
 
-        /// <summary>
-        /// Add a Cluster with default border information and no minimum sizes.
-        /// </summary>
-        /// <param name="parentCluster">The cluster this cluster is to be a member of; if null, this is the root of a
-        ///                             new hierarchy, otherwise must be non-NULL (perhaps DefaultClusterHierarchy).</param>
-        /// <param name="userData">An object that is passed through.</param>
-        /// <returns>The new Cluster.</returns>
-        public OverlapRemovalCluster AddCluster(OverlapRemovalCluster parentCluster, object userData)
-        {
-            return AddCluster(parentCluster, userData,
-                            new BorderInfo(0.0), new BorderInfo(0.0),
-                            new BorderInfo(0.0), new BorderInfo(0.0)); // 0.0 margins 
-        }
-
-        /// <summary>
-        /// Add a Cluster with default border information and specified minimum sizes.
-        /// </summary>
-        /// <param name="parentCluster">The cluster this cluster is to be a member of; if null, this is the root of a
-        ///                             new hierarchy, otherwise must be non-NULL (perhaps DefaultClusterHierarchy).</param>
-        /// <param name="userData">An object that is passed through.</param>
-        /// <param name="minimumSize">Minimum cluster size along the primary axis.</param>
-        /// <param name="minimumSizeP">Minimum cluster size along the perpendicular axis.</param>
-        /// <returns>The new Cluster.</returns>
-        public OverlapRemovalCluster AddCluster(OverlapRemovalCluster parentCluster, object userData,
-                                              double minimumSize, double minimumSizeP)
-        {
-            return AddCluster(parentCluster, userData, minimumSize, minimumSizeP,
-                            new BorderInfo(0.0), new BorderInfo(0.0),
-                            new BorderInfo(0.0), new BorderInfo(0.0)); // 0.0 margins 
-        }
-
+        
         /// <summary>
         /// Add a node to a cluster in another hierarchy (a node can be in only one cluster per hierarchy).
         /// </summary>
