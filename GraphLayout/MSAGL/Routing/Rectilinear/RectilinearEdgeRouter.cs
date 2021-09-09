@@ -203,7 +203,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         void AddObstacleWithoutRebuild(Shape shape)
         {
             ValidateArg.IsNotNull(shape, "shape");
-            if (null == shape.BoundaryCurve) {
+            if ( shape.BoundaryCurve==null) {
                 throw new InvalidOperationException(
 #if TEST_MSAGL
                     "Shape must have a BoundaryCurve"
@@ -217,7 +217,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         void UpdateObstacleWithoutRebuild(Shape shape)
         {
             ValidateArg.IsNotNull(shape, "shape");
-            if (null == shape.BoundaryCurve) {
+            if ( shape.BoundaryCurve==null) {
                 throw new InvalidOperationException(
 #if TEST_MSAGL
                     "Shape must have a BoundaryCurve"
@@ -253,8 +253,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         #endregion // Obstacle API
 
         void RebuildTreeAndGraph() {
-            bool hadTree = (null != this.ObstacleTree.Root);
-            bool hadVg = (null != GraphGenerator.VisibilityGraph);
+            bool hadTree = this.ObstacleTree.Root!=null;
+            bool hadVg = GraphGenerator.VisibilityGraph!= null;
             InternalClear(retainObstacles: true);
 
             if (hadTree) {
@@ -516,7 +516,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
         
         private static void EnsureNonNullPath(Path edgePath) {
-            if (null == edgePath.PathPoints) {
+            if ( edgePath.PathPoints==null) {
                 // Probably a fully-landlocked obstacle such as RectilinearTests.Route_Between_Two_Separately_Landlocked_Obstacles
                 // or disconnected subcomponents due to excessive overlaps, such as Rectilinear(File)Tests.*Disconnected*.  In this
                 // case, just put the single-bend path in there, even though it most likely cuts across unrelated obstacles.
@@ -589,7 +589,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
         internal virtual void FinaliseEdgeGeometries() {
             foreach (EdgeGeometry edgeGeom in EdgeGeometries.Concat(selfEdges)) {
-                if (null == edgeGeom.Curve) {
+                if (edgeGeom.Curve == null) {
                     continue;
                 }
                 var poly = (edgeGeom.Curve as Polyline);
@@ -618,7 +618,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         private void GenerateObstacleTree() {
-            if ((null == Obstacles) || !Obstacles.Any()) {
+            if (( Obstacles== null) || !Obstacles.Any()) {
                 throw new InvalidOperationException(
 #if TEST_MSAGL
                     "No obstacles have been added"
@@ -626,7 +626,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                     );
             }
 
-            if (null == this.ObstacleTree.Root) {
+            if ( this.ObstacleTree.Root==null) {
                 InitObstacleTree();
             }
         }
@@ -662,7 +662,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         /// Generates the visibility graph if it hasn't already been done.
         /// </summary>
         internal void GenerateVisibilityGraph() {
-            if ((null == Obstacles) || !Obstacles.Any()) {
+            if ((Obstacles==null) || !Obstacles.Any()) {
                 throw new InvalidOperationException(
 #if TEST_MSAGL
                     "No obstacles have been set"
