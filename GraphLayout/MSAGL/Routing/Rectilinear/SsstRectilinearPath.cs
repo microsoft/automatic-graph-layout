@@ -43,7 +43,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         /// <summary>
         /// The priority queue for path extensions.
         /// </summary>
-        private GenericBinaryHeapPriorityQueueWithTimestamp<VertexEntry> queue;
+        private GenericBinaryHeapPriorityQueue<VertexEntry> queue;
 
         /// <summary>
         /// The list of vertices we've visited for all paths.
@@ -95,7 +95,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             }
 
             // This path starts lower than upperBoundOnCost, so create our structures and process it.
-            this.queue = new GenericBinaryHeapPriorityQueueWithTimestamp<VertexEntry>();
+            this.queue = new GenericBinaryHeapPriorityQueue<VertexEntry>();
             this.visitedVertices = new List<VisibilityVertexRectilinear> { source };
 
             if (sourceVertexEntries == null) {
@@ -477,9 +477,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                 this.DevTraceShowPath(source, null);
                 return null;
             }
-#if TEST_MSAGL
-            this.DevTraceShowAllPartialPaths(source, queue.Peek());
-#endif // TEST_MSAGL
+
 
             while (queue.Count > 0) {
                 this.TestPreDequeue();
@@ -723,11 +721,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         [Conditional("TEST_MSAGL")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         private void TestPreDequeue() {
-#if TEST_MSAGL
-            ++currentIterations;
-            ++totalIterations;
-            this.lastDequeueTimestamp = this.queue.PeekTimestamp();
-#endif // TEST_MSAGL
         }
 
         [Conditional("TEST_MSAGL")]

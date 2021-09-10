@@ -127,7 +127,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         internal void AddToAdjacentVertex(TransientGraphUtility transUtil, VisibilityVertex targetVertex
                             , Rectangle limitRect, bool routeToCenter) {
             VisibilityVertex borderVertex = transUtil.VisGraph.FindVertex(this.VisibilityBorderIntersect);
-            if (null != borderVertex) {
+            if (borderVertex != null) {
                 ExtendFromBorderVertex(transUtil, borderVertex, limitRect, routeToCenter);
                 return;
             }
