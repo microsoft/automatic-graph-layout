@@ -9,16 +9,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
     internal class MsmtRectilinearPath {
         private readonly double bendPenaltyAsAPercentageOfDistance = SsstRectilinearPath.DefaultBendPenaltyAsAPercentageOfDistance;
 
-        // Waypoints define path stages: source -> wp1, wp1 -> wp2 ... wpn -> target.
-        class WaypointEntry {
-            internal readonly VisibilityVertex[] waypointVector = new VisibilityVertex[1];
-            internal readonly VertexEntry[] entryVector = new VertexEntry[4];
-
-            internal WaypointEntry(VisibilityVertex waypoint) {
-                this.waypointVector[0] = waypoint;
-            }
-        }
-
+    
         // Temporary for accumulating target entries.
         private readonly VertexEntry[] currentPassTargetEntries = new VertexEntry[4];
 
@@ -36,73 +27,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return SsstRectilinearPath.RestorePath(GetPathStage(null, sources, null, targets));
         }
 
-        /// <summary>
-        /// Get the lowest-cost path from one of one or more sources to one of one or more targets, with waypoints.
-        /// </summary>
-        /// <param name="sources">One or more source vertices</param>
-        /// <param name="waypoints">One or more waypoint vertices</param>
-        /// <param name="targets">One or more target vertices</param>
-        /// <returns>An enumeration of each stage's enumeration of path points</returns>
-        internal IEnumerable<IEnumerable<Point>> GetPath(IEnumerable<VisibilityVertex> sources, IEnumerable<VisibilityVertex> waypoints,
-                                            IEnumerable<VisibilityVertex> targets) {
-            var waypointEntries = new List<WaypointEntry>();
-
-            var waypointEnum = waypoints.GetEnumerator();
-            waypointEnum.MoveNext();
-            var sourceWaypointEntry = new WaypointEntry(waypointEnum.Current);
-            waypointEntries.Add(sourceWaypointEntry);
-
-            VertexEntry lastEntry;
-            if (!GetFirstPathStage(sourceWaypointEntry, sources)
-                    || !GetWaypointPathStages(waypointEnum, waypointEntries, ref sourceWaypointEntry)
-                    || !GetLastPathStage(sourceWaypointEntry, targets, out lastEntry)) {
-                return null;
-            }
-            return RestorePathStages(waypointEntries, lastEntry);
-        }
-
-        private bool GetFirstPathStage(WaypointEntry sourceWaypointEntry, IEnumerable<VisibilityVertex> sources) {
-            // Get the first stage: no prior entries to the sources; this target waypoint becomes the first waypoint stage's source.
-            return null != this.GetPathStage(null, sources, sourceWaypointEntry.entryVector, sourceWaypointEntry.waypointVector);
-        }
-
-        private bool GetWaypointPathStages(IEnumerator<VisibilityVertex> waypointEnum, List<WaypointEntry> waypointEntries, ref WaypointEntry sourceWaypointEntry) {
-            // Get the path stages between each waypoint: send the prior entries to source and get the entries to target.
-            while (waypointEnum.MoveNext()) {
-                var targetWaypointEntry = new WaypointEntry(waypointEnum.Current);
-                waypointEntries.Add(targetWaypointEntry);
-
-                if (null == this.GetPathStage(sourceWaypointEntry.entryVector, sourceWaypointEntry.waypointVector,
-                        targetWaypointEntry.entryVector, targetWaypointEntry.waypointVector)) {
-                    return false;
-                }
-                sourceWaypointEntry = targetWaypointEntry;
-            }
-            return true;
-        }
-
-        private bool GetLastPathStage(WaypointEntry sourceWaypointEntry, IEnumerable<VisibilityVertex> targets, out VertexEntry lastEntry) {
-            // Final stage: no need to get separate entries to the targets.  And because we send null for the
-            // target entry vector, this will return the final vertexEntry of the path.
-            lastEntry = this.GetPathStage(sourceWaypointEntry.entryVector, sourceWaypointEntry.waypointVector, null, targets);
-            return lastEntry != null;
-        }
-
-        private static IEnumerable<IEnumerable<Point>> RestorePathStages(List<WaypointEntry> waypointEntries, VertexEntry lastEntry) {
-            // Back up to restore the path stages back to each waypoint.
-            var paths = new List<IEnumerable<Point>>();
-            waypointEntries.Reverse();
-            foreach (var waypointEntry in waypointEntries) {
-                paths.Add(SsstRectilinearPath.RestorePath(ref lastEntry, waypointEntry.waypointVector[0]));
-            }
-
-            // Add the first stage.
-            paths.Add(SsstRectilinearPath.RestorePath(lastEntry));
-            paths.Reverse();
-            return paths;
-        }
-
-        /// <summary>
+/// <summary>
         /// Route a single stage of a possibly multi-stage (due to waypoints) path.
         /// </summary>
         /// <param name="sourceVertexEntries">The VertexEntry array that was in the source vertex if it was the target of a prior stage.</param>
