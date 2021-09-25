@@ -29,7 +29,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         /// </summary>
         /// <returns></returns>
         internal override void GenerateVisibilityGraph() {
-            if (null == ObstacleTree.Root) {
+            if (null == ObsTree.Root) {
                 return;
             }
 
@@ -43,7 +43,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
             // Done now with the ScanSegment generation; intersect them to create the VisibilityGraph.
             IntersectScanSegments();
-            Debug_AssertGraphIsRectilinear(VisibilityGraph, ObstacleTree);
+            Debug_AssertGraphIsRectilinear(VisibilityGraph, ObsTree);
         }
 
         private void IntersectScanSegments()
@@ -183,7 +183,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             if (!side.Obstacle.IsGroup && !eventObstacle.IsGroup && (side.Obstacle.Clump != eventObstacle.Clump)) {
                 return false;
             }
-            return ObstacleTree.IntersectionIsInsideAnotherObstacle(side.Obstacle, eventObstacle, intersect, ScanDirection);
+            return ObsTree.IntersectionIsInsideAnotherObstacle(side.Obstacle, eventObstacle, intersect, ScanDirection);
         }
 
         // As described in the document, we currently don't create ScanSegments where a flat top/bottom boundary may have

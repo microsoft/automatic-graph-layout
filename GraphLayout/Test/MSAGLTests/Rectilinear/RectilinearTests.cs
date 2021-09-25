@@ -3686,7 +3686,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             var routings = new List<EdgeGeometry> { CreateRouting(ps1, ps2) };
 
             var router = DoRouting(obstacles, routings, null /*freePorts*/);
-            var group1 = router.ObstacleTree.GetAllGroups().First();
+            var group1 = router.ObsTree.GetAllGroups().First();
             VerifyReflectionSegmentsOutsideGroup(group1, router.GraphGenerator.HorizontalScanSegments.Segments, base.UseSparseVisibilityGraph ? 0 : 7);
             VerifyReflectionSegmentsOutsideGroup(group1, router.GraphGenerator.VerticalScanSegments.Segments, base.UseSparseVisibilityGraph ? 0 : 8);
         }
@@ -4398,9 +4398,9 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         private void VerifyAllObstaclesInClump(RectilinearEdgeRouterWrapper router, Shape[] siblingShapes = null, bool show = true)
         {
             router.CreateVisibilityGraph();
-            var clump = router.ObstacleTree.GetAllObstacles().First().Clump;
+            var clump = router.ObsTree.GetAllObstacles().First().Clump;
             Validate.IsNotNull(clump, "Obstacles should be in a clump");
-            foreach (var obstacle in router.ObstacleTree.GetAllObstacles())
+            foreach (var obstacle in router.ObsTree.GetAllObstacles())
             {
                 var expectClump = IsObstacleInShapes(siblingShapes, obstacle);
                 Validate.IsTrue(obstacle.IsRectangle, "Clumped obstacles should always be rectangles");
@@ -4598,9 +4598,9 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         private void VerifyAllObstaclesInConvexHull(RectilinearEdgeRouterWrapper router, Shape[] hullShapes = null, bool show = true) 
         {
             router.CreateVisibilityGraph();
-            var convexHull = router.ObstacleTree.GetAllObstacles().First().ConvexHull;
+            var convexHull = router.ObsTree.GetAllObstacles().First().ConvexHull;
             Validate.IsNotNull(convexHull, "convex hull should have been created");
-            foreach (var obstacle in router.ObstacleTree.GetAllObstacles())
+            foreach (var obstacle in router.ObsTree.GetAllObstacles())
             {
                 var expectHull = IsObstacleInShapes(hullShapes, obstacle);
                 if (expectHull) 
@@ -4782,7 +4782,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             Obstacle group1 = null;
             Obstacle group2 = null;
             Obstacle group3 = null;
-            foreach (var obstacle in router.ObstacleTree.GetAllObstacles()) 
+            foreach (var obstacle in router.ObsTree.GetAllObstacles()) 
             {
                 // No obstacles should be clumped or convex-hulled.
                 Validate.IsFalse(obstacle.IsOverlapped, "objects in convex hulls should not be marked overlapped");
@@ -4851,9 +4851,9 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             this.RunAndShowGraph(router);
 
             // Reget all obstacles as they have been re-created for the new router.
-            group1 = router.ObstacleTree.GetAllGroups().First();
-            shape1 = router.ObstacleTree.GetAllObstacles().Where(obs => obs.InputShape == s1).First();
-            var shape2 = router.ObstacleTree.GetAllObstacles().Where(obs => obs.InputShape == s2).First();
+            group1 = router.ObsTree.GetAllGroups().First();
+            shape1 = router.ObsTree.GetAllObstacles().Where(obs => obs.InputShape == s1).First();
+            var shape2 = router.ObsTree.GetAllObstacles().Where(obs => obs.InputShape == s2).First();
 
             // Now the shapes should be in clumps.
             Validate.IsFalse(group1.IsInConvexHull, "group1 should not have a convex hull");
@@ -4897,9 +4897,9 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             this.RunAndShowGraph(router);
 
             // Reget all obstacles as they have been re-created for the new router.
-            group1 = router.ObstacleTree.GetAllGroups().First();
-            shape1 = router.ObstacleTree.GetAllObstacles().Where(obs => obs.InputShape == s1).First();
-            var shape2 = router.ObstacleTree.GetAllObstacles().Where(obs => obs.InputShape == s2).First();
+            group1 = router.ObsTree.GetAllGroups().First();
+            shape1 = router.ObsTree.GetAllObstacles().Where(obs => obs.InputShape == s1).First();
+            var shape2 = router.ObsTree.GetAllObstacles().Where(obs => obs.InputShape == s2).First();
 
             // Now we should have a convex hull for the nonrectangular obstacles.
             Validate.IsTrue(group1.IsInConvexHull, "group1 should have a convex hull");
@@ -4946,8 +4946,8 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             {
                 this.ShowGraph(router);
             }
-            group1 = router.ObstacleTree.GetAllGroups().First();
-            shape1 = router.ObstacleTree.GetAllObstacles().Where(obs => obs.InputShape == s1).First();
+            group1 = router.ObsTree.GetAllGroups().First();
+            shape1 = router.ObsTree.GetAllObstacles().Where(obs => obs.InputShape == s1).First();
             return obstacles;
         }
 

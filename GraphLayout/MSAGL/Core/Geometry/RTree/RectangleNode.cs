@@ -81,9 +81,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// </summary>
         public RectangleNode<T,  P> Left {
             get { return left; }
-            internal set {
-                if (left != null && left.Parent==this)
-                    left.Parent = null;
+            internal set {                
                 left = value;
                 if (left != null)
                     left.Parent = this;
@@ -96,8 +94,6 @@ namespace Microsoft.Msagl.Core.Geometry {
         public RectangleNode<T,  P> Right {
             get { return right; }
             internal set {
-                if (right != null&& right.Parent==this)
-                    right.Parent = null;
                 right = value;
                 if (right != null)
                     right.Parent = this;
@@ -386,14 +382,18 @@ namespace Microsoft.Msagl.Core.Geometry {
                     Right = CreateRectangleNodeOnListOfNodes(gr1)
             };
 
+            Debug.Assert(RTree<T,P>.TreeIsCorrect(ret));
+
             return ret;
 
         }
 
         static int ChooseSeeds(IList<RectangleNode<T,  P>> nodes, ref int seed0) {
             var b0 = nodes[seed0].Rectangle;
-            double area = b0.Unite(nodes[seed0].Rectangle).Area;
-            for (int i = 2; i < nodes.Count; i++) {
+            double area = b0.Area;
+            for (int i = 0; i < nodes.Count; i++) {
+                if (i == seed0)
+                    continue;
                 double area0 = b0.Unite(nodes[i].Rectangle).Area;
                 if (area0 > area) {
                     seed0 = i;
@@ -425,6 +425,7 @@ namespace Microsoft.Msagl.Core.Geometry {
                     area = area1;
                 }
             }
+            
             return seed1;
         }
 

@@ -89,11 +89,11 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             System.Diagnostics.Debug.WriteLine(message);
         }
 
-        internal ObstacleTree ObstacleTree
+        internal ObstacleTree ObsTree
         {
             get
             {
-                return GraphGenerator.ObstacleTree;
+                return GraphGenerator.ObsTree;
             }
         }
 
@@ -101,7 +101,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         {
             base.InitObstacleTree();
             this.ShowObstacleTree();
-            this.allObstacleHierarchy = ObstacleTree.CalculateHierarchy(this.ObstacleTree.GetAllObstacles());
+            this.allObstacleHierarchy = ObstacleTree.CalculateHierarchy(this.ObsTree.GetAllObstacles());
         }
 
         internal override void CreateVisibilityGraph()
@@ -308,7 +308,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         private IEnumerable<Obstacle> ConvexHullsCrossedByEdge(VisibilityEdge edge, double tolerance)
         {
             var lineSegment = new LineSegment(edge.SourcePoint, edge.TargetPoint);
-            return this.ObstacleTree.Root.AllHitItems(
+            return this.ObsTree.Root.AllHitItems(
                 lineSegment.BoundingBox, obs => !obs.IsGroup && obs.IsInConvexHull && obs.IsPrimaryObstacle
                         && SegmentCrossesPolylineInterior(lineSegment, obs.VisibilityPolyline, tolerance));
         }
@@ -576,7 +576,7 @@ internal override void FinaliseEdgeGeometries()
 
         private void VerifyClumpsAndConvexHulls()
         {
-            foreach (var obstacle in this.ObstacleTree.GetAllObstacles()) 
+            foreach (var obstacle in this.ObsTree.GetAllObstacles()) 
             {
                 if (obstacle.IsOverlapped) 
                 {
@@ -717,7 +717,7 @@ internal override void FinaliseEdgeGeometries()
             hitTestOverlappingObstacle = null;
             hitTestIntervalRect = new Rectangle(start, end);
             hitTestExpectOverlap = isOverlapped;
-            ObstacleTree.Root.VisitTree(OverlappedRectangleHitTest, hitTestIntervalRect);
+            ObsTree.Root.VisitTree(OverlappedRectangleHitTest, hitTestIntervalRect);
             if (isOverlapped != (null != hitTestOverlappingObstacle))
             {
                 TestWriteLine(string.Format("  VisibilitySegment overlap mismatch: {0} -> {1}", start, end));
@@ -753,7 +753,7 @@ internal override void FinaliseEdgeGeometries()
 
             // Do the more expensive test for non-rectangular obstacle borders.  Because we have a single obstacle,
             // just do the maximum projection of the segment to the graphBox limits, then check for two intersections.
-            Rectangle graphBox = this.ObstacleTree.GraphBox;
+            Rectangle graphBox = this.ObsTree.GraphBox;
             bool isVertical = PointComparer.Equal(hitTestIntervalRect.Left, hitTestIntervalRect.Right);
             LineSegment hitTestSeg = isVertical
                                     ? new LineSegment(hitTestIntervalRect.Left, graphBox.Bottom, hitTestIntervalRect.Left, graphBox.Top)
@@ -919,7 +919,7 @@ internal override void FinaliseEdgeGeometries()
             // too; otherwise, and earlier path which crosses a non-spatial hierarchical ancestor would fail this validation
             // if a subsequent path caused SpatialAncestorsAdjusted (thereby removing that crossed non-spatial ancestor).
             // File Test: TestCode_Groups_NonSpatial_Ancestor_Crossed_Before_AdjustSpatialAncestors.
-            if (!this.ObstacleTree.SpatialAncestorsAdjusted)
+            if (!this.ObsTree.SpatialAncestorsAdjusted)
             {
                 return false;
             }
@@ -987,7 +987,7 @@ internal override void FinaliseEdgeGeometries()
 
         private void CreateGroupSpatialChildMap()
         {
-            var groupHierarchy = ObstacleTree.CalculateHierarchy(this.ObstacleTree.GetAllGroups());
+            var groupHierarchy = ObstacleTree.CalculateHierarchy(this.ObsTree.GetAllGroups());
             this.spatialChildrenToGroups = new Dictionary<Obstacle, List<Obstacle>>();
             if ((groupHierarchy == null) || (this.allObstacleHierarchy == null)) 
             {
@@ -998,13 +998,13 @@ internal override void FinaliseEdgeGeometries()
 
         private void CreateSuperClumpMap()
         {
-            this.superClumpMap = new SuperClumpMap(this.ObstacleTree);
+            this.superClumpMap = new SuperClumpMap(this.ObsTree);
         }
 
         private void CreateClumpMap()
         {
             this.clumpToRectNode = new Dictionary<Clump, RectangleNode<Obstacle,Point>>();
-            foreach (var clumpee in this.ObstacleTree.GetAllObstacles().Where(obs => obs.IsOverlapped))
+            foreach (var clumpee in this.ObsTree.GetAllObstacles().Where(obs => obs.IsOverlapped))
             {
                 this.clumpToRectNode[clumpee.Clump] = null;
             }
@@ -1025,7 +1025,7 @@ internal override void FinaliseEdgeGeometries()
             this.CreateGroupSpatialChildMap();
             this.CreateSuperClumpMap();
             this.CreateClumpMap();
-            if (this.ObstacleTree.SpatialAncestorsAdjusted) {
+            if (this.ObsTree.SpatialAncestorsAdjusted) {
                 this.originalAncestorSets = SplineRouter.GetAncestorSetsMap(Obstacles);
             }
 
@@ -1119,9 +1119,9 @@ internal override void FinaliseEdgeGeometries()
         private bool CheckDirectRouteAcrossGroupThroughClumpRect(EdgeGeometry edgeGeom, LineSegment routeAsTheCrowFlies, Rectangle crossedClumpRect)
         {
             return ClumpIsGroupRoadblock(routeAsTheCrowFlies, crossedClumpRect,
-                        this.ObstacleTree.Root.AllHitItems(new Rectangle(edgeGeom.SourcePort.Location), obs => obs.IsGroup))
+                        this.ObsTree.Root.AllHitItems(new Rectangle(edgeGeom.SourcePort.Location), obs => obs.IsGroup))
                    || ClumpIsGroupRoadblock(routeAsTheCrowFlies, crossedClumpRect,
-                        this.ObstacleTree.Root.AllHitItems(new Rectangle(edgeGeom.TargetPort.Location), obs => obs.IsGroup));
+                        this.ObsTree.Root.AllHitItems(new Rectangle(edgeGeom.TargetPort.Location), obs => obs.IsGroup));
         }
 
         private bool CrossedObstacleClumpContainsEndpoint(EdgeGeometry edgeGeom, Obstacle crossedObstacle)

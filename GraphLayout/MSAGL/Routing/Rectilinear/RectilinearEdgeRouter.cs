@@ -253,7 +253,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         #endregion // Obstacle API
 
         void RebuildTreeAndGraph() {
-            bool hadTree = this.ObstacleTree.Root!=null;
+            bool hadTree = this.ObsTree.Root!=null;
             bool hadVg = GraphGenerator.VisibilityGraph!= null;
             InternalClear(retainObstacles: true);
 
@@ -415,15 +415,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         /// </summary>
         protected override void RunInternal()
         {
-            RouteEdges();
-        }
-
-        
-        /// <summary>
-        /// Calculates the routed edges geometry, optionally forcing re-routing for existing paths.
-        /// </summary>
-        /// <returns></returns>
-        private void RouteEdges() {
             // Create visibility graph if not already done.
             GenerateVisibilityGraph();
             GeneratePaths();
@@ -569,7 +560,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         internal virtual void NudgePaths(IEnumerable<Path> edgePaths) {
         
             // If we adjusted for spatial ancestors, this nudging can get very weird, so refetch in that case.
-            var ancestorSets = this.ObstacleTree.SpatialAncestorsAdjusted ? SplineRouter.GetAncestorSetsMap(Obstacles) : this.AncestorsSets;
+            var ancestorSets = this.ObsTree.SpatialAncestorsAdjusted ? SplineRouter.GetAncestorSetsMap(Obstacles) : this.AncestorsSets;
 
             // Using VisibilityPolyline retains any reflection/staircases on the convex hull borders; using
             // PaddedPolyline removes them.
@@ -613,8 +604,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
         #region Private functions
 
-        private ObstacleTree ObstacleTree {
-            get { return this.GraphGenerator.ObstacleTree; }
+        private ObstacleTree ObsTree {
+            get { return this.GraphGenerator.ObsTree; }
         }
 
         private void GenerateObstacleTree() {
@@ -626,14 +617,14 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                     );
             }
 
-            if ( this.ObstacleTree.Root==null) {
+            if ( this.ObsTree.Root==null) {
                 InitObstacleTree();
             }
         }
 
         internal virtual void InitObstacleTree() {
             AncestorsSets = SplineRouter.GetAncestorSetsMap(Obstacles);
-            this.ObstacleTree.Init(ShapeToObstacleMap.Values, AncestorsSets, ShapeToObstacleMap);
+            this.ObsTree.Init(ShapeToObstacleMap.Values, AncestorsSets, ShapeToObstacleMap);
         }
 
         private void InternalClear(bool retainObstacles) {
@@ -755,7 +746,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                 double legLength = leg.Length;
 
                 if (legLength < ApproximateComparer.IntersectionEpsilon)
-                    ret = new Ellipse(0, 0, polyline[i]);
+                    ret = /*new Ellipse(0, 0, polyline[i]) = */
+                        new Ellipse(0, 0, new Point(), new Point(), polyline[i]);
 
                 Point ndir = leg/legLength;
                 if (Math.Abs(ndir*dir) > 0.9) //the polyline does't make a 90 degrees turn

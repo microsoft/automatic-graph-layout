@@ -43,14 +43,14 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
             RoundVerticesAndSimplify(this.PaddedPolyline);
             this.IsRectangle = this.IsPolylineRectangle();
-                     InputShape = shape;
+            InputShape = shape;
             Ports = new Set<Port>(InputShape.Ports);
         }
 
 
         // From CreateSentinel only
         Obstacle(Point a, Point b, int scanlineOrdinal) {
-            PaddedPolyline = new Polyline(ApproximateComparer.Round(a), ApproximateComparer.Round(b)) {Closed = true};
+            PaddedPolyline = new Polyline(ApproximateComparer.Round(a), ApproximateComparer.Round(b)) { Closed = true };
             this.Ordinal = scanlineOrdinal;
         }
 
@@ -67,7 +67,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         /// <summary>
         /// The polyline that is either the PaddedPolyline or a convex hull for multiple overlapping obstacles.
         /// </summary>
-        internal Polyline VisibilityPolyline { 
+        internal Polyline VisibilityPolyline {
             get {
                 return (this.ConvexHull != null) ? this.ConvexHull.Polyline : this.PaddedPolyline;
             }

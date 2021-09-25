@@ -90,6 +90,36 @@ namespace Microsoft.Msagl.UnitTests
         }
 
         [TestMethod]
+        public void RTreeRemove() {
+            for (int size = 2; size < 20; size++) {
+                var rects = new List<Tuple<Rectangle, char>>(); ;
+                var rand = new Random(0);
+                for (int i = 0; i < size; ++i) {
+                    int RegionSize = 10;
+                    rects.Add(new Tuple<Rectangle,char>(new Rectangle(rand.Next(RegionSize), rand.Next(RegionSize), new Point(2, 2)), (char)('a'+i)));
+                }
+
+                var tree = new RTree<char, Point>(Enumerable.Range(0, size).Select(i => new KeyValuePair<IRectangle<Point>, char>(rects[i].Item1, rects[i].Item2)));
+
+                while (rects.Count > 0) {
+                    var i = rand.Next(rects.Count);
+                    tree.Remove(rects[i].Item1, rects[i].Item2);
+                    rects.RemoveAt(i);
+                }
+                
+            }
+
+        }
+
+        private RTree<double, Point> CreateOnRecs(List<Rectangle> rects) {
+            var r = new RTree<double, Point>();
+            foreach (var p in rects) {
+                r.Add(p, p.Area);
+            }
+            return r;
+        }
+
+        [TestMethod]
         public void RTreeQuery_Rectangles() {
             const int Seeds = 100;
             const int RectCount = 100;

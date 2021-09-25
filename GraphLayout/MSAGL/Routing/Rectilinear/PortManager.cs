@@ -60,7 +60,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         private VisibilityGraph VisGraph { get { return graphGenerator.VisibilityGraph; } }
         private ScanSegmentTree HScanSegments { get { return graphGenerator.HorizontalScanSegments; } }
         private ScanSegmentTree VScanSegments { get { return graphGenerator.VerticalScanSegments; } }
-        private ObstacleTree ObstacleTree { get { return graphGenerator.ObstacleTree; } }
+        private ObstacleTree ObstacleTree { get { return graphGenerator.ObsTree; } }
         private Dictionary<Shape, Set<Shape>> AncestorSets { get { return ObstacleTree.AncestorSets; } }
 
         internal PortManager(VisibilityGraphGenerator graphGenerator) {
@@ -444,7 +444,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         private void CreateObstaclePortEntrancesFromPoints(ObstaclePort oport) {
-            var graphBox = graphGenerator.ObstacleTree.GraphBox;
+            var graphBox = graphGenerator.ObsTree.GraphBox;
             var curveBox = new Rectangle(ApproximateComparer.Round(oport.PortCurve.BoundingBox.LeftBottom)
                                              , ApproximateComparer.Round(oport.PortCurve.BoundingBox.RightTop));
 
@@ -603,7 +603,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         private Point InBoundsGraphBoxIntersect(Point point, Direction dir) {
-            return StaticGraphUtility.RectangleBorderIntersect(graphGenerator.ObstacleTree.GraphBox, point, dir);
+            return StaticGraphUtility.RectangleBorderIntersect(graphGenerator.ObsTree.GraphBox, point, dir);
         }
 
         private VisibilityEdge FindorCreateNearestPerpEdge(Point first, Point second, Direction dir, double weight) {
@@ -786,7 +786,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
         private void GetPortSpliceLimitRectangle(EdgeGeometry edgeGeom) {
             if (!this.LimitPortVisibilitySpliceToEndpointBoundingBox) {
-                this.portSpliceLimitRectangle = graphGenerator.ObstacleTree.GraphBox;
+                this.portSpliceLimitRectangle = graphGenerator.ObsTree.GraphBox;
                 return;
             }
 

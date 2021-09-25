@@ -865,18 +865,17 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
 
             while (en.MoveNext()) {
                 var dir = (en.Current - b).CompassDirection;
-                if (dir == prevDir || CompassVector.OppositeDir(dir) == prevDir || dir == Direction.None) //we continue walking along the same straight line, maybe going backwards!
-                    b = en.Current;
-                else {
+                if (!(dir == prevDir || CompassVector.OppositeDir(dir) == prevDir || dir == Direction.None)) { //we continue walking along the same straight line, maybe going backwards!
                     if (!ApproximateComparer.Close(a, b)) {//make sure that we are not returning the same point twice                        
-                        yield return a=Rectilinearise(a, b);
+                        yield return a = Rectilinearise(a, b);
                     }
-                    b = en.Current;
                     prevDir = dir;
                 }
+                b = en.Current;
+
             }
             if (!ApproximateComparer.Close(a, b))
-                yield return Rectilinearise(a,b);
+                yield return Rectilinearise(a, b);
         }
 
 

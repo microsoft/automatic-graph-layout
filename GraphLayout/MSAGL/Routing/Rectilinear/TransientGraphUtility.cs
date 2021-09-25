@@ -27,7 +27,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
         // Owned by creator of this class.
         VisibilityGraphGenerator GraphGenerator { get; set; }
-        internal ObstacleTree ObstacleTree { get { return GraphGenerator.ObstacleTree; } }
+        internal ObstacleTree ObstacleTree { get { return GraphGenerator.ObsTree; } }
         internal VisibilityGraph VisGraph { get { return GraphGenerator.VisibilityGraph; } }
         private bool IsSparseVg { get { return this.GraphGenerator is SparseVisibilityGraphGenerator; } }
 
@@ -56,16 +56,29 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // evaluation; thus there may already be an edge from the source vertex in the direction
             // of the target vertex, but ending before or after the target vertex.
             Direction dirToTarget = PointComparer.GetPureDirection(sourceVertex, targetVertex);
-            VisibilityVertex bracketSource, bracketTarget;
+            VisibilityVertex bracketSource, bracketTarget, splitVertex;
+            GetBrackets(sourceVertex, targetVertex, dirToTarget, out bracketSource, out bracketTarget, out splitVertex);
+
+            // If null != edge then targetVertex is between bracketSource and bracketTarget and SplitEdge returns the 
+            // first half-edge (and weight is ignored as the split uses the edge weight).
+            var edge = VisGraph.FindEdge(bracketSource.Point, bracketTarget.Point);
+            edge = (edge != null)
+                    ? this.SplitEdge(edge, splitVertex)
+                    : CreateEdge(bracketSource, bracketTarget, weight);
+            DevTrace_VerifyEdge(edge);
+            return edge;
+        }
+
+        private static void GetBrackets(VisibilityVertex sourceVertex, VisibilityVertex targetVertex, Direction dirToTarget, out VisibilityVertex bracketSource, out VisibilityVertex bracketTarget, out VisibilityVertex splitVertex) {
 
             // Is there an edge in the chain from sourceVertex in the direction of targetVertex
             // that brackets targetvertex?
             //      <sourceVertex> -> ..1.. -> ..2.. <end>   3
             // Yes if targetVertex is at the x above 1 or 2, No if it is at 3.  If false, bracketSource
             // will be set to the vertex at <end> (if there are any edges in that direction at all).
-            VisibilityVertex splitVertex = targetVertex;
+            splitVertex = targetVertex;
             if (!FindBracketingVertices(sourceVertex, targetVertex.Point, dirToTarget
-                                    , out bracketSource, out bracketTarget)) {
+, out bracketSource, out bracketTarget)) {
                 // No bracketing of targetVertex from sourceVertex but bracketSource has been updated.
                 // Is there a bracket of bracketSource from the targetVertex direction?
                 //                      3   <end> ..2.. <- ..1..   <targetVertex>
@@ -80,15 +93,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                     splitVertex = sourceVertex;
                 }
             }
-
-            // If null != edge then targetVertex is between bracketSource and bracketTarget and SplitEdge returns the 
-            // first half-edge (and weight is ignored as the split uses the edge weight).
-            var edge = VisGraph.FindEdge(bracketSource.Point, bracketTarget.Point);
-            edge = ( edge!=null)
-                    ? this.SplitEdge(edge, splitVertex)
-                    : CreateEdge(bracketSource, bracketTarget, weight);
-            DevTrace_VerifyEdge(edge);
-            return edge;
         }
 
         internal static bool FindBracketingVertices(VisibilityVertex sourceVertex, Point targetPoint, Direction dirToTarget

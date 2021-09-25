@@ -126,7 +126,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
             HorizontalScanSegments.DevTraceVerifyVisibility();
             VerticalScanSegments.DevTraceVerifyVisibility();
-            Debug_AssertGraphIsRectilinear(VisibilityGraph, ObstacleTree);
+            Debug_AssertGraphIsRectilinear(VisibilityGraph, ObsTree);
 
             this.Cleanup();
         }
@@ -135,7 +135,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // Unlike the paper we only generate lines for extreme vertices (i.e. on the horizontal pass we
             // don't generate a horizontal vertex projection to the Y axis for a vertex that is not on the top
             // or bottom of the obstacle).  So we can just use the bounding box.
-            foreach (var obstacle in this.ObstacleTree.GetAllObstacles()) {
+            foreach (var obstacle in this.ObsTree.GetAllObstacles()) {
                 xCoordAccumulator.Insert(obstacle.VisibilityBoundingBox.Left);
                 xCoordAccumulator.Insert(obstacle.VisibilityBoundingBox.Right);
                 yCoordAccumulator.Insert(obstacle.VisibilityBoundingBox.Top);
@@ -176,12 +176,12 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // Normal event ordering will apply - and will thus order the ScanSegments created in the vectors.
             if (scanDir.IsHorizontal) {
                 foreach (var coord in yCoordAccumulator) {
-                    base.eventQueue.Enqueue(new AxisCoordinateEvent(new Point(ObstacleTree.GraphBox.Left - SentinelOffset, coord)));
+                    base.eventQueue.Enqueue(new AxisCoordinateEvent(new Point(ObsTree.GraphBox.Left - SentinelOffset, coord)));
                 }
                 return;
             }
             foreach (var coord in xCoordAccumulator) {
-                base.eventQueue.Enqueue(new AxisCoordinateEvent(new Point(coord, ObstacleTree.GraphBox.Bottom - SentinelOffset)));
+                base.eventQueue.Enqueue(new AxisCoordinateEvent(new Point(coord, ObsTree.GraphBox.Bottom - SentinelOffset)));
             }
         }
 
@@ -233,13 +233,13 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // Add the intersections at the neighbor bounding boxes if the intersection is not at a sentinel.  
             // Go in the opposite direction from the neighbor intersection to find the border between the Steiner 
             // point and vertexEvent.Site (unless vertexEvent.Site is inside the bounding box).
-            if (ObstacleTree.GraphBox.Contains(lowSteiner)) {
+            if (ObsTree.GraphBox.Contains(lowSteiner)) {
                 var bboxIntersectBeforeLowSteiner = StaticGraphUtility.RectangleBorderIntersect(lowNborSide.Obstacle.VisibilityBoundingBox, lowSteiner, highDir);
                 if (PointComparer.IsPureLower(bboxIntersectBeforeLowSteiner, vertexEvent.Site)) {
                     this.boundingBoxSteinerPoints.Insert(bboxIntersectBeforeLowSteiner);
                 }
             }
-            if (ObstacleTree.GraphBox.Contains(highSteiner)) {
+            if (ObsTree.GraphBox.Contains(highSteiner)) {
                 var bboxIntersectBeforeHighSteiner = StaticGraphUtility.RectangleBorderIntersect(highNborSide.Obstacle.VisibilityBoundingBox, highSteiner, lowDir);
                 if (PointComparer.IsPureLower(vertexEvent.Site, bboxIntersectBeforeHighSteiner)) {
                     this.boundingBoxSteinerPoints.Insert(bboxIntersectBeforeHighSteiner);
@@ -325,8 +325,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
             // The final piece.
             var end = base.ScanDirection.IsHorizontal
-                    ? new Point(ObstacleTree.GraphBox.Right + SentinelOffset, start.Y)
-                    : new Point(start.X, ObstacleTree.GraphBox.Top + SentinelOffset);
+                    ? new Point(ObsTree.GraphBox.Right + SentinelOffset, start.Y)
+                    : new Point(start.X, ObsTree.GraphBox.Top + SentinelOffset);
             this.parallelSegmentVector.CreateScanSegment(start, end, ScanSegment.NormalWeight,
                     base.CurrentGroupBoundaryCrossingMap.GetOrderedListBetween(start, end));
             this.parallelSegmentVector.ScanSegmentsCompleteForCurrentSlot();
@@ -398,7 +398,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
         private void GenerateSparseIntersectionsAlongHorizontalAxis() {
             this.currentAxisPointComparer = new HorizontalPointComparer();
-            var vertexPoints = this.horizontalVertexPoints.OrderBy(point => point, this.currentAxisPointComparer).GetEnumerator();
+            var vertexPoints = this.horizontalVertexPoints.OrderBy(point => point, this.currentAxisPointComparer).ToArray();
             var bboxSteinerPoints = this.boundingBoxSteinerPoints.OrderBy(point => point, this.currentAxisPointComparer).ToList();
             base.ScanDirection = ScanDirection.HorizontalInstance;
             SetVectorsAndCoordMaps(base.ScanDirection);
@@ -407,7 +407,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
         private void GenerateSparseIntersectionsAlongVerticalAxis() {
             this.currentAxisPointComparer = new VerticalPointComparer();
-            var vertexPoints = this.verticalVertexPoints.OrderBy(point => point, this.currentAxisPointComparer).GetEnumerator();
+            var vertexPoints = this.verticalVertexPoints.OrderBy(point => point, this.currentAxisPointComparer).ToArray();
             var bboxSteinerPoints = this.boundingBoxSteinerPoints.OrderBy(point => point, this.currentAxisPointComparer).ToList();
             base.ScanDirection = ScanDirection.VerticalInstance;
             SetVectorsAndCoordMaps(base.ScanDirection);
@@ -448,35 +448,36 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             }
         }
 
-        private void GenerateSparseIntersections(IEnumerator<Point> vertexPoints, List<Point> bboxSteinerPoints) {
+        private void GenerateSparseIntersections(Point [] vertexPoints, List<Point> bboxSteinerPoints) {
             this.perpendicularSegmentVector.ResetForIntersections();
             this.parallelSegmentVector.ResetForIntersections();
 
             // Position the enumerations to the first point.
-            vertexPoints.MoveNext();
+            //vertexPoints.MoveNext();
             int j = 0;
+            int i = 0;
             foreach (var item in parallelSegmentVector.Items) {
-                for (;;) {
-                    if (!item.CurrentSegment.ContainsPoint(vertexPoints.Current)) {
+                for (; ; ) {
+                    if (!item.CurrentSegment.ContainsPoint(vertexPoints[i])) {
                         // Done accumulating intersections for the current segment; move to the next segment.
-                        if (!this.AddSteinerPointsToInterveningSegments(vertexPoints.Current, bboxSteinerPoints, ref j, item)
-                                || !item.TraverseToSegmentContainingPoint(vertexPoints.Current)) {
+                        if (!this.AddSteinerPointsToInterveningSegments(vertexPoints[i], bboxSteinerPoints, ref j, item)
+                                || !item.TraverseToSegmentContainingPoint(vertexPoints[i])) {
                             // Done with this vectorItem, move to the next item.
                             break;
                         }
                     }
 
                     this.AddPointsToCurrentSegmentIntersections(bboxSteinerPoints, ref j, item);
-                    this.GenerateIntersectionsFromVertexPointForCurrentSegment(vertexPoints.Current, item);
+                    this.GenerateIntersectionsFromVertexPointForCurrentSegment(vertexPoints[i], item);
 
-                    if (item.PointIsCurrentEndAndNextStart(vertexPoints.Current)) {
+                    if (item.PointIsCurrentEndAndNextStart(vertexPoints[i])) {
                         // MoveNext will always return true because the test to enter this block returned true.
                         item.MoveNext();
                         Debug.Assert(item.HasCurrent, "MoveNext ended before EndAndNextStart");
                         continue;
                     }
 
-                    if (!vertexPoints.MoveNext()) {
+                    if (++i >= vertexPoints.Length) {
                         // No more vertexPoints; we're done.
                         return;
                     }

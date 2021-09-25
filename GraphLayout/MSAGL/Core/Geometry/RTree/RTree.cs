@@ -227,19 +227,23 @@ namespace Microsoft.Msagl.Core.Geometry {
                     UpdateParent(parent);
                 }
             }
-        //   Debug.Assert(TreeIsCorrect(RootNode));
+            Debug.Assert(TreeIsCorrect(RootNode));
         }
 
-//        static bool TreeIsCorrect(RectangleNode<TData,Point> node)
-//        {
-//            if (node == null)
-//                return true;
-//            bool ret= node.Left != null && node.Right != null  ||
-//                   node.Left == null && node.Right == null;
-//            if (!ret)
-//                return false;
-//            return TreeIsCorrect(node.Left) && TreeIsCorrect(node.Right);
-//        }
+        static internal bool TreeIsCorrect(RectangleNode<T, P> node) {
+            if (node == null)
+                return true;
+            bool ret = node.Left != null && node.Right != null ||
+                   node.Left == null && node.Right == null;
+            if (!ret)
+                return false;
+            if (node.Left != null && node.Left.Parent != node)
+                return false;
+            if (node.Right != null && node.Right.Parent != node)
+                return false;
+
+            return TreeIsCorrect(node.Left) && TreeIsCorrect(node.Right);
+        }
 
         static void UpdateParent(RectangleNode<T, P> parent) {
             for(var node=parent.Parent; node!=null; node=node.Parent) {
@@ -267,6 +271,7 @@ namespace Microsoft.Msagl.Core.Geometry {
             nodeForRebuild.Left = newNode.Left;
             nodeForRebuild.Right = newNode.Right;
             nodeForRebuild.Rectangle = newNode.Left.rectangle.Unite(newNode.Right.rectangle);
+            Debug.Assert(TreeIsCorrect(nodeForRebuild));
         }
 
         static RectangleNode<T, P> FindTopUnbalancedNode(RectangleNode<T, P> node) {
