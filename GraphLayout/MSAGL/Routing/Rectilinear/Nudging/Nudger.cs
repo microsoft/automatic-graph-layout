@@ -89,7 +89,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         internal void Calculate(Direction direction, bool mergePaths) {
             NudgingDirection = direction;
             PathRefiner.RefinePaths(Paths, mergePaths);
-           // ShowPathsDebug(Paths);
             GetPathOrdersAndPathGraph();
             MapAxisEdgesToTheirObstacles();            
             DrawPaths();
@@ -209,8 +208,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         void PositionShiftedEdges() {
             //we are using 2*cornerFitRadius for the minimal edge separation
             Solver = new UniformOneDimensionalSolver(EdgeSeparation);
-            foreach (var segment in LongestNudgedSegs)
-                CreateVariablesOfLongestSegment(segment);
+            for (var i = 0; i < LongestNudgedSegs.Count; i++)
+                CreateVariablesOfLongestSegment(LongestNudgedSegs[i]);
             CreateConstraintsOfTheOrder();
             CreateConstraintsBetweenLongestSegments();
             Solver.Solve();
@@ -218,8 +217,10 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         }
 
         void MoveLongestSegsIdealPositionsInsideFeasibleIntervals() {
-            foreach (var seg in LongestNudgedSegs)
+            for (int i = 0; i < this.LongestNudgedSegs.Count; i++) {
+                var seg = this.LongestNudgedSegs[i];
                 MoveLongestSegIdealPositionsInsideFeasibleInterval(seg);
+            }
         }
 
         static void MoveLongestSegIdealPositionsInsideFeasibleInterval(LongestNudgedSegment seg) {
@@ -709,9 +710,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                 NudgingDirection == Direction.East ? (PointProjection)FreeSpaceFinder.MinusY : FreeSpaceFinder.X;
 
             LongestNudgedSegs = new List<LongestNudgedSegment>();
-            foreach (var path in Paths)
-                CreateLongestNudgedSegmentsForPath(path, projectionToPerp);
-
+            for (int i = 0; i < Paths.Count; i++) 
+                CreateLongestNudgedSegmentsForPath(Paths[i], projectionToPerp);
         }
 
 

@@ -43,7 +43,7 @@ namespace CommonDrawingUtilsForSamples {
         }
 
         static void DrawEdge(Edge e, Pen pen, Graphics graphics) {
-            graphics.DrawPath(pen, CreateGraphicsPath(e.Curve));
+            graphics.DrawPath(pen, Microsoft.Msagl.GraphViewerGdi.Draw.CreateGraphicsPath(e.Curve));
 
             if (e.EdgeGeometry != null && e.EdgeGeometry.SourceArrowhead != null )
                 DrawArrow(pen, graphics, e.Curve.Start, e.EdgeGeometry.SourceArrowhead.TipPosition);
@@ -51,44 +51,7 @@ namespace CommonDrawingUtilsForSamples {
                 DrawArrow(pen, graphics, e.Curve.End, e.EdgeGeometry.TargetArrowhead.TipPosition);
         }
 
-        internal static GraphicsPath CreateGraphicsPath(ICurve iCurve) {
-            GraphicsPath graphicsPath = new GraphicsPath();
-            if (iCurve == null)
-                return null;
-            Curve c = iCurve as Curve;
-            if (c != null)
-            {
-                foreach (ICurve seg in c.Segments)
-                {
-                    CubicBezierSegment cubic = seg as CubicBezierSegment;
-                    if (cubic != null)
-                        graphicsPath.AddBezier(PointF(cubic.B(0)), PointF(cubic.B(1)), PointF(cubic.B(2)), PointF(cubic.B(3)));
-                    else
-                    {
-                        LineSegment ls = seg as LineSegment;
-                        if (ls != null)
-                            graphicsPath.AddLine(PointF(ls.Start), PointF(ls.End));
-
-                        else
-                        {
-                            Ellipse el = seg as Ellipse;
-                            if (el != null)
-                            {
-                                graphicsPath.AddArc((float)(el.Center.X - el.AxisA.X), (float)(el.Center.Y - el.AxisB.Y), (float)(el.AxisA.X * 2), Math.Abs((float)el.AxisB.Y * 2), EllipseStartAngle(el), EllipseSweepAngle(el));
-
-                            }
-                        }
-                    }
-                }
-            }
-            else {
-                var ls = iCurve as LineSegment;
-                if (ls != null)
-                    graphicsPath.AddLine(PointF(ls.Start), PointF(ls.End));
-            }
-
-            return graphicsPath;
-        }
+        
 
         static PointF PointF(Point point) {
             return new PointF((float)point.X, (float)point.Y);
@@ -130,7 +93,7 @@ namespace CommonDrawingUtilsForSamples {
                 graphics.DrawEllipse(pen, new RectangleF((float)el.BoundingBox.Left, (float)el.BoundingBox.Bottom,
                     (float)el.BoundingBox.Width, (float)el.BoundingBox.Height));
             } else
-                graphics.DrawPath(pen, CreateGraphicsPath(curve));
+                graphics.DrawPath(pen, Microsoft.Msagl.GraphViewerGdi.Draw.CreateGraphicsPath(curve));
         }
 
         public static System.Drawing.Point MsaglPointToDrawingPoint(Point point) {

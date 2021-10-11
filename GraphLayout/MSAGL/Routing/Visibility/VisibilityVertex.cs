@@ -17,7 +17,14 @@ namespace Microsoft.Msagl.Routing.Visibility
         bool _isShortestPathTerminal;
         readonly List<VisibilityEdge> _inEdges = new List<VisibilityEdge>();
 
-        internal List<VisibilityEdge> InEdges
+     
+        internal void AddInEdge(VisibilityEdge e) {
+            _inEdges.Add(e);
+        }
+        internal int InEdgesCount() {
+            return _inEdges.Count;
+        }
+        internal IEnumerable<VisibilityEdge> InEdges
         {
             get { return _inEdges; }
         }
@@ -35,7 +42,7 @@ namespace Microsoft.Msagl.Routing.Visibility
 
         internal int Degree
         {
-            get { return InEdges.Count + OutEdges.Count; }
+            get { return InEdgesCount() + OutEdges.Count; }
         }
         /// <summary>
         /// needed for shortest path calculations
@@ -101,11 +108,11 @@ namespace Microsoft.Msagl.Routing.Visibility
 
         internal void RemoveInEdge(VisibilityEdge edge)
         {
-            for (int ii = InEdges.Count - 1; ii >= 0; --ii)
+            for (int ii = _inEdges.Count - 1; ii >= 0; --ii)
             {
-                if (InEdges[ii] == edge)
+                if (_inEdges[ii] == edge)
                 {
-                    InEdges.RemoveAt(ii);
+                    _inEdges.RemoveAt(ii);
                     break;
                 }
             }

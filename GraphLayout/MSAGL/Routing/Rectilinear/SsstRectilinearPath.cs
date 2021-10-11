@@ -317,11 +317,11 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                 }
             }
             System.Diagnostics.Debug.WriteLine("entry {0} seq = {1} len = {2} nbend = {3} ccost = {4} hcost = {5} iters = {6}/{7}", mostRecentlyExtendedPath,
-                             this.lastDequeueTimestamp,
+                             0,
                              mostRecentlyExtendedPath.Length, mostRecentlyExtendedPath.NumberOfBends,
                              this.CombinedCost(mostRecentlyExtendedPath.Length, mostRecentlyExtendedPath.NumberOfBends),
                              this.HeuristicDistanceFromVertexToTarget(mostRecentlyExtendedPath.Vertex.Point, mostRecentlyExtendedPath.Direction),
-                             this.currentIterations, totalIterations);
+                             this.currentIterations, 0);
             foreach (var newEntry in newEntries) {
                 System.Diagnostics.Debug.WriteLine("   newEntry {0} len = {1} nbend = {2} ccost = {3} hcost = {4}", newEntry,
                                  newEntry.Length, newEntry.NumberOfBends,
@@ -343,8 +343,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                           };
 
             List<DebugCurve> pathEdges = GetPathEdgeDebugCurves(pathPoints, "green");
-            System.Diagnostics.Debug.WriteLine("path {0} -> {1} cost = {2} len = {3} nbend = {4} iters = {5}/{6}",
-                            source.Point, this.Target.Point, cost, length, numberOfBends, this.currentIterations, totalIterations);
+            System.Diagnostics.Debug.WriteLine("path {0} -> {1} cost = {2} len = {3} nbend = {4} iters = {5}",
+                            source.Point, this.Target.Point, cost, length, numberOfBends, this.currentIterations);
             DevTraceDisplay(edges.Concat(so).Concat(pathEdges));
         }
 
@@ -536,11 +536,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return null;
         }
 
-        private void ExtendPathAlongInEdges(VertexEntry bestEntry, List<VisibilityEdge> edges, Direction preferredBendDir) {
-            // Iteration is faster than foreach and much faster than .Where.
-            int count = edges.Count;
-            for (int ii = 0; ii < count; ++ii) {
-                var edge = edges[ii];
+        private void ExtendPathAlongInEdges(VertexEntry bestEntry, IEnumerable<VisibilityEdge> edges, Direction preferredBendDir) {
+            foreach (var edge in edges) {
                 ExtendPathAlongEdge(bestEntry, edge, true, preferredBendDir);
             }
         }
@@ -714,8 +711,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
 #if TEST_MSAGL
         private int currentIterations;
-        private static int totalIterations;
-        private UInt64 lastDequeueTimestamp;
+        
 #endif // TEST_MSAGL
 
         [Conditional("TEST_MSAGL")]

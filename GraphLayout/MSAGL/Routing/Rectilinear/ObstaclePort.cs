@@ -58,10 +58,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         internal void RemoveFromGraph() {
-            // Currently all transient removals and edge restorations are done by TransientGraphUtility itself.
-            foreach (var entrance in PortEntrances) {
-                entrance.RemoveFromGraph();
-            }
             CenterVertex = null;
         }
 

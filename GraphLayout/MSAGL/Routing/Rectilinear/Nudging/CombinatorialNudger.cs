@@ -191,7 +191,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
 
         static void InitQueueOfSources(Queue<VisibilityVertex> queue, IDictionary<VisibilityVertex, int> dictionary, VisibilityGraph graph) {
             foreach (var v in graph.Vertices()) {
-                int inDegree = v.InEdges.Count;
+                int inDegree = v.InEdgesCount();
                 dictionary[v] = inDegree;
                 if (inDegree == 0)
                     queue.Enqueue(v);

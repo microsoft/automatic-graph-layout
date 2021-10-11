@@ -24,7 +24,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         /// <param name="targets">One or more target vertices</param>
         /// <returns>A single enumeration of path points.</returns>
         internal IEnumerable<Point> GetPath(IEnumerable<VisibilityVertex> sources, IEnumerable<VisibilityVertex> targets) {
-            return SsstRectilinearPath.RestorePath(GetPathStage(null, sources, null, targets));
+            var entry = GetPathStage(null, sources, null, targets);
+            return SsstRectilinearPath.RestorePath(entry);
         }
 
 /// <summary>
@@ -50,8 +51,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // Calculate the bend penalty multiplier.  This is a percentage of the distance between the source and target,
             // so that we have the same relative importance if we have objects of about size 20 that are about 100 apart
             // as for objects of about size 200 that are about 1000 apart.
-            Point sourceCenter = GetBarycenterOfUniquePortLocations(sources);
-            Point targetCenter = GetBarycenterOfUniquePortLocations(targets);
+            Point sourceCenter = Barycenter(sources);
+            Point targetCenter = Barycenter(targets);
             var distance = SsstRectilinearPath.ManhattanDistance(sourceCenter, targetCenter);
             ssstCalculator.BendsImportance = Math.Max(0.001, distance * (this.bendPenaltyAsAPercentageOfDistance * 0.01));
 
@@ -128,19 +129,12 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return;
         }
 
-        private static Point GetBarycenterOfUniquePortLocations(IEnumerable<VisibilityVertex> vertices) {
+        private static Point Barycenter(IEnumerable<VisibilityVertex> vertices) {
             var center = new Point();
-            VisibilityVertex prevVertex = null;
-            int count = 0;
-            foreach (var vertex in vertices.OrderBy(s => s.Point)) {
-                if ((prevVertex != null) && ApproximateComparer.CloseIntersections(vertex.Point, prevVertex.Point)) {
-                    continue;
-                }
-                prevVertex = vertex;
-                ++count;
+            foreach (var vertex in vertices) {
                 center += vertex.Point;
             }
-            return center / count;
+            return center / vertices.Count();
         }
     }
 }

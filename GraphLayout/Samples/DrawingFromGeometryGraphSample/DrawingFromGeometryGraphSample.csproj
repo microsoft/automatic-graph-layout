@@ -79,5 +79,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj" />
+    <ProjectReference Include="..\..\Tools\GraphViewerGDI\GraphViewerGDI.csproj" />
   </ItemGroup>
 </Project>

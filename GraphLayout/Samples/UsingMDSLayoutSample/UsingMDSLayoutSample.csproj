@@ -138,6 +138,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Drawing\AutomaticGraphLayout.Drawing.csproj" />
     <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj" />
+    <ProjectReference Include="..\..\Tools\GraphViewerGDI\GraphViewerGDI.csproj" />
+    <ProjectReference Include="..\DrawingFromGeometryGraphSample\DrawingFromGeometryGraphSample.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />

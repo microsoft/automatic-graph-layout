@@ -113,19 +113,20 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             if (obstaclePortMap.TryGetValue(port, out oport)) {
                 if (RouteToCenterOfObstacles) {
                     vertices.Add(oport.CenterVertex);
-                    return vertices;
                 }
-
-                // Add all vertices on the obstacle borders.  Avoid LINQ for performance.
-                foreach (var entrance in oport.PortEntrances) {
-                    VisibilityVertex vertex = this.VisGraph.FindVertex(entrance.UnpaddedBorderIntersect);
-                    if (vertex != null) {
-                        vertices.Add(vertex);
+                else {
+                    // Add all vertices on the obstacle borders.  Avoid LINQ for performance.
+                    foreach (var entrance in oport.PortEntrances) {
+                        VisibilityVertex vertex = this.VisGraph.FindVertex(entrance.UnpaddedBorderIntersect);
+                        if (vertex != null) {
+                            vertices.Add(vertex);
+                        }
                     }
                 }
-                return vertices;
             }
-            vertices.Add(VisGraph.FindVertex(ApproximateComparer.Round(port.Location)));
+            else {
+                vertices.Add(VisGraph.FindVertex(ApproximateComparer.Round(port.Location)));
+            }
             return vertices;
         }
 
@@ -367,7 +368,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         private void CreateObstaclePortEntrancesIfNeeded(ObstaclePort oport) {
-            if (0 != oport.PortEntrances.Count) {
+            if (oport.PortEntrances.Count > 0) {
                 return;
             }
             
@@ -587,7 +588,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             // through the other obstacle on the shared border is OK.
             VisibilityVertex borderVertex = VisGraph.FindVertex(entrance.VisibilityBorderIntersect);
             if (borderVertex != null) {
-                entrance.ExtendFromBorderVertex(TransUtil, borderVertex, this.portSpliceLimitRectangle, RouteToCenterOfObstacles);
+                entrance.ExtendEdgeChain(TransUtil, borderVertex, borderVertex, this.portSpliceLimitRectangle, RouteToCenterOfObstacles);
                 return;
             }
 

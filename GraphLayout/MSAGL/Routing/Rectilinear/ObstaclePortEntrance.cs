@@ -128,7 +128,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                             , Rectangle limitRect, bool routeToCenter) {
             VisibilityVertex borderVertex = transUtil.VisGraph.FindVertex(this.VisibilityBorderIntersect);
             if (borderVertex != null) {
-                ExtendFromBorderVertex(transUtil, borderVertex, limitRect, routeToCenter);
+                ExtendEdgeChain(transUtil, borderVertex, borderVertex, limitRect, routeToCenter);
                 return;
             }
 
@@ -162,12 +162,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             }
             ExtendEdgeChain(transUtil, borderVertex, targetVertex, limitRect, routeToCenter);
         }
-            
-        internal void ExtendFromBorderVertex(TransientGraphUtility transUtil, VisibilityVertex borderVertex
-                            , Rectangle limitRect, bool routeToCenter) {
-            ExtendEdgeChain(transUtil, borderVertex, borderVertex, limitRect, routeToCenter);
-        }
-
+        
         internal void ExtendEdgeChain(TransientGraphUtility transUtil, VisibilityVertex paddedBorderVertex
                                 , VisibilityVertex targetVertex, Rectangle limitRect, bool routeToCenter) {
             // Extend the edge chain to the opposite side of the limit rectangle.
@@ -183,12 +178,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        internal void RemoveFromGraph() {
-            // Currently all transient removals and edge restorations are done by TransientGraphUtility itself
-            // and ObstaclePort clears itself so there's nothing to do.
-        }
-
+        
         /// <summary>
         /// </summary>
         /// <returns></returns>
