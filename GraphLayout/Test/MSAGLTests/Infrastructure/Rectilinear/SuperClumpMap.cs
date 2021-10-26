@@ -8,11 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.Msagl.Core.Geometry.Curves;
-
+using Microsoft.Msagl.Routing.Rectilinear;
 namespace Microsoft.Msagl.UnitTests.Rectilinear
 {
-    using Routing.Rectilinear;
-
+    
     /// <summary>
     /// Rectangular obstacles and clumps do not aggregate on the production side - groups are separate
     /// from clumps - but they may overlap to form a roadblock.

@@ -45,6 +45,7 @@ namespace Test01 {
         const string ReverseXOption = "-rx";
         const string MdsOption = "-mds";
         const string RectRoutingOption = "-rect";
+        const string SplineRoutingOption = "-spline";
 
         const string FdOption = "-fd";
         const string EdgeSeparationOption = "-es";
@@ -493,6 +494,9 @@ namespace Test01 {
             if (argsParser.OptionIsUsed(RectRoutingOption)) {
                 graph.LayoutAlgorithmSettings.EdgeRoutingSettings.EdgeRoutingMode = EdgeRoutingMode.Rectilinear;                
             }
+            if (argsParser.OptionIsUsed(SplineRoutingOption)) {
+                graph.LayoutAlgorithmSettings.EdgeRoutingSettings.EdgeRoutingMode = EdgeRoutingMode.Spline;
+            }
 
             gviewer.Graph = graph;
             string svgout = argsParser.GetStringOptionValue(SvgFileNameOption);
@@ -747,6 +751,7 @@ namespace Test01 {
             argsParser.AddOptionWithAfterStringWithHelp(EdgeSeparationOption, "use specified edge separation");
             argsParser.AddAllowedOptionWithHelpString(MdsOption, "use mds layout");
             argsParser.AddAllowedOptionWithHelpString(RectRoutingOption, "use rect layout");
+            argsParser.AddAllowedOptionWithHelpString(SplineRoutingOption, "use spline layout");
             argsParser.AddAllowedOptionWithHelpString(FdOption, "use force directed layout");
             argsParser.AddAllowedOptionWithHelpString(ConstraintsTestOption, "test constraints");
             argsParser.AddOptionWithAfterStringWithHelp(InkImportanceOption, "ink importance coefficient");
