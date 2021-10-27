@@ -594,10 +594,7 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
                 Z = Math.Max(GetZ(coneSide.Start), Z - 0.01);
                 coneSideComparer.SetOperand(coneSide);
 
-#if TEST_MSAGL
-                b =
-#endif
-                leftConeSides.Remove(coneSide);
+                b = leftConeSides.Remove(coneSide);
                 Z = tmpZ;
 #if TEST_MSAGL
                 if (b == null) {
