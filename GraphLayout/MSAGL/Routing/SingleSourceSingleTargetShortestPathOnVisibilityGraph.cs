@@ -135,7 +135,6 @@ namespace Microsoft.Msagl.Routing
                 //Since v is not in the queue changing its .Distance will not influence other nodes.
                 //Changing v.Prev is fine since we come up with the path with an insignificantly
                 //smaller distance.
-                var prevV = _visGraph.PreviosVertex(v);
                 v.Distance = c;
                 _visGraph.SetPreviousEdge(v, l);
                 if (v != _target)
