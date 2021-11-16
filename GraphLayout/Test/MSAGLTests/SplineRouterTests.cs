@@ -190,7 +190,7 @@ namespace Microsoft.Msagl.UnitTests
             sw.Stop();
             TestContext.WriteLine("Edge routing took: {0} seconds.", sw.ElapsedMilliseconds / 1000.0);
         }
-        [Ignore]
+        
         [TestMethod]
         [Description("the run does not stop")]
         public void BundlingBug1GeomGraph() {
@@ -259,7 +259,7 @@ namespace Microsoft.Msagl.UnitTests
             Assert.IsTrue(bb1.Contains(edge.EdgeGeometry.Curve.End));
         }
 
-        [Ignore, WorkItem(535708)]
+        [WorkItem(535708)]
         [TestMethod]
         [TestCategory("Rectilinear routing")]
         [TestCategory("NonRollingBuildTest")]
@@ -279,8 +279,11 @@ namespace Microsoft.Msagl.UnitTests
             root.AddChild(b);
 
             var c = new Cluster { UserData = "c" };
-            foreach (string id in new[] { "30", "5", "6", "7", "8" })
-                c.AddChild(graph.FindNodeByUserData(id));
+            foreach (string id in new[] { "30", "5", "6", "7", "8" }) {
+                var n = graph.FindNodeByUserData(id);
+                if (n != null) 
+                    c.AddChild(n);
+            }
             root.AddChild(c);
 
             var clusterNodes = new Set<Node>(root.AllClustersDepthFirst().SelectMany(cl => cl.Nodes));

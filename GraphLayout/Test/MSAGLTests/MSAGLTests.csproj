@@ -124,6 +124,7 @@
     <Compile Include="NetworkSimplexTest.cs" />
     <Compile Include="RandomBundlingTests.cs" />
     <Compile Include="RectanglePackingTest.cs" />
+    <Compile Include="Routing\TestLineSweeper.cs" />
     <Compile Include="SplineRouterTests.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="GraphConnectedComponentsTest.cs" />

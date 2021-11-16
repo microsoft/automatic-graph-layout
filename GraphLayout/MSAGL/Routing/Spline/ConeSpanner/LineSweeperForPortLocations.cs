@@ -322,17 +322,9 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
             return new LineSegment(segment.Start, segment.Start + segment.Direction * t);
         }
 
-        // ReSharper disable UnusedMember.Global
-        internal ICurve ExtendSegmentToZPlus1(ConeSide segment) {
-            // ReSharper restore UnusedMember.Global
-            double den = segment.Direction * SweepDirection;
-            Debug.Assert(Math.Abs(den) > ApproximateComparer.DistanceEpsilon);
-            double t = (Z + 1 - segment.Start * SweepDirection) / den;
 
-            return new LineSegment(segment.Start, segment.Start + segment.Direction * t);
-        }
+
 #endif
-
         void AddConeAndEnqueueEvents(VertexEvent vertexEvent) {
             var leftVertexEvent = vertexEvent as LeftVertexEvent;
             if (leftVertexEvent != null) {
@@ -576,10 +568,7 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
                 Z = Math.Max(GetZ(coneSide.Start), Z - 0.01);
                 //we need to return to the past a little bit when the order was still correc
                 coneSideComparer.SetOperand(coneSide);
-#if TEST_MSAGL
-                b =
-#endif
-                rightConeSides.Remove(coneSide);
+                b = rightConeSides.Remove(coneSide);
                 Z = tmpZ;
 
 #if TEST_MSAGL
@@ -605,10 +594,7 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
                 Z = Math.Max(GetZ(coneSide.Start), Z - 0.01);
                 coneSideComparer.SetOperand(coneSide);
 
-#if TEST_MSAGL
-                b =
-#endif
-                leftConeSides.Remove(coneSide);
+                b = leftConeSides.Remove(coneSide);
                 Z = tmpZ;
 #if TEST_MSAGL
                 if (b == null) {
