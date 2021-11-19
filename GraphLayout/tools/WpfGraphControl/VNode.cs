@@ -49,7 +49,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
 
         internal VNode(Node node, FrameworkElement frameworkElementOfNodeForLabelOfLabel,
-            Func<Edge, VEdge> funcFromDrawingEdgeToVEdge, Func<double> pathStrokeThicknessFunc)
+            Func<Edge, VEdge> funcFromDrawingEdgeToVEdge, Func<double> pathStrokeThicknessFunc, bool createToolTipForNodes)
         {
             PathStrokeThicknessFunc = pathStrokeThicknessFunc;
             Node = node;
@@ -57,7 +57,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
             _funcFromDrawingEdgeToVEdge = funcFromDrawingEdgeToVEdge;
 
-            CreateNodeBoundaryPath();
+            CreateNodeBoundaryPath(createToolTipForNodes);
             if (FrameworkElementOfNodeForLabel != null)
             {
                 FrameworkElementOfNodeForLabel.Tag = this; //get a backpointer to the VNode
@@ -223,7 +223,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
             return pathGeometry;
         }
 
-        internal void CreateNodeBoundaryPath() {
+        internal void CreateNodeBoundaryPath(bool setNodeToolTips) {
             if (FrameworkElementOfNodeForLabel != null) {
                 // FrameworkElementOfNode.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
                 var center = Node.GeometryNode.Center;
@@ -238,7 +238,9 @@ namespace Microsoft.Msagl.WpfGraphControl {
             BoundaryPath = new Path {Data = CreatePathFromNodeBoundary(), Tag = this};
             Panel.SetZIndex(BoundaryPath, ZIndex);
             SetFillAndStroke();
-            if (Node.Label != null) {
+            if (setNodeToolTips && (
+                Node.Label != null 
+                && !string.IsNullOrEmpty(Node.LabelText))) {
                 BoundaryPath.ToolTip = Node.LabelText;
                 if (FrameworkElementOfNodeForLabel != null)
                     FrameworkElementOfNodeForLabel.ToolTip = Node.LabelText;

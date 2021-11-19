@@ -89,13 +89,13 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
         readonly Canvas _graphCanvas = new Canvas();
         Graph _drawingGraph;
-        
+
         readonly Dictionary<DrawingObject, FrameworkElement> drawingObjectsToFrameworkElements =
             new Dictionary<DrawingObject, FrameworkElement>();
 
         readonly LayoutEditor layoutEditor;
 
-        
+
         GeometryGraph geometryGraphUnderLayout;
         /*
                 Thread layoutThread;
@@ -114,7 +114,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
         FrameworkElement _rectToFillGraphBackground;
         System.Windows.Shapes.Rectangle _rectToFillCanvas;
 
-       
+
         GeometryGraph GeomGraph {
             get { return _drawingGraph.GeometryGraph; }
         }
@@ -139,9 +139,9 @@ namespace Microsoft.Msagl.WpfGraphControl {
             _graphCanvas.MouseWheel += GraphCanvasMouseWheel;
             _graphCanvas.MouseRightButtonUp += GraphCanvasRightMouseUp;
             ViewChangeEvent += AdjustBtrectRenderTransform;
-     
+
             LayoutEditingEnabled = true;
-            clickCounter = new ClickCounter(() => Mouse.GetPosition((IInputElement) _graphCanvas.Parent));
+            clickCounter = new ClickCounter(() => Mouse.GetPosition((IInputElement)_graphCanvas.Parent));
             clickCounter.Elapsed += ClickCounterElapsed;
         }
 
@@ -163,17 +163,17 @@ namespace Microsoft.Msagl.WpfGraphControl {
             if (vedge != null) {
                 if (clickCounter.UpCount == clickCounter.DownCount && clickCounter.UpCount == 1)
                     HandleClickForEdge(vedge);
-            } 
+            }
             clickCounter.ClickedObject = null;
         }
 
-        
+
 
         void AdjustBtrectRenderTransform(object sender, EventArgs e) {
             if (_rectToFillCanvas == null)
                 return;
-            _rectToFillCanvas.RenderTransform = (Transform) _graphCanvas.RenderTransform.Inverse;
-            var parent = (Panel) GraphCanvas.Parent;
+            _rectToFillCanvas.RenderTransform = (Transform)_graphCanvas.RenderTransform.Inverse;
+            var parent = (Panel)GraphCanvas.Parent;
             _rectToFillCanvas.Width = parent.ActualWidth;
             _rectToFillCanvas.Height = parent.ActualHeight;
 
@@ -196,92 +196,92 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
 
 
-/*
-        Tuple<string, VoidDelegate>[] CreateToggleZoomLevelMenuCoupleForNode(VNode vNode) {
-            var list = new List<Tuple<string, VoidDelegate>>();
-            var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
-            if (lgSettings != null) {
-                var lgNodeInfo = lgSettings.GeometryNodesToLgNodeInfos[(Node) vNode.DrawingObject.GeometryObject];
-                list.Add(ToggleZoomLevelMenuCouple(lgNodeInfo));
-                list.Add(MakeAllNodeEdgesAlwaysVisible(lgNodeInfo));
-                list.Add(RestoreAllNodeEdgesZoomLevels(lgNodeInfo));
+        /*
+                Tuple<string, VoidDelegate>[] CreateToggleZoomLevelMenuCoupleForNode(VNode vNode) {
+                    var list = new List<Tuple<string, VoidDelegate>>();
+                    var lgSettings = Graph.LayoutAlgorithmSettings as LgLayoutSettings;
+                    if (lgSettings != null) {
+                        var lgNodeInfo = lgSettings.GeometryNodesToLgNodeInfos[(Node) vNode.DrawingObject.GeometryObject];
+                        list.Add(ToggleZoomLevelMenuCouple(lgNodeInfo));
+                        list.Add(MakeAllNodeEdgesAlwaysVisible(lgNodeInfo));
+                        list.Add(RestoreAllNodeEdgesZoomLevels(lgNodeInfo));
 
-                return list.ToArray();
-            }
-            return null;
-        }
-*/
-
-/*
-        Tuple<string, VoidDelegate> RestoreAllNodeEdgesZoomLevels(LgNodeInfo lgNodeInfo) {
-            const string title = "Restore zoom levels of adjacent edges";
-
-            var lgSettings = (LgLayoutSettings) Graph.LayoutAlgorithmSettings;
-
-            return new Tuple<string, VoidDelegate>(title, () => {
-                foreach (var edge in lgNodeInfo.GeometryNode.Edges) {
-                    var lgEi = lgSettings.GeometryEdgesToLgEdgeInfos[edge];
-                    lgEi.SlidingZoomLevel = double.PositiveInfinity;
+                        return list.ToArray();
+                    }
+                    return null;
                 }
-                ViewChangeEvent(null, null);
-            });
-        }
-*/
+        */
 
-/*
-        Tuple<string, VoidDelegate> MakeAllNodeEdgesAlwaysVisible(LgNodeInfo lgNodeInfo) {
-            const string title = "Set zoom levels for adjacent edges to 1";
+        /*
+                Tuple<string, VoidDelegate> RestoreAllNodeEdgesZoomLevels(LgNodeInfo lgNodeInfo) {
+                    const string title = "Restore zoom levels of adjacent edges";
 
-            var lgSettings = (LgLayoutSettings) Graph.LayoutAlgorithmSettings;
+                    var lgSettings = (LgLayoutSettings) Graph.LayoutAlgorithmSettings;
 
-            return new Tuple<string, VoidDelegate>(title, () => {
-                foreach (var edge in lgNodeInfo.GeometryNode.Edges) {
-                    var lgEi = lgSettings.GeometryEdgesToLgEdgeInfos[edge];
-                    lgEi.SlidingZoomLevel = 1;
+                    return new Tuple<string, VoidDelegate>(title, () => {
+                        foreach (var edge in lgNodeInfo.GeometryNode.Edges) {
+                            var lgEi = lgSettings.GeometryEdgesToLgEdgeInfos[edge];
+                            lgEi.SlidingZoomLevel = double.PositiveInfinity;
+                        }
+                        ViewChangeEvent(null, null);
+                    });
                 }
-                ViewChangeEvent(null, null);
-            });
-        }
-*/
+        */
 
-/*
-        Tuple<string, VoidDelegate> CreateToggleZoomLevelMenuCoupleForEdge(VEdge vedge) {
-            var lgSettings = (LgLayoutSettings) Graph.LayoutAlgorithmSettings;
-            var lgEdgeInfo = lgSettings.GeometryEdgesToLgEdgeInfos[(Edge) vedge.DrawingObject.GeometryObject];
+        /*
+                Tuple<string, VoidDelegate> MakeAllNodeEdgesAlwaysVisible(LgNodeInfo lgNodeInfo) {
+                    const string title = "Set zoom levels for adjacent edges to 1";
 
-            return ToggleZoomLevelMenuCouple(lgEdgeInfo);
-        }
-*/
+                    var lgSettings = (LgLayoutSettings) Graph.LayoutAlgorithmSettings;
 
-/*
-        Tuple<string, VoidDelegate> ToggleZoomLevelMenuCouple(LgInfoBase lgEdgeInfo) {
-            string title;
-            double newZoomLevel;
-            if (lgEdgeInfo.ZoomLevel > 0) {
-                title = "Make always visible";
-                newZoomLevel = 0;
-            } else {
-                title = "Restore zoom level";
-                newZoomLevel = double.PositiveInfinity;
-            }
+                    return new Tuple<string, VoidDelegate>(title, () => {
+                        foreach (var edge in lgNodeInfo.GeometryNode.Edges) {
+                            var lgEi = lgSettings.GeometryEdgesToLgEdgeInfos[edge];
+                            lgEi.SlidingZoomLevel = 1;
+                        }
+                        ViewChangeEvent(null, null);
+                    });
+                }
+        */
 
-            return new Tuple<string, VoidDelegate>(title, () => {
-                lgEdgeInfo.SlidingZoomLevel = newZoomLevel;
-                ViewChangeEvent(null, null);
-            });
-        }
-*/
+        /*
+                Tuple<string, VoidDelegate> CreateToggleZoomLevelMenuCoupleForEdge(VEdge vedge) {
+                    var lgSettings = (LgLayoutSettings) Graph.LayoutAlgorithmSettings;
+                    var lgEdgeInfo = lgSettings.GeometryEdgesToLgEdgeInfos[(Edge) vedge.DrawingObject.GeometryObject];
+
+                    return ToggleZoomLevelMenuCouple(lgEdgeInfo);
+                }
+        */
+
+        /*
+                Tuple<string, VoidDelegate> ToggleZoomLevelMenuCouple(LgInfoBase lgEdgeInfo) {
+                    string title;
+                    double newZoomLevel;
+                    if (lgEdgeInfo.ZoomLevel > 0) {
+                        title = "Make always visible";
+                        newZoomLevel = 0;
+                    } else {
+                        title = "Restore zoom level";
+                        newZoomLevel = double.PositiveInfinity;
+                    }
+
+                    return new Tuple<string, VoidDelegate>(title, () => {
+                        lgEdgeInfo.SlidingZoomLevel = newZoomLevel;
+                        ViewChangeEvent(null, null);
+                    });
+                }
+        */
 
         void GraphCanvasRightMouseDown(object sender, MouseButtonEventArgs e) {
             if (MouseDown != null)
-                MouseDown(this, CreateMouseEventArgs(e));            
+                MouseDown(this, CreateMouseEventArgs(e));
         }
 
         void GraphCanvasMouseWheel(object sender, MouseWheelEventArgs e) {
             if (e.Delta != 0) {
                 const double zoomFractionLocal = 0.9;
-                var zoomInc = e.Delta < 0 ? zoomFractionLocal : 1.0/zoomFractionLocal;
-                ZoomAbout(ZoomFactor*zoomInc, e.GetPosition(_graphCanvas));
+                var zoomInc = e.Delta < 0 ? zoomFractionLocal : 1.0 / zoomFractionLocal;
+                ZoomAbout(ZoomFactor * zoomInc, e.GetPosition(_graphCanvas));
                 e.Handled = true;
             }
         }
@@ -292,11 +292,11 @@ namespace Microsoft.Msagl.WpfGraphControl {
         /// <param name="zoomFactor"></param>
         /// <param name="centerOfZoom"></param>
         public void ZoomAbout(double zoomFactor, WpfPoint centerOfZoom) {
-            var scale = zoomFactor*FitFactor;
+            var scale = zoomFactor * FitFactor;
             var centerOfZoomOnScreen =
-                _graphCanvas.TransformToAncestor((FrameworkElement) _graphCanvas.Parent).Transform(centerOfZoom);
-            SetTransform(scale, centerOfZoomOnScreen.X - centerOfZoom.X*scale,
-                         centerOfZoomOnScreen.Y + centerOfZoom.Y*scale);
+                _graphCanvas.TransformToAncestor((FrameworkElement)_graphCanvas.Parent).Transform(centerOfZoom);
+            SetTransform(scale, centerOfZoomOnScreen.X - centerOfZoom.X * scale,
+                         centerOfZoomOnScreen.Y + centerOfZoom.Y * scale);
         }
 
         public LayoutEditor LayoutEditor {
@@ -313,7 +313,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
             _mouseDownPositionInGraph_initialized = true;
         }
 
-        
+
         void GraphCanvasMouseMove(object sender, MouseEventArgs e) {
             if (MouseMove != null)
                 MouseMove(this, CreateMouseEventArgs(e));
@@ -321,10 +321,8 @@ namespace Microsoft.Msagl.WpfGraphControl {
             if (e.Handled) return;
 
 
-            if (Mouse.LeftButton == MouseButtonState.Pressed && (!LayoutEditingEnabled || _objectUnderMouseCursor == null))
-            {
-                if (!_mouseDownPositionInGraph_initialized)
-                {
+            if (Mouse.LeftButton == MouseButtonState.Pressed && (!LayoutEditingEnabled || _objectUnderMouseCursor == null)) {
+                if (!_mouseDownPositionInGraph_initialized) {
                     _mouseDownPositionInGraph = Common.MsaglPoint(e.GetPosition(_graphCanvas));
                     _mouseDownPositionInGraph_initialized = true;
                 }
@@ -406,28 +404,23 @@ namespace Microsoft.Msagl.WpfGraphControl {
         }
 
         // Return the result of the hit test to the callback.
-        HitTestResultBehavior MyHitTestResultCallbackWithNoCallbacksToTheUser(HitTestResult result)
-        {
+        HitTestResultBehavior MyHitTestResultCallbackWithNoCallbacksToTheUser(HitTestResult result) {
             var frameworkElement = result.VisualHit as FrameworkElement;
 
             if (frameworkElement == null)
                 return HitTestResultBehavior.Continue;
             object tag = frameworkElement.Tag;
-            if (tag != null)
-            {
+            if (tag != null) {
                 //it is a tagged element
                 var ivo = tag as IViewerObject;
-                if (ivo != null)
-                {
-                    if (ivo.DrawingObject.IsVisible)
-                    {
+                if (ivo != null) {
+                    if (ivo.DrawingObject.IsVisible) {
                         _objectUnderMouseCursor = ivo;
                         if (tag is VNode || tag is Label)
                             return HitTestResultBehavior.Stop;
                     }
                 }
-                else
-                {
+                else {
                     System.Diagnostics.Debug.Assert(tag is Rail);
                     _objectUnderMouseCursor = tag;
                     return HitTestResultBehavior.Stop;
@@ -439,7 +432,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
 
         protected double MouseHitTolerance {
-            get { return (0.05)*DpiX/CurrentScale; }
+            get { return (0.05) * DpiX / CurrentScale; }
 
         }
         /// <summary>
@@ -455,47 +448,44 @@ namespace Microsoft.Msagl.WpfGraphControl {
         /// Moves the point to the center of the viewport
         /// </summary>
         /// <param name="sourcePoint"></param>
-        public void PointToCenter(Point sourcePoint)
-        {
+        public void PointToCenter(Point sourcePoint) {
             WpfPoint center = new WpfPoint(_graphCanvas.RenderSize.Width / 2, _graphCanvas.RenderSize.Height / 2);
             SetTransformFromTwoPoints(center, sourcePoint);
         }
-        public void NodeToCenterWithScale(Drawing.Node node, double scale)
-        {
+        public void NodeToCenterWithScale(Drawing.Node node, double scale) {
             if (node.GeometryNode == null) return;
             var screenPoint = new WpfPoint(_graphCanvas.RenderSize.Width / 2, _graphCanvas.RenderSize.Height / 2);
             var sourcePoint = node.BoundingBox.Center;
             SetTransform(scale, screenPoint.X - scale * sourcePoint.X, screenPoint.Y + scale * sourcePoint.Y);
         }
 
-        public void NodeToCenter(Drawing.Node node)
-        {
+        public void NodeToCenter(Drawing.Node node) {
             if (node.GeometryNode == null) return;
             PointToCenter(node.GeometryNode.Center);
         }
-        
+
         void Pan(MouseEventArgs e) {
             if (UnderLayout)
                 return;
-            
+
             if (!_graphCanvas.IsMouseCaptured)
                 _graphCanvas.CaptureMouse();
 
-            
-            SetTransformFromTwoPoints(e.GetPosition((FrameworkElement) _graphCanvas.Parent),
+
+            SetTransformFromTwoPoints(e.GetPosition((FrameworkElement)_graphCanvas.Parent),
                     _mouseDownPositionInGraph);
 
             if (ViewChangeEvent != null)
-                 ViewChangeEvent(null, null);
+                ViewChangeEvent(null, null);
         }
 
-//        [System.Runtime.InteropServices.DllImportAttribute("user32.dll", EntryPoint = "SetCursorPos")]
-//        [return: System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.Bool)]
-//        public static extern bool SetCursorPos(int X, int Y);   
+        //        [System.Runtime.InteropServices.DllImportAttribute("user32.dll", EntryPoint = "SetCursorPos")]
+        //        [return: System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.Bool)]
+        //        public static extern bool SetCursorPos(int X, int Y);   
 
 
         public double CurrentScale {
-            get { return ((MatrixTransform) _graphCanvas.RenderTransform).Matrix.M11; }
+            get { return ((MatrixTransform)_graphCanvas.RenderTransform).Matrix.M11; }
         }
 
         /*
@@ -532,23 +522,23 @@ namespace Microsoft.Msagl.WpfGraphControl {
             // keep the same zoom level
             double oldfit = GetFitFactor(e.PreviousSize);
             double fitNow = FitFactor;
-            double scaleFraction = fitNow/oldfit;
-            SetTransform(CurrentScale*scaleFraction, CurrentXOffset*scaleFraction, CurrentYOffset*scaleFraction);
+            double scaleFraction = fitNow / oldfit;
+            SetTransform(CurrentScale * scaleFraction, CurrentXOffset * scaleFraction, CurrentYOffset * scaleFraction);
         }
 
         protected double CurrentXOffset {
-            get { return ((MatrixTransform) _graphCanvas.RenderTransform).Matrix.OffsetX; }
+            get { return ((MatrixTransform)_graphCanvas.RenderTransform).Matrix.OffsetX; }
         }
 
         protected double CurrentYOffset {
-            get { return ((MatrixTransform) _graphCanvas.RenderTransform).Matrix.OffsetY; }
+            get { return ((MatrixTransform)_graphCanvas.RenderTransform).Matrix.OffsetY; }
         }
 
         /// <summary>
         /// 
         /// </summary>
         public double ZoomFactor {
-            get { return CurrentScale/FitFactor; }
+            get { return CurrentScale / FitFactor; }
         }
 
         #endregion
@@ -590,7 +580,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
         }
 
         public void Invalidate(IViewerObject objectToInvalidate) {
-            ((IInvalidatable) objectToInvalidate).Invalidate();
+            ((IInvalidatable)objectToInvalidate).Invalidate();
         }
 
         public void Invalidate() {
@@ -621,7 +611,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
         public Point ScreenToSource(MsaglMouseEventArgs e) {
             var p = new Point(e.X, e.Y);
             var m = Transform.Inverse;
-            return m*p;
+            return m * p;
         }
 
 
@@ -697,13 +687,13 @@ namespace Microsoft.Msagl.WpfGraphControl {
         }
 
         public static object CreateMenuItem(string title, VoidDelegate voidVoidDelegate) {
-            var menuItem = new MenuItem {Header = title};
-            menuItem.Click += (RoutedEventHandler) (delegate { voidVoidDelegate(); });
+            var menuItem = new MenuItem { Header = title };
+            menuItem.Click += (RoutedEventHandler)(delegate { voidVoidDelegate(); });
             return menuItem;
         }
 
         public double UnderlyingPolylineCircleRadius {
-            get { return 0.1*DpiX/CurrentScale; }
+            get { return 0.1 * DpiX / CurrentScale; }
         }
 
         public Graph Graph {
@@ -713,25 +703,25 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 ProcessGraph();
             }
         }
-//
-//        void Dumpxy() {
-//            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\tmp\dumpxy")) {
-//                file.WriteLine("~nodes");
-//                foreach (var node in Graph.Nodes) {
-//                    var c = node.GeometryNode.Center;
-//                    file.WriteLine("{0} {1} {2}", node.Id, c.X, c.Y);
-//                }
-//                file.WriteLine("~edges");
-//                foreach (var edge in Graph.Edges)
-//                {
-//                    file.WriteLine("{0} {1}", edge.Source, edge.Target);
-//                }
-//            }
-//        }
+        //
+        //        void Dumpxy() {
+        //            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\tmp\dumpxy")) {
+        //                file.WriteLine("~nodes");
+        //                foreach (var node in Graph.Nodes) {
+        //                    var c = node.GeometryNode.Center;
+        //                    file.WriteLine("{0} {1} {2}", node.Id, c.X, c.Y);
+        //                }
+        //                file.WriteLine("~edges");
+        //                foreach (var edge in Graph.Edges)
+        //                {
+        //                    file.WriteLine("{0} {1}", edge.Source, edge.Target);
+        //                }
+        //            }
+        //        }
 
 
         const double DesiredPathThicknessInInches = 0.008;
-      
+
         readonly Dictionary<DrawingObject, Func<DrawingObject, FrameworkElement>> registeredCreators =
             new Dictionary<DrawingObject, Func<DrawingObject, FrameworkElement>>();
 
@@ -739,14 +729,14 @@ namespace Microsoft.Msagl.WpfGraphControl {
         public string MsaglFileToSave;
 
         double GetBorderPathThickness() {
-            return DesiredPathThicknessInInches*DpiX;
+            return DesiredPathThicknessInInches * DpiX;
         }
 
-        readonly Object _processGraphLock=new object();
+        readonly Object _processGraphLock = new object();
         void ProcessGraph() {
             lock (_processGraphLock) {
                 ProcessGraphUnderLock();
-            }            
+            }
         }
 
         void ProcessGraphUnderLock() {
@@ -774,13 +764,13 @@ namespace Microsoft.Msagl.WpfGraphControl {
                     SetUpBackgrounWorkerAndRunAsync();
                 else
                     RunLayoutInUIThread();
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 MessageBox.Show(e.ToString());
             }
         }
 
-        void RunLayoutInUIThread()
-        {
+        void RunLayoutInUIThread() {
             LayoutGraph();
             PostLayoutStep();
             if (LayoutComplete != null)
@@ -794,9 +784,11 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 if (args.Error != null) {
                     MessageBox.Show(args.Error.ToString());
                     ClearGraphViewer();
-                } else if (CancelToken.Canceled) {
+                }
+                else if (CancelToken.Canceled) {
                     ClearGraphViewer();
-                } else {
+                }
+                else {
                     if (_graphCanvas.Dispatcher.CheckAccess())
                         PostLayoutStep();
                     else
@@ -826,7 +818,8 @@ namespace Microsoft.Msagl.WpfGraphControl {
                         _drawingGraph.Write(MsaglFileToSave);
                         Environment.Exit(0);
                     }
-                } catch (OperationCanceledException) {
+                }
+                catch (OperationCanceledException) {
                     //swallow this exception
                 }
             }
@@ -849,8 +842,8 @@ namespace Microsoft.Msagl.WpfGraphControl {
         /// <returns></returns>
         public IViewerNode CreateIViewerNode(Drawing.Node drawingNode) {
             var frameworkElement = CreateTextBlockForDrawingObj(drawingNode);
-            var width = frameworkElement.Width + 2*drawingNode.Attr.LabelMargin;
-            var height = frameworkElement.Height + 2*drawingNode.Attr.LabelMargin;
+            var width = frameworkElement.Width + 2 * drawingNode.Attr.LabelMargin;
+            var height = frameworkElement.Height + 2 * drawingNode.Attr.LabelMargin;
             var bc = NodeBoundaryCurves.GetNodeBoundaryCurve(drawingNode, width, height);
             drawingNode.GeometryNode = new Node(bc, drawingNode);
             var vNode = CreateVNode(drawingNode);
@@ -881,12 +874,11 @@ namespace Microsoft.Msagl.WpfGraphControl {
             var graphCenter = GeomGraph.BoundingBox.Center;
             var vp = new Rectangle(new Point(0, 0),
                                    new Point(_graphCanvas.RenderSize.Width, _graphCanvas.RenderSize.Height));
-            
+
             SetTransformOnViewportWithoutRaisingViewChangeEvent(scale, graphCenter, vp);
         }
 
-        public Image DrawImage(string fileName)
-        {
+        public Image DrawImage(string fileName) {
             var ltrans = _graphCanvas.LayoutTransform;
             var rtrans = _graphCanvas.RenderTransform;
             _graphCanvas.LayoutTransform = null;
@@ -898,18 +890,16 @@ namespace Microsoft.Msagl.WpfGraphControl {
             int h = (int)(GeomGraph.Height * scale);
 
             SetTransformOnViewportWithoutRaisingViewChangeEvent(scale, GeomGraph.BoundingBox.Center, new Rectangle(0, 0, w, h));
-            
+
             Size size = new Size(w, h);
             // Measure and arrange the surface
             // VERY IMPORTANT
             _graphCanvas.Measure(size);
             _graphCanvas.Arrange(new Rect(size));
-            
-            foreach (var node in _drawingGraph.Nodes.Concat(_drawingGraph.RootSubgraph.AllSubgraphsDepthFirstExcludingSelf()))
-            {
+
+            foreach (var node in _drawingGraph.Nodes.Concat(_drawingGraph.RootSubgraph.AllSubgraphsDepthFirstExcludingSelf())) {
                 IViewerObject o;
-                if (drawingObjectsToIViewerObjects.TryGetValue(node, out o))
-                {
+                if (drawingObjectsToIViewerObjects.TryGetValue(node, out o)) {
                     ((VNode)o).Invalidate();
                 }
             }
@@ -919,8 +909,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
             if (fileName != null)
                 // Create a file stream for saving image
-                using (System.IO.FileStream outStream = new System.IO.FileStream(fileName, System.IO.FileMode.Create))
-                {
+                using (System.IO.FileStream outStream = new System.IO.FileStream(fileName, System.IO.FileMode.Create)) {
                     // Use png encoder for our data
                     PngBitmapEncoder encoder = new PngBitmapEncoder();
                     // push the rendered bitmap to it
@@ -938,11 +927,11 @@ namespace Microsoft.Msagl.WpfGraphControl {
         }
 
         void SetTransformOnViewportWithoutRaisingViewChangeEvent(double scale, Point graphCenter, Rectangle vp) {
-            var dx = vp.Width/2 - scale*graphCenter.X;
-            var dy = vp.Height/2 + scale*graphCenter.Y;
+            var dx = vp.Width / 2 - scale * graphCenter.X;
+            var dy = vp.Height / 2 + scale * graphCenter.Y;
 
             SetTransformWithoutRaisingViewChangeEvent(scale, dx, dy);
-                       
+
         }
 
         public Rectangle ClientViewportMappedToGraph {
@@ -950,7 +939,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 var t = Transform.Inverse;
                 var p0 = new Point(0, 0);
                 var p1 = new Point(_graphCanvas.RenderSize.Width, _graphCanvas.RenderSize.Height);
-                return new Rectangle(t*p0, t*p1);
+                return new Rectangle(t * p0, t * p1);
             }
         }
 
@@ -988,7 +977,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
         double GetFitFactor(Size rect) {
             var geomGraph = GeomGraph;
-            return geomGraph == null ? 1 : Math.Min(rect.Width/geomGraph.Width, rect.Height/geomGraph.Height);
+            return geomGraph == null ? 1 : Math.Min(rect.Width / geomGraph.Width, rect.Height / geomGraph.Height);
         }
 
         void PushDataFromLayoutGraphToFrameworkElements() {
@@ -1000,7 +989,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
 
         void CreateRectToFillCanvas() {
-            var parent = (Panel) GraphCanvas.Parent;
+            var parent = (Panel)GraphCanvas.Parent;
             _rectToFillCanvas = new System.Windows.Shapes.Rectangle();
             Canvas.SetLeft(_rectToFillCanvas, 0);
             Canvas.SetTop(_rectToFillCanvas, 0);
@@ -1023,7 +1012,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
         VEdge CreateEdge(DrawingEdge edge, LgLayoutSettings lgSettings) {
             lock (this) {
                 if (drawingObjectsToIViewerObjects.ContainsKey(edge))
-                    return (VEdge) drawingObjectsToIViewerObjects[edge];
+                    return (VEdge)drawingObjectsToIViewerObjects[edge];
                 if (lgSettings != null)
                     return CreateEdgeForLgCase(lgSettings, edge);
 
@@ -1046,16 +1035,16 @@ namespace Microsoft.Msagl.WpfGraphControl {
         }
 
         int ZIndexOfEdge(DrawingEdge edge) {
-            var source = (VNode) drawingObjectsToIViewerObjects[edge.SourceNode];
-            var target = (VNode) drawingObjectsToIViewerObjects[edge.TargetNode];
+            var source = (VNode)drawingObjectsToIViewerObjects[edge.SourceNode];
+            var target = (VNode)drawingObjectsToIViewerObjects[edge.TargetNode];
 
             var zIndex = Math.Max(source.ZIndex, target.ZIndex) + 1;
             return zIndex;
         }
 
         VEdge CreateEdgeForLgCase(LgLayoutSettings lgSettings, DrawingEdge edge) {
-            return (VEdge) (drawingObjectsToIViewerObjects[edge] = new VEdge(edge, lgSettings) {
-                PathStrokeThicknessFunc = () => GetBorderPathThickness()*edge.Attr.LineWidth
+            return (VEdge)(drawingObjectsToIViewerObjects[edge] = new VEdge(edge, lgSettings) {
+                PathStrokeThicknessFunc = () => GetBorderPathThickness() * edge.Attr.LineWidth
             });
         }
 
@@ -1067,7 +1056,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 frameworkElementForEdgeLabel.Tag = new VLabel(edge, frameworkElementForEdgeLabel);
             }
 
-            vEdge.VLabel = (VLabel) frameworkElementForEdgeLabel.Tag;
+            vEdge.VLabel = (VLabel)frameworkElementForEdgeLabel.Tag;
             if (frameworkElementForEdgeLabel.Parent == null) {
                 _graphCanvas.Children.Add(frameworkElementForEdgeLabel);
                 Panel.SetZIndex(frameworkElementForEdgeLabel, zIndex);
@@ -1085,10 +1074,8 @@ namespace Microsoft.Msagl.WpfGraphControl {
             }
         }
 
-        void CreateVNodes()
-        {
-            foreach (var node in _drawingGraph.Nodes.Concat(_drawingGraph.RootSubgraph.AllSubgraphsDepthFirstExcludingSelf()))
-            {
+        void CreateVNodes() {
+            foreach (var node in _drawingGraph.Nodes.Concat(_drawingGraph.RootSubgraph.AllSubgraphsDepthFirstExcludingSelf())) {
                 CreateVNode(node);
                 Invalidate(drawingObjectsToIViewerObjects[node]);
             }
@@ -1097,14 +1084,14 @@ namespace Microsoft.Msagl.WpfGraphControl {
         IViewerNode CreateVNode(Drawing.Node node) {
             lock (this) {
                 if (drawingObjectsToIViewerObjects.ContainsKey(node))
-                    return (IViewerNode) drawingObjectsToIViewerObjects[node];
+                    return (IViewerNode)drawingObjectsToIViewerObjects[node];
 
                 FrameworkElement feOfLabel;
                 if (!drawingObjectsToFrameworkElements.TryGetValue(node, out feOfLabel))
                     feOfLabel = CreateAndRegisterFrameworkElementOfDrawingNode(node);
 
                 var vn = new VNode(node, feOfLabel,
-                    e => (VEdge)drawingObjectsToIViewerObjects[e], () => GetBorderPathThickness() * node.Attr.LineWidth);
+                    e => (VEdge)drawingObjectsToIViewerObjects[e], () => GetBorderPathThickness() * node.Attr.LineWidth, this.CreateToolTipForNodes);
 
                 foreach (var fe in vn.FrameworkElements)
                     _graphCanvas.Children.Add(fe);
@@ -1143,8 +1130,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
             SetBackgroundRectanglePositionAndSize();
 
             var rect = _rectToFillGraphBackground as System.Windows.Shapes.Rectangle;
-            if (rect != null)
-            {
+            if (rect != null) {
                 rect.Fill = Common.BrushFromMsaglColor(_drawingGraph.Attr.BackgroundColor);
                 //rect.Fill = Brushes.Green;
             }
@@ -1162,11 +1148,11 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
         void SetBackgroundRectanglePositionAndSize() {
             if (GeomGraph == null) return;
-//            Canvas.SetLeft(_rectToFillGraphBackground, geomGraph.Left);
-//            Canvas.SetTop(_rectToFillGraphBackground, geomGraph.Bottom);
+            //            Canvas.SetLeft(_rectToFillGraphBackground, geomGraph.Left);
+            //            Canvas.SetTop(_rectToFillGraphBackground, geomGraph.Bottom);
             _rectToFillGraphBackground.Width = GeomGraph.Width;
             _rectToFillGraphBackground.Height = GeomGraph.Height;
-            
+
             var center = GeomGraph.BoundingBox.Center;
             Common.PositionFrameworkElement(_rectToFillGraphBackground, center, 1);
         }
@@ -1177,7 +1163,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
             foreach (
                 Node msaglNode in
                     geometryGraphUnderLayout.Nodes) {
-                var node = (Drawing.Node) msaglNode.UserData;
+                var node = (Drawing.Node)msaglNode.UserData;
                 if (_graphCanvas.Dispatcher.CheckAccess())
                     msaglNode.BoundaryCurve = GetNodeBoundaryCurve(node);
                 else {
@@ -1189,7 +1175,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
             foreach (
                 Cluster cluster in geometryGraphUnderLayout.RootCluster.AllClustersWideFirstExcludingSelf()) {
-                var subgraph = (Subgraph) cluster.UserData;
+                var subgraph = (Subgraph)cluster.UserData;
                 if (_graphCanvas.Dispatcher.CheckAccess())
                     cluster.CollapsedBoundary = GetClusterCollapsedBoundary(subgraph);
                 else {
@@ -1200,12 +1186,12 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 if (cluster.RectangularBoundary == null)
                     cluster.RectangularBoundary = new RectangularClusterBoundary();
                 cluster.RectangularBoundary.TopMargin = subgraph.DiameterOfOpenCollapseButton + 0.5 +
-                                                        subgraph.Attr.LineWidth/2;
+                                                        subgraph.Attr.LineWidth / 2;
                 //AssignLabelWidthHeight(msaglNode, msaglNode.UserData as DrawingObject);
             }
 
             foreach (var msaglEdge in geometryGraphUnderLayout.Edges) {
-                var drawingEdge = (DrawingEdge) msaglEdge.UserData;
+                var drawingEdge = (DrawingEdge)msaglEdge.UserData;
                 AssignLabelWidthHeight(msaglEdge, drawingEdge);
             }
         }
@@ -1216,9 +1202,10 @@ namespace Microsoft.Msagl.WpfGraphControl {
             FrameworkElement fe;
             if (drawingObjectsToFrameworkElements.TryGetValue(subgraph, out fe)) {
 
-                width = fe.Width + 2*subgraph.Attr.LabelMargin + subgraph.DiameterOfOpenCollapseButton;
-                height = Math.Max(fe.Height + 2*subgraph.Attr.LabelMargin, subgraph.DiameterOfOpenCollapseButton);
-            } else
+                width = fe.Width + 2 * subgraph.Attr.LabelMargin + subgraph.DiameterOfOpenCollapseButton;
+                height = Math.Max(fe.Height + 2 * subgraph.Attr.LabelMargin, subgraph.DiameterOfOpenCollapseButton);
+            }
+            else
                 return GetApproximateCollapsedBoundary(subgraph);
 
             if (width < _drawingGraph.Attr.MinNodeWidth)
@@ -1237,12 +1224,12 @@ namespace Microsoft.Msagl.WpfGraphControl {
             if (String.IsNullOrEmpty(subgraph.LabelText))
                 height = width = subgraph.DiameterOfOpenCollapseButton;
             else {
-                double a = ((double) subgraph.LabelText.Length)/textBoxForApproxNodeBoundaries.Text.Length*
-                           subgraph.Label.FontSize/Label.DefaultFontSize;
-                width = textBoxForApproxNodeBoundaries.Width*a + subgraph.DiameterOfOpenCollapseButton;
+                double a = ((double)subgraph.LabelText.Length) / textBoxForApproxNodeBoundaries.Text.Length *
+                           subgraph.Label.FontSize / Label.DefaultFontSize;
+                width = textBoxForApproxNodeBoundaries.Width * a + subgraph.DiameterOfOpenCollapseButton;
                 height =
                     Math.Max(
-                        textBoxForApproxNodeBoundaries.Height*subgraph.Label.FontSize/Label.DefaultFontSize,
+                        textBoxForApproxNodeBoundaries.Height * subgraph.Label.FontSize / Label.DefaultFontSize,
                         subgraph.DiameterOfOpenCollapseButton);
             }
 
@@ -1270,9 +1257,10 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
             FrameworkElement fe;
             if (drawingObjectsToFrameworkElements.TryGetValue(node, out fe)) {
-                width = fe.Width + 2*node.Attr.LabelMargin;
-                height = fe.Height + 2*node.Attr.LabelMargin;
-            } else
+                width = fe.Width + 2 * node.Attr.LabelMargin;
+                height = fe.Height + 2 * node.Attr.LabelMargin;
+            }
+            else
                 return GetNodeBoundaryCurveByMeasuringText(node);
 
             if (width < _drawingGraph.Attr.MinNodeWidth)
@@ -1283,9 +1271,9 @@ namespace Microsoft.Msagl.WpfGraphControl {
         }
 
         TextBlock textBoxForApproxNodeBoundaries;
+        private bool createToolTipForNodes = true;
 
-        public static Size MeasureText(string text, FontFamily family, double size, Visual visual=null)
-        {
+        public static Size MeasureText(string text, FontFamily family, double size, Visual visual = null) {
             FormattedText formattedText = new FormattedText(
                 text,
                 System.Globalization.CultureInfo.CurrentCulture,
@@ -1303,16 +1291,13 @@ namespace Microsoft.Msagl.WpfGraphControl {
             return new Size(formattedText.Width, formattedText.Height);
         }
 
-        ICurve GetNodeBoundaryCurveByMeasuringText(Drawing.Node node)
-        {
+        ICurve GetNodeBoundaryCurveByMeasuringText(Drawing.Node node) {
             double width, height;
-            if (String.IsNullOrEmpty(node.LabelText))
-            {
+            if (String.IsNullOrEmpty(node.LabelText)) {
                 width = 10;
                 height = 10;
             }
-            else
-            {
+            else {
                 var size = MeasureText(node.LabelText, new FontFamily(node.Label.FontName), node.Label.FontSize, GraphCanvas);
                 width = size.Width;
                 height = size.Height;
@@ -1331,12 +1316,11 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
 
         void SetUpTextBoxForApproxNodeBoundaries() {
-            textBoxForApproxNodeBoundaries = new TextBlock
-                {
-                    Text = "Fox jumping over River",
-                    FontFamily = new FontFamily(Label.DefaultFontName),
-                    FontSize = Label.DefaultFontSize,
-                };
+            textBoxForApproxNodeBoundaries = new TextBlock {
+                Text = "Fox jumping over River",
+                FontFamily = new FontFamily(Label.DefaultFontName),
+                FontSize = Label.DefaultFontSize,
+            };
 
             textBoxForApproxNodeBoundaries.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
             textBoxForApproxNodeBoundaries.Width = textBoxForApproxNodeBoundaries.DesiredSize.Width;
@@ -1406,14 +1390,13 @@ namespace Microsoft.Msagl.WpfGraphControl {
         }
 
         static TextBlock CreateTextBlock(Label drawingLabel) {
-            var textBlock = new TextBlock
-                {
-                    Tag = drawingLabel,
-                    Text = drawingLabel.Text,
-                    FontFamily = new FontFamily(drawingLabel.FontName),
-                    FontSize = drawingLabel.FontSize,
-                    Foreground = Common.BrushFromMsaglColor(drawingLabel.FontColor)
-                };
+            var textBlock = new TextBlock {
+                Tag = drawingLabel,
+                Text = drawingLabel.Text,
+                FontFamily = new FontFamily(drawingLabel.FontName),
+                FontSize = drawingLabel.FontSize,
+                Foreground = Common.BrushFromMsaglColor(drawingLabel.FontColor)
+            };
 
             textBlock.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
             textBlock.Width = textBlock.DesiredSize.Width;
@@ -1463,7 +1446,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
         public void AddNode(IViewerNode node, bool registerForUndo) {
             if (_drawingGraph == null)
                 throw new InvalidOperationException(); // adding a node when the graph does not exist
-            var vNode = (VNode) node;
+            var vNode = (VNode)node;
             _drawingGraph.AddNode(vNode.Node);
             _drawingGraph.GeometryGraph.Nodes.Add(vNode.Node.GeometryNode);
             layoutEditor.AttachLayoutChangeEvent(vNode);
@@ -1481,7 +1464,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
         public void RemoveEdge(IViewerEdge edge, bool registerForUndo) {
             lock (this) {
-                var vedge = (VEdge) edge;
+                var vedge = (VEdge)edge;
                 var dedge = vedge.Edge;
                 _drawingGraph.RemoveEdge(dedge);
                 _drawingGraph.GeometryGraph.Edges.Remove(dedge.GeometryEdge);
@@ -1499,7 +1482,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 RemoveEdges(node.Node.SelfEdges);
                 drawingObjectsToFrameworkElements.Remove(node.Node);
                 drawingObjectsToIViewerObjects.Remove(node.Node);
-                var vnode = (VNode) node;
+                var vnode = (VNode)node;
                 vnode.DetouchFromCanvas(_graphCanvas);
 
                 _drawingGraph.RemoveNode(node.Node);
@@ -1511,7 +1494,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
         void RemoveEdges(IEnumerable<DrawingEdge> drawingEdges) {
             foreach (var de in drawingEdges.ToArray()) {
-                var vedge = (VEdge) drawingObjectsToIViewerObjects[de];
+                var vedge = (VEdge)drawingObjectsToIViewerObjects[de];
                 RemoveEdge(vedge, false);
             }
         }
@@ -1520,14 +1503,14 @@ namespace Microsoft.Msagl.WpfGraphControl {
         public IViewerEdge RouteEdge(DrawingEdge drawingEdge) {
             var geomEdge = GeometryGraphCreator.CreateGeometryEdgeFromDrawingEdge(drawingEdge);
             var geomGraph = _drawingGraph.GeometryGraph;
-            LayoutHelpers.RouteAndLabelEdges(geomGraph, _drawingGraph.LayoutAlgorithmSettings, new[] {geomEdge}, 0, null);
+            LayoutHelpers.RouteAndLabelEdges(geomGraph, _drawingGraph.LayoutAlgorithmSettings, new[] { geomEdge }, 0, null);
             return CreateEdge(drawingEdge, _drawingGraph.LayoutAlgorithmSettings as LgLayoutSettings);
         }
 
         public IViewerGraph ViewerGraph { get; set; }
 
         public double ArrowheadLength {
-            get { return 0.2*DpiX/CurrentScale; }
+            get { return 0.2 * DpiX / CurrentScale; }
         }
 
         public void SetSourcePortForEdgeRouting(Point portLocation) {
@@ -1537,27 +1520,26 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 _graphCanvas.Children.Add(_sourcePortCircle);
             }
             _sourcePortCircle.Width = _sourcePortCircle.Height = UnderlyingPolylineCircleRadius;
-            _sourcePortCircle.StrokeThickness = _sourcePortCircle.Width/10;
+            _sourcePortCircle.StrokeThickness = _sourcePortCircle.Width / 10;
             Common.PositionFrameworkElement(_sourcePortCircle, portLocation, 1);
         }
 
         Ellipse CreatePortPath() {
-            return new Ellipse
-                {
-                    Stroke = Brushes.Brown,
-                    Fill = Brushes.Brown,
-                };
+            return new Ellipse {
+                Stroke = Brushes.Brown,
+                Fill = Brushes.Brown,
+            };
         }
 
-        
-        
+
+
         public void SetTargetPortForEdgeRouting(Point portLocation) {
             if (TargetPortCircle == null) {
                 TargetPortCircle = CreatePortPath();
                 _graphCanvas.Children.Add(TargetPortCircle);
             }
             TargetPortCircle.Width = TargetPortCircle.Height = UnderlyingPolylineCircleRadius;
-            TargetPortCircle.StrokeThickness = TargetPortCircle.Width/10;
+            TargetPortCircle.StrokeThickness = TargetPortCircle.Width / 10;
             Common.PositionFrameworkElement(TargetPortCircle, portLocation, 1);
         }
 
@@ -1574,17 +1556,15 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
         public void DrawRubberEdge(EdgeGeometry edgeGeometry) {
             if (_rubberEdgePath == null) {
-                _rubberEdgePath = new Path
-                    {
-                        Stroke = Brushes.Black,
-                        StrokeThickness = GetBorderPathThickness()*3
-                    };
+                _rubberEdgePath = new Path {
+                    Stroke = Brushes.Black,
+                    StrokeThickness = GetBorderPathThickness() * 3
+                };
                 _graphCanvas.Children.Add(_rubberEdgePath);
-                _targetArrowheadPathForRubberEdge = new Path
-                    {
-                        Stroke = Brushes.Black,
-                        StrokeThickness = GetBorderPathThickness()*3
-                    };
+                _targetArrowheadPathForRubberEdge = new Path {
+                    Stroke = Brushes.Black,
+                    StrokeThickness = GetBorderPathThickness() * 3
+                };
                 _graphCanvas.Children.Add(_targetArrowheadPathForRubberEdge);
             }
             _rubberEdgePath.Data = VEdge.GetICurveWpfGeometry(edgeGeometry.Curve);
@@ -1592,7 +1572,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
                                                                                   edgeGeometry.LineWidth);
         }
 
-        
+
         bool UnderLayout {
             get { return _backgroundWorker != null; }
         }
@@ -1645,15 +1625,14 @@ namespace Microsoft.Msagl.WpfGraphControl {
         /// no layout is done, but the overlap is removed for graphs with geometry
         /// </summary>
         public bool NeedToRemoveOverlapOnly { get; set; }
-        
+
 
         public void DrawRubberLine(Point rubberEnd) {
             if (_rubberLinePath == null) {
-                _rubberLinePath = new Path
-                    {
-                        Stroke = Brushes.Black,
-                        StrokeThickness = GetBorderPathThickness()*3
-                    };
+                _rubberLinePath = new Path {
+                    Stroke = Brushes.Black,
+                    StrokeThickness = GetBorderPathThickness() * 3
+                };
                 _graphCanvas.Children.Add(_rubberLinePath);
                 //                targetArrowheadPathForRubberLine = new Path {
                 //                    Stroke = Brushes.Black,
@@ -1668,7 +1647,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
         public void StartDrawingRubberLine(Point startingPoint) {
         }
 
-#endregion
+        #endregion
 
 
 
@@ -1676,10 +1655,10 @@ namespace Microsoft.Msagl.WpfGraphControl {
             if (_drawingGraph == null)
                 return null;
             var frameworkElement = visualElement as FrameworkElement ?? CreateTextBlockForDrawingObj(drawingNode);
-            var width = frameworkElement.Width + 2*drawingNode.Attr.LabelMargin;
-            var height = frameworkElement.Height + 2*drawingNode.Attr.LabelMargin;
+            var width = frameworkElement.Width + 2 * drawingNode.Attr.LabelMargin;
+            var height = frameworkElement.Height + 2 * drawingNode.Attr.LabelMargin;
             var bc = NodeBoundaryCurves.GetNodeBoundaryCurve(drawingNode, width, height);
-            drawingNode.GeometryNode = new Node(bc, drawingNode) {Center = center};
+            drawingNode.GeometryNode = new Node(bc, drawingNode) { Center = center };
             var vNode = CreateVNode(drawingNode);
             _drawingGraph.AddNode(drawingNode);
             _drawingGraph.GeometryGraph.Nodes.Add(drawingNode.GeometryNode);
@@ -1690,25 +1669,26 @@ namespace Microsoft.Msagl.WpfGraphControl {
         }
 
         void MakeRoomForNewNode(Drawing.Node drawingNode) {
-            IncrementalDragger incrementalDragger = new IncrementalDragger(new[] {drawingNode.GeometryNode},
+            IncrementalDragger incrementalDragger = new IncrementalDragger(new[] { drawingNode.GeometryNode },
                                                                            Graph.GeometryGraph,
                                                                            Graph.LayoutAlgorithmSettings);
             incrementalDragger.Drag(new Point());
 
             foreach (var n in incrementalDragger.ChangedGraph.Nodes) {
-                var dn = (Drawing.Node) n.UserData;
+                var dn = (Drawing.Node)n.UserData;
                 var vn = drawingObjectsToIViewerObjects[dn] as VNode;
                 if (vn != null)
                     vn.Invalidate();
             }
 
             foreach (var n in incrementalDragger.ChangedGraph.Edges) {
-                var dn = (Drawing.Edge) n.UserData;
+                var dn = (Drawing.Edge)n.UserData;
                 var ve = drawingObjectsToIViewerObjects[dn] as VEdge;
                 if (ve != null)
                     ve.Invalidate();
             }
         }
         public bool IncrementalDraggingModeAlways { get; set; }
+        public bool CreateToolTipForNodes { get => createToolTipForNodes; private set => createToolTipForNodes = value; }
     }
 }
