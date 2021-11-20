@@ -1271,7 +1271,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
         }
 
         TextBlock textBoxForApproxNodeBoundaries;
-        private bool createToolTipForNodes = true;
+        private bool createToolTipForNodes = false;
 
         public static Size MeasureText(string text, FontFamily family, double size, Visual visual = null) {
             FormattedText formattedText = new FormattedText(
