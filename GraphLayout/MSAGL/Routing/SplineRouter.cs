@@ -430,31 +430,27 @@ namespace Microsoft.Msagl.Routing {
     InteractiveEdgeRouter CreateInteractiveEdgeRouter(IEnumerable<Shape> obstacleShapes) {
       //we need to create a set here because one loose polyline can hold several original shapes
       var loosePolys = new Set<Polyline>(obstacleShapes.Select(sh => shapesToTightLooseCouples[sh].LooseShape.BoundaryCurve as Polyline));
-      var router = new InteractiveEdgeRouter {
-        VisibilityGraph = visGraph,
-        TightHierarchy =
-              CreateTightObstacleHierarachy(obstacleShapes),
-        LooseHierarchy =
-              CreateLooseObstacleHierarachy(loosePolys),
-        UseSpanner = true,
-        LookForRoundedVertices = true,
-        TightPadding = tightPadding,
-        LoosePadding = LoosePadding,
-        UseEdgeLengthMultiplier = UseEdgeLengthMultiplier,
-        UsePolylineEndShortcutting = UsePolylineEndShortcutting,
-        UseInnerPolylingShortcutting = UseInnerPolylingShortcutting,
-        AllowedShootingStraightLines = AllowedShootingStraightLines,
-        CacheCorners = CacheCornersForSmoothing,
-      };
+            var router = new InteractiveEdgeRouter {
+                VisibilityGraph = visGraph,
+                TightHierarchy =
+                    CreateTightObstacleHierarachy(obstacleShapes),
+                LooseHierarchy =
+                    CreateLooseObstacleHierarachy(loosePolys),
+                UseSpanner = true,
+                LookForRoundedVertices = true,
+                TightPadding = tightPadding,
+                LoosePadding = LoosePadding,
+                UseEdgeLengthMultiplier = UseEdgeLengthMultiplier,
+                UsePolylineEndShortcutting = UsePolylineEndShortcutting,
+                UseInnerPolylingShortcutting = UseInnerPolylingShortcutting,
+                AllowedShootingStraightLines = AllowedShootingStraightLines,
+            };
 
       router.AddActivePolygons(loosePolys.Select(polyline => new Polygon(polyline)));
       return router;
     }
     /// <summary>
     /// 
-    /// </summary>
-    public bool CacheCornersForSmoothing { get; set; }
-
     Set<Shape> GetObstaclesFromPassport(Set<Shape> passport) {
       if (passport.Count == 0)
         return new Set<Shape>(root.Children);

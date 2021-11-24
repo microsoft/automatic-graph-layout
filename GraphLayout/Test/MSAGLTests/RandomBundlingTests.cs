@@ -72,7 +72,7 @@ namespace Microsoft.Msagl.UnitTests {
             //DisplayGeometryGraph.SetShowFunctions();
 
             Random random = new Random(1);
-            int ntest = 20;
+            int ntest = 6;
             for (int i = 0; i < ntest; i++) {
                 GeometryGraph graph = GraphGenerator.GenerateSquareLattice(20 + random.Next(20));
                 AddRootCluster(graph);
@@ -155,8 +155,8 @@ namespace Microsoft.Msagl.UnitTests {
 
 
         public static void RsmContent() {
-            const int ntest = 70;
-            int iStart = 1;            
+            const int ntest = 8;
+            int iStart = 0;            
 #if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
 #endif

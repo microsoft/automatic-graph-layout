@@ -196,9 +196,7 @@ namespace Microsoft.Msagl.Routing {
         internal bool UsePolylineEndShortcutting=true;
 
         internal bool AllowedShootingStraightLines = true;
-        Dictionary<Corner, Tuple<double,double>> cornerTable;
-        bool cacheCorners;
-
+  
 
         /// <summary>
         /// An empty constructor for calling it from inside of MSAGL
@@ -626,14 +624,6 @@ namespace Microsoft.Msagl.Routing {
         }
 
         Site SmoothOneCorner(Site a, Site c, Site b) {
-            if (CacheCorners) {
-                double p, n;
-                if (FindCachedCorner(a, b, c, out p, out n)) {
-                    b.PreviousBezierSegmentFitCoefficient = p;
-                    b.NextBezierSegmentFitCoefficient = n;
-                    return b;
-                }
-            }
             const double mult = 1.5;
             const double kMin = 0.01;
             
@@ -667,51 +657,8 @@ namespace Microsoft.Msagl.Routing {
                     b.NextBezierSegmentFitCoefficient = k*v;
                 }
             }
-            if (CacheCorners)
-                CacheCorner(a, b, c);
+            
             return b;
-        }
-
-        internal int foundCachedCorners;
-        bool FindCachedCorner(Site a, Site b, Site c, out double prev, out double next) {
-            Corner corner=new Corner(a.Point,b.Point,c.Point);
-            Tuple<double, double> prevNext;
-            if (cornerTable.TryGetValue(corner, out prevNext)) {
-                if (a.Point == corner.a) {
-                    prev = prevNext.Item1;
-                    next = prevNext.Item2;
-                }
-                else {
-                    prev = prevNext.Item2;
-                    next = prevNext.Item1;
-                }
-                foundCachedCorners++;
-                return true;
-            }
-            prev = next = 0;
-            return false;
-        }
-
-        void CacheCorner(Site a, Site b, Site c) {
-            cornerTable[new Corner(a.Point,b.Point,c.Point)]=new Tuple<double, double>(b.PreviousBezierSegmentFitCoefficient,b.NextBezierSegmentFitCoefficient);
-        }
-
-        /// <summary>
-        /// is set to true will cache three points defining the corner 
-        /// to avoid obstacle avoidance calculation
-        /// </summary>
-        public bool CacheCorners {
-            get { return cacheCorners; }
-            set {
-                cacheCorners = value;
-                if (cacheCorners)
-                    cornerTable = new Dictionary<Corner, Tuple<double, double>>();
-                else {
-                    if (cornerTable != null)
-                        cornerTable.Clear();
-                } 
-
-            }
         }
 
         /// <summary>

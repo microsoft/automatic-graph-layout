@@ -17,6 +17,7 @@ namespace Microsoft.Msagl.UnitTests
     /// Test class for manipulating the aspect ratio of sugiyama style graphs.
     /// </summary>
     [TestClass]
+    [Ignore]
     [DeploymentItem(@"Resources\DotFiles\LevFiles\chat.dot", "Dots")]
     public class AspectRatioTests : MsaglTestBase
     {
