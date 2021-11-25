@@ -246,14 +246,13 @@ namespace Microsoft.Msagl.Routing {
         }
 
         void CalculateEdgeTargetVisibilityGraph(Point location) {
-            PointVisibilityCalculator.CalculatePointVisibilityGraph(GetActivePolylines(), VisibilityGraph, location,
-                                                                    VisibilityKind.Tangent, out targetVisibilityVertex);
+            targetVisibilityVertex =  PointVisibilityCalculator.CalculatePointVisibilityGraph(GetActivePolylines(), VisibilityGraph, location,
+                                                                    VisibilityKind.Tangent);
         }
 
         void CalculateSourcePortVisibilityGraph() {
-            PointVisibilityCalculator.CalculatePointVisibilityGraph(GetActivePolylines(), VisibilityGraph,
-                                                                    StartPointOfEdgeRouting, VisibilityKind.Tangent,
-                                                                    out _sourceVisibilityVertex);
+           _sourceVisibilityVertex= PointVisibilityCalculator.CalculatePointVisibilityGraph(GetActivePolylines(), VisibilityGraph,
+                                                                    StartPointOfEdgeRouting, VisibilityKind.Tangent);
             Debug.Assert(_sourceVisibilityVertex != null);
         }
 
@@ -1071,9 +1070,7 @@ namespace Microsoft.Msagl.Routing {
             if (UseSpanner)
                 targetVisibilityVertex = AddTransientVisibilityEdgesForPort(targetLocation, targetLoosePoly);
             else
-                PointVisibilityCalculator.CalculatePointVisibilityGraph(
-                    GetActivePolylinesWithException(targetLoosePoly), VisibilityGraph, targetLocation,
-                    VisibilityKind.Tangent, out targetVisibilityVertex);
+                targetVisibilityVertex = PointVisibilityCalculator.CalculatePointVisibilityGraph(GetActivePolylinesWithException(targetLoosePoly), VisibilityGraph, targetLocation, VisibilityKind.Tangent);
         }
 
         VisibilityVertex AddTransientVisibilityEdgesForPort(Point point, IEnumerable<Point> loosePoly) {
@@ -1087,10 +1084,10 @@ namespace Microsoft.Msagl.Routing {
                 foreach (Point p in loosePoly)
                     visibilityGraph.AddEdge(point, p, ((a, b) => new TollFreeVisibilityEdge(a, b)));
             else {
-                PointVisibilityCalculator.CalculatePointVisibilityGraph(GetActivePolylines(),
+                v = PointVisibilityCalculator.CalculatePointVisibilityGraph(GetActivePolylines(),
                                                                         VisibilityGraph, point,
-                                                                        VisibilityKind.Tangent,
-                                                                        out v);
+                                                                        VisibilityKind.Tangent
+                                                                       );
                 Debug.Assert(v != null);
             }
             return v;
@@ -1667,9 +1664,9 @@ namespace Microsoft.Msagl.Routing {
             if (UseSpanner)
                 _sourceVisibilityVertex = AddTransientVisibilityEdgesForPort(sourcePort.Location, SourceLoosePolyline);
             else {
-                PointVisibilityCalculator.CalculatePointVisibilityGraph(
+               _sourceVisibilityVertex= PointVisibilityCalculator.CalculatePointVisibilityGraph(
                     from p in GetActivePolylines() where p != SourceLoosePolyline select p, VisibilityGraph,
-                    StartPointOfEdgeRouting, VisibilityKind.Tangent, out _sourceVisibilityVertex);
+                    StartPointOfEdgeRouting, VisibilityKind.Tangent);
             }
         }
 

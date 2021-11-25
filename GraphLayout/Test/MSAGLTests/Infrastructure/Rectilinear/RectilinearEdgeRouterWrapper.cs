@@ -602,6 +602,8 @@ internal override void FinaliseEdgeGeometries()
                     Validate.IsTrue(obstacle.IsPrimaryObstacle, "Groups should always be primary obstacles - their convex hull is never shared.");
                 }
             }
+            if (this.allObstacleHierarchy == null)
+                return;
 
             RectangleNodeUtils.CrossRectangleNodes<Obstacle,Point>(this.allObstacleHierarchy, this.allObstacleHierarchy, VerifyIntersectingObstacleBoundingBoxes);
 

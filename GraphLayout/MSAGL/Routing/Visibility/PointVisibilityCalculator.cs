@@ -53,21 +53,20 @@ namespace Microsoft.Msagl.Routing.Visibility {
         /// <param name="visibilityKind">tangent or regural visibility</param>
         /// <param name="qVertex">the graph vertex corresponding to the pivot</param>        
         /// <returns></returns>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal static void CalculatePointVisibilityGraph(IEnumerable<Polyline> listOfHoles,
-                                                           VisibilityGraph visibilityGraph, Point point,
-                                               VisibilityKind visibilityKind, out VisibilityVertex qVertex) {
+        internal static VisibilityVertex CalculatePointVisibilityGraph(
+            IEnumerable<Polyline> listOfHoles,
+            VisibilityGraph visibilityGraph,
+            Point point,
+            VisibilityKind visibilityKind) {
             //maybe there is nothing to do
             var qv = visibilityGraph.FindVertex(point);
-            if (qv != null){
-                qVertex = qv;
-                return;
+            if (qv != null) {
+                return qv;
             }
-                
+
             var calculator = new PointVisibilityCalculator(listOfHoles, visibilityGraph, point, visibilityKind);
             calculator.FillGraph();
-            qVertex = calculator.QVertex;
-            Debug.Assert(qVertex != null);
+            return calculator.QVertex;
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]

@@ -40,7 +40,6 @@ namespace Microsoft.Msagl.Routing.Visibility {
                 return CompareVectorsPointingToTheSameYHalfPlane(ref a, ref b);
             }
 
-            throw new InvalidOperationException();
         }
 
         private static int CompareVectorsPointingToTheSameYHalfPlane(ref Point a, ref Point b) {

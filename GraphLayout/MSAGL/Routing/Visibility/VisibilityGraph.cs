@@ -75,10 +75,10 @@ namespace Microsoft.Msagl.Routing.Visibility {
       var polygons = holes.Select(hole => new Polygon(hole)).ToList();
 
       TangentVisibilityGraphCalculator.AddTangentVisibilityEdgesToGraph(polygons, visibilityGraph);
-      PointVisibilityCalculator.CalculatePointVisibilityGraph(holes, visibilityGraph, pathStart,
-                                                              VisibilityKind.Tangent, out sourceVertex);
-      PointVisibilityCalculator.CalculatePointVisibilityGraph(holes, visibilityGraph, pathEnd,
-                                                              VisibilityKind.Tangent, out targetVertex);
+      sourceVertex = PointVisibilityCalculator.CalculatePointVisibilityGraph(holes, visibilityGraph, pathStart,
+                                                              VisibilityKind.Tangent);
+      targetVertex = PointVisibilityCalculator.CalculatePointVisibilityGraph(holes, visibilityGraph, pathEnd,
+                                                              VisibilityKind.Tangent);
 
       return visibilityGraph;
     }

@@ -4659,20 +4659,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         public void Zero_Obstacle_Graph() 
         {
             var router = this.CreateRouter(new List<Shape>());
-            bool threw = false;
-            try
-            {
-                router.CreateVisibilityGraph();
-                this.ShowGraph(router);
-            } 
-            catch (Exception e) 
-            {
-                threw = true;
-
-                // Don't use "exception" in the message to avoid the word appearing in the errorlog...
-                base.WriteLine(e.Message + " (thrown/caught as expected)");
-            }
-            Validate.IsTrue(threw, "Empty graph did not throw");
+            router.CreateVisibilityGraph();
         }
 
         [TestMethod]

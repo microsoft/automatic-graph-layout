@@ -176,7 +176,7 @@ namespace Microsoft.Msagl.Routing.Visibility {
         /// <param name="e0"></param>
         /// <param name="e1"></param>
         /// <returns></returns>
-        int TangentComparison(Tangent e0, Tangent e1) {
+        static int TangentComparison(Tangent e0, Tangent e1) {
             return StemStartPointComparer.CompareVectorsByAngleToXAxis(e0.End.Point - e0.Start.Point, e1.End.Point - e1.Start.Point);
         }
 
