@@ -694,53 +694,54 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       contextMenu.Show(this, PointToClient(MousePosition));
     }
 
-    /// <summary>
-    /// adding a node to the graph with the undo support
-    /// The node boundary curve should have (0,0) as its internal point.
-    /// The curve will be moved the the node center.
-    /// </summary>
-    /// <param name="node"></param>
-    /// <param name="registerForUndo"></param>
-    public void AddNode(IViewerNode node, bool registerForUndo) {
-      var dNode = node as DNode;
-      DrawingNode drawingNode = dNode.DrawingNode;
+        /// <summary>
+        /// adding a node to the graph with the undo support
+        /// The node boundary curve should have (0,0) as its internal point.
+        /// The curve will be moved the the node center.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="registerForUndo"></param>
+        public void AddNode(IViewerNode node, bool registerForUndo) {
+            var dNode = node as DNode;
+            DrawingNode drawingNode = dNode.DrawingNode;
 
-      var viewer = this as IViewer;
+            var viewer = this as IViewer;
 
-      DGraph.AddNode(dNode);
-      Graph.AddNode(drawingNode);
-      Graph.GeometryGraph.Nodes.Add(drawingNode.GeometryNode);
+            DGraph.AddNode(dNode);
+            Graph.AddNode(drawingNode);
+            Graph.GeometryGraph.Nodes.Add(drawingNode.GeometryNode);
 
-      foreach (DEdge e in dNode.outEdges) {
-        e.Target.inEdges.Add(e);
-        e.Target.DrawingNode.AddInEdge(e.DrawingEdge);
-        e.Target.DrawingNode.GeometryNode.AddInEdge(e.DrawingEdge.GeometryEdge);
-      }
-      foreach (DEdge e in dNode.inEdges) {
-        e.Source.outEdges.Add(e);
-        e.Source.DrawingNode.AddOutEdge(e.DrawingEdge);
-        e.Source.DrawingNode.GeometryNode.AddOutEdge(e.DrawingEdge.GeometryEdge);
-      }
+            foreach (DEdge e in dNode.outEdges) {
+                e.Target.inEdges.Add(e);
+                e.Target.DrawingNode.AddInEdge(e.DrawingEdge);
+                e.Target.DrawingNode.GeometryNode.AddInEdge(e.DrawingEdge.GeometryEdge);
+            }
+            foreach (DEdge e in dNode.inEdges) {
+                e.Source.outEdges.Add(e);
+                e.Source.DrawingNode.AddOutEdge(e.DrawingEdge);
+                e.Source.DrawingNode.GeometryNode.AddOutEdge(e.DrawingEdge.GeometryEdge);
+            }
 
-      viewer.Invalidate(node);
-      foreach (DEdge e in Edges(dNode)) {
-        DGraph.Edges.Add(e);
-        Graph.AddPrecalculatedEdge(e.DrawingEdge);
-        Graph.GeometryGraph.Edges.Add(e.DrawingEdge.GeometryEdge);
-        viewer.Invalidate(e);
-      }
+            viewer.Invalidate(node);
+            foreach (DEdge e in Edges(dNode)) {
+                DGraph.Edges.Add(e);
+                Graph.AddPrecalculatedEdge(e.DrawingEdge);
+                Graph.GeometryGraph.Edges.Add(e.DrawingEdge.GeometryEdge);
+                viewer.Invalidate(e);
+            }
+            layoutEditor.AttachLayoutChangeEvent(node);
+            if (registerForUndo) {
+                layoutEditor.RegisterNodeAdditionForUndo(node);
+                Core.Geometry.Rectangle bounds = Graph.GeometryGraph.BoundingBox;
+                bounds.Add(drawingNode.BoundingBox.LeftTop);
+                bounds.Add(drawingNode.BoundingBox.RightBottom);
+                Graph.GeometryGraph.BoundingBox = bounds;
+                layoutEditor.CurrentUndoAction.GraphBoundingBoxAfter = Graph.BoundingBox;
+            }
+            BbNode = null;
+            viewer.Invalidate();
 
-      if (registerForUndo) {
-        layoutEditor.RegisterNodeAdditionForUndo(node);
-        Core.Geometry.Rectangle bounds = Graph.GeometryGraph.BoundingBox;
-        bounds.Add(drawingNode.BoundingBox.LeftTop);
-        bounds.Add(drawingNode.BoundingBox.RightBottom);
-        Graph.GeometryGraph.BoundingBox = bounds;
-        layoutEditor.CurrentUndoAction.GraphBoundingBoxAfter = Graph.BoundingBox;
-      }
-      BbNode = null;
-      viewer.Invalidate();
-    }
+        }
 
 
     ///// <summary>
