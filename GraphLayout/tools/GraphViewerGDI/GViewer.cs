@@ -1039,6 +1039,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     public void SetEdgeLabel(DrawingEdge edge, Label label) {
       //find the edge first
       DEdge de = null;
+      label.Owner = edge;
       foreach (DEdge dEdge in DGraph.Edges)
         if (dEdge.DrawingEdge == edge) {
           de = dEdge;

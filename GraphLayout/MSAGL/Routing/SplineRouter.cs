@@ -717,7 +717,7 @@ namespace Microsoft.Msagl.Routing {
 
       var transparentLooseShapes = new List<Shape>();
 
-      foreach (var shape in GetTransparentShapes(edgeGeometry.SourcePort, edgeGeometry.TargetPort, sourceShape, targetShape).ToArray())
+      foreach (var shape in GetTransparentShapes(edgeGeometry.SourcePort, edgeGeometry.TargetPort, sourceShape, targetShape))
         if (shape != null)
           transparentLooseShapes.Add(LooseShapeOfOriginalShape(shape));
       foreach (var shape in portsToEnterableShapes[edgeGeometry.SourcePort])

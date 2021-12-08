@@ -313,6 +313,7 @@ namespace Editing {
                 if (edge != null && edge.Label != null)
                     m_LabelBox.Text = edge.Label.Text;
             }
+             
             Controls.Add(m_LabelBox);
             if (obj != null)
                 m_LabelBox.Focus();
@@ -326,7 +327,7 @@ namespace Editing {
             if (m_EditingObject is DrawingNode) {
                 RelabelNode((m_EditingObject as DrawingNode), m_LabelBox.Text);
             } else if (m_EditingObject is Edge) {
-                RelabelEdge((m_EditingObject as Edge), m_LabelBox.Text);
+                    RelabelEdge((m_EditingObject as Edge), m_LabelBox.Text);
             }
 
             gViewer.Invalidate();
