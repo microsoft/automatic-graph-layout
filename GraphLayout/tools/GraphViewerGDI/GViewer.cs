@@ -1050,6 +1050,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       edge.Label = label;
       double w, h;
       DGraph.CreateDLabel(de, label, out w, out h, this);
+      layoutEditor.AttachLayoutChangeEvent(de.Label);
       edge.GeometryEdge.Label = label.GeometryLabel;
       ICurve curve = edge.GeometryEdge.Curve;
       label.GeometryLabel.Center = curve[(curve.ParStart + curve.ParEnd) / 2];
