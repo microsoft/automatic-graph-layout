@@ -129,13 +129,13 @@ namespace Microsoft.Msagl.Drawing {
         /// <param name="source"> cannot be null</param>
         /// <param name="labelText">label can be null</param>
         /// <param name="target">cannot be null</param>
-        public Edge(string source, string labelText, string target) {
+        public Edge(string source, string labelText, string target, EdgeAttr edgeAttr= null) {
             if (String.IsNullOrEmpty(source) || String.IsNullOrEmpty(target))
                 throw new InvalidOperationException("Creating an edge with null or empty source or target IDs");
             this.source = source;
             this.target = target;
 
-            this.attr = new EdgeAttr();
+            this.attr = edgeAttr?? new EdgeAttr();
             if (!String.IsNullOrEmpty(labelText))
             {
                 Label = new Label(labelText) {Owner = this};
@@ -148,8 +148,8 @@ namespace Microsoft.Msagl.Drawing {
         /// <param name="sourceNode"></param>
         /// <param name="targetNode"></param>
         /// <param name="connection">controls is the edge will be connected to the graph</param>
-        public Edge(Node sourceNode, Node targetNode, ConnectionToGraph connection)
-            : this(sourceNode.Id, null, targetNode.Id) {
+        public Edge(Node sourceNode, Node targetNode, ConnectionToGraph connection, EdgeAttr edgeAttr = null)
+            : this(sourceNode.Id, null, targetNode.Id, edgeAttr) {
             this.SourceNode = sourceNode;
             this.TargetNode = targetNode;
             if (connection == ConnectionToGraph.Connected) {

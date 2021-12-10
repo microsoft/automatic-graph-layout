@@ -228,7 +228,9 @@ namespace Microsoft.Msagl.Drawing {
             get { return geomGraphEditor.UndoMode ? geomGraphEditor.CurrentUndoAction : geomGraphEditor.CurrentRedoAction; }
         }
 
-        
+        public EdgeAttr EdgeAttr { get => edgeAttr; set => edgeAttr = value; }
+
+
         /// <summary>
         /// signals that there is a change in the undo/redo list
         /// There are four possibilities: Undo(Redo) becomes available (unavailable)
@@ -895,7 +897,7 @@ namespace Microsoft.Msagl.Drawing {
             SourceOfInsertedEdge = TargetOfInsertedEdge = null;
             SourcePort = TargetPort = null;
         }
-
+        EdgeAttr edgeAttr = new EdgeAttr();
         void InsertEdgeOnMouseUp() {
             if (DraggingStraightLine()) {
                 viewer.StopDrawingRubberLine();
@@ -928,7 +930,7 @@ namespace Microsoft.Msagl.Drawing {
 
         void AddEdge() {
             var drawingEdge = new Edge(SourceOfInsertedEdge.DrawingObject as Node,
-                                       TargetOfInsertedEdge.DrawingObject as Node, ConnectionToGraph.Disconnected);
+                                       TargetOfInsertedEdge.DrawingObject as Node, ConnectionToGraph.Disconnected, this.EdgeAttr.Clone());
             var geomEdge = new Core.Layout.Edge(GeometryNode(SourceOfInsertedEdge),
                                                 GeometryNode(TargetOfInsertedEdge)) {EdgeGeometry = EdgeGeometry};
             drawingEdge.GeometryEdge = geomEdge;
@@ -941,11 +943,16 @@ namespace Microsoft.Msagl.Drawing {
         }
 
         void FinishRoutingEdge() {
+            EdgeGeometry.SourceArrowhead = this.EdgeAttr.ArrowheadAtSource != ArrowStyle.None ? new Arrowhead() { Length = this.EdgeAttr.ArrowheadLength } : null;
+
+            EdgeGeometry.TargetArrowhead = this.EdgeAttr.ArrowheadAtTarget != ArrowStyle.None ? new Arrowhead() { Length = this.EdgeAttr.ArrowheadLength } : null;
+
             if (TargetOfInsertedEdge != SourceOfInsertedEdge) {
                 InteractiveEdgeRouter.TryToRemoveInflectionsAndCollinearSegments(EdgeGeometry.SmoothedPolyline);
                 InteractiveEdgeRouter.SmoothCorners(EdgeGeometry.SmoothedPolyline);
                 EdgeGeometry.Curve = EdgeGeometry.SmoothedPolyline.CreateCurve();
-                EdgeGeometry.TargetArrowhead = new Arrowhead();
+               
+                
                 Arrowheads.TrimSplineAndCalculateArrowheads(EdgeGeometry,
                                                             GeometryNode(SourceOfInsertedEdge).BoundaryCurve,
                                                             GeometryNode(TargetOfInsertedEdge).BoundaryCurve,
