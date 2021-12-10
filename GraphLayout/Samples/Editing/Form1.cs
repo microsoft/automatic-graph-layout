@@ -82,7 +82,7 @@ namespace Editing {
             g.AddEdge("pcr3B", "ter2B");
 
             // Protein coding
-            g.AddEdge("pcr1A", "prot_Q2b");
+            g.AddEdge("pcr1A", "prot_Q2b").LabelText = "some label";
             g.AddEdge("pcr2A", "prot_Q1a");
             g.AddEdge("pcr3A", "prot_A");
             g.AddEdge("pcr4A", "prot_ccdB");
