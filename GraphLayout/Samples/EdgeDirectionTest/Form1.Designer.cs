@@ -32,6 +32,7 @@ namespace EdgeDirectionTest
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.gv = new Microsoft.Msagl.GraphViewerGdi.GViewer();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // gv
@@ -53,6 +54,7 @@ namespace EdgeDirectionTest
             this.gv.LayoutEditingEnabled = true;
             this.gv.Location = new System.Drawing.Point(0, 0);
             this.gv.LooseOffsetForRouting = 0.25D;
+            this.gv.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.gv.MouseHitDistance = 0.05D;
             this.gv.Name = "gv";
             this.gv.NavigationVisible = true;
@@ -65,7 +67,7 @@ namespace EdgeDirectionTest
             this.gv.SaveButtonVisible = true;
             this.gv.SaveGraphButtonVisible = true;
             this.gv.SaveInVectorFormatEnabled = true;
-            this.gv.Size = new System.Drawing.Size(624, 438);
+            this.gv.Size = new System.Drawing.Size(1248, 842);
             this.gv.TabIndex = 0;
             this.gv.TightOffsetForRouting = 0.125D;
             this.gv.ToolBarIsVisible = true;
@@ -75,14 +77,25 @@ namespace EdgeDirectionTest
             this.gv.ZoomF = 1D;
             this.gv.ZoomWindowThreshold = 0.05D;
             this.gv.EdgeAdded += new System.EventHandler(this.gv_EdgeAdded);
-            //this.gv.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gv_MouseDown);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(685, 0);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(228, 40);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Remove  (1 -> 2)";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1600, 865);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.gv);
+            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -91,6 +104,8 @@ namespace EdgeDirectionTest
         }
 
         #endregion
+
+        private System.Windows.Forms.Button button1;
     }
 }
 

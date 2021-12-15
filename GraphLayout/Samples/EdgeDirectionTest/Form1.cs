@@ -66,5 +66,16 @@ namespace EdgeDirectionTest
                 gv.LayoutEditor.EdgeAttr.ArrowheadLength /= 2;
 
         }
+
+        private void button1_Click(object sender, EventArgs e) {
+            foreach (IViewerObject edge in gv.Entities) {
+                if (edge is IViewerEdge) {
+                    var ve = edge as IViewerEdge;
+                    if (ve.Edge.SourceNode.Id=="1" && ve.Edge.TargetNode.Id == "2")
+                    gv.RemoveEdge(ve, true);
+                    break;
+                }
+            }
+        }
     }
 }
