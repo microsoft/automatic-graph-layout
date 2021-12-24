@@ -46,12 +46,26 @@ namespace EdgeDirectionTest
 
         private void viewer_MouseDown(object sender, MsaglMouseEventArgs e)
         {
-            if(e.RightButtonIsPressed)
-            {
-                Microsoft.Msagl.Core.Geometry.Point p = gv.ScreenToSource(e.X, e.Y);
-                Node n = new Node((gv.Graph.NodeCount+1).ToString());
-                IViewerNode iwn = gv.CreateIViewerNode(n, p, true);
-                gv.AddNode(iwn, true);
+            if (e.RightButtonIsPressed) {
+                IViewerObject ob = gv.ObjectUnderMouseCursor;
+                if (ob == null) {
+                    Microsoft.Msagl.Core.Geometry.Point p = gv.ScreenToSource(e.X, e.Y);
+                    Node n = new Node(this.FindNewId());
+                    IViewerNode iwn = gv.CreateIViewerNode(n, p, true);
+                    gv.AddNode(iwn, true);
+                }
+                else if (ob is IViewerNode) {
+                    IViewerNode existingNode = ob as IViewerNode;
+                    gv.RemoveNode(existingNode, true);
+                }
+            }
+        }
+
+        private string FindNewId() {
+            for (int i = 0; true; i++) {
+                if (!this.gv.Graph.NodeMap.ContainsKey(i.ToString())) {
+                    return i.ToString();
+                }
             }
         }
 
