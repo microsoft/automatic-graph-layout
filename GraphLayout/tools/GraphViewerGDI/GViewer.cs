@@ -739,6 +739,8 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                 layoutEditor.CurrentUndoAction.GraphBoundingBoxAfter = Graph.BoundingBox;
             }
             BbNode = null;
+            DGraph.BbNode = null;
+            DGraph.BuildBBHierarchy();
             viewer.Invalidate();
 
         }
@@ -1050,6 +1052,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       edge.Label = label;
       double w, h;
       DGraph.CreateDLabel(de, label, out w, out h, this);
+      layoutEditor.AttachLayoutChangeEvent(de.Label);
       edge.GeometryEdge.Label = label.GeometryLabel;
       ICurve curve = edge.GeometryEdge.Curve;
       label.GeometryLabel.Center = curve[(curve.ParStart + curve.ParEnd) / 2];
@@ -1267,28 +1270,37 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       return !(dObject is DEdge);
     }
 
-    void UnconditionalHit(MouseEventArgs args, EntityFilterDelegate filter) {
-      System.Drawing.Point point = args != null
-                                       ? new System.Drawing.Point(args.X, args.Y)
-                                       : DrawingPanel.PointToClient(MousePosition);
+        void UnconditionalHit(MouseEventArgs args, EntityFilterDelegate filter) {
+            System.Drawing.Point point = args != null
+                                             ? new System.Drawing.Point(args.X, args.Y)
+                                             : DrawingPanel.PointToClient(MousePosition);
 
-      object old = selectedDObject;
-      if (bBNode == null && DGraph != null)
-        bBNode = DGraph.BBNode;
-      if (bBNode != null) {
-        var subgraphs = new List<Geometry>();
-        Geometry geometry = bBNode.Hit(ScreenToSource(point), GetHitSlack(), filter, subgraphs) ??
-                            PickSubgraph(subgraphs, ScreenToSource(point));
-        selectedDObject = geometry == null ? null : geometry.dObject;
-        if (old == selectedDObject) return;
-        SetSelectedObject(selectedDObject);
-        if (ObjectUnderMouseCursorChanged != null) {
-          var changedArgs = new ObjectUnderMouseCursorChangedEventArgs((IViewerObject)old,
-              selectedDObject);
-          ObjectUnderMouseCursorChanged(this, changedArgs);
+            object old = selectedDObject;
+            if (bBNode == null && DGraph != null)
+                bBNode = DGraph.BBNode;
+            if (bBNode != null) {
+                var subgraphs = new List<Geometry>();
+                Geometry geometry = bBNode.Hit(ScreenToSource(point), GetHitSlack(), filter, subgraphs) ??
+                                    PickSubgraph(subgraphs, ScreenToSource(point));
+                selectedDObject = geometry?.dObject;
+                if (old == selectedDObject) return;
+                SetSelectedObject(selectedDObject);
+                if (ObjectUnderMouseCursorChanged != null) {
+                    var changedArgs = new ObjectUnderMouseCursorChangedEventArgs((IViewerObject)old,
+                        selectedDObject);
+                    ObjectUnderMouseCursorChanged(this, changedArgs);
+                }
+            }
+            else {
+                old = selectedDObject;
+                SetSelectedObject(null);
+                if (ObjectUnderMouseCursorChanged != null) {
+                    var changedArgs = new ObjectUnderMouseCursorChangedEventArgs((IViewerObject)old,
+                        null);
+                    ObjectUnderMouseCursorChanged(this, changedArgs);
+                }
+            }
         }
-      }
-    }
 
     Geometry PickSubgraph(List<Geometry> subgraphs, Point screenToSource) {
       if (subgraphs.Count == 0) return null;
