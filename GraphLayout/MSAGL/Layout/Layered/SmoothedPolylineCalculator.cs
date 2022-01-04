@@ -475,14 +475,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         private bool FindLegalPositions(Anchor a, Anchor b, ref double ax, ref double bx, out int sign) {
             if (!FindPositions(a, b, ref ax, ref bx, out sign))
                 return false;
-            int count = 10;
-            do {
-                if (PositionsAreLegal(ax, bx, sign, a, b, EdgePathNode(1)))
-                    return true;
-                ax = (ax + a.X) / 2.0;
-                bx = (bx + b.X) / 2.0;
-            } while (count++ < 10);
-            return false;
+            return PositionsAreLegal(ax, bx, sign, a, b, EdgePathNode(1));                 
         }
 
         private bool FindPositions(Anchor a, Anchor b, ref double ax, ref double bx, out int sign) {

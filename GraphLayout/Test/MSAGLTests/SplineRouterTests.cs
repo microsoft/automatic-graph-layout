@@ -21,6 +21,7 @@ using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.DebugHelpers.Persistence;
 using Microsoft.Msagl.Layout.Incremental;
 using Microsoft.Msagl.Layout.Initial;
+using Microsoft.Msagl.Layout.Layered;
 using Microsoft.Msagl.Routing;
 using Microsoft.Msagl.Routing.Rectilinear;
 using Microsoft.Msagl.Routing.Spline.Bundling;
@@ -170,9 +171,51 @@ namespace Microsoft.Msagl.UnitTests
             return edge.Source.OutEdges.Where(e => e.Target == edge.Target && e != edge).Any() || edge.Source.InEdges.Where(e => e.Source == edge.Target && e != edge).Any();
         }
 
-        
+        static Size MeasureTextSize(string str) {
+            if (string.IsNullOrEmpty(str)) {
+                return new Size(0, 0);
+            }
+            var lines = str.Split('\n');
+            var w = lines
+              .Select((s) => s.Length * 15)
+              .Max();
+            return new Size(w, 15 * lines.Length);
+        }
+
+
+        static Node SetNode(
+   GeometryGraph g,
+  string id,
+  double xRad,
+  double yRad) {
+            var geomNode = g.FindNodeByUserData(id);
+            if (geomNode == null) {
+                g.Nodes.Add(geomNode = new Node() { UserData = id });
+            }
+            var size = MeasureTextSize(id);
+            geomNode.BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(
+              size.Width,
+              size.Height,
+              xRad,
+              yRad,
+              new Point(0, 0)
+            );
+            return geomNode;
+        }
 
         [TestMethod]
+        public void SelfEdge() {
+            var g = new GeometryGraph();
+            var n = SetNode(g, "a", 10, 10);
+            var e = new Edge(n, n);
+            g.Edges.Add(e);
+            var l = new LayeredLayout(g, new SugiyamaLayoutSettings());
+            l.Run();
+            g.Translate(-n.Center);
+            var sr = new SplineRouter(g, 2, 4, Math.PI / 6);
+            sr.Run();
+        }
+[TestMethod]
         [WorkItem(446802)]
         [TestCategory("LayoutPerfTest")]
         [TestCategory("NonRollingBuildTest")]
