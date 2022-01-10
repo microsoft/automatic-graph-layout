@@ -161,3 +161,5 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 /sh.exe.stackdump
+/node_modules
+/package-lock.json

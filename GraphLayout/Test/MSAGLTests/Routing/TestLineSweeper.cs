@@ -92,7 +92,7 @@ namespace Microsoft.Msagl.UnitTests.Routing {
 
         [TestMethod]
         public void RandomPorts() {
-            GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
+            // GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
             for (int i = 0; i < 10; i++) {
                 RunOnRandom(i);
             }
