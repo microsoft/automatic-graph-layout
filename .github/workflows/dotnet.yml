@@ -47,11 +47,8 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
         
     - name: artifacts
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+      uses: ncipollo/release-action@v1
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./GraphLayout/tools/agl/bin/Release/
-        asset_name: agl.zip
-        asset_content_type: application/zip
+        artifacts: "GraphLayout/tools/agl/bin/Release/"
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
