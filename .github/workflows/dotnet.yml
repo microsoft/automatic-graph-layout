@@ -33,6 +33,7 @@ jobs:
       with:
         name: agl_exe_directory
         path: GraphLayout/tools/agl/bin/Release/
+        retention-days: 5
         
     - name: Release
       uses: actions/create-release@v1
@@ -44,3 +45,13 @@ jobs:
         tag_name: ${{ github.ref }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
+        
+    - name: artifacts
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./GraphLayout/tools/agl/bin/Release/
+        asset_name: agl.zip
+        asset_content_type: application/zip
