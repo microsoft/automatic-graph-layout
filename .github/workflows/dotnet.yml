@@ -11,15 +11,17 @@ jobs:
     runs-on: windows-latest
  
     steps:
-    - uses: actions/checkout@v1
       name: Checkout Code
-      
+    - uses: actions/checkout@v1
+        
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
        
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v1.0.2
-     
+      env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'     
+
     - name: Restore NuGet Packages
       run: nuget restore GraphLayout/GraphLayout.sln
  
