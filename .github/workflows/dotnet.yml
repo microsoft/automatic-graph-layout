@@ -35,16 +35,16 @@ jobs:
         path: GraphLayout/tools/agl/bin/Release/
         retention-days: 5
         
-    - name: Release
-      uses: actions/create-release@v1
-      id: create_release
-      with:
-        draft: false
-        prerelease: false
-        release_name: ${{ steps.version.outputs.version }}
-        tag_name: ${{ github.ref }}
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+ #   - name: Release
+ #     uses: actions/create-release@v1
+ #     id: create_release
+ #     with:
+ #       draft: false
+ #       prerelease: false
+ #       release_name: ${{ steps.version.outputs.version }}
+ #       tag_name: ${{ github.ref }}
+ #     env:
+ #       GITHUB_TOKEN: ${{ github.token }}
         
     - name: artifacts
       uses: actions/upload-release-asset@v1
