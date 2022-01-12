@@ -45,13 +45,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ github.token }}
 
-    - name : zip
-      uses: papeloto/action-zip@v1
-      with:
-        files:  GraphLayout/tools/agl/bin/Release/
-        recursive: true
-        dest: agl.zip
-        
+    - name : aglzip
+      run: 7z  GraphLayout/tools/agl/bin/Release  agl.zip
+
     - name: artifacts
       uses: ncipollo/release-action@v1
       with:
