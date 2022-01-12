@@ -27,9 +27,12 @@ jobs:
  
     - name: Build and Publish Web App
       run: msbuild GraphLayout/GraphLayout.sln /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
- 
+
+    - name: Create folder
+      run:  mkdir -p bin\Release\Publish
+      
     - name: Upload Artifact
       uses: actions/upload-artifact@v1.0.0
       with:
         name: published_webapp
-        path: \bin\Release\Publish
+        path: bin\Release\Publish
