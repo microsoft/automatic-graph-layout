@@ -42,6 +42,7 @@ jobs:
         prerelease: false
         replace: true
         release_name: ${{ steps.version.outputs.version }}
+        tag_name: latest
       env:
         GITHUB_TOKEN: ${{ github.token }}
 
