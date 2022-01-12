@@ -47,7 +47,7 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
 
     - name : aglzip
-      run: 7z  GraphLayout/tools/agl/bin/Release  agl.zip
+      run: 7z a agl.zip GraphLayout/tools/agl/bin/Release -r
 
     - name: artifacts
       uses: ncipollo/release-action@v1
