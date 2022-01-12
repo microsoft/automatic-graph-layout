@@ -47,10 +47,11 @@ jobs:
 
     - name : zip
       uses: papeloto/action-zip@v1
-        with:
-          files:  GraphLayout/tools/agl/bin/Release/
-          recursive: true
-          dest: agl.zip
+      with:
+        files:  GraphLayout/tools/agl/bin/Release/
+        recursive: true
+        dest: agl.zip
+        
     - name: artifacts
       uses: ncipollo/release-action@v1
       with:
