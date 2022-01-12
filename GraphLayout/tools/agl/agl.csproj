@@ -103,10 +103,6 @@
       <Project>{ef5cf15e-5645-433b-8a23-af93e3f2682f}</Project>
       <Name>QUT.ShiftReduceParser</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Test\MSAGLTests\MSAGLTests.csproj">
-      <Project>{a6d1f09a-3db0-4cb2-a7f0-422bf1afe222}</Project>
-      <Name>MSAGLTests</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj">
       <Project>{415D3E3F-7105-46C1-84D2-7ECB34213D92}</Project>
       <Name>AutomaticGraphLayout</Name>

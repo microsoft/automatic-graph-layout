@@ -26,7 +26,7 @@ jobs:
       run: nuget restore GraphLayout/GraphLayout.sln
  
     - name: Build and Publish Web App
-      run: msbuild GraphLayout/GraphLayout.sln /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
+      run: msbuild GraphLayout\tools\agl\agl.csproj /p:Configuration=Release /p:Platform="AnyCPU" /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1.0.0
