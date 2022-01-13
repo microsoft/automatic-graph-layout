@@ -34,17 +34,17 @@ jobs:
         name: agl_exe_directory
         path: GraphLayout/tools/agl/bin/Release/
         
-    - name: Release
+    - name: Create Release
       uses: actions/create-release@v1
-      id: create_release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
+        tag_name: ${{ github.ref }}
         draft: false
         prerelease: false
         replace: true
         release_name: ${{ steps.version.outputs.version }}
-        tag_name: latest
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+
 
     - name : aglzip
       run: 7z a agl.zip GraphLayout/tools/agl/bin/Release -r
