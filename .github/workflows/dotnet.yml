@@ -35,25 +35,48 @@ jobs:
         path: GraphLayout/tools/agl/bin/Release/
         
     - name: Create Release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.event.release.tag_name }}
-        draft: false
-        prerelease: false
-        replace: true
-        release_name: ${{ steps.version.outputs.version }}
-
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
 
     - name : aglzip
       run: 7z a agl.zip GraphLayout/tools/agl/bin/Release -r
+- uses: octokit/request-action@v2.x
 
-    - name: artifacts
-      uses: ncipollo/release-action@v1
+      id: get_latest_release
       with:
-        artifacts: agl.zip
-        token: ${{ secrets.GITHUB_TOKEN }}
+          route: GET /repos/:repository/releases/latest
+          repository: ${{ github.repository }}
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: get upload url
+      id: get_upload_url
+      run: |
+        url=$(echo "$response" | jq -r '.upload_url')
+        echo "::set-output name=url::$url"
+      env: 
+          response:  ${{ steps.get_latest_release.outputs.data }}
+     
+    - name: Upload a Release Asset
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        # The URL for uploading assets to the release
+        upload_url:  ${{steps.get_upload_url.outputs.url}}
+        # The path to the asset you want to upload
+        asset_path: agl.zip
+        # The name of the asset you want to upload
+        asset_name: agl.zip
+        # The content-type of the asset you want to upload. See the supported Media Types here: https://www.iana.org/assignments/media-types/media-types.xhtml for more information
+        asset_content_type: application/zip
+
 
 
         
