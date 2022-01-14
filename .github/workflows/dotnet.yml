@@ -27,7 +27,7 @@ jobs:
   deploy:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v1
+     uses: actions/checkout@v1
       name: Checkout Code
       
     - name: Add msbuild to PATH
@@ -48,7 +48,7 @@ jobs:
       run: 7z a agl.zip GraphLayout/tools/agl/bin/Release -r
 
     - name: get release
-    - uses: octokit/request-action@v2.x
+      uses: octokit/request-action@v2.x
       id: get_latest_release
       with:
           route: GET /repos/:repository/releases/latest
