@@ -1,4 +1,4 @@
- on:
+on:
   push:
     # Sequence of patterns matched against refs/tags
     tags:
@@ -23,7 +23,8 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false deploy:
-   build_and_upload:       
+          
+  build_and_upload:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v1
