@@ -4,12 +4,23 @@ on:
   push:
     branches: [ master ]
 
- 
 jobs:
-  build:
- 
+  mkrelease:
     runs-on: windows-latest
- 
+    steps:
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@latest
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+  deploy: 
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v1
       name: Checkout Code
@@ -25,30 +36,14 @@ jobs:
     - name: Restore NuGet Packages
       run: nuget restore GraphLayout/GraphLayout.sln
  
-    - name: Build and Publish Web App
+    - name: Build agl.csproj
       run: msbuild GraphLayout\tools\agl\agl.csproj /p:Configuration=Release /p:Platform="AnyCPU" /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        name: agl_exe_directory
-        path: GraphLayout/tools/agl/bin/Release/
-        
-    - name: Create Release
-        id: create_release
-        uses: actions/create-release@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
-
-    - name : aglzip
+    - name: aglzip
       run: 7z a agl.zip GraphLayout/tools/agl/bin/Release -r
-- uses: octokit/request-action@v2.x
 
+    - name: get release
+    - uses: octokit/request-action@v2.x
       id: get_latest_release
       with:
           route: GET /repos/:repository/releases/latest
@@ -75,8 +70,4 @@ jobs:
         # The name of the asset you want to upload
         asset_name: agl.zip
         # The content-type of the asset you want to upload. See the supported Media Types here: https://www.iana.org/assignments/media-types/media-types.xhtml for more information
-        asset_content_type: application/zip
-
-
-
-        
+        asset_content_type: application/zipx
