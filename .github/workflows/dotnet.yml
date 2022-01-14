@@ -22,9 +22,9 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           draft: false
-          prerelease: false deploy:
+          prerelease: false
           
-  build_and_upload:
+  deploy:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v1
