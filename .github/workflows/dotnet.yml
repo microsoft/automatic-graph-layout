@@ -1,6 +1,10 @@
 on:
   push:
-
+branches:
+- master  # triggers only on master
+tags:
+- release* # You will need to provide a tag of the form 'relase for ...' with your push command:
+            #For example "git push origin "release with a bug fix"
 name: Create Release
 
 jobs:
