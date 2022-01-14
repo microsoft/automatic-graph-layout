@@ -3,8 +3,8 @@ on:
 branches:
 - master  # triggers only on master
 tags:
-- release* # You will need to provide a tag of the form 'relase for ...' with your push command:
-            #For example "git push origin "release with a bug fix"
+- release* # You will need to provide a tag of the form 'relase_ ...' with your push command:
+           # For example git tag -a release_with_a_bug_fix -m "bug fix" && git push origin release_with_a_bug_fix
 name: Create Release
 
 jobs:
