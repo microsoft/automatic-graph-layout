@@ -53,8 +53,8 @@ namespace EdgeDirectionTest
                     Node n = new Node(this.FindNewId());
                     IViewerNode iwn = gv.CreateIViewerNode(n, p, true);
                     gv.AddNode(iwn, true);
-                }
-                else if (ob is IViewerNode) {
+                    gv.ResizeNodeToLabel(n);
+                } else if (ob is IViewerNode) {
                     IViewerNode existingNode = ob as IViewerNode;
                     gv.RemoveNode(existingNode, true);
                 }
