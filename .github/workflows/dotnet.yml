@@ -27,47 +27,48 @@ jobs:
   deploy:
     runs-on: windows-latest
     steps:
-     uses: actions/checkout@v1
-      name: Checkout Code
+     - name: Checkout Code
+       uses: actions/checkout@v1
+
       
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.1
+     - name: Add msbuild to PATH
+       uses: microsoft/setup-msbuild@v1.1
        
-    - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.0.2
-      env:
+     - name: Setup NuGet
+       uses: NuGet/setup-nuget@v1.0.2
+       env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'     
 
-    - name: Restore NuGet Packages
-      run: nuget restore GraphLayout/GraphLayout.sln
+     - name: Restore NuGet Packages
+       run: nuget restore GraphLayout/GraphLayout.sln
  
-    - name: Build agl.csproj
-      run: msbuild GraphLayout\tools\agl\agl.csproj /p:Configuration=Release /p:Platform="AnyCPU" /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
+     - name: Build agl.csproj
+       run: msbuild GraphLayout\tools\agl\agl.csproj /p:Configuration=Release /p:Platform="AnyCPU" /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
 
-    - name: aglzip
-      run: 7z a agl.zip GraphLayout/tools/agl/bin/Release -r
+     - name: aglzip
+       run: 7z a agl.zip GraphLayout/tools/agl/bin/Release -r
 
-    - name: get release
-      uses: octokit/request-action@v2.x
-      id: get_latest_release
-      with:
+     - name: get release
+       uses: octokit/request-action@v2.x
+       id: get_latest_release
+       with:
           route: GET /repos/:repository/releases/latest
           repository: ${{ github.repository }}
-      env:
+       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: get upload url
-      id: get_upload_url
-      run: |
-        url=$(echo "$response" | jq -r '.upload_url')
-        echo "::set-output name=url::$url"
-      env: 
+     - name: get upload url
+       id: get_upload_url
+       run: |
+         url=$(echo "$response" | jq -r '.upload_url')
+         echo "::set-output name=url::$url"
+       env: 
           response:  ${{ steps.get_latest_release.outputs.data }}
      
-    - name: Upload a Release Asset
-      uses: actions/upload-release-asset@v1.0.2
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
+     - name: Upload a Release Asset
+       uses: actions/upload-release-asset@v1.0.2
+       env:
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       with:
         # The URL for uploading assets to the release
         upload_url:  ${{steps.get_upload_url.outputs.url}}
         # The path to the asset you want to upload
