@@ -47,32 +47,12 @@ jobs:
      - name: aglzip
        run: 7z a agl.zip GraphLayout/tools/agl/bin/Release -r
 
-     - name: get release
-       uses: octokit/request-action@v2.x
-       id: get_latest_release
+     - name: Upload binaries to release
+       uses: svenstaro/upload-release-action@v2
        with:
-          route: GET /repos/:repository/releases/latest
-          repository: ${{ github.repository }}
-       env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-     - name: get upload url
-       id: get_upload_url
-       run: |
-         url=$(echo "$response" | jq -r '.upload_url')
-         echo "::set-output name=url::$url"
-       env: 
-          response:  ${{ steps.get_latest_release.outputs.data }}
-     
-     - name: Upload a Release Asset
-       uses: actions/upload-release-asset@v1.0.2
-       env:
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       with:
-        # The URL for uploading assets to the release
-        upload_url:  ${{steps.get_upload_url.outputs.url}}
-        # The path to the asset you want to upload
-        asset_path: agl.zip
-        # The name of the asset you want to upload
-        asset_name: agl.zip
-        # The content-type of the asset you want to upload. See the supported Media Types here: https://www.iana.org/assignments/media-types/media-types.xhtml for more information
-        asset_content_type: application/zipx
+         repo_token: ${{ secrets.GITHUB_TOKEN }}
+         file: agl.zip
+         asset_name: agl.zip
+         tag: ${{ github.ref }}
+         overwrite: true
+         body: "The zip file of agl driver"
