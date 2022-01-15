@@ -108,7 +108,7 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 [![Build Status](https://dev.azure.com/MSAGL/MSAGLBuild/_apis/build/status/microsoft.automatic-graph-layout?branchName=master)](https://dev.azure.com/MSAGL/MSAGLBuild/_build/latest?definitionId=1&branchName=master)
 
 ## Producing a release
-The release containing the binaries of agl.exe
+A release containing the binaries of agl.exe
 can be created automatically by a github action of
 ".github\workflows\dotnet.yaml'.
 To invoke the action do the following. 
