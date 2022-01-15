@@ -110,7 +110,7 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 ## Producing a release
 A release containing the binaries of agl.exe
 can be created automatically by a github action of
-".github\workflows\dotnet.yaml'.
+".github\workflows\agl.yaml'.
 To invoke the action do the following. 
 Create a new tag in the form "release*". For example,  "git tag -a
 release_11 -m "some comment here"". Then execute git push with this
