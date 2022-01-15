@@ -115,5 +115,3 @@ To invoke the action do the following.
 Create a new tag in the form "release*". For example,  "git tag -a
 release_11 -m "some comment here"". Then execute git push with this
 tag: "git push origin release_11". These should trigger the release creation.
- 
-
