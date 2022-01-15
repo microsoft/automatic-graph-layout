@@ -14,8 +14,8 @@ if len(sys.argv) == 3 :
  
 version_tag = 'v'+ sys.argv[1] 
 
-command = "git tag -a " + version_tag + " -m " + comment
+command = "git tag -a " + version_tag + " -m \"" + comment + "\""
 
 command +=  " && git push origin " + version_tag
 print(command)
-#os.system(command)
+os.system( command)
