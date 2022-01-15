@@ -1,8 +1,8 @@
 on:
   push:
      tags:
-        - release* # You will need to provide a tag of the form 'relase_ ...' with your push command:
-           # For example git tag -a release_with_a_bug_fix -m "bug fix" && git push origin release_with_a_bug_fix
+        - v* # You will need to provide a tag of the form 'v* ...' with your push command:
+           # For example git tag -a v11 -m "bug fix" && git push origin v11
 name: Create Release
 
 jobs:

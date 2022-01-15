@@ -112,6 +112,8 @@ A release containing the binaries of agl.exe
 can be created automatically by a github action of
 ".github\workflows\agl.yaml'.
 To invoke the action do the following. 
-Create a new tag in the form "release*". For example,  "git tag -a
-release_11 -m "some comment here"". Then execute git push with this
-tag: "git push origin release_11". These should trigger the release creation.
+Create a new tag in the form "v*". For example,  "git tag -a
+v_11 -m "some comment here"". Then execute git push with this
+tag: "git push origin v_11". These should trigger the release
+creation. Alternatively, you can use python script "createRelease.py",
+as following "python createRelease.py 1.1.1".
