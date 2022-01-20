@@ -18,4 +18,4 @@ command = "git tag -a " + version_tag + " -m " + comment
 
 command +=  " && git push origin " + version_tag
 print(command)
-#os.system(command)
+os.system(command)

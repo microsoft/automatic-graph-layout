@@ -1,0 +1,31 @@
+# This workflow will do a clean build of agl, build and test the solution
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+name: Test Status
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        build-type: ['Visual Studio 16 2019']
+
+    steps:
+      - name:Checkout code
+        uses: actions/checkout@v2
+      - name: Restore NuGet Packages
+        run: nuget restore GraphLayout/GraphLayout.sln
+ 
+      - name: Build release agl.csproj
+        run: msbuild GraphLayout\GraphLayout.sln /p:Configuration=Release 
+
+      - name: Build debug agl.csproj
+        run: msbuild GraphLayout\GraphLayout.sln /p:Configuration=Debug
+
+      - name : Test
+        run: vstest.console GraphLayout\Test\MSAGLTests\bin\Debug\Microsoft.Msagl.UnitTests.dll
