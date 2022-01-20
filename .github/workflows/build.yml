@@ -12,7 +12,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name:Checkout code
+      - name: Checkout code
         uses: actions/checkout@master
       - name: Restore NuGet Packages
         run: nuget restore GraphLayout/GraphLayout.sln
