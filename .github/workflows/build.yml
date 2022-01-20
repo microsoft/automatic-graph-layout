@@ -27,5 +27,8 @@ jobs:
       - name: Build debug agl.csproj
         run: msbuild GraphLayout\GraphLayout.sln /p:Configuration=Debug
 
+      - name: Setup VSTest.exe
+        uses: Malcolmnixon/Setup-VSTest@v4
+
       - name : Test
         run: vstest.console GraphLayout\Test\MSAGLTests\bin\Debug\Microsoft.Msagl.UnitTests.dll
