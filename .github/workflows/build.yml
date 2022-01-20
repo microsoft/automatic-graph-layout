@@ -8,12 +8,8 @@ name: Test Status
 
 jobs:
   build:
-
+    name: Build    
     runs-on: windows-latest
-
-    strategy:
-      matrix:
-        build-type: ['Visual Studio 16 2019']
 
     steps:
       - name:Checkout code
