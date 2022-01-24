@@ -2305,9 +2305,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       Point originalCenter = node.GeometryNode.Center;
       node.GeometryNode.BoundaryCurve = NodeBoundaryCurves.GetNodeBoundaryCurve(node, width, height).Clone();
       node.GeometryNode.BoundaryCurve.Translate(originalCenter);
-
-      LayoutHelpers.IncrementalLayout(Graph.GeometryGraph, node.GeometryNode,
-                                      Graph.LayoutAlgorithmSettings as SugiyamaLayoutSettings);
+    
       foreach (IViewerObject en in Entities)
         Invalidate(en);
 

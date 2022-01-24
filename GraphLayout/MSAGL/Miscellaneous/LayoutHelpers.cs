@@ -232,20 +232,6 @@ namespace Microsoft.Msagl.Miscellaneous {
 
 
 
-        /// <summary>
-        /// adaptes to the node boundary curve change
-        /// </summary>
-        public static void IncrementalLayout(GeometryGraph geometryGraph, Node node, SugiyamaLayoutSettings settings) {
-            if (settings == null)
-                return;
-            var engine = geometryGraph.AlgorithmData as LayeredLayoutEngine;
-
-            if (engine != null) {
-                engine.IncrementalRun(node);
-                PostRunTransform(geometryGraph, settings);
-            }
-        }
-
         static void PostRunTransform(GeometryGraph geometryGraph, SugiyamaLayoutSettings settings) {
             bool transform = !settings.Transformation.IsIdentity;
             if (transform) {

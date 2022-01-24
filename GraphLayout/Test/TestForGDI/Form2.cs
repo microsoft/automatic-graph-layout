@@ -192,9 +192,8 @@ namespace TestForGdi {
 
         void EnlargeNode(IViewerNode node) {
             var geomNode = node.DrawingObject.GeometryObject as AglNode;
-            geomNode.BoundaryCurve = geomNode.BoundaryCurve.OffsetCurve(geomNode.BoundingBox.Width/2,
-                                                                         new Point(1, 0));
-            LayoutHelpers.IncrementalLayout(gViewer.Graph.GeometryGraph, geomNode, gViewer.Graph.LayoutAlgorithmSettings as SugiyamaLayoutSettings);
+            geomNode.BoundaryCurve = geomNode.BoundaryCurve.OffsetCurve(geomNode.BoundingBox.Width / 2, new Point(1, 0));
+
         }
 
 

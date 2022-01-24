@@ -101,7 +101,7 @@ namespace Test01 {
             string ext = Path.GetExtension(fileName);
             if (ext != null) {
                 ext = ext.ToLower();
-                if (ext == ".dot") {
+                if (ext == ".dot" || ext == ".gv") {
                     ProcessDotFile(gviewer, argsParser, fileName);
                 }
                 else {

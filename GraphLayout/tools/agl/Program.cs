@@ -1,34 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using Dot2Graph;
-using Microsoft.Msagl.Core.DataStructures;
-using Microsoft.Msagl.Core.Geometry;
-using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Routing;
-using Microsoft.Msagl.DebugHelpers.Persistence;
-using Microsoft.Msagl.DebugHelpers;
 using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.GraphViewerGdi;
 using Microsoft.Msagl.Layout.Incremental;
-using Microsoft.Msagl.Layout.Initial;
-using Microsoft.Msagl.Layout.Layered;
 using Microsoft.Msagl.Layout.MDS;
 using Microsoft.Msagl.Routing;
-using Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation;
-using Microsoft.Msagl.Routing.Spline.Bundling;
-using Microsoft.Msagl.Routing.Visibility;
-using Microsoft.Msagl.UnitTests;
 using TestFormForGViewer;
-using Edge = Microsoft.Msagl.Core.Layout.Edge;
-using Node = Microsoft.Msagl.Core.Layout.Node;
 
-namespace Test01 {
+namespace agl {
     internal class Program {
         static bool bundling;
         const string SvgFileNameOption = "-svgout";

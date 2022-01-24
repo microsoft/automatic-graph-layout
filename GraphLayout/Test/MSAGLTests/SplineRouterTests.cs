@@ -19,9 +19,11 @@ using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.DebugHelpers.Persistence;
+using Microsoft.Msagl.GraphViewerGdi;
 using Microsoft.Msagl.Layout.Incremental;
 using Microsoft.Msagl.Layout.Initial;
 using Microsoft.Msagl.Layout.Layered;
+using Microsoft.Msagl.Layout.MDS;
 using Microsoft.Msagl.Routing;
 using Microsoft.Msagl.Routing.Rectilinear;
 using Microsoft.Msagl.Routing.Spline.Bundling;
@@ -320,6 +322,7 @@ namespace Microsoft.Msagl.UnitTests
         
         [TestMethod]
         [Description("the run does not stop")]
+        [Ignore] // it is a flaky test
         public void BundlingBug1GeomGraph() {
 #if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
@@ -329,6 +332,43 @@ namespace Microsoft.Msagl.UnitTests
             var router = new SplineRouter(graph, 0.1, 0.75, Math.PI / 6, settings);
             router.Run();
         }
+
+
+        [TestMethod]
+        [Description("the run does not stop")]
+        public void Clusterabc() {
+#if TEST_MSAGL
+
+                DisplayGeometryGraph.SetShowFunctions();
+#endif
+            var geometryGraph = new GeometryGraph();
+            geometryGraph.RootCluster = new Cluster();
+            var a = new Node();
+            a.BoundaryCurve = CurveFactory.CreateCircle(20, new Point());
+            var b = new Node();
+            b.BoundaryCurve = CurveFactory.CreateCircle(20, new Point());
+            var c = new Node();
+            c.BoundaryCurve = CurveFactory.CreateCircle(20, new Point());
+
+
+            geometryGraph.RootCluster.AddNode(a);
+            geometryGraph.RootCluster.AddNode(b);
+            geometryGraph.RootCluster.AddNode(c);
+            b.AddInEdge(new Edge(a, b));
+            c.AddInEdge(new Edge(a, c));
+            var mdsLayoutSettings = new MdsLayoutSettings { RemoveOverlaps = true, NodeSeparation = 10 };
+            var mdsLayout = new MdsGraphLayout(mdsLayoutSettings, geometryGraph);
+            mdsLayout.Run();
+            var splineRouter = new SplineRouter(geometryGraph, geometryGraph.Edges, 2,
+                                                               3,
+                                                               Math.PI / 6, null);
+            splineRouter.Run();
+
+#if TEST_MSAGL
+            DisplayGeometryGraph.ShowGraph(geometryGraph);
+#endif
+        }
+
 
         [TestMethod]
         [Description("the run does not stop")]
