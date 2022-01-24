@@ -204,6 +204,90 @@ namespace Microsoft.Msagl.UnitTests
         }
 
         [TestMethod]
+        public void OneEdgeWithObstacle() {
+            GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
+            var g = new GeometryGraph();
+            var a = new Node {
+                BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(
+              20,
+              20,
+              3,
+              3,
+              new Point(0, 0))
+            };
+            g.Nodes.Add(a);
+            var b = new Node {
+                BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(
+              20,
+              20,
+              3,
+              3,
+              new Point(0, 200))
+            };
+            g.Nodes.Add(b);
+            var c = new Node {
+                BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(
+              20,
+              20,
+              3,
+              3,
+              new Point(0, 300))
+            };
+            g.Nodes.Add(c);
+            var e = new Edge(a, c);
+            g.Edges.Add(e);
+            var sr = new SplineRouter(g, 2, 4, Math.PI / 6);
+            sr.Run();
+         //   GraphViewerGdi.DisplayGeometryGraph.ShowGraph(g);
+        }
+        [TestMethod]
+        public void OneEdgeWithTwoObstacles() {
+            GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
+            var g = new GeometryGraph();
+            var a = new Node {
+                BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(
+              20,
+              20,
+              3,
+              3,
+              new Point(0, 0))
+            };
+            g.Nodes.Add(a);
+            var b = new Node {
+                BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(
+              40,
+              20,
+              3,
+              3,
+              new Point(-10, 200))
+            };
+            g.Nodes.Add(b);
+            var c = new Node {
+                BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(
+              60,
+              20,
+              3,
+              3,
+              new Point(35, 170))
+            };
+            g.Nodes.Add(c);
+            var d = new Node {
+                BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(
+              20,
+              20,
+              3,
+              3,
+              new Point(0, 270))
+            };
+            g.Nodes.Add(d);
+            var e = new Edge(a, d);
+            g.Edges.Add(e);
+            var sr = new SplineRouter(g, 2, 4, Math.PI / 6);
+            sr.Run();
+            GraphViewerGdi.DisplayGeometryGraph.ShowGraph(g);
+        }
+
+        [TestMethod]
         public void SelfEdge() {
             var g = new GeometryGraph();
             var n = SetNode(g, "a", 10, 10);

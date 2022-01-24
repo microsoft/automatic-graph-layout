@@ -280,9 +280,9 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
         }
 
         void ProcessEvent(SweepEvent p) {
-//            if(debug && (p.Site-new Point(-313.122 ,-170.6)).Length<1)
-//               Show( EllipseOnVert(p));
             var vertexEvent = p as VertexEvent;
+           
+
             if (vertexEvent != null)
                 ProcessVertexEvent(vertexEvent);
             else {
@@ -439,12 +439,7 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
         }
 
         void ProcessVertexEvent(VertexEvent vertexEvent) {
-//            if (count == 872 && (vertexEvent.Site - new Point(-130.7368, -305.908)).Length < 1)
-//                Show(EllipseOnVert(vertexEvent));
-
             Z = GetZ(vertexEvent);
-            //PrintOutLeftSegTree();
-            //PrintOutRightSegTree();
             GoOverConesSeeingVertexEvent(vertexEvent);
             AddConeAndEnqueueEvents(vertexEvent);
         }
@@ -1058,10 +1053,9 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
 
             if (rbNode == null) {//it is an emergency measure and should not happen                
                 rbNode = GetRbNodeEmergency(rbNode, leftConeSide);
+                if (rbNode == null)
+                    return; // the cone is not there! and it is a bug
             }
-
-            if (rbNode == null)
-                return; // the cone is not there! and it is a bug
 
             rbNode = leftConeSides.Next(rbNode);
             while (rbNode != null && !VertexIsToTheLeftOfSegment(vertexEvent, rbNode.Item)) {
