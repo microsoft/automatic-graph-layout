@@ -207,7 +207,9 @@ namespace Microsoft.Msagl.UnitTests
 
         [TestMethod]
         public void OneEdgeWithObstacle() {
+#if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
+#endif
             var g = new GeometryGraph();
             var a = new Node {
                 BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(
@@ -244,7 +246,9 @@ namespace Microsoft.Msagl.UnitTests
         }
         [TestMethod]
         public void OneEdgeWithTwoObstacles() {
+#if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
+#endif
             var g = new GeometryGraph();
             var a = new Node {
                 BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(
@@ -286,7 +290,9 @@ namespace Microsoft.Msagl.UnitTests
             g.Edges.Add(e);
             var sr = new SplineRouter(g, 2, 4, Math.PI / 6);
             sr.Run();
+#if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.ShowGraph(g);
+#endif
         }
 
         [TestMethod]
