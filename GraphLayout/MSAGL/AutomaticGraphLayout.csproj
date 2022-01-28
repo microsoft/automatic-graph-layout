@@ -14,7 +14,4 @@
   <ItemGroup>
     <None Remove="AutomaticGraphLayout.nuspec" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="MSTest.TestAdapter" Version="2.2.5" />
-  </ItemGroup>
 </Project>

@@ -9,7 +9,7 @@ using Microsoft.Msagl.GraphViewerGdi;
 using Microsoft.Msagl.Layout.Incremental;
 using Microsoft.Msagl.Layout.MDS;
 using Microsoft.Msagl.Routing;
-using TestFormForGViewer;
+using FormForGViewer;
 
 namespace agl {
     internal class Program {
