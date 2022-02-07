@@ -30,7 +30,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             out List<Tuple<Point, Point>> closestDist) {
 
             closestDist = new List<Tuple<Point, Point>>();
-            //return true;
 
             Set<Polyline> obstaclesToIgnore = metroGraphData.looseIntersections.ObstaclesToIgnoreForBundle(v, u);
             Dictionary<Polyline, Tuple<Point, Point>> closeObstacles = FindCloseObstaclesForBundle(u.CdtTriangle, uPosition, vPosition, obstaclesToIgnore, upperBound);
@@ -40,11 +39,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
             foreach (var item in closeObstacles) {
                 Tuple<Point, Point> dist = item.Value;
-
-                //TODO: get rif od this call!
-                //if (!Intersections.ClosedPolylinesIntersect(bundle, obstacle)) continue;
-                //if (!Curve.ClosedCurveInteriorsIntersect(bundle, obstacle)) continue;
-
                 closestDist.Add(dist);
            } 
 

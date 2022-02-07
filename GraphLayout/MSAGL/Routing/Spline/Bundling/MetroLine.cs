@@ -28,6 +28,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             Width = width;
             Polyline = polyline;
             this.sourceAndTargetLoosePolylines = sourceAndTargetLoosePolys;
+            this.Index = index;
         }
 
         internal void UpdateLengths() {
