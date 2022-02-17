@@ -74,7 +74,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                 cost += bundlingSettings.PathLengthImportance * metroline.Length / metroline.IdealLength;
             }
 
-            cost += CostOfForces(metroGraphData, bundlingSettings);
+            cost += CostOfForces(metroGraphData);
 
             return cost;
         }
@@ -82,7 +82,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         /// <summary>
         /// Cost of the whole graph (hubs and bundles)
         /// </summary>
-        static internal double CostOfForces(MetroGraphData metroGraphData, BundlingSettings bundlingSettings) {
+        static internal double CostOfForces(MetroGraphData metroGraphData) {
             double cost = 0;
 
             //hubs
@@ -123,12 +123,11 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             //edge lengths
             foreach (var e in metroGraphData.MetroNodeInfosOfNode(node)) {
                 var oldLength = e.Metroline.Length;
-                var newLength = e.Metroline.Length;
-
+         
                 var prev = e.PolyPoint.Prev.Point;
                 var next = e.PolyPoint.Next.Point;
 
-                newLength += (next - newPosition).Length + (prev - newPosition).Length - (next - node.Position).Length - (prev - node.Position).Length;
+                var newLength = e.Metroline.Length + (next - newPosition).Length + (prev - newPosition).Length - (next - node.Position).Length - (prev - node.Position).Length;
 
                 gain += PathLengthsError(oldLength, newLength, e.Metroline.IdealLength, bundlingSettings);
             }
@@ -175,9 +174,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         /// if a newPosition is not valid (e.g. intersect obstacles) the result is -inf
         /// </summary>
         internal double BundleGain(Station node, Point newPosition) {
-            double gain = 0;
-
-            gain += node.cachedBundleCost;
+            double gain = node.cachedBundleCost;
             foreach (var adj in node.Neighbors) {
                 double lgain = BundleCost(node, adj, newPosition);
                 if (ApproximateComparer.GreaterOrEqual(lgain, Inf)) return -Inf;

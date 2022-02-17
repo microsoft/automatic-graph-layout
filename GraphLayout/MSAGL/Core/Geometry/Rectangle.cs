@@ -455,16 +455,16 @@ namespace Microsoft.Msagl.Core.Geometry{
         /// pad the rectangle by the given padding
         /// </summary>
         /// <param name="padding"></param>
-        public void Pad(double padding) {
+        public Rectangle Pad(double padding) {
             if (padding < -Width / 2)
                 padding = -Width / 2;
             if (padding < -Height / 2)
                 padding = -Height / 2;
 
 
-
             PadWidth(padding);
             PadHeight(padding);
+            return this;
         }
 
         /// <summary>

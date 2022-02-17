@@ -29,10 +29,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         }
 
 
-        bool CreateUnderlyingPolylines {
-            get { return bundlingSettings.CreateUnderlyingPolyline; }
-        }
-
+      
 
         protected override void RunInternal() {
             CreateMetroOrdering();
@@ -88,8 +85,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             }
             c.AddSegment(new LineSegment(currentEnd, FindCurveEnd(metroGraphData, metroOrdering, line)));
             edge.Curve = c;
-            if (CreateUnderlyingPolylines)
-                edge.SmoothedPolyline = BuildUnderlyingPolyline(start, currentEnd, hubSegsOfLine);
+            
         }
 
         static Point FindCurveStart(MetroGraphData metroGraphData, IMetroMapOrderingAlgorithm metroOrdering, Metroline metroline) {
@@ -110,13 +106,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             return bb.Points[index];
         }
 
-        internal static SmoothedPolyline BuildUnderlyingPolyline(Point start, Point end, IEnumerable<ICurve> cubicSegsOfLine) {
-            return null;
-            /*SmoothedPolyline sp = GetVanilaSmoothedPolyline(cubicSegsOfLine, start, end);
-            FleshOutSites(sp.HeadSite, cubicSegsOfLine);
-            return sp;*/
-        }
-
+        
         static IEnumerable<ICurve> HubSegsOfLine(MetroGraphData metroGraphData, IMetroMapOrderingAlgorithm metroOrdering, Metroline line) {
             for (PolylinePoint i = line.Polyline.StartPoint.Next; i.Next != null; i = i.Next)
                 yield return SegOnLineVertex(metroGraphData, metroOrdering, line, i);

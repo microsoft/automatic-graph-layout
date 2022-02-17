@@ -21,7 +21,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
     ///  'virtual' edges are polyline segments
     /// </summary>
     internal class MetroGraphData {
-        internal Set<Station> Stations;
+        internal List<Station> Stations;
 
         /// info on the edges passing through a couple
         Dictionary<Tuple<Station, Station>, StationEdgeInfo> edgeInfoDictionary;
@@ -240,33 +240,32 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         }
 
         void InitializeNodeData() {
-            Stations = new Set<Station>();
+            Stations = new List<Station>();
             //create indexes
             PointToStations = new Dictionary<Point, Station>();
-            int i = 0;
             foreach (var edge in regularEdges) {
                 Polyline poly = (Polyline)edge.Curve;
-                i = ProcessPolylinePoints(i, poly);
+                ProcessPolylinePoints(poly);
             }
         }
 
-        int ProcessPolylinePoints(int i, Polyline poly) {
+       void ProcessPolylinePoints(Polyline poly) {
             var pp = poly.StartPoint;
-            i = RegisterStation(i, pp, true);
+            RegisterStation(pp, true);
 
             for (pp = pp.Next; pp != poly.EndPoint; pp = pp.Next)
-                i = RegisterStation(i, pp, false);
+                RegisterStation(pp, false);
 
-            i = RegisterStation(i, pp, true);
-            return i;
+            RegisterStation(pp, true);
+            
         }
 
-        int RegisterStation(int i, PolylinePoint pp, bool isRealNode) {
+        void RegisterStation(PolylinePoint pp, bool isRealNode) {
             if (!PointToStations.ContainsKey(pp.Point)) {
                 // Filippo Polo: assigning the return value of the assignment operator (i.e. a = b = c) does not work well in Sharpkit.
-                Station station = new Station(i++, isRealNode, pp.Point);
+                Station station = new Station(this.Stations.Count, isRealNode, pp.Point);
                 PointToStations[pp.Point] = station;
-                Stations.Insert(station);
+                Stations.Add(station);
             }
             else {
 #if TEST_MSAGL
@@ -274,7 +273,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                 Debug.Assert(s.IsRealNode == isRealNode);
 #endif
             }
-            return i;
+            
         }
 
         void InitializeEdgeData() {
@@ -330,7 +329,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             StationEdgeInfo cw;
             if (edgeInfoDictionary.TryGetValue(couple, out cw))
                 return cw;
-            edgeInfoDictionary[couple] = cw = new StationEdgeInfo(i.Position, j.Position);
+            edgeInfoDictionary[couple] = cw = new StationEdgeInfo();
             return cw;
         }
 
@@ -456,7 +455,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                 for (var p = metroLine.Polyline.StartPoint; p.Next != null; p = p.Next, u = v) {
                     v = PointToStations[p.Next.Point];
                     var info = GetUnorderedIjInfo(u, v);
-                    info.Count++;
                     info.Width += metroLine.Width;
                     info.Metrolines.Add(metroLine);
                 }

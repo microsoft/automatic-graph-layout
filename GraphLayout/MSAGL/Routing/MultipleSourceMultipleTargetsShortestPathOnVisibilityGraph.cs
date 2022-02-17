@@ -57,13 +57,13 @@ namespace Microsoft.Msagl.Routing {
         }
 
         bool PassableOutEdge(VisibilityEdge e) {
-            return e.Source == sources || 
+            return 
                 targets.Contains(e.Target) || 
                 !IsForbidden(e);
         }
 
         bool PassableInEdge(VisibilityEdge e) {
-            return targets.Contains(e.Source) || e.Target == sources || !IsForbidden(e);
+            return targets.Contains(e.Source)  || !IsForbidden(e);
         }
 
 

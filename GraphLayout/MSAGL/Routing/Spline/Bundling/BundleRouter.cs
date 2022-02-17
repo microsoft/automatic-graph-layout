@@ -109,7 +109,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                                                         LooseHierarchy,
                                                         TightHierarchy,
                                                         bundlingSettings,
-                                                        shortestPathRouter.Cdt,
+                                                        shortestPathRouter.CdtProperty,
                                                         EdgeLooseEnterable,
                                                         EdgeTightEnterable,
                                                         loosePolylineOfPort);
@@ -144,14 +144,10 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             IEnumerable<Polyline> obstacles = looseHierarchy.GetAllLeaves();
 
             Rectangle rectangle = (Rectangle)looseHierarchy.Rectangle;
-            double d = rectangle.Diagonal / 4;
-            Point lb = rectangle.LeftBottom + new Point(-d, -d);
-            Point lt = rectangle.LeftTop + new Point(-d, d);
-            Point rt = rectangle.RightTop + new Point(d, d);
-            Point rb = rectangle.RightBottom + new Point(d, -d);
+            rectangle.Pad(rectangle.Diagonal / 4);
 
-            var additionalObstacles = new[] { 
-                new Polyline(lb, lt, rt, rb) { Closed = true }};
+            var additionalObstacles = new[] {
+                rectangle.Perimeter() };
 
             return GetConstrainedDelaunayTriangulation(obstacles.Concat(additionalObstacles));
         }
@@ -237,7 +233,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             shortestPathRouter.RouteEdges();
 
             //find appropriate edge separation
-            if (shortestPathRouter.Cdt != null)
+            if (shortestPathRouter.CdtProperty != null)
                 if (!AnalyzeEdgeSeparation())
                     return false;
             return true;

@@ -26,8 +26,8 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
         IEnumerable<PointPair> Edges() {
             var set = new Set<PointPair>();
-            foreach (var poly in Polylines)
-                for (var pp = poly.StartPoint; pp.Next != null; pp = pp.Next)
+            foreach (var pp in Vertices())
+              if (pp.Next != null)
                     set.Insert(FlipCollapser.OrderedPair(pp));
             return set;
         }

@@ -547,11 +547,11 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             var enterableForEdgeNodeB = metroGraphData.looseIntersections.ObstaclesToIgnoreForBundle(node, b);
 
             var crossingsOfEdgeNodeA = InteractiveEdgeRouter.IntersectionsOfLineAndRectangleNodeOverPolyline(new LineSegment(node.Position, a.Position), metroGraphData.LooseTree);
-            if (!crossingsOfEdgeNodeA.All(ii => enterableForEdgeNodeB.Contains(ii.Segment1)))
+            if (crossingsOfEdgeNodeA.Exists(ii => !enterableForEdgeNodeB.Contains(ii.Segment1)))
                 return false;
 
             var crossingsOfEdgeab = InteractiveEdgeRouter.IntersectionsOfLineAndRectangleNodeOverPolyline(new LineSegment(a.Position, b.Position), metroGraphData.LooseTree);
-            if (!crossingsOfEdgeab.All(ii => enterableForEdgeNodeB.Contains(ii.Segment1)))
+            if (crossingsOfEdgeab.Exists(ii => !enterableForEdgeNodeB.Contains(ii.Segment1)))
                 return false;
 
             //2. check cost

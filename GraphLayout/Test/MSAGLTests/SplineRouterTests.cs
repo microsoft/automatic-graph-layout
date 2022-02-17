@@ -206,6 +206,42 @@ namespace Microsoft.Msagl.UnitTests
         }
 
         [TestMethod]
+        public void DoubleEdge() {
+#if TEST_MSAGL
+            GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
+#endif
+            var g = new GeometryGraph();
+            var a = new Node {
+                BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(
+              20,
+              20,
+              3,
+              3,
+              new Point(0, 0))
+            };
+            g.Nodes.Add(a);
+            var b = new Node {
+                BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(
+              20,
+              20,
+              3,
+              3,
+              new Point(0, 200))
+            };
+            g.Nodes.Add(b);
+            var e = new Edge(a, b);
+            g.Edges.Add(e);
+            e = new Edge(a, b);
+            g.Edges.Add(e);
+            var sr = new SplineRouter(g, 2, 4, Math.PI / 6);
+            sr.Run();
+#if TEST_MSAGL
+//            GraphViewerGdi.DisplayGeometryGraph.ShowGraph(g);
+  GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
+#endif
+
+        }
+        [TestMethod]
         public void OneEdgeWithObstacle() {
 #if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();

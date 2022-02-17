@@ -359,10 +359,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                 if (parameterChange < MinParameterChange)
                     break;
 
-                if (iteration % 10 == 0) {
-                    //TimeMeasurer.DebugOutput("bundle bases cost is " + cost + " (" + iteration + " iterations) " + parameterChange * 360);
-                    //EdgeNudger.ShowHubs(metroGraphData, metroOrdering, null);
-                }
+               
             }
 
             //TimeMeasurer.DebugOutput("bases optimization completed after " + iteration + " iterations (cost=" + cost + ")");
@@ -492,10 +489,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             double del1 = Math.Abs(bundleInfo.TotalRequiredWidth - projecton1) / bundleInfo.TotalRequiredWidth;
             double del = Math.Abs(projecton0 - projecton1) / bundleInfo.TotalRequiredWidth;
 
-            double cost = Math.Exp(del0 * 10) - 1 + Math.Exp(del1 * 10) - 1;
-
-            cost += del;
-            return cost;
+            return Math.Exp(del0 * 10) - 1 + Math.Exp(del1 * 10) - 1 + del;
         }
 
         double CenterCost(BundleInfo bundleInfo) {

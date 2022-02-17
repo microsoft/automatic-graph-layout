@@ -88,7 +88,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             if (v.Radius >= allowedRadius)
                 return false;
             double idealR = useHalfEdgesAsIdealR ?
-                                  CalculateIdealHubRadiusWithAdjacentEdges(metroGraphData, bundlingSettings, v) :
+                                  CalculateIdealHubRadiusWithAdjacentEdges(bundlingSettings, v) :
                                   v.cachedIdealRadius;
 
             Debug.Assert(idealR > 0);
@@ -109,7 +109,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
         double CalculatePotential(Station v, bool useHalfEdgesAsIdealR) {
             double idealR = useHalfEdgesAsIdealR ?
-                            CalculateIdealHubRadiusWithAdjacentEdges(metroGraphData, bundlingSettings, v) :
+                            CalculateIdealHubRadiusWithAdjacentEdges(bundlingSettings, v) :
                             v.cachedIdealRadius;
 
             if (idealR <= v.Radius)
@@ -185,7 +185,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         /// <summary>
         /// Returns the ideal radius of the hub
         /// </summary>
-        static double CalculateIdealHubRadiusWithAdjacentEdges(MetroGraphData metroGraphData, BundlingSettings bundlingSettings, Station node) {
+        static double CalculateIdealHubRadiusWithAdjacentEdges(BundlingSettings bundlingSettings, Station node) {
             double r = bundlingSettings.MaxHubRadius;
             foreach (var adj in node.Neighbors) {
                 r = Math.Min(r, (node.Position - adj.Position).Length / 2);
