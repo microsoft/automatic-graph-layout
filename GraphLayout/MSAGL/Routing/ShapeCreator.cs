@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace Microsoft.Msagl.Routing
     /// </summary>
     static internal class ShapeCreator
     {
+        
         /// <summary>
         /// For a given graph finds the obstacles for nodes and clusters, correctly parenting the obstacles
         /// according to the cluster hierarchy
@@ -20,42 +22,37 @@ namespace Microsoft.Msagl.Routing
         public static IEnumerable<Shape> GetShapes(GeometryGraph graph)
         {
             var nodesToShapes = new Dictionary<Node, Shape>();
+            
             var interestingNodes = graph.Nodes.Where(n => !n.UnderCollapsedCluster()).ToArray();
             foreach (var v in interestingNodes)
                 nodesToShapes[v] = CreateShapeWithCenterPort(v);
-            foreach (var c in graph.RootCluster.AllClustersDepthFirst()) {
-                if (!c.IsCollapsed)
-                    foreach (var v in c.Nodes)
-                        if (!nodesToShapes.ContainsKey(v))
-                            nodesToShapes[v] = CreateShapeWithCenterPort(v);
-
-
-                if (c == graph.RootCluster) continue;
-                var parent = nodesToShapes[c] = CreateShapeWithClusterBoundaryPort(c);
-                if (c.IsCollapsed) continue;
-                foreach (var v in c.Nodes)
-                    parent.AddChild(nodesToShapes[v]);
-                foreach (var d in c.Clusters)
-                    parent.AddChild(nodesToShapes[d]);
-            }
-
-            foreach (var edge in graph.Edges) {
-                Shape shape;
-                if (nodesToShapes.TryGetValue(edge.Source, out shape)) {
-                    if(edge.SourcePort!=null)
-                        shape.Ports.Insert(edge.SourcePort);
-                }
-                if (nodesToShapes.TryGetValue(edge.Target, out shape)) {
-                    if (edge.TargetPort != null)
-                        shape.Ports.Insert(edge.TargetPort);
-                }
+            
+            foreach (var c in graph.RootCluster.Clusters)
+                GetShapesOnDict(nodesToShapes, c);
                 
-            }
-
             return nodesToShapes.Values;
         }
 
-        
+        private static void GetShapesOnDict(Dictionary<Node, Shape> nodesToShapes, Cluster c) {
+            if (c.IsCollapsed) return;
+            nodesToShapes.TryGetValue(c, out Shape cShape);
+            if (cShape == null) {
+              cShape=  nodesToShapes[c] = CreateShapeWithClusterBoundaryPort(c);
+            }
+            foreach (var n in c.Nodes) {
+                nodesToShapes.TryGetValue(n, out Shape nShape);
+                if (nShape == null) {
+                    nShape = nodesToShapes[n] = CreateShapeWithCenterPort(n);
+                }
+                cShape.AddChild(nShape);
+            }
+            foreach (var cc in c.Clusters) {
+                GetShapesOnDict(nodesToShapes, cc);
+                cShape.AddChild(nodesToShapes[cc]);
+            }
+        }
+
+
 
         /// <summary>
         /// Creates a shape with a RelativeFloatingPort for the node center, attaches it to the shape and all edges
@@ -64,6 +61,7 @@ namespace Microsoft.Msagl.Routing
         /// <returns>Shape obstacle for the node with simple port</returns>
         static Shape CreateShapeWithCenterPort(Node node)
         {
+            Debug.Assert(node is Cluster == false);
             // Debug.Assert(ApproximateComparer.Close(node.BoundaryCurve.BoundingBox, node.BoundingBox), "node's curve doesn't fit its bounds!");
             var shape = new RelativeShape(() => node.BoundaryCurve);
             var port = new RelativeFloatingPort(() => node.BoundaryCurve, () => node.Center);
