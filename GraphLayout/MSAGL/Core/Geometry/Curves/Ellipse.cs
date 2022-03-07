@@ -613,7 +613,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves{
         ///is it a proper circle?
         ///</summary>
         public bool IsArc() {
-            return AxisA.X == AxisB.Y && AxisA.Y == -AxisB.X;
+            return Math.Abs(AxisA * AxisB)<= ApproximateComparer.Tolerance && Math.Abs(AxisA.Length - AxisB.Length) < ApproximateComparer.DistanceEpsilon;
         }
 
     }

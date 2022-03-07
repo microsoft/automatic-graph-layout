@@ -98,11 +98,11 @@ namespace TestFormForGViewer {
         }
 
         static void OpenFileClick(object sender, EventArgs e) {
-            
+
             var openFileDialog = new OpenFileDialog {
-                                                        RestoreDirectory = true,
-                                                        Filter = " dot files (*.dot)|*.dot|All files (*.*)|*.*"
-                                                    };
+                RestoreDirectory = true,
+                Filter = "DOT (*.dot,*.gv)|*.dot;*.gv| All(*.*)|*.*"
+            };
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
                 ReadGraphFromFile(openFileDialog.FileName, GViewer, false);
