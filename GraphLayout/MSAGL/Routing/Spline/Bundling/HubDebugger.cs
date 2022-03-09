@@ -59,10 +59,9 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             //curves.AddRange(IdealHubsWithNeighbors());
             //curves.AddRange(IdealBundles());
             if (iCurves != null) {
-                int i = 0;
-                foreach(var iCurve in iCurves)
-                if (iCurve != null)
-                    curves.Add(new DebugCurve(100,0.2, DebugCurve.Colors[i++], iCurve));
+                foreach (var iCurve in iCurves)
+                    if (iCurve != null)
+                        curves.Add(new DebugCurve(100, 2, "Brown", iCurve));
             }
             return curves;
         }

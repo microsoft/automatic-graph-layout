@@ -280,10 +280,10 @@ namespace Microsoft.Msagl.Layout.Initial {
 
             //currentComponentFraction = (1.0 / clusterCount) / components.Count;
 
-            //            if (runInParallel)
-            //                Parallel.ForEach(components, parallelOptions, comp => LayoutComponent(settings, comp));
-            //            else // debug!!!!!!
-            components.ForEach(c => LayoutComponent(settings, c));
+            if (runInParallel)
+                            Parallel.ForEach(components, parallelOptions, comp => LayoutComponent(settings, comp));
+             else 
+             components.ForEach(c => LayoutComponent(settings, c));
 
             var bounds = MdsGraphLayout.PackGraphs(components, settings);
 

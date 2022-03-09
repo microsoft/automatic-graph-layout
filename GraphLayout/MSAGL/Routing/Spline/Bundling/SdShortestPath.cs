@@ -503,9 +503,9 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                     vertexArray.Select(v => new RectangleNode<SdVertex,Point>(v, new Rectangle(v.Point))));
 
             RectangleNodeUtils.CrossRectangleNodes(triangleTree, vertexTree, TryToAssigenTriangleToVertex);
-            foreach (var v in vertexArray) {
-                Debug.Assert(v.Triangle != null);
-            }
+//            foreach (var v in vertexArray) {
+  //              Debug.Assert(v.Triangle != null);
+    //        }
         }
 
         void TryToAssigenTriangleToVertex(CdtTriangle triangle, SdVertex vertex) {

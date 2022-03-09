@@ -117,6 +117,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         /// NOTE: polyline points should be oriented clockwise
         /// </summary>
         internal static bool LineSegmentIntersectPolyline(Point start, Point end, Polyline poly) {
+            return Curve.CurveCurveIntersectionOne(new LineSegment(start, end), poly, false) != null;
             Point segDirection = end - start;   // the segment direction vector
             Debug.Assert(segDirection.Length > ApproximateComparer.DistanceEpsilon);
 

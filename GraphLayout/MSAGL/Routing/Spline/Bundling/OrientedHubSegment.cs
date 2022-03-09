@@ -3,7 +3,7 @@ using Microsoft.Msagl.Core.Geometry.Curves;
 
 namespace Microsoft.Msagl.Routing.Spline.Bundling {
     internal class OrientedHubSegment {
-        internal ICurve Segment;
+        private ICurve segment;
         internal bool Reversed;
         internal int Index;
         internal BundleBase BundleBase;
@@ -18,5 +18,11 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         internal Point this[double t] { get { return Reversed ? Segment[Segment.ParEnd - t] : Segment[t]; } }
 
         internal OrientedHubSegment Other { get; set; }
+        internal ICurve Segment {
+            get { return segment; }
+            set {
+                segment = value;
+            }
+        }
     }
 }
