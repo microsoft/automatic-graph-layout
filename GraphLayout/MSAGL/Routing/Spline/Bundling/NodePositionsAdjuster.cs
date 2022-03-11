@@ -133,13 +133,10 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
         double GetCurrentHubRadius(Station node) {
             if (node.IsRealNode) {
-                return node.BoundaryCurve.BoundingBox.Diagonal/2;
-            }
-            else {
-                double idealR = node.cachedIdealRadius;
-                //TODO: which one?
+                return node.BoundaryCurve.BoundingBox.Diagonal / 2;
+            } else {
+                double idealR = node.cachedIdealRadius = HubRadiiCalculator.CalculateIdealHubRadiusWithNeighbors(this.metroGraphData, this.bundlingSettings, node);
                 double r = metroGraphData.looseIntersections.GetMinimalDistanceToObstacles(node, node.Position, idealR);
-                //double r = idealR;
                 Debug.Assert(r <= idealR);
                 foreach (var adj in node.Neighbors)
                     r = Math.Min(r, (node.Position - adj.Position).Length);

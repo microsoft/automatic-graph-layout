@@ -28,7 +28,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             this.obstaclesToIgnore = obstaclesToIgnore;
             EdgeSeparation = edgeSeparation;
             HalfWidthArray = halfWidthArray;
-            TotalRequiredWidth = EdgeSeparation * HalfWidthArray.Length + HalfWidthArray.Sum() * 2;
+            TotalRequiredWidth = EdgeSeparation * (HalfWidthArray.Length-1) + HalfWidthArray.Sum() * 2;
             longEnoughSideLength = new Rectangle(sourceBase.Curve.BoundingBox, targetBase.Curve.BoundingBox).Diagonal;
 
             //sometimes TotalRequiredWidth is too large to fit into the circle, so we evenly scale everything
@@ -88,24 +88,24 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
             if (mw <= FeasibleWidthEpsilon) {
                 //try one side
-                if (SetRLParamsIfWidthIsFeasible(2 * FeasibleWidthEpsilon * perp / 2, new Point(), a, b)) {
+                if (SetRLParamsIfWidthIsFeasibleTwoPerps(2 * FeasibleWidthEpsilon * perp / 2, new Point(), a, b)) {
                     mw = 2 * FeasibleWidthEpsilon;
-                }
-                else if (SetRLParamsIfWidthIsFeasible(new Point(), -2 * FeasibleWidthEpsilon * perp / 2, a, b)) {
+                } else if (SetRLParamsIfWidthIsFeasibleTwoPerps(new Point(), -2 * FeasibleWidthEpsilon * perp / 2, a, b)) {
                     mw = 2 * FeasibleWidthEpsilon;
                 }
             }
 
             Debug.Assert(mw > FeasibleWidthEpsilon);
 
-            SetInitialMidParams();
+            SourceBase.InitialMidParameter = SourceBase.AdjustParam(SourceBase.ParRight + SourceBase.Span / 2);
+            TargetBase.InitialMidParameter = TargetBase.AdjustParam(TargetBase.ParRight + TargetBase.Span / 2);
         }
 
         bool SetRLParamsIfWidthIsFeasible(Point perp, Point a, Point b) {
-            return SetRLParamsIfWidthIsFeasible(perp, -perp, a, b);
+            return SetRLParamsIfWidthIsFeasibleTwoPerps(perp, -perp, a, b);
         }
 
-        bool SetRLParamsIfWidthIsFeasible(Point perpL, Point perpR, Point a, Point b) {
+        bool SetRLParamsIfWidthIsFeasibleTwoPerps(Point perpL, Point perpR, Point a, Point b) {
             double sourceRParam, targetRParam, sourceLParam, targetLParam;
             var ls = TrimSegWithBoundaryCurves(new LineSegment(a + perpL, b + perpL), out sourceLParam, out targetRParam);
             if (ls == null)
@@ -146,15 +146,10 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
         void SetInitialMidParams() {
             double sourceParam, targetParam;
-            var ls = TrimSegWithBoundaryCurves(new LineSegment(TargetBase.CurveCenter, SourceBase.CurveCenter), out sourceParam, out targetParam);
-            if (ls != null) {
-                SourceBase.InitialMidParameter = sourceParam;
-                TargetBase.InitialMidParameter = targetParam;
-            }
-            else {
-                SourceBase.InitialMidParameter = SourceBase.AdjustParam(SourceBase.ParRight + SourceBase.Span / 2);
-                TargetBase.InitialMidParameter = TargetBase.AdjustParam(TargetBase.ParRight + TargetBase.Span / 2);
-            }
+            TrimSegWithBoundaryCurves(new LineSegment(TargetBase.CurveCenter, SourceBase.CurveCenter), out sourceParam, out targetParam);
+
+            SourceBase.InitialMidParameter = sourceParam;
+            TargetBase.InitialMidParameter = targetParam;
         }
 
         LineSegment TrimSegWithBoundaryCurves(LineSegment ls, out double sourcePar, out double targetPar) {
@@ -209,9 +204,9 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
         internal void UpdateSourceAndTargetBases(bool sourceChanged, bool targetChanged) {
             if (sourceChanged)
-                UpdatePointsOnSourceBase();
+                UpdatePointsOnBundleBase(SourceBase);
             if (targetChanged)
-                UpdatePointsOnTargetBase();
+                UpdatePointsOnBundleBase(TargetBase);
 
             UpdateTangentsOnBases();
         }
@@ -230,27 +225,19 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             }
         }
 
-        void UpdatePointsOnSourceBase() {
-            int count = SourceBase.Count;
+        
+        void UpdatePointsOnBundleBase(BundleBase bb) {
+            int count = bb.Count;
 
-            Point[] pns = SourceBase.Points;
-            Point dir = (SourceBase.RightPoint - SourceBase.LeftPoint) / TotalRequiredWidth;
-
-            pns[count - 1] = SourceBase.LeftPoint + (EdgeSeparation / 2 + HalfWidthArray[0]) * dir;
-            int j = 1;
-            for (int i = count - 2; i >= 0; i--, j++)
-                pns[i] = pns[i + 1] + (HalfWidthArray[j - 1] + EdgeSeparation + HalfWidthArray[j]) * dir;
-        }
-
-        void UpdatePointsOnTargetBase() {
-            int count = TargetBase.Count;
-
-            Point[] pns = TargetBase.Points;
-            Point dir = (TargetBase.LeftPoint - TargetBase.RightPoint) / TotalRequiredWidth;
-
-            pns[0] = TargetBase.RightPoint + (EdgeSeparation / 2 + HalfWidthArray[0]) * dir;
-            for (int i = 1; i < count; i++)
-                pns[i] = pns[i - 1] + (HalfWidthArray[i - 1] + EdgeSeparation + HalfWidthArray[i]) * dir;
+            Point[] pns = bb.Points;
+            var ls = new LineSegment(bb.LeftPoint, bb.RightPoint);
+            var scale = 1 / TotalRequiredWidth;
+            var t = HalfWidthArray[0];
+            pns[0] = ls[t*scale];
+            for (int i = 1; i < count; i++) {
+                t += HalfWidthArray[i-1]+EdgeSeparation + HalfWidthArray[i];
+                pns[i] = ls[t * scale];
+            }
         }
 
         internal bool RotationIsLegal(int rotationOfSourceRightPoint, int rotationOfSourceLeftPoint,

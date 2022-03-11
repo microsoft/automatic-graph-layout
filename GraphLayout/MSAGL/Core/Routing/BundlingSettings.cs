@@ -168,5 +168,9 @@ namespace Microsoft.Msagl.Core.Routing {
         /// calculates the routes that just follow the visibility graph
         /// </summary>
         public bool StopAfterShortestPaths { get; set; }
+        /// <summary>
+        /// rotate bundles to diminish the cost: seems counter productive!
+        /// </summary>
+        public bool RotateBundles { get; internal set; }
     }
 }

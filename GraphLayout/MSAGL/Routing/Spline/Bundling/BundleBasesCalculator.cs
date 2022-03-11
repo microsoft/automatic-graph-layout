@@ -29,8 +29,8 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         }
 
         internal void Run() {
-            //HubDebugger.ShowHubs(metroGraphData, bundlingSettings, true);
-            //HubDebugger.ShowHubs(metroGraphData, bundlingSettings);
+            //HubDebugger.ShowHubsTurnByTurn(metroGraphData, bundlingSettings, true);
+            //HubDebugger.ShowHubsWithAdditionalICurves(metroGraphData, bundlingSettings);
 
             AllocateBundleBases();
             SetBasesRightLeftParamsToTheMiddles();
@@ -51,14 +51,15 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
                 //optimization: moving bases to reduce cost
                 //TimeMeasurer.DebugOutput("Initial cost of bundle bases: " + Cost());
-                Optimize();
+                if (bundlingSettings.RotateBundles)
+                    RotateBasesToDiminishCost();
                 //EdgeNudger.ShowHubs(metroGraphData, metroOrdering, null);
                 AdjustStartEndParamsToAvoidBaseOverlaps();
                 UpdateSourceAndTargetBases();
             }
 
             //TimeMeasurer.DebugOutput("Optimized cost of bundle bases: " + Cost());
-//            EdgeNudger.ShowHubs(metroGraphData, metroOrdering, null);
+            //EdgeNudger.ShowHubs(metroGraphData, metroOrdering, null);
         }
 
         #region Initialization
@@ -184,6 +185,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                 var tbase = bundle.TargetBase;
                 sbase.ParRight = sbase.ParLeft = GetBaseMiddleParamInDirection(sbase, sbase.Position, tbase.Position);
                 tbase.ParRight = tbase.ParLeft = GetBaseMiddleParamInDirection(tbase, tbase.Position, sbase.Position);
+           //     HubDebugger.ShowHubsWithAdditionalICurves(metroGraphData, bundlingSettings, new LineSegment(tbase.Curve[tbase.ParRight], sbase.Curve[sbase.ParRight]), tbase.Curve, sbase.Curve);
             }
         }
 
@@ -343,7 +345,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
         HashSet<BundleInfo> fixedBundles = new HashSet<BundleInfo>();
 
-        void Optimize() {
+        void RotateBasesToDiminishCost() {
             double parameterChange = MaxParameterChange;
             double cost = Cost();
 
@@ -353,7 +355,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             while (iteration++ < MaxIterations) {
 
                 double oldCost = cost;
-                OptimizeBundles(parameterChange, ref cost);
+                RotateBasesToDiminishCostOneIteration(parameterChange, ref cost);
 
                 parameterChange = UpdateParameterChange(parameterChange, oldCost, cost);
                 if (parameterChange < MinParameterChange)
@@ -388,13 +390,13 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             return step;
         }
 
-        bool OptimizeBundles(double parameterChange, ref double cost) {
+        bool RotateBasesToDiminishCostOneIteration(double parameterChange, ref double cost) {
             var progress = false;
             foreach (var bundleInfo in Bundles) {
                 if (fixedBundles.Contains(bundleInfo))
                     continue;
 
-                if (OptimizeBundle(bundleInfo, parameterChange, ref cost)) {
+                if (RotateBundle(bundleInfo, parameterChange, ref cost)) {
                     progress = true;
                     /*bool isClusterS = bundleInfo.SourceBase.CurveCenter != bundleInfo.SourceBase.Position;
                     bool isClusterT = bundleInfo.TargetBase.CurveCenter != bundleInfo.TargetBase.Position;
@@ -406,7 +408,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             return progress;
         }
 
-        bool OptimizeBundle(BundleInfo bundleInfo, double parameterChange, ref double cost) {
+        bool RotateBundle(BundleInfo bundleInfo, double parameterChange, ref double cost) {
             double bundleCost = Cost(bundleInfo);
             if (bundleCost < CostThreshold)
                 return false;

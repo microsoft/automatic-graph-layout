@@ -322,10 +322,10 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                 bool res = metroGraphData.cdtIntersections.BundleAvoidsObstacles(node, adj, node.Position, adj.Position, idealWidth / 2, out closestPoints);
                 if (!res) {
 #if TEST_MSAGL&& TEST_MSAGL
-                    HubDebugger.ShowHubs(metroGraphData, bundlingSettings, new LineSegment(node.Position, adj.Position));
+                    HubDebugger.ShowHubsWithAdditionalICurves(metroGraphData, bundlingSettings, new LineSegment(node.Position, adj.Position));
 #endif
                 }
-                //Debug.Assert(res);  //todo : still unsolved
+                Debug.Assert(res);  //todo : still unsolved
 
                 foreach (var d in closestPoints) {
                     double dist = (d.Item1 - d.Item2).Length;

@@ -125,30 +125,27 @@ namespace Microsoft.Msagl.UnitTests {
         }
         [TestMethod]
         [Description("Three edges")]
-        public void ThreeEdges() {
-//            GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
+        public void TenEdges() {
+            //GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
 
             GeometryGraph graph = new GeometryGraph();
             var a = new Node {
-                BoundaryCurve = CurveFactory.CreateCircle(15, new Point(448, 112)), UserData = "a",
+                BoundaryCurve = CurveFactory.CreateCircle(15, new Point(65, 25)), UserData = "a",
             };
             graph.Nodes.Add(a);
-            var b = new Node { UserData = "b",
-                BoundaryCurve = CurveFactory.CreateCircle(15, new Point(368, 328))
+            var b = new Node {
+                UserData = "b",
+                BoundaryCurve = CurveFactory.CreateCircle(15, new Point(25, 25))
             };
             graph.Nodes.Add(b);
-            var c = new Node { UserData = "c",
-                BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(411, 261, 10, 10, new Point(215, 140))
-            };
-            graph.Nodes.Add(c);
-            graph.Edges.Add(new Edge(a, b));
-            graph.Edges.Add(new Edge(a, b));
-            graph.Edges.Add(new Edge(a, b));
+            graph.Edges.Add(new Edge(b, a));
+            graph.Edges.Add(new Edge(b, a));
+            for (int i = 0; i < 8; i++)
+                graph.Edges.Add(new Edge(a, b));
+
             var sr = new SplineRouter(graph, 2, 1.5, Math.PI / 6, new BundlingSettings() { EdgeSeparation = 1 });
             sr.Run();
-
-
-  //          GraphViewerGdi.DisplayGeometryGraph.ShowGraph(graph);
+            //GraphViewerGdi.DisplayGeometryGraph.ShowGraph(graph);
 
         }
         [TestMethod]

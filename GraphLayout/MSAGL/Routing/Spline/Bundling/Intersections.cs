@@ -181,7 +181,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                 
                 if (!station.IsRealNode && !HubAvoidsObstacles(station.Position, 0, obstaclesToIgnore(station))) {
                     if (LayoutAlgorithmSettings.ShowDebugCurvesEnumeration != null) {
-                        HubDebugger.ShowHubs(metroGraphData, bundlingSettings, station);
+                        HubDebugger.ShowHubsWithHighligtedStation(metroGraphData, bundlingSettings, station);
                         ShowStationWithObstaclesToIgnore(station,  obstacleTree.AllHitItems(station.Position));
                     }
                     return false;
