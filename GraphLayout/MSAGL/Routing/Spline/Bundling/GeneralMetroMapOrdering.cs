@@ -132,7 +132,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
             if (p00 != null && p11 != null) {   //we have a backward fork
                 var forkBase = p0.Point;
-                return IsLeft(next0(p0).Point - forkBase,
+                return -IsLeft(next0(p0).Point - forkBase,
                               p00.Point - forkBase,
                               p11.Point - forkBase);
             }
@@ -152,7 +152,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
             if (p00 != null && p11 != null) {//compare forward fork
                 var forkBase = p0.Point;
-                return -IsLeft(prev0(p0).Point - forkBase,
+                return IsLeft(prev0(p0).Point - forkBase,
                               p00.Point - forkBase,
                               p11.Point - forkBase);
             }

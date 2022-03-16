@@ -123,10 +123,39 @@ namespace Microsoft.Msagl.UnitTests {
                 //DisplayGeometryGraph.ShowGraph(graph);
             }
         }
+
         [TestMethod]
-        [Description("Three edges")]
+        [Description("Five edges")]
+        public void FiveEdges() {
+           // GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
+
+            GeometryGraph graph = new GeometryGraph();
+            var b = new Node {
+                BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners( 20, 20, 1, 1, new Point(120, 150) ), UserData = "b",
+            };
+            graph.Nodes.Add(b);
+   
+            var d = new Node {
+                UserData = "d",
+                BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(20, 20, 1,1,new Point(0, 150))
+            };
+            graph.Nodes.Add(d);
+            var e = new Node {
+                BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(20, 20, 1, 1, new Point(160, 150)), UserData = "e",
+            };
+            graph.Nodes.Add(e);
+            graph.Edges.Add(new Edge(b, d));
+            graph.Edges.Add(new Edge(e, d));
+            
+            var sr = new SplineRouter(graph, 2, 4, Math.PI / 6, new BundlingSettings() { EdgeSeparation = 1, StopAfterShortestPaths = false });
+            sr.Run();
+           // GraphViewerGdi.DisplayGeometryGraph.ShowGraph(graph);
+
+        }
+        [TestMethod]
+        [Description("Routing on a small graph")]
         public void TenEdges() {
-            //GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
+           // GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
 
             GeometryGraph graph = new GeometryGraph();
             var a = new Node {
@@ -143,9 +172,9 @@ namespace Microsoft.Msagl.UnitTests {
             for (int i = 0; i < 8; i++)
                 graph.Edges.Add(new Edge(a, b));
 
-            var sr = new SplineRouter(graph, 2, 1.5, Math.PI / 6, new BundlingSettings() { EdgeSeparation = 1 });
+            var sr = new SplineRouter(graph, 2, 4, Math.PI / 6, new BundlingSettings() { EdgeSeparation = 1 });
             sr.Run();
-            //GraphViewerGdi.DisplayGeometryGraph.ShowGraph(graph);
+           // GraphViewerGdi.DisplayGeometryGraph.ShowGraph(graph);
 
         }
         [TestMethod]
