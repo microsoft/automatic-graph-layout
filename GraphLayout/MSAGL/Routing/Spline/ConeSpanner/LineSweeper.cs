@@ -726,11 +726,10 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
         void CloseConesAddConeAtLeftVertex(VertexEvent leftVertexEvent, PolylinePoint nextVertex) {
             //close segments first
             Point prevSite = leftVertexEvent.Vertex.PrevOnPolyline.Point;
-            double prevZ = prevSite * SweepDirection;
-            if (ApproximateComparer.Close(prevZ, Z) && (prevSite - leftVertexEvent.Site) * DirectionPerp > 0) {
-                //Show(
-                //    new Ellipse(1, 1, prevSite),
-                //    CurveFactory.CreateBox(2, 2, leftVertexEvent.Vertex.Point));
+            Point fromPrev = leftVertexEvent.Site - prevSite;
+            if (ApproximateComparer.Close(GetZ(fromPrev), 0) &&
+                fromPrev * DirectionPerp < -ApproximateComparer.DistanceEpsilon) { 
+                // we have a low horizontal side from prevSite to leftVertexEvent
                 RemoveConesClosedBySegment(leftVertexEvent.Vertex.Point, prevSite);
             }
 
@@ -742,14 +741,14 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
 
             if ((site - prevSite) * SweepDirection > ApproximateComparer.DistanceEpsilon)
                 RemoveLeftSide(new LeftObstacleSide(leftVertexEvent.Vertex.PrevOnPolyline));
-           
 
-            var nextDelZ = GetZ(nextSite) - Z;
+            Point toNext = nextSite - leftVertexEvent.Site;
+            var nextDelZ = GetZ(toNext);
             if(nextDelZ<-ApproximateComparer.DistanceEpsilon)
                 RemoveRightSide(new RightObstacleSide(nextVertex));
-
+           
             if (nextDelZ < -ApproximateComparer.DistanceEpsilon ||
-                ApproximateComparer.Close(nextDelZ, 0) && (nextSite - leftVertexEvent.Site) * DirectionPerp > 0) {
+                ApproximateComparer.Close(nextDelZ, 0) && toNext * DirectionPerp > -ApproximateComparer.DistanceEpsilon) {
                 //if (angle > Math.PI / 2)
                 CreateConeOnVertex(leftVertexEvent); //it is the last left vertex on this obstacle
                 
