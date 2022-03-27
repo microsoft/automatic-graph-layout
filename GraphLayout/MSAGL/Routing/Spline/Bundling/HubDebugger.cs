@@ -61,7 +61,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             if (iCurves != null) {
                 foreach (var iCurve in iCurves)
                     if (iCurve != null)
-                        curves.Add(new DebugCurve(100, 0.2, "Brown", iCurve));
+                        curves.Add(new DebugCurve(100, 2, "Brown", iCurve));
             }
             return curves;
         }

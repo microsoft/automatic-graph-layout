@@ -169,7 +169,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         /// 1. hubs are not inside loose obstacles
         /// 2. bundles do not cross loose obstacles
         /// </summary>
-        internal bool HubPositionsAreOK() {
+        internal bool HubPositionsAreOK() {        
             //check polylines
             foreach (var line in metroGraphData.Metrolines) {
                 var poly = line.Polyline;
@@ -255,7 +255,8 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                 l.AddRange(obstaclesToIgnoreForBundle.Select(p=>new DebugCurve(100,0.5,"green",p)));
                 LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(l);
             }
-            return crossings.All(intersectionInfo => obstaclesToIgnoreForBundle.Contains((Polyline)intersectionInfo.Segment1));
+            var ret = crossings.All(intersectionInfo => obstaclesToIgnoreForBundle.Contains((Polyline)intersectionInfo.Segment1));
+            return ret;
         }
 #endif
     }

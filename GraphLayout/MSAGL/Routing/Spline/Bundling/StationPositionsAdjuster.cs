@@ -15,7 +15,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
     /// <summary>
     /// Adjust current bundle-routing with a number of heuristic
     /// </summary>
-    public class NodePositionsAdjuster {
+    public class StationPositionsAdjuster {
         /// <summary>
         /// Algorithm settings
         /// </summary>
@@ -26,7 +26,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         /// </summary>
         readonly MetroGraphData metroGraphData;
 
-        NodePositionsAdjuster(MetroGraphData metroGraphData, BundlingSettings bundlingSettings) {
+        StationPositionsAdjuster(MetroGraphData metroGraphData, BundlingSettings bundlingSettings) {
             this.metroGraphData = metroGraphData;
             this.bundlingSettings = bundlingSettings;
         }
@@ -42,7 +42,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             //TimeMeasurer.DebugOutput("Initial cost = " + CostCalculator.Cost(metroGraphData, bundlingSettings));
             //TimeMeasurer.DebugOutput("Initial cost of forces: " + CostCalculator.CostOfForces(metroGraphData, bundlingSettings));
 
-            var adjuster = new NodePositionsAdjuster(metroGraphData, bundlingSettings);
+            var adjuster = new StationPositionsAdjuster(metroGraphData, bundlingSettings);
             adjuster.GlueConflictingNodes();
             adjuster.UnglueEdgesFromBundleToSaveInk(true);
 
@@ -95,7 +95,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             var gluingMap = new Dictionary<Station, Station>();
             var gluedDomain = new Set<Station>();
             RectangleNodeUtils.CrossRectangleNodes<Station, Point>(circlesHierarchy, circlesHierarchy,
-                                                            (i, j) => TryToGlueNodes(i, j, gluingMap, gluedDomain));
+                                                            (i, j) => TryToGlueStations(i, j, gluingMap, gluedDomain));
             if (gluingMap.Count == 0)
                 return false;
 
@@ -144,8 +144,10 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             }
         }
 
-        void TryToGlueNodes(Station i, Station j, Dictionary<Station, Station> gluingMap, Set<Station> gluedDomain) {
+        void TryToGlueStations(Station i, Station j, Dictionary<Station, Station> gluingMap, Set<Station> gluedDomain) {
             Debug.Assert(i != j);
+            if (i.EnterableLoosePolylines != j.EnterableLoosePolylines)
+                return;
             double d = (i.Position - j.Position).Length;
             double r1 = Math.Max(i.Radius, 5);
             double r2 = Math.Max(j.Radius, 5);

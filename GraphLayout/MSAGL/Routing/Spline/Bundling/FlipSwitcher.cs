@@ -110,14 +110,20 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             }
         }
 
-        bool ProcessFlip(Polyline polylineA, Polyline polylineB, Point flipStart, Point flipEnd) {
-            //temporary switching polylines of the same width only
+        bool ProcessFlip(Polyline polyA, Polyline polyB, Point flipStart, Point flipEnd) {
+            //switching polylines of the same width and same enterable loose sets
             //need to check capacities here
-            if (polylineToEdgeGeom[polylineA].LineWidth != polylineToEdgeGeom[polylineB].LineWidth) return false;
+            var ea = polylineToEdgeGeom[polyA];
+            var eb = polylineToEdgeGeom[polyB];
+
+            if (ea.LineWidth != eb.LineWidth || metroGraphData.EdgeLooseEnterable==null ||
+              metroGraphData.EdgeLooseEnterable[ea] != metroGraphData.EdgeLooseEnterable[eb]) {
+                return false;
+            }
             PolylinePoint aFirst, aLast, bFirst, bLast;
             bool forwardOrderA, forwardOrderB;
-            FindPointsOnPolyline(polylineA, flipStart, flipEnd, out aFirst, out aLast, out forwardOrderA);
-            FindPointsOnPolyline(polylineB, flipStart, flipEnd, out bFirst, out bLast, out forwardOrderB);
+            FindPointsOnPolyline(polyA, flipStart, flipEnd, out aFirst, out aLast, out forwardOrderA);
+            FindPointsOnPolyline(polyB, flipStart, flipEnd, out bFirst, out bLast, out forwardOrderB);
             Debug.Assert(PolylinePointsAreInForwardOrder(aFirst, aLast) == forwardOrderA);
             Debug.Assert(PolylinePointsAreInForwardOrder(bFirst, bLast) == forwardOrderB);
 
@@ -133,15 +139,15 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             if (rel1 == 1 || rel2 == 1) return false;
 
             //unregister
-            UnregisterPolylinePointInPathsThrough(polylineA.PolylinePoints);
-            UnregisterPolylinePointInPathsThrough(polylineB.PolylinePoints);
+            UnregisterPolylinePointInPathsThrough(polyA.PolylinePoints);
+            UnregisterPolylinePointInPathsThrough(polyB.PolylinePoints);
 
             //switching
             Swap(aFirst, bFirst, aLast, bLast, forwardOrderA, forwardOrderB);
 
             //register back
-            RegisterPolylinePointInPathsThrough(polylineA.PolylinePoints);
-            RegisterPolylinePointInPathsThrough(polylineB.PolylinePoints);
+            RegisterPolylinePointInPathsThrough(polyA.PolylinePoints);
+            RegisterPolylinePointInPathsThrough(polyB.PolylinePoints);
 
             RegisterInterestingPoint(aFirst.Point);
             RegisterInterestingPoint(aLast.Point);

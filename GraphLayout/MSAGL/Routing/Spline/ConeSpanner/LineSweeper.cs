@@ -566,9 +566,12 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
                                             PolylinePoint nextVertex) {
             var prevSite = rightVertexEvent.Vertex.NextOnPolyline.Point;
             var prevZ = prevSite*SweepDirection;
-            if (ApproximateComparer.Close(prevZ, Z))
+            if (this.DirectionPerp * (rightVertexEvent.Site - prevSite) > ApproximateComparer.DistanceEpsilon) {
                 RemoveConesClosedBySegment(prevSite, rightVertexEvent.Vertex.Point);
-
+            }
+            if (this.DirectionPerp*(nextVertex.Point-rightVertexEvent.Site) > ApproximateComparer.DistanceEpsilon) {
+                this.RemoveConesClosedBySegment(rightVertexEvent.Site, nextVertex.Point);
+    }
             var site = rightVertexEvent.Site;
             var coneLp = site + ConeLeftSideDirection;
             var coneRp = site + ConeRightSideDirection;
@@ -726,11 +729,13 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
         void CloseConesAddConeAtLeftVertex(VertexEvent leftVertexEvent, PolylinePoint nextVertex) {
             //close segments first
             Point prevSite = leftVertexEvent.Vertex.PrevOnPolyline.Point;
-            Point fromPrev = leftVertexEvent.Site - prevSite;
-            if (ApproximateComparer.Close(GetZ(fromPrev), 0) &&
-                fromPrev * DirectionPerp < -ApproximateComparer.DistanceEpsilon) { 
-                // we have a low horizontal side from prevSite to leftVertexEvent
+            if (DirectionPerp*(prevSite - leftVertexEvent.Site) > ApproximateComparer
+                .DistanceEpsilon) { 
+                // we have a visible segment on the left of the obstacle
                 RemoveConesClosedBySegment(leftVertexEvent.Vertex.Point, prevSite);
+            }
+            if ((leftVertexEvent.Site - nextVertex.Point) * DirectionPerp > ApproximateComparer.DistanceEpsilon) {
+                this.RemoveConesClosedBySegment(nextVertex.Point, leftVertexEvent.Site);
             }
 
             var site = leftVertexEvent.Site;

@@ -113,7 +113,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                                                         EdgeLooseEnterable,
                                                         EdgeTightEnterable,
                                                         loosePolylineOfPort);
-                NodePositionsAdjuster.FixRouting(metroGraphData, bundlingSettings);
+                StationPositionsAdjuster.FixRouting(metroGraphData, bundlingSettings);
                 new EdgeNudger(metroGraphData, bundlingSettings).Run();
                 //TimeMeasurer.DebugOutput("edge bundling ended");
             }

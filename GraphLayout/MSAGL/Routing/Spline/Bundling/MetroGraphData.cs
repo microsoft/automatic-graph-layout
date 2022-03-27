@@ -44,7 +44,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         ///  objects to check crossings and calculate distances
         internal CdtIntersections cdtIntersections;
 
-        Dictionary<EdgeGeometry, Set<Polyline>> EdgeLooseEnterable { get; set; }
+        internal Dictionary<EdgeGeometry, Set<Polyline>> EdgeLooseEnterable { get; set; }
         Dictionary<EdgeGeometry, Set<Polyline>> EdgeTightEnterable { get; set; }
 
         internal Func<Port, Polyline> LoosePolylineOfPort;
