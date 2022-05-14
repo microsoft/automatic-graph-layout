@@ -61,7 +61,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
             if (FrameworkElementOfNodeForLabel != null)
             {
                 FrameworkElementOfNodeForLabel.Tag = this; //get a backpointer to the VNode
-                Common.PositionFrameworkElement(FrameworkElementOfNodeForLabel, node.GeometryNode.Center, 1);
+                Common.PositionFrameworkElement(FrameworkElementOfNodeForLabel, GetLabelPosition(node), 1);
                 Panel.SetZIndex(FrameworkElementOfNodeForLabel, Panel.GetZIndex(BoundaryPath) + 1);
             }
             SetupSubgraphDrawing();
@@ -438,7 +438,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
             BoundaryPath.Data = CreatePathFromNodeBoundary();
 
-            Common.PositionFrameworkElement(FrameworkElementOfNodeForLabel, Node.BoundingBox.Center, 1);
+            Common.PositionFrameworkElement(FrameworkElementOfNodeForLabel, GetLabelPosition(Node), 1);
 
 
             SetFillAndStroke();
@@ -458,6 +458,12 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 _collapseSymbolPath.Visibility =
                     _collapseButtonBorder.Visibility = Visibility.Visible;
 
+        }
+
+        Point GetLabelPosition(Node node)
+        {
+            return node.BoundingBox.Center;
+            //return node.GeometryNode.Center;
         }
 
         public override string ToString() {
