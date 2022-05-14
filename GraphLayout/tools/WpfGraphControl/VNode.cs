@@ -462,6 +462,17 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
         Point GetLabelPosition(Node node)
         {
+            if (node.Label.Owner is Subgraph) {
+                var size = 
+                    GraphViewer.MeasureText(
+                        node.LabelText, 
+                        new FontFamily(node.Label.FontName), 
+                        node.Label.FontSize);
+
+                return node.BoundingBox.Center + 
+                       new Point(0, node.BoundingBox.Height / 2 - size.Height / 2);
+            }
+
             return node.BoundingBox.Center;
             //return node.GeometryNode.Center;
         }
