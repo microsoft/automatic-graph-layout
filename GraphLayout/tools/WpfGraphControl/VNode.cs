@@ -239,7 +239,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
             Panel.SetZIndex(BoundaryPath, ZIndex);
             SetFillAndStroke();
             if (setNodeToolTips && (
-                Node.Label != null 
+                Node.Label != null
                 && !string.IsNullOrEmpty(Node.LabelText))) {
                 BoundaryPath.ToolTip = Node.LabelText;
                 if (FrameworkElementOfNodeForLabel != null)
@@ -264,7 +264,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
                     Node.Attr.Color.B));
             SetBoundaryFill();
             BoundaryPath.StrokeThickness = PathStrokeThickness;
-            
+
             var textBlock = FrameworkElementOfNodeForLabel as TextBlock;
             if (textBlock != null) {
                 var col = Node.Label.FontColor;
@@ -462,19 +462,20 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
         Point GetLabelPosition(Node node)
         {
-            if (node.Label.Owner is Subgraph) {
-                var size = 
+            if (node.Label.Owner is Subgraph subgraph) {
+                var size =
                     GraphViewer.MeasureText(
-                        node.LabelText, 
-                        new FontFamily(node.Label.FontName), 
+                        node.LabelText,
+                        new FontFamily(node.Label.FontName),
                         node.Label.FontSize);
 
-                return node.BoundingBox.Center + 
-                       new Point(0, node.BoundingBox.Height / 2 - size.Height / 2);
+                return node.BoundingBox.Center +
+                       new Point(
+                           subgraph.DiameterOfOpenCollapseButton / 2,
+                           node.BoundingBox.Height / 2 - size.Height / 2);
             }
 
             return node.BoundingBox.Center;
-            //return node.GeometryNode.Center;
         }
 
         public override string ToString() {
