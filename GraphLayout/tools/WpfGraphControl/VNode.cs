@@ -467,7 +467,8 @@ namespace Microsoft.Msagl.WpfGraphControl {
                     GraphViewer.MeasureText(
                         node.LabelText,
                         new FontFamily(node.Label.FontName),
-                        node.Label.FontSize);
+                        node.Label.FontSize,
+                        FrameworkElementOfNodeForLabel);
 
                 return node.BoundingBox.Center +
                        new Point(
