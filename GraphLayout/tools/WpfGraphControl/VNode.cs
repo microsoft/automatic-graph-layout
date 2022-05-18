@@ -468,14 +468,13 @@ namespace Microsoft.Msagl.WpfGraphControl {
                         node.LabelText,
                         new FontFamily(node.Label.FontName),
                         node.Label.FontSize,
-                        FrameworkElementOfNodeForLabel);
+                        FrameworkElementOfNodeForLabel);    // without this NullReferenceException in VisualTreeHelper.GetDpi
 
                 return node.BoundingBox.Center +
                        new Point(
-                           subgraph.DiameterOfOpenCollapseButton / 2,
+                           subgraph.DiameterOfOpenCollapseButton / 2,       // to not overlap Collapse button at top left
                            node.BoundingBox.Height / 2 - size.Height / 2);
             }
-
             return node.BoundingBox.Center;
         }
 
