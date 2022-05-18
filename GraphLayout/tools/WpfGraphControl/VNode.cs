@@ -48,23 +48,24 @@ namespace Microsoft.Msagl.WpfGraphControl {
         }
 
 
-        internal VNode(Node node, FrameworkElement frameworkElementOfNodeForLabelOfLabel,
+        internal VNode(Node node, FrameworkElement frameworkElementOfNodeForLabelOfLabel, LayoutAlgorithmSettings settings,
             Func<Edge, VEdge> funcFromDrawingEdgeToVEdge, Func<double> pathStrokeThicknessFunc, bool createToolTipForNodes)
         {
             PathStrokeThicknessFunc = pathStrokeThicknessFunc;
             Node = node;
             FrameworkElementOfNodeForLabel = frameworkElementOfNodeForLabelOfLabel;
-
             _funcFromDrawingEdgeToVEdge = funcFromDrawingEdgeToVEdge;
 
             CreateNodeBoundaryPath(createToolTipForNodes);
+
             if (FrameworkElementOfNodeForLabel != null)
             {
                 FrameworkElementOfNodeForLabel.Tag = this; //get a backpointer to the VNode
                 Common.PositionFrameworkElement(FrameworkElementOfNodeForLabel, GetLabelPosition(node), 1);
                 Panel.SetZIndex(FrameworkElementOfNodeForLabel, Panel.GetZIndex(BoundaryPath) + 1);
             }
-            SetupSubgraphDrawing();
+
+            SetupSubgraphDrawing(settings);
             Node.Attr.VisualsChanged += (a, b) => Invalidate();
             Node.IsVisibleChanged += obj =>
             {
@@ -87,11 +88,15 @@ namespace Microsoft.Msagl.WpfGraphControl {
             }
         }
 
-        void SetupSubgraphDrawing() {
+        void SetupSubgraphDrawing(LayoutAlgorithmSettings settings) {
             if (_subgraph == null) return;
 
             SetupTopMarginBorder();
             SetupCollapseSymbol();
+
+            // Fix missing margins around label right after the launch
+            var cluster = (Cluster)_subgraph.GeometryObject;
+            cluster.CalculateBoundsFromChildren(settings.ClusterMargin);
         }
 
         void SetupTopMarginBorder() {

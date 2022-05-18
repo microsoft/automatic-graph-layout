@@ -1090,8 +1090,12 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 if (!drawingObjectsToFrameworkElements.TryGetValue(node, out feOfLabel))
                     feOfLabel = CreateAndRegisterFrameworkElementOfDrawingNode(node);
 
-                var vn = new VNode(node, feOfLabel,
-                    e => (VEdge)drawingObjectsToIViewerObjects[e], () => GetBorderPathThickness() * node.Attr.LineWidth, this.CreateToolTipForNodes);
+                var vn = new VNode(
+                    node, 
+                    feOfLabel,
+                    _drawingGraph.LayoutAlgorithmSettings,
+                    e => (VEdge)drawingObjectsToIViewerObjects[e], 
+                    () => GetBorderPathThickness() * node.Attr.LineWidth, this.CreateToolTipForNodes);
 
                 foreach (var fe in vn.FrameworkElements)
                     _graphCanvas.Children.Add(fe);
