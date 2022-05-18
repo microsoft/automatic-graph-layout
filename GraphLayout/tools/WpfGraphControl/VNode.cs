@@ -468,17 +468,34 @@ namespace Microsoft.Msagl.WpfGraphControl {
         Point GetLabelPosition(Node node)
         {
             if (node.Label.Owner is Subgraph subgraph) {
-                var size =
+                var box = node.BoundingBox;
+                var text =
                     GraphViewer.MeasureText(
                         node.LabelText,
                         new FontFamily(node.Label.FontName),
                         node.Label.FontSize,
                         FrameworkElementOfNodeForLabel);    // without this NullReferenceException in VisualTreeHelper.GetDpi
 
-                return node.BoundingBox.Center +
-                       new Point(
-                           subgraph.DiameterOfOpenCollapseButton / 2,       // to not overlap Collapse button at top left
-                           node.BoundingBox.Height / 2 - size.Height / 2);
+                double x = 0;
+                double y = 0;
+
+                switch (subgraph.Attr.ClusterLabelMargin) {
+                    case LgNodeInfo.LabelPlacement.Top:
+                        y = box.Height / 2 - text.Height / 2;
+                        break;
+                    case LgNodeInfo.LabelPlacement.Bottom:
+                        y = - box.Height / 2 + text.Height / 2;
+                        break;
+                    case LgNodeInfo.LabelPlacement.Left:
+                        x = - box.Width / 2 + text.Width / 2;
+                        break;
+                    case LgNodeInfo.LabelPlacement.Right:
+                        x = box.Width / 2 - text.Width / 2;
+                        break;
+                }
+
+                // var button = subgraph.DiameterOfOpenCollapseButton / 2;
+                return box.Center + new Point(x, y);
             }
             return node.BoundingBox.Center;
         }

@@ -1,11 +1,11 @@
 /*
-Microsoft Automatic Graph Layout,MSAGL 
+Microsoft Automatic Graph Layout,MSAGL
 
 Copyright (c) Microsoft Corporation
 
-All rights reserved. 
+All rights reserved.
 
-MIT License 
+MIT License
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -481,7 +481,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
         //        [System.Runtime.InteropServices.DllImportAttribute("user32.dll", EntryPoint = "SetCursorPos")]
         //        [return: System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.Bool)]
-        //        public static extern bool SetCursorPos(int X, int Y);   
+        //        public static extern bool SetCursorPos(int X, int Y);
 
 
         public double CurrentScale {
@@ -490,12 +490,12 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
         /*
                 void Pan(Point vector) {
-            
-            
+
+
                     graphCanvas.RenderTransform = new MatrixTransform(mouseDownTransform[0, 0], mouseDownTransform[0, 1],
                                                                       mouseDownTransform[1, 0], mouseDownTransform[1, 1],
                                                                       mouseDownTransform[0, 2] +vector.X,
-                                                                      mouseDownTransform[1, 2] +vector.Y);            
+                                                                      mouseDownTransform[1, 2] +vector.Y);
                 }
         */
 
@@ -535,7 +535,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public double ZoomFactor {
             get { return CurrentScale / FitFactor; }
@@ -794,7 +794,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
                     else
                         _graphCanvas.Dispatcher.Invoke(PostLayoutStep);
                 }
-                _backgroundWorker = null; //this will signal that we are not under layout anymore          
+                _backgroundWorker = null; //this will signal that we are not under layout anymore
                 if (LayoutComplete != null)
                     LayoutComplete(null, null);
             };
@@ -1091,10 +1091,10 @@ namespace Microsoft.Msagl.WpfGraphControl {
                     feOfLabel = CreateAndRegisterFrameworkElementOfDrawingNode(node);
 
                 var vn = new VNode(
-                    node, 
+                    node,
                     feOfLabel,
                     _drawingGraph.LayoutAlgorithmSettings,
-                    e => (VEdge)drawingObjectsToIViewerObjects[e], 
+                    e => (VEdge)drawingObjectsToIViewerObjects[e],
                     () => GetBorderPathThickness() * node.Attr.LineWidth, this.CreateToolTipForNodes);
 
                 foreach (var fe in vn.FrameworkElements)
@@ -1112,7 +1112,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 ColorAnimation ca = new ColorAnimation(Colors.Green, Colors.White, new Duration(TimeSpan.FromMilliseconds(3000)));
                 //Storyboard sb = new Storyboard();
                 //Storyboard.SetTargetProperty(ca, new PropertyPath("Color"));
-                //Storyboard.SetTarget(ca, brush);            
+                //Storyboard.SetTarget(ca, brush);
                 //sb.Children.Add(ca);
                 //sb.Begin(p);
                 brush.BeginAnimation(SolidColorBrush.ColorProperty, ca);
@@ -1178,8 +1178,9 @@ namespace Microsoft.Msagl.WpfGraphControl {
             }
 
             foreach (
-                Cluster cluster in geometryGraphUnderLayout.RootCluster.AllClustersWideFirstExcludingSelf()) {
-                var subgraph = (Subgraph)cluster.UserData;
+                var cluster in geometryGraphUnderLayout.RootCluster.AllClustersWideFirstExcludingSelf()) {
+                var subgraph = (Subgraph) cluster.UserData;
+
                 if (_graphCanvas.Dispatcher.CheckAccess())
                     cluster.CollapsedBoundary = GetClusterCollapsedBoundary(subgraph);
                 else {
@@ -1187,10 +1188,31 @@ namespace Microsoft.Msagl.WpfGraphControl {
                     _graphCanvas.Dispatcher.Invoke(
                         () => clusterInThread.BoundaryCurve = GetClusterCollapsedBoundary(subgraph));
                 }
-                if (cluster.RectangularBoundary == null)
-                    cluster.RectangularBoundary = new RectangularClusterBoundary();
-                cluster.RectangularBoundary.TopMargin = subgraph.DiameterOfOpenCollapseButton + 0.5 +
-                                                        subgraph.Attr.LineWidth / 2;
+
+                if (cluster.RectangularBoundary == null) {
+                    var lp = subgraph.Attr.ClusterLabelMargin;
+                    var margin = subgraph.Attr.LabelMargin;
+
+                    var label =
+                        MeasureText(
+                            subgraph.LabelText,
+                            new FontFamily(subgraph.Label.FontName),
+                            subgraph.Label.FontSize,
+                            drawingObjectsToFrameworkElements[subgraph]);
+
+                    cluster.RectangularBoundary = new RectangularClusterBoundary {
+                        MinWidth     = label.Width  + 2 * margin,
+                        MinHeight    = label.Height + 2 * margin,
+                        TopMargin    = lp == LgNodeInfo.LabelPlacement.Top    ? label.Height : margin,
+                        BottomMargin = lp == LgNodeInfo.LabelPlacement.Bottom ? label.Height : margin,
+                        LeftMargin   = lp == LgNodeInfo.LabelPlacement.Left   ? label.Width  : margin,
+                        RightMargin  = lp == LgNodeInfo.LabelPlacement.Right  ? label.Width  : margin,
+                    };
+                }
+
+                cluster.RectangularBoundary.TopMargin =
+                    subgraph.DiameterOfOpenCollapseButton + 0.5 + subgraph.Attr.LineWidth/2;
+
                 //AssignLabelWidthHeight(msaglNode, msaglNode.UserData as DrawingObject);
             }
 
@@ -1354,7 +1376,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
         //        void CreateFrameworkElementForEdgeLabel(DrawingEdge edge) {
         //            var textBlock = CreateTextBlockForDrawingObj(edge);
         //            if (textBlock == null) return;
-        //            drawingGraphObjectsToTextBoxes[edge] = textBlock;            
+        //            drawingGraphObjectsToTextBoxes[edge] = textBlock;
         //            textBlock.Tag = new VLabel(edge, textBlock);
         //        }
 
