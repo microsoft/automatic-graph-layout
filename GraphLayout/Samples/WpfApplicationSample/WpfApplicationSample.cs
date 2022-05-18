@@ -293,11 +293,13 @@ namespace WpfApplicationSample
 
 
                 var subgraph = new Subgraph("subgraph1");
+                subgraph.Label.Text = "Outter Subgraph";
                 graph.RootSubgraph.AddSubgraph(subgraph);
                 subgraph.AddNode(graph.FindNode("47"));
                 subgraph.AddNode(graph.FindNode("58"));
 
                 var subgraph2 = new Subgraph("subgraph2");
+                subgraph2.Label.Text = "Inner";
                 subgraph2.Attr.Color = Color.Black;
                 subgraph2.Attr.FillColor = Color.Yellow;
                 subgraph2.AddNode(graph.FindNode("70"));

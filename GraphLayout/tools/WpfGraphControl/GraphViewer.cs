@@ -1370,8 +1370,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
             Func<DrawingObject, FrameworkElement> registeredCreator;
             if (registeredCreators.TryGetValue(drawingObj, out registeredCreator))
                 return registeredCreator(drawingObj);
-            if (drawingObj is Subgraph)
-                return null; //todo: add Label support later
             var labeledObj = drawingObj as ILabeledObject;
             if (labeledObj == null)
                 return null;
