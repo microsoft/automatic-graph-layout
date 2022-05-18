@@ -293,7 +293,7 @@ namespace WpfApplicationSample
 
 
                 var subgraph = new Subgraph("subgraph1");
-                subgraph.Label.Text = "Outter Subgraph";
+                subgraph.Label.Text = "Outer Subgraph";
                 graph.RootSubgraph.AddSubgraph(subgraph);
                 subgraph.AddNode(graph.FindNode("47"));
                 subgraph.AddNode(graph.FindNode("58"));
