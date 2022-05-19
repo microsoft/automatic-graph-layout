@@ -94,7 +94,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
             SetupTopMarginBorder();
             SetupCollapseSymbol();
 
-            // Fix missing margins around label right after the launch
+            // Fix missing margins around label right after the launch https://github.com/microsoft/automatic-graph-layout/pull/313#issuecomment-1130468914
             var cluster = (Cluster)_subgraph.GeometryObject;
             cluster.CalculateBoundsFromChildren(settings.ClusterMargin);
         }

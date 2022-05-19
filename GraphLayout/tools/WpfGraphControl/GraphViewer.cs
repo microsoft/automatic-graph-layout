@@ -984,6 +984,15 @@ namespace Microsoft.Msagl.WpfGraphControl {
             CreateRectToFillCanvas();
             CreateAndPositionGraphBackgroundRectangle();
             CreateVNodes();
+
+            // Fix wrong initial end point if Target is Subgraph https://github.com/microsoft/automatic-graph-layout/pull/313#issuecomment-1130468914
+            LayoutHelpers.RouteAndLabelEdges(
+                _drawingGraph.GeometryGraph, 
+                _drawingGraph.LayoutAlgorithmSettings,
+                _drawingGraph.Edges.Select(e => e.GeometryEdge),
+                0,
+                null);
+
             CreateEdges();
         }
 
