@@ -194,6 +194,8 @@ namespace Microsoft.Msagl.Drawing {
                 UpdateGraphBoundingBoxWithCheck(e);
             foreach (GeomNode n in Graph.Nodes)
                 UpdateGraphBoundingBoxWithCheck(n);
+
+            PropagateChangesToClusterParents();
         }
 
         void DragObjectsForNonRectilinearCase(Point delta, DraggingMode draggingMode) {
