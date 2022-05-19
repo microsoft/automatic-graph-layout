@@ -1210,17 +1210,17 @@ namespace Microsoft.Msagl.WpfGraphControl {
                             drawingObjectsToFrameworkElements[subgraph]);
 
                     var offset =    
-                        lp == LgNodeInfo.LabelPlacement.Top     
+                        lp == LabelPlacement.Top     
                             ? subgraph.DiameterOfOpenCollapseButton         // to not overlap CollapseButton if Label on Top
                             : 0;
 
                     cluster.RectangularBoundary = new RectangularClusterBoundary {
                         MinHeight    = label.Height + 2 * margin,
                         MinWidth     = label.Width  + 2 * margin + offset,
-                        TopMargin    = lp == LgNodeInfo.LabelPlacement.Top    ? label.Height : margin,
-                        BottomMargin = lp == LgNodeInfo.LabelPlacement.Bottom ? label.Height : margin,
-                        LeftMargin   = lp == LgNodeInfo.LabelPlacement.Left   ? label.Width  : margin,
-                        RightMargin  = lp == LgNodeInfo.LabelPlacement.Right  ? label.Width  : margin,
+                        TopMargin    = lp == LabelPlacement.Top    ? label.Height : margin,
+                        BottomMargin = lp == LabelPlacement.Bottom ? label.Height : margin,
+                        LeftMargin   = lp == LabelPlacement.Left   ? label.Width  : margin,
+                        RightMargin  = lp == LabelPlacement.Right  ? label.Width  : margin,
                     };
                 }
 

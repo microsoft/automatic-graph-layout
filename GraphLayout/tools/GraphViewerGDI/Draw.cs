@@ -1057,16 +1057,16 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                 var rb = cluster.RectangularBoundary;
                 double cy = cluster.BoundingBox.Top, cx = rb.Rect.Left + rb.Rect.Width / 2;
                 switch (subgraph.Attr.ClusterLabelMargin) {
-                    case LgNodeInfo.LabelPlacement.Top:
+                    case LabelPlacement.Top:
                         cy -= rb.TopMargin / 2;
                         break;
-                    case LgNodeInfo.LabelPlacement.Bottom:
+                    case LabelPlacement.Bottom:
                         cy -= rb.BottomMargin / 2;
                         break;
-                    case LgNodeInfo.LabelPlacement.Left:
+                    case LabelPlacement.Left:
                         cy -= rb.LeftMargin / 2;
                         break;
-                    case LgNodeInfo.LabelPlacement.Right:
+                    case LabelPlacement.Right:
                         cy -= rb.RightMargin / 2;
                         break;
                 }

@@ -13,7 +13,8 @@ using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.WpfGraphControl;
 using Microsoft.Win32;
 using Color = Microsoft.Msagl.Drawing.Color;
-using LgNodeInfo = Microsoft.Msagl.Core.Layout.LgNodeInfo;
+using LabelPlacement = Microsoft.Msagl.Core.Layout.LabelPlacement;
+
 using ModifierKeys = System.Windows.Input.ModifierKeys;
 using Size = System.Windows.Size;
 
@@ -295,7 +296,7 @@ namespace WpfApplicationSample
 
                 var subgraph = new Subgraph("subgraph1");
                 subgraph.Label.Text = "Outer Subgraph";
-                subgraph.Attr.ClusterLabelMargin = LgNodeInfo.LabelPlacement.Bottom;
+                subgraph.Attr.ClusterLabelMargin = LabelPlacement.Bottom;
                 graph.RootSubgraph.AddSubgraph(subgraph);
                 subgraph.AddNode(graph.FindNode("47"));
                 subgraph.AddNode(graph.FindNode("58"));
@@ -304,7 +305,7 @@ namespace WpfApplicationSample
                 subgraph2.Label.Text = "Inner";
                 subgraph2.Attr.Color = Color.Black;
                 subgraph2.Attr.FillColor = Color.Yellow;
-                subgraph2.Attr.ClusterLabelMargin = LgNodeInfo.LabelPlacement.Left;
+                subgraph2.Attr.ClusterLabelMargin = LabelPlacement.Left;
                 subgraph2.AddNode(graph.FindNode("70"));
                 subgraph2.AddNode(graph.FindNode("71"));
                 subgraph.AddSubgraph(subgraph2);

@@ -486,17 +486,17 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 double y = 0;
 
                 switch (subgraph.Attr.ClusterLabelMargin) {
-                    case LgNodeInfo.LabelPlacement.Top:
+                    case LabelPlacement.Top:
                         x = buttonRadius;   // shift only for Top since CollapseButton is at top left
                         y = box.Height / 2 - text.Height / 2;
                         break;
-                    case LgNodeInfo.LabelPlacement.Bottom:
+                    case LabelPlacement.Bottom:
                         y = - box.Height / 2 + text.Height / 2;
                         break;
-                    case LgNodeInfo.LabelPlacement.Left:
+                    case LabelPlacement.Left:
                         x = - box.Width / 2 + text.Width / 2;
                         break;
-                    case LgNodeInfo.LabelPlacement.Right:
+                    case LabelPlacement.Right:
                         x = box.Width / 2 - text.Width / 2;
                         break;
                 }

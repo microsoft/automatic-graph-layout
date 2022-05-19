@@ -11,7 +11,7 @@ namespace Microsoft.Msagl.Core.Layout {
     /// <summary>
     /// facilitates large graph browsing
     /// </summary>
-    public class LgNodeInfo : LgInfoBase {
+    public partial class LgNodeInfo : LgInfoBase {
         //these needed for shortest path calculations
         internal bool Processed;
         public int PartiteSet;
@@ -63,11 +63,6 @@ namespace Microsoft.Msagl.Core.Layout {
 
         public LabelPlacement LabelPosition = LabelPlacement.Top;
         public object Color;
-
-        public enum LabelPlacement
-        {
-            Top, Bottom, Left, Right
-        };
 
         public static Point GetLabelOffset(LabelPlacement placement)
         {
