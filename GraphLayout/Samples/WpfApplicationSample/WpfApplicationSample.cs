@@ -303,7 +303,7 @@ namespace WpfApplicationSample
                 subgraph2.AddNode(graph.FindNode("70"));
                 subgraph2.AddNode(graph.FindNode("71"));
                 subgraph.AddSubgraph(subgraph2);
-                graph.AddEdge("58", subgraph2.Id);
+                //graph.AddEdge("58", subgraph2.Id);
 
                 graph.Attr.LayerDirection = LayerDirection.LR;
                 graph.LayoutAlgorithmSettings.EdgeRoutingSettings.EdgeRoutingMode = EdgeRoutingMode.Rectilinear;
