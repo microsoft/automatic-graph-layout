@@ -467,9 +467,15 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
         Point GetLabelPosition(Node node)
         {
+            var box = node.BoundingBox;
+
             if (node.Label.Owner is Subgraph subgraph) {
-                var box = node.BoundingBox;
-                var text =
+                var buttonRadius = subgraph.DiameterOfOpenCollapseButton / 2;
+
+                if (_subgraph.GeometryNode is Cluster c && c.IsCollapsed)
+                    return box.Center + new Point(buttonRadius, 0);
+
+                var text = 
                     GraphViewer.MeasureText(
                         node.LabelText,
                         new FontFamily(node.Label.FontName),
@@ -481,6 +487,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
                 switch (subgraph.Attr.ClusterLabelMargin) {
                     case LgNodeInfo.LabelPlacement.Top:
+                        x = buttonRadius;   // shift only for Top since CollapseButton is at top left
                         y = box.Height / 2 - text.Height / 2;
                         break;
                     case LgNodeInfo.LabelPlacement.Bottom:
@@ -494,10 +501,9 @@ namespace Microsoft.Msagl.WpfGraphControl {
                         break;
                 }
 
-                // var button = subgraph.DiameterOfOpenCollapseButton / 2;
                 return box.Center + new Point(x, y);
             }
-            return node.BoundingBox.Center;
+            return box.Center;
         }
 
         public override string ToString() {

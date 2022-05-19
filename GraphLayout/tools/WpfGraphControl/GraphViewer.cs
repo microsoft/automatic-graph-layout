@@ -1209,9 +1209,14 @@ namespace Microsoft.Msagl.WpfGraphControl {
                             subgraph.Label.FontSize,
                             drawingObjectsToFrameworkElements[subgraph]);
 
+                    var offset =    
+                        lp == LgNodeInfo.LabelPlacement.Top     
+                            ? subgraph.DiameterOfOpenCollapseButton         // to not overlap CollapseButton if Label on Top
+                            : 0;
+
                     cluster.RectangularBoundary = new RectangularClusterBoundary {
-                        MinWidth     = label.Width  + 2 * margin,
                         MinHeight    = label.Height + 2 * margin,
+                        MinWidth     = label.Width  + 2 * margin + offset,
                         TopMargin    = lp == LgNodeInfo.LabelPlacement.Top    ? label.Height : margin,
                         BottomMargin = lp == LgNodeInfo.LabelPlacement.Bottom ? label.Height : margin,
                         LeftMargin   = lp == LgNodeInfo.LabelPlacement.Left   ? label.Width  : margin,
