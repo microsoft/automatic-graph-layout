@@ -223,7 +223,7 @@ namespace WindowsApplicationSample {
                     cluster.AddNode(node);
                 }
                 if (horizontal)
-                    cluster.Attr.ClusterLabelMargin = Microsoft.Msagl.Core.Layout.LgNodeInfo.LabelPlacement.Right;
+                    cluster.Attr.ClusterLabelMargin = Microsoft.Msagl.Core.Layout.LabelPlacement.Right;
                 graph.RootSubgraph.AddSubgraph(cluster);
             }
 

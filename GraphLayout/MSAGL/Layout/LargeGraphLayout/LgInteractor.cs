@@ -55,7 +55,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         RailGraph _railGraph;
         Rectangle _visibleRectangle;
 
-        public Dictionary<LgNodeInfo, LgNodeInfo.LabelPlacement> SelectedNodeLabels = new Dictionary<LgNodeInfo, LgNodeInfo.LabelPlacement>();
+        public Dictionary<LgNodeInfo, LabelPlacement> SelectedNodeLabels = new Dictionary<LgNodeInfo, LabelPlacement>();
 
         /// <summary>
         ///     constructor
@@ -3439,7 +3439,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 return new Rectangle(nodeInfo.Center + offset - d, nodeInfo.Center + offset + d);
         }
 
-        Rectangle GetLabelRectForScale(LgNodeInfo nodeInfo, LgNodeInfo.LabelPlacement placement, double scale)
+        Rectangle GetLabelRectForScale(LgNodeInfo nodeInfo, LabelPlacement placement, double scale)
         {
             double labelHeight = _lgLayoutSettings.NodeLabelHeightInInches * _lgLayoutSettings.DpiX / scale /
                                  FitFactor();
@@ -3498,20 +3498,20 @@ return new Rectangle(nodeInfo.Center + offset - d, nodeInfo.Center + offset + d)
                     continue;
                 }
 
-                LgNodeInfo.LabelPlacement[] positions =
+                LabelPlacement[] positions =
                 {
-                    LgNodeInfo.LabelPlacement.Bottom,
-                    LgNodeInfo.LabelPlacement.Right,
-                    LgNodeInfo.LabelPlacement.Left,
-                    LgNodeInfo.LabelPlacement.Top
+                    LabelPlacement.Bottom,
+                    LabelPlacement.Right,
+                    LabelPlacement.Left,
+                    LabelPlacement.Top
                 };
 
                 bool couldPlace = false;
                 var labelRect = new Rectangle();
 
-                LgNodeInfo.LabelPlacement pl = LgNodeInfo.LabelPlacement.Bottom;
+                LabelPlacement pl = LabelPlacement.Bottom;
 
-                foreach (LgNodeInfo.LabelPlacement placement in positions)
+                foreach (LabelPlacement placement in positions)
                 {
                     pl = placement;
                     labelRect = GetLabelRectForScale(node, pl, scale);
@@ -3571,17 +3571,17 @@ return new Rectangle(nodeInfo.Center + offset - d, nodeInfo.Center + offset + d)
                     continue;
                 }
 
-                LgNodeInfo.LabelPlacement[] positions =
+                LabelPlacement[] positions =
                 {
-                    LgNodeInfo.LabelPlacement.Bottom,
-                    LgNodeInfo.LabelPlacement.Right,
-                    LgNodeInfo.LabelPlacement.Left,
-                    LgNodeInfo.LabelPlacement.Top
+                    LabelPlacement.Bottom,
+                    LabelPlacement.Right,
+                    LabelPlacement.Left,
+                    LabelPlacement.Top
                 };
 
                 bool couldPlace = false;
                 var labelRect = new Rectangle();
-                foreach (LgNodeInfo.LabelPlacement placement in positions)
+                foreach (LabelPlacement placement in positions)
                 {
                     node.LabelPosition = placement;
                     labelRect = GetLabelRectForScale(node, scale);

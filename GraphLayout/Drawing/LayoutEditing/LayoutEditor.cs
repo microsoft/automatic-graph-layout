@@ -632,6 +632,8 @@ namespace Microsoft.Msagl.Drawing {
                         DragSomeObjects(e);
                     else if (InsertingEdge)
                         MouseMoveWhenInsertingEdgeAndPressingLeftButton(e);
+                    else
+                        MouseMoveLiveSelectObjectsForDragging(e);
                 } else if(InsertingEdge)
                     HandleMouseMoveWhenInsertingEdgeAndNotPressingLeftButton(e);
             }            
@@ -878,11 +880,6 @@ namespace Microsoft.Msagl.Drawing {
                 else
                     InsertEdgeOnMouseUp();
                 args.Handled = true;
-            }
-            else if (LeftMouseButtonWasPressed) {
-                if (ToggleEntityPredicate(viewer.ModifierKeys, PressedMouseButtons, true) &&
-                    (viewer.ModifierKeys & ModifierKeys.Shift) != ModifierKeys.Shift)
-                    SelectEntitiesForDraggingWithRectangle(args);
             }
             Dragging = false;
             geomGraphEditor.ForgetDragging();
@@ -1264,6 +1261,12 @@ namespace Microsoft.Msagl.Drawing {
                 }
                 e.Handled = true;
             }
+        }
+        void MouseMoveLiveSelectObjectsForDragging(MsaglMouseEventArgs e) {
+            UnselectEverything();
+            if (ToggleEntityPredicate(viewer.ModifierKeys, PressedMouseButtons, true) &&
+                (viewer.ModifierKeys & ModifierKeys.Shift) != ModifierKeys.Shift)
+                SelectEntitiesForDraggingWithRectangle(e);
         }
 
         void DrawEdgeInteractivelyToLocation(MsaglMouseEventArgs e) {

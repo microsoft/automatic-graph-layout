@@ -48,23 +48,24 @@ namespace Microsoft.Msagl.WpfGraphControl {
         }
 
 
-        internal VNode(Node node, FrameworkElement frameworkElementOfNodeForLabelOfLabel,
+        internal VNode(Node node, FrameworkElement frameworkElementOfNodeForLabelOfLabel, LayoutAlgorithmSettings settings,
             Func<Edge, VEdge> funcFromDrawingEdgeToVEdge, Func<double> pathStrokeThicknessFunc, bool createToolTipForNodes)
         {
             PathStrokeThicknessFunc = pathStrokeThicknessFunc;
             Node = node;
             FrameworkElementOfNodeForLabel = frameworkElementOfNodeForLabelOfLabel;
-
             _funcFromDrawingEdgeToVEdge = funcFromDrawingEdgeToVEdge;
 
             CreateNodeBoundaryPath(createToolTipForNodes);
+
             if (FrameworkElementOfNodeForLabel != null)
             {
                 FrameworkElementOfNodeForLabel.Tag = this; //get a backpointer to the VNode
-                Common.PositionFrameworkElement(FrameworkElementOfNodeForLabel, node.GeometryNode.Center, 1);
+                Common.PositionFrameworkElement(FrameworkElementOfNodeForLabel, GetLabelPosition(node), 1);
                 Panel.SetZIndex(FrameworkElementOfNodeForLabel, Panel.GetZIndex(BoundaryPath) + 1);
             }
-            SetupSubgraphDrawing();
+
+            SetupSubgraphDrawing(settings);
             Node.Attr.VisualsChanged += (a, b) => Invalidate();
             Node.IsVisibleChanged += obj =>
             {
@@ -87,11 +88,15 @@ namespace Microsoft.Msagl.WpfGraphControl {
             }
         }
 
-        void SetupSubgraphDrawing() {
+        void SetupSubgraphDrawing(LayoutAlgorithmSettings settings) {
             if (_subgraph == null) return;
 
             SetupTopMarginBorder();
             SetupCollapseSymbol();
+
+            // Fix missing margins around label right after the launch https://github.com/microsoft/automatic-graph-layout/pull/313#issuecomment-1130468914
+            var cluster = (Cluster)_subgraph.GeometryObject;
+            cluster.CalculateBoundsFromChildren(settings.ClusterMargin);
         }
 
         void SetupTopMarginBorder() {
@@ -239,7 +244,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
             Panel.SetZIndex(BoundaryPath, ZIndex);
             SetFillAndStroke();
             if (setNodeToolTips && (
-                Node.Label != null 
+                Node.Label != null
                 && !string.IsNullOrEmpty(Node.LabelText))) {
                 BoundaryPath.ToolTip = Node.LabelText;
                 if (FrameworkElementOfNodeForLabel != null)
@@ -264,7 +269,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
                     Node.Attr.Color.B));
             SetBoundaryFill();
             BoundaryPath.StrokeThickness = PathStrokeThickness;
-            
+
             var textBlock = FrameworkElementOfNodeForLabel as TextBlock;
             if (textBlock != null) {
                 var col = Node.Label.FontColor;
@@ -438,7 +443,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
             BoundaryPath.Data = CreatePathFromNodeBoundary();
 
-            Common.PositionFrameworkElement(FrameworkElementOfNodeForLabel, Node.BoundingBox.Center, 1);
+            Common.PositionFrameworkElement(FrameworkElementOfNodeForLabel, GetLabelPosition(Node), 1);
 
 
             SetFillAndStroke();
@@ -458,6 +463,47 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 _collapseSymbolPath.Visibility =
                     _collapseButtonBorder.Visibility = Visibility.Visible;
 
+        }
+
+        Point GetLabelPosition(Node node)
+        {
+            var box = node.BoundingBox;
+
+            if (node.Label.Owner is Subgraph subgraph) {
+                var buttonRadius = subgraph.DiameterOfOpenCollapseButton / 2;
+
+                if (_subgraph.GeometryNode is Cluster c && c.IsCollapsed)
+                    return box.Center + new Point(buttonRadius, 0);
+
+                var text = 
+                    GraphViewer.MeasureText(
+                        node.LabelText,
+                        new FontFamily(node.Label.FontName),
+                        node.Label.FontSize,
+                        FrameworkElementOfNodeForLabel);    // without this NullReferenceException in VisualTreeHelper.GetDpi
+
+                double x = 0;
+                double y = 0;
+
+                switch (subgraph.Attr.ClusterLabelMargin) {
+                    case LabelPlacement.Top:
+                        x = buttonRadius;   // shift only for Top since CollapseButton is at top left
+                        y = box.Height / 2 - text.Height / 2;
+                        break;
+                    case LabelPlacement.Bottom:
+                        y = - box.Height / 2 + text.Height / 2;
+                        break;
+                    case LabelPlacement.Left:
+                        x = - box.Width / 2 + text.Width / 2;
+                        break;
+                    case LabelPlacement.Right:
+                        x = box.Width / 2 - text.Width / 2;
+                        break;
+                }
+
+                return box.Center + new Point(x, y);
+            }
+            return box.Center;
         }
 
         public override string ToString() {

@@ -598,12 +598,12 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             if (cluster.RectangularBoundary == null) {
                 var lp = dNode.DrawingNode.Attr.ClusterLabelMargin;
                 cluster.RectangularBoundary = new RectangularClusterBoundary() {
-                    BottomMargin = lp == LgNodeInfo.LabelPlacement.Bottom ? height : margin,
-                    LeftMargin = lp == LgNodeInfo.LabelPlacement.Left ? height : margin,
-                    RightMargin = lp == LgNodeInfo.LabelPlacement.Right ? height : margin,
-                    TopMargin = lp == LgNodeInfo.LabelPlacement.Top ? height : margin,
-                    MinWidth = lp == LgNodeInfo.LabelPlacement.Top || lp == LgNodeInfo.LabelPlacement.Bottom ? width : 0,
-                    MinHeight = lp == LgNodeInfo.LabelPlacement.Left || lp == LgNodeInfo.LabelPlacement.Right ? width : 0,
+                    BottomMargin = lp == LabelPlacement.Bottom ? height : margin,
+                    LeftMargin = lp == LabelPlacement.Left ? height : margin,
+                    RightMargin = lp == LabelPlacement.Right ? height : margin,
+                    TopMargin = lp == LabelPlacement.Top ? height : margin,
+                    MinWidth = lp == LabelPlacement.Top || lp == LabelPlacement.Bottom ? width : 0,
+                    MinHeight = lp == LabelPlacement.Left || lp == LabelPlacement.Right ? width : 0,
                 };
             }
             // Filippo Polo: I'm taking this out because I've modified the drawing of a double circle
