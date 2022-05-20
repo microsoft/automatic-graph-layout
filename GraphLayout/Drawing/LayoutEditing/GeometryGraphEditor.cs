@@ -180,20 +180,29 @@ namespace Microsoft.Msagl.Drawing {
             foreach (GeomNode node in objectsToDrag.Where(n => n is GeomNode))
                 node.Center += delta;
 
-            RectilinearInteractiveEditor.CreatePortsAndRouteEdges(LayoutSettings.NodeSeparation/3, 1, graph.Nodes,
+            RectilinearInteractiveEditor.CreatePortsAndRouteEdges(
+                LayoutSettings.NodeSeparation/3, 
+                1, 
+                graph.Nodes,
                 graph.Edges,
                 LayoutSettings.EdgeRoutingSettings.EdgeRoutingMode,
                 true,
-                LayoutSettings.EdgeRoutingSettings
-                    .UseObstacleRectangles,
+                LayoutSettings.EdgeRoutingSettings.UseObstacleRectangles,
                 LayoutSettings.EdgeRoutingSettings.BendPenalty);
-            var labelPlacer = new EdgeLabelPlacement(graph);
-            labelPlacer.Run();
+
+            new EdgeLabelPlacement(graph).Run();
 
             foreach (GeomEdge e in Graph.Edges)
                 UpdateGraphBoundingBoxWithCheck(e);
             foreach (GeomNode n in Graph.Nodes)
                 UpdateGraphBoundingBoxWithCheck(n);
+
+            foreach (var node in objectsToDrag.OfType<Cluster>()) {
+                node.DeepContentsTranslation(delta, false);
+                node.RectangularBoundary.TranslateRectangle(delta);
+            }
+
+            PropagateChangesToClusterParents();
         }
 
         void DragObjectsForNonRectilinearCase(Point delta, DraggingMode draggingMode) {
