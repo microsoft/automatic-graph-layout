@@ -81,26 +81,40 @@ namespace Microsoft.Msagl.Routing.Rectilinear{
             Debug.Assert((EdgeRoutingMode.Rectilinear == edgeRoutingMode) || (EdgeRoutingMode.RectilinearToCenter == edgeRoutingMode)
                         , "Non-rectilinear edgeRoutingMode");
 
-            var nodeShapeMap = new Dictionary<Node, Shape>();
-            foreach (Node node in obstacleNodes)
-            {
-                Shape shape = CreateShapeWithRelativeNodeAtCenter(node);
-                nodeShapeMap.Add(node, shape);
-            }
-
-            var router = new RectilinearEdgeRouter(nodeShapeMap.Values, padding, cornerFitRadius, useSparseVisibilityGraph, useObstacleRectangles)
-            {
+            var nodeShapesMap = new Dictionary<Node, Shape>();
+            FillNodeShapesMap(obstacleNodes, geomEdges, nodeShapesMap);
+            var router = new RectilinearEdgeRouter(nodeShapesMap.Values, padding, cornerFitRadius, useSparseVisibilityGraph, useObstacleRectangles) {
                 RouteToCenterOfObstacles = (edgeRoutingMode == EdgeRoutingMode.RectilinearToCenter),
                 BendPenaltyAsAPercentageOfDistance = bendPenaltyAsAPercentageOfDistance
             };
 
             foreach (var geomEdge in geomEdges) {
                 var edgeGeom = geomEdge.EdgeGeometry;
-                edgeGeom.SourcePort = nodeShapeMap[geomEdge.Source].Ports.First();
-                edgeGeom.TargetPort = nodeShapeMap[geomEdge.Target].Ports.First();
+                edgeGeom.SourcePort = nodeShapesMap[geomEdge.Source].Ports.First();
+                edgeGeom.TargetPort = nodeShapesMap[geomEdge.Target].Ports.First();
                 router.AddEdgeGeometryToRoute(edgeGeom);
             }
             return router;
+        }
+
+        private static void FillNodeShapesMap(IEnumerable<Node> obstacleNodes, IEnumerable<Edge> geomEdges, Dictionary<Node, Shape> nodeShapeMap) {
+            foreach (Node node in obstacleNodes) {
+                Shape shape = CreateShapeWithRelativeNodeAtCenter(node);
+                nodeShapeMap.Add(node, shape);
+            }
+
+            foreach (var e in geomEdges) {
+                var node = e.Source;
+                if (!nodeShapeMap.ContainsKey(node)) {
+
+                    nodeShapeMap.Add(node, CreateShapeWithRelativeNodeAtCenter(node));
+                }
+                node = e.Target;
+                if (!nodeShapeMap.ContainsKey(node)) {
+
+                    nodeShapeMap.Add(node, CreateShapeWithRelativeNodeAtCenter(node));
+                }
+            }
         }
 
         static void CreateSelfEdges(IEnumerable<Edge> selfEdges, double cornerFitRadius) {

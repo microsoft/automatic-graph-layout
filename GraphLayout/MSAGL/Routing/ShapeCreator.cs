@@ -48,7 +48,11 @@ namespace Microsoft.Msagl.Routing
             }
             foreach (var cc in c.Clusters) {
                 GetShapesOnDict(nodesToShapes, cc);
-                cShape.AddChild(nodesToShapes[cc]);
+                nodesToShapes.TryGetValue(cc, out Shape nShape);
+                if (nShape == null) {
+                    nShape = nodesToShapes[cc] = CreateShapeWithCenterPort(cc);
+                }
+                cShape.AddChild(nShape);
             }
         }
 
@@ -61,8 +65,6 @@ namespace Microsoft.Msagl.Routing
         /// <returns>Shape obstacle for the node with simple port</returns>
         static Shape CreateShapeWithCenterPort(Node node)
         {
-            Debug.Assert(node is Cluster == false);
-            // Debug.Assert(ApproximateComparer.Close(node.BoundaryCurve.BoundingBox, node.BoundingBox), "node's curve doesn't fit its bounds!");
             var shape = new RelativeShape(() => node.BoundaryCurve);
             var port = new RelativeFloatingPort(() => node.BoundaryCurve, () => node.Center);
             shape.Ports.Insert(port);

@@ -186,15 +186,26 @@ namespace Microsoft.Msagl.Miscellaneous {
             //todo: what about parent edges!!!!
             var filteredEdgesToRoute =
                 edgesToRoute.Where(e => !e.UnderCollapsedCluster()).ToArray();
-            
+            if (filteredEdgesToRoute.Length == 0)
+                return;
             var ers = layoutSettings.EdgeRoutingSettings;
+            var nodes = new Set<Node>(geometryGraph.Nodes);
+            foreach (var e in filteredEdgesToRoute) {
+                nodes.Insert(e.Source);
+                nodes.Insert(e.Target);
+            }
+            if (geometryGraph.RootCluster != null) {
+                foreach (var c in geometryGraph.RootCluster.Clusters) {
+                    nodes.Insert(c);
+                }
+            }
             var mode = (straighLineRoutingThreshold == 0 || geometryGraph.Nodes.Count < straighLineRoutingThreshold) ? ers.EdgeRoutingMode : EdgeRoutingMode.StraightLine; 
             if (mode == EdgeRoutingMode.Rectilinear ||
                 mode == EdgeRoutingMode.RectilinearToCenter) {
                 RectilinearInteractiveEditor.CreatePortsAndRouteEdges(
                     layoutSettings.NodeSeparation / 3,
                     layoutSettings.NodeSeparation / 3,
-                    geometryGraph.Nodes,
+                    nodes,
                     edgesToRoute,
                     mode,
                     true,
