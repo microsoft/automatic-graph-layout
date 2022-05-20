@@ -195,6 +195,11 @@ namespace Microsoft.Msagl.Drawing {
             foreach (GeomNode n in Graph.Nodes)
                 UpdateGraphBoundingBoxWithCheck(n);
 
+            foreach (var node in objectsToDrag.OfType<Cluster>()) {
+                node.DeepContentsTranslation(delta, false);
+                node.RectangularBoundary.TranslateRectangle(delta);
+            }
+
             PropagateChangesToClusterParents();
         }
 
