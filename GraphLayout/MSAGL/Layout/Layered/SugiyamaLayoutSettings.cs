@@ -437,5 +437,9 @@ namespace Microsoft.Msagl.Layout.Layered {
             set { gridSizeByX = value; }
         }
 
+        /// <summary>
+        /// Settings per Cluster for InitialLayoutByCluster used by LayoutHelpers.ProcessSugiamaLayout
+        /// </summary>
+        public Dictionary<object, LayoutAlgorithmSettings> ClusterSettings { get; set; } = new Dictionary<object, LayoutAlgorithmSettings>();
     }
 }
