@@ -89,7 +89,13 @@ namespace Microsoft.Msagl.Miscellaneous {
 
             if (geometryGraph.RootCluster.Clusters.Any()) {
                 PrepareGraphForInitialLayoutByCluster(geometryGraph, sugiyamaLayoutSettings);
-                var initialBc = new InitialLayoutByCluster(geometryGraph, a => sugiyamaLayoutSettings);
+                var initialBc = 
+                    new InitialLayoutByCluster(
+                        geometryGraph, 
+                        //use different settings per each Cluster if available
+                        c => sugiyamaLayoutSettings.ClusterSettings.ContainsKey(c.UserData) 
+                                 ? sugiyamaLayoutSettings.ClusterSettings[c.UserData] 
+                                 : sugiyamaLayoutSettings);
                 initialBc.Run(cancelToken);
                 //route the rest of the edges, those between the clusters
                 var edgesToRoute = sugiyamaLayoutSettings.EdgeRoutingSettings.EdgeRoutingMode == EdgeRoutingMode.SplineBundling ? geometryGraph.Edges.ToArray() : geometryGraph.Edges.Where(e => e.Curve == null).ToArray();
