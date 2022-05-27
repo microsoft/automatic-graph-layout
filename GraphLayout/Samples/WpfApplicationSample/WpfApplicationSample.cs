@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,8 +8,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Drawing;
+using Microsoft.Msagl.Layout.Layered;
 using Microsoft.Msagl.WpfGraphControl;
 using Microsoft.Win32;
 using Color = Microsoft.Msagl.Drawing.Color;
@@ -295,8 +297,7 @@ namespace WpfApplicationSample
 
 
                 var subgraph = new Subgraph("subgraph1");
-                subgraph.Label.Text = "Outer Subgraph";
-                subgraph.Attr.ClusterLabelMargin = LabelPlacement.Bottom;
+                subgraph.Label.Text = "Outer";
                 graph.RootSubgraph.AddSubgraph(subgraph);
                 subgraph.AddNode(graph.FindNode("47"));
                 subgraph.AddNode(graph.FindNode("58"));
@@ -305,7 +306,7 @@ namespace WpfApplicationSample
                 subgraph2.Label.Text = "Inner";
                 subgraph2.Attr.Color = Color.Black;
                 subgraph2.Attr.FillColor = Color.Yellow;
-                subgraph2.Attr.ClusterLabelMargin = LabelPlacement.Left;
+                subgraph2.Attr.ClusterLabelMargin = LabelPlacement.Bottom;
                 subgraph2.AddNode(graph.FindNode("70"));
                 subgraph2.AddNode(graph.FindNode("71"));
                 subgraph.AddSubgraph(subgraph2);
@@ -313,6 +314,13 @@ namespace WpfApplicationSample
 
                 graph.Attr.LayerDirection = LayerDirection.LR;
                 //graph.LayoutAlgorithmSettings.EdgeRoutingSettings.EdgeRoutingMode = EdgeRoutingMode.Rectilinear;
+                
+                var global = (SugiyamaLayoutSettings) graph.LayoutAlgorithmSettings;
+                var local  = (SugiyamaLayoutSettings) global.Clone();
+                local.Transformation = PlaneTransformation.Rotation(-Math.PI / 2);
+                subgraph2.LayoutSettings = local;   // for Collapsing\Expanding
+                global.ClusterSettings.Add(subgraph2, local);
+
                 graphViewer.Graph = graph;
             }
             catch (Exception e)
