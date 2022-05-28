@@ -97,7 +97,8 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         int NodeIndex(Node node) {
             int index;
-            if (nodeIdToIndex.TryGetValue(node, out index))
+            var unwrapped = nodeIdToIndex.ToDictionary(p => p.Key.UserData as Node, p => p.Value);
+            if (unwrapped.TryGetValue(node, out index))
                 return index;
             return -1;
         }
