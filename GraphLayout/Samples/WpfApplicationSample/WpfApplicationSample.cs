@@ -312,14 +312,15 @@ namespace WpfApplicationSample
                 subgraph.AddSubgraph(subgraph2);
                 graph.AddEdge("58", subgraph2.Id);
 
-                graph.Attr.LayerDirection = LayerDirection.LR;
+                //graph.Attr.LayerDirection = LayerDirection.LR;
                 //graph.LayoutAlgorithmSettings.EdgeRoutingSettings.EdgeRoutingMode = EdgeRoutingMode.Rectilinear;
-                
-                var global = (SugiyamaLayoutSettings) graph.LayoutAlgorithmSettings;
-                var local  = (SugiyamaLayoutSettings) global.Clone();
-                local.Transformation = PlaneTransformation.Rotation(-Math.PI / 2);
-                subgraph2.LayoutSettings = local;   // for Collapsing\Expanding
-                global.ClusterSettings.Add(subgraph2, local);
+
+                graph.LayerConstraints.AddSameLayerNeighbors(
+                    graph.FindNode("47"),
+                    graph.FindNode("58"));
+                graph.LayerConstraints.AddSameLayerNeighbors(
+                    graph.FindNode("70"),
+                    graph.FindNode("71"));
 
                 graphViewer.Graph = graph;
             }
