@@ -749,7 +749,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         internal static void DrawArrow(Graphics g, Brush brush, P2 start, P2 end, double lineWidth,
                                        ArrowStyle arrowStyle) {
             switch (arrowStyle) {
-                case ArrowStyle.NonSpecified:
+                case ArrowStyle.Default:
                 case ArrowStyle.Normal:
 
                     DrawNormalArrow(g, brush, ref start, ref end, lineWidth);

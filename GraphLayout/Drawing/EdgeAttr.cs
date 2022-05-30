@@ -50,7 +50,7 @@ namespace Microsoft.Msagl.Drawing {
         }
 
 
-        ArrowStyle arrowheadAtSource = ArrowStyle.NonSpecified;
+        ArrowStyle arrowheadAtSource = ArrowStyle.Default;
 
         /// <summary>
         /// Arrow style; for the moment only the Normal and None are supported.
@@ -67,7 +67,7 @@ namespace Microsoft.Msagl.Drawing {
         /// <summary>
         /// Arrow style; for the moment only a few are supported.
         /// </summary>
-        ArrowStyle arrowheadAtTarget = ArrowStyle.NonSpecified;
+        ArrowStyle arrowheadAtTarget = ArrowStyle.Default;
 
         /// <summary>
         /// Arrow style; for the moment only the Normal and None are supported.
@@ -107,7 +107,7 @@ namespace Microsoft.Msagl.Drawing {
             }
 
 
-            if (arrowheadAtSource != ArrowStyle.NonSpecified)
+            if (arrowheadAtSource != ArrowStyle.Default)
                 ret = Utils.ConcatWithComma(ret, "arrowhead=" + arrowheadAtSource.ToString().ToLower());
 
 
@@ -137,7 +137,7 @@ namespace Microsoft.Msagl.Drawing {
     /// is true if need to draw an arrow at the source
     /// </summary>
         public bool ArrowAtSource {
-            get { return ! (ArrowheadAtSource == ArrowStyle.NonSpecified || ArrowheadAtSource ==ArrowStyle.None); }
+            get { return ! (ArrowheadAtSource == ArrowStyle.Default || ArrowheadAtSource ==ArrowStyle.None); }
         }
     /// <summary>
     /// gets or sets the position of the arrow head at the source
