@@ -50,7 +50,7 @@ namespace Microsoft.Msagl.Drawing {
         }
 
 
-        ArrowStyle arrowheadAtSource = ArrowStyle.Default;
+        ArrowStyle arrowheadAtSource = ArrowStyle.None;
 
         /// <summary>
         /// Arrow style; for the moment only the Normal and None are supported.
@@ -137,7 +137,7 @@ namespace Microsoft.Msagl.Drawing {
     /// is true if need to draw an arrow at the source
     /// </summary>
         public bool ArrowAtSource {
-            get { return ! (ArrowheadAtSource == ArrowStyle.Default || ArrowheadAtSource ==ArrowStyle.None); }
+            get { return ArrowheadAtSource != ArrowStyle.None; }
         }
     /// <summary>
     /// gets or sets the position of the arrow head at the source
