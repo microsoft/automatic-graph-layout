@@ -19,12 +19,12 @@ namespace Microsoft.Msagl.Drawing {
         /// <summary>
         /// raised when the entity is marked for dragging
         /// </summary>
-        event EventHandler MarkedForDraggingEvent;
+        event EventHandler MarkForDraggingEvent;
 
         /// <summary>
         /// raised when the entity is unmarked for dragging
         /// </summary>
-        event EventHandler UnmarkedForDraggingEvent;
+        event EventHandler UnmarkForDraggingEvent;
 
     }
 }

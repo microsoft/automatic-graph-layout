@@ -46,8 +46,8 @@ namespace Microsoft.Msagl.GraphmapsWpfControl {
         Line AttachmentLine { get; set; }
 #pragma warning disable 0067
 
-        public event EventHandler MarkedForDraggingEvent;
-        public event EventHandler UnmarkedForDraggingEvent;
+        public event EventHandler MarkForDraggingEvent;
+        public event EventHandler UnmarkForDraggingEvent;
 #pragma warning restore 0067
         public void Invalidate()
         {
