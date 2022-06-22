@@ -409,17 +409,17 @@ namespace Microsoft.Msagl.WpfGraphControl {
                 markedForDragging = value;
                 if (value)
                 {
-                    MarkedForDraggingEvent?.Invoke(this, null);
+                    MarkForDraggingEvent?.Invoke(this, null);
                 }
                 else
                 {
-                    UnmarkedForDraggingEvent?.Invoke(this, null);
+                    UnmarkForDraggingEvent?.Invoke(this, null);
                 }
             }
         }
 
-        public event EventHandler MarkedForDraggingEvent;
-        public event EventHandler UnmarkedForDraggingEvent;
+        public event EventHandler MarkForDraggingEvent;
+        public event EventHandler UnmarkForDraggingEvent;
 
         #endregion
 
