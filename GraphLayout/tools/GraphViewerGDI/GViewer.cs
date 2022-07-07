@@ -961,7 +961,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     public IViewerEdge RouteEdge(DrawingEdge drawingEdge) {
       drawingEdge.Label = new Label();
       Edge geometryEdge = drawingEdge.GeometryEdge = new Edge();
-      if (drawingEdge.Attr.ArrowheadAtSource != ArrowStyle.NonSpecified &&
+      if (drawingEdge.Attr.ArrowheadAtSource != ArrowStyle.Default &&
           drawingEdge.Attr.ArrowheadAtSource != ArrowStyle.None)
         geometryEdge.EdgeGeometry.SourceArrowhead = new Arrowhead { Length = drawingEdge.Attr.ArrowheadLength };
       if (drawingEdge.Attr.ArrowheadAtSource != ArrowStyle.None)

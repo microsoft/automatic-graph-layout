@@ -67,11 +67,11 @@ namespace Microsoft.Msagl.GraphViewerGdi {
             set {
                 markedForDragging = value;
                 if (value) {
-                    if (MarkedForDraggingEvent != null)
-                        MarkedForDraggingEvent(this, null);
+                    if (MarkForDraggingEvent != null)
+                        MarkForDraggingEvent(this, null);
                 } else {
-                    if (UnmarkedForDraggingEvent != null)
-                        UnmarkedForDraggingEvent(this, null);
+                    if (UnmarkForDraggingEvent != null)
+                        UnmarkForDraggingEvent(this, null);
                 }
             }
         }
@@ -88,12 +88,12 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         /// <summary>
         /// raised when the entity is marked for dragging
         /// </summary>
-        public event EventHandler MarkedForDraggingEvent;
+        public event EventHandler MarkForDraggingEvent;
 
         /// <summary>
         /// raised when the entity is unmarked for dragging
         /// </summary>
-        public event EventHandler UnmarkedForDraggingEvent;
+        public event EventHandler UnmarkForDraggingEvent;
 
         /// <summary>
         /// the current viewer holding the object

@@ -939,9 +939,9 @@ namespace Microsoft.Msagl.Drawing {
         }
 
         void FinishRoutingEdge() {
-            EdgeGeometry.SourceArrowhead = this.EdgeAttr.ArrowheadAtSource != ArrowStyle.None ? new Arrowhead() { Length = this.EdgeAttr.ArrowheadLength } : null;
+            EdgeGeometry.SourceArrowhead = this.EdgeAttr.ArrowheadAtSource == ArrowStyle.None ? null : new Arrowhead() { Length = this.EdgeAttr.ArrowheadLength };
 
-            EdgeGeometry.TargetArrowhead = this.EdgeAttr.ArrowheadAtTarget != ArrowStyle.None ? new Arrowhead() { Length = this.EdgeAttr.ArrowheadLength } : null;
+            EdgeGeometry.TargetArrowhead = this.EdgeAttr.ArrowheadAtTarget == ArrowStyle.None ? null : new Arrowhead() { Length = this.EdgeAttr.ArrowheadLength };
 
             if (TargetOfInsertedEdge != SourceOfInsertedEdge) {
                 InteractiveEdgeRouter.TryToRemoveInflectionsAndCollinearSegments(EdgeGeometry.SmoothedPolyline);

@@ -128,7 +128,7 @@ namespace Microsoft.Msagl.Drawing {
         ///<summary>
         ///The default.
         ///</summary>
-        NonSpecified,
+        Default,
         /// <summary>
         /// The default.
         /// </summary>
