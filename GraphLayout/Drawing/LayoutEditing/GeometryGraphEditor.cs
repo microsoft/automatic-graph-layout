@@ -121,7 +121,7 @@ namespace Microsoft.Msagl.Drawing {
         internal bool UndoMode {
             get { return undoMode; }
             set { undoMode = value; }
-        }
+        }   
 
 
         /// <summary>
@@ -187,7 +187,6 @@ namespace Microsoft.Msagl.Drawing {
                 graph.Edges,
                 LayoutSettings.EdgeRoutingSettings.EdgeRoutingMode,
                 true,
-                LayoutSettings.EdgeRoutingSettings.UseObstacleRectangles,
                 LayoutSettings.EdgeRoutingSettings.BendPenalty);
 
             new EdgeLabelPlacement(graph).Run();

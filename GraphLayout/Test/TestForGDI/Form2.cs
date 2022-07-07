@@ -591,18 +591,7 @@ namespace TestForGdi {
             }
         }
 
-        
-        internal bool UseObstacleRectangles {
-            get { return null == EdgeRoutingSettings ? false : this.EdgeRoutingSettings.UseObstacleRectangles; }
-            set {
-                // Make sure the EdgeRoutingSettings are there, using the default routing mode.
-                OverrideRoutingSettings = true;
-                if (EdgeRoutingSettings == null) {
-                    EdgeRoutingSettings = new EdgeRoutingSettings();
-                }
-                EdgeRoutingSettings.UseObstacleRectangles = value;
-            }
-        }
+       
 
         internal double BendPenalty {
             get { return null == EdgeRoutingSettings ? SsstRectilinearPath.DefaultBendPenaltyAsAPercentageOfDistance : this.EdgeRoutingSettings.BendPenalty; }

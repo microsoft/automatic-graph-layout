@@ -95,28 +95,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             get { return EdgeGeometries; }
         }
 
-        /// <summary>
-        /// Remove all EdgeGeometries to route
-        /// </summary>
-        public void RemoveAllEdgeGeometriesToRoute() {
-            // Don't call RemoveEdgeGeometryToRoute as it will interrupt the EdgeGeometries enumerator.
-            EdgeGeometries.Clear();
-        }
-
-        /// <summary>
-        /// If true, this router uses a sparse visibility graph, which saves memory for large graphs but
-        /// may choose suboptimal paths.  Set on constructor.
-        /// </summary>
-        public bool UseSparseVisibilityGraph {
-            get { return GraphGenerator is SparseVisibilityGraphGenerator; }
-        }
-
-        /// <summary>
-        /// If true, this router uses obstacle bounding box rectangles in the visibility graph.
-        /// Set on constructor.
-        /// </summary>
-        public bool UseObstacleRectangles { get; private set; }
-
+        
+        
         #region Obstacle API
 
         /// <summary>
@@ -233,7 +213,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 
         private void CreatePaddedObstacle(Shape shape) {
-            var obstacle = new Obstacle(shape, this.UseObstacleRectangles, this.Padding);
+            var obstacle = new Obstacle(shape, this.Padding);
             this.ShapeToObstacleMap[shape] = obstacle;
             this.PortManager.CreateObstaclePorts(obstacle);
         }
@@ -337,22 +317,10 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         /// <param name="obstacles">The collection of shapes to route around. Contains all source and target shapes
         /// as well as any intervening obstacles.</param>
         public RectilinearEdgeRouter(IEnumerable<Shape> obstacles)
-            : this(obstacles, DefaultPadding, DefaultCornerFitRadius, useSparseVisibilityGraph: false, useObstacleRectangles: false) {
+            : this(obstacles, DefaultPadding, DefaultCornerFitRadius, useSparseVisibilityGraph: false) {
         }
 
-        /// <summary>
-        /// Constructor for a router that does not use obstacle rectangles in the visibility graph.
-        /// </summary>
-        /// <param name="obstacles">The collection of shapes to route around. Contains all source and target shapes
-        /// as well as any intervening obstacles.</param>
-        /// <param name="padding">The minimum padding from an obstacle's curve to its enclosing polyline.</param>
-        /// <param name="cornerFitRadius">The radius of the arc inscribed into path corners</param>
-        /// <param name="useSparseVisibilityGraph">If true, use a sparse visibility graph, which saves memory for large graphs
-        /// but may select suboptimal paths</param>
-        public RectilinearEdgeRouter(IEnumerable<Shape> obstacles, double padding, double cornerFitRadius, bool useSparseVisibilityGraph)
-            : this(obstacles, padding, cornerFitRadius, useSparseVisibilityGraph, useObstacleRectangles: false) {
-        }
-
+        
         /// <summary>
         /// Constructor specifying graph and shape information.
         /// </summary>
@@ -364,7 +332,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         /// but may select suboptimal paths</param>
         /// <param name="useObstacleRectangles">Use obstacle bounding boxes in visibility graph</param>
         public RectilinearEdgeRouter(IEnumerable<Shape> obstacles, double padding, double cornerFitRadius,
-                                    bool useSparseVisibilityGraph, bool useObstacleRectangles) {
+                                    bool useSparseVisibilityGraph) {
             Padding = padding;
             CornerFitRadius = cornerFitRadius;
             BendPenaltyAsAPercentageOfDistance = SsstRectilinearPath.DefaultBendPenaltyAsAPercentageOfDistance;
@@ -374,23 +342,11 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             else {
                 this.GraphGenerator = new FullVisibilityGraphGenerator();
             }
-            this.UseObstacleRectangles = useObstacleRectangles;
             PortManager = new PortManager(GraphGenerator);
             AddShapes(obstacles);
         }
 
-        /// <summary>
-        /// Constructor specifying graph information.
-        /// </summary>
-        /// <param name="graph">The graph whose edges are being routed.</param>
-        /// <param name="padding">The minimum padding from an obstacle's curve to its enclosing polyline.</param>
-        /// <param name="cornerFitRadius">The radius of the arc inscribed into path corners</param>
-        /// <param name="useSparseVisibilityGraph">If true, use a sparse visibility graph, which saves memory for large graphs
-        /// but may select suboptimal paths</param>
-        public RectilinearEdgeRouter(GeometryGraph graph, double padding, double cornerFitRadius, bool useSparseVisibilityGraph)
-            : this(graph, padding, cornerFitRadius, useSparseVisibilityGraph, useObstacleRectangles: false) {
-        }
-
+        
         /// <summary>
         /// Constructor specifying graph information.
         /// </summary>
@@ -401,8 +357,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         /// but may select suboptimal paths</param>
         /// <param name="useObstacleRectangles">If true, use obstacle bounding boxes in visibility graph</param>
         public RectilinearEdgeRouter(GeometryGraph graph, double padding, double cornerFitRadius,
-                                    bool useSparseVisibilityGraph, bool useObstacleRectangles)
-            : this(ShapeCreator.GetShapes(graph), padding, cornerFitRadius, useSparseVisibilityGraph, useObstacleRectangles) {
+                                    bool useSparseVisibilityGraph)
+            : this(ShapeCreator.GetShapes(graph), padding, cornerFitRadius, useSparseVisibilityGraph) {
             ValidateArg.IsNotNull(graph, "graph");
             foreach (var edge in graph.Edges) {
                 this.AddEdgeGeometryToRoute(edge.EdgeGeometry);

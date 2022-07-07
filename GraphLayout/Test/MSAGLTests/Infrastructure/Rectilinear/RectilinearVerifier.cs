@@ -196,7 +196,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         /// <returns>The instantiated router</returns>
         internal virtual RectilinearEdgeRouterWrapper CreateRouter(IEnumerable<Shape> obstacles) {
             return new RectilinearEdgeRouterWrapper(obstacles, this.RouterPadding, this.RouterEdgeSeparation,
-                                                    this.RouteToCenterOfObstacles, this.UseSparseVisibilityGraph, this.UseObstacleRectangles) {
+                                                    this.RouteToCenterOfObstacles, this.UseSparseVisibilityGraph) {
                     WantNudger = this.WantNudger,
                     WantPaths = this.WantPaths,
                     WantVerify = this.WantVerify,

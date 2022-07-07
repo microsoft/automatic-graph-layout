@@ -28,9 +28,9 @@ namespace Microsoft.Msagl.Routing.Rectilinear{
         static public void CreatePortsAndRouteEdges(double cornerFitRadius, double padding
                             , IEnumerable<Node> obstacleNodes, IEnumerable<Edge> geometryEdges
                             , EdgeRoutingMode edgeRoutingMode, bool useSparseVisibilityGraph
-                            , bool useObstacleRectangles, double bendPenaltyAsAPercentageOfDistance, CancelToken ct = null) {
+                            , double bendPenaltyAsAPercentageOfDistance, CancelToken ct = null) {
             var r = FillRouter(cornerFitRadius, padding, obstacleNodes, geometryEdges, edgeRoutingMode, useSparseVisibilityGraph
-                            , useObstacleRectangles, bendPenaltyAsAPercentageOfDistance);
+                            ,  bendPenaltyAsAPercentageOfDistance);
             r.Run(ct);
             CreateSelfEdges(geometryEdges.Where(e => e.SourcePort.Location == e.TargetPort.Location), cornerFitRadius);
         }
@@ -51,7 +51,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear{
                             , EdgeRoutingMode edgeRoutingMode, bool useSparseVisibilityGraph
                             , bool useObstacleRectangles) {
             CreatePortsAndRouteEdges(cornerFitRadius, padding, obstacleNodes, geometryEdges, edgeRoutingMode
-                            , useSparseVisibilityGraph, useObstacleRectangles, SsstRectilinearPath.DefaultBendPenaltyAsAPercentageOfDistance);
+                            , useSparseVisibilityGraph,  SsstRectilinearPath.DefaultBendPenaltyAsAPercentageOfDistance);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear{
                             , EdgeRoutingMode edgeRoutingMode, bool useSparseVisibilityGraph)
         {
             CreatePortsAndRouteEdges(cornerFitRadius, padding, obstacleNodes, geometryEdges, edgeRoutingMode
-                            , useSparseVisibilityGraph, false, SsstRectilinearPath.DefaultBendPenaltyAsAPercentageOfDistance);
+                            , useSparseVisibilityGraph, SsstRectilinearPath.DefaultBendPenaltyAsAPercentageOfDistance);
         }
 
         /// <summary>
@@ -77,13 +77,13 @@ namespace Microsoft.Msagl.Routing.Rectilinear{
         /// </summary>
         /// <returns>The populated RectilinearEdgeRouter</returns>
         static RectilinearEdgeRouter FillRouter(double cornerFitRadius, double padding, IEnumerable<Node> obstacleNodes, IEnumerable<Edge> geomEdges
-                            , EdgeRoutingMode edgeRoutingMode, bool useSparseVisibilityGraph, bool useObstacleRectangles, double bendPenaltyAsAPercentageOfDistance) {
+                            , EdgeRoutingMode edgeRoutingMode, bool useSparseVisibilityGraph, double bendPenaltyAsAPercentageOfDistance) {
             Debug.Assert((EdgeRoutingMode.Rectilinear == edgeRoutingMode) || (EdgeRoutingMode.RectilinearToCenter == edgeRoutingMode)
                         , "Non-rectilinear edgeRoutingMode");
 
             var nodeShapesMap = new Dictionary<Node, Shape>();
             FillNodeShapesMap(obstacleNodes, geomEdges, nodeShapesMap);
-            var router = new RectilinearEdgeRouter(nodeShapesMap.Values, padding, cornerFitRadius, useSparseVisibilityGraph, useObstacleRectangles) {
+            var router = new RectilinearEdgeRouter(nodeShapesMap.Values, padding, cornerFitRadius, useSparseVisibilityGraph) {
                 RouteToCenterOfObstacles = (edgeRoutingMode == EdgeRoutingMode.RectilinearToCenter),
                 BendPenaltyAsAPercentageOfDistance = bendPenaltyAsAPercentageOfDistance
             };

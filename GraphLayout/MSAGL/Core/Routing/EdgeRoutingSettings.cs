@@ -68,11 +68,7 @@ namespace Microsoft.Msagl.Core.Routing {
         public BundlingSettings BundlingSettings { get; set; }
 
         
-        /// <summary>
-        /// For rectilinear, whether to use obstacle bounding boxes in the visibility graph.
-        /// </summary>
-        public bool UseObstacleRectangles { get; set; }
-
+        
         double routingToParentConeAngle = Math.PI/6;
 
         /// <summary>

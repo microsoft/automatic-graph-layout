@@ -36,7 +36,6 @@ namespace SvgLayerSample.Svg {
             }
 
             var routingSettings = new Microsoft.Msagl.Core.Routing.EdgeRoutingSettings {
-                UseObstacleRectangles = true,
                 BendPenalty = 100,
                 EdgeRoutingMode = Microsoft.Msagl.Core.Routing.EdgeRoutingMode.StraightLine
             };

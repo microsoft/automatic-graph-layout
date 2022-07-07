@@ -305,8 +305,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                     //todo: are these good values?
                     var rer = new RectilinearEdgeRouter(originalGraph, sugiyamaSettings.NodeSeparation/3,
                                                         sugiyamaSettings.NodeSeparation/4,
-                                                        true,
-                                                        sugiyamaSettings.EdgeRoutingSettings.UseObstacleRectangles);
+                                                        true);
                     rer.RouteToCenterOfObstacles = routingSettings.EdgeRoutingMode ==
                                                    EdgeRoutingMode.RectilinearToCenter;
                     rer.BendPenaltyAsAPercentageOfDistance = routingSettings.BendPenalty;

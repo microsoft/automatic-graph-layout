@@ -215,7 +215,6 @@ namespace Microsoft.Msagl.Miscellaneous {
                     edgesToRoute,
                     mode,
                     true,
-                    ers.UseObstacleRectangles,
                     ers.BendPenalty, cancelToken);
             }
             else if (mode == EdgeRoutingMode.Spline || mode == EdgeRoutingMode.SugiyamaSplines) {

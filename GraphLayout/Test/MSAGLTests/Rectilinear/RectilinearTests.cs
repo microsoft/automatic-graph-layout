@@ -3530,7 +3530,8 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
             {
                 Intersect = point;
                 var shape = createPolylineFunc(Intersect - new Point(0.1, 0.1), Intersect + new Point(0.1, 0.1));
-                Group = new Obstacle(shape, makeRect:false, padding:1.0);
+                Group = new 
+                    Obstacle(shape, padding:1.0);
             }
         }
 

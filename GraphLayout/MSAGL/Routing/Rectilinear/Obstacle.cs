@@ -24,22 +24,13 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         /// Only public to make the compiler happy about the "where TPoly : new" constraint.
         /// Will be populated by caller.
         /// </summary>
-        public Obstacle(Shape shape, bool makeRect, double padding) {
-            if (makeRect) {
-#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=369 there are no structs in js
-                var paddedBox = shape.BoundingBox.Clone();
-#else
-                var paddedBox = shape.BoundingBox;
-#endif
-                paddedBox.Pad(padding);
-                this.PaddedPolyline = Curve.PolyFromBox(paddedBox);
-            } else {
-                this.PaddedPolyline = InteractiveObstacleCalculator.PaddedPolylineBoundaryOfNode(shape.BoundaryCurve, padding);
+        public Obstacle(Shape shape, double padding) {
+                           this.PaddedPolyline = InteractiveObstacleCalculator.PaddedPolylineBoundaryOfNode(shape.BoundaryCurve, padding);
 #if TEST_MSAGL || VERIFY_MSAGL
                 // This throws if the polyline is nonconvex.
-                VisibilityGraph.CheckThatPolylineIsConvex(this.PaddedPolyline);
+                // VisibilityGraph.CheckThatPolylineIsConvex(this.PaddedPolyline);
 #endif // TEST || VERIFY
-            }
+            
 
             RoundVerticesAndSimplify(this.PaddedPolyline);
             this.IsRectangle = this.IsPolylineRectangle();

@@ -833,8 +833,7 @@ namespace Microsoft.Msagl.Drawing {
             var geomGraph = viewer.Graph.GeometryGraph;
             var settings = viewer.Graph.LayoutAlgorithmSettings;
             RectilinearInteractiveEditor.CreatePortsAndRouteEdges(settings.NodeSeparation / 3, 1, geomGraph.Nodes, geomGraph.Edges,
-                                         settings.EdgeRoutingSettings.EdgeRoutingMode, true,
-                                         settings.EdgeRoutingSettings.UseObstacleRectangles, settings.EdgeRoutingSettings.BendPenalty);
+                                         settings.EdgeRoutingSettings.EdgeRoutingMode, true, settings.EdgeRoutingSettings.BendPenalty);
             var labelPlacer = new EdgeLabelPlacement(geomGraph);
             labelPlacer.Run();
 
