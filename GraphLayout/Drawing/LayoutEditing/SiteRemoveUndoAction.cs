@@ -6,8 +6,8 @@ using GeomEdge = Microsoft.Msagl.Core.Layout.Edge;
 
 namespace Microsoft.Msagl.Drawing {
     internal class SiteRemoveUndoAction:UndoRedoAction {
-        Site removedSite;
-        internal Site RemovedSite {
+        CornerSite removedSite;
+        internal CornerSite RemovedSite {
             get { return removedSite; }
             set { 
                 removedSite = value;
@@ -29,8 +29,8 @@ namespace Microsoft.Msagl.Drawing {
         /// undoes the editing
         /// </summary>
         public override void Undo() {
-            Site prev = RemovedSite.Previous;
-            Site next = RemovedSite.Next;
+            CornerSite prev = RemovedSite.Previous;
+            CornerSite next = RemovedSite.Next;
             prev.Next = RemovedSite;
             next.Previous = RemovedSite;
             GeometryGraphEditor.DragEdgeWithSite(new Point(0, 0), editedEdge, prev);
@@ -40,8 +40,8 @@ namespace Microsoft.Msagl.Drawing {
         /// redoes the editing
         /// </summary>
         public override void Redo() {
-            Site prev = RemovedSite.Previous;
-            Site next = RemovedSite.Next;
+            CornerSite prev = RemovedSite.Previous;
+            CornerSite next = RemovedSite.Next;
             prev.Next = next;
             next.Previous = prev;
             GeometryGraphEditor.DragEdgeWithSite(new Point(0, 0), editedEdge, prev);

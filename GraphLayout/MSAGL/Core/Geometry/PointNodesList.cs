@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace Microsoft.Msagl.Core.Geometry {
     internal class PointNodesList : IEnumerator<Point>, IEnumerable<Point> {
-        Site current, head;
+        CornerSite current, head;
 
-        Site Head {
+        CornerSite Head {
             get { return head; }
         }
 
-        internal PointNodesList(Site pointNode) {
+        internal PointNodesList(CornerSite pointNode) {
             head = pointNode;
         }
 

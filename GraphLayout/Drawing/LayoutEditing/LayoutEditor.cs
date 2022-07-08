@@ -23,9 +23,9 @@ namespace Microsoft.Msagl.Drawing {
 
         internal IViewerObject ActiveDraggedObject { get; set; }
 
-        internal Site PolylineVertex { get; set; }
+        internal CornerSite PolylineVertex { get; set; }
 
-        Tuple<Site, PolylineCornerType> cornerInfo;
+        Tuple<CornerSite, PolylineCornerType> cornerInfo;
 
         readonly Dictionary<IViewerObject, VoidDelegate> decoratorRemovalsDict =
             new Dictionary<IViewerObject, VoidDelegate>();
@@ -1015,7 +1015,7 @@ namespace Microsoft.Msagl.Drawing {
 
         void CheckIfDraggingPolylineVertex(MsaglMouseEventArgs e) {
             if (SelectedEdge != null && SelectedEdge.Edge.GeometryEdge.UnderlyingPolyline!=null) {
-                Site site = SelectedEdge.Edge.GeometryEdge.UnderlyingPolyline.HeadSite;
+                CornerSite site = SelectedEdge.Edge.GeometryEdge.UnderlyingPolyline.HeadSite;
                 do {
                     if (MouseScreenPointIsCloseEnoughToVertex(site.Point,
                                                               SelectedEdge.RadiusOfPolylineCorner +
@@ -1093,19 +1093,19 @@ namespace Microsoft.Msagl.Drawing {
         /// <returns>null if a corner is not found</returns>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Polyline"),
          SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public Tuple<Site, PolylineCornerType> AnalyzeInsertOrDeletePolylineCorner(Point point, double tolerance) {
+        public Tuple<CornerSite, PolylineCornerType> AnalyzeInsertOrDeletePolylineCorner(Point point, double tolerance) {
             if (SelectedEdge == null)
                 return null;
 
             tolerance += SelectedEdge.Edge.Attr.LineWidth;
-            Site corner=GeometryGraphEditor.FindCornerForEdit(SelectedEdge.Edge.GeometryEdge.UnderlyingPolyline, point,
+            CornerSite corner=GeometryGraphEditor.FindCornerForEdit(SelectedEdge.Edge.GeometryEdge.UnderlyingPolyline, point,
                                                            tolerance);
             if (corner != null)
-                return new Tuple<Site, PolylineCornerType>(corner, PolylineCornerType.CornerToDelete);
+                return new Tuple<CornerSite, PolylineCornerType>(corner, PolylineCornerType.CornerToDelete);
 
             corner = GeometryGraphEditor.GetPreviousSite(SelectedEdge.Edge.GeometryEdge, point);
             if (corner != null)
-                return new Tuple<Site, PolylineCornerType>(corner, PolylineCornerType.PreviousCornerForInsertion);
+                return new Tuple<CornerSite, PolylineCornerType>(corner, PolylineCornerType.PreviousCornerForInsertion);
 
             return null;
         }
@@ -1204,7 +1204,7 @@ namespace Microsoft.Msagl.Drawing {
         /// <param name="point"></param>
         /// <param name="previousCorner"></param>
         [SuppressMessage("Microsoft.Naming","CA1704:IdentifiersShouldBeSpelledCorrectly",MessageId = "Polyline")]
-        public void InsertPolylineCorner(Point point,Site previousCorner) {
+        public void InsertPolylineCorner(Point point,CornerSite previousCorner) {
             geomGraphEditor.InsertSite(SelectedEdge.Edge.GeometryEdge,point,previousCorner,SelectedEdge);
             viewer.Invalidate(SelectedEdge);
         }
@@ -1219,7 +1219,7 @@ namespace Microsoft.Msagl.Drawing {
         /// delete the polyline corner, shortcut it.
         /// </summary>
         /// <param name="corner"></param>
-        public void DeleteCorner(Site corner) {
+        public void DeleteCorner(CornerSite corner) {
             geomGraphEditor.DeleteSite(SelectedEdge.Edge.GeometryEdge,corner,SelectedEdge);
             viewer.Invalidate(SelectedEdge);
             viewer.OnDragEnd(new IViewerObject [] { SelectedEdge });

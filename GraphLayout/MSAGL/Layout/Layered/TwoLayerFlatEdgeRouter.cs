@@ -160,9 +160,9 @@ namespace Microsoft.Msagl.Layout.Layered {
             interactiveEdgeRouter.RouteSplineFromPortToPortWhenTheWholeGraphIsReady(sourcePort, labelPort, true, out poly0);
             SmoothedPolyline poly1;
             interactiveEdgeRouter.RouteSplineFromPortToPortWhenTheWholeGraphIsReady(labelPort, targetPort, true, out poly1);
-            Site site = poly1.HeadSite.Next;
+            CornerSite site = poly1.HeadSite.Next;
 
-            Site lastSite = poly0.LastSite;
+            CornerSite lastSite = poly0.LastSite;
             lastSite.Next = site;
             site.Previous = lastSite;
             var eg = intEdge.Edge.EdgeGeometry;

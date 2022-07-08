@@ -231,13 +231,13 @@ namespace Microsoft.Msagl.Routing
             var p3 = p0 + new Point(dx, -dy);
             var p4 = p0 + new Point(0, -dy);
 
-            var site = new Site(p0);
+            var site = new CornerSite(p0);
             var polyline = new SmoothedPolyline(site);
-            site = new Site(site, p1);
-            site = new Site(site, p2);
-            site = new Site(site, p3);
-            site = new Site(site, p4);
-            new Site(site, p0);
+            site = new CornerSite(site, p1);
+            site = new CornerSite(site, p2);
+            site = new CornerSite(site, p3);
+            site = new CornerSite(site, p4);
+            new CornerSite(site, p0);
             return polyline;
         }
 

@@ -320,9 +320,9 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
 #endif
 
         void SmoothCorners(SmoothedPolyline edgePolyline) {
-            Site a = edgePolyline.HeadSite; //the corner start
-            Site b; //the corner origin
-            Site c; //the corner other end
+            CornerSite a = edgePolyline.HeadSite; //the corner start
+            CornerSite b; //the corner origin
+            CornerSite c; //the corner other end
             const double mult = 1.5;
 
             while (Curve.FindCorner(a, out b, out c)) {
@@ -366,17 +366,17 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
             bool progress = true;
             while (progress) {
                 progress = false;
-                for (Site s = underlyingPolyline.HeadSite; s != null && s.Next != null; s = s.Next) {
+                for (CornerSite s = underlyingPolyline.HeadSite; s != null && s.Next != null; s = s.Next) {
                     if (s.Turn * s.Next.Turn < 0)
                         progress = TryToRemoveInflectionEdge(ref s) || progress;
                 }
             }
         }
 
-        bool TryToRemoveInflectionEdge(ref Site s) {
+        bool TryToRemoveInflectionEdge(ref CornerSite s) {
             if (!obstacleCalculator.ObstaclesIntersectLine(s.Previous.Point, s.Next.Point)) {
-                Site a = s.Previous; //forget s
-                Site b = s.Next;
+                CornerSite a = s.Previous; //forget s
+                CornerSite b = s.Next;
                 a.Next = b;
                 b.Previous = a;
                 s = a;
@@ -384,8 +384,8 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
             }
             if (!obstacleCalculator.ObstaclesIntersectLine(s.Previous.Point, s.Next.Next.Point)) {
                 //forget about s and s.Next
-                Site a = s.Previous;
-                Site b = s.Next.Next;
+                CornerSite a = s.Previous;
+                CornerSite b = s.Next.Next;
                 a.Next = b;
                 b.Previous = a;
                 s = a;
@@ -393,7 +393,7 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
             }
             if (!obstacleCalculator.ObstaclesIntersectLine(s.Point, s.Next.Next.Point)) {
                 //forget about s.Next
-                Site b = s.Next.Next;
+                CornerSite b = s.Next.Next;
                 s.Next = b;
                 b.Previous = s;
                 return true;

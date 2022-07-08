@@ -116,13 +116,13 @@ foreach (var intEdgeList in Database.RegularMultiedges) {
                         Point p3 = p0 + new Point(dx, -dy);
                         Point p4 = p0 + new Point(0, -dy);
 
-                        var s = new Site(p0);
+                        var s = new CornerSite(p0);
                         var polyline = new SmoothedPolyline(s);
-                        s = new Site(s, p1);
-                        s = new Site(s, p2);
-                        s = new Site(s, p3);
-                        s = new Site(s, p4);
-                        new Site(s, p0);
+                        s = new CornerSite(s, p1);
+                        s = new CornerSite(s, p2);
+                        s = new CornerSite(s, p3);
+                        s = new CornerSite(s, p4);
+                        new CornerSite(s, p0);
 
                         Curve c;
                         intEdge.Curve = c = polyline.CreateCurve();

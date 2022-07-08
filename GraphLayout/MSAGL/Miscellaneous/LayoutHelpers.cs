@@ -292,7 +292,7 @@ namespace Microsoft.Msagl.Miscellaneous {
 
         static void TransformUnderlyingPolyline(Edge e, SugiyamaLayoutSettings settings) {
             if (e.UnderlyingPolyline != null) {
-                for (Site s = e.UnderlyingPolyline.HeadSite; s != null; s = s.Next) {
+                for (CornerSite s = e.UnderlyingPolyline.HeadSite; s != null; s = s.Next) {
                     s.Point = settings.Transformation * s.Point;
                 }
             }

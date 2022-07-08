@@ -9,11 +9,11 @@ namespace Microsoft.Msagl.Drawing {
     /// undoes/redoes edge editing when dragging the smoothed polyline corner
     /// </summary>
     public class SiteInsertUndoAction : UndoRedoAction {
-        Site insertedSite;
+        CornerSite insertedSite;
         Point insertionPoint;
-        Site prevSite;
+        CornerSite prevSite;
 
-        internal Site PrevSite {
+        internal CornerSite PrevSite {
             get { return prevSite; }
             set { prevSite = value; }
         }
@@ -46,7 +46,7 @@ namespace Microsoft.Msagl.Drawing {
             set { insertionPoint = value; }
         }
 
-        internal Site InsertedSite {
+        internal CornerSite InsertedSite {
             get { return insertedSite; }
             set {
                 insertedSite = value;
@@ -72,8 +72,8 @@ namespace Microsoft.Msagl.Drawing {
         /// undoes the editing
         /// </summary>
         public override void Undo() {
-            Site prev = InsertedSite.Previous;
-            Site next = InsertedSite.Next;
+            CornerSite prev = InsertedSite.Previous;
+            CornerSite next = InsertedSite.Next;
             prev.Next = next;
             next.Previous = prev;
             GeometryGraphEditor.DragEdgeWithSite(new Point(0, 0), editedEdge, prev);
@@ -83,7 +83,7 @@ namespace Microsoft.Msagl.Drawing {
         /// redoes the editing
         /// </summary>
         public override void Redo() {
-            insertedSite = new Site(PrevSite, InsertionPoint, PrevSite.Next);
+            insertedSite = new CornerSite(PrevSite, InsertionPoint, PrevSite.Next);
             insertedSite.NextBezierSegmentFitCoefficient = this.SiteKNext;
             insertedSite.PreviousBezierSegmentFitCoefficient = this.SiteKPrevious;
             GeometryGraphEditor.DragEdgeWithSite(new Point(0, 0), editedEdge, insertedSite);

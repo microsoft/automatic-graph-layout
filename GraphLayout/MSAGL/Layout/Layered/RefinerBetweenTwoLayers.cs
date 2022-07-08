@@ -13,10 +13,10 @@ namespace Microsoft.Msagl.Layout.Layered {
     internal class RefinerBetweenTwoLayers {
         int topNode;
         int bottomNode;
-        Site topSite;
-        Site bottomSite;
-        Site currentTopSite;
-        Site currentBottomSite;
+        CornerSite topSite;
+        CornerSite bottomSite;
+        CornerSite currentTopSite;
+        CornerSite currentBottomSite;
         LayerArrays layerArrays;
         ProperLayeredGraph layeredGraph;
         GeometryGraph originalGraph;
@@ -29,7 +29,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         RefinerBetweenTwoLayers(
                 int topNodeP,
                 int bottomNodeP,
-                Site topSiteP,
+                CornerSite topSiteP,
                 LayerArrays layerArraysP,
                 ProperLayeredGraph layeredGraphP, GeometryGraph originalGraphP, Anchor[] anchorsP, double layerSeparation) {
             this.topNode = topNodeP;
@@ -48,7 +48,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         internal static void Refine(
             int topNodeP,
             int bottomNode,
-            Site topSiteP,
+            CornerSite topSiteP,
             Anchor[] anchors,
             LayerArrays layerArraysP,
             ProperLayeredGraph layeredGraph,
@@ -107,7 +107,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             if (!someBottomCorners)
                 return false;
             if (!ApproximateComparer.Close(cotan, AbsCotan(mainSeg))) {
-                currentBottomSite = new Site(currentTopSite, FixCorner(currentTopSite.Point, vOfNewSite, currentBottomSite.Point), currentBottomSite);//consider a different FixCorner
+                currentBottomSite = new CornerSite(currentTopSite, FixCorner(currentTopSite.Point, vOfNewSite, currentBottomSite.Point), currentBottomSite);//consider a different FixCorner
                 return true;
             }
 
@@ -136,7 +136,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             if (!someTopCorners)
                 return false;
             if (!ApproximateComparer.Close(cotan, AbsCotan(mainSeg))) {
-                currentTopSite = new Site(currentTopSite,
+                currentTopSite = new CornerSite(currentTopSite,
                     FixCorner(currentTopSite.Point, vOfNewSite, currentBottomSite.Point),
                     currentBottomSite
                     );//consider a different FixCorner

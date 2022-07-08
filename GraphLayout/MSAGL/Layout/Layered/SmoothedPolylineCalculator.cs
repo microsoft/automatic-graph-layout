@@ -15,7 +15,7 @@ using Microsoft.Msagl.Layout.MDS;
 namespace Microsoft.Msagl.Layout.Layered {
 
     internal class SmoothedPolylineCalculator {
-        Site headSite;// corresponds to the bottom point
+        CornerSite headSite;// corresponds to the bottom point
         PolyIntEdge edgePath;
         Anchor[] anchors;
         GeometryGraph originalGraph;
@@ -303,7 +303,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         Curve Poly() {
             Curve c = new Curve();
-            for (Site s = this.headSite; s.Next != null; s = s.Next)
+            for (CornerSite s = this.headSite; s.Next != null; s = s.Next)
                 c.AddSegment(new CubicBezierSegment(s.Point, 2 * s.Point / 3 + s.Next.Point / 3, s.Point / 3 + 2 * s.Next.Point / 3, s.Next.Point));
             return c;
         }
@@ -324,15 +324,15 @@ namespace Microsoft.Msagl.Layout.Layered {
                 CurveIntersectsHierarchy(l, eastHierarchy) || CurveIntersectsHierarchy(l, thinEastHierarchy);
         }
 
-        bool SegIntersectEastBound(Site a, Site b) {
+        bool SegIntersectEastBound(CornerSite a, CornerSite b) {
             return SegIntersectsBound(a, b, westHierarchy) || SegIntersectsBound(a, b, this.thinWestHierarchy);
         }
 
-        bool SegIntersectWestBound(Site a, Site b) {
+        bool SegIntersectWestBound(CornerSite a, CornerSite b) {
             return SegIntersectsBound(a, b, eastHierarchy) || SegIntersectsBound(a, b, this.thinEastHierarchy);
         }
 
-        private Site TryToRemoveInflectionEdge(Site s, out bool cut) {
+        private CornerSite TryToRemoveInflectionEdge(CornerSite s, out bool cut) {
 
             if (s.Next == null || s.Previous == null) {
                 cut = false;
@@ -343,7 +343,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                 cut = false;
                 return s.Next;
             }
-            Site ret = s.Next;
+            CornerSite ret = s.Next;
             s.Previous.Next = s.Next;                  //forget about s
             s.Next.Previous = s.Previous;
             cut = true;
@@ -352,7 +352,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
 
-        static bool SegIntersectsBound(Site a, Site b, ParallelogramNode hierarchy) {
+        static bool SegIntersectsBound(CornerSite a, CornerSite b, ParallelogramNode hierarchy) {
             return CurveIntersectsHierarchy(new LineSegment(a.Point, b.Point), hierarchy);
         }
 
@@ -371,14 +371,14 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         }
 
-        static bool Flat(Site i) {
+        static bool Flat(CornerSite i) {
             return Point.GetTriangleOrientation(i.Previous.Point, i.Point, i.Next.Point) == TriangleOrientation.Collinear;
         }
 
         internal SmoothedPolylineCalculator Reverse() {
             SmoothedPolylineCalculator ret = new SmoothedPolylineCalculator(this.edgePath, this.anchors, this.originalGraph, this.settings, this.layerArrays, this.layeredGraph, this.database);
-            Site site = this.headSite;
-            Site v = null;
+            CornerSite site = this.headSite;
+            CornerSite v = null;
             while (site != null) {
                 ret.headSite = site.Clone();
                 ret.headSite.Next = v;
@@ -393,8 +393,8 @@ namespace Microsoft.Msagl.Layout.Layered {
         private void CreateRefinedPolyline(bool optimizeShortEdges) {
             CreateInitialListOfSites();
 
-            Site topSite = this.headSite;
-            Site bottomSite;
+            CornerSite topSite = this.headSite;
+            CornerSite bottomSite;
             for (int i = 0; i < this.edgePath.Count; i++) {
                 bottomSite = topSite.Next;
                 RefineBeetweenNeighborLayers(topSite, this.EdgePathNode(i), this.EdgePathNode(i + 1));
@@ -405,19 +405,19 @@ namespace Microsoft.Msagl.Layout.Layered {
                 OptimizeShortPath();
         }
 
-        private void RefineBeetweenNeighborLayers(Site topSite, int topNode, int bottomNode) {
+        private void RefineBeetweenNeighborLayers(CornerSite topSite, int topNode, int bottomNode) {
             RefinerBetweenTwoLayers.Refine(topNode, bottomNode, topSite, this.anchors,
                                            this.layerArrays, this.layeredGraph, this.originalGraph,
                                            this.settings.LayerSeparation);
         }
 
         private void CreateInitialListOfSites() {
-            Site currentSite = headSite = new Site(EdgePathPoint(0));
+            CornerSite currentSite = headSite = new CornerSite(EdgePathPoint(0));
             for (int i = 1; i <= edgePath.Count; i++)
-                currentSite = new Site(currentSite, EdgePathPoint(i));
+                currentSite = new CornerSite(currentSite, EdgePathPoint(i));
         }
 
-        Site TailSite { get { Site s = headSite; while (s.Next != null) s = s.Next; return s; } }
+        CornerSite TailSite { get { CornerSite s = headSite; while (s.Next != null) s = s.Next; return s; } }
 
         void OptimizeForThreeSites() {
             Debug.Assert(edgePath.LayerEdges.Count == 2);
@@ -597,7 +597,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             bool progress = true;
             while (progress) {
                 progress = false;
-                for (Site s = this.headSite; s != null; ) {
+                for (CornerSite s = this.headSite; s != null; ) {
                     bool cut;
                     s = TryToRemoveInflectionEdge(s, out cut);
                     progress |= cut;
@@ -607,7 +607,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
         private bool TurningAlwaySameDirection() {
             int sign = 0;//undecided
-            for (Site s = this.headSite.Next; s != null && s.Next != null; s = s.Next) {
+            for (CornerSite s = this.headSite.Next; s != null && s.Next != null; s = s.Next) {
                 double nsign = s.Turn;
                 if (sign == 0) {//try to set the sign
                     if (nsign > 0)
@@ -644,9 +644,9 @@ namespace Microsoft.Msagl.Layout.Layered {
         Curve CreateSmoothedPolyline() {
             RemoveVerticesWithNoTurns();
             Curve curve = new Curve();
-            Site a = headSite;//the corner start
-            Site b; //the corner origin
-            Site c;//the corner other end
+            CornerSite a = headSite;//the corner start
+            CornerSite b; //the corner origin
+            CornerSite c;//the corner other end
             if (Curve.FindCorner(a, out b, out c)) {
                 CreateFilletCurve(curve, ref a, ref b, ref c);
                 curve = ExtendCurveToEndpoints(curve);
@@ -666,7 +666,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         private bool RemoveVerticesWithNoTurnsOnePass() {
 
             bool ret = false;
-            for (Site s = headSite; s.Next != null && s.Next.Next != null; s = s.Next)
+            for (CornerSite s = headSite; s.Next != null && s.Next.Next != null; s = s.Next)
                 if (Flat(s.Next)) {
                     ret = true;
                     s.Next = s.Next.Next;//crossing out s.next
@@ -688,7 +688,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             return curve;
         }
 
-        private void CreateFilletCurve(Curve curve, ref Site a, ref Site b, ref Site c) {
+        private void CreateFilletCurve(Curve curve, ref CornerSite a, ref CornerSite b, ref CornerSite c) {
             do {
                 AddSmoothedCorner(a, b, c, curve);
                 a = b;
@@ -700,7 +700,7 @@ namespace Microsoft.Msagl.Layout.Layered {
             } while (true);
         }
 
-        private void AddSmoothedCorner(Site a, Site b, Site c, Curve curve) {
+        private void AddSmoothedCorner(CornerSite a, CornerSite b, CornerSite c, Curve curve) {
             double k = 0.5;
             CubicBezierSegment seg;
             do {

@@ -189,13 +189,13 @@ namespace Microsoft.Msagl.Routing.Rectilinear{
             var p3 = p0 + new Point(dx, -dy);
             var p4 = p0 + new Point(0, -dy);
 
-            var site = new Site(p0);
+            var site = new CornerSite(p0);
             var polyline = new SmoothedPolyline(site);
-            site = new Site(site, p1);
-            site = new Site(site, p2);
-            site = new Site(site, p3);
-            site = new Site(site, p4);
-            new Site(site, p0);
+            site = new CornerSite(site, p1);
+            site = new CornerSite(site, p2);
+            site = new CornerSite(site, p3);
+            site = new CornerSite(site, p4);
+            new CornerSite(site, p0);
             return polyline;
         }
 
@@ -211,7 +211,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear{
             return shape;
         }
 
-        private static void CalculateCoefficiensUnderSite(Site site, double radius){
+        private static void CalculateCoefficiensUnderSite(CornerSite site, double radius){
             double l = radius/(site.Point - site.Previous.Point).Length;
             l = Math.Min(0.5, l);
             site.PreviousBezierSegmentFitCoefficient = l;

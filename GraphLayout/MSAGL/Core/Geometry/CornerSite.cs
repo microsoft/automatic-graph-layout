@@ -7,7 +7,7 @@ namespace Microsoft.Msagl.Core.Geometry {
 #if TEST_MSAGL
     [Serializable]
 #endif
-    public class Site{
+    public class CornerSite{
         /// <summary>
         /// the coeffiecient used to calculate the first and the second control points of the 
         /// Bezier segment for the fillet at the site
@@ -64,31 +64,31 @@ namespace Microsoft.Msagl.Core.Geometry {
             set { point = value; }
         }
 
-         Site prev;
+         CornerSite prev;
 /// <summary>
 /// gets the previous site
 /// </summary>
-		public Site Previous
+		public CornerSite Previous
 		{
             get { return prev; }
             set { prev = value; }
         }
 
-         Site next;
+         CornerSite next;
 /// <summary>
 /// gets the next site
 /// </summary>
-		public Site Next
+		public CornerSite Next
 		{
             get { return next; }
             set { next = value; }
         }
-        internal Site() { }
+        internal CornerSite() { }
         /// <summary>
         /// the constructor
         /// </summary>
         /// <param name="sitePoint"></param>
-        public Site(Point sitePoint) {
+        public CornerSite(Point sitePoint) {
             point = sitePoint;
         }
         /// <summary>
@@ -96,7 +96,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// </summary>
         /// <param name="previousSite"></param>
         /// <param name="sitePoint"></param>
-		public Site(Site previousSite, Point sitePoint )
+		public CornerSite(CornerSite previousSite, Point sitePoint )
 		{
             ValidateArg.IsNotNull(previousSite, "pr");
             point = sitePoint;
@@ -109,7 +109,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// <param name="previousSite"></param>
         /// <param name="sitePoint"></param>
         /// <param name="nextSite"></param>
-		public Site(Site previousSite, Point sitePoint, Site nextSite )
+		public CornerSite(CornerSite previousSite, Point sitePoint, CornerSite nextSite )
 		{
             ValidateArg.IsNotNull(previousSite, "pr");
             ValidateArg.IsNotNull(nextSite, "ne");
@@ -129,8 +129,8 @@ namespace Microsoft.Msagl.Core.Geometry {
             }
         }
 
-        internal Site Clone() {
-            Site s = new Site();
+        internal CornerSite Clone() {
+            CornerSite s = new CornerSite();
             s.PreviousBezierSegmentFitCoefficient = PreviousBezierSegmentFitCoefficient;
             s.Point = Point;
             return s;

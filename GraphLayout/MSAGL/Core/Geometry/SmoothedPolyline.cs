@@ -23,13 +23,13 @@ namespace Microsoft.Msagl.Core.Geometry {
         public static SmoothedPolyline FromPoints(IEnumerable<Point> points){
             ValidateArg.IsNotNull(points, "points");
             SmoothedPolyline ret=null;
-            Site site=null;
+            CornerSite site=null;
             foreach(Point p in points){
                 if(site==null){
-                    site=new Site(p);
+                    site=new CornerSite(p);
                     ret=new SmoothedPolyline(site);
                 } else {
-                    Site s=new Site(p);
+                    CornerSite s=new CornerSite(p);
                     s.Previous=site;
                     site.Next=s;
                     site=s;
@@ -39,11 +39,11 @@ namespace Microsoft.Msagl.Core.Geometry {
         }
 
 
-        readonly Site headSite;
+        readonly CornerSite headSite;
         /// <summary>
         /// the first site of the polyline
         /// </summary>
-        public Site HeadSite {
+        public CornerSite HeadSite {
             get { return headSite; }
         }
 /// <summary>
@@ -51,10 +51,10 @@ namespace Microsoft.Msagl.Core.Geometry {
 /// </summary>
 /// <returns></returns>
         public SmoothedPolyline Clone() {
-            Site h; //the site of teh clone
-            Site s = headSite; //the old site
-            Site prev = null;
-            Site headOfTheClone=null;
+            CornerSite h; //the site of teh clone
+            CornerSite s = headSite; //the old site
+            CornerSite prev = null;
+            CornerSite headOfTheClone=null;
             while (s != null) {
                 h=s.Clone();
                 h.Previous=prev;
@@ -71,16 +71,16 @@ namespace Microsoft.Msagl.Core.Geometry {
 /// a constructor
 /// </summary>
 /// <param name="head"></param>
-        public SmoothedPolyline(Site head) {
+        public SmoothedPolyline(CornerSite head) {
             this.headSite = head;
         }
 
         /// <summary>
         /// the last site of the polyline
         /// </summary>
-        public Site LastSite {
+        public CornerSite LastSite {
             get {
-                Site ret = headSite;
+                CornerSite ret = headSite;
                 while (ret.Next != null)
                     ret = ret.Next;
                 return ret;
@@ -94,8 +94,8 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         public IEnumerable<LineSegment> GetSegments() {
-            Site s0 = headSite;
-            Site s1 = headSite.Next;
+            CornerSite s0 = headSite;
+            CornerSite s1 = headSite.Next;
             while (s1 != null) {
                yield return new LineSegment(s0.Point,s1.Point);
                 s0=s1;
@@ -110,9 +110,9 @@ namespace Microsoft.Msagl.Core.Geometry {
         /// <returns></returns>
         public Curve CreateCurve() {
             Curve curve = new Curve();
-            Site a = HeadSite;//the corner start
-            Site b; //the corner origin
-            Site c;//the corner other end
+            CornerSite a = HeadSite;//the corner start
+            CornerSite b; //the corner origin
+            CornerSite c;//the corner other end
 
             while (Curve.FindCorner(a, out b, out c)) {
                 CubicBezierSegment bezierSeg = CreateBezierSegOnSite(b);
@@ -139,7 +139,7 @@ namespace Microsoft.Msagl.Core.Geometry {
             return curve;
         }
 
-        static internal CubicBezierSegment CreateBezierSegOnSite(Site b) {
+        static internal CubicBezierSegment CreateBezierSegOnSite(CornerSite b) {
             var kPrev = b.PreviousBezierSegmentFitCoefficient;
             var kNext = b.NextBezierSegmentFitCoefficient;
             var a = b.Previous;

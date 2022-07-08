@@ -313,7 +313,7 @@ namespace Microsoft.Msagl.Drawing {
 
         void DragEdgeEdit(Point lastMousePosition, Point delta) {
             EditedEdge.RaiseLayoutChangeEvent(delta);
-            Site site = FindClosestCornerForEdit(EditedEdge.UnderlyingPolyline, lastMousePosition);
+            CornerSite site = FindClosestCornerForEdit(EditedEdge.UnderlyingPolyline, lastMousePosition);
             site.Point += delta;
             CreateCurveOnChangedPolyline(EditedEdge);
         }
@@ -323,7 +323,7 @@ namespace Microsoft.Msagl.Drawing {
         /// <param name="delta">delta of the drag</param>
         /// <param name="e">the modified edge</param>
         /// <param name="site"></param>
-        internal static void DragEdgeWithSite(Point delta, GeomEdge e, Site site) {
+        internal static void DragEdgeWithSite(Point delta, GeomEdge e, CornerSite site) {
             e.RaiseLayoutChangeEvent(delta);
             site.Point += delta;
             CreateCurveOnChangedPolyline(e);
@@ -560,7 +560,7 @@ namespace Microsoft.Msagl.Drawing {
         /// <param name="geometryEdge"></param>
         /// <param name="site"></param>
         /// <returns></returns>
-        public UndoRedoAction PrepareForEdgeCornerDragging(GeomEdge geometryEdge, Site site) {
+        public UndoRedoAction PrepareForEdgeCornerDragging(GeomEdge geometryEdge, CornerSite site) {
             EditedEdge = geometryEdge;
             UndoRedoAction edgeDragUndoRedoAction = CreateEdgeEditUndoRedoAction();
 //            var edgeRestoreDate = (EdgeRestoreData) edgeDragUndoRedoAction.GetRestoreData(geometryEdge);
@@ -575,7 +575,7 @@ namespace Microsoft.Msagl.Drawing {
         /// <param name="site"></param>
         /// <returns></returns>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Polyline")]
-        public UndoRedoAction PrepareForPolylineCornerRemoval(IViewerObject affectedEdge, Site site) {
+        public UndoRedoAction PrepareForPolylineCornerRemoval(IViewerObject affectedEdge, CornerSite site) {
             var action = new SiteRemoveUndoAction(EditedEdge) {
                 RemovedSite = site,
             };
@@ -589,7 +589,7 @@ namespace Microsoft.Msagl.Drawing {
         /// <param name="affectedObj">edited objects</param>
         /// <param name="site">the site to insert</param>
         /// <returns></returns>
-        internal UndoRedoAction PrepareForPolylineCornerInsertion(IViewerObject affectedObj, Site site) {
+        internal UndoRedoAction PrepareForPolylineCornerInsertion(IViewerObject affectedObj, CornerSite site) {
             var action = new SiteInsertUndoAction(EditedEdge) {
                 InsertedSite = site,
             };
@@ -643,9 +643,9 @@ namespace Microsoft.Msagl.Drawing {
         /// <param name="edge"></param>
         /// <param name="point"></param>
         /// <returns></returns>
-        public static Site GetPreviousSite(GeomEdge edge, Point point) {
-            Site prevSite = edge.UnderlyingPolyline.HeadSite;
-            Site nextSite = prevSite.Next;
+        public static CornerSite GetPreviousSite(GeomEdge edge, Point point) {
+            CornerSite prevSite = edge.UnderlyingPolyline.HeadSite;
+            CornerSite nextSite = prevSite.Next;
             do {
                 if (BetweenSites(prevSite, nextSite, point))
                     return prevSite;
@@ -655,7 +655,7 @@ namespace Microsoft.Msagl.Drawing {
             return null;
         }
 
-        static bool BetweenSites(Site prevSite, Site nextSite, Point point) {
+        static bool BetweenSites(CornerSite prevSite, CornerSite nextSite, Point point) {
             double par = Point.ClosestParameterOnLineSegment(point, prevSite.Point, nextSite.Point);
             return par > 0.1 && par < 0.9;
         }
@@ -667,12 +667,12 @@ namespace Microsoft.Msagl.Drawing {
         /// <param name="point">the point to insert the corner</param>
         /// <param name="siteBeforeInsertion"></param>
         /// <param name="affectedEntity">an object to be stored in the undo action</param>
-        public void InsertSite(GeomEdge edge, Point point, Site siteBeforeInsertion, IViewerObject affectedEntity) {
+        public void InsertSite(GeomEdge edge, Point point, CornerSite siteBeforeInsertion, IViewerObject affectedEntity) {
             EditedEdge = edge;
             //creating the new site
-            Site first = siteBeforeInsertion;
-            Site second = first.Next;
-            var s = new Site(first, point, second);
+            CornerSite first = siteBeforeInsertion;
+            CornerSite second = first.Next;
+            var s = new CornerSite(first, point, second);
             PrepareForPolylineCornerInsertion(affectedEntity, s);
 
             //just to recalc everything in a correct way
@@ -685,7 +685,7 @@ namespace Microsoft.Msagl.Drawing {
         /// <param name="edge"></param>
         /// <param name="site"></param>
         /// <param name="userData">an object to be stored in the unde action</param>
-        public void DeleteSite(GeomEdge edge, Site site, IViewerObject userData) {
+        public void DeleteSite(GeomEdge edge, CornerSite site, IViewerObject userData) {
             EditedEdge = edge;
             PrepareForPolylineCornerRemoval(userData, site);
             site.Previous.Next = site.Next; //removing the site from the list
@@ -703,8 +703,8 @@ namespace Microsoft.Msagl.Drawing {
         /// <param name="tolerance"></param>
         /// <returns></returns>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Polyline")]
-        public static Site FindCornerForEdit(SmoothedPolyline underlyingPolyline, Point mousePoint, double tolerance) {
-            Site site = underlyingPolyline.HeadSite.Next;
+        public static CornerSite FindCornerForEdit(SmoothedPolyline underlyingPolyline, Point mousePoint, double tolerance) {
+            CornerSite site = underlyingPolyline.HeadSite.Next;
             tolerance *= tolerance; //square the tolerance
 
             do {
@@ -726,7 +726,7 @@ namespace Microsoft.Msagl.Drawing {
         /// <param name="mousePoint"></param>
         /// <returns></returns>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Polyline")]
-        static Site FindClosestCornerForEdit(SmoothedPolyline underlyingPolyline, Point mousePoint) {
+        static CornerSite FindClosestCornerForEdit(SmoothedPolyline underlyingPolyline, Point mousePoint) {
             var site = underlyingPolyline.HeadSite.Next;
             var bestSite = site;
             var dist = (bestSite.Point - mousePoint).LengthSquared;

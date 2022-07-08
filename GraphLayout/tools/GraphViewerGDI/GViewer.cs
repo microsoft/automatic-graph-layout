@@ -765,15 +765,15 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       var a = source.GeometryNode.Center;
       var b = target.GeometryNode.Center;
       if (source == target) {
-        Site start = new Site(a);
-        Site end = new Site(b);
+        CornerSite start = new CornerSite(a);
+        CornerSite end = new CornerSite(b);
         var mid1 = source.GeometryNode.Center;
         mid1.X += (source.GeometryNode.BoundingBox.Width / 3 * 2);
         var mid2 = mid1;
         mid1.Y -= source.GeometryNode.BoundingBox.Height / 2;
         mid2.Y += source.GeometryNode.BoundingBox.Height / 2;
-        Site mid1s = new Site(mid1);
-        Site mid2s = new Site(mid2);
+        CornerSite mid1s = new CornerSite(mid1);
+        CornerSite mid2s = new CornerSite(mid2);
         start.Next = mid1s;
         mid1s.Previous = start;
         mid1s.Next = mid2s;
@@ -784,9 +784,9 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         geometryEdge.Curve = geometryEdge.UnderlyingPolyline.CreateCurve();
       }
       else {
-        Site start = new Site(a);
-        Site end = new Site(b);
-        Site mids = new Site(a * 0.5 + b * 0.5);
+        CornerSite start = new CornerSite(a);
+        CornerSite end = new CornerSite(b);
+        CornerSite mids = new CornerSite(a * 0.5 + b * 0.5);
         start.Next = mids;
         mids.Previous = start;
         mids.Next = end;

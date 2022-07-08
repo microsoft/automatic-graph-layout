@@ -1795,7 +1795,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             return curve1 == curve2 || (CurveCurveIntersectionOne(curve1, curve2, false) != null);
         }
 
-        internal static CubicBezierSegment CreateBezierSeg(double kPrev, double kNext, Site a, Site b, Site c) {
+        internal static CubicBezierSegment CreateBezierSeg(double kPrev, double kNext, CornerSite a, CornerSite b, CornerSite c) {
             Point s = kPrev*a.Point + (1 - kPrev)*b.Point;
             Point e = kNext*c.Point + (1 - kNext)*b.Point;
             Point t = (2.0/3.0)*b.Point;
@@ -1807,7 +1807,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             return new CubicBezierSegment(a, a + d, b + d, b);
         }
 
-        internal static bool FindCorner(Site a, out Site b, out Site c) {
+        internal static bool FindCorner(CornerSite a, out CornerSite b, out CornerSite c) {
             c = null; // to silence the compiler
             b = a.Next;
             if (b.Next == null)
