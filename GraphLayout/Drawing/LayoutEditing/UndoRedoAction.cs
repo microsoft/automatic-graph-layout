@@ -102,26 +102,12 @@ namespace Microsoft.Msagl.Drawing {
 
         }
 
-        internal static GeometryGraph GetParentGraph(GeometryObject geomObj) {
-            do {
-                GeometryGraph graph = geomObj.GeometryParent as GeometryGraph;
-                if (graph != null)
-                    return graph;
-                geomObj = geomObj.GeometryParent;
-            } while (true);
-        }
-
+        
         internal RestoreData GetRestoreData(GeometryObject msaglObject) {
             return restoreDataDictionary[msaglObject];
         }
 
-        /// <summary>
-        /// enumerates over all edited objects
-        /// </summary>
-        public IEnumerable<GeometryObject> EditedObjects {
-            get { return restoreDataDictionary.Keys; }
-        }
-
+        
 
         Rectangle graphBoundingBoxBefore = new Rectangle();
 
