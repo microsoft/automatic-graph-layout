@@ -570,7 +570,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         }
 
         static void ArrawAtTheBeginning(Graphics g, DrawingEdge edge, Color edgeColor, Pen myPen) {
-            if (edge.GeometryEdge != null && edge.Attr.ArrowAtSource && && edge.GeometryEdge.EdgeGeometry.SourceArrowhead != null) 
+            if (edge.GeometryEdge != null && edge.Attr.ArrowAtSource && edge.GeometryEdge.EdgeGeometry.SourceArrowhead != null) 
                 DrawArrowAtTheBeginningWithControlPoints(g, edge, edgeColor, myPen);
         }
 
