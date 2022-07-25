@@ -26,7 +26,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="./bin/Release/net461/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net61" />
+    <file src="./bin/Release/net461/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net461" />
     <file src="./bin/Release/net472/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net472" />
     <file src="./bin/Release/netcoreapp3.1/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\netcoreapp3.1" />
   </files>
