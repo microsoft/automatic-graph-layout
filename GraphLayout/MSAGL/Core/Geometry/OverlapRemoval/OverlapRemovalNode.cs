@@ -197,7 +197,7 @@ namespace Microsoft.Msagl.Core.Geometry
             ValidateArg.IsNotNull(solver, "solver");
             // Due to multiple hierarchies, we must check to see if the variable has been created yet;
             // we share one Node (and its single Variable) across all clusters it's a member of.
-            if (null == this.Variable)
+            if (this.Variable == null)
             {
                 this.Variable = solver.AddVariable(this /* userData */, this.Position, this.Weight);
             }
@@ -271,7 +271,7 @@ namespace Microsoft.Msagl.Core.Geometry
         public int CompareTo(object obj)
         {
             var rhs = obj as OverlapRemovalNode;
-            if (null == rhs)
+            if (rhs == null)
             {
                 throw new InvalidOperationException(
 #if TEST_MSAGL
@@ -299,8 +299,8 @@ namespace Microsoft.Msagl.Core.Geometry
             return (this.CompareTo(obj) == 0);
         }
         public static bool operator == (Node lhs, Node rhs) {
-            if (null == (object)lhs) {          // Cast to object to avoid recursive op==
-                return (null == (object)rhs);
+            if ((object)lhs == null) {          // Cast to object to avoid recursive op==
+                return ((object)rhs == null);
             }
             return lhs.Equals(rhs);
         }

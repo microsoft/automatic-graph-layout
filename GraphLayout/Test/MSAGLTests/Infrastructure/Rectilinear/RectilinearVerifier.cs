@@ -463,7 +463,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
 
             // Add routing specifications.
             bool wantRouting = this.DefaultWantPorts && !NoPorts;
-            if ((null == routingEnum) && (null != freePorts) && !NoPorts)
+            if ((routingEnum!= null) && (freePorts!= null) && !NoPorts)
             {
                 routingEnum = CreateSourceToFreePortRoutings(router, obstacles, freePorts);
             }

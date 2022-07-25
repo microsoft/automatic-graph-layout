@@ -163,7 +163,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
 #else
             var cdt = new Cdt(nodePositions.Select((p, index) => Tuple.Create(p, (object) index)));
 #endif
-                cdt.Run();
+            cdt.Run();
             var siteIndex = new Dictionary<CdtSite, int>();
             for (int i = 0; i < nodePositions.Length; i++)
                 siteIndex[cdt.PointsToSites[nodePositions[i]]] = i;

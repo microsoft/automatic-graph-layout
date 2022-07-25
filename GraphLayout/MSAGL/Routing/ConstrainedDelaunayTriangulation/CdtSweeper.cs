@@ -58,7 +58,8 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
         void FinalizeTriangulation() {
             RemoveP1AndP2Triangles(); 
             var list =CreateDoubleLinkedListOfPerimeter();
-            MakePerimeterConvex(list);
+            if (list != null) // if list == null we do not have any triangles left!
+                MakePerimeterConvex(list);
             
         }
 
@@ -97,6 +98,7 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
         PerimeterEdge CreateDoubleLinkedListOfPerimeter() {
 
             CdtEdge firstEdge = this.triangles.SelectMany(t => t.Edges).FirstOrDefault(e => e.CwTriangle == null || e.CcwTriangle == null);
+            if (firstEdge == null) return null;
             var edge = firstEdge;
             PerimeterEdge pe, prevPe = null, listStart = null;
 

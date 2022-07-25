@@ -76,7 +76,7 @@ namespace Microsoft.Msagl.Core.Geometry
         /// <summary>
         /// Empty clusters are ignored on positioning.
         /// </summary>
-        public bool IsEmpty { get { return 0 == this.nodeList.Count; } }
+        public bool IsEmpty { get { return  this.nodeList.Count == 0; } }
 
         /// <summary>
         /// If the following is true then constraints will be generated the prevent children coming
@@ -182,7 +182,7 @@ namespace Microsoft.Msagl.Core.Geometry
         /// the root cluster "infinite" means we don't have to generate the constraints for nodes and clusters
         /// in the root, which may be numerous.
         /// </summary>
-        public bool IsRootCluster { get { return null == this.ParentCluster; } }
+        public bool IsRootCluster { get { return this.ParentCluster == null; } }
         OverlapRemovalCluster ParentCluster { get; set; }
 
         // Zero cluster margins. This ctor is currently used only by the generator's DefaultClusterHierarchy,
@@ -253,7 +253,7 @@ namespace Microsoft.Msagl.Core.Geometry
         {
             this.nodeList.Add(newNode);
             var newCluster = newNode as OverlapRemovalCluster;
-            if (null != newCluster)
+            if (newCluster != null)
             {
                 this.clusterList.Add(newCluster);
             }
@@ -401,7 +401,7 @@ namespace Microsoft.Msagl.Core.Geometry
             var events = this.CreateEvents(solver, ref boundaryRect);
 
             // If we added no events, we're either Fixed (so continue) or empty (so return).
-            if (0 == events.Count && !TranslateChildren)
+            if (events.Count == 0 && !TranslateChildren)
             {
                 return false;
             }
@@ -440,7 +440,7 @@ namespace Microsoft.Msagl.Core.Geometry
             {
                 OverlapRemovalNode node = this.nodeList[nodeIndex];
                 var cluster = node as OverlapRemovalCluster;
-                if (null != cluster)
+                if ( cluster != null)
                 {
                     // Child Clusters have already "recursively" been processed before the current cluster,
                     // so we just need to check to see if it had any events.  If so, then it has created its
@@ -619,7 +619,7 @@ namespace Microsoft.Msagl.Core.Geometry
             {
                 Constraint cst = solver.AddConstraint(
                     this.LeftBorderNode.Variable, this.RightBorderNode.Variable, this.MinimumSize - leftBorderWidth/2 - rightBorderWidth/2);
-                Debug.Assert(null != cst, "Minimum Cluster size: unexpected null cst");
+                Debug.Assert(cst != null, "Minimum Cluster size: unexpected null cst");
 #if VERBOSE
                     System.Diagnostics.Debug.WriteLine(" {0} MinClusterSizeCst {1} -> {2} g {3:F5}", isHorizontal ? "H" : "V"
                             , cst.Left.Name, cst.Right.Name, cst.Gap);
@@ -710,12 +710,12 @@ namespace Microsoft.Msagl.Core.Geometry
         internal static OverlapRemovalNode GetLeftConstraintNode(OverlapRemovalNode node)
         {
             var cluster = node as OverlapRemovalCluster;
-            return (null != cluster) ? cluster.RightBorderNode : node;
+            return (cluster != null) ? cluster.RightBorderNode : node;
         }
         internal static OverlapRemovalNode GetRightConstraintNode(OverlapRemovalNode node)
         {
             var cluster = node as OverlapRemovalCluster;
-            return (null != cluster) ? cluster.LeftBorderNode : node;
+            return ( cluster != null) ? cluster.LeftBorderNode : node;
         }
 
          void GenerateFromEvents(Solver solver, OverlapRemovalParameters parameters,
@@ -812,9 +812,9 @@ namespace Microsoft.Msagl.Core.Geometry
                     // This is a close event, so generate the constraints and remove the closing node
                     // from its neighbours lists.  If we're closing we should have left neighbours so
                     // this is null then we've likely got some sort of internal calculation error.
-                    if (null == currentNode.LeftNeighbors)
+                    if (currentNode.LeftNeighbors == null)
                     {
-                        Debug.Assert(null != currentNode.LeftNeighbors, "LeftNeighbors should not be null for a Close event");
+                        Debug.Assert(currentNode.LeftNeighbors != null, "LeftNeighbors should not be null for a Close event");
                         continue;
                     }
 
@@ -850,7 +850,7 @@ namespace Microsoft.Msagl.Core.Geometry
                             separation = Math.Max(separation, currentRightNode.Position - leftNeighborNode.Position);
                         }
                         Constraint cst = solver.AddConstraint(leftNeighborNode.Variable, currentRightNode.Variable, separation);
-                        Debug.Assert(null != cst, "LeftNeighbors: unexpected null cst");
+                        Debug.Assert(cst != null, "LeftNeighbors: unexpected null cst");
 #if VERBOSE
                         System.Diagnostics.Debug.WriteLine(" {0} LnbourCst {1} -> {2} g {3:F5}", isHorizontal ? "H" : "V"
                                 , cst.Left.Name, cst.Right.Name, cst.Gap);
@@ -879,7 +879,7 @@ namespace Microsoft.Msagl.Core.Geometry
                             separation = Math.Max(separation, rightNeighborNode.Position - currentLeftNode.Position);
                         }
                         Constraint cst = solver.AddConstraint(currentLeftNode.Variable, rightNeighborNode.Variable, separation);
-                        Debug.Assert(null != cst, "RightNeighbors: unexpected null cst");
+                        Debug.Assert(cst != null, "RightNeighbors: unexpected null cst");
 #if VERBOSE
                         System.Diagnostics.Debug.WriteLine(" {0} RnbourCst {1} -> {2} g {3:F5}", isHorizontal ? "H" : "V"
                                 , cst.Left.Name, cst.Right.Name, cst.Gap);
@@ -905,7 +905,7 @@ namespace Microsoft.Msagl.Core.Geometry
         {
             var lstNeighbours = new List<OverlapRemovalNode>();
             OverlapRemovalNode nextNode = scanLine.NextLeft(currentNode);
-            for (; null != nextNode; nextNode = scanLine.NextLeft(nextNode))
+            for (; nextNode != null; nextNode = scanLine.NextLeft(nextNode))
             {
                 // AddNeighbor returns false if we are done adding them.
                 if (!AddNeighbour(parameters, currentNode, nextNode, lstNeighbours, true /* isLeftNeighbor */
@@ -925,7 +925,7 @@ namespace Microsoft.Msagl.Core.Geometry
         {
             var lstNeighbours = new List<OverlapRemovalNode>();
             OverlapRemovalNode nextNode = scanLine.NextRight(currentNode);
-            for (; null != nextNode; nextNode = scanLine.NextRight(nextNode))
+            for (; nextNode != null; nextNode = scanLine.NextRight(nextNode))
             {
                 // AddNeighbor returns false if we are done adding them.
                 if (!AddNeighbour(parameters, currentNode, nextNode, lstNeighbours, false /* isLeftNeighbor */
@@ -1059,7 +1059,7 @@ namespace Microsoft.Msagl.Core.Geometry
             {
                 // If empty, we had nothing to do.  We're also empty if we had child clusters
                 // that were empty; in that case we check that we don't have our Variables created.
-                if (IsEmpty || (null == this.LeftBorderNode.Variable))
+                if (IsEmpty || (this.LeftBorderNode.Variable == null))
                 {
                     return;
                 }

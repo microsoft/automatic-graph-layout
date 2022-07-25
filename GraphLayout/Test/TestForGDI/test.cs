@@ -466,7 +466,7 @@ namespace TestForGdi {
             try {
                 file = File.Open(fileName, FileMode.Open);
                 var debugCurveCollection = formatter.Deserialize(file) as DebugCurveCollection;
-                if (null == debugCurveCollection) {
+                if (debugCurveCollection == null) {
                     System.Diagnostics.Debug.WriteLine("cannot read debugcurves from " + fileName);
                     return null;
                 }
