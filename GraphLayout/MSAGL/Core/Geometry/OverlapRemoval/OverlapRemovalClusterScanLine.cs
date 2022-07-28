@@ -29,7 +29,7 @@ namespace Microsoft.Msagl.Core.Geometry
             // the nearer midpoint would have a constraint generated on the node with the
             // further midpoint (though in that case we probably generate a duplicative constraint
             // between the current node and the node with the further midpoint).
-             readonly RbTree<OverlapRemovalNode> nodeTree = new RbTree<OverlapRemovalNode>(new NodeComparer());
+             readonly RbTree<OverlapRemovalNode> nodeTree = new RbTree<OverlapRemovalNode>((lhs, rhs)=> lhs.CompareTo(rhs));
 
             internal void Insert(OverlapRemovalNode node)
             {
@@ -48,13 +48,13 @@ namespace Microsoft.Msagl.Core.Geometry
             internal OverlapRemovalNode NextLeft(OverlapRemovalNode node)
             {
                 var pred = this.nodeTree.Previous(this.nodeTree.Find(node));
-                return (null != pred) ? pred.Item : null;
+                return (pred != null) ? pred.Item : null;
             }
 
             internal OverlapRemovalNode NextRight(OverlapRemovalNode node)
             {
                 var succ = this.nodeTree.Next(this.nodeTree.Find(node));
-                return (null != succ) ? succ.Item : null;
+                return (succ!= null) ? succ.Item : null;
             }
         } // end class ScanLine
     }

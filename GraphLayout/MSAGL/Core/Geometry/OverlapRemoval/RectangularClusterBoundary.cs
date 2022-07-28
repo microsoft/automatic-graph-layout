@@ -125,20 +125,7 @@ namespace Microsoft.Msagl.Core.Geometry {
             }
         }
 
-        /// <summary>
-        /// Returns (bounding) Rect with margins subtracted
-        /// </summary>
-        public Rectangle InnerRect
-        {
-            get
-            {
-                var outer = Rect;
-                var inner = new Rectangle(outer.Left + LeftMargin, outer.Bottom + BottomMargin,
-                                          outer.Right - RightMargin, outer.Top - TopMargin);
-                return inner;
-            }
-        }
-
+        
          class Margin
         {
             public double Left;
@@ -264,12 +251,6 @@ namespace Microsoft.Msagl.Core.Geometry {
             RightBorderInfo = new BorderInfo(RightBorderInfo.InnerMargin);
             TopBorderInfo = new BorderInfo(TopBorderInfo.InnerMargin);
             BottomBorderInfo = new BorderInfo(BottomBorderInfo.InnerMargin);
-        }
-        /// <summary>
-        /// Locks all four borders at their current positions
-        /// </summary>
-        public void Lock() {
-            Lock(rectangle.Left, rectangle.Right, rectangle.Top, rectangle.Bottom);
         }
         /// <summary>
         /// boundary can shrink no more than this

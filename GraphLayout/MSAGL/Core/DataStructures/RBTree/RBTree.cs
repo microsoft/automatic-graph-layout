@@ -19,11 +19,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
             return FindFirst(root, predicate);
         }
 
-        internal RbTree() {
-            comparer = new DefaultComperer<T>();
-            root = nil = new RBNode<T>(RBColor.Black);
-        }
-
         RBNode<T> FindFirst(RBNode<T> n, Func<T, bool> p) {
             if (n == nil)
                 return null;

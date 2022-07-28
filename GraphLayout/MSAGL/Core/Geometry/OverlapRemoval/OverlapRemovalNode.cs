@@ -316,25 +316,4 @@ namespace Microsoft.Msagl.Core.Geometry
         #endregion // RequiredOverridesForIComparable
 #endif // NOTNEEDED_FXCOP
     } // end class Node
-
-    // NodeComparer is used by the RBTree.
-    internal class NodeComparer : IComparer<OverlapRemovalNode>
-    {
-        #region IComparer<Node> Members
-        /// <summary>
-        /// Compare the points by point ActualPos in ascending left-to-right order.
-        /// </summary>
-        /// <param name="lhs">Left-hand side of the comparison.</param>
-        /// <param name="rhs">Right-hand side of the comparison.</param>
-        /// <returns>-1 if lhs is less than rhs; +1 if lhs is greater than rhs; else 0.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1307:SpecifyStringComparison", MessageId = "System.String.CompareTo(System.String)")]
-        public int Compare(OverlapRemovalNode lhs, OverlapRemovalNode rhs)
-        {
-            ValidateArg.IsNotNull(lhs, "lhs");
-            ValidateArg.IsNotNull(rhs, "rhs");
-
-            return lhs.CompareTo(rhs);
-        }
-        #endregion // IComparer<Node> Members
-    }
 }

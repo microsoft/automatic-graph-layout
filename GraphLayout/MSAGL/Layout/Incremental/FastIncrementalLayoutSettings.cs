@@ -203,34 +203,7 @@ namespace Microsoft.Msagl.Layout.Incremental {
             return lp;
         }
 
-        /// <summary>
-        /// Remove all locks on node positions
-        /// </summary>
-        public void ClearLocks() {
-//            foreach (var l in locks) {
-//                l.listNode = null;
-//            }
-            locks.Clear();
-        }
-
-        /// <summary>
-        /// Remove a specific lock on node position.  Once you remove it, you'll have to call AddLock again to create a new one if you want to lock it again.
-        /// </summary>
-        /// <param name="lockPosition">the LinkedListNode returned by the AddLock method above</param>
-        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.Debug.WriteLine(System.String)"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "FastIncrementalLayoutSettings"), SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "RemoveLock")]
-        public void RemoveLock(LockPosition lockPosition) {
-            ValidateArg.IsNotNull(lockPosition, "lockPosition");
-            if (lockPosition.listNode != null) {
-                lockPosition.RestoreNodeWeight();
-                try {
-                    locks.Remove(lockPosition.listNode);
-                } catch (InvalidOperationException e) {
-                    System.Diagnostics.Debug.WriteLine("Problem in FastIncrementalLayoutSettings.RemoveLock "+e.Message);
-                }
-                lockPosition.listNode = null;
-            }
-        }
-
+        
         /// <summary>
         /// restart layout, use e.g. after a mouse drag or non-structural change to the graph
         /// </summary>
