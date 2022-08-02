@@ -5,7 +5,7 @@ MSAGL was developed in Microsoft by Lev Nachmanson, Sergey Pupyrev, Tim Dwyer, T
 
 ## Getting Started
 
-The simplest way to start with MSAGL in C# is to open GraphLayout.sln in Visual Studio, and and look at the Samples folder.
+The simplest way to start with MSAGL in C# is to open GraphLayout.sln in Visual Studio and browse the Samples folder.
 
 ## MSAGL Modules
 
