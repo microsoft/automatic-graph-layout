@@ -491,7 +491,7 @@ namespace Microsoft.Msagl.Layout.Initial {
         }
 
         void ForceDirectedLayout(FastIncrementalLayoutSettings settings, GeometryGraph component) {
-            LayoutAlgorithmHelpers.ComputeDesiredEdgeLengths(settings.IdealEdgeLength, component);
+            LayoutAlgorithmHelpers.ComputeDesiredEdgeLengths(component);
             var layout = new InitialLayout(component, settings) { SingleComponent = true };
             layout.Run(this.CancelToken);
             InitialLayoutHelpers.RouteEdges(component, settings, this.CancelToken);
@@ -500,7 +500,7 @@ namespace Microsoft.Msagl.Layout.Initial {
         }
 
         void MDSLayout(MdsLayoutSettings settings, GeometryGraph component) {
-            LayoutAlgorithmHelpers.ComputeDesiredEdgeLengths(settings.EdgeConstraints, component);
+            LayoutAlgorithmHelpers.ComputeDesiredEdgeLengths(component);
             var layout = new MdsGraphLayout(settings, component);
             layout.Run(this.CancelToken);
             InitialLayoutHelpers.RouteEdges(component, settings, this.CancelToken);

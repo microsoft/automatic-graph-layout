@@ -24,14 +24,8 @@ namespace Microsoft.Msagl.Core.Layout
         /// <summary>
         /// Controls the separation used in Edge Constraints
         /// </summary>
-        public double Separation
-        {
-            get { return constrainedEdgeSeparation; }
-            set { constrainedEdgeSeparation = value; }
-        }
-
-        internal double constrainedEdgeSeparation;
-
+        public double Separation { get; set; }
+        
         
     }
 }

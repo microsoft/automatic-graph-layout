@@ -49,7 +49,7 @@ namespace Microsoft.Msagl.Core.Layout
         /// </summary>
         /// <param name="settings">settings for calculating ideal edge length</param>
         /// <param name="component">a graph component</param>
-        public static void ComputeDesiredEdgeLengths(EdgeConstraints settings, GeometryGraph component)
+        public static void ComputeDesiredEdgeLengths( GeometryGraph component)
         {
             if (component == null)
             {

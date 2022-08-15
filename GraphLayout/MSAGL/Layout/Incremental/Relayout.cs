@@ -157,7 +157,7 @@ namespace Microsoft.Msagl.Layout.Initial {
                 settings.MinConstraintLevel = 2;
 
             GeometryGraph newGraph = GetShallowCopyGraphUnderCluster(cluster);
-            LayoutAlgorithmHelpers.ComputeDesiredEdgeLengths(settings.IdealEdgeLength, newGraph);
+            LayoutAlgorithmHelpers.ComputeDesiredEdgeLengths(newGraph);
 
             // orthogonal ordering constraints preserve the left-of, above-of relationships between existing nodes
             // (we do not apply these to the newly added nodes)

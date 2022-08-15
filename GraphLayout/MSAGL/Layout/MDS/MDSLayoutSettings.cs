@@ -134,11 +134,7 @@ namespace Microsoft.Msagl.Layout.MDS
             return MemberwiseClone() as LayoutAlgorithmSettings;
         }
 
-        /// <summary>
-        /// Settings for calculation of ideal edge length
-        /// </summary>
-        public EdgeConstraints EdgeConstraints { get; set; }
-
+        
         /// <summary>
         /// Adjust the scale of the graph if there is not enough whitespace between nodes
         /// </summary>
