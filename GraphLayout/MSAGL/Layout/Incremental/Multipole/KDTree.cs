@@ -55,12 +55,11 @@ namespace Microsoft.Msagl.Layout.Incremental
             foreach (var l in leaves)
             {
                 l.ComputeForces();
-                List<KdNode> stack = new List<KdNode>();
-                stack.Add(root);
+                var stack = new Stack<KdNode>();
+                stack.Push(root);
                 while (stack.Count > 0)
                 {
-                    KdNode v = stack.Last();
-                    stack.RemoveAt(stack.Count - 1);
+                    KdNode v = stack.Pop();
                     if (!l.intersects(v))
                     {
                         foreach (var p in l.particles[0])
@@ -86,8 +85,8 @@ namespace Microsoft.Msagl.Layout.Incremental
                         else
                         {
                             var n = v as InternalKdNode;
-                            stack.Add(n.leftChild);
-                            stack.Add(n.rightChild);
+                            stack.Push(n.leftChild);
+                            stack.Push(n.rightChild);
                         }
                     }
                 }
