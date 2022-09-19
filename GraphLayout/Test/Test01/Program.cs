@@ -212,7 +212,7 @@ namespace Test01 {
             var ir = new InitialLayout(graph, settings);
             ir.Run();
             RouteEdges(graph, settings);
-            LayoutAlgorithmSettings.ShowGraph(graph);
+            // LayoutAlgorithmSettings.ShowGraph(graph);
             //  AddNodeFd(graph);
 
             var n = new Node(CurveFactory.CreateDiamond(200, 200, new Point(350, 230)));
