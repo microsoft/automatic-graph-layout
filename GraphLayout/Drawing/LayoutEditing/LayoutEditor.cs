@@ -677,7 +677,7 @@ namespace Microsoft.Msagl.Drawing {
                     port = CreateOrUpdateCurvePort(t, geomNode, port);
                 else
                     port = PointIsInside(mousePosition, ((Node) viewerNode.DrawingObject).GeometryNode.BoundaryCurve)
-                               ? CreateFloatingPort(geomNode, ref mousePosition)
+                               ? CreateFloatingPort(geomNode, mousePosition)
                                : null;
             }
             else 
@@ -694,7 +694,7 @@ namespace Microsoft.Msagl.Drawing {
             return port;
         }
 
-        FloatingPort CreateFloatingPort( GeometryNode geomNode, ref Point location) {
+        FloatingPort CreateFloatingPort( GeometryNode geomNode, Point location) {
             return new FloatingPort(geomNode.BoundaryCurve, location);
         }
 
@@ -746,7 +746,7 @@ namespace Microsoft.Msagl.Drawing {
             if (NeedToCreateBoundaryPort(mousePosition, node, out t))
                 port = CreateOrUpdateCurvePort(t, geomNode, port);
             else
-                port = CreateFloatingPort(geomNode, ref mousePosition);
+                port = CreateFloatingPort(geomNode, mousePosition);
         }
 
         static GeometryNode GeometryNode(IViewerNode node) {

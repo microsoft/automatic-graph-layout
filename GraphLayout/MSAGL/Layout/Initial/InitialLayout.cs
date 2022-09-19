@@ -128,7 +128,7 @@ namespace Microsoft.Msagl.Layout.Initial
                     // run PivotMDS with a largish Scale so that the layout comes back oversized.
                     // subsequent incremental iterations do a better job of untangling when they're pulling it in
                     // rather than pushing it apart.
-                    PivotMDS pivotMDS = new PivotMDS(component) { Scale = 2 };
+                    PivotMDS pivotMDS = new PivotMDS(component); ;
                     this.RunChildAlgorithm(pivotMDS, 0.5 / componentCount);
                 }
                 FastIncrementalLayout fil = new FastIncrementalLayout(component, settings, settings.MinConstraintLevel, anyCluster => settings);
@@ -142,7 +142,7 @@ namespace Microsoft.Msagl.Layout.Initial
                     }
                     if (level > settings.MinConstraintLevel)
                     {
-                        fil.CurrentConstraintLevel = level;
+                        fil.SetCurrentConstraintLevel(level);
                     }
                     do
                     {

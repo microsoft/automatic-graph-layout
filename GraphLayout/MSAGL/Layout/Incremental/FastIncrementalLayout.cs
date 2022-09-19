@@ -118,7 +118,7 @@ namespace Microsoft.Msagl.Layout.Incremental {
                 c.RectangularBoundary = new RectangularClusterBoundary();
             }
 
-            CurrentConstraintLevel = initialConstraintLevel;
+            SetCurrentConstraintLevel(initialConstraintLevel);
         }
 
         void SetupConstraints() {
@@ -147,16 +147,18 @@ namespace Microsoft.Msagl.Layout.Incremental {
         /// <summary>
         /// Controls which constraints are applied in CalculateLayout.  Setter enforces feasibility at that level.
         /// </summary>
-        internal int CurrentConstraintLevel {
-            get { return currentConstraintLevel; }
-            set {
-                currentConstraintLevel = value;
-                horizontalSolver.ConstraintLevel = value;
-                verticalSolver.ConstraintLevel = value;
-                Feasibility.Enforce(settings, value, nodes, horizontalSolver.structuralConstraints,
-                                    verticalSolver.structuralConstraints, new[] {graph.RootCluster}, clusterSettings);
-                settings.Unconverge();
-            }
+        internal int GetCurrentConstraintLevel() { return currentConstraintLevel; }
+
+        /// <summary>
+        /// Controls which constraints are applied in CalculateLayout.  Setter enforces feasibility at that level.
+        /// </summary>
+        internal void SetCurrentConstraintLevel(int value) {
+            currentConstraintLevel = value;
+            horizontalSolver.ConstraintLevel = value;
+            verticalSolver.ConstraintLevel = value;
+            Feasibility.Enforce(settings, value, nodes, horizontalSolver.structuralConstraints,
+                                verticalSolver.structuralConstraints, new[] { graph.RootCluster }, clusterSettings);
+            settings.Unconverge();
         }
 
         /// <summary>
@@ -363,7 +365,7 @@ namespace Microsoft.Msagl.Layout.Incremental {
         void SatisfyConstraints() {
             for (int i = 0; i < settings.ProjectionIterations; ++i) {
                 foreach (var level in constraints.Keys) {
-                    if (level > CurrentConstraintLevel) {
+                    if (level > GetCurrentConstraintLevel()) {
                         break;
                     }
                     foreach (var c in constraints[level]) {

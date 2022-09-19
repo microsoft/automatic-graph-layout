@@ -40,11 +40,7 @@ namespace Microsoft.Msagl.Drawing {
         }
 
         static void RestoreOnKevValue(KeyValuePair<GeometryObject, RestoreData> kv) {
-            if (kv.Value.Action != null) {
-                kv.Value.Action();
-                return;
-            }
-
+           
             var geomObj = kv.Key;
             var node = geomObj as GeomNode;
             if (node != null) {

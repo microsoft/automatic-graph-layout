@@ -693,8 +693,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 // Don't check the return of Project; defer the termination check to SplitBlocks.
                 // This also examines limits post-Project; because it happens pre-SplitBlocks it ensures
                 // a feasible stopping state.
-                bool violationsFound;
-                if (!this.RunProject(out violationsFound))
+                if (!this.RunProject())
                 {
                     return;
                 }
@@ -707,10 +706,10 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             }
         }
 
-        private bool RunProject(out bool violationsFound)
+        private bool RunProject()
         {
             ++this.solverSolution.OuterProjectIterations;
-            violationsFound = Project();
+            Project();
 
             // Examine limits post-Project but pre-SplitBlocks to ensure a feasible stopping state.
             return !CheckForLimitsExceeded();
@@ -820,7 +819,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
 
                 // Examine limits post-Project to ensure a feasible stopping state.  We don't test for 
                 // termination due to "no violations found" here, deferring that to the next iteration's PreProject().
-                if (!this.RunProject(out foundViolation))
+                if (!this.RunProject())
                 {
                     break;
                 }
@@ -843,8 +842,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
         {
             // Start off with one Project pass so the initial Qpsc state is feasible (not in violation
             // of constraints).  If this takes more than the max allowable time, we're done.
-            bool foundViolation;
-            return this.RunProject(out foundViolation);
+            return this.RunProject();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Conditional("TEST_MSAGL")]

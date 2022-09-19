@@ -202,17 +202,17 @@ namespace Test01 {
 
         static void TestFD() {
             GeometryGraph graph = CreateGeometryGraphForFD();
-            //LayoutAlgorithmSettings.ShowGraph(graph);
+           // LayoutAlgorithmSettings.ShowGraph(graph);
             var settings = new FastIncrementalLayoutSettings {
                 AvoidOverlaps = true,
-                ApplyForces = false,
+                ApplyForces = true,
                 RungeKuttaIntegration = true
             };
 
             var ir = new InitialLayout(graph, settings);
             ir.Run();
             RouteEdges(graph, settings);
-            //LayoutAlgorithmSettings.ShowGraph(graph);
+            LayoutAlgorithmSettings.ShowGraph(graph);
             //  AddNodeFd(graph);
 
             var n = new Node(CurveFactory.CreateDiamond(200, 200, new Point(350, 230)));

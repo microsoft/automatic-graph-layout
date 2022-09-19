@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Layout;
 
@@ -61,10 +62,12 @@ namespace Microsoft.Msagl.Layout.Incremental {
         }
 
         internal void SetVariableDesiredPos(bool horizontal) {
-            if (horizontal)
+            if (horizontal) {
                 mOlapNodeX.Variable.DesiredPos = desiredPosition.X;
-            else
+            }
+            else {
                 mOlapNodeY.Variable.DesiredPos = desiredPosition.Y;
+            }
         }
         /// <summary>
         /// Update the current X or Y coordinate of the node center from the result of a solve

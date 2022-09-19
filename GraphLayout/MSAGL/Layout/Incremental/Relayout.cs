@@ -251,8 +251,8 @@ namespace Microsoft.Msagl.Layout.Initial {
             Debug.Assert(settings.Iterations == 0);
 
             foreach (var level in Enumerable.Range(settings.MinConstraintLevel, settings.MaxConstraintLevel + 1)) {
-                if (level != fil.CurrentConstraintLevel) {
-                    fil.CurrentConstraintLevel = level;
+                if (level != fil.GetCurrentConstraintLevel()) {
+                    fil.SetCurrentConstraintLevel(level);
                     if (level == 2) {
                         settings.MinorIterations = 1;
                         settings.ApplyForces = false;

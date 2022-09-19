@@ -118,40 +118,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         /// </summary>
         internal static bool LineSegmentIntersectPolyline(Point start, Point end, Polyline poly) {
             return Curve.CurveCurveIntersectionOne(new LineSegment(start, end), poly, false) != null;
-            Point segDirection = end - start;   // the segment direction vector
-            Debug.Assert(segDirection.Length > ApproximateComparer.DistanceEpsilon);
-
-            double tStart = 0;                  // the maximum entering segment parameter
-            double tEnd = 1;                    // the minimum leaving segment parameter
-
-            foreach (var p in poly.PolylinePoints) {
-                //process one edge
-                var prev = p.PrevOnPolyline;
-                Point e = prev.Point - p.Point;
-                double num = Point.CrossProduct(e, start - p.Point);
-                double den = -Point.CrossProduct(e, segDirection);
-                if (Math.Abs(den) < ApproximateComparer.Tolerance) { // segment is nearly parallel to this edge
-                    if (num < 0) return false;
-                    continue;
-                }
-
-                //intersection parameter
-                double t = num / den;
-                if (den < 0) {
-                    // segment is entering across this edge
-                    tStart = Math.Max(tStart, t);
-                    // segment enters after leaving polygon
-                    if (tStart > tEnd) return false;
-                }
-                else {
-                    // segment is leaving across this edge
-                    tEnd = Math.Min(tEnd, t);
-                    // segment leaves before entering polygon
-                    if (tStart > tEnd) return false;
-                }
-            }
-
-            return true;
+            
         }
 
 

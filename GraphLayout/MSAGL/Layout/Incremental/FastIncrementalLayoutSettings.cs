@@ -511,18 +511,24 @@ namespace Microsoft.Msagl.Layout.Incremental {
         /// obtain an untangled unconstrained layout, then 1 to introduce structural constraints and finally 2 to beautify.
         /// Running only at level 2 will most likely leave the graph stuck in a tangled local minimum.
         /// </summary>
-        public int CurrentConstraintLevel
-        {
-            get
-            {
-                if (algorithm == null)
-                    return 0;
-                return algorithm.CurrentConstraintLevel;
-            }
-            set
-            {
-                algorithm.CurrentConstraintLevel = value;
-            }
+        public int GetCurrentConstraintLevel() {
+            if (algorithm == null)
+                return 0;
+            return algorithm.GetCurrentConstraintLevel();
+        }
+
+        /// <summary>
+        /// Constraint level ranges from Min to MaxConstraintLevel.
+        /// 0 = no constraints
+        /// 1 = only structural constraints
+        /// 2 = all constraints including non-overlap constraints
+        /// 
+        /// A typical run of FastIncrementalLayout will apply it at each constraint level, starting at 0 to
+        /// obtain an untangled unconstrained layout, then 1 to introduce structural constraints and finally 2 to beautify.
+        /// Running only at level 2 will most likely leave the graph stuck in a tangled local minimum.
+        /// </summary>
+        public void SetCurrentConstraintLevel(int value) {
+            algorithm.SetCurrentConstraintLevel(value);
         }
 
         double attractiveInterClusterForceConstant = 1.0;
