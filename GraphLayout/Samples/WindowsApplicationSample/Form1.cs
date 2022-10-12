@@ -135,16 +135,16 @@ namespace WindowsApplicationSample {
                     //         here we can use e.Attr.Id or e.UserData to get back to the user data
                     gViewer.SetToolTip(toolTip1, String.Format("edge from {0} to {1}", edge.Source, edge.Target));
                 }
-                else if (selectedObject is Microsoft.Msagl.Drawing.Node) {
-                    selectedObjectAttr = (gViewer.SelectedObject as Microsoft.Msagl.Drawing.Node).Attr.Clone();
-                    (selectedObject as Microsoft.Msagl.Drawing.Node).Attr.Color = Color.Green;
+                else if (selectedObject is Node) {
+                    selectedObjectAttr = (selectedObject as Node).Attr.Clone();
+                    (selectedObject as Node).Attr.Color = Color.Green;
                     // //   here you can use e.Attr.Id to get back to your data
                     gViewer.SetToolTip(toolTip1,
                                        String.Format("node {0}",
                                                      (selectedObject as Microsoft.Msagl.Drawing.Node).Attr.Id));
                     gViewer.Invalidate(e.NewObject);
                 }
-                label1.Text = selectedObject.ToString();                
+                label1.Text = selectedObject.ToString();
             }
 
             label1.Refresh();
@@ -152,17 +152,17 @@ namespace WindowsApplicationSample {
 
         void RestoreSelectedObjAttr() {
             var edge = selectedObject as Edge;
-            if (edge != null) {
-                edge.Attr = (EdgeAttr)selectedObjectAttr;
+            if (edge != null && selectedObjectAttr is EdgeAttr atr) {
+                edge.Attr = atr;
             }
             else {
                 var node = selectedObject as Microsoft.Msagl.Drawing.Node;
-                if (node != null)
-                    node.Attr = (NodeAttr)selectedObjectAttr;
-
+                if (node != null && selectedObjectAttr is NodeAttr attr)
+                    node.Attr = attr;
             }
-
         }
+
+    
 
 
         void Button1Click(object sender, EventArgs e) {
