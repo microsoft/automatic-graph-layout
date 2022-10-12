@@ -432,116 +432,16 @@ namespace Microsoft.Msagl.Drawing {
                 else
                     edgesDraggedWithSource.Insert(edge);
 
-            CalculateOffsetsForMultiedges(node, LayoutSettings.NodeSeparation);
+            
             var cl = node as Cluster;
             if (cl != null)
                 foreach (var n in cl.AllSuccessorsWidthFirst())
                     AssignEdgesOfNodeToEdgeDragSets(n);
         }
 
-        internal static Dictionary<GeomEdge, double> CalculateOffsetsForMultiedges(GeomNode node, double nodeSeparation) {
-            var offsetsInsideOfMultiedge = new Dictionary<GeomEdge, double>();
-            foreach (var multiedge in GetMultiEdges(node))
-                CalculateMiddleOffsetsForMultiedge(multiedge, node, offsetsInsideOfMultiedge, nodeSeparation);
-            return offsetsInsideOfMultiedge;
-        }
+      
 
-        static void CalculateMiddleOffsetsForMultiedge(List<GeomEdge> multiedge, GeomNode node,
-            Dictionary<GeomEdge, double> offsetsInsideOfMultiedge,
-            double nodeSeparation) {
-            Dictionary<GeomEdge, double> middleAngles = GetMiddleAnglesOfMultiedge(multiedge, node);
-            var angles = new double[middleAngles.Count];
-            var edges = new GeomEdge[middleAngles.Count];
-            int i = 0;
-            foreach (var v in middleAngles) {
-                angles[i] = v.Value;
-                edges[i] = v.Key;
-                i++;
-            }
-            Array.Sort(angles, edges);
-
-            double separation = nodeSeparation*6;
-
-            int k = edges.Length/2;
-            bool even = k*2 == edges.Length;
-            double off;
-            if (even) {
-                off = -separation/2;
-                for (int j = k - 1; j >= 0; j--) {
-                    GeomEdge edge = edges[j];
-                    offsetsInsideOfMultiedge[edge] = off;
-                    off -= separation + (edge.Label != null ? edge.Label.Width : 0);
-                }
-
-                off = separation/2;
-                for (int j = k; j < edges.Length; j++) {
-                    GeomEdge edge = edges[j];
-                    offsetsInsideOfMultiedge[edge] = off;
-                    off += separation + (edge.Label != null ? edge.Label.Width : 0);
-                }
-            }
-            else {
-                off = 0;
-                for (int j = k; j >= 0; j--) {
-                    GeomEdge edge = edges[j];
-                    offsetsInsideOfMultiedge[edge] = off;
-                    off -= separation + (edge.Label != null ? edge.Label.Width : 0);
-                }
-                off = separation;
-                for (int j = k + 1; j < edges.Length; j++) {
-                    GeomEdge edge = edges[j];
-                    offsetsInsideOfMultiedge[edge] = off;
-                    off += separation + (edge.Label != null ? edge.Label.Width : 0);
-                }
-            }
-        }
-
-        static Dictionary<GeomEdge, double> GetMiddleAnglesOfMultiedge(List<GeomEdge> multiedge, GeomNode node) {
-            var ret = new Dictionary<GeomEdge, double>();
-            GeomEdge firstEdge = multiedge[0];
-
-            Point a = node.Center;
-            Point b = Middle(firstEdge.Curve);
-            ret[firstEdge] = 0;
-
-            for (int i = 1; i < multiedge.Count; i++) {
-                GeomEdge edge = multiedge[i];
-                Point c = Middle(edge.Curve);
-                double angle = Point.Angle(b, a, c);
-                if (angle > Math.PI)
-                    angle = angle - Math.PI*2;
-
-                ret[edge] = angle;
-            }
-
-            return ret;
-        }
-
-        static Point Middle(ICurve iCurve) {
-            return iCurve[iCurve.ParStart + 0.5*(iCurve.ParEnd - iCurve.ParStart)];
-        }
-
-        static IEnumerable<List<GeomEdge>> GetMultiEdges(GeomNode node) {
-            var nodeToMultiEdge = new Dictionary<GeomNode, List<GeomEdge>>();
-            foreach (GeomEdge edge in node.OutEdges)
-                GetOrCreateListOfMultiedge(nodeToMultiEdge, edge.Target).Add(edge);
-            foreach (GeomEdge edge in node.InEdges)
-                GetOrCreateListOfMultiedge(nodeToMultiEdge, edge.Source).Add(edge);
-
-            foreach (var list in nodeToMultiEdge.Values)
-                if (list.Count > 1)
-                    yield return list;
-        }
-
-        static List<GeomEdge> GetOrCreateListOfMultiedge(Dictionary<GeomNode, List<GeomEdge>> nodeToMultiEdge,
-            GeomNode node) {
-            List<GeomEdge> list;
-            if (nodeToMultiEdge.TryGetValue(node, out list))
-                return list;
-
-            return nodeToMultiEdge[node] = new List<GeomEdge>();
-        }
-
+        
         internal UndoRedoAction InsertToListAndSetTheBoxBefore(UndoRedoAction action) {
             UndoRedoActionsList.AddAction(action);
             action.GraphBoundingBoxBefore = action.Graph.BoundingBox;
