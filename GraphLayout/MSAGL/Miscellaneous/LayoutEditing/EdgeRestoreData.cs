@@ -32,7 +32,6 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing{
                 labelCenter = edge.Label.Center;
                 Curve untrimmedCurve = edge.UnderlyingPolyline.CreateCurve();
                 LabelAttachmentParameter = untrimmedCurve.ClosestParameter(labelCenter);
-                LabelOffsetFromTheAttachmentPoint = labelCenter - untrimmedCurve[LabelAttachmentParameter];
             }
         }
 
@@ -65,11 +64,7 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing{
         /// </summary>
         public Point ArrowheadAtTargetPosition { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Point LabelOffsetFromTheAttachmentPoint { get; set; }
-
+        
 
         /// <summary>
         /// the closest point to the label center
