@@ -627,7 +627,7 @@ namespace Microsoft.Msagl.Drawing {
         /// <returns></returns>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Polyline")]
         static CornerSite FindClosestCornerForEdit(SmoothedPolyline underlyingPolyline, Point mousePoint) {
-            var site = underlyingPolyline.HeadSite.Next;
+            var site = underlyingPolyline.HeadSite;
             var bestSite = site;
             var dist = (bestSite.Point - mousePoint).LengthSquared;
             while (site.Next != null) {
