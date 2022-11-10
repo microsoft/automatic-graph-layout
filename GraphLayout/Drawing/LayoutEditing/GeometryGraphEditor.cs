@@ -22,8 +22,8 @@ namespace Microsoft.Msagl.Drawing {
     ///     the editor of a graph layout
     /// </summary>
     public class GeometryGraphEditor {
-        readonly Set<GeomEdge> edgesDraggedWithSource = new Set<GeomEdge>();
-        readonly Set<GeomEdge> edgesDraggedWithTarget = new Set<GeomEdge>();
+        private readonly Set<GeomEdge> edgesDraggedWithSource = new Set<GeomEdge>();
+        private readonly Set<GeomEdge> edgesDraggedWithTarget = new Set<GeomEdge>();
 
         GeometryGraph graph;
         LayoutAlgorithmSettings layoutSettings;
