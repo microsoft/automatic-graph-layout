@@ -1,7 +1,7 @@
 <package>
   <metadata>
     <id>AutomaticGraphLayout.GraphViewerGDI</id>
-    <version>1.1.4</version>
+    <version>1.2.0</version>
     <authors>paulovila</authors>
     <owners>Microsoft</owners>
     <license type="expression">MIT</license>
@@ -14,20 +14,28 @@
     <language>en-US</language>
     <tags>MSAGL Graph Layout</tags>
     <dependencies>
-      <group targetFramework=".NETFramework4.6.1" >
-        <dependency id="AutomaticGraphLayout.Drawing" version="$(BuildVersion)" />
-      </group>
       <group targetFramework=".NETFramework4.7.2" >
         <dependency id="AutomaticGraphLayout.Drawing" version="$(BuildVersion)" />
       </group>
-      <group targetFramework=".NETCoreApp3.1" >
+      <group targetFramework="net6.0-windows">
+        <dependency id="AutomaticGraphLayout.Drawing" version="$(BuildVersion)" />
+      </group>
+      <group targetFramework="net7.0-windows">
         <dependency id="AutomaticGraphLayout.Drawing" version="$(BuildVersion)" />
       </group>
     </dependencies>
+    <frameworkReferences>
+      <group targetFramework="net6.0-windows">
+        <frameworkReference name="Microsoft.WindowsDesktop.App.WinForms" />
+      </group>
+      <group targetFramework="net7.0-windows">
+        <frameworkReference name="Microsoft.WindowsDesktop.App.WinForms" />
+      </group>
+    </frameworkReferences>
   </metadata>
   <files>
-    <file src="./bin/Release/net461/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net461" />
     <file src="./bin/Release/net472/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net472" />
-    <file src="./bin/Release/netcoreapp3.1/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\netcoreapp3.1" />
+    <file src="./bin/Release/net6.0-windows/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net6.0-windows" />
+    <file src="./bin/Release/net7.0-windows/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net7.0-windows" />
   </files>
 </package>
