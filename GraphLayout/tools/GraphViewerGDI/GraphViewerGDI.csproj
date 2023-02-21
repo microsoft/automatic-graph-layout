@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFrameworks>net461;net472;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net472;net6.0-windows;net7.0-windows</TargetFrameworks>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Msagl.GraphViewerGdi</RootNamespace>
     <AssemblyName>Microsoft.Msagl.GraphViewerGdi</AssemblyName>
@@ -21,9 +21,10 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DefineConstants>TRACE;TEST_MSAGL;TEST_MSAGL</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL</DefineConstants>
     <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGdi.xml</DocumentationFile>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <UseVSHostingProcess>false</UseVSHostingProcess>
@@ -38,14 +39,14 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugSurface|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\DebugSurface\</OutputPath>
-    <DefineConstants>TRACE;TEST_MSAGL;CODE_ANALYSIS;TEST_MSAGL</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL;CODE_ANALYSIS</DefineConstants>
     <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGDI.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugWithoutRebuild|AnyCPU' ">
     <OutputPath>bin\DebugWithoutRebuild\</OutputPath>
-    <DefineConstants>TRACE;TEST_MSAGL;TEST_MSAGL</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL</DefineConstants>
     <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>1591</NoWarn>
@@ -54,14 +55,14 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugDevTrace|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\DebugDevTrace\</OutputPath>
-    <DefineConstants>TRACE;TEST_MSAGL;CODE_ANALYSIS;TEST_MSAGL;TEST_MSAGL;DEVTRACE</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL;CODE_ANALYSIS;DEVTRACE</DefineConstants>
     <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGDI.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>TRACE;TEST_MSAGL;TEST_MSAGL</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL</DefineConstants>
     <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGDI.XML</DocumentationFile>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <NoWarn>1591</NoWarn>
@@ -77,14 +78,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugSurface|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\DebugSurface\</OutputPath>
-    <DefineConstants>TRACE;TEST_MSAGL;CODE_ANALYSIS;TEST_MSAGL</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL;CODE_ANALYSIS</DefineConstants>
     <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGDI.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugWithoutRebuild|x86'">
     <OutputPath>bin\x86\DebugWithoutRebuild\</OutputPath>
-    <DefineConstants>TRACE;TEST_MSAGL;TEST_MSAGL</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL</DefineConstants>
     <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>1591</NoWarn>
@@ -93,14 +94,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugDevTrace|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\DebugDevTrace\</OutputPath>
-    <DefineConstants>TRACE;TEST_MSAGL;CODE_ANALYSIS;TEST_MSAGL;TEST_MSAGL;DEVTRACE</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL;CODE_ANALYSIS;DEVTRACE</DefineConstants>
     <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGDI.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>TRACE;TEST_MSAGL;TEST_MSAGL</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL</DefineConstants>
     <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGDI.XML</DocumentationFile>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <NoWarn>1591</NoWarn>
@@ -115,14 +116,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugSurface|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\DebugSurface\</OutputPath>
-    <DefineConstants>TRACE;TEST_MSAGL;CODE_ANALYSIS;TEST_MSAGL</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL;CODE_ANALYSIS</DefineConstants>
     <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGDI.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugWithoutRebuild|x64'">
     <OutputPath>bin\x64\DebugWithoutRebuild\</OutputPath>
-    <DefineConstants>TRACE;TEST_MSAGL;TEST_MSAGL</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL</DefineConstants>
     <DocumentationFile>bin\Release\Microsoft.Msagl.GraphViewerGdi.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>1591</NoWarn>
@@ -131,7 +132,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugDevTrace|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\DebugDevTrace\</OutputPath>
-    <DefineConstants>TRACE;TEST_MSAGL;CODE_ANALYSIS;TEST_MSAGL;TEST_MSAGL;DEVTRACE</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL;CODE_ANALYSIS;DEVTRACE</DefineConstants>
     <DocumentationFile>bin\Debug\Microsoft.Msagl.GraphViewerGDI.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet />
@@ -200,5 +201,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Drawing\AutomaticGraphLayout.Drawing.csproj" />
     <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Resources.Extensions" Version="7.0.0" />
   </ItemGroup>
 </Project>

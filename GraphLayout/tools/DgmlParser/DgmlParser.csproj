@@ -87,8 +87,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="VSSDK.GraphModel">
-      <Version>12.0.4</Version>
+    <PackageReference Include="Microsoft.VisualStudio.GraphModel">
+      <Version>17.4.33103.184</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

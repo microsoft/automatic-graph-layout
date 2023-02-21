@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
-    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net472;net6.0-windows;net7.0-windows</TargetFrameworks>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>LocationLabeling</RootNamespace>
     <AssemblyName>LocationLabeling</AssemblyName>
     <StartupObject></StartupObject>
@@ -24,16 +24,16 @@
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DefineConstants>TRACE;TEST_MSAGL;TEST_MSAGL</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugDevTrace|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\DebugDevTrace\</OutputPath>
-    <DefineConstants>TRACE;TEST_MSAGL;TEST_MSAGL;DEVTRACE</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL;DEVTRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>TRACE;TEST_MSAGL;TEST_MSAGL</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -41,11 +41,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugDevTrace|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\DebugDevTrace\</OutputPath>
-    <DefineConstants>TRACE;TEST_MSAGL;TEST_MSAGL;DEVTRACE</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL;DEVTRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>TRACE;TEST_MSAGL;TEST_MSAGL</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -53,7 +53,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugDevTrace|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\DebugDevTrace\</OutputPath>
-    <DefineConstants>TRACE;TEST_MSAGL;TEST_MSAGL;DEVTRACE</DefineConstants>
+    <DefineConstants>TRACE;TEST_MSAGL;DEVTRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Update="System.Core">

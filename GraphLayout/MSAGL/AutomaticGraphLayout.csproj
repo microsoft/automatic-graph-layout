@@ -6,10 +6,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <DefineConstants>TEST_MSAGL;TEST_MSAGL</DefineConstants>
+    <DefineConstants>TEST_MSAGL</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-    <DefineConstants>TEST_MSAGL;TEST_MSAGL;TEST_MSAGL</DefineConstants>
+    <DefineConstants>TEST_MSAGL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="AutomaticGraphLayout.nuspec" />
