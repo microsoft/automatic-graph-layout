@@ -22,6 +22,8 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+    <NuspecFile>GraphViewerGDI.nuspec</NuspecFile>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DefineConstants>TRACE;TEST_MSAGL</DefineConstants>
@@ -203,6 +205,10 @@
     <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="System.Resources.Extensions" Version="7.0.0" />
   </ItemGroup>
 </Project>

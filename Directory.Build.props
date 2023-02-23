@@ -4,6 +4,15 @@
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\Key.snk</AssemblyOriginatorKeyFile>
+    <Deterministic>true</Deterministic>
+    <PackageProjectUrl>https://github.com/Microsoft/automatic-graph-layout</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Microsoft/automatic-graph-layout</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>Microsoft</Authors>
+    <PackageTags>MSAGL Graph Layout</PackageTags>
+    <PackageVersion>1.1.7</PackageVersion>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
 </Project>

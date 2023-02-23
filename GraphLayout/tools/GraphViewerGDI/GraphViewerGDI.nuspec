@@ -1,8 +1,8 @@
 <package>
   <metadata>
-    <id>AutomaticGraphLayout.GraphViewerGDI</id>
-    <version>1.1.5</version>
-    <authors>paulovila</authors>
+    <id>Microsoft.Msagl.GraphViewerGDI</id>
+    <version>1.1.6</version>
+    <authors>Microsoft</authors>
     <owners>Microsoft</owners>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/Microsoft/automatic-graph-layout</projectUrl>
@@ -15,27 +15,30 @@
     <tags>MSAGL Graph Layout</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.7.2" >
-        <dependency id="AutomaticGraphLayout.Drawing" version="$(BuildVersion)" />
+        <dependency id="Microsoft.Msagl.Drawing" version="1.1.6" />
       </group>
-      <group targetFramework="net6.0-windows">
-        <dependency id="AutomaticGraphLayout.Drawing" version="$(BuildVersion)" />
+      <group targetFramework="net6.0-windows7.0">
+        <dependency id="Microsoft.Msagl.Drawing" version="1.1.6" />
       </group>
-      <group targetFramework="net7.0-windows">
-        <dependency id="AutomaticGraphLayout.Drawing" version="$(BuildVersion)" />
+      <group targetFramework="net7.0-windows7.0">
+        <dependency id="Microsoft.Msagl.Drawing" version="1.1.6" />
       </group>
     </dependencies>
     <frameworkReferences>
-      <group targetFramework="net6.0-windows">
+      <group targetFramework="net6.0-windows7.0">
         <frameworkReference name="Microsoft.WindowsDesktop.App.WinForms" />
       </group>
-      <group targetFramework="net7.0-windows">
+      <group targetFramework="net7.0-windows7.0">
         <frameworkReference name="Microsoft.WindowsDesktop.App.WinForms" />
       </group>
     </frameworkReferences>
   </metadata>
   <files>
     <file src="./bin/Release/net472/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net472" />
-    <file src="./bin/Release/net6.0-windows/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net6.0-windows" />
-    <file src="./bin/Release/net7.0-windows/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net7.0-windows" />
+    <file src="./bin/Release/net472/Microsoft.Msagl.GraphViewerGdi.xml" target="lib\net472" />
+    <file src="./bin/Release/net6.0-windows/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net6.0-windows7.0" />
+    <file src="./bin/Release/net6.0-windows/Microsoft.Msagl.GraphViewerGdi.xml" target="lib\net6.0-windows7.0" />
+    <file src="./bin/Release/net7.0-windows/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net7.0-windows7.0" />
+    <file src="./bin/Release/net7.0-windows/Microsoft.Msagl.GraphViewerGdi.xml" target="lib\net7.0-windows7.0" />
   </files>
 </package>
