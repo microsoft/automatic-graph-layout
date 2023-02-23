@@ -1,10 +1,10 @@
 ﻿<package>
   <metadata>
-    <id>AutomaticGraphLayout.Drawing</id>
-    <version>1.1.4</version>
-    <authors>paulovila</authors>
+    <id>Microsoft.Msagl.Drawing</id>
+    <version>1.1.6</version>
+    <authors>Microsoft</authors>
     <owners>Microsoft</owners>
-    <licenseUrl>https://github.com/Microsoft/automatic-graph-layout/blob/master/LICENSE</licenseUrl>
+    <license type="expression">MIT</license>
     <projectUrl>https://github.com/Microsoft/automatic-graph-layout</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>The Definitions of different drawing attributes like colors, line styles, etc. It also contains definitions of a node class, an edge class, and a graph class. By using these classes a user can create a graph object and use it later for layout, and rendering.</description>
@@ -14,10 +14,11 @@
     <language>en-US</language>
     <tags>MSAGL Graph Layout</tags>
     <dependencies>
-      <dependency id="Microsoft.AutomaticGraphLayout" version="$(BuildVersion)" />
+      <dependency id="Microsoft.Msagl" version="1.1.6" />
     </dependencies>
   </metadata>
   <files>
-    <file src="./bin/Release/netstandard2.0/AutomaticGraphLayout.Drawing.dll" target="lib/netstandard2.0" />
+    <file src="./bin/Release/netstandard2.0/Microsoft.Msagl.Drawing.dll" target="lib/netstandard2.0" />
+    <file src="./bin/Release/netstandard2.0/Microsoft.Msagl.Drawing.xml" target="lib/netstandard2.0" />
   </files>
 </package>
