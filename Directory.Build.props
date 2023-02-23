@@ -11,7 +11,6 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Microsoft</Authors>
     <PackageTags>MSAGL Graph Layout</PackageTags>
-    <PackageVersion>1.1.7</PackageVersion>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
