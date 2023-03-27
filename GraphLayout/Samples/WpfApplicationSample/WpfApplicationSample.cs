@@ -293,8 +293,9 @@ namespace WpfApplicationSample
                 Graph graph = new Graph();
                 graph.AddEdge("47", "58");
                 graph.AddEdge("70", "71");
+                var tn = graph.AddNode("test");
 
-
+                graph.AddEdge("test", "47");
 
                 var subgraph = new Subgraph("subgraph1");
                 subgraph.Label.Text = "Outer";

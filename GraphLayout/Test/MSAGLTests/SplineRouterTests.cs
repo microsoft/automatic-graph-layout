@@ -519,6 +519,38 @@ namespace Microsoft.Msagl.UnitTests
 #endif
             
         }
+//        [WorkItem(535708)]
+//        [TestMethod]
+//        [TestCategory("Rectilinear routing")]
+//        [TestCategory("NonRollingBuildTest")]
+//        [Timeout(5000)]
+//        [Description("Create three groups, a couple of embedded and see if the routing succeeds")]
+//        public void RelayoutTest() {
+//            var graph = LoadGraph("abstract.msagl.geom");
+//            var n = new Node();
+//            n.BoundaryCurve = CurveFactory.CreateCircle(30, new Point());
+
+//            graph.Add(n);
+//            FixClusterBoundariesWithNoRectBoundaries(root, 5);
+//            var defaultSettings = new FastIncrementalLayoutSettings();
+//            var rootSettings = new FastIncrementalLayoutSettings() { AvoidOverlaps = true };
+
+//            var initialLayout = new InitialLayoutByCluster(graph, new[] { graph.RootCluster }, cl => cl == root ? rootSettings : defaultSettings);
+//            initialLayout.Run();
+
+//            const double Padding = 5;
+
+//            SplineRouter splineRouter = new SplineRouter(graph, Padding / 3, Padding, Math.PI / 6);
+//            splineRouter.Run();
+//#if TEST_MSAGL
+//            if (!DontShowTheDebugViewer())
+//            {
+//                graph.UpdateBoundingBox();
+//                DisplayGeometryGraph.ShowGraph(graph);                
+//            }
+//#endif
+
+//        }
 
         static void FixClusterBoundariesWithNoRectBoundaries(Cluster cluster, double padding) {
             foreach (Cluster cl in cluster.Clusters)

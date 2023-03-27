@@ -362,11 +362,11 @@ namespace Microsoft.Msagl.WpfGraphControl {
             var tag = frameworkElement.Tag;
             var iviewerObj = tag as IViewerObject;
             if (iviewerObj != null && iviewerObj.DrawingObject.IsVisible) {
-                if (ObjectUnderMouseCursor is IViewerEdge || ObjectUnderMouseCursor == null
+                if (iviewerObj is IViewerEdge || ObjectUnderMouseCursor == null
                     ||
                     Panel.GetZIndex(frameworkElement) >
                     Panel.GetZIndex(GetFrameworkElementFromIViewerObject(ObjectUnderMouseCursor)))
-                    //always overwrite an edge or take the one with greater zIndex
+                    //always overwrite with the incoming edge or take the one with greater zIndex
                     ObjectUnderMouseCursor = iviewerObj;
             }
             return HitTestResultBehavior.Continue;
