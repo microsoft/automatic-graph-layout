@@ -206,7 +206,8 @@ namespace Microsoft.Msagl.Drawing {
             if (SubgraphMap.TryGetValue(nodeId, out subgraph))
                 return subgraph;
 
-            ret = nodeMap[nodeId] as Node;
+
+            nodeMap.TryGetValue(nodeId, out ret);
             if (ret == null) {
                 ret = new Node(nodeId);
                 nodeMap[nodeId] = ret;
@@ -239,21 +240,6 @@ namespace Microsoft.Msagl.Drawing {
             get { return nodeMap.Count; }
         }
 
-
-        /// <summary>
-        /// A lookup function.
-        /// </summary>
-        /// <param name="edgeId"></param>
-        /// <returns></returns>
-        public Edge EdgeById(string edgeId) {
-            if (idToEdges == null || idToEdges.Count == 0) {
-                foreach (Edge e in Edges)
-                    if (e.Attr.Id != null)
-                        idToEdges[e.Attr.Id] = e;
-            }
-
-            return idToEdges[edgeId] as Edge;
-        }
 
         /// <summary>
         /// The number of dges in the graph.
@@ -369,12 +355,12 @@ namespace Microsoft.Msagl.Drawing {
         /// <summary>
         /// It is very strange, but the layouts don't look not so good if I use Dictionary over strings
         /// </summary>
-        internal Hashtable nodeMap = new Hashtable();
+        internal SortedDictionary<string, Node> nodeMap = new SortedDictionary<string, Node>();
 
         /// <summary>
         /// labels -> nodes 
         /// </summary>
-        public Hashtable NodeMap {
+        public SortedDictionary<string,Node> NodeMap {
             get { return nodeMap; }
         }
 
@@ -388,7 +374,7 @@ namespace Microsoft.Msagl.Drawing {
         /// visible only in debug
         /// </summary>
         /// <param name="nodeM"></param>
-        public void InitNodeMap(Hashtable nodeM) {
+        public void InitNodeMap(SortedDictionary<string, Node> nodeM) {
             nodeMap = nodeM;
         }
 #endif
@@ -415,10 +401,6 @@ namespace Microsoft.Msagl.Drawing {
                 }
             }
         }
-
-
-        Hashtable idToEdges = new Hashtable();
-       
 
 
         [SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")] string id;
