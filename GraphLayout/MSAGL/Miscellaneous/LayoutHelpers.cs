@@ -55,7 +55,7 @@ namespace Microsoft.Msagl.Miscellaneous {
             else {
                 var sugiyamaLayoutSettings = settings as SugiyamaLayoutSettings;
                 if (sugiyamaLayoutSettings != null)
-                    ProcessSugiamaLayout(geometryGraph, sugiyamaLayoutSettings, cancelToken);
+                    ProcessSugiyamaLayout(geometryGraph, sugiyamaLayoutSettings, cancelToken);
                 else {
                     Debug.Assert(settings is LgLayoutSettings);
                     LayoutLargeGraphWithLayers(geometryGraph, settings, cancelToken, tileDirectory);
@@ -83,7 +83,7 @@ namespace Microsoft.Msagl.Miscellaneous {
             largeGraphLayout.LabelingOfOneRun();
         }
 
-        static void ProcessSugiamaLayout(GeometryGraph geometryGraph, SugiyamaLayoutSettings sugiyamaLayoutSettings, CancelToken cancelToken) {
+        static void ProcessSugiyamaLayout(GeometryGraph geometryGraph, SugiyamaLayoutSettings sugiyamaLayoutSettings, CancelToken cancelToken) {
             PlaneTransformation originalTransform;
             var transformIsNotIdentity = HandleTransformIsNotIdentity(geometryGraph, sugiyamaLayoutSettings, out originalTransform);
 
