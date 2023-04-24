@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.22.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Drawing\AutomaticGraphLayout.Drawing.csproj" />
+    <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj" />
+    <ProjectReference Include="..\..\Tools\WpfGraphControl\WpfGraphControl.csproj" />
+  </ItemGroup>
+
+</Project>
