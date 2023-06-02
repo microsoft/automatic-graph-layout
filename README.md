@@ -74,7 +74,7 @@ samples can be found here…](https://www.microsoft.com/en-us/research/project/m
 GraphMaps lets you view very large graphs like oneline maps - as you zoom in more detail is revealed. Watch a [video](https://youtu.be/qCUP20dQqBo) that shows how GraphMaps works, and here is the [video](http://i11www.iti.kit.edu/~rprutkin/composers.wmv) of the previous version.
 
 ## Using GraphMaps
-* open Lg.sln and build the solution,
+* open GraphLayout.sln and build the solution,
 * run TestGraphMaps. 
 
 NOTES:
