@@ -7,6 +7,8 @@ MSAGL was developed in Microsoft by Lev Nachmanson, Sergey Pupyrev, Tim Dwyer, T
 
 The simplest way to start with MSAGL in C# is to open GraphLayout.sln in Visual Studio and browse the Samples folder.
 
+> **Note:** This repository requires Visual Studio with the UWP (Universal Windows Platform) development workload installed, as well as the Windows 10 SDK. If these are not installed, Visual Studio will recommend installing them when you open the solution. Please ensure these components are installed to successfully build the project.
+
 ## MSAGL Modules
 
 **The Core Layout engine (AutomaticGraphLayout.dll)** - [NuGet package](https://www.nuget.org/packages/AutomaticGraphLayout/)
