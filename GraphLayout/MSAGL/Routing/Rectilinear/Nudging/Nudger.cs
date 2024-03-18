@@ -27,6 +27,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         }
 
         Dictionary<AxisEdge, Polyline> axisEdgesToObstaclesTheyOriginatedFrom;
+        private double minimalEdgeSeparation = 2;
 
         List<Path> Paths { get; set; }
 
@@ -47,7 +48,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             HierarchyOfGroups = RectangleNode<Shape, Point>.CreateRectangleNodeOnEnumeration(
                     ancestorsSets.Keys.Where(shape => shape.IsGroup).Select(group => new RectangleNode<Shape, Point>(group, group.BoundingBox)));
             Obstacles = obstacles;
-            EdgeSeparation = 2 * cornerFitRad;
+            EdgeSeparation = Math.Max(2 * cornerFitRad, MinimalEdgeSeparation);
             Paths = new List<Path>(paths);
             HierarchyOfObstacles =
                 RectangleNode<Polyline, Point>.CreateRectangleNodeOnEnumeration(
@@ -656,6 +657,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         /// 
         /// </summary>
         protected Dictionary<Port, Shape> PortToShapes { get; private set; }
+        public double MinimalEdgeSeparation { get => minimalEdgeSeparation; private set => minimalEdgeSeparation = value; }
 
         Set<Shape> AncestorsForPort(Port port) {
             Shape shape;

@@ -209,7 +209,7 @@ namespace Microsoft.Msagl.Miscellaneous {
             if (mode == EdgeRoutingMode.Rectilinear ||
                 mode == EdgeRoutingMode.RectilinearToCenter) {
                 RectilinearInteractiveEditor.CreatePortsAndRouteEdges(
-                    layoutSettings.NodeSeparation / 3,
+                    ers.CornerRadius,
                     layoutSettings.NodeSeparation / 3,
                     nodes,
                     edgesToRoute,
