@@ -732,7 +732,7 @@ namespace TestForGdi {
             var sugiyamaSettings = (SugiyamaLayoutSettings) settings;
             var router = new RectilinearEdgeRouter(graph, sugiyamaSettings.NodeSeparation/6,
                                                    sugiyamaSettings.NodeSeparation/6,
-                                                   true)
+                                                   true, 0)
                                                    {
                                                        BendPenaltyAsAPercentageOfDistance = sugiyamaSettings.EdgeRoutingSettings.BendPenalty
                                                    };
@@ -914,7 +914,7 @@ namespace TestForGdi {
             }
 
             var padding = (settings == null) ? 3 : settings.NodeSeparation / 3;
-            var router = new RectilinearEdgeRouter(nodeShapeMap.Values, padding, 3, useSparseVisibilityGraph)
+            var router = new RectilinearEdgeRouter(nodeShapeMap.Values, padding, 3, useSparseVisibilityGraph, 0)
             {
                 RouteToCenterOfObstacles = edgeRoutingMode == EdgeRoutingMode.RectilinearToCenter,
                 BendPenaltyAsAPercentageOfDistance = bendPenalty
@@ -980,7 +980,7 @@ namespace TestForGdi {
                 }
 
                 var router = new RectilinearEdgeRouter(nodeShapeMap.Values, RectilinearEdgeRouter.DefaultPadding,
-                                                       RectilinearEdgeRouter.DefaultCornerFitRadius, useSparseVisibilityGraph) {
+                                                       RectilinearEdgeRouter.DefaultCornerFitRadius, useSparseVisibilityGraph, 0) {
                     RouteToCenterOfObstacles = edgeRoutingMode == EdgeRoutingMode.RectilinearToCenter,
                     BendPenaltyAsAPercentageOfDistance =  bendPenalty
                 };

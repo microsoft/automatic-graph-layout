@@ -38,17 +38,17 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         ///  "nudge" paths to decrease the number of intersections and stores the results inside WidePaths of "paths"
         /// </summary>
         /// <param name="paths">paths through the graph</param>
-        /// <param name="cornerFitRad">two parallel paths should be separated by this distance if it is feasible</param>
+        /// <param name="edgeSeparation">two parallel paths should be separated by this distance if it is feasible</param>
         /// <param name="obstacles">polygonal convex obstacles organized in a tree; the obstacles here are padded original obstacles</param>
         /// <param name="ancestorsSets"></param>
         /// <returns></returns>
-        internal Nudger(IEnumerable<Path> paths, double cornerFitRad, IEnumerable<Polyline> obstacles, 
+        internal Nudger(IEnumerable<Path> paths, double edgeSeparation, IEnumerable<Polyline> obstacles, 
             Dictionary<Shape, Set<Shape>> ancestorsSets) {
             AncestorsSets = ancestorsSets;
             HierarchyOfGroups = RectangleNode<Shape, Point>.CreateRectangleNodeOnEnumeration(
                     ancestorsSets.Keys.Where(shape => shape.IsGroup).Select(group => new RectangleNode<Shape, Point>(group, group.BoundingBox)));
             Obstacles = obstacles;
-            EdgeSeparation = Math.Max(2 * cornerFitRad, MinimalEdgeSeparation);
+            EdgeSeparation = Math.Max(2 * edgeSeparation, MinimalEdgeSeparation);
             Paths = new List<Path>(paths);
             HierarchyOfObstacles =
                 RectangleNode<Polyline, Point>.CreateRectangleNodeOnEnumeration(
@@ -885,15 +885,15 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         /// this function defines the final path coordinates
         /// </summary>
         /// <param name="paths">the set of paths, point sequences</param>
-        /// <param name="cornerFitRadius">the radius of the arc inscribed into the path corners</param>
+        /// <param name="edgeSeparation">the radius of the arc inscribed into the path corners</param>
         /// <param name="paddedObstacles">an enumeration of padded obstacles</param>
         /// <param name="ancestorsSets"></param>
         /// <param name="removeStaircases"></param>
         /// <returns>the mapping of the path to its modified path</returns>
-        internal static void NudgePaths(IEnumerable<Path> paths, double cornerFitRadius, IEnumerable<Polyline> paddedObstacles, Dictionary<Shape, Set<Shape>> ancestorsSets, bool removeStaircases) {
+        internal static void NudgePaths(IEnumerable<Path> paths, double edgeSeparation, IEnumerable<Polyline> paddedObstacles, Dictionary<Shape, Set<Shape>> ancestorsSets, bool removeStaircases) {
             if (!paths.Any())
                 return;
-            var nudger = new Nudger(paths, cornerFitRadius, paddedObstacles, ancestorsSets);
+            var nudger = new Nudger(paths, edgeSeparation, paddedObstacles, ancestorsSets);
             nudger.Calculate(Direction.North, true);
             nudger.Calculate(Direction.East, false);
             nudger.Calculate(Direction.North, false);

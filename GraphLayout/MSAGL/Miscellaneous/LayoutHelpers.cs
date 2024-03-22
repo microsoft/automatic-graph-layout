@@ -208,6 +208,7 @@ namespace Microsoft.Msagl.Miscellaneous {
             var mode = (straighLineRoutingThreshold == 0 || geometryGraph.Nodes.Count < straighLineRoutingThreshold) ? ers.EdgeRoutingMode : EdgeRoutingMode.StraightLine; 
             if (mode == EdgeRoutingMode.Rectilinear ||
                 mode == EdgeRoutingMode.RectilinearToCenter) {
+                double edgeSepar = layoutSettings.EdgeRoutingSettings == null ? 0 : layoutSettings.EdgeRoutingSettings.EdgeSeparationRectilinear;
                 RectilinearInteractiveEditor.CreatePortsAndRouteEdges(
                     ers.CornerRadius,
                     layoutSettings.NodeSeparation / 3,
@@ -215,7 +216,7 @@ namespace Microsoft.Msagl.Miscellaneous {
                     edgesToRoute,
                     mode,
                     true,
-                    ers.BendPenalty, cancelToken);
+                    ers.BendPenalty, edgeSepar, cancelToken);
             }
             else if (mode == EdgeRoutingMode.Spline || mode == EdgeRoutingMode.SugiyamaSplines) {
                 new SplineRouter(geometryGraph, filteredEdgesToRoute, ers.Padding, ers.PolylinePadding, ers.ConeAngle, null) {

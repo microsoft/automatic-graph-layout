@@ -59,7 +59,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
 
         internal RectilinearEdgeRouterWrapper(IEnumerable<Shape> obstacles, double padding, double cornerFitRadius,
                                             bool routeToCenterOfObstacles, bool useSparseVisibilityGraph)
-            : base(obstacles, padding, cornerFitRadius, useSparseVisibilityGraph)
+            : base(obstacles, padding, cornerFitRadius, useSparseVisibilityGraph, cornerFitRadius)
         {
             this.WantPaths = true;
             this.WantNudger = true;

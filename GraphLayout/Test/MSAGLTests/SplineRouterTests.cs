@@ -456,7 +456,7 @@ namespace Microsoft.Msagl.UnitTests
             InitialLayout initialLayout = new InitialLayout(g, new FastIncrementalLayoutSettings() { AvoidOverlaps = true });
             initialLayout.Run();
             
-            RectilinearEdgeRouter router = new RectilinearEdgeRouter(g, 1, 1, false);
+            RectilinearEdgeRouter router = new RectilinearEdgeRouter(g, 1, 1, false, 1);
             router.Run();
             EnableDebugViewer();
             ShowGraphInDebugViewer(g);

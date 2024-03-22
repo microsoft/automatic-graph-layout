@@ -52,7 +52,7 @@ namespace EdgeRoutingSample {
             LayoutAlgorithmSettings.ShowGraph(graph);
 #endif
 
-            var rectRouter = new RectilinearEdgeRouter(graph, 3,3, true);
+            var rectRouter = new RectilinearEdgeRouter(graph, 3,3, true, 5);
             rectRouter.Run();
 #if TEST
             LayoutAlgorithmSettings.ShowGraph(graph);
