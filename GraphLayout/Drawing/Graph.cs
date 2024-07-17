@@ -321,7 +321,9 @@ namespace Microsoft.Msagl.Drawing {
         /// <param name="nodeId"></param>
         /// <returns></returns>
         public Node FindNode(string nodeId) {
-            return nodeMap[nodeId] as Node;
+            if (nodeMap.TryGetValue(nodeId, out Node n))
+                return n;
+            return null;
         }
 
         /// <summary>
@@ -332,7 +334,8 @@ namespace Microsoft.Msagl.Drawing {
         {
             if (GeometryGraph != null)
             {
-                Node node = nodeMap[nodeId] as Node;
+
+                nodeMap.TryGetValue(nodeId, out Node node);
                 if (node != null)
                 {
                     return GeometryGraph.FindNodeByUserData(node);
