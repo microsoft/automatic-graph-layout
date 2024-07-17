@@ -238,17 +238,16 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             double h = height / 2;
             Point[] ps = new Point[8];
 
-            // Pad out horizontally
-            ps[0] = new Point(w + (octagonPad * w), h - (h * octagonPad));
-            ps[3] = new Point(-ps[0].X, ps[0].Y);
-            ps[4] = new Point(ps[3].X, -ps[3].Y);
-            ps[7] = new Point(ps[0].X, -ps[0].Y);
+            ps[7] = new Point(w + (octagonPad * w), h - (h * octagonPad));
+            ps[4] = new Point(-ps[7].X, ps[7].Y);
+            ps[3] = new Point(ps[4].X, -ps[4].Y);
+            ps[0] = new Point(ps[7].X, -ps[7].Y);
 
             // Pad out vertically
-            ps[1] = new Point(w - (w * octagonPad), h + (h * octagonPad));
-            ps[2] = new Point(-ps[1].X, ps[1].Y);
-            ps[6] = new Point(ps[1].X, -ps[1].Y);
-            ps[5] = new Point(ps[2].X, -ps[2].Y);
+            ps[6] = new Point(w - (w * octagonPad), h + (h * octagonPad));
+            ps[5] = new Point(-ps[6].X, ps[6].Y);
+            ps[1] = new Point(ps[6].X, -ps[6].Y);
+            ps[2] = new Point(ps[5].X, -ps[5].Y);
 
             for (int i = 0; i < 8; i++) {
                 ps[i] += center;
@@ -272,12 +271,12 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             var x = center.X;
             var y = center.Y;
             return new Polyline(new[]{
-                new Point(-w     + x, - h  + y),
-                new Point( w     + x, - h  + y),
-                new Point( w + h + x,  0  + y),
-                new Point( w     + x, h + y),
-                new Point(-w     + x, h + y),
-                new Point(-w - h + x, 0  + y),
+            new Point(-w - h + x, 0  + y),
+            new Point(-w     + x, h + y),
+            new Point( w     + x, h + y),
+            new Point( w + h + x,  0  + y),
+            new Point( w     + x, - h  + y),
+            new Point(-w     + x, - h  + y),
             }) { Closed = true };
         }
 
