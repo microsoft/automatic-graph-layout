@@ -34,11 +34,7 @@ namespace Microsoft.Msagl.Routing {
     Shape[] rootShapes;
     IEnumerable<EdgeGeometry> edgeGeometriesEnumeration {
       get {
-        if (this._edges != null) {
-          foreach (var item in this._edges.Select(e => e.EdgeGeometry)) {
-              yield return item;
-          }
-        }
+        return this._edges?.Select(e => e.EdgeGeometry) ?? Enumerable.Empty<EdgeGeometry>();
       }
     }
     double coneAngle;

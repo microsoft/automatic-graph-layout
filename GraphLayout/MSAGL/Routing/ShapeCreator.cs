@@ -34,11 +34,12 @@ namespace Microsoft.Msagl.Routing
         }
 
         private static void GetShapesOnDict(Dictionary<Node, Shape> nodesToShapes, Cluster c) {
-            if (c.IsCollapsed) return;
             nodesToShapes.TryGetValue(c, out Shape cShape);
             if (cShape == null) {
-              cShape=  nodesToShapes[c] = CreateShapeWithClusterBoundaryPort(c);
+              cShape = nodesToShapes[c] = CreateShapeWithClusterBoundaryPort(c);
             }
+            if (c.IsCollapsed) return;
+
             foreach (var n in c.Nodes) {
                 nodesToShapes.TryGetValue(n, out Shape nShape);
                 if (nShape == null) {
