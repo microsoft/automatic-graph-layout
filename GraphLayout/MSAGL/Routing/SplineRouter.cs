@@ -36,8 +36,7 @@ namespace Microsoft.Msagl.Routing {
       get {
         if (this._edges != null) {
           foreach (var item in this._edges.Select(e => e.EdgeGeometry)) {
-              if (item.SourcePort != null && item.TargetPort != null)
-                yield return item;
+              yield return item;
           }
         }
       }
@@ -633,9 +632,6 @@ namespace Microsoft.Msagl.Routing {
 
     IEnumerable<Port> AllPorts() {
       foreach (var edgeGeometry in edgeGeometriesEnumeration) {
-                if (edgeGeometry.SourcePort == null || edgeGeometry.TargetPort == null) {
-                    Console.WriteLine("");
-                }
         yield return edgeGeometry.SourcePort;
         yield return edgeGeometry.TargetPort;
       }
@@ -647,7 +643,7 @@ namespace Microsoft.Msagl.Routing {
         foreach (var port in shape.Ports)
           portsToShapes[port] = shape;
       //assign all orphan ports to the root 
-      foreach (var port in AllPorts().Where(p => p != null && !portsToShapes.ContainsKey(p))) {
+      foreach (var port in AllPorts().Where(p => !portsToShapes.ContainsKey(p))) {
         root.Ports.Insert(port);
         portsToShapes[port] = root;
       }
