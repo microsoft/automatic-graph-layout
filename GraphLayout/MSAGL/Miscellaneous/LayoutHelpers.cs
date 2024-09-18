@@ -191,7 +191,7 @@ namespace Microsoft.Msagl.Miscellaneous {
         public static void RouteAndLabelEdges(GeometryGraph geometryGraph, LayoutAlgorithmSettings layoutSettings, IEnumerable<Edge> edgesToRoute, int straighLineRoutingThreshold, CancelToken cancelToken) {
             //todo: what about parent edges!!!!
             var filteredEdgesToRoute =
-                edgesToRoute.Where(e => !e.UnderCollapsedCluster()).ToArray();
+                edgesToRoute.Where(e => !e.UnderCollapsedCluster() && e.SourcePort != null && e.TargetPort != null).ToArray();
             if (filteredEdgesToRoute.Length == 0)
                 return;
             var ers = layoutSettings.EdgeRoutingSettings;
