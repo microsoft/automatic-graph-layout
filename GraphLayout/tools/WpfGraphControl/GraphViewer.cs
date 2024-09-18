@@ -1439,6 +1439,11 @@ namespace Microsoft.Msagl.WpfGraphControl {
             textBlock.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
             textBlock.Width = textBlock.DesiredSize.Width;
             textBlock.Height = textBlock.DesiredSize.Height;
+            if (drawingLabel.GeometryLabel == null) {
+                drawingLabel.GeometryLabel = new Core.Layout.Label();
+            }
+            drawingLabel.GeometryLabel.Width = textBlock.Width;
+            drawingLabel.GeometryLabel.Height = textBlock.Height;
             return textBlock;
         }
 

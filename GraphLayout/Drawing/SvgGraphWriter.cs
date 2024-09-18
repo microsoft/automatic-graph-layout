@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -156,12 +156,12 @@ namespace Microsoft.Msagl.Drawing
         {
             if (!LabelIsValid(label))
                 return;
-            //need to remove these hecks. TODO
+            //need to remove the hack. TODO
             const double yScaleAdjustment = 1.5;
 
             var x = label.Center.X - label.Width / 2;
             var y = label.Center.Y + label.Height / (2 * yScaleAdjustment);
-            var fontSize = 16;
+            var fontSize = label.fontsize;
             WriteStartElement("text");
             WriteAttribute("x", x);
             WriteAttribute("y", y);

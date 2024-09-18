@@ -92,6 +92,7 @@ namespace TestWpfViewer {
 
         public static readonly RoutedUICommand OpenFileCommand = new RoutedUICommand("Open File...", "OpenFileCommand",
                                                                                      typeof (App));
+        public static readonly RoutedUICommand SaveSvgCommand = new RoutedUICommand("Save SVG", "SaveSvgCommand", typeof(App));
 
 
         public static readonly RoutedUICommand CancelLayoutCommand = new RoutedUICommand("Cancel Layout...", "CancelLayoutCommand",
@@ -605,6 +606,8 @@ namespace TestWpfViewer {
 
 
         void SetCommands() {
+            appWindow.CommandBindings.Add(new CommandBinding(SaveSvgCommand, SaveSvg));
+
             appWindow.CommandBindings.Add(new CommandBinding(SaveImageCommand, SaveImage));
             appWindow.CommandBindings.Add(new CommandBinding(SaveMsaglCommand, SaveMsagl));
             appWindow.CommandBindings.Add(new CommandBinding(ExitCommand, ExitHandler));
@@ -629,6 +632,29 @@ namespace TestWpfViewer {
 
         }
 
+        private void SaveSvg(object sender, ExecutedRoutedEventArgs e) {
+           if (graphViewer.Graph==null) {
+                MessageBox.Show("Graph is not loaded", "No Graph", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = lastFileName + ".svg"; // Default file name
+            dlg.DefaultExt = ".svg "; // Default file extension
+            dlg.Filter = "svg  files (.svg )|*.svg "; // Filter files by extension
+
+            Nullable<bool> result = dlg.ShowDialog();
+
+            if (result != true) {
+                return;
+            }
+
+            using (StreamWriter writer = new StreamWriter(dlg.FileName)) {
+                var svgWriter = new SvgGraphWriter(writer.BaseStream, graphViewer.Graph);
+                svgWriter.Write();
+            }
+
+        }
+
         void SaveImage(object sender, ExecutedRoutedEventArgs e)
         {
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
@@ -641,6 +667,7 @@ namespace TestWpfViewer {
             if (result == true)
             {
                 graphViewer.DrawImage(dlg.FileName);
+                
             }
         }
 
@@ -693,7 +720,9 @@ namespace TestWpfViewer {
         void SetFileMenu(Menu mainMenu) {
             var fileMenu = new MenuItem {Header = "_File"};
             var openFileMenuItem = new MenuItem {Header = "_Open", Command = OpenFileCommand};
-            fileMenu.Items.Add(openFileMenuItem);
+            fileMenu.Items.Add(openFileMenuItem); 
+            fileMenu.Items.Add(new MenuItem { Header = "Save _SVG", Command = SaveSvgCommand });
+
             var reloadFileMenuItem = new MenuItem {Header = "_Reload", Command = ReloadCommand};
             fileMenu.Items.Add(reloadFileMenuItem);
 
@@ -702,7 +731,7 @@ namespace TestWpfViewer {
             mainMenu.Items.Add(fileMenu);
             toolBar.Items.Add(mainMenu);
 
-            var saveImageMenuItem = new MenuItem { Header = "_Save Image", Command = SaveImageCommand };
+            var saveImageMenuItem = new MenuItem { Header = "Save _Image", Command = SaveImageCommand };
             fileMenu.Items.Add(saveImageMenuItem);
 
             var saveMsaglMenuItem = new MenuItem { Header = "_Save MSAGL", Command = SaveMsaglCommand };
