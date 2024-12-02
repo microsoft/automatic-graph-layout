@@ -746,7 +746,10 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
                 CancelToken = new CancelToken();
 
-                if (_drawingGraph == null) return;
+                if (_drawingGraph == null) {
+                    ClearGraphViewer();
+                    return;
+                }
 
                 HideCanvas();
                 ClearGraphViewer();

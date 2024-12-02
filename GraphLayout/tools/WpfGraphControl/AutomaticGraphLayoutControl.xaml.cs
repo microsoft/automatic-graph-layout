@@ -15,12 +15,8 @@ namespace Microsoft.Msagl.WpfGraphControl {
         public static readonly DependencyProperty GraphProperty =
             DependencyProperty.Register("Graph", typeof(Graph), typeof(AutomaticGraphLayoutControl), new PropertyMetadata(default(Graph),
                 (d,e)=> ((AutomaticGraphLayoutControl)d)?.SetGraph()));
-     
+
         private void SetGraph() {
-            if (Graph == null) {
-                dockPanel.Children.Clear();
-                return;
-            }
             if (_graphViewer == null) {
                 _graphViewer = new GraphViewer();
                 _graphViewer.BindToPanel(dockPanel);
