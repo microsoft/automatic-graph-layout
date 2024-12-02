@@ -88,7 +88,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
         public bool RunLayoutAsync;
 
         readonly Canvas _graphCanvas = new Canvas();
-        Graph _drawingGraph;
+        Graph _drawingGraph = new Graph();
 
         readonly Dictionary<DrawingObject, FrameworkElement> drawingObjectsToFrameworkElements =
             new Dictionary<DrawingObject, FrameworkElement>();
@@ -518,7 +518,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
         }
 
         void GraphCanvasSizeChanged(object sender, SizeChangedEventArgs e) {
-            if (_drawingGraph == null) return;
+            if (_drawingGraph.NodeMap.Count == 0) return;
             // keep the same zoom level
             double oldfit = GetFitFactor(e.PreviousSize);
             double fitNow = FitFactor;
@@ -699,7 +699,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
         public Graph Graph {
             get { return _drawingGraph; }
             set {
-                _drawingGraph = value;
+                _drawingGraph = value ?? new Graph();
                 ProcessGraph();
             }
         }
@@ -745,9 +745,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
                     LayoutStarted(null, null);
 
                 CancelToken = new CancelToken();
-
-                if (_drawingGraph == null) return;
-
                 HideCanvas();
                 ClearGraphViewer();
                 CreateFrameworkElementsForLabelsOnly();
@@ -868,7 +865,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
         /// zooms to the default view
         /// </summary>
         public void SetInitialTransform() {
-            if (_drawingGraph == null || GeomGraph == null) return;
+            if (_drawingGraph.NodeMap.Count == 0 || GeomGraph == null) return;
 
             var scale = FitFactor;
             var graphCenter = GeomGraph.BoundingBox.Center;
@@ -964,8 +961,7 @@ namespace Microsoft.Msagl.WpfGraphControl {
         double FitFactor {
             get {
                 var geomGraph = GeomGraph;
-                if (_drawingGraph == null || geomGraph == null ||
-
+                if (_drawingGraph.NodeMap.Count == 0 || geomGraph == null ||
                     geomGraph.Width == 0 || geomGraph.Height == 0)
                     return 1;
 
@@ -1487,8 +1483,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
         }
 
         public void AddNode(IViewerNode node, bool registerForUndo) {
-            if (_drawingGraph == null)
-                throw new InvalidOperationException(); // adding a node when the graph does not exist
             var vNode = (VNode)node;
             _drawingGraph.AddNode(vNode.Node);
             _drawingGraph.GeometryGraph.Nodes.Add(vNode.Node.GeometryNode);
@@ -1695,8 +1689,6 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
 
         public IViewerNode CreateIViewerNode(Drawing.Node drawingNode, Point center, object visualElement) {
-            if (_drawingGraph == null)
-                return null;
             var frameworkElement = visualElement as FrameworkElement ?? CreateTextBlockForDrawingObj(drawingNode);
             var width = frameworkElement.Width + 2 * drawingNode.Attr.LabelMargin;
             var height = frameworkElement.Height + 2 * drawingNode.Attr.LabelMargin;
