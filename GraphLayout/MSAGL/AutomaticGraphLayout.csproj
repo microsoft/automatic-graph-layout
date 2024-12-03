@@ -6,6 +6,7 @@
     <AssemblyName>Microsoft.Msagl</AssemblyName>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IsPackable>true</IsPackable>
+    <NoWarn>NU1605,CS1591,CS1570,CS1572, CS1587, CS1572, CS1573, CS1712</NoWarn>   
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <DefineConstants>TEST_MSAGL</DefineConstants>
