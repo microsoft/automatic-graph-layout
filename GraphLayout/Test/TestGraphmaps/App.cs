@@ -159,9 +159,7 @@ namespace TestGraphmaps {
 
         
         protected override void OnStartup(StartupEventArgs e) {
-#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
-#endif
 
             // debug
             //Test1.RunTest9();
@@ -820,14 +818,13 @@ namespace TestGraphmaps {
         }
 
         void ProcessDgml(string fileName) {
-#if TEST_MSAGL
             Graph gwgraph = DgmlParser.DgmlParser.Parse(fileName);
             if (gwgraph != null) {
                 SetLayoutSettings(gwgraph);
                 _graphViewer.Graph = gwgraph;
             }
             else
-#endif
+
                 MessageBox.Show("cannot load " + fileName);
         }
 

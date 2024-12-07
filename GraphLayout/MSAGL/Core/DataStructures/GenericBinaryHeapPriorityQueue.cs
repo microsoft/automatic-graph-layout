@@ -172,7 +172,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
             for (int i = 1; i <= heapSize; i++)
                 yield return A[i].v;
         }
-#if TEST_MSAGL
         /// <summary>
         /// 
         /// </summary>
@@ -184,7 +183,7 @@ namespace Microsoft.Msagl.Core.DataStructures {
             return sb.ToString();
         }
   
-#endif
+
     }
 }
 

@@ -3,9 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Msagl.Core.Geometry;
 
-#if TEST_MSAGL
 using System.Linq;
-#endif
 
 namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
     /// <summary>
@@ -51,11 +49,10 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             Debug.Assert( CompassVector.IsPureDirection(Point, Next.Point) );
         }
 
-#if TEST_MSAGL
         public override string ToString() {
             return Point.ToString();
         }
-#endif
+
 
 
     }

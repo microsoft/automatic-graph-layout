@@ -33,9 +33,7 @@ using Node = Microsoft.Msagl.Core.Layout.Node;
 using Path = System.IO.Path;
 using Shape = Microsoft.Msagl.Routing.Shape;
 using Size = System.Drawing.Size;
-#if TEST_MSAGL
 using Timer = Microsoft.Msagl.DebugHelpers.Timer;
-#endif
 //using Timer = Microsoft.Msagl.Timer;
 
 namespace TestForGdi {
@@ -56,9 +54,7 @@ namespace TestForGdi {
             EdgeRoutingMode edgeRoutingMode = EdgeRoutingMode.SugiyamaSplines;
             bool useSparseVisibilityGraph = false;
             
-#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
-#endif
             const string badEdgeOption = "-edge";
             const string mdsOption = "-mds";
             const string initialLayoutOption = "-initl";
@@ -135,9 +131,7 @@ namespace TestForGdi {
                                     System.Diagnostics.Debug.WriteLine("argument is missing after -vdc");
                                     return;
                                 }
-#if TEST_MSAGL
                                 ShowDebugCurves(args[iarg + 1]);
-#endif
                                 return;
                             case "-geom": // must be before case "g":
                                 geomFileNames.Add(args[iarg + 1]);
@@ -233,8 +227,7 @@ namespace TestForGdi {
                                 System.Diagnostics.Debug.WriteLine("setting rectToCenter");
                                 break;
                                 //                            case "testspanner":
-                                //#if TEST_MSAGL
-                                //                                ConeSpannerTest.TestSpanner();
+                                //                                //                                ConeSpannerTest.TestSpanner();
                                 //#else
                                 //                                System.Diagnostics.Debug.WriteLine("ConeSpannerTest is only available in TEST mode");
                                 //#endif
@@ -372,7 +365,7 @@ namespace TestForGdi {
                 f.ResumeLayout();
 
                 f.ShowDialog();
-#endif
+
             }
         }
 
@@ -388,9 +381,7 @@ namespace TestForGdi {
 
             var splineRouter = new SplineRouter(graph, 1, 20, Math.PI / 6, null);
             splineRouter.Run();
-#if TEST_MSAGL
             LayoutAlgorithmSettings.ShowGraph(graph);
-#endif
         }
 
         static void BundleWithWidths() {
@@ -448,12 +439,8 @@ namespace TestForGdi {
             layeredLayout.Run();
             //   LayoutHelpers.CalculateLayout(graph, settings);
             GeometryGraphWriter.Write(graph, "c:\\tmp\\correctLayout");
-#if TEST_MSAGL
             LayoutAlgorithmSettings.ShowGraph(graph);
-#endif
         }
-
-#if TEST_MSAGL
 
         static void ShowDebugCurves(string fileName) {
             DisplayGeometryGraph.ShowDebugCurvesEnumerationOnForm(GetDebugCurves(fileName), new Form1());
@@ -485,19 +472,15 @@ namespace TestForGdi {
             }
             return null;
         }
-#endif
+
 
         static void GroupRoutingTestSpline() {
             LayoutAlgorithmSettings settings;
             var graph = GetTestGraphWithClusters(out settings);
-#if TEST_MSAGL
             //DisplayGeometryGraph.ShowGraph(graph);
-#endif
             var router = new SplineRouter(graph, 2, 9, Math.PI / 6, new BundlingSettings());
             router.Run();
-#if TEST_MSAGL
             DisplayGeometryGraph.ShowGraph(graph);
-#endif
         }
 
 //        static void FixClusterBoundaries(Cluster cluster, double i) {
@@ -546,9 +529,7 @@ namespace TestForGdi {
             GeometryGraph graph = GeometryGraphReader.CreateFromFile("c:/tmp/bug.msagl.geom");
             var router = new SplineRouter(graph, 10, 5, Math.PI/6);
             router.Run();
-#if TEST_MSAGL
             DisplayGeometryGraph.ShowGraph(graph);
-#endif
         }
 
 
@@ -609,9 +590,7 @@ namespace TestForGdi {
 
             var layeredLayout = new LayeredLayout(graph, settings);
             layeredLayout.Run();
-#if TEST_MSAGL
             LayoutAlgorithmSettings.ShowGraph(graph);
-#endif
 
             Debug.Assert(Math.Abs(closed.Center.X - ellipse.Center.X) < 0.01);
             Debug.Assert(Math.Abs(open.Center.X - bezier.Center.X) < 0.01);
@@ -681,15 +660,11 @@ namespace TestForGdi {
                 var router = new SplineRouter(graph, 10, 1, Math.PI/6);
                 router.Run();
             }
-#if TEST_MSAGL
             LayoutAlgorithmSettings.ShowGraph(graph);
-#endif
             graph = GeometryGraphReader.CreateFromFile("c:\\tmp\\graph1.msagl.geom");
             var splineRouter = new SplineRouter(graph, 10, 1, Math.PI / 6);
             splineRouter.Run();
-#if TEST_MSAGL
             LayoutAlgorithmSettings.ShowGraph(graph);
-#endif
             //RoutingTest0();
             for (int i = 0; i < count; i++)
             {
@@ -700,21 +675,15 @@ namespace TestForGdi {
                 box.Pad(box.Diagonal/4);
                 graph.BoundingBox = box;
             }
-#if TEST_MSAGL
             LayoutAlgorithmSettings.ShowGraph(graph);
-#endif
 #endif
         }
         static void RouteCustomEdges(int count) {
             for (int i = 0; i < count; i++) {
                 var graph = CreateGraphForGroupRouting();
-#if TEST_MSAGL
                 LayoutAlgorithmSettings.ShowGraph(graph);
-#endif
                 var router = new SplineRouter(graph, 3, 3,Math.PI/180*30);
                 router.Run();
-#if TEST_MSAGL
-
                 int j = 0;
                 List<DebugCurve> edges =
                     graph.Edges.Select(edge => new DebugCurve(200, 2, DebugCurve.Colors[j++], edge.Curve))
@@ -722,7 +691,7 @@ namespace TestForGdi {
                 LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(graph.RootCluster.AllClustersDepthFirst().Select(
                     s => new DebugCurve(s.BoundaryCurve, s.UserData)).
                                                                        Concat(edges));
-#endif
+
             }
         }
 
@@ -737,9 +706,7 @@ namespace TestForGdi {
                                                        BendPenaltyAsAPercentageOfDistance = sugiyamaSettings.EdgeRoutingSettings.BendPenalty
                                                    };
             router.Run();
-#if TEST_MSAGL
             DisplayGeometryGraph.ShowGraph(graph);
-#endif
         }
 
         static GeometryGraph GetTestGraphWithClusters(out LayoutAlgorithmSettings settings) {            
@@ -869,7 +836,6 @@ namespace TestForGdi {
                 }
             }
 
-#if TEST_MSAGL
             if (show) {
                 geomGraph.UpdateBoundingBox();
                 var b = geomGraph.BoundingBox;
@@ -877,7 +843,7 @@ namespace TestForGdi {
                 geomGraph.BoundingBox = b;
                 DisplayGeometryGraph.ShowGraph(geomGraph);
             }
-#endif
+
         }
 
         static void TestPadding(GeometryGraph geomGraph) {
@@ -897,10 +863,9 @@ namespace TestForGdi {
 
                     var p = nb.ClosestParameter(curvePoint);
                     var nodePoint = nb[p];
-#if TEST_MSAGL
                     if ((nodePoint - curvePoint).Length < 0.99)
                         LayoutAlgorithmSettings.Show(new LineSegment(nodePoint, curvePoint), nb, edgeCurve);
-#endif
+
                 }
             }
         }
@@ -953,9 +918,7 @@ namespace TestForGdi {
             else {
                 var router = new SplineRouter(geomGraph, 9, 0.95238095238095233, Math.PI/6, null);
                 router.Run();
-#if TEST_MSAGL
                 LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(DebugCurvesFromGraph(geomGraph));
-#endif
             }
         }
 
@@ -969,9 +932,7 @@ namespace TestForGdi {
                 //                        continue;
                 if (i == -1) {
                     GeometryGraphWriter.Write(geomGraph, "c:/tmp/ch0");
-#if TEST_MSAGL
                     LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(DebugCurvesFromGraph(geomGraph));
-#endif
                 }
                 var nodeShapeMap = new Dictionary<Node, Shape>();
                 foreach (Node node in geomGraph.Nodes) {
@@ -1006,14 +967,13 @@ namespace TestForGdi {
             }
         }
 
-#if TEST_MSAGL
         static IEnumerable<DebugCurve> DebugCurvesFromGraph(GeometryGraph graph) {
             IEnumerable<DebugCurve> dd = graph.Nodes.Where(n => n.BoundaryCurve != null).
                 Select(n => new DebugCurve(1, "black", n.BoundaryCurve));
             return
                 dd.Concat(graph.Edges.Where(edge => edge.Curve != null).Select(e => new DebugCurve(1, "blue", e.Curve)));
         }
-#endif
+
 
         static void ConvertDotToGeom(string dotFileName, string geomFileName) {
             int line, column;

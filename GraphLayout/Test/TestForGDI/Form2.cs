@@ -254,9 +254,7 @@ namespace TestForGdi {
                     //                        graph.Attr.LayerDirection = LayerDirection.RL;
                 }
 
-#if TEST_MSAGL
                 graph.LayoutAlgorithmSettings.Reporting = verbose;
-#endif
                 gViewer.FileName = fileName;
                 Stopwatch sw = null;
                 if (verbose){
@@ -483,9 +481,7 @@ namespace TestForGdi {
 
         void RouteEdgesRegular() {
             if (GViewer.Graph != null) {
-#if TEST_MSAGL
                 gViewer.Graph.DebugICurves.Clear();
-#endif
                 var edgeMode = GViewer.Graph.LayoutAlgorithmSettings.EdgeRoutingSettings.EdgeRoutingMode;
                 if (GViewer.Graph.LayoutAlgorithmSettings is SugiyamaLayoutSettings && (edgeMode == EdgeRoutingMode.SugiyamaSplines))
                     GViewer.Graph = GViewer.Graph;

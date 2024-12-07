@@ -17,12 +17,10 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
 /// <summary>
 /// Implements the minimal distance between curves functionality
 /// </summary>
-#if TEST_MSAGL
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dist")]
     public 
-#else
-    internal
-#endif
+
+
         class MinDistCurveCurve {
 
         ICurve curveA;

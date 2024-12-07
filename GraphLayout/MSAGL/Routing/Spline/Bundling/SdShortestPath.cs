@@ -246,7 +246,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             }
         }
 
-#if TEST_MSAGL
         //        void DebugShow(SdSimpleVertex prevElement, SdBoneEdge outBoneEdge) {
         //            SplineRouter.ShowVisGraph(this.VisibilityGraph,
         //                                      this.ObstacleHierarchy.GetAllLeaves(),
@@ -264,7 +263,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
         //                                      new[] {(ICurve) new LineSegment(inBoneEdge.SourcePoint, inBoneEdge.TargetPoint) ,
         //                                      new Ellipse(2,2,inBoneEdge.TargetPoint)});
         //        }
-#endif
+
 
         List<SdBoneEdge> GetPathAndUpdateRelatedCosts() {
             //restore the path by moving backwards

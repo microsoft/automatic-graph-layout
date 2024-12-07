@@ -20,9 +20,7 @@ namespace FastIncrementalLayoutWithGdi {
     public partial class Form1 : Form {
         readonly GViewer gViewer = new GViewer();
         public Form1() {
-#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
-#endif
             InitializeComponent();
             SuspendLayout();
             Controls.Add(gViewer);
@@ -43,11 +41,10 @@ namespace FastIncrementalLayoutWithGdi {
 
            
 
-#if TEST_MSAGL
             DisplayGeometryGraph.BindGeomGraphToDrawingGraph(drawingGraph, geometryGraph);
             drawingGraph.DebugCurves = GetClusterBounds(geometryGraph.RootCluster.Clusters).ToArray();
             
-#endif
+
 
             //LayoutAlgorithmSettings.Show(geometryGraph.Nodes.Select(node => node.BoundaryCurve).ToArray());
 
@@ -58,7 +55,6 @@ namespace FastIncrementalLayoutWithGdi {
             gViewer.Graph = drawingGraph;
             gViewer.ZoomF = 1;
         }
-#if TEST_MSAGL
         static List<DebugCurve> GetClusterBounds(IEnumerable<Cluster> listOfClusters){
             var ret = new List<DebugCurve>();
             foreach (var cluster in listOfClusters){
@@ -92,17 +88,16 @@ namespace FastIncrementalLayoutWithGdi {
             return b;
         }
         
-#endif
+
 
         static Node FindNode(GeometryGraph geometryGraph, int id) {
             return geometryGraph.Nodes.First(n => ((DrawingNode) n.UserData).Id == id.ToString());
         }
 
         static void SetupDisplayNodeIds(GeometryGraph geometryGraph) {
- #if TEST_MSAGL
-            foreach (var node in geometryGraph.Nodes)
+             foreach (var node in geometryGraph.Nodes)
                 node.DebugId = ((DrawingNode)node.UserData).Id;
-#endif
+
         }
 
         static void FillClustersAndSettings(FastIncrementalLayoutSettings settings, GeometryGraph geometryGraph) {

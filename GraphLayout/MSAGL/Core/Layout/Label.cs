@@ -8,9 +8,7 @@ namespace Microsoft.Msagl.Core.Layout {
     /// <summary>
     /// A class keeping the data about an edge label
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
     public class Label : GeometryObject {
 
         /// <summary>

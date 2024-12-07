@@ -6,7 +6,7 @@ using Microsoft.Msagl.Core.GraphAlgorithms;
 
 namespace Microsoft.Msagl.Layout.Layered {
     /// <summary>
-    /// The implementation follows "Fast and Simple Horizontal Coordinate Assignment" of Ulrik Brandes and Boris K¨opf
+    /// The implementation follows "Fast and Simple Horizontal Coordinate Assignment" of Ulrik Brandes and Boris Kï¿½opf
     /// The paper has two serious bugs that this code resolves.
     /// </summary>
     internal partial class XCoordsWithAlignment {
@@ -223,11 +223,10 @@ namespace Microsoft.Msagl.Layout.Layered {
         void CalcBiasedAlignment() {
             ConflictElimination();
             Align();
-#if TEST_MSAGL
             //for (int i = 0; i < nOfVertices; i++)
             //    anchors[i].X = x[i];
             //Layout.ShowDataBase(dataBase);
-#endif
+
         }
 
         void LeftUpSetup() {

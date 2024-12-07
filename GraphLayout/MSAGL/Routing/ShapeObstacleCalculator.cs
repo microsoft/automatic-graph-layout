@@ -55,9 +55,7 @@ namespace Microsoft.Msagl.Routing {
         void TryMapShapeToTightLooseCouple(Shape shape, TightLooseCouple tightLooseCouple) {
             if (ShapeIsInsideOfPoly(shape, tightLooseCouple.TightPolyline))
                 ShapesToTightLooseCouples[shape] = tightLooseCouple;
-#if TEST_MSAGL
             tightLooseCouple.LooseShape.UserData = (string) shape.UserData + "x";
-#endif
         }
 
 

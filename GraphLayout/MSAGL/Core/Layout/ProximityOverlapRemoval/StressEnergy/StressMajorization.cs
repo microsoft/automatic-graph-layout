@@ -223,7 +223,6 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.StressEnergy {
             }
         }
 
-#if TEST_MSAGL
     /// <summary>
     ///     Only for internal testing purposes. Three nodes a-b-c, after the process the distances should be 10 between them.
     /// </summary>
@@ -282,7 +281,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.StressEnergy {
                 System.Diagnostics.Debug.WriteLine("----------------------------------------");
             }
         }
-#endif
+
 
          void ConstructLinearSystemFromMajorization(out SparseMatrix Lw, out SparseMatrix Lx) {
             int numEdges = GetNumberOfEdges(NodeVotings);

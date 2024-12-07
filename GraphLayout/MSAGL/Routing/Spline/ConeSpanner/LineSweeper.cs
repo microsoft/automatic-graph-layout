@@ -5,10 +5,9 @@ using System.Linq;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
-#if TEST_MSAGL
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.DebugHelpers;
-#endif
+
 using Microsoft.Msagl.Routing.Visibility;
 
 namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
@@ -184,7 +183,6 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
             return d > 0 ? -1 : 0;
         }
 
-#if TEST_MSAGL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         void Showside(PolylinePoint p, Point a, Point b, PolylinePoint pn) {
             ShowBothTrees(new DebugCurve(100, 1, "brown", BorderPolyline), new DebugCurve(100, 2, "blue",
@@ -194,7 +192,7 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
                                              pn.Point, p.Point)
                               ));
         }
-#endif
+
 
         //        void CheckThatPolylineIsLegal()
         //        {
@@ -208,7 +206,6 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
         //            } while (p != BorderPolyline.StartPoint);
         //        }
 
-#if TEST_MSAGL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         void ShowBoundaryPolyline() {
             LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(CreateBoundaryPolyDebugCurves());
@@ -221,7 +218,7 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
                 yield return new DebugCurve(new Ellipse(1, 1, p.Point), i++);
             }
         }
-#endif
+
 
         void AddEdgeAndRemoveCone(Cone cone, Point p) {
             if (Ports != null && Ports.Contains(cone.Apex))
@@ -306,7 +303,6 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
             }
             //Debug.Assert(TreesAreCorrect());
         }
-#if TEST_MSAGL
 //        protected override bool TreesAreCorrect() {
 //            return TreeIsCorrect(leftConeSides) && TreeIsCorrect(rightConeSides);
 //        }
@@ -322,7 +318,7 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
 //            }
 //            return true;
 //        }
-#endif
+
         void ProcessPortObstacleEvent(PortObstacleEvent portObstacleEvent) {
             Z = GetZ(portObstacleEvent);
             GoOverConesSeeingVertexEvent(portObstacleEvent);
@@ -363,19 +359,16 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
 
         void CreateConeClosureEvent(BrokenConeSide brokenConeSide, ConeSide otherSide) {
             Point x;
-#if TEST_MSAGL
             var r =
-#endif
  Point.RayIntersectsRayInteriors(brokenConeSide.start, brokenConeSide.Direction, otherSide.Start,
                                                 otherSide.Direction, out x);
-#if TEST_MSAGL
             if (!r)
                 LayoutAlgorithmSettings.ShowDebugCurves(
                     new DebugCurve(100, 0.1, "red",new LineSegment(brokenConeSide.Start, brokenConeSide.start + brokenConeSide.Direction)),
                     new DebugCurve(100,0.1, "black", new Ellipse(0.1,0.1, brokenConeSide.Start)),
                     new DebugCurve(100, 0.1, "blue",new LineSegment(otherSide.Start, otherSide.Start + otherSide.Direction)));
             Debug.Assert(r);
-#endif
+
             EnqueueEvent(new ConeClosureEvent(x, brokenConeSide.Cone));
         }
 
@@ -444,7 +437,6 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
             AddConeAndEnqueueEvents(vertexEvent);
         }
 
-#if TEST_MSAGL
         // ReSharper disable UnusedMember.Local
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         static Ellipse EllipseOnVert(SweepEvent vertexEvent) {
@@ -543,7 +535,7 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
             var ls = new LineSegment(Z * SweepDirection + DirectionPerp * range.Min, Z * SweepDirection + DirectionPerp * range.Max);
             return new DebugCurve(100,0.1,"magenta", ls);
         }
-#endif
+
 
         void AddConeAndEnqueueEvents(VertexEvent vertexEvent) {
             var leftVertexEvent = vertexEvent as LeftVertexEvent;
@@ -667,7 +659,6 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
             return leftConeSides.FindFirst(s => PointIsToTheLeftOfSegment(p, s));
         }
 
-#if TEST_MSAGL
         // ReSharper disable UnusedMember.Local
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         static ICurve Box(Point p) {
@@ -684,7 +675,7 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
                 System.Diagnostics.Debug.WriteLine(t);
             System.Diagnostics.Debug.WriteLine("end of right segments");
         }
-#endif
+
 
         static bool PointIsToTheLeftOfSegment(Point p, ConeSide seg) {
             return (Point.GetTriangleOrientation(seg.Start, seg.Start + seg.Direction, p) ==
@@ -810,11 +801,10 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
                 b = rightConeSides.Remove(coneSide);
                 Z = tmpZ;
 
-#if TEST_MSAGL
                 if (b == null) {
                     PrintOutRightSegTree();
                 }
-#endif
+
             }
         }
 
@@ -830,12 +820,11 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
                 coneSideComparer.SetOperand(coneSide);
                 b = leftConeSides.Remove(coneSide);
                 Z = tmpZ;
-#if TEST_MSAGL
                 if (b == null) {
                     PrintOutLeftSegTree();
                     ShowLeftTree(new Ellipse(2, 2, coneSide.Start));
                 }
-#endif
+
             }
 
             Debug.Assert(b != null);
@@ -972,7 +961,6 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
         }
 
 
-#if TEST_MSAGL
         internal void Show(params ICurve[] curves) {
             var l = Obstacles.Select(o => new DebugCurve(100, 0.1, "blue", o)).ToList();
 
@@ -1014,7 +1002,7 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
 
             return new LineSegment(segment.Start, segment.Start + segment.Direction * t);
         }
-#endif
+
 
         //        static int count;
         void GoOverConesSeeingVertexEvent(SweepEvent vertexEvent) {
@@ -1036,7 +1024,6 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
                 coneSideComparer.SetOperand(leftConeSide);
                 rbNode = leftConeSides.Find(leftConeSide);
                 Z = tmpZ;
-#if TEST_MSAGL
 //                if (rbNode == null) {
                     //GeometryGraph gg = CreateGraphFromObstacles();
                     //gg.Save("c:\\tmp\\bug");
@@ -1045,7 +1032,7 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
 //                    ShowLeftTree(new Ellipse(3, 3, vertexEvent.Site));
 //                    ShowRightTree(new Ellipse(3, 3, vertexEvent.Site));
 //                }
-#endif
+
             }
             // the following should not happen if the containment hierarchy is correct.  
             // If containment is not correct it still should not result in a fatal error, just a funny looking route.
@@ -1077,7 +1064,6 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
             return rbNode;
         }
 
-#if TEST_MSAGL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider",
             MessageId = "System.Int32.ToString")]
         internal static GeometryGraph CreateGraphFromObstacles(IEnumerable<Polyline> obstacles) {
@@ -1100,7 +1086,7 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
             }
             System.Diagnostics.Debug.WriteLine("##########end of left cone segments");
         }
-#endif
+
 
         static bool VertexIsToTheLeftOfSegment(SweepEvent vertexEvent, ConeSide seg) {
             return (Point.GetTriangleOrientation(seg.Start, seg.Start + seg.Direction,

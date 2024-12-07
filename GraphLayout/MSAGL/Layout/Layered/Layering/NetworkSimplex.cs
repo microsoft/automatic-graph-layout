@@ -526,12 +526,11 @@ namespace Microsoft.Msagl.Layout.Layered {
                 }
             }
 
-#if TEST_MSAGL
       if (enteringEdge == null)
       {
         throw new InvalidOperationException();
       }
-#endif
+
             return new Tuple<NetworkEdge, NetworkEdge>(leavingEdge, enteringEdge);
 
 
@@ -694,7 +693,6 @@ namespace Microsoft.Msagl.Layout.Layered {
             }
             return l;
         }
-#if TEST_MSAGL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.Debug.WriteLine(System.String,System.Object,System.Object,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         void CheckCutValues() {
             foreach (NetworkEdge e in this.graph.Edges) {
@@ -715,7 +713,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
 
         }
-#endif
+
 
         void InitLayers() {
             LongestPathLayering lp = new LongestPathLayering(this.graph);

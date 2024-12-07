@@ -16,35 +16,35 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
     /// <summary>
     /// An ObstaclePortEntrance is a single edge entering or leaving an obstacle in one of the NSEW Compass directions.
     /// </summary>
-    internal class ObstaclePortEntrance {
+    public class ObstaclePortEntrance {
         ObstaclePort ObstaclePort { get; set; }
         Obstacle Obstacle { get { return ObstaclePort.Obstacle; } }
 
         // The intersection point on the obstacle border (e.g. intersection with a port point, or
         // midpoint of PortEntry) and the direction from that point to find the outer vertex.
-        internal Point UnpaddedBorderIntersect { get; private set; }
-        internal Direction OutwardDirection { get; private set; }
-        internal Point VisibilityBorderIntersect { get; private set; }
-        internal bool IsOverlapped { get; private set; }
-        internal double InitialWeight { get { return this.IsOverlapped ? ScanSegment.OverlappedWeight : ScanSegment.NormalWeight; } }
+        public Point UnpaddedBorderIntersect { get; private set; }
+        public Direction OutwardDirection { get; private set; }
+        public Point VisibilityBorderIntersect { get; private set; }
+        public bool IsOverlapped { get; private set; }
+        public double InitialWeight { get { return this.IsOverlapped ? ScanSegment.OverlappedWeight : ScanSegment.NormalWeight; } }
         private double unpaddedToPaddedBorderWeight = ScanSegment.NormalWeight; 
         
-        internal bool IsCollinearWithPort {
+        public bool IsCollinearWithPort {
             get { return CompassVector.IsPureDirection(PointComparer.GetDirections(this.VisibilityBorderIntersect, this.ObstaclePort.Location)); }
         }
 
         // The line segment from VisibilityBorderIntersect to the first obstacle it hits.
-        internal LineSegment MaxVisibilitySegment { get; private set; }
+        public LineSegment MaxVisibilitySegment { get; private set; }
         private readonly PointAndCrossingsList pointAndCrossingsList;
-        internal bool IsVertical { get { return StaticGraphUtility.IsVertical(this.MaxVisibilitySegment); } }
+        public bool IsVertical { get { return StaticGraphUtility.IsVertical(this.MaxVisibilitySegment); } }
 
         // If the port has entrances that are collinear, don't do the optimization for non-collinear ones.
-        internal bool WantVisibilityIntersection {
+        public bool WantVisibilityIntersection {
             get { return !this.IsOverlapped && this.CanExtend && (!this.ObstaclePort.HasCollinearEntrances || this.IsCollinearWithPort); }
         }
-        internal bool CanExtend { get { return PointComparer.GetDirections(this.MaxVisibilitySegment.Start, this.MaxVisibilitySegment.End) != Direction. None; } }
+        public bool CanExtend { get { return PointComparer.GetDirections(this.MaxVisibilitySegment.Start, this.MaxVisibilitySegment.End) != Direction. None; } }
 
-        internal ObstaclePortEntrance(ObstaclePort oport, Point unpaddedBorderIntersect, Direction outDir, ObstacleTree obstacleTree) {
+        public ObstaclePortEntrance(ObstaclePort oport, Point unpaddedBorderIntersect, Direction outDir, ObstacleTree obstacleTree) {
             ObstaclePort = oport;
             UnpaddedBorderIntersect = unpaddedBorderIntersect;
             OutwardDirection = outDir;
@@ -114,9 +114,9 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return false;
         }
 
-        internal bool HasGroupCrossings { get { return (this.pointAndCrossingsList != null) && (this.pointAndCrossingsList.Count > 0); } }
+        public bool HasGroupCrossings { get { return (this.pointAndCrossingsList != null) && (this.pointAndCrossingsList.Count > 0); } }
 
-        internal bool HasGroupCrossingBeforePoint(Point point) {
+        public bool HasGroupCrossingBeforePoint(Point point) {
             if (!this.HasGroupCrossings) {
                 return false;
             }
@@ -124,7 +124,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return PointComparer.GetDirections(this.MaxVisibilitySegment.Start, pac.Location) == PointComparer.GetDirections(pac.Location, point);
         }
 
-        internal void AddToAdjacentVertex(TransientGraphUtility transUtil, VisibilityVertex targetVertex
+        public void AddToAdjacentVertex(TransientGraphUtility transUtil, VisibilityVertex targetVertex
                             , Rectangle limitRect, bool routeToCenter) {
             VisibilityVertex borderVertex = transUtil.VisGraph.FindVertex(this.VisibilityBorderIntersect);
             if (borderVertex != null) {
@@ -163,7 +163,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             ExtendEdgeChain(transUtil, borderVertex, targetVertex, limitRect, routeToCenter);
         }
         
-        internal void ExtendEdgeChain(TransientGraphUtility transUtil, VisibilityVertex paddedBorderVertex
+        public void ExtendEdgeChain(TransientGraphUtility transUtil, VisibilityVertex paddedBorderVertex
                                 , VisibilityVertex targetVertex, Rectangle limitRect, bool routeToCenter) {
             // Extend the edge chain to the opposite side of the limit rectangle.
             transUtil.ExtendEdgeChain(targetVertex, limitRect, this.MaxVisibilitySegment, this.pointAndCrossingsList, this.IsOverlapped);

@@ -4,14 +4,10 @@ namespace Microsoft.Msagl.Core.GraphAlgorithms {
     /// <summary>
     /// Represents a couple of integers.
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
-#if TEST_MSAGL
     public
-#else
-    internal
-#endif
+
+
  sealed class IntPair : IEdge {
 
         internal int x;

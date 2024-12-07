@@ -130,7 +130,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
 
        
-#if TEST_MSAGL
         /// <summary>
         /// check the validness of the drawing:
         /// 1. hubs are not inside loose obstacles
@@ -224,6 +223,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             }
             return crossings.All(intersectionInfo => obstaclesToIgnoreForBundle.Contains((Polyline)intersectionInfo.Segment1));
         }
-#endif
+
     }
 }

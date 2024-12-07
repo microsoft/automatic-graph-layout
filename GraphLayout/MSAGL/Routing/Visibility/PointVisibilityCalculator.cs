@@ -188,7 +188,6 @@ namespace Microsoft.Msagl.Routing.Visibility {
         void Sweep() {
             foreach (PolylinePoint polylinePoint in sortedListOfPolypoints)
                 SweepPolylinePoint(polylinePoint);
-#if TEST_MSAGL
             //List<ICurve> l = new List<ICurve>();
             //foreach (PEdge pe in this.visibilityGraph.Edges) {
             //    if (!ApproximateComparer.Close(pe.SourcePoint, pe.TargetPoint && pe.Target.PolylinePoint.Polyline!=pe.Source.PolylinePoint.Polyline))
@@ -199,7 +198,7 @@ namespace Microsoft.Msagl.Routing.Visibility {
             ////    l.Add(new LineSegment(pe.SourcePoint, pe.TargetPoint));
 
             //SugiyamaLayoutSettings.Show(l.ToArray());
-#endif
+
         }
 
         //this code will work for convex holes
@@ -266,7 +265,6 @@ namespace Microsoft.Msagl.Routing.Visibility {
             return Point.SignedDoubledTriangleArea(a, v, prev)*Point.SignedDoubledTriangleArea(a, v, next) >= 0;
         }
 
-#if TEST_MSAGL
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
 // ReSharper disable UnusedMember.Local
         void DrawActiveEdgesAndVisibleGraph() {
@@ -282,7 +280,7 @@ namespace Microsoft.Msagl.Routing.Visibility {
 
             LayoutAlgorithmSettings.Show(l.ToArray());
         }
-#endif
+
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         PolylinePoint GetOutgoingSide(PolylinePoint v) {

@@ -3,11 +3,10 @@ using System.ComponentModel;
 
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Routing;
-#if TEST_MSAGL
 using Microsoft.Msagl.DebugHelpers;
 using Microsoft.Msagl.Layout.LargeGraphLayout;
 using Microsoft.Msagl.Routing;
-#endif
+
 
 namespace Microsoft.Msagl.Core.Layout {
 
@@ -17,9 +16,7 @@ namespace Microsoft.Msagl.Core.Layout {
     [Description("Specifies the layout algorithm parametres")]
     [TypeConverter(typeof (ExpandableObjectConverter))]
     [DisplayName("Layout algorithm settings")]
-#if TEST_MSAGL
     [Serializable]
-#endif
     public abstract class LayoutAlgorithmSettings {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2235:MarkAllNonSerializableFields")]
         EdgeRoutingSettings edgeRoutingSettings = new EdgeRoutingSettings();
@@ -31,7 +28,6 @@ namespace Microsoft.Msagl.Core.Layout {
             set { edgeRoutingSettings = value; }
         }
         #region
-#if TEST_MSAGL
         bool reporting;
 
         /// <summary>
@@ -43,11 +39,10 @@ namespace Microsoft.Msagl.Core.Layout {
             get { return reporting; }
             set { reporting = value; }
         }
-#endif
+
         #endregion
         #region test_msagl
 
-#if TEST_MSAGL
         static Show show;
 
         /// <summary>
@@ -84,7 +79,7 @@ namespace Microsoft.Msagl.Core.Layout {
         ///</summary>
         public static ShowGraph ShowGraph { get; set; }
 
-#endif
+
 
         #endregion
 

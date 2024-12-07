@@ -187,7 +187,6 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
         //bool LineIntersectsTightObstacles(Point point, Point x) {
         //    return LineIntersectsTightObstacles(new LineSegment(point, x));    
         //}
-#if TEST_MSAGL
         //private void ShowPolylineAndObstaclesWithGraph() {
         //    List<ICurve> ls = new List<ICurve>();
         //    foreach (Polyline poly in this.obstacleCalculator.TightObstacles)
@@ -198,7 +197,7 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
         //    ls.Add(Polyline);
         //    SugiyamaLayoutSettings.Show(ls.ToArray());
         //}
-#endif
+
         //pull the polyline out from the corners
         void RelaxPolyline() {
             RelaxedPolylinePoint relaxedPolylinePoint = CreateRelaxedPolylinePoints(Polyline);
@@ -230,9 +229,7 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
 
         bool RelaxWithGivenOffset(double offset, RelaxedPolylinePoint relaxedPoint) {
             SetRelaxedPointLocation(offset, relaxedPoint);
-#if TEST_MSAGL
             //ShowPolylineAndObstacles();
-#endif
             if (StickingSegmentDoesNotIntersectTightObstacles(relaxedPoint))
                 return true;
             PullCloserRelaxedPoint(relaxedPoint.Prev);
@@ -298,7 +295,6 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
             relaxedPoint.PolylinePoint.Point = relaxedPoint.OriginalPosition + v;
         }
 
-#if TEST_MSAGL
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         void ShowPolylineAndObstacles(){
             List<ICurve> ls = CreateListWithObstaclesAndPolyline();
@@ -317,7 +313,7 @@ namespace Microsoft.Msagl.Prototype.LayoutEditing {
             ls.Add(Polyline);
             return ls;
         }
-#endif
+
 
         void SmoothCorners(SmoothedPolyline edgePolyline) {
             CornerSite a = edgePolyline.HeadSite; //the corner start

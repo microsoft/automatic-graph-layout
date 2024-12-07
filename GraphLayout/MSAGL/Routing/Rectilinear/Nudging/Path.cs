@@ -10,7 +10,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
     /// <summary>
     /// represents the path for an EdgeGeometry 
     /// </summary>
-    internal class Path {
+    public class Path {
         /// <summary>
         /// the corresponding edge geometry
         /// </summary>

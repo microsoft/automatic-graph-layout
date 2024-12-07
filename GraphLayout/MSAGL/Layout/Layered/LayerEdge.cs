@@ -6,12 +6,7 @@ namespace Microsoft.Msagl.Layout.Layered {
     /// It points to the original edge that can pass several layers
     /// 
     /// </summary>
-#if TEST_MSAGL
-    public
-#else
-    internal
-#endif
- class LayerEdge {
+    public class LayerEdge {
         internal int Weight = 1;
         internal LayerEdge(int source, int target, int crossingWeight, int weight) {
             this.Source = source;

@@ -13,7 +13,7 @@ using Microsoft.Msagl.Routing.Visibility;
 namespace Microsoft.Msagl.Routing.Rectilinear {
     using DebugHelpers;
 
-    internal class TransientGraphUtility {
+    public class TransientGraphUtility {
         // Vertices added to the graph for routing.
         internal List<VisibilityVertexRectilinear> AddedVertices = new List<VisibilityVertexRectilinear>();
 
@@ -675,10 +675,9 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             if (isOverlapped) {
                 return;
             }
-#if TEST_MSAGL
             StaticGraphUtility.Assert(!this.ObstacleTree.SegmentCrossesANonGroupObstacle(extendVertex.Point, nextExtendVertex.Point)
                     , "extendDir edge crosses an obstacle", this.ObstacleTree, this.VisGraph);
-#endif // TEST_MSAGL
+ // TEST_MSAGL
 
             if (spliceSource == null) {
                 // Only verifying the direct extension.

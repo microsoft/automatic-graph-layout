@@ -2,16 +2,14 @@ using System;
 namespace Microsoft.Msagl.Core.DataStructures {
     
 
-#if TEST_MSAGL
     [Serializable]
-#endif
-    internal class RBNode<T> {
+    public class RBNode<T> {
 
-        internal RBColor color;
-        internal T Item;
-        internal RBNode<T> parent, left, right;
-        internal RBNode(RBColor color) { this.color = color; }
-        internal RBNode(RBColor color, T item, RBNode<T> p, RBNode<T> left, RBNode<T> right) {
+        public RBColor color;
+        public T Item;
+        public RBNode<T> parent, left, right;
+        public RBNode(RBColor color) { this.color = color; }
+        public RBNode(RBColor color, T item, RBNode<T> p, RBNode<T> left, RBNode<T> right) {
             this.color = color;
             this.parent = p;
             this.left = left;

@@ -7,11 +7,8 @@ namespace Microsoft.Msagl.Core.Geometry.Curves{
     /// <summary>
     /// A class representing an ellipse.
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
     public class Ellipse : ICurve{
-#if TEST_MSAGL
         /// <summary>
         /// </summary>
         /// <returns></returns>
@@ -19,7 +16,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves{
         public override string ToString() {
             return String.Format("{0} {1} from {2} to {3} a0={4} a1={5}", Start, End, ParStart, ParEnd, AxisA, AxisB);
         }
-#endif
+
         Rectangle box;
 
         ParallelogramNodeOverICurve parallelogramNodeOverICurve;

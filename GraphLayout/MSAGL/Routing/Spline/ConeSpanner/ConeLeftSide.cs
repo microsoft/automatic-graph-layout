@@ -11,10 +11,9 @@ namespace Microsoft.Msagl.Routing.Spline.ConeSpanner {
         internal override Point Direction {
             get { return Cone.LeftSideDirection; }
         }
-#if TEST_MSAGL
         public override string ToString() {
             return "ConeLeftSide " + Start + " " + Direction;
         }
-#endif
+
     }
 }

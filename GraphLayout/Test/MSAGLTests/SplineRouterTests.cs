@@ -9,9 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-#if TEST_MSAGL
 using Microsoft.Msagl.GraphViewerGdi;
-#endif
 using Microsoft.Msagl.Core;
 using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
@@ -19,7 +17,6 @@ using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.DebugHelpers.Persistence;
-using Microsoft.Msagl.GraphViewerGdi;
 using Microsoft.Msagl.Layout.Incremental;
 using Microsoft.Msagl.Layout.Initial;
 using Microsoft.Msagl.Layout.Layered;
@@ -119,12 +116,11 @@ namespace Microsoft.Msagl.UnitTests
 
         private static void CheckEdgesForOverlapWithNodes(double tightPadding, GeometryGraph graph)
         {
-#if TEST_MSAGL
             if (!DontShowTheDebugViewer())
             {
                 DisplayGeometryGraph.SetShowFunctions();
             }
-#endif
+
             foreach (var e in graph.Edges.Where(e=>!MultiEdge(e)))//avoid checking multi-edges since they routed as bundles and can slightly go over the nodes
             {
                 Assert.IsNotNull(e.EdgeGeometry, "EdgeGeometry is null");
@@ -138,14 +134,13 @@ namespace Microsoft.Msagl.UnitTests
                     var box = v.BoundingBox;
                     var poly = InteractiveObstacleCalculator.CreatePaddedPolyline(Curve.PolylineAroundClosedCurve(v.BoundaryCurve), tightPadding / 2);
                     bool overlaps = CurveOverlapsBox(e.EdgeGeometry.Curve, ref box, poly);
-#if TEST_MSAGL
     //uncomment to see the graph and the overlaps  
                     if (overlaps && !DontShowTheDebugViewer())
                     {
                         LayoutAlgorithmSettings.ShowGraph(graph);
                         LayoutAlgorithmSettings.Show(poly, e.Curve);
                     }
-#endif
+
                     Assert.IsFalse(overlaps);
                 }
             }
@@ -207,9 +202,7 @@ namespace Microsoft.Msagl.UnitTests
 
         [TestMethod]
         public void DoubleEdge() {
-#if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
             var g = new GeometryGraph();
             var a = new Node {
                 BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(
@@ -235,17 +228,14 @@ namespace Microsoft.Msagl.UnitTests
             g.Edges.Add(e);
             var sr = new SplineRouter(g, 2, 4, Math.PI / 6);
             sr.Run();
-#if TEST_MSAGL
 //            GraphViewerGdi.DisplayGeometryGraph.ShowGraph(g);
   GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
+
 
         }
         [TestMethod]
         public void OneEdgeWithObstacle() {
-#if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
             var g = new GeometryGraph();
             var a = new Node {
                 BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(
@@ -282,9 +272,7 @@ namespace Microsoft.Msagl.UnitTests
         }
         [TestMethod]
         public void OneEdgeWithTwoObstacles() {
-#if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
             var g = new GeometryGraph();
             var a = new Node {
                 BoundaryCurve = CurveFactory.CreateRectangleWithRoundedCorners(
@@ -326,9 +314,7 @@ namespace Microsoft.Msagl.UnitTests
             g.Edges.Add(e);
             var sr = new SplineRouter(g, 2, 4, Math.PI / 6);
             sr.Run();
-#if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.ShowGraph(g);
-#endif
         }
 
         [TestMethod]
@@ -366,9 +352,7 @@ namespace Microsoft.Msagl.UnitTests
         [Description("the run does not stop")]
         [Ignore] // it is a flaky test
         public void BundlingBug1GeomGraph() {
-#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
-#endif
             var graph = GeometryGraphReader.CreateFromFile(GetGeomGraphFileName("bug1.msagl.geom"));
             var settings = new BundlingSettings();
             var router = new SplineRouter(graph, 0.1, 0.75, Math.PI / 6, settings);
@@ -379,10 +363,7 @@ namespace Microsoft.Msagl.UnitTests
         [TestMethod]
         [Description("the run does not stop")]
         public void Clusterabc() {
-#if TEST_MSAGL
-
                 DisplayGeometryGraph.SetShowFunctions();
-#endif
             var geometryGraph = new GeometryGraph();
             geometryGraph.RootCluster = new Cluster();
             var a = new Node();
@@ -406,9 +387,7 @@ namespace Microsoft.Msagl.UnitTests
                                                                Math.PI / 6, null);
             splineRouter.Run();
 
-#if TEST_MSAGL
             DisplayGeometryGraph.ShowGraph(geometryGraph);
-#endif
         }
 
 
@@ -510,13 +489,12 @@ namespace Microsoft.Msagl.UnitTests
 
             SplineRouter splineRouter = new SplineRouter(graph, Padding/3, Padding, Math.PI / 6);
             splineRouter.Run();
-#if TEST_MSAGL
             if (!DontShowTheDebugViewer())
             {
                 graph.UpdateBoundingBox();
                 DisplayGeometryGraph.ShowGraph(graph);                
             }
-#endif
+
             
         }
 //        [WorkItem(535708)]

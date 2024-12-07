@@ -11,9 +11,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
     /// Represents a node containing a parallelogram.
     /// Is used in curve intersections routines.
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
     abstract public class ParallelogramNode {
         Parallelogram parallelogram;
         /// <summary>

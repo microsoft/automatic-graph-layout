@@ -5,17 +5,13 @@ using Microsoft.Msagl.Drawing;
 using Color = Microsoft.Msagl.Drawing.Color;
 using Node = Microsoft.Msagl.Drawing.Node;
 using Shape = Microsoft.Msagl.Drawing.Shape;
-#if TEST_MSAGL
-using Microsoft.Msagl.GraphViewerGdi;
-#endif 
+using Microsoft.Msagl.GraphViewerGdi; 
 namespace Editing {
     public partial class Form1 : Form {
         bool helpIsShown;
        
         public Form1() {
-#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
-#endif
             graphEditor = new GraphEditor();
             InitializeComponent();
             graphEditor.AddNodeType("Ellipse", Shape.Ellipse, Color.Transparent, Color.Black, 10, "user data",
@@ -33,9 +29,7 @@ namespace Editing {
             ResumeLayout();
 
             helpButton.Click += helpButton_Click;
-#if TEST_MSAGL
             //   Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
         }
 
 

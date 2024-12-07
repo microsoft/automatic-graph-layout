@@ -14,7 +14,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
     /// </summary>
     public class HubDebugger {
         
-#if TEST_MSAGL
         readonly MetroGraphData mgd;
         readonly BundlingSettings bundlingSettings;
         static internal void ShowHubsWithAdditionalICurves(MetroGraphData mgd, BundlingSettings bundlingSettings, params ICurve[] iCurves
@@ -119,7 +118,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
             return dc;
         }
-#endif
+
 
         /*void SaveAsBitmap(string filename, GViewer gViewer) {
             int w = (int)Math.Ceiling((double) gViewer.Graph.Width);

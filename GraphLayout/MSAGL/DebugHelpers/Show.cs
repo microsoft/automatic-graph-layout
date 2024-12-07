@@ -1,4 +1,3 @@
-#if TEST_MSAGL
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 
@@ -14,4 +13,3 @@ namespace Microsoft.Msagl.DebugHelpers {
     ///<param name="graph"></param>
     public delegate void ShowGraph(GeometryGraph graph);
 }
-#endif

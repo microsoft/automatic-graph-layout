@@ -23,8 +23,9 @@ namespace Microsoft.Msagl.UnitTests
         [Description("Verifies that updating shapes and calling incremental sugiyama does not affect the ordering of nodes and layers.")]
         public void NodeShapeChange()
         {
+            Console.WriteLine(this.TestContext.TestRunDirectory);
             // Setup
-            string filePath = Path.Combine(this.TestContext.TestDir, "Out\\Dots", "chat.dot");
+            string filePath = Path.Combine(this.TestContext.TestRunDirectory, "Out\\Dots", "chat.dot");
             GeometryGraph graph = this.LoadGraph(filePath);
             var settings = new SugiyamaLayoutSettings();
 

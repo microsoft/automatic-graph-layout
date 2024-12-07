@@ -56,7 +56,6 @@ namespace Microsoft.Msagl.Drawing
         bool isUpdated;
         
 
-#if TEST_MSAGL 
         /// <summary>
         /// to string
         /// </summary>
@@ -64,7 +63,6 @@ namespace Microsoft.Msagl.Drawing
         public override string ToString() {
             return Id;
         }
-#endif
 
         ///<summary>
         ///</summary>

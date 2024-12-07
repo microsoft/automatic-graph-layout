@@ -13,9 +13,7 @@ using Microsoft.Msagl.Layout.MDS;
 using Microsoft.Msagl.Routing;
 using Microsoft.Msagl.Routing.Rectilinear;
 using System.Threading.Tasks;
-#if TEST_MSAGL
 using Microsoft.Msagl.DebugHelpers;
-#endif
 
 namespace Microsoft.Msagl.Layout.Initial {
     /// <summary>
@@ -61,9 +59,7 @@ namespace Microsoft.Msagl.Layout.Initial {
             ValidateArg.IsNotNull(graph, "graph");
             ValidateArg.IsNotNull(clusters, "clusters");
             ValidateArg.IsNotNull(clusterSettings, "clusterSettings");
-#if TEST_MSAGL
             graph.SetDebugIds();
-#endif
 
             this.graph = graph;
             this.clusters = clusters.ToList();
@@ -141,9 +137,7 @@ namespace Microsoft.Msagl.Layout.Initial {
                 Rectangle newBounds = cluster.BoundingBox;
                 cluster.DeepTranslation(oldBounds.Center - newBounds.Center, true);
             }
-#if TEST_MSAGL
             //  ValidateLayout(cluster);
-#endif
         }
 
         internal static void RouteParentEdges(GeometryGraph graph, EdgeRoutingSettings edgeRoutingSettings) {
@@ -226,7 +220,6 @@ namespace Microsoft.Msagl.Layout.Initial {
             return edge.EdgeGeometry.TargetArrowhead == null ? 0 : edge.EdgeGeometry.TargetArrowhead.Length;
         }
 
-#if TEST_MSAGL
         //        void CheckEdges() {
         //            foreach (var edge in graph.Edges)
         //                CheckEdge(edge);
@@ -257,7 +250,7 @@ namespace Microsoft.Msagl.Layout.Initial {
                 foreach (var v in c.nodes.Concat(c.Clusters.Cast<Node>()))
                     Debug.Assert(c.BoundingBox.Contains(v.BoundingBox));
         }
-#endif
+
 
         /// <summary>
         /// Apply the appropriate layout to the specified cluster and its children (bottom up)

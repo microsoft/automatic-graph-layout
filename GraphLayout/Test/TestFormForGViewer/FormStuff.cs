@@ -138,9 +138,7 @@ namespace TestFormForGViewer {
 
             else {
                 
-#if TEST_MSAGL
                 graph.LayoutAlgorithmSettings.Reporting = Test.verbose;
-#endif
                 gViewer.FileName = fileName;
                 Stopwatch sw = null;
                 if (verbose) {

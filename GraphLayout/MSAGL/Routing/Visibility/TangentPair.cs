@@ -202,10 +202,9 @@ namespace Microsoft.Msagl.Routing.Visibility {
             bisectorRay = (pClosest - qClosest).Rotate(Math.PI/2);
 
             // int p=P.FindTheFurthestVertexFromBisector(
-#if TEST_MSAGL
             //if (!ApproximateComparer.Close(pClosest, qClosest))
             //    SugiyamaLayoutSettings.Show(this.P.Polyline, this.Q.Polyline, new LineSegment(pClosest, qClosest));
-#endif
+
         }
 
 

@@ -5,9 +5,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
     /// <summary>
     /// A rectanglular curve with rounded corners
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
     public class RoundedRect : ICurve {
         ///<summary>
         ///</summary>

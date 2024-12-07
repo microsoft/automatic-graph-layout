@@ -5,11 +5,10 @@
 //-----------------------------------------------------------------------
 
 using System.Collections.Generic;
-#if TEST_MSAGL
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.DebugHelpers;
 using Microsoft.Msagl.GraphViewerGdi;
-#endif
+
 using System;
 using System.IO;
 using System.Linq;
@@ -25,9 +24,7 @@ namespace Microsoft.Msagl.UnitTests {
     [TestClass]
     public class CurveTest {
         /*public void ClosestPolyTest() {
-#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
-#endif
             Polyline pl1;
             Polyline pl2;
             Polyline pl3;
@@ -47,9 +44,7 @@ namespace Microsoft.Msagl.UnitTests {
         }
         [TestMethod]
         public void ClosestPolyToLineSegTest() {
-#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
-#endif
             Polyline pl1;
             Polyline pl2;
             Polyline pl3;
@@ -173,9 +168,7 @@ namespace Microsoft.Msagl.UnitTests {
 
         [TestMethod]
         public void PolygonPolygonDistanceTest0() {
-#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
-#endif
             Polyline pl1;
             Polyline pl2;
             Polyline pl3;
@@ -241,9 +234,7 @@ namespace Microsoft.Msagl.UnitTests {
 
         [TestMethod]
         public void PolygonPolygonDistanceTest() {
-#if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
             var a = new Polygon(new Polyline(new[] { new Point(0, 0), new Point(0, 100), new Point(42, 109), new Point(100, 100), new Point(100, 0) }));
             var b = new Polygon(new Polyline(new[] { new Point(-2, 105), new Point(50, 130) }));
             Point p0, p1;
@@ -266,9 +257,7 @@ namespace Microsoft.Msagl.UnitTests {
 
         [TestMethod]
         public void PolygonPolygonDistanceTest2() {
-#if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
             var a = new Polyline(new[] {   new Point(-3397.10020369428, 993.94470736826),
                                             new Point(-3426.74057842555, 1014.3329144183),
                                             new Point(-3426.74057842555, 1045.96907990543),
@@ -304,11 +293,10 @@ namespace Microsoft.Msagl.UnitTests {
         [TestMethod]
         [Description("Testing Curve.CurveIsInsideOther ")]
         public void CurveIsInsideOfAnother() {
-#if TEST_MSAGL
             if (!MsaglTestBase.DontShowTheDebugViewer()) {
                 DisplayGeometryGraph.SetShowFunctions();
             }
-#endif
+
             var smallEllipse = CurveFactory.CreateEllipse(10, 10, new Point());
             var ellipse = CurveFactory.CreateEllipse(50, 40, new Point());
             var rect = CurveFactory.CreateRectangle(100, 80, new Point());
@@ -366,9 +354,7 @@ namespace Microsoft.Msagl.UnitTests {
         [TestMethod]
         [Description("Testing ICurve.Length for Curve")]
         public void LengthTestingForCurve() {
-#if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
             var curve = new Curve(Getsegs());
             var lengths = new List<double>();
             foreach (var seg in curve.Segments) {
@@ -427,32 +413,29 @@ namespace Microsoft.Msagl.UnitTests {
         [TestMethod]
         [Description("Testing ICurve.ClosestParameterWithinBounds ")]
         public void ClosestParameterWithinBounds() {
-#if TEST_MSAGL
             if (!MsaglTestBase.DontShowTheDebugViewer()) {
                 DisplayGeometryGraph.SetShowFunctions();
             }
-#endif
+
             var ellipse = CurveFactory.CreateEllipse(8, 10, new Point());
             var point = new Point(20, 1);
             var t = ellipse.ClosestParameter(point);
             var low = t - 1;
             var high = t + 1;
             var t1 = ellipse.ClosestParameterWithinBounds(point, low, high);
-#if TEST_MSAGL
             if (!MsaglTestBase.DontShowTheDebugViewer()) {
                 LayoutAlgorithmSettings.ShowDebugCurves(new DebugCurve(100, 0.1, "black", ellipse),
                         new DebugCurve(100, 0.01, "brown", new LineSegment(ellipse[t], point)),
                         new DebugCurve(100, 0.01, "green", new LineSegment(ellipse[t1], point)));
             }
-#endif
+
             var dist = point - ellipse[t];
             var dist1 = point - ellipse[t1];
             Assert.IsTrue(ApproximateComparer.Close(dist.Length, dist1.Length) && ApproximateComparer.Close(t, t1));
-#if TEST_MSAGL
             if (!MsaglTestBase.DontShowTheDebugViewer()) {
                 LayoutAlgorithmSettings.ShowDebugCurves(new DebugCurve(ellipse), new DebugCurve("red", new LineSegment(point, ellipse[t])));
             }
-#endif
+
 
             var curve = new Curve();
             curve.AddSegment(new LineSegment(new Point(-10, -10), new Point(10, -10)));
@@ -463,17 +446,15 @@ namespace Microsoft.Msagl.UnitTests {
             Point p = new Point(11, 0);
             t = curve.ClosestParameter(p);
 
-#if TEST_MSAGL
             if (!MsaglTestBase.DontShowTheDebugViewer()) {
                 LayoutAlgorithmSettings.ShowDebugCurves(new DebugCurve(curve), new DebugCurve("red", new LineSegment(p, curve[t])));
             }
-#endif
+
             t1 = curve.ClosestParameterWithinBounds(p, 1 + Math.PI / 4, 2);
-#if TEST_MSAGL
             if (!MsaglTestBase.DontShowTheDebugViewer()) {
                 LayoutAlgorithmSettings.ShowDebugCurves(new DebugCurve(curve), new DebugCurve("red", new LineSegment(p, curve[t1])));
             }
-#endif
+
             Assert.IsTrue(t1 < t);
             p = new Point(30, 30);
             t = curve.ClosestParameter(p);
@@ -486,11 +467,10 @@ namespace Microsoft.Msagl.UnitTests {
             const double l = 0.7;
             const double h = 1.3;
             t = poly.ClosestParameterWithinBounds(p, l, h);
-#if TEST_MSAGL
             if (!MsaglTestBase.DontShowTheDebugViewer()) {
                 LayoutAlgorithmSettings.ShowDebugCurves(new DebugCurve(poly), new DebugCurve("red", new LineSegment(p, poly[t])));
             }
-#endif
+
             var d = (p - poly[t]).Length;
 
             Assert.IsTrue(d <= (p - poly[l]).Length + ApproximateComparer.Tolerance && d < (p - poly[h]).Length + ApproximateComparer.Tolerance && d < (p - poly[(l + h) / 2]).Length + ApproximateComparer.Tolerance);
@@ -501,11 +481,10 @@ namespace Microsoft.Msagl.UnitTests {
         [TestMethod]
         [Description("Testing Ellipse.BoundingBox ")]
         public void EllipseBoundingBox() {
-#if TEST_MSAGL
             if (!MsaglTestBase.DontShowTheDebugViewer()) {
                 DisplayGeometryGraph.SetShowFunctions();
             }
-#endif
+
             Ellipse ell = new Ellipse(Math.PI / 6, Math.PI / 4, new Point(10, 0), new Point(0, 5), new Point(1, 1));
             TestEllipseBoxOnEllipse(ell);
             ell = new Ellipse(Math.PI / 6, 2 * Math.PI / 4, new Point(10, 0), new Point(0, 5), new Point(1, 1));
@@ -524,7 +503,6 @@ namespace Microsoft.Msagl.UnitTests {
             var del = (ell.ParEnd - ell.ParStart) / steps;
             for (int i = 1; i <= steps; i++)
                 smallerBox.Add(ell[ell.ParStart + i * del]);
-#if TEST_MSAGL
             if (!MsaglTestBase.DontShowTheDebugViewer()) {
                 LayoutAlgorithmSettings.ShowDebugCurves(
                     new DebugCurve(100, 0.1, "purple", ell),
@@ -534,7 +512,7 @@ namespace Microsoft.Msagl.UnitTests {
                     new DebugCurve(100, 0.1, "black", new LineSegment(ell.Center, ell.Start)),
                     new DebugCurve(100, 0.1, "black", new LineSegment(ell.Center, ell.End)));
             }
-#endif
+
             Assert.IsTrue(ApproximateComparer.CloseIntersections(b.LeftTop, smallerBox.LeftTop) && ApproximateComparer.CloseIntersections(b.RightBottom, smallerBox.RightBottom));
         }
 

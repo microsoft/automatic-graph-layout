@@ -10,9 +10,7 @@ namespace Microsoft.Msagl.Core.Layout {
     /// <summary>
     ///     A cluster has a list of nodes and a list of nested clusters
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
     public class Cluster : Node {
         bool isCollapsed;
 

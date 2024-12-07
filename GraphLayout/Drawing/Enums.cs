@@ -115,12 +115,10 @@ namespace Microsoft.Msagl.Drawing {
         /// the curve is given by the geometry node
         /// </summary>
         DrawFromGeometry,
-#if TEST_MSAGL
         /// <summary>
         /// testing only, don't use
         /// </summary>
         TestShape,
-#endif
         /// <summary>
         /// hexagon
         /// </summary>

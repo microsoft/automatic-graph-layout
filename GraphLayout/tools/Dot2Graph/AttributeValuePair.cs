@@ -974,10 +974,9 @@ namespace Dot2Graph {
                     break;
                 case Shape.DrawFromGeometry:
                     break;
-#if TEST_MSAGL
                 case Shape.TestShape:
                     break;
-#endif
+
                 case Shape.Hexagon:
                     curve = CurveFactory.CreateHexagon(width, height, center);
                     break;

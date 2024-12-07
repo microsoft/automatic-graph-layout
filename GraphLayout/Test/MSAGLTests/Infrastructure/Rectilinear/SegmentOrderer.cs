@@ -25,7 +25,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         /// <param name="lhs">The left-hand side.</param>
         /// <param name="rhs">The right-hand side.</param>
         /// <returns>-1 if lhs is less than rhs, 1 if lhs is greater than rhs, else 0</returns>
-        public int Compare(LineSegment lhs, LineSegment rhs)
+        public int Compare(LineSegment? lhs, LineSegment? rhs)
         {
             Validate.IsNotNull(lhs, "Lhs must not be null");
             Validate.IsNotNull(rhs, "Rhs must not be null");

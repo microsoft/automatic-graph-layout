@@ -13,9 +13,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
     /// <summary>
     /// Cubic Bezier Segment
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
     public class CubicBezierSegment : ICurve {
 
         /// <summary>

@@ -237,14 +237,12 @@ namespace Microsoft.Msagl.Miscellaneous.ConstrainedSkeleton
                 new RTree<Point,Point>(_pointsToIndices.Keys.Select(p => new KeyValuePair<IRectangle<Point>, Point>(new Rectangle(p), p)));
             var badSegs = (from e in _segments let overlaps = GetPointsOverlappingSeg(e, tree, indexToPoints) where overlaps.Count > 2 select e).ToList();
 
-#if TEST_MSAGL
             if (badSegs.Any())
                 ShowInputSegments(badSegs, indexToPoints);
-#endif
+
             return !badSegs.Any();
         }
 
-#if TEST_MSAGL
         private void ShowInputSegments(List<SymmetricTuple<int>> badSegs, Point[] indexToPoints) {
             var l = new List<DebugCurve>();
             foreach (var seg in _segments)
@@ -259,7 +257,7 @@ namespace Microsoft.Msagl.Miscellaneous.ConstrainedSkeleton
             }
             LayoutAlgorithmSettings.ShowDebugCurves(l.ToArray());
         }
-#endif
+
 
         List<Point> GetPointsOverlappingSeg(SymmetricTuple<int> seg, RTree<Point, Point> tree, Point[] indexToPoints)
         {

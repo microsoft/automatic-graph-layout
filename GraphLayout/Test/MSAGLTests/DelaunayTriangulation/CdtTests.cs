@@ -113,21 +113,15 @@ namespace Microsoft.Msagl.UnitTests.DelaunayTriangulation {
         [Ignore]
         [TestMethod]
         public void FlatLine() {
-#if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
             var points = new List<Point> { new Point(0, 0), new Point(100, 0), new Point(300, 0) };
             var cdt = new Cdt(points, null, null);
             cdt.Run();
-#if TEST_MSAGL
 CdtSweeper.ShowFront(cdt.GetTriangles(), null, null, null);
-#endif
         }
         [TestMethod]
         public void SmallTriangulation() {
-#if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
             var cdt = new Cdt(Points(), null, new[]{new SymmetricTuple<Point>(new Point(109,202),new Point(506,135) ),
             new SymmetricTuple<Point>(new Point(139,96),new Point(452,96) )}.ToList());
             cdt.Run();
@@ -173,9 +167,7 @@ CdtSweeper.ShowFront(cdt.GetTriangles(), null, null, null);
         }
         [TestMethod]
         public void TriangulationWithSizes() {
-#if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
             int[] dimensions = { 2, 10, 100, 10000, 100000 };
             double size = 10.0;
             foreach (var n in dimensions)
@@ -187,9 +179,7 @@ CdtSweeper.ShowFront(cdt.GetTriangles(), null, null, null);
             var w = n * size;
             var cdt = new Cdt(PointsForCdt(random, n, w), null, SegmentsForCdt(w).ToList());
             cdt.Run();
-#if TEST_MSAGL
             //CdtSweeper.ShowFront(cdt.GetTriangles(), null, null,null);
-#endif
         }
 
         IEnumerable<SymmetricTuple<Point>> SegmentsForCdt(double size) {
@@ -252,9 +242,7 @@ CdtSweeper.ShowFront(cdt.GetTriangles(), null, null, null);
 
         [TestMethod]
         public void TwoHoles() {
-#if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
             var corners = new[]{
             new Point(0, 0),
             new Point(100, 0),
@@ -289,9 +277,7 @@ CdtSweeper.ShowFront(cdt.GetTriangles(), null, null, null);
         }
         [TestMethod]
         public void GridRotated() {
-#if TEST_MSAGL
             GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
             var corners = new List<Point>();
             var ang = Math.PI / 6;
             for (var i = 0; i < 10; i++) {
@@ -301,15 +287,11 @@ CdtSweeper.ShowFront(cdt.GetTriangles(), null, null, null);
             }
             var cdt = new Cdt(corners, null, null);
             cdt.Run();
-#if TEST_MSAGL
             //  CdtSweeper.ShowFront(cdt.GetTriangles(), null, null, null);
-#endif
         }
         [TestMethod]
         public void AlongFrontTest() {
-#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
-#endif
             List<Polyline> polys = CreatePolylines();
             var constrainedDelaunayTriangulation = new Cdt(null, polys, null);
             constrainedDelaunayTriangulation.Run();

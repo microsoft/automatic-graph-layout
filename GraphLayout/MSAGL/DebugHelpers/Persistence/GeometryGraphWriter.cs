@@ -1,5 +1,4 @@
 ﻿using Microsoft.Msagl.Layout.LargeGraphLayout;
-#if TEST_MSAGL
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -949,9 +948,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
                     if (mds != null)
                     {
                         WriteAttribute(GeometryToken.LayoutAlgorithmType, GeometryToken.MdsLayoutSettings);
-#if TEST_MSAGL
                         WriteAttribute(GeometryToken.Reporting, mds.Reporting);
-#endif
                         WriteAttribute(GeometryToken.Exponent, mds.Exponent);
                         WriteAttribute(GeometryToken.IterationsWithMajorization, mds.IterationsWithMajorization);
                         WriteAttribute(GeometryToken.PivotNumber, mds.PivotNumber);
@@ -972,9 +969,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
             WriteAttribute(GeometryToken.MinNodeHeight, sugiyama.MinNodeHeight);
             WriteAttribute(GeometryToken.AspectRatio, sugiyama.AspectRatio);
             WriteAttribute(GeometryToken.NodeSeparation, sugiyama.NodeSeparation);
-#if TEST_MSAGL
             WriteAttribute(GeometryToken.Reporting, sugiyama.Reporting);
-#endif
             WriteAttribute(GeometryToken.RandomSeedForOrdering, sugiyama.RandomSeedForOrdering);
             WriteAttribute(GeometryToken.NoGainStepsBound, sugiyama.NoGainAdjacentSwapStepsBound);
             WriteAttribute(GeometryToken.MaxNumberOfPassesInOrdering, sugiyama.MaxNumberOfPassesInOrdering);
@@ -990,4 +985,3 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
     }
 }
 
-#endif

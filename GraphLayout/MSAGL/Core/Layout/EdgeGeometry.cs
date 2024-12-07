@@ -10,9 +10,7 @@ namespace Microsoft.Msagl.Core.Layout {
     /// <summary>
     ///     Keeps the curve of the edge and arrowhead positions
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
     public class EdgeGeometry {
         ICurve curve;
         SmoothedPolyline smoothedPolyline;

@@ -14,7 +14,6 @@ namespace Microsoft.Msagl.Core.Geometry {
     /// Is used in curve intersections routines.
     /// </summary>
     public class RectangleNode<T, P> {
-#if TEST_MSAGL
         /// <summary>
         /// 
         /// </summary>
@@ -23,7 +22,7 @@ namespace Microsoft.Msagl.Core.Geometry {
         public override string ToString() {
             return IsLeaf ? (Count + " " + UserData) : Count.ToString();
         }
-#endif
+
         /// <summary>
         /// 
         /// </summary>

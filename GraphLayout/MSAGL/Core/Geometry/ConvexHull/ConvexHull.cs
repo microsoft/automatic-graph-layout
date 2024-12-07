@@ -159,7 +159,6 @@ namespace Microsoft.Msagl.Core.Geometry {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object,System.Object)")]
         internal static Polyline CreateConvexHullAsClosedPolyline(IEnumerable<Point> points) {
             var convexHull = new Polyline(CalculateConvexHull(points)) { Closed = true };
-#if TEST_MSAGL
             foreach (var point in points) {
                 if (Curve.PointRelativeToCurveLocation(point, convexHull) == PointLocation.Outside) {
                     var hullPoint = convexHull[convexHull.ClosestParameter(point)];
@@ -170,7 +169,7 @@ namespace Microsoft.Msagl.Core.Geometry {
                     
                 }
             }
-#endif // TEST_MSAGL
+ // TEST_MSAGL
             return convexHull;
         }
     }

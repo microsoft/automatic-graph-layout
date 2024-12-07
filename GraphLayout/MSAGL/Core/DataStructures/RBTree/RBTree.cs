@@ -3,9 +3,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Msagl.Core.DataStructures {
 
-#if TEST_MSAGL
     [Serializable]
-#endif
     internal class RbTree<T> : IEnumerable<T> {
   
         /// <summary>

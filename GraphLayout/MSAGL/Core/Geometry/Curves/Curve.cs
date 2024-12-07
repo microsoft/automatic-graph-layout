@@ -10,9 +10,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
     /// Curve: keeps a sequence of connected ICurves
     /// </summary>
 #pragma warning restore 1587
-#if TEST_MSAGL
     [Serializable]
-#endif
 #pragma warning disable 1591
     public partial class Curve : ICurve {
 #pragma warning restore 1591
@@ -224,10 +222,9 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         public Curve AddSegment(ICurve curve) {
             if (curve == null)
                 return this; //nothing happens
-#if TEST_MSAGL
             if (segs.Count > 0 && !ApproximateComparer.Close(End, curve.Start, 0.001))
                 throw new InvalidOperationException(); //discontinuous curve
-#endif
+
             ParStart = 0;
             var c = curve as Curve;
             if (c == null) {
@@ -311,7 +308,6 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             ValidateArg.IsNotNull(curve0, "curve0");
             ValidateArg.IsNotNull(curve1, "curve1");
             Debug.Assert(curve0 != curve1, "curve0 == curve1");
-#if TEST_MSAGL
 //            double c0S = curve0.ParStart, c1S = curve1.ParStart;
 //            if (CurvesAreCloseAtParams(curve0, curve1, c0S, c1S)) {
 //                double mc0 = 0.5 * (curve0.ParStart + curve0.ParEnd);
@@ -323,7 +319,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
 //                    throw new InvalidOperationException();
 //                }
 //            }
-#endif
+
             //recurse down to find all PBLeaf pairs which intesect and try to cross their segments
 
             IntersectionInfo ret = CurveCurveXWithParallelogramNodesOne(curve0.ParallelogramNodeOverICurve,
@@ -347,7 +343,6 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             ValidateArg.IsNotNull(curve0, "curve0");
             ValidateArg.IsNotNull(curve1, "curve1");
             Debug.Assert(curve0 != curve1);
-#if TEST_MSAGL
 //            var c0S = curve0.ParStart;
 //            var c1S = curve1.ParStart;
 //            var c0E = curve0.ParEnd;
@@ -360,7 +355,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
 //                        throw new InvalidOperationException();
 //                }
 //            }
-#endif
+
 
             var lineSeg = curve0 as LineSegment;
             if (lineSeg != null)

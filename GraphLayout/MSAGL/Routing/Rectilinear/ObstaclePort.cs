@@ -11,30 +11,30 @@ using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Routing.Visibility;
 
 namespace Microsoft.Msagl.Routing.Rectilinear {
-    internal class ObstaclePort {
-        internal Port Port { get; private set; }
-        internal Obstacle Obstacle { get; private set; }
+    public class ObstaclePort {
+        public Port Port { get; private set; }
+        public Obstacle Obstacle { get; private set; }
 
-        internal VisibilityVertex CenterVertex;
+        public VisibilityVertex CenterVertex;
 
         // These are derived from PortEntry spans if present, else from Port.Location.
-        internal List<ObstaclePortEntrance> PortEntrances { get; private set; }
+        public List<ObstaclePortEntrance> PortEntrances { get; private set; }
 
-        internal bool HasCollinearEntrances { get; private set; }
+        public bool HasCollinearEntrances { get; private set; }
 
         // Hang onto this separately to detect port movement.
-        internal Point Location { get; private set; }
+        public Point Location { get; private set; }
 
-        internal Rectangle VisibilityRectangle = Rectangle.CreateAnEmptyBox();
+        public Rectangle VisibilityRectangle = Rectangle.CreateAnEmptyBox();
 
-        internal ObstaclePort(Port port, Obstacle obstacle) {
+        public ObstaclePort(Port port, Obstacle obstacle) {
             this.Port = port;
             this.Obstacle = obstacle;
             this.PortEntrances = new List<ObstaclePortEntrance>();
             this.Location = ApproximateComparer.Round(this.Port.Location);
         }
 
-        internal void CreatePortEntrance(Point unpaddedBorderIntersect, Direction outDir, ObstacleTree obstacleTree) {
+        public void CreatePortEntrance(Point unpaddedBorderIntersect, Direction outDir, ObstacleTree obstacleTree) {
             var entrance = new ObstaclePortEntrance(this, unpaddedBorderIntersect, outDir, obstacleTree);
             PortEntrances.Add(entrance);
             this.VisibilityRectangle.Add(entrance.MaxVisibilitySegment.End);
@@ -45,24 +45,24 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 #endif
         }
 
-        internal void ClearVisibility() {
+        public void ClearVisibility() {
             // Most of the retained PortEntrance stuff is about precalculated visibility.
             this.PortEntrances.Clear();
         }
 
-        internal void AddToGraph(TransientGraphUtility transUtil, bool routeToCenter) {
+        public void AddToGraph(TransientGraphUtility transUtil, bool routeToCenter) {
             // We use only border vertices if !routeToCenter.
             if (routeToCenter) {
                 CenterVertex = transUtil.FindOrAddVertex(this.Location);
             }
         }
 
-        internal void RemoveFromGraph() {
+        public void RemoveFromGraph() {
             CenterVertex = null;
         }
 
         // PortManager will recreate the Port if it detects this (this.Location has already been rounded).
-        internal bool LocationHasChanged { get { return !PointComparer.Equal(this.Location, ApproximateComparer.Round(this.Port.Location)); } }
+        public bool LocationHasChanged { get { return !PointComparer.Equal(this.Location, ApproximateComparer.Round(this.Port.Location)); } }
 
         /// <summary>
         /// The curve associated with the port.

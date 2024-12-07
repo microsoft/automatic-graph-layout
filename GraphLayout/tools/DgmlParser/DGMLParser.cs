@@ -1,5 +1,4 @@
-﻿#if TEST_MSAGL
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Msagl.Drawing;
 using Microsoft.VisualStudio.GraphModel;
 using DgmlGraph = Microsoft.VisualStudio.GraphModel.Graph;
@@ -87,4 +86,3 @@ namespace DgmlParser {
         }
     }
 }
-#endif

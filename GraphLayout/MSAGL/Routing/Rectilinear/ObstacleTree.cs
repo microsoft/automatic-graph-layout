@@ -14,7 +14,7 @@ using Microsoft.Msagl.Core.GraphAlgorithms;
 namespace Microsoft.Msagl.Routing.Rectilinear {
     using System;
 
-    internal class ObstacleTree {
+    public class ObstacleTree {
         /// <summary>
         /// The root of the hierarchy.
         /// </summary>
@@ -623,14 +623,13 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             return !PointComparer.Equal(obstacleIntersectSeg.End, endPoint);
         }
 
-#if TEST_MSAGL
         internal bool SegmentCrossesANonGroupObstacle(Point startPoint, Point endPoint) {
             stopAtGroups = false;
             wantGroupCrossings = false;
             LineSegment obstacleIntersectSeg = RestrictSegmentPrivate(startPoint, endPoint);
             return !PointComparer.Equal(obstacleIntersectSeg.End, endPoint);
         }
-#endif // TEST_MSAGL
+ // TEST_MSAGL
 
         internal LineSegment RestrictSegmentWithObstacles(Point startPoint, Point endPoint) {
             stopAtGroups = false;

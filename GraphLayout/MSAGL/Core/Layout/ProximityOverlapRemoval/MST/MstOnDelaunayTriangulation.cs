@@ -78,28 +78,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
         /// </summary>
         public static void Test()
         {
-#if TEST_MSAGL && !SHARPKIT
-            int count = 100;
-            var random = new Random(3);
-            var points = new List<Point>();
-            for (int i = 0; i < count; i++)
-                points.Add(20 * new Point(random.NextDouble(), random.NextDouble()));
 
-            var cdt = new Cdt(points, null, null);
-            cdt.Run();
-            var ret = GetMstOnCdt(cdt, e => (e.lowerSite.Point - e.upperSite.Point).Length);
-            var l = new List<DebugCurve>();
-            foreach(var s in cdt.PointsToSites.Values)
-                foreach (var e in s.Edges)
-                {
-                    l.Add(new DebugCurve(100, 0.1, "black", new LineSegment(e.lowerSite.Point, e.upperSite.Point)));
-                }
-            foreach (var e in ret)
-            {
-                l.Add(new DebugCurve(100, 0.12, "red", new LineSegment(e.lowerSite.Point, e.upperSite.Point)));
-            }
-            LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(l);
-#endif
         }
     }
 }

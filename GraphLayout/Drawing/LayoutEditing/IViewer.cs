@@ -10,7 +10,7 @@ namespace Microsoft.Msagl.Drawing {
     /// the interface for the viewer which is able to edit the graph layout
     /// </summary>
     public interface IViewer {
-        bool IncrementalDraggingModeAlways { get; }
+        bool IncrementalDraggingModeAlways {get;}
         /// <summary>
         /// the scale to screen
         /// </summary>

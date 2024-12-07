@@ -26,9 +26,7 @@ namespace NodesWithImages {
         GViewer viewer = new GViewer();
 
         public Form1() {
-#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
-#endif
             InitializeComponent();
             creek = Image.FromFile("Creek.jpg");
             leaves = Image.FromFile("Autumn Leaves.jpg");

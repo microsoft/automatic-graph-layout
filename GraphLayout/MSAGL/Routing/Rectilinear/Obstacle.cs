@@ -16,7 +16,7 @@ using Microsoft.Msagl.Routing.Visibility;
 
 namespace Microsoft.Msagl.Routing.Rectilinear {
     // Defines routing information for each obstacle in the graph.
-    internal class Obstacle {
+    public class Obstacle {
         internal const int FirstSentinelOrdinal = 1;
         internal const int FirstNonSentinelOrdinal = 10;
 
@@ -26,10 +26,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         /// </summary>
         public Obstacle(Shape shape, double padding) {
                            this.PaddedPolyline = InteractiveObstacleCalculator.PaddedPolylineBoundaryOfNode(shape.BoundaryCurve, padding);
-#if TEST_MSAGL || VERIFY_MSAGL
-                // This throws if the polyline is nonconvex.
-                // VisibilityGraph.CheckThatPolylineIsConvex(this.PaddedPolyline);
-#endif // TEST || VERIFY
             
 
             RoundVerticesAndSimplify(this.PaddedPolyline);

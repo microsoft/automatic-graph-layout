@@ -5,9 +5,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
 	/// <summary>
 	/// 
 	/// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
 	public class PolylinePoint {
 		/// <summary>
 		/// 

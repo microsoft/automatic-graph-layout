@@ -81,7 +81,6 @@ namespace Microsoft.Msagl.Routing.Visibility {
                     }
                 }
 
-#if TEST_MSAGL
                 //List<ICurve> cs = new List<ICurve>();
 
                 //foreach (Diagonal d in this.activeDiagonalTree) {
@@ -93,7 +92,7 @@ namespace Microsoft.Msagl.Routing.Visibility {
 
                 //cs.Add(new LineSegment(t.Start.Point, t.End.Point));
                 //SugiyamaLayoutSettings.Show(cs.ToArray);
-#endif
+
             }
         }
 
@@ -131,14 +130,12 @@ namespace Microsoft.Msagl.Routing.Visibility {
             }
             
         }
-#if TEST_MSAGL
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private void AddPolylinesForShow(List<ICurve> curves) {
             foreach (Polygon p in this.AllObstacles)
                 curves.Add(p.Polyline);
         }
-#endif
+
 
         private void RemoveDiagonalFromActiveNodes(Diagonal diag) {
             RBNode<Diagonal> changedNode = activeDiagonalTree.DeleteSubtree(diag.RbNode);

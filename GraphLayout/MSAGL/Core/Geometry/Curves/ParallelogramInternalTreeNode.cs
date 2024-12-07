@@ -12,9 +12,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves
     /// An internal node of ParallelogramNodeOverICurve hierarchy.
     /// Is used in curve intersections routines.
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
   internal class ParallelogramInternalTreeNode : ParallelogramNodeOverICurve
   {
     List<ParallelogramNodeOverICurve> children = new List<ParallelogramNodeOverICurve>();

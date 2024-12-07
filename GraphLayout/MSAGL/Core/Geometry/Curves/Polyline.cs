@@ -12,9 +12,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
     /// </summary>
     [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix"),
      SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Polyline")]
-#if TEST_MSAGL
     [Serializable]
-#endif
     public class Polyline : ICurve, IEnumerable<Point> {
         bool needToInit = true;
 
@@ -46,7 +44,6 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
                 }
             }
         }
-#if TEST_MSAGL
         /// <summary>
         /// 
         /// </summary>
@@ -55,7 +52,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
         public override string ToString() {
             return String.Format("{0},{1},count={2}", Start,End, Count);
         }
-#endif 
+ 
         internal Curve ToCurve() {
             var c = new Curve();
             Curve.AddLineSegment(c, StartPoint.Point, StartPoint.Next.Point);

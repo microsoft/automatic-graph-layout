@@ -10,17 +10,13 @@ namespace Microsoft.Msagl.Core.Layout {
     /// <summary>
     /// Node of the graph
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
     public class Node : GeometryObject {
-#if TEST_MSAGL
-
         ///<summary>
         /// used for debugging purposes
         ///</summary>
         public object DebugId { get; set; }
-#endif
+
         #region Fields set by the client
 
         double padding = 1;
@@ -76,10 +72,9 @@ namespace Microsoft.Msagl.Core.Layout {
 
             if (UserData != null) {
                 var ret = UserData.ToString();
-#if TEST_MSAGL
 //            if(DebugId!=null)
 //                ret+= " "+DebugId.ToString();
-#endif
+
                 return ret;
             }
 

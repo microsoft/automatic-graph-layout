@@ -7,9 +7,7 @@ namespace Microsoft.Msagl.Core.Layout {
     /// <summary>
     /// Edge of the graph
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
     public class Edge : GeometryObject, ILabeledObject {
         /// <summary>
         /// Defines the way the edge connects to the source.

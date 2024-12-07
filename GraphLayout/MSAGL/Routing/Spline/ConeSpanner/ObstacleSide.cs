@@ -4,7 +4,7 @@ using Microsoft.Msagl.Routing.Visibility;
 
 namespace Microsoft.Msagl.Routing.Spline.ConeSpanner
 {
-    internal abstract class ObstacleSide : SegmentBase
+         abstract class ObstacleSide : SegmentBase
     {
         internal PolylinePoint StartVertex { get; private set; }
         internal ObstacleSide(PolylinePoint startVertex)

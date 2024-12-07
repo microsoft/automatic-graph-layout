@@ -150,7 +150,6 @@ namespace Microsoft.Msagl.Routing {
             shape.children.Remove(this);
         }
 
-#if TEST_MSAGL
         /// <summary>
         /// 
         /// </summary>
@@ -159,6 +158,6 @@ namespace Microsoft.Msagl.Routing {
         {
             return UserData == null ? "null" : UserData.ToString();
         }
-#endif 
+ 
     }
 }

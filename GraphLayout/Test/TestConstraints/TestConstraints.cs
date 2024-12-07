@@ -223,9 +223,7 @@ namespace TestConstraints
 
         static int Main(string[] args)
         {
-#if TEST_MSAGL
             Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
             return (new TestConstraints()).Run(args);
         }
 

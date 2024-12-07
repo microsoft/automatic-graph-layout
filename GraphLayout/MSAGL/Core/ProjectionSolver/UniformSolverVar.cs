@@ -39,10 +39,9 @@ namespace Microsoft.Msagl.Core.ProjectionSolver{
 
         
 
-#if TEST_MSAGL
         public override string ToString() {
             return lowBound + " " + Position + " " + upperBound;
         }
-#endif
+
     }
 }

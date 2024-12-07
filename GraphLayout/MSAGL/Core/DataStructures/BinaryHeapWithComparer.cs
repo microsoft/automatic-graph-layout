@@ -108,8 +108,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
             this.comparer = comparer;
         }
 
-#if TEST_MSAGL
-
         public override string ToString() {
             int i = 1;
             return "{" + Print(i) + "}";
@@ -125,17 +123,15 @@ namespace Microsoft.Msagl.Core.DataStructures {
                 return " " + A[i].ToString() + " ";
             return "";
         }
-#endif
+
 
 
         public T GetMinimum() {
             return A[1];
         }
 
-#if TEST_MSAGL
         //internal void UpdateMinimum() {
         //    throw new NotImplementedException();
         //}
-#endif
     }
 }

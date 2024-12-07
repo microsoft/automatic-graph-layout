@@ -23,7 +23,6 @@ namespace Microsoft.Msagl.Drawing {
         public Subgraph RootSubgraph { get { return rootSubgraph; } set { rootSubgraph = value; } }
 
 
-#if TEST_MSAGL
         [NonSerialized] Database dataBase;
 
         /// <summary>
@@ -33,7 +32,6 @@ namespace Microsoft.Msagl.Drawing {
             get { return dataBase; }
             set { dataBase = value; }
         }
-#endif
         Label label;
 
         /// <summary>
@@ -176,7 +174,6 @@ namespace Microsoft.Msagl.Drawing {
             get { return GeometryGraph != null ? GeometryGraph.Right + Attr.Border : 1; }
         }
 
-#if TEST_MSAGL
         List<Node> history = new List<Node>();
 
         /// <summary>
@@ -186,7 +183,6 @@ namespace Microsoft.Msagl.Drawing {
             get { return history; }
             set { history = (List<Node>) value; }
         }
-#endif
 
         /// <summary>
         /// Creates a new node and returns it or returns the old node.
@@ -211,9 +207,7 @@ namespace Microsoft.Msagl.Drawing {
             if (ret == null) {
                 ret = new Node(nodeId);
                 nodeMap[nodeId] = ret;
-#if TEST_MSAGL
                 history.Add(ret);
-#endif
             }
             return ret;
         }
@@ -372,15 +366,12 @@ namespace Microsoft.Msagl.Drawing {
         /// </summary>
         public Dictionary<string, Subgraph> SubgraphMap { get { return subgraphMap; } }
 
-#if TEST_MSAGL
         /// <summary>
-        /// visible only in debug
         /// </summary>
         /// <param name="nodeM"></param>
         public void InitNodeMap(SortedDictionary<string, Node> nodeM) {
             nodeMap = nodeM;
         }
-#endif
 
         
         /// <summary>
@@ -479,8 +470,6 @@ namespace Microsoft.Msagl.Drawing {
             return GeometryGraphCreator.CreateLayoutSettings(this);
         }
 
-#if TEST_MSAGL
-
         List<Color> debugColors;
 
         /// <summary>
@@ -518,7 +507,6 @@ namespace Microsoft.Msagl.Drawing {
             get { return showControlPoints; }
             set { showControlPoints = value; }
         }
-#endif
 
         /// <summary>
         /// the geometry graph
@@ -528,7 +516,6 @@ namespace Microsoft.Msagl.Drawing {
             set { GeometryGraph = (GeometryGraph) value; }
         }
             
-#if TEST_MSAGL
         ///<summary>
         ///</summary>
         public List<ICurve> DebugICurves {
@@ -545,8 +532,6 @@ namespace Microsoft.Msagl.Drawing {
                     geomGraph.DebugCurves = value;
             }
         }
-#endif
-
         LayerConstraints layerConstraints = new LayerConstraints();
         Dictionary<string, Subgraph> subgraphMap=new Dictionary<string, Subgraph>();
         

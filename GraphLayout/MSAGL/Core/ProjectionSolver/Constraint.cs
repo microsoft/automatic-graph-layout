@@ -46,9 +46,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
 
         internal double Lagrangian { get; set; }
         internal bool IsActive { get; private set; }
-#if TEST_MSAGL
-        internal int IdDfDv { get; set; }
-#endif // TEST_MSAGL
+        internal int IdDfDv { get; set; } // TEST_MSAGL
         internal bool IsUnsatisfiable { get; set; }
 
         // Index in Solver.AllConstraints, to segregate active from inactive constraints.
@@ -158,9 +156,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
 
         internal void ClearDfDv()
         {
-#if TEST_MSAGL
-            this.IdDfDv = 0;
-#endif // TEST_MSAGL
+            this.IdDfDv = 0; // TEST_MSAGL
             this.Lagrangian = 0.0;
         }
 

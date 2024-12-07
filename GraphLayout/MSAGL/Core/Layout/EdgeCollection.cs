@@ -10,9 +10,7 @@ namespace Microsoft.Msagl.Core.Layout {
     /// <summary>
     /// A collection of edges.  Adding or removing edges from the collection automatically updates the related nodes.
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
     public class EdgeCollection : IEnumerable<Edge> {
         readonly IList<Edge> edges = new List<Edge>();
         /// <summary>

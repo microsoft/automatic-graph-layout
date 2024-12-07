@@ -384,8 +384,7 @@ namespace Microsoft.Msagl.Drawing {
         private string ReadElementContentAsString() {
             return xmlReader.ReadElementContentAsString();
         }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)"), System.Diagnostics.Conditional("TEST_MSAGL")]
+        
         private void CheckToken(Tokens t) {
             if (!xmlReader.IsStartElement(t.ToString())) {
                 throw new InvalidDataException(String.Format("expecting {0}", t));

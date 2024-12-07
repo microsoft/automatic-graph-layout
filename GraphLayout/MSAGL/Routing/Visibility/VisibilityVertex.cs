@@ -7,7 +7,7 @@ using Microsoft.Msagl.Core.Geometry;
 namespace Microsoft.Msagl.Routing.Visibility
 {
     [DebuggerDisplay("({Point.X} {Point.Y})")]
-    internal class VisibilityVertex : IComparer<VisibilityEdge>
+    public class VisibilityVertex : IComparer<VisibilityEdge>
     {
 
         // This member is accessed a lot.  Using a field instead of a property for performance.

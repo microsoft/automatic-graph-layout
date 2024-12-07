@@ -7,25 +7,19 @@ using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.DebugHelpers;
 
-#if TEST_MSAGL
 
-#endif
 namespace Microsoft.Msagl.Routing.Visibility {
     /// <summary>
     /// the polygon is going clockwise
     /// </summary>
 
-#if TEST_MSAGL
     [Serializable]
-#endif
-    internal class Polygon {
+    public class Polygon {
         Polyline polyline;
 
         internal Polyline Polyline {
             get { return polyline; }
-#if TEST_MSAGL
             set { polyline = value; }
-#endif
         }
 
         readonly PolylinePoint[] points;
@@ -123,7 +117,6 @@ namespace Microsoft.Msagl.Routing.Visibility {
 
             return p1;
         }
-#if TEST_MSAGL
         // ReSharper disable UnusedMember.Local
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         static double TestPolygonDist(Polygon a, Polygon b) {
@@ -136,7 +129,7 @@ namespace Microsoft.Msagl.Routing.Visibility {
 
             return ret;
         }
-#endif
+
 
         /// <summary>
         /// Distance between two polygons
@@ -146,13 +139,7 @@ namespace Microsoft.Msagl.Routing.Visibility {
         static public double Distance(Polygon a, Polygon b, out Point p, out Point q) {
             var tp = new TangentPair(a, b);
             tp.FindClosestPoints(out p, out q);
-#if TEST_MSAGL
             if(!ApproximateComparer.Close((p - q).Length,TestPolygonDist(a,b))) {
-                using(var stream = File.Open(@"c:\tmp\polygonBug",FileMode.Create)) {
-                    var bf = new BinaryFormatter();
-                    bf.Serialize(stream, a);
-                    bf.Serialize(stream, b);                    
-                }
                 LayoutAlgorithmSettings.ShowDebugCurves?.Invoke(
                     new DebugCurve(100, 0.1, "red", a.Polyline),
                     new DebugCurve(100, 0.1, "blue", b.Polyline),
@@ -160,7 +147,7 @@ namespace Microsoft.Msagl.Routing.Visibility {
                 System.Diagnostics.Debug.Fail("wrong distance between two polygons");
 
             }
-#endif
+
             return (p - q).Length;
         }
 

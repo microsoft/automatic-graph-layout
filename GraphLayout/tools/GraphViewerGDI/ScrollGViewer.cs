@@ -46,6 +46,7 @@ using MouseButtons=System.Windows.Forms.MouseButtons;
 using Point = Microsoft.Msagl.Core.Geometry.Point;
 using Rectangle = System.Drawing.Rectangle;
 using Size=System.Drawing.Size;
+using System.ComponentModel;
 
 namespace Microsoft.Msagl.GraphViewerGdi{
     /// <summary>
@@ -132,6 +133,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
 
         
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         internal RectangleF SrcRect{
             get { return srcRect; }
             set { srcRect = value; }
@@ -158,6 +160,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         /// Gets or sets the zoom factor
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public double ZoomF{
             get { return CurrentScale/GetFitScale(); }
             set{
@@ -189,7 +192,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         /// capturing the previous user's choice of which veiw to save
         /// </summary>
-        internal bool SaveCurrentViewInImage { get; set; }
+        internal bool SaveCurrentViewInImage;
 
         /// <summary>
         /// The panel containing GViewer object
@@ -201,6 +204,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         /// Gets or sets the forward and backward buttons visibility
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public bool NavigationVisible{
             get { return forwardButton.Visible; }
             set{
@@ -212,6 +216,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         /// Gets or sets the save button visibility
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public bool SaveButtonVisible{
             get { return saveButton.Visible; }
             set { saveButton.Visible = value; }
@@ -225,6 +230,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         /// The rectangle for drawing
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         internal System.Drawing.Rectangle DestRect{
             get { return destRect; }
             set { destRect = value; }
@@ -233,6 +239,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         /// Enables or disables the forward button
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public bool ForwardEnabled{
             get { return forwardButton.ImageIndex == (int) ImageEnum.Forward; }
 
@@ -246,6 +253,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         /// Enables or disables the backward button
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public bool BackwardEnabled{
             get { return backwardButton.ImageIndex == (int) ImageEnum.Backward; }
 
@@ -259,6 +267,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         /// hides/shows the toolbar
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public bool ToolBarIsVisible{
             get { return Controls.Contains(toolbar); }
             set{
@@ -282,6 +291,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// Otherwise the "Load file" button and saving as .MSAGL file is disabled.
         /// </summary>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Msagl")]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public bool SaveAsMsaglEnabled{
             get { return saveAsMsaglEnabled; }
             set{
@@ -295,6 +305,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         /// enables or disables saving the graph in a vector format
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public bool SaveInVectorFormatEnabled{
             get { return saveInVectorFormatEnabled; }
             set { saveInVectorFormatEnabled = value; }
@@ -303,6 +314,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         /// enables or disables saving the graph as an image
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public bool SaveAsImageEnabled{
             get { return saveAsImageEnabled; }
             set { saveAsImageEnabled = value; }
@@ -312,6 +324,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         ///hides and shows the layout algorithm settings button
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public bool LayoutAlgorithmSettingsButtonVisible{
             get { return layoutSettingsButton.Visible; }
             set { layoutSettingsButton.Visible = value; }
@@ -320,6 +333,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         /// hides and shows the "Save graph" button
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public bool SaveGraphButtonVisible{
             get { return saveButton.Visible; }
             set { saveButton.Visible = value; }
@@ -328,6 +342,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         ///hides and shows the undo/redo buttons
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public bool UndoRedoButtonsVisible
         {
             get { return undoButton.Visible; }
@@ -341,6 +356,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         ///hides and shows the edge insert button
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public bool EdgeInsertButtonVisible
         {
             get { return edgeInsertButton.Visible; }
@@ -350,6 +366,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         /// exposes the kind of the layout that is used when the graph is laid out by the viewer
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public LayoutMethod CurrentLayoutMethod{
             get { return currentLayoutMethod; }
             set { currentLayoutMethod = value; }
@@ -372,6 +389,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         /// The color of the area outside of the graph.
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public Brush OutsideAreaBrush{
             get { return outsideAreaBrush; }
             set { outsideAreaBrush = value; }
@@ -384,12 +402,14 @@ namespace Microsoft.Msagl.GraphViewerGdi{
             get { return selectedDObject != null ? selectedDObject.DrawingObject : null; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         internal System.Drawing.Point MousePositonWhenSetSelectedObject{
             get { return mousePositonWhenSetSelectedObject; }
             set { mousePositonWhenSetSelectedObject = value; }
         }
 
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         internal ToolTip ToolTip{
             get { return toolTip1; }
             set { toolTip1 = value; }
@@ -435,6 +455,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         /// enables and disables the default editing of the viewer
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public bool LayoutEditingEnabled{
             get { return !(panButton.Checked || windowZoomButton.Checked) && EditingEnabled; }
             set { EditingEnabled = value; }
@@ -442,6 +463,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         /// <summary>
         /// 
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public Core.Geometry.Rectangle ClientViewport { get; private set; }
 
 
@@ -452,7 +474,8 @@ namespace Microsoft.Msagl.GraphViewerGdi{
             get { return UnderlyingPolylineCircleRadius*2; }
         }
 
-        public bool IncrementalDraggingModeAlways { get; set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        public bool IncrementalDraggingModeAlways {get; set;}
 
         #endregion
 

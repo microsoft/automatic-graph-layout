@@ -98,23 +98,16 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             var visEdgeDump =
                 new Set<SymmetricSegment>(
                     PathRouter.VisGraph.Edges.Select(e => new SymmetricSegment(e.SourcePoint, e.TargetPoint)));
-#if TEST_MSAGL && !SHARPKIT
-            var routesOutOfVisGraph = routesDump - visEdgeDump;
-            if (routesOutOfVisGraph.Count > 0) {
-                SplineRouter.ShowVisGraph(PathRouter.VisGraph, null,null, Ttt(routesOutOfVisGraph));
-            }
 
-#endif
             return routesDump == visEdgeDump && usedEdges==routesDump;
         }
 
-#if TEST_MSAGL
         IEnumerable<ICurve> Ttt(Set<SymmetricSegment> routesOutOfVisGraph) {
             foreach (var symmetricTuple in routesOutOfVisGraph) {
                 yield return new LineSegment(symmetricTuple.A,symmetricTuple.B);
             }
         }
-#endif
+
 
         internal void RemoveSomeEdgeTrajectories(List<SymmetricTuple<LgNodeInfo>> removeList) {
             foreach (var symmetricTuple in removeList)

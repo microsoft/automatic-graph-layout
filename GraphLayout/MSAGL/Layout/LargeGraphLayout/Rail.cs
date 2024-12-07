@@ -25,10 +25,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         public Point Right;
         public int Weight = 1;
        // public List<int> unnecessaryTransfer = new List<int>();
-#if TEST_MSAGL
         static int railCount;
         int id;
-#endif
+
 
         /// <summary>
         /// the number of higlighted edges passing through the rail
@@ -62,7 +61,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
         public int ZoomLevel;
         public List<object> Color;
-#if TEST_MSAGL
         Rail() {
             railCount++;
             id = railCount;
@@ -89,12 +87,10 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             Point s, t;
             return GetStartEnd(out s, out t) ? " " + new LineSegment(s, t) : "";
         }
-#endif
+
 
         internal Rail(ICurve curveSegment, LgEdgeInfo topRankedEdgeInfoOfTheRail, int zoomLevel)
-#if TEST_MSAGL
             : this()
-#endif
         {
             TopRankedEdgeInfoOfTheRail = topRankedEdgeInfoOfTheRail;
             this.ZoomLevel = zoomLevel;
@@ -103,9 +99,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
 
         internal Rail(Arrowhead arrowhead, Point curveAttachmentPoint, LgEdgeInfo topRankedEdgeInfoOfTheRail,
             int zoomLevel)
-#if TEST_MSAGL
             : this()
-#endif
         {
             TopRankedEdgeInfoOfTheRail = topRankedEdgeInfoOfTheRail;
             Geometry = arrowhead.Clone();
@@ -147,10 +141,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         public Rail(ICurve curveSegment, int zoomLevel)
         {
             ZoomLevel = zoomLevel;
-#if TEST_MSAGL
             railCount++;
             id = railCount;
-#endif
+
             Geometry = curveSegment;
         }
 

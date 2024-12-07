@@ -4,9 +4,7 @@ namespace Microsoft.Msagl.Core.Geometry {
     /// <summary>
     /// A class for keeping polyline points in a double linked list
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
     public class CornerSite{
         /// <summary>
         /// the coeffiecient used to calculate the first and the second control points of the 

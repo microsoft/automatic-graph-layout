@@ -54,9 +54,7 @@ namespace Microsoft.Msagl.Core.Geometry
                 if (value <= 0.0)
                 {
                     throw new ArgumentOutOfRangeException("value"
-#if TEST_MSAGL
-                                                          , @"Weight must be greater than zero"
-#endif // TEST_MSAGL
+                                                          , @"Weight must be greater than zero" // TEST_MSAGL
                         );
                 }
                 this.borderWeight = value;

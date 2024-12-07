@@ -70,9 +70,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                 return new PathEdge(GetAxisEdge(p1,p0), width){Reversed = true};
                 default:
                     throw new InvalidOperationException(
-#if TEST_MSAGL
                         "Not a rectilinear path"
-#endif
                         );
             }
         }

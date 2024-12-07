@@ -38,7 +38,7 @@ using BBox = Microsoft.Msagl.Core.Geometry.Rectangle;
 using Color = System.Drawing.Color;
 using MouseButtons = System.Windows.Forms.MouseButtons;
 using P2 = Microsoft.Msagl.Core.Geometry.Point;
-
+using System.ComponentModel;
 namespace Microsoft.Msagl.GraphViewerGdi {
     /// <summary>
     /// this class serves as a drawing panel for GViewer
@@ -55,7 +55,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         P2 rubberLineStart;
         bool zoomWindow;
         PlaneTransformation mouseDownTransform;
-
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         internal GViewer GViewer {
             private get { return gViewer; }
             set { gViewer = value; }

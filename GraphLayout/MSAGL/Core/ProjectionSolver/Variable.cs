@@ -124,35 +124,27 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             if (weight <= 0)
             {
                 throw new ArgumentOutOfRangeException("weight"
-#if TEST_MSAGL
-                        , "Variable Weight must be greater than zero"
-#endif // TEST_MSAGL
+                        , "Variable Weight must be greater than zero" // TEST_MSAGL
                     );
             }
             if (scale <= 0)
             {
                 throw new ArgumentOutOfRangeException("scale"
-#if TEST_MSAGL
-                        , "Variable Scale must be greater than zero"
-#endif // TEST_MSAGL
+                        , "Variable Scale must be greater than zero" // TEST_MSAGL
                     );
             }
             double check = desiredPos * weight;
             if (double.IsInfinity(check) || double.IsNaN(check))
             {
                 throw new ArgumentOutOfRangeException("desiredPos"
-#if TEST_MSAGL
-                        , "Invalid Variable DesiredPosition * Weight"
-#endif // TEST_MSAGL
+                        , "Invalid Variable DesiredPosition * Weight" // TEST_MSAGL
                     );
             }
             check = desiredPos * scale;
             if (double.IsInfinity(check) || double.IsNaN(check))
             {
                 throw new ArgumentOutOfRangeException("desiredPos"
-#if TEST_MSAGL
-                        , "Invalid Variable DesiredPosition * Scale"
-#endif // TEST_MSAGL
+                        , "Invalid Variable DesiredPosition * Scale" // TEST_MSAGL
                     );
             }
             this.Ordinal = ordinal;

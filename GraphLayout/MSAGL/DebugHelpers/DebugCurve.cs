@@ -1,4 +1,3 @@
-#if TEST_MSAGL
 using System;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using System.Diagnostics.CodeAnalysis;
@@ -193,4 +192,4 @@ namespace Microsoft.Msagl.DebugHelpers {
     }
 
 }
-#endif
+

@@ -6,9 +6,7 @@ namespace Microsoft.Msagl.Core.Layout {
     /// <summary>
     /// The base class of the Graph,Node and Edge classes
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
     abstract public class GeometryObject {
        
         GeometryObject geometryParent;
@@ -24,9 +22,7 @@ namespace Microsoft.Msagl.Core.Layout {
         /// Storage for any data algorithms may want to store temporarily.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
-#if TEST_MSAGL
         [NonSerialized]
-#endif
 
         public object AlgorithmData;
 

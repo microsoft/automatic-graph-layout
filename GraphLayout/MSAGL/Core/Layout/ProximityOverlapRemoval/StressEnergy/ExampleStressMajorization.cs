@@ -93,9 +93,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.StressEnergy {
             for (int i = 0; i < result.Count; i++) {
                 graph.Nodes[i].Center = result[i];
             }
-#if TEST_MSAGL && !SHARPKIT
-            LayoutAlgorithmSettings.ShowGraph(graph);
-#endif
+
         }
     }
 }

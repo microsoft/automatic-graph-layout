@@ -29,7 +29,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
         public double Length{
             get { return Max-Min; }
         }
-#if TEST_MSAGL
         /// <summary>
         /// 
         /// </summary>
@@ -38,6 +37,6 @@ namespace Microsoft.Msagl.Core.DataStructures {
         public override string ToString() {
             return IsEmpty ? "empty" : String.Format("{0},{1}", Min, Max);
         }
-#endif
+
     }
 }

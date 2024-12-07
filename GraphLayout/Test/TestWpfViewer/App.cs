@@ -136,9 +136,7 @@ namespace TestWpfViewer {
         //RangeSlider edgeRangeSlider;
 
         protected override void OnStartup(StartupEventArgs e) {
-#if TEST_MSAGL
             Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
 
             appWindow = new Window {
                 Title = "My app for testing wpf graph control",
@@ -875,14 +873,13 @@ namespace TestWpfViewer {
         }
 
         void ProcessDgml(string fileName) {
-#if TEST_MSAGL
             Graph gwgraph = DgmlParser.DgmlParser.Parse(fileName);
             if (gwgraph != null) {
                 SetLayoutSettings(gwgraph);
                 graphViewer.Graph = gwgraph;
             }
             else
-#endif
+
                 MessageBox.Show("cannot load " + fileName);
         }
 

@@ -1,4 +1,3 @@
-#if TEST_MSAGL
 namespace Microsoft.Msagl.DebugHelpers {
 #pragma warning disable 1591
     /// <summary>
@@ -512,4 +511,4 @@ namespace Microsoft.Msagl.DebugHelpers {
         Unknown
     }
 }
-#endif  
+  

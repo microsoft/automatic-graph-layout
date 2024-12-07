@@ -33,6 +33,7 @@ namespace WindowsApplicationSample {
             gViewer.MouseDown += WaMouseDown;
             gViewer.MouseUp += WaMouseUp;
             gViewer.MouseMove += GViewerOnMouseMove;
+            gViewer.LayoutEditingEnabled = true;
         }
 
         void GViewerOnMouseMove(object sender, MouseEventArgs mouseEventArgs) {
@@ -104,9 +105,7 @@ namespace WindowsApplicationSample {
         void Form1Load(object sender, EventArgs e) {
             gViewer.ObjectUnderMouseCursorChanged += GViewerObjectUnderMouseCursorChanged;
 
-#if TEST_MSAGL
             //DisplayGeometryGraph.SetShowFunctions();
-#endif
 
             /////  CreateGraph();
         }
@@ -287,9 +286,7 @@ namespace WindowsApplicationSample {
         }
 
         void CreateGraph() {
-#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
-#endif
             //Graph graph = new Graph();
             //graph.AddEdge("47", "58");
             //graph.AddEdge("70", "71");
@@ -327,20 +324,20 @@ namespace WindowsApplicationSample {
             var e = graph.AddEdge("4", "5");
             e.Attr.Color = Color.Red;
             e.Attr.LineWidth *= 2;
-            graph.LayerConstraints.AddUpDownVerticalConstraint(graph.FindNode("4"), graph.FindNode("5"));
-            StraightenEdge(e, graph);
+            //graph.LayerConstraints.AddUpDownVerticalConstraint(graph.FindNode("4"), graph.FindNode("5"));
+            //StraightenEdge(e, graph);
             e = graph.AddEdge("4", "6");
             e.LabelText = "Changing label";
             this.labelToChange = e.Label;
             e = graph.AddEdge("7", "8");
             e.Attr.LineWidth *= 2;
             e.Attr.Color = Color.Red;
-            StraightenEdge(e, graph);
+            //StraightenEdge(e, graph);
             graph.AddEdge("7", "9");
             e = graph.AddEdge("5", "7");
             e.Attr.Color = Color.Red;
             e.Attr.LineWidth *= 2;
-            StraightenEdge(e, graph);
+            //StraightenEdge(e, graph);
 
             graph.AddEdge("2", "7");
             graph.AddEdge("10", "11");
@@ -369,7 +366,7 @@ namespace WindowsApplicationSample {
             e = graph.AddEdge("8", "22");
             e.Attr.Color = Color.Red;
             e.Attr.LineWidth *= 2;
-            StraightenEdge(e, graph);
+            //StraightenEdge(e, graph);
             graph.AddEdge("20", "22");
             graph.AddEdge("25", "26");
             graph.AddEdge("25", "27");

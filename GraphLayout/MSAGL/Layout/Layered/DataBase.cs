@@ -8,18 +8,12 @@ namespace Microsoft.Msagl.Layout.Layered {
     /// This class holds assorted data associated with the graph under layout: list of anchors, 
     /// edges sorted by their sources,targets etc
     /// </summary>
-#if TEST_MSAGL
-    public 
-#else
-    internal
-#endif
-        class Database {
+    public class Database {
 
         /// <summary>
         /// maps middles of multiple strings to their buckets
         /// </summary>
         Set<int> multipleMiddles = new Set<int>();
-#if TEST_MSAGL
         /// <summary>
         /// The layer to visualize. Is set to zero after each display
         /// </summary>
@@ -28,11 +22,7 @@ namespace Microsoft.Msagl.Layout.Layered {
      /// <summary>
      /// 
      /// </summary>
-        public
-#else
-        internal
-#endif
- Set<int> MultipleMiddles {
+        public Set<int> MultipleMiddles {
             get { return multipleMiddles; }
         }
 
@@ -57,14 +47,8 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// Anchors of the nodes
         /// </summary>
 
-#if TEST_MSAGL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
-        public
-#else
-        internal
-#endif
-
- Anchor[] Anchors {
+        public Anchor[] Anchors {
             get { return anchors; }
             set { anchors = value; }
         }
@@ -96,16 +80,11 @@ namespace Microsoft.Msagl.Layout.Layered {
                         yield return kv.Value;
             }
         }
-#if TEST_MSAGL
         /// <summary>
         /// 
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multiedges")]
-        public
-#else
-        internal
-#endif
- Dictionary<IntPair, List<PolyIntEdge>> Multiedges {
+        public Dictionary<IntPair, List<PolyIntEdge>> Multiedges {
             get {
                 return this.multiedges;
             }

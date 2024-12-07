@@ -11,13 +11,7 @@ using Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation;
 
 namespace Microsoft.Msagl.Routing.Spline.Bundling {
     [DebuggerDisplay("[{SerialNumber}] ({Position.X},{Position.Y})")]
-#if SHARPKIT //http://code.google.com/p/sharpkit/issues/detail?id=203
-    //SharpKit/Colin - Interface implementations
-    // (this needs to be public because it's used elsewhere in an interface implementation)
-    public class Station {
-#else
     internal class Station {
-#endif
         internal Station(int serialNumber, bool isRealNode, Point position) {
             this.SerialNumber = serialNumber;
             this.IsRealNode = isRealNode;

@@ -15,12 +15,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
     /// <summary>
     /// following paper "Orthogonal Connector Routing" which is included in the project
     /// </summary>
-#if TEST_MSAGL
-    public
-#else
-        internal
-#endif
-    class Nudger {
+    public class Nudger {
 
         bool HasGroups {
             get { return (null != HierarchyOfGroups) && (HierarchyOfGroups.Count > 0); }
@@ -162,7 +157,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         Direction NudgingDirection { get; set; }
 
         #region debugging
-#if TEST_MSAGL
         static internal ICurve[] GetCurvesForShow(IEnumerable<Path> paths, IEnumerable<Polyline> obstacles) {
             var ret = new List<ICurve>();
             foreach (var path in paths) {
@@ -174,7 +168,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             ret.AddRange(obstacles.Cast<ICurve>());
             return ret.ToArray();
         }
-#endif
+
         #endregion
         void DrawPaths() {
             SetWidthsOfArrowheads();
@@ -282,7 +276,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         }
 
         #region debug
-#if TEST_MSAGL
         internal static void ShowPathsFromPoints(IEnumerable<Path> paths, IEnumerable<Polyline> enumerable) {
             var dd = new List<DebugCurve>();
             if (enumerable != null)
@@ -499,7 +492,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                 debugCurves.AddRange(obstacles.Select(poly => new DebugCurve(50, 0.3, color, poly)));
             return debugCurves;
         }
-#endif
+
         #endregion
 
         void CreateConstraintsBetweenLongestSegments() {
@@ -578,7 +571,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             return direction == Direction.North ? segment.Start.X : -segment.Start.Y;
         }
 
-#if TEST_MSAGL
         // ReSharper disable UnusedMember.Local
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         void ShowSegmentBounds(LongestNudgedSegment segment) {
@@ -608,7 +600,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(dd.Concat(new[] { seg }));
 
         }
-#endif
+
 
         List<LongestNudgedSegment> LongestNudgedSegs { get; set; }
 

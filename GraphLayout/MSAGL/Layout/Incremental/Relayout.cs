@@ -15,9 +15,7 @@ using Microsoft.Msagl.Miscellaneous;
 using Microsoft.Msagl.Routing;
 using Microsoft.Msagl.Routing.Rectilinear;
 using System.Threading.Tasks;
-#if TEST_MSAGL
 using Microsoft.Msagl.DebugHelpers;
-#endif
 
 namespace Microsoft.Msagl.Layout.Initial {
     /// <summary>
@@ -50,9 +48,7 @@ namespace Microsoft.Msagl.Layout.Initial {
             Func<Cluster, LayoutAlgorithmSettings> clusterSettings) {
             ValidateArg.IsNotNull(graph, "graph");
             ValidateArg.IsNotNull(clusterSettings, "clusterSettings");
-#if TEST_MSAGL
             graph.SetDebugIds();
-#endif
             this.graph = graph;
             this.modifiedNodes = modifiedNodes;
             this.clusterSettings = clusterSettings;

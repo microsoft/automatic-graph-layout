@@ -7,9 +7,7 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
     /// an efficient class to simulate a three element array
     ///</summary>
     ///<typeparam name="T"></typeparam>
-#if TEST_MSAGL
     [Serializable]
-#endif
 
     public class ThreeArray<T>:IEnumerable<T> {
         T item0;

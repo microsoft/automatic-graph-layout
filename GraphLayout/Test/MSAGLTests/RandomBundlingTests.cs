@@ -6,9 +6,7 @@
 
 using System;
 using System.Linq;
-#if TEST_MSAGL
 using Microsoft.Msagl.GraphViewerGdi;
-#endif
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
@@ -181,9 +179,7 @@ namespace Microsoft.Msagl.UnitTests {
         public static void RsmContent() {
             const int ntest = 8;
             int iStart = 0;            
-#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
-#endif
             for (int i = iStart; i < ntest; i++) {
                 Random random = new Random(i);
                 int multiplier = random.Next() % 5 + 1;

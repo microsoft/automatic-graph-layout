@@ -1031,9 +1031,7 @@ namespace Microsoft.Msagl.Layout.Layered {
 
             anchors[i] = new Anchor(leftAnchor, rightAnchor, topAnchor, bottomAnchor, intGraph.Nodes[i],
                                     settings.LabelCornersPreserveCoefficient) { Padding = intGraph.Nodes[i].Padding };
-#if TEST_MSAGL
             anchors[i].UserData = intGraph.Nodes[i].UserData;
-#endif
         }
 
         static void RightAnchorMultiSelfEdges(int i, ref double rightAnchor, ref double topAnchor,

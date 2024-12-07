@@ -15,7 +15,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
     /// BasicObstacleSide uses the ctor arg traverseClockwise to manage that.
     /// </summary>
     internal abstract class BasicObstacleSide : ObstacleSide {
-        internal Obstacle Obstacle { get; private set; }
+        public Obstacle Obstacle { get; private set; }
         readonly PolylinePoint endVertex;
         internal double Slope { get; private set; }
         internal double SlopeInverse { get; private set; }

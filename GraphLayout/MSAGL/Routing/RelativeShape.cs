@@ -20,9 +20,7 @@ namespace Microsoft.Msagl.Routing {
             get { return curveDelegate(); }
             set {
                 throw new InvalidOperationException(
-#if TEST_MSAGL
-                        "Cannot set BoundaryCurve directly for RelativeShape"
-#endif // TEST
+                        "Cannot set BoundaryCurve directly for RelativeShape" // TEST
                     );
             }
         }

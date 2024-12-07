@@ -16,7 +16,7 @@ using Microsoft.Msagl.Routing;
 using Microsoft.Msagl.Routing.Rectilinear;
 using Microsoft.Msagl.Routing.Rectilinear.Nudging;
 using Microsoft.Msagl.Routing.Visibility;
-
+using Path = Microsoft.Msagl.Routing.Rectilinear.Nudging.Path;
 namespace Microsoft.Msagl.UnitTests.Rectilinear
 {
     using VisualStudio.TestTools.UnitTesting;

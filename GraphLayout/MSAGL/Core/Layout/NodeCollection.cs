@@ -8,9 +8,7 @@ namespace Microsoft.Msagl.Core.Layout
     /// <summary>
     /// A collection of nodes.  Adding or removing nodes from the collection automatically updates the graph.
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
     internal class NodeCollection : IList<Node>
     {
         internal readonly List<Node> nodes = new List<Node>();

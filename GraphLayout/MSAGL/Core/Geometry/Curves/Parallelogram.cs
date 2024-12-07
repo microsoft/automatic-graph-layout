@@ -37,9 +37,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
     /// Parallelograms are used by GLEE in curve intersections routines.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes")
-#if TEST_MSAGL
     , Serializable
-#endif
     ] 
     //parallelograms are not stored in dictionaries
     public struct Parallelogram {

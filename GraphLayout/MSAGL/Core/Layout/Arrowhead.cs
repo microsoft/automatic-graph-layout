@@ -10,9 +10,7 @@ namespace Microsoft.Msagl.Core.Layout
     /// <summary>
     /// keeps the arrowhead info
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
     public class Arrowhead
     {
 

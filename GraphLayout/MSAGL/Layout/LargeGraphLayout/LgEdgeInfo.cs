@@ -10,7 +10,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
     /// 
     /// </summary>
     public class LgEdgeInfo:LgInfoBase {
-#if TEST_MSAGL
         /// <summary>
         /// to string for debugging
         /// </summary>
@@ -18,7 +17,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         public override string ToString() {
             return String.Format("zoom lvl={0:F2}", ZoomLevel);
         }
-#endif
+
         
 
         /// <summary>

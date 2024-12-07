@@ -1,6 +1,5 @@
 ﻿using Microsoft.Msagl.Layout.LargeGraphLayout;
 using Microsoft.Msagl.Prototype.Ranking;
-#if TEST_MSAGL
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -111,12 +110,11 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
         [SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#")]
         public static GeometryGraph CreateFromFile(string fileName, out LayoutAlgorithmSettings settings)
         {
-#if TEST_MSAGL
             if (FirstCharacter(fileName) != '<') {
                 settings = null;
                 return null;
             }
-#endif
+
             using (Stream stream = File.OpenRead(fileName))
             {
                 var graphReader = new GeometryGraphReader(stream);
@@ -126,7 +124,6 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
             }
         }
 
-#if TEST_MSAGL
         static char FirstCharacter(string fileName) {
             using (TextReader reader = File.OpenText(fileName))
             {
@@ -134,7 +131,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
                 return first;
             }
         }
-#endif
+
 
         /// <summary>
         /// Reads the graph from the stream
@@ -198,9 +195,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
                         layoutSettings = mds;
                         if (XmlReader.IsStartElement(GeometryToken.Reporting.ToString()))
                         {
-#if TEST_MSAGL
                             mds.Reporting =
-#endif
  ReadBooleanElement(GeometryToken.Reporting);
                         }
                         mds.Exponent = ReadDoubleElement(reader);
@@ -233,9 +228,7 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
             sugiyama.NodeSeparation = GetDoubleAttributeOrDefault(GeometryToken.NodeSeparation, sugiyama.NodeSeparation);
             sugiyama.ClusterMargin = sugiyama.NodeSeparation;
 
-#if TEST_MSAGL
             sugiyama.Reporting = GetBoolAttributeOrDefault(GeometryToken.Reporting, false);
-#endif
 
             sugiyama.RandomSeedForOrdering = GetIntAttributeOrDefault(GeometryToken.RandomSeedForOrdering,
                 sugiyama.RandomSeedForOrdering);
@@ -1581,5 +1574,3 @@ namespace Microsoft.Msagl.DebugHelpers.Persistence
         }
     }
 }
-
-#endif

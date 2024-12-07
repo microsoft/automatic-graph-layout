@@ -86,9 +86,7 @@ namespace Microsoft.Msagl.Drawing
                 WriteEdges();
                 WriteNodes();
                 
-#if TEST_MSAGL
                 WriteDebugCurves();
-#endif
                 Close();
             }
             finally
@@ -98,7 +96,6 @@ namespace Microsoft.Msagl.Drawing
                 Thread.CurrentThread.CurrentCulture = currentCulture;
             }
         }
-#if TEST_MSAGL
         void WriteDebugCurves() {
             if(_graph.DebugCurves!=null)
                 foreach (var debugCurve in _graph.DebugCurves) {
@@ -144,7 +141,6 @@ namespace Microsoft.Msagl.Drawing
                 return color;
             return "black";
         }
-#endif
         static bool LabelIsValid(Label label)
         {
             if (label == null || String.IsNullOrEmpty(label.Text) || label.Width == 0)
@@ -381,9 +377,7 @@ namespace Microsoft.Msagl.Drawing
                 case Shape.Ellipse:
                 case Shape.DrawFromGeometry:
                 case Shape.Hexagon:
-#if TEST_MSAGL
                 case Shape.TestShape:
-#endif
                     WriteFromMsaglCurve(node);
                     break;
 

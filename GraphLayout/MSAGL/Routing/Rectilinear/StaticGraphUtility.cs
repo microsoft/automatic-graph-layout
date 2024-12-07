@@ -11,9 +11,7 @@ using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
-#if TEST_MSAGL
-using Microsoft.Msagl.DebugHelpers;
-#endif // TEST_MSAGL
+using Microsoft.Msagl.DebugHelpers; // TEST_MSAGL
 using Microsoft.Msagl.Routing.Rectilinear.Nudging;
 using Microsoft.Msagl.Routing.Visibility;
 
@@ -194,9 +192,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                     return new Point(GetRectangleBound(boundingBox, dir), point.Y);
                 default:
                     throw new InvalidOperationException(
-#if TEST_MSAGL
-                            "Invalid direction"
-#endif // TEST
+                            "Invalid direction" // TEST
                         );
             }
         }
@@ -213,9 +209,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
                     return rect.Left;
                 default:
                     throw new InvalidOperationException(
-#if TEST_MSAGL
-                            "Invalid direction"
-#endif // TEST
+                            "Invalid direction" // TEST
                         );
             }
         }
@@ -244,11 +238,10 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
         [Conditional("TEST_MSAGL")]
         static internal void Test_DumpVisibilityGraph(ObstacleTree obstacleTree, VisibilityGraph vg) {
-#if TEST_MSAGL
             var debugCurves = Test_GetObstacleDebugCurves(obstacleTree);
             debugCurves.AddRange(Test_GetVisibilityGraphDebugCurves(vg));
             DebugCurveCollection.WriteToFile(debugCurves, GetDumpFileName("VisibilityGraph"));
-#endif // TEST
+ // TEST
         }
 
 #if DEVTRACE
@@ -260,7 +253,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         }
 #endif // DEVTRACE
 
-#if TEST_MSAGL
         static internal List<DebugCurve> Test_GetObstacleDebugCurves(ObstacleTree obstacleTree) {
             return Test_GetObstacleDebugCurves(obstacleTree, false, false);
         }
@@ -322,10 +314,9 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         static internal string GetDumpFileName(string prefix) {
             return System.IO.Path.GetTempPath() + prefix + ".DebugCurves";
         }
-#endif // TEST
+ // TEST
 // ReSharper restore InconsistentNaming
 
-#if TEST_MSAGL
         // Make it easier for floating-point conditional breakpoints in the VS debugger
         // (the docs say they don't need to be non-private but apparently they do).
         static internal bool IsEqualForDebugger(double variable, double want) {
@@ -334,6 +325,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         static internal bool IsEqualForDebugger(Point variable, double wantX, double wantY) {
             return IsEqualForDebugger(variable.X, wantX) && IsEqualForDebugger(variable.Y, wantY);
         }
-#endif // TEST_MSAGL
+ // TEST_MSAGL
     }
 }

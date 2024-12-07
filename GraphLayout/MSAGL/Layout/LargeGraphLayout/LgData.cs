@@ -94,19 +94,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
             return ret;
         }
 
-#if TEST_MSAGL && !SHARPKIT
-        static void ShowDimmedRails(Set<Rail> dimmedRails) {
-            var l = new List<DebugHelpers.DebugCurve>();
-            foreach (var r in dimmedRails) {
-                var s = r.ToString();
-                string color =
-                    s.StartsWith("15") ? "green" : (s.StartsWith("1384") ? "red" : "blue");
-                 l.Add(new DebugHelpers.DebugCurve(100, 1, color, r.Geometry as ICurve));
-                
-            }
-            LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(l);
-        }
-#endif
+
 
         internal void SelectEdges(List<Edge> passingEdges) {
             SelectedEdges.InsertRange(passingEdges);

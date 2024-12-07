@@ -31,9 +31,7 @@ namespace agl {
 
         [STAThread]
         static void Main(string[] args) {
-#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
-#endif
             ArgsParser.ArgsParser argsParser = SetArgsParser(args);
             if (argsParser.OptionIsUsed("-help")) {
                 Console.WriteLine(argsParser.UsageString());

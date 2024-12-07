@@ -2,7 +2,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Msagl.Core.DataStructures;
 
 namespace ArgsParser {
     public class ArgsParser {
@@ -10,7 +9,7 @@ namespace ArgsParser {
 
         Dictionary<string,string> allowedOptionWithAfterString = new Dictionary<string,string>();
 
-        Set<string> usedOptions = new Set<string>();
+        HashSet<string> usedOptions = new HashSet<string>();
 
         Dictionary<string, string> usedOptionsWithAfterString = new Dictionary<string, string>();
 
@@ -66,7 +65,7 @@ namespace ArgsParser {
             for (int i = 0; i < args.Length; i++) {
                 string ar = args[i];
                 if (allowedOptions.ContainsKey(ar))
-                    usedOptions.Insert(ar);
+                    usedOptions.Add(ar);
                 else if (allowedOptionWithAfterString.ContainsKey(ar)) {
                     if (i == args.Length - 1) {
                         ErrorMessage = "Argument is missing after "+ar;

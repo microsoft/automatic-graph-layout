@@ -5,9 +5,7 @@ namespace Microsoft.Msagl.Core.Layout {
     /// <summary>
     /// Specifies the way an edge is connected to a curve
     /// </summary>
-#if TEST_MSAGL
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors"), System.Serializable]
-#endif
     abstract public class Port {
         
         /// <summary>

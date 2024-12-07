@@ -14,9 +14,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
     /// The sons are either both nulls or both non-nulls
     /// </summary>
 
-#if TEST_MSAGL
     [Serializable]
-#endif
     abstract public class ParallelogramNodeOverICurve : ParallelogramNode {
 
         ICurve seg;

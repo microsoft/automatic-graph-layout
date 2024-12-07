@@ -1,10 +1,9 @@
-#if TEST_MSAGL
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.Json;
 
 namespace Microsoft.Msagl.DebugHelpers{
     /// <summary>
@@ -16,7 +15,7 @@ namespace Microsoft.Msagl.DebugHelpers{
         /// 
         /// </summary>
         /// <param name="debugCurves"></param>
-        DebugCurveCollection(IEnumerable<DebugCurve> debugCurves){
+        public DebugCurveCollection(IEnumerable<DebugCurve> debugCurves){
             DebugCurvesArray = debugCurves.ToArray();
         }
         /// <summary>
@@ -31,15 +30,20 @@ namespace Microsoft.Msagl.DebugHelpers{
         ///<param name="fileName"></param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         public static void WriteToFile(IEnumerable<DebugCurve> debugCurves, string fileName) {
-            Stream stream = File.Open(fileName, FileMode.Create);
-            var bformatter = new BinaryFormatter();
-            try {
-                bformatter.Serialize(stream, new DebugCurveCollection(debugCurves));
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+
+            try
+            {
+                string jsonString = JsonSerializer.Serialize(new DebugCurveCollection(debugCurves), options);
+                File.WriteAllText(fileName, jsonString);
             }
-            catch (SerializationException e) {
+            catch (Exception e)
+            {
                 System.Diagnostics.Debug.WriteLine(e.ToString());
             }
-            stream.Close();
         }
 
         ///<summary>
@@ -47,18 +51,17 @@ namespace Microsoft.Msagl.DebugHelpers{
         ///<param name="fileName"></param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         public static IEnumerable<DebugCurve> ReadFromFile(string fileName) {
-            Stream stream = File.Open(fileName, FileMode.Open);
-            var bformatter = new BinaryFormatter();
-            DebugCurveCollection dc = null;
-            try {
-                dc = bformatter.Deserialize(stream) as DebugCurveCollection;
+            try
+            {
+                string jsonString = File.ReadAllText(fileName);
+                var debugCurveCollection = JsonSerializer.Deserialize<DebugCurveCollection>(jsonString);
+                return new List<DebugCurve>(debugCurveCollection.DebugCurvesArray);
             }
-            catch (SerializationException e) {
+            catch (Exception e)
+            {
                 System.Diagnostics.Debug.WriteLine(e.ToString());
+                return new List<DebugCurve>();
             }
-            stream.Close();
-            return new List<DebugCurve>(dc.DebugCurvesArray);
         }
     }
 }
-#endif

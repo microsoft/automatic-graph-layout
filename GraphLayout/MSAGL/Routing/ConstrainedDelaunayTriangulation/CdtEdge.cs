@@ -7,9 +7,7 @@ namespace Microsoft.Msagl.Routing {
     /// <summary>
     /// the edge direction is from the upperSite to lowerSite
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
 
     public class CdtEdge {
         ///<summary>

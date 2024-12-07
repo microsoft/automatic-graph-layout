@@ -221,9 +221,6 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
             return ret;
         }
 
-#if TEST_MSAGL
-
-
         //        void ShowZoomLevels() {
         //            var l = new List<DebugCurve>();
         //            foreach (LgNodeInfo node in Graph.Nodes.Select(n => NodeToLgNodeInfo(n))) {
@@ -233,7 +230,7 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout
         //            }
         //            LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(l);
         //        }
-#endif
+
 
 
 

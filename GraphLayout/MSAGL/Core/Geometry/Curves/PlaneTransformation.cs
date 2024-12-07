@@ -5,9 +5,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
     /// <summary>
     /// 2 by 3 matrix of plane affine transformations
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
     public class PlaneTransformation {
         
         readonly double[][] elements = new double[2][];

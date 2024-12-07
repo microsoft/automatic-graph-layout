@@ -1,13 +1,13 @@
 <package>
   <metadata>
-    <id>Microsoft.Msagl.GraphViewerGDI</id>
-    <version>1.1.6</version>
+    <id>Msagl.GraphViewerGDI</id>
+    <version>BuildVersion</version>
     <authors>Microsoft</authors>
     <owners>Microsoft</owners>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/Microsoft/automatic-graph-layout</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>The MSAGL GraphViewerGDI control lets you visualize graphs and has and some other rendering functionality. Key features: (1) Pan and Zoom (2) Navigate Forward and Backward (3) tooltips and highlighting on graph entities (4) Search for and focus on graph entities.</description>
+    <description>The MSAGL GraphViewerGDI control lets you visualize graphs and has some other rendering functionality. Key features: (1) Pan and Zoom (2) Navigate Forward and Backward (3) tooltips and highlighting on graph entities (4) Search for and focus on graph entities(5) Collapse and opening of subgraphs.</description>
     <releaseNotes>
     </releaseNotes>
     <copyright>Copyright © Microsoft Corporation</copyright>
@@ -15,13 +15,13 @@
     <tags>MSAGL Graph Layout</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.7.2" >
-        <dependency id="Microsoft.Msagl.Drawing" version="1.1.6" />
+        <dependency id="Msagl.Drawing" version="BuildVersion" />
       </group>
       <group targetFramework="net6.0-windows7.0">
-        <dependency id="Microsoft.Msagl.Drawing" version="1.1.6" />
+        <dependency id="Msagl.Drawing" version="BuildVersion" />
       </group>
       <group targetFramework="net7.0-windows7.0">
-        <dependency id="Microsoft.Msagl.Drawing" version="1.1.6" />
+        <dependency id="Msagl.Drawing" version="BuildVersion" />
       </group>
     </dependencies>
     <frameworkReferences>

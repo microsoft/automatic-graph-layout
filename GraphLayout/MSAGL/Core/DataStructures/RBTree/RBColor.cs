@@ -1,6 +1,6 @@
 namespace Microsoft.Msagl.Core.DataStructures {
 
-    internal enum RBColor {
+    public enum RBColor {
         Red,
         Black
     }

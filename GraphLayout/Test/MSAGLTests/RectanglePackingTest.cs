@@ -90,14 +90,13 @@ namespace Microsoft.Msagl.UnitTests
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "rectangles")]
         private static void ShowDebugView(List<RectangleToPack<int>> rectangles)
         {
-#if TEST_MSAGL
             if (!MsaglTestBase.EnableDebugViewer())
             {
                 return;
             }
             var shapes = from r in rectangles select new DebugCurve(CurveFactory.CreateRectangle(r.Rectangle));
             LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(shapes);
-#endif
+
         }
 
         [TestMethod]

@@ -12,10 +12,9 @@ using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Routing.Spline.ConeSpanner;
 using Microsoft.Msagl.Routing.Visibility;
 
-#if TEST_MSAGL
 using System.Linq;
 using Microsoft.Msagl.DebugHelpers;
-#endif
+
 
 namespace Microsoft.Msagl.Routing.Rectilinear {
     // Scan direction is parallel to the sweepline which moves in the perpendicular direction;
@@ -160,13 +159,12 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         protected static void Debug_AssertGraphIsRectilinear(VisibilityGraph graph, ObstacleTree obstacleTree)
         // ReSharper restore InconsistentNaming
         {
-#if TEST_MSAGL
             if (graph.Edges.Any(edge => !PointComparer.IsPureDirection(PointComparer.GetDirections(edge.SourcePoint, edge.TargetPoint))))
             {
                 StaticGraphUtility.Assert(false, "Generated VisibilityGraph contains non-rectilinear lines", obstacleTree, graph);
                 return;
             }
-#endif
+
         }
 
         internal static Point ScanLineIntersectSide(Point site, BasicObstacleSide side, ScanDirection scanDir)

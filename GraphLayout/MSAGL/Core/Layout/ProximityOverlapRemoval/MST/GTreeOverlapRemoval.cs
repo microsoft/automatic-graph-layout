@@ -330,40 +330,7 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
             return euclid;
         }
 
-#if TEST_MSAGL && !SHARPKIT
 
-    /// <summary>
-    /// Shows the current state of the algorithm for debug purposes.
-    /// </summary>
-    /// <param name="treeEdges"></param>
-    /// <param name="proximityEdges"></param>
-    /// <param name="nodeSizes"></param>
-    /// <param name="nodePos"></param>
-    /// <param name="rootId"></param>
-        void ShowAndMoveBoxesRemoveLater(List<OverlappedEdge> treeEdges,
-            List<OverlappedEdge> proximityEdges, Size[] nodeSizes, Point[] nodePos, int rootId) {
-            var l = new List<DebugCurve>();
-            foreach (var tuple in proximityEdges)
-                l.Add(new DebugCurve(100, 0.5, "black", new LineSegment(nodePos[tuple.source], nodePos[tuple.target])));
-            //just for debug
-            var nodeBoxes = new Rectangle[nodeSizes.Length];
-            for (int i = 0; i < nodePos.Length; i++)
-                nodeBoxes[i] = new Rectangle(nodeSizes[i], nodePos[i]);
-            l.AddRange(nodeBoxes.Select(b => new DebugCurve(100, 0.3, "green", b.Perimeter())));
-            if (treeEdges != null)
-                l.AddRange(
-                    treeEdges.Select(
-                        e =>
-                            new DebugCurve(200, GetEdgeWidth(e), "red",
-                                new LineSegment(nodePos[e.source], nodePos[e.target]))));
-            if (rootId >= 0)
-                l.Add(new DebugCurve(100, 10, "blue", CurveFactory.CreateOctagon(30, 30, nodePos[rootId])));
-            LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(l);
-        }
-        static double GetEdgeWidth(OverlappedEdge edge) {
-            return edge.overlapFactor > 1 ? 6 : 2;
-        }
-#endif
 
         /// <summary>
         /// Lets the tree grow according to the ideal distances.

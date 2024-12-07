@@ -6,9 +6,7 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
     /// <summary>
     /// a trianlge oriented counterclockwise
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
 
     public class CdtTriangle {
         ///<summary>
@@ -111,7 +109,6 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
             return Edges[index + 1];
         }
 
-#if TEST_MSAGL
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// </summary>
@@ -122,7 +119,7 @@ namespace Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation {
         public override string ToString() {
             return String.Format("({0},{1},{2}", Sites[0], Sites[1], Sites[2]);
         }
-#endif
+
 
         internal CdtSite OppositeSite(CdtEdge cdtEdge) {
             var i = Edges.Index(cdtEdge);

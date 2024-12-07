@@ -9,9 +9,7 @@ namespace Microsoft.Msagl.Core.Geometry {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix"),
      System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly",
          MessageId = "Polyline")
-#if TEST_MSAGL
     ,Serializable
-#endif
     ]
     public class SmoothedPolyline: IEnumerable<Point> {
 
@@ -87,7 +85,6 @@ namespace Microsoft.Msagl.Core.Geometry {
             }
         }
 
-#if TEST_MSAGL
         /// <summary>
         /// 
         /// </summary>
@@ -102,7 +99,7 @@ namespace Microsoft.Msagl.Core.Geometry {
                 s1=s1.Next;
             }
         }
-#endif
+
 
         /// <summary>
         /// Creates a curve by using the underlying polyline

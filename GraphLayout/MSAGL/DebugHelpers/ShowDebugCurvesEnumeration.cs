@@ -1,4 +1,3 @@
-#if TEST_MSAGL
 using System.Collections.Generic;
 
 namespace Microsoft.Msagl.DebugHelpers {
@@ -8,4 +7,3 @@ namespace Microsoft.Msagl.DebugHelpers {
     ///<param name="shapes"></param>
     public delegate void ShowDebugCurvesEnumeration(IEnumerable<DebugCurve> shapes);
 }   
-#endif

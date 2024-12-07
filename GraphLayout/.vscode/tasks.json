@@ -2,40 +2,27 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
+            "label": "WindowsApplicationSample",
             "command": "dotnet",
-            "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/Samples/WpfApplicationSample/WpfApplicationSample.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile"
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "args": ["build"],
+            "options": {"cwd": "C:/dev/agl/GraphLayout/Samples/WindowsApplicationSample"}
+
         },
         {
-            "label": "publish",
+            "label": "msagltest",
             "command": "dotnet",
-            "type": "process",
-            "args": [
-                "publish",
-                "${workspaceFolder}/Samples/WpfApplicationSample/WpfApplicationSample.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile"
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "args": ["build"],
+            "options": {"cwd": "c:/dev/agl/GraphLayout/Test/MSAGLTests"}
+
         },
-        {
-            "label": "watch",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "watch",
-                "run",
-                "--project",
-                "${workspaceFolder}/Samples/WpfApplicationSample/WpfApplicationSample.csproj"
-            ],
-            "problemMatcher": "$msCompile"
-        }
+
     ]
 }

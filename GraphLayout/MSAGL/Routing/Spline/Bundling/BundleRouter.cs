@@ -40,7 +40,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
 
         Func<Port, Polyline> loosePolylineOfPort;
     
-#if TEST_MSAGL
         void CheckGraph() {
             foreach (var e in geometryGraph.Edges) {
                 if (e.Source == e.Target)
@@ -54,7 +53,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             if (node is Cluster)
                 Debug.Assert(nodePort is ClusterBoundaryPort || nodePort is HookUpAnywhereFromInsidePort || nodePort is CurvePort);
         }
-#endif
+
 
         internal BundleRouter(GeometryGraph geometryGraph, SdShortestPath shortestPathRouter,
                               VisibilityGraph visibilityGraph, BundlingSettings bundlingSettings, double loosePadding, RectangleNode<Polyline, Point> tightHierarchy,
@@ -157,7 +156,6 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             constrainedDelaunayTriangulation.Run();
             return constrainedDelaunayTriangulation;
         }
-#if TEST_MSAGL
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         // ReSharper disable UnusedMember.Local
         void ShowGraphLocal() {
@@ -173,7 +171,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
             }
             SplineRouter.ShowVisGraph(VisibilityGraph, LooseHierarchy.GetAllLeaves(), null, l);
         }
-#endif
+
 
         void FixLocationsForHookAnywherePorts(IEnumerable<Edge> edges) {
             foreach (var edge in edges) {

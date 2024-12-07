@@ -297,7 +297,6 @@ namespace Microsoft.Msagl.Layout.Layered {
         }
 
 #region debug stuff
-#if TEST_MSAGL
         //   static int calls;
         // bool debug { get { return calls == 5;} }
 
@@ -307,7 +306,7 @@ namespace Microsoft.Msagl.Layout.Layered {
                 c.AddSegment(new CubicBezierSegment(s.Point, 2 * s.Point / 3 + s.Next.Point / 3, s.Point / 3 + 2 * s.Next.Point / 3, s.Next.Point));
             return c;
         }
-#endif
+
 
 #endregion
 

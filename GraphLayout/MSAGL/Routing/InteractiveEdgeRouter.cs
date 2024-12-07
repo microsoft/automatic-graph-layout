@@ -12,9 +12,7 @@ using Microsoft.Msagl.Layout.Initial;
 using Microsoft.Msagl.Layout.LargeGraphLayout;
 using Microsoft.Msagl.Routing.Spline.ConeSpanner;
 using Microsoft.Msagl.Routing.Visibility;
-#if TEST_MSAGL
 using Microsoft.Msagl.DebugHelpers;
-#endif
 
 namespace Microsoft.Msagl.Routing {
     /// <summary>
@@ -369,7 +367,6 @@ namespace Microsoft.Msagl.Routing {
 
         #endregion
 
-#if TEST_MSAGL
         // void ShowPolylineAndObstaclesWithGraph() {
         //    List<ICurve> ls = new List<ICurve>();
         //    foreach (Polyline poly in this.obstacleCalculator.TightObstacles)
@@ -380,7 +377,7 @@ namespace Microsoft.Msagl.Routing {
         //    ls.Add(Polyline);
         //    SugiyamaLayoutSettings.Show(ls.ToArray());
         //}
-#endif
+
         //pull the polyline out from the corners
         void RelaxPolyline() {
             RelaxedPolylinePoint relaxedPolylinePoint = CreateRelaxedPolylinePoints(_polyline);
@@ -567,7 +564,6 @@ namespace Microsoft.Msagl.Routing {
             relaxedPoint.PolylinePoint.Point = relaxedPoint.OriginalPosition + v;
         }
 
-#if TEST_MSAGL
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
 // ReSharper disable UnusedMember.Local
         internal void ShowPolylineAndObstacles(params ICurve[] curves)
@@ -605,7 +601,7 @@ namespace Microsoft.Msagl.Routing {
                 ls.Add(new DebugCurve(100, 0.03, "blue",_polyline));
             return ls;
         }
-#endif
+
 
         /// <summary>
         /// smoothing the corners of the polyline
@@ -745,7 +741,6 @@ namespace Microsoft.Msagl.Routing {
             return RemoveCollinearVertices(ret);
         }
 
-#if TEST_MSAGL
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private void ShowIsPassable(VisibilityVertex sourceVisVertex, VisibilityVertex targetVisVertex)
         {
@@ -763,7 +758,7 @@ namespace Microsoft.Msagl.Routing {
                 dd.AddRange(Obstacles.Select(o => new DebugCurve(o)));
             LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(dd);
         }
-#endif
+
 
         void CleanTheGraphForShortestPath() {
             visibilityGraph.ClearPrevEdgesTable();            

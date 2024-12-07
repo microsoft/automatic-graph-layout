@@ -6,9 +6,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
     /// <summary>
     /// Line segment
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
     [DebuggerDisplay("[({a.X} {a.Y}),({b.X} {b.Y})]")]
     public class LineSegment : ICurve {
 

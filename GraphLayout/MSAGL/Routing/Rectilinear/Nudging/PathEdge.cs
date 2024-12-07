@@ -16,11 +16,10 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         internal double Width { get; set; }
         internal Path Path { get; set; }
         
-#if TEST_MSAGL
         public override string ToString() {
             return Source + " " + Target;
         }
-#endif
+
 
 
         internal PathEdge(AxisEdge edgeForNudging, double width) {

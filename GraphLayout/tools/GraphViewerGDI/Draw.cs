@@ -96,7 +96,6 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                 dg.DrawGraph(graphics);
         }
 
-#if TEST_MSAGL
         internal static void DrawDebugStuff(Graphics g, DGraph graphToDraw, Pen myPen) {
             if (graphToDraw.DrawingGraph.DebugICurves != null) {
                 foreach (ICurve c in graphToDraw.DrawingGraph.DebugICurves) {
@@ -539,7 +538,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                 g.DrawLine(pen, PointF(bs.B(2)), PointF(bs.B(3)));
             }
         }
-#endif
+
 
 
         internal static void AddStyleForPen(DObject dObj, Pen myPen, Style style) {
@@ -707,11 +706,9 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                                 (float)sweepAngle);
         }
 
-#if TEST_MSAGL || DEVTRACE
         static PointF PP(P2 point) {
             return new PointF((float)point.X, (float)point.Y);
         }
-#endif
 
         static bool NeedToFill(Color fillColor) {
             return fillColor.A != 0; //the color is not transparent

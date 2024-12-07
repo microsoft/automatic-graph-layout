@@ -6,9 +6,7 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
     /// A leaf of the ParallelogramNodeOverICurve hierarchy.
     /// Is used in curve intersectons routine.
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
     internal class ParallelogramLeaf : ParallelogramNodeOverICurve {
         double low;
 

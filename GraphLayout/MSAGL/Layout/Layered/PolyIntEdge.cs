@@ -11,11 +11,9 @@ namespace Microsoft.Msagl.Layout.Layered {
     /// An edge with source and target represented as integers, they point to an array of Nodes of the graph
     /// </summary>
     [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
-#if TEST_MSAGL
     public
-#else
-    internal
-#endif
+
+
         class PolyIntEdge : IEnumerable<int>, IEdge {
         int source;
 
@@ -220,13 +218,8 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// <summary>
         /// 
         /// </summary>
-#if TEST_MSAGL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public
-#else
-        internal
-#endif
-            IList<LayerEdge> LayerEdges {
+        public IList<LayerEdge> LayerEdges {
             get { return layerEdges; }
             set { layerEdges = (LayerEdge[]) value; }
         }

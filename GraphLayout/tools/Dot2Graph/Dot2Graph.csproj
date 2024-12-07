@@ -1,13 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFramework>net472</TargetFramework>
+		<TargetFrameworks>net8.0;net9.0</TargetFrameworks>
 		<RuntimeIdentifiers>win</RuntimeIdentifiers>
-	</PropertyGroup>
-
-	<PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-    <RootNamespace>Dot2Graph</RootNamespace>
+	  <RootNamespace>Dot2Graph</RootNamespace>
     <AssemblyName>Dot2Graph</AssemblyName>
     <Platforms>AnyCPU;x86;x64</Platforms>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>

@@ -146,9 +146,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             if (!this.allConstraints.IsEmpty)
             {
                 throw new InvalidOperationException(
-#if TEST_MSAGL
-                        "Cannot add Variables or Constraints once Solve() has been called"
-#endif // TEST_MSAGL
+                        "Cannot add Variables or Constraints once Solve() has been called" // TEST_MSAGL
                     );
             }
 
@@ -277,18 +275,14 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             if (!this.allConstraints.IsEmpty)
             {
                 throw new InvalidOperationException(
-#if TEST_MSAGL
-                        "Cannot add Variables or Constraints once Solve() has been called"
-#endif // TEST_MSAGL
+                        "Cannot add Variables or Constraints once Solve() has been called" // TEST_MSAGL
                         );
             }
 
             if (left == right)
             {
                 throw new ArgumentException(
-#if TEST_MSAGL
-                        "Cannot add a constraint between a variable and itself"
-#endif // TEST_MSAGL
+                        "Cannot add a constraint between a variable and itself" // TEST_MSAGL
                         );
             }
 
@@ -384,17 +378,13 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
             if ((relationshipWeight <= 0) || double.IsNaN(relationshipWeight) || double.IsInfinity(relationshipWeight))
             {
                 throw new ArgumentOutOfRangeException("relationshipWeight"
-#if TEST_MSAGL
-                        , "Invalid Neighbor Weight"
-#endif // TEST_MSAGL
+                        , "Invalid Neighbor Weight" // TEST_MSAGL
                     );
             }
             if (variable1 == variable2)
             {
                 throw new InvalidOperationException(
-#if TEST_MSAGL
-                        "Cannot make a Variable a neighbor of itself"
-#endif // TEST_MSAGL
+                        "Cannot make a Variable a neighbor of itself" // TEST_MSAGL
                     );
             }
             variable1.AddNeighbor(variable2, relationshipWeight);

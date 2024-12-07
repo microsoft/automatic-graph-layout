@@ -14,7 +14,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         internal Clump(IEnumerable<Obstacle> obstacles) {
             this.AddRange(obstacles);
         }
-#if TEST_MSAGL
         /// <summary>
         /// </summary>
         /// <returns></returns>
@@ -22,6 +21,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         public override string ToString() {
             return string.Format("({0}", this.Count);
         }
-#endif
+
     }
 }

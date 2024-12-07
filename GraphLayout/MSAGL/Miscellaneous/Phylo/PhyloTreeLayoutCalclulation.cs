@@ -340,9 +340,7 @@ namespace Microsoft.Msagl.Prototype.Phylo {
 
             anchors[i] = new Anchor(leftAnchor, rightAnchor, topAnchor, bottomAnchor, this.intGraph.Nodes[i], LayoutSettings.LabelCornersPreserveCoefficient)
                          {Padding = this.intGraph.Nodes[i].Padding};
-#if TEST_MSAGL
             //anchors[i].Id = this.intGraph.Nodes[i].Id;
-#endif
         }
 
         private static void ExtendStandardAnchors(ref double leftAnchor, ref double rightAnchor, ref double topAnchor, ref double bottomAnchor, Node node) {

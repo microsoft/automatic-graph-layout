@@ -54,10 +54,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
     /// It is passed to the drawing routine
     /// </summary>
     internal sealed class DGraph : DObject, IViewerGraph {
-#if TEST_MSAGL
-
         internal static bool DrawControlPoints { get; set; }
-#endif
 
         public override DrawingObject DrawingObject {
             get { return DrawingGraph; }
@@ -274,7 +271,6 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         internal void DrawGraph(Graphics g) {
             #region drawing of database for debugging only
 
-#if TEST_MSAGL
             Graph dg = DrawingGraph;
 
             if (dg.DataBase != null) {
@@ -287,7 +283,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                 Draw.DrawDebugStuff(g, this, myPen);
             }
 
-#endif
+
 
             #endregion
 
@@ -324,14 +320,13 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                 DrawPortAtLocation(g, Viewer.TargetPortLocation);
         }
 
-#if TEST_MSAGL
         bool NeedToDrawDebugStuff() {
             return drawingGraph.DebugCurves != null ||
                    drawingGraph.DebugICurves != null && drawingGraph.DebugICurves.Count > 0 ||
                    drawingGraph.DataBase != null ||
                    drawingGraph.GeometryGraph != null;
         }
-#endif
+
 
         static void DrawUnderlyingPolyline(Graphics g, DEdge editedEdge) {
             SmoothedPolyline underlyingPolyline = editedEdge.DrawingEdge.GeometryEdge.UnderlyingPolyline;
@@ -400,7 +395,6 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                 if (dEdge.DrawingEdge.GeometryEdge.Label != null)
                     Draw.DrawLabel(graphics, dEdge.Label);
 
-#if TEST_MSAGL
                 if (DrawControlPoints) {
                     ICurve iCurve = dEdge.DrawingEdge.GeometryEdge.Curve;
                     var c = iCurve as Curve;
@@ -419,7 +413,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                     }
                 }
 
-#endif
+
             }
         }
 
@@ -463,9 +457,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                     case Shape.Ellipse:
                     case Shape.DrawFromGeometry:
 
-#if TEST_MSAGL
                     case Shape.TestShape:
-#endif
                         pen.EndCap = LineCap.Square;
                         Draw.DrawFromMsaglCurve(g, pen, dnode);
                         break;

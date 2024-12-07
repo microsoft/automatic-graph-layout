@@ -188,9 +188,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             ValidateArg.IsNotNull(shape, "shape");
             if (shape.BoundaryCurve == null) {
                 throw new InvalidOperationException(
-#if TEST_MSAGL
-                    "Shape must have a BoundaryCurve"
-#endif // TEST_MSAGL
+                    "Shape must have a BoundaryCurve" // TEST_MSAGL
                     );
             }
             this.CreatePaddedObstacle(shape);
@@ -201,9 +199,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             ValidateArg.IsNotNull(shape, "shape");
             if (shape.BoundaryCurve == null) {
                 throw new InvalidOperationException(
-#if TEST_MSAGL
-                    "Shape must have a BoundaryCurve"
-#endif // TEST_MSAGL
+                    "Shape must have a BoundaryCurve" // TEST_MSAGL
                     );
             }
 
@@ -392,14 +388,13 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
 
 
-#if TEST_MSAGL
         private IEnumerable<DebugCurve> GetGraphDebugCurves() {
             List<DebugCurve> l =
                 VisibilityGraph.Edges.Select(e => new DebugCurve(50, 0.1, "blue", new LineSegment(e.SourcePoint, e.TargetPoint))).ToList();
             l.AddRange(Obstacles.Select(o => new DebugCurve(1, "green", o.BoundaryCurve)));
             return l;
         }
-#endif
+
 
         private void FillEdgePathsWithShortestPaths(IEnumerable<Path> edgePaths) {
             this.PortManager.BeginRouteEdges();
@@ -435,7 +430,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             this.PortManager.RemoveControlPointsFromGraph();
         }
 
-#if TEST_MSAGL
         // ReSharper disable UnusedMember.Local
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private void ShowEdgePath(Path path) {
@@ -445,7 +439,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             dd.AddRange(VisibilityGraph.Edges.Select(e => new DebugCurve(0.5, "blue", new LineSegment(e.SourcePoint, e.TargetPoint))));
             LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(dd);
         }
-#endif
+
 
         internal virtual bool GeneratePath(MsmtRectilinearPath shortestPathRouter, Path edgePath, bool lastChance = false) {
             var sourceVertices = PortManager.FindVertices(edgePath.EdgeGeometry.SourcePort);
@@ -573,9 +567,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         private void GenerateObstacleTree() {
             if ((Obstacles == null) || !Obstacles.Any()) {
                 throw new InvalidOperationException(
-#if TEST_MSAGL
-                    "No obstacles have been added"
-#endif // TEST
+                    "No obstacles have been added" // TEST
                     );
             }
 
@@ -618,9 +610,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         internal void GenerateVisibilityGraph() {
             if ((Obstacles == null) || !Obstacles.Any()) {
                 throw new InvalidOperationException(
-#if TEST_MSAGL
                     "No obstacles have been set"
-#endif
                     );
             }
 
@@ -631,7 +621,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             }
         }
 
-#if TEST_MSAGL
         internal void ShowPathWithTakenEdgesAndGraph(IEnumerable<VisibilityVertex> path, Set<VisibilityEdge> takenEdges) {
             var list = new List<VisibilityVertex>(path);
             var lines = new List<LineSegment>();
@@ -654,7 +643,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             LayoutAlgorithmSettings.ShowDebugCurvesEnumeration(dc);
             // ReSharper restore InconsistentNaming
         }
-#endif
+
 
         internal static ICurve FitArcsIntoCorners(double radius, Point[] polyline) {
             IEnumerable<Ellipse> ellipses = GetFittedArcSegs(radius, polyline);

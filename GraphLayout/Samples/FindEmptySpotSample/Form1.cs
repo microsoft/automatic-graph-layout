@@ -27,9 +27,7 @@ namespace FindEmptySpotSample {
         void Form1_Load(object sender, EventArgs e) {
             gViewer.ObjectUnderMouseCursorChanged += new EventHandler<ObjectUnderMouseCursorChangedEventArgs>(gViewer_ObjectUnderMouseCursorChanged);
 
-#if TEST_MSAGL
            Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
 
            CreateGraph();
         }
@@ -286,9 +284,7 @@ namespace FindEmptySpotSample {
 
 
 
-#if TEST_MSAGL
             Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
 
 
             //settings.AddUpDownVerticalConstraints("3", "28");

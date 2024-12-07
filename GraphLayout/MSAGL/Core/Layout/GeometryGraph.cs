@@ -6,25 +6,20 @@ using Microsoft.Msagl.Core.DataStructures;
 using Microsoft.Msagl.Core.Geometry;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Layout.LargeGraphLayout;
-#if TEST_MSAGL
 using Microsoft.Msagl.DebugHelpers;
 using System.Diagnostics;
-#endif
+
 
 namespace Microsoft.Msagl.Core.Layout {
     /// <summary>
     /// This class keeps the graph nodes, edges, and clusters, together with their geometries
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
     public class GeometryGraph : GeometryObject
     {
          IList<Node> nodes;
          EdgeCollection edges;
-#if TEST_MSAGL
     [NonSerialized]
-#endif
          Cluster rootCluster;
 
         /// <summary>
@@ -64,12 +59,11 @@ namespace Microsoft.Msagl.Core.Layout {
         }
 
         double margins;
-#if TEST_MSAGL
         /// <summary>
         /// curves to show debug stuff
         /// </summary>
         public DebugCurve[] DebugCurves;
-#endif
+
 
         /// <summary>
         /// margins width are equal from the left and from the right; they are given in percents
@@ -170,11 +164,10 @@ namespace Microsoft.Msagl.Core.Layout {
                 node.Transform(matrix);
             foreach (var edge in Edges)
                 edge.Transform(matrix);
-#if TEST_MSAGL
             if (DebugCurves != null)
                 foreach (var dc in DebugCurves)
                     dc.Curve = dc.Curve.Transform(matrix);
-#endif
+
             UpdateBoundingBox();
         }
 
@@ -237,11 +230,10 @@ namespace Microsoft.Msagl.Core.Layout {
                 if (c.BoundaryCurve != null)
                     b.Add(c.BoundaryCurve.BoundingBox);
             }
-#if TEST_MSAGL
             if(DebugCurves!=null)
                 foreach (var debugCurve in DebugCurves.Where(d => d.Curve != null))
                     b.Add(debugCurve.Curve.BoundingBox);
-#endif
+
         }
 
         /// <summary>
@@ -303,7 +295,6 @@ namespace Microsoft.Msagl.Core.Layout {
         {
             return this.Nodes.FirstOrDefault(n => n.UserData.Equals(userData));
         }
-#if TEST_MSAGL
         ///<summary>
         ///</summary>
 
@@ -328,16 +319,14 @@ namespace Microsoft.Msagl.Core.Layout {
                 return;
             foreach (var child in cluster.Clusters.Concat(cluster.Nodes)) {
                 var inside=Curve.CurveIsInsideOther(child.BoundaryCurve, cluster.BoundaryCurve);
-#if TEST_MSAGL
 //                if (!inside)
 //                    LayoutAlgorithmSettings.ShowDebugCurves(new DebugCurve("green", cluster.BoundaryCurve), new DebugCurve("red", child.BoundaryCurve));
-#endif
+
                 Debug.Assert(inside,
                              "A child of a cluster has to have the BoundaryCurve inside of the BoundaryCurve of the cluster");
             }
 
         }
-#endif
         /// <summary>
         /// info of layers for large graph browsing
         /// </summary>

@@ -67,10 +67,9 @@ namespace Microsoft.Msagl.Layout.LargeGraphLayout {
         }
 
         void RemoveAction(Point a, Point b) {
-#if TEST_MSAGL
             VisibilityEdge ve;
             Debug.Assert(_pathRouter.FindVertex(a).TryGetEdge(_pathRouter.FindVertex(b), out ve));
-#endif
+
             _pathRouter.RemoveEdge(a, b);
             var ss=new SymmetricSegment(a, b);
             _symmetricSegmentsTree.Remove(new Rectangle(ss.A, ss.B), ss);

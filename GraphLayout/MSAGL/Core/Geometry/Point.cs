@@ -7,9 +7,7 @@ namespace Microsoft.Msagl.Core.Geometry {
     /// <summary>
     /// Two dimensional point
     /// </summary>
-#if TEST_MSAGL
     [Serializable]
-#endif
     [DebuggerDisplay("({X},{Y})")]
     public struct Point : IComparable<Point> {
         /// <summary>

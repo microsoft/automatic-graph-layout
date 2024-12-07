@@ -393,7 +393,6 @@ namespace Microsoft.Msagl.UnitTests.Constraints
                 return;
             }
 
-#if TEST_MSAGL
             var variableDebugCurves = new List<DebugCurve>();
             var clusterDebugCurves = new List<DebugCurve>();
 
@@ -411,9 +410,6 @@ namespace Microsoft.Msagl.UnitTests.Constraints
             System.Diagnostics.Debug.WriteLine("ShowRectangles: there are {0} variables and {1} clusters",
                     variableDebugCurves.Count, clusterDebugCurves.Count);
             SugiyamaLayoutSettings.ShowDebugCurvesEnumeration(variableDebugCurves.Concat(clusterDebugCurves));
-#else  // TEST_MSAGL
-            System.Diagnostics.Debug.WriteLine("-show* options require TEST mode");
-#endif // TEST_MSAGL
         }
 
         internal static void ShowInitialRectangles(IEnumerable<VariableDef> variableDefs)
@@ -423,15 +419,11 @@ namespace Microsoft.Msagl.UnitTests.Constraints
                 return;
             }
 
-#if TEST_MSAGL
             var debugCurves = new List<DebugCurve>();
             debugCurves.AddRange(variableDefs.Select(
                 v => new Rectangle(v.InitialLeft, v.InitialTop, v.InitialRight, v.InitialBottom)).Select(
                 rect => new DebugCurve(0.1, "black", CurveFactory.CreateRectangle(rect))));
             SugiyamaLayoutSettings.ShowDebugCurvesEnumeration(debugCurves);
-#else  // TEST_MSAGL
-            System.Diagnostics.Debug.WriteLine("-show* options require TEST mode");
-#endif // TEST_MSAGL
         }
     }
 }

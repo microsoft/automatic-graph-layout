@@ -23,7 +23,6 @@ namespace Microsoft.Msagl.Core
         /// <param name="source">The items that action will be applied to.</param>
         /// <param name="action">The action being applied to the items.</param>
         /// <param name="progressAction">The action being called to report progress on the items.  The integer parameter is the number of items processed since the last progress report.</param>
-        [Conditional("NET4")]
         public static void ForEach<T>(IEnumerable<T> source, Action<T> action, Action<int> progressAction)
         {
             // Parallel.ForEach operates faster on an array

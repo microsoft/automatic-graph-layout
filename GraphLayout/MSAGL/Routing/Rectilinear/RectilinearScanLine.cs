@@ -185,11 +185,10 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
         [Conditional("TEST_MSAGL")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         void Assert(bool condition, string message) {
-#if TEST_MSAGL
             if (!condition) {
                 Test_DumpScanLine();
             }
-#endif // TEST
+ // TEST
             Debug.Assert(condition, message);
         }
 
@@ -221,14 +220,12 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
 
         #region DebugCurves
 
-#if TEST_MSAGL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         internal void Test_DumpScanLine() {
             DebugCurveCollection.WriteToFile(Test_GetScanLineDebugCurves(), StaticGraphUtility.GetDumpFileName("ScanLine"));
         }
-#endif // TEST
+ // TEST
 
-#if TEST_MSAGL
         internal List<DebugCurve> Test_GetScanLineDebugCurves() {
 // ReSharper restore InconsistentNaming
             var debugCurves = new List<DebugCurve>();
@@ -265,7 +262,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear {
             debugCurves.Add(new DebugCurve(0.025, "black", new LineSegment(start, end)));
             return debugCurves;
         }
-#endif // TEST
+ // TEST
         #endregion // DebugCurves
     }
 }

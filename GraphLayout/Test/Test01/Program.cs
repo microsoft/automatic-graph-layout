@@ -64,9 +64,7 @@ namespace Test01 {
 
         [STAThread]
         static void Main(string[] args) {
-#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
-#endif
             ArgsParser.ArgsParser argsParser = SetArgsParser(args);
             if (argsParser.OptionIsUsed("-help")) {
                 Console.WriteLine(argsParser.UsageString());
@@ -112,7 +110,6 @@ namespace Test01 {
                         FixHookPorts(geometryGraph);
                         // if (argsParser.OptionIsUsed(BundlingOption)) {
                         for (int i = 0; i < 1; i++) {
-#if TEST_MSAGL
                             /*DisplayGeometryGraph.ShowGraph(geometryGraph);
                                 var l = new List<DebugCurve>(); l.AddRange(geometryGraph.Nodes.Select(n=>new DebugCurve(100,1,"black",n.BoundaryCurve)));
                                 l.AddRange(geometryGraph.Edges.Select(e=>new DebugCurve(100,1,"black", new LineSegment(e.Source.Center,e.Target.Center))));
@@ -128,7 +125,7 @@ namespace Test01 {
 
                                 DisplayGeometryGraph.ShowDebugCurves(l.ToArray());*/
 
-#endif
+
                             BundlingSettings bs = GetBundlingSettings(argsParser);
 
                             double loosePadding;
@@ -149,9 +146,7 @@ namespace Test01 {
                                                                 Math.PI / 6, bs);
                             splineRouter.Run();
                         }
-#if TEST_MSAGL
                         DisplayGeometryGraph.ShowGraph(geometryGraph);
-#endif
                         return;
                     }
                     else {
@@ -233,9 +228,7 @@ namespace Test01 {
             } while (!settings.Converged);
 
             RouteEdges(graph, settings);
-#if TEST_MSAGL
             LayoutAlgorithmSettings.ShowGraph(graph);
-#endif
             Environment.Exit(0);
         }
 
@@ -318,7 +311,6 @@ namespace Test01 {
             var start = (Point)bformatter.Deserialize(stream);
             var end = (Point)bformatter.Deserialize(stream);
             stream.Close();
-#if TEST_MSAGL
             foreach (var t in FindStartTriangle(trs, start)) {
 
                 var ll = ThreadOnTriangle(start, end, t);
@@ -327,10 +319,9 @@ namespace Test01 {
                 }
                 DisplayGeometryGraph.ShowDebugCurves(ll.ToArray());
             }
-#endif
+
         }
 
-#if TEST_MSAGL
         static List<DebugCurve> ThreadOnTriangle(Point start, Point end, CdtTriangle t) {
             var l = new List<DebugCurve> { new DebugCurve(10, "red", new LineSegment(start, end)) };
             AddTriangleToListOfDebugCurves(l, t, 100, 3, "brown");
@@ -357,7 +348,7 @@ namespace Test01 {
                     yield return t;
             }
         }
-#endif
+
 
         static void TestPolygonDistance() {
             IFormatter formatter = new BinaryFormatter();
@@ -773,18 +764,14 @@ Console.WriteLine(argsParser.ErrorMessage);
         }
 
         static void Triangulation(bool reverseX) {
-#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
-#endif
             int r = reverseX ? -1 : 1;
             IEnumerable<Point> points = Points().Select(p => new Point(r * p.X, p.Y));
 
             var poly = (Polyline)RussiaPolyline.GetTestPolyline().ScaleFromOrigin(1, 1);
             var cdt = new Cdt(null, new[] { poly }, null);
             cdt.Run();
-#if TEST_MSAGL
             CdtSweeper.ShowFront(cdt.GetTriangles(), null, null, null);
-#endif
         }
 
         static IEnumerable<Point> Points() {
@@ -866,9 +853,7 @@ Console.WriteLine(argsParser.ErrorMessage);
 
             var layeredLayout = new LayeredLayout(graph, settings);
             layeredLayout.Run();
-#if TEST_MSAGL
             DisplayGeometryGraph.ShowGraph(graph);
-#endif
         }
     }
 }

@@ -18,11 +18,7 @@ namespace Microsoft.Msagl.Layout.Layered {
     ///          |
     ///          |BottomAnchor
     /// </summary>
-#if TEST_MSAGL
     public
-#else
-    internal
-#endif
         class Anchor {
         /// <summary>
         /// ToString
@@ -300,12 +296,7 @@ namespace Microsoft.Msagl.Layout.Layered {
         /// <summary>
         /// the polygon representing the boundary of a node
         /// </summary>
-#if TEST_MSAGL
-        public
-#else
-        internal
-#endif
- Polyline PolygonalBoundary {
+        public Polyline PolygonalBoundary {
             get {
                 if (polygonalBoundary != null)
                     return polygonalBoundary;
@@ -482,14 +473,12 @@ namespace Microsoft.Msagl.Layout.Layered {
             this.Y += p.Y;
         }
 
-#if TEST_MSAGL
-
         /// <summary>
         /// UserData
         /// </summary>
         public object UserData { get; set; }
 
-#endif
+
 
     }
 }

@@ -64,9 +64,7 @@ namespace Agl {
         int precision=3;
      
         Dot2SvgMain(string[] args) {
-#if TEST_MSAGL
             DisplayGeometryGraph.SetShowFunctions();
-#endif
             argsParser = new ArgsParser.ArgsParser(args);
             argsParser.AddAllowedOptionWithHelpString("-nolayout", "do not run layout if the geometry is there");
             argsParser.AddOptionWithAfterString(FileOption);

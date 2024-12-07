@@ -15,11 +15,8 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
     /// <summary>
     /// The class is looking for the free space around AxisEdges
     /// </summary>
-#if SHARPKIT //https://code.google.com/p/sharpkit/issues/detail?id=301
-    internal class FreeSpaceFinder : LineSweeperBase {
-#else
     internal class FreeSpaceFinder : LineSweeperBase, IComparer<AxisEdgesContainer> {
-#endif
+
         static double AreaComparisonEpsilon = ApproximateComparer.IntersectionEpsilon;
         readonly PointProjection xProjection;
         
@@ -133,7 +130,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                            rightEdge.TargetPoint.X < leftEdge.SourcePoint.X - ApproximateComparer.DistanceEpsilon);
         }
 
-#if TEST_MSAGL
 // ReSharper disable UnusedMember.Local
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         void DebShowEdge(AxisEdge edge, Point point){
@@ -160,7 +156,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
         IEnumerable<DebugCurve> GetObstacleBoundaries(string color){
             return Obstacles.Select(p => new DebugCurve(1, color, p));
         }
-#endif
+
         
 
         /// <summary>
@@ -209,7 +205,6 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
                                                   PointToTheRightOfLineOrOnLineLocal(point, side.Start, side.End));
         }
         #region debug
-#if TEST_MSAGL
         // ReSharper disable UnusedMember.Local
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         void ShowPointAndEdge(Point point, AxisEdge edge) {
@@ -320,7 +315,7 @@ namespace Microsoft.Msagl.Routing.Rectilinear.Nudging {
             var curves = GetCurvesTest(point);
             LayoutAlgorithmSettings.ShowDebugCurves(curves.ToArray());
         }
-#endif
+
         #endregion
         RBNode<AxisEdgesContainer> GetOrCreateAxisEdgesContainer(AxisEdge edge) {
             var source = edge.Source.Point;

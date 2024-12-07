@@ -582,7 +582,6 @@ namespace Microsoft.Msagl.UnitTests
             var hull = new Polyline(ConvexHull.CalculateConvexHull(points)) { Closed = true };
             VerifyPointsAreInOrOnHull(points, hull);
            
-#if TEST_MSAGL
             MsaglTestBase.EnableDebugViewer();
             if (LayoutAlgorithmSettings.ShowDebugCurvesEnumeration == null)
             {
@@ -590,7 +589,7 @@ namespace Microsoft.Msagl.UnitTests
             }
             var poly = new Polyline(points);
             LayoutAlgorithmSettings.ShowDebugCurves(new DebugCurve(100, 0.01, "magenta", hull), new DebugCurve(100, 0.001, "green", poly));
-#endif
+
         }
 
         public static void VerifyPointsAreInOrOnHull(IEnumerable<Point> points, Polyline hull) 

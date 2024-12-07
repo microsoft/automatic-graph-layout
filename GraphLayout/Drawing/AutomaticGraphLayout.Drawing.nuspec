@@ -1,8 +1,8 @@
 ﻿<package>
   <metadata>
-    <id>Microsoft.Msagl.Drawing</id>
-    <version>1.1.6</version>
-    <authors>Microsoft</authors>
+    <id>Msagl.Drawing</id>
+    <version>BuildVersion</version>
+    <authors>levnach</authors>
     <owners>Microsoft</owners>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/Microsoft/automatic-graph-layout</projectUrl>
@@ -14,7 +14,7 @@
     <language>en-US</language>
     <tags>MSAGL Graph Layout</tags>
     <dependencies>
-      <dependency id="Microsoft.Msagl" version="1.1.6" />
+        <dependency id="Msagl" version="BuildVersion" />
     </dependencies>
   </metadata>
   <files>
