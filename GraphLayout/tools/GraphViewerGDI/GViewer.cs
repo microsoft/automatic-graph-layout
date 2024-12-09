@@ -1230,19 +1230,29 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                     bool needToCalc = NeedToCalculateLayout;
                     layoutWaitHandle.Set();
                     OriginalGraph = value;
-                    if (needToCalc)
-                    {
+                    if (needToCalc) {
                         AsyncLayoutProgress?.Invoke(this, args);
                         LayoutAndCreateDGraph(token);
                     }
-                    else
-                    {
+                    else {
                         DGraph = DGraph.CreateDGraphFromPrecalculatedDrawingGraph(OriginalGraph, this);
                     }
+Invoke(
+                (Invoker)
+                delegate {
+                  if (AsyncLayoutProgress != null) {
+                    args.progress = LayoutProgress.Rendering;
+                    AsyncLayoutProgress(this, args);
+                  }
+                  InitiateDrawing();
+                  if (AsyncLayoutProgress != null) {
+                    args.progress = LayoutProgress.Finished;
+                    AsyncLayoutProgress(this, args);
+                  }
+                });
                 }
-                catch (OperationCanceledException)
-                {
-                    // Handle the cancellation
+                catch (OperationCanceledException) {
+                    AbortAsyncLayout();
                 }
                 finally
                 {
@@ -1250,7 +1260,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                 }
             }
         });
-
+      // Before we start the thread, ensure the control is created.
       // Otherwise Invoke inside of the thread might fail.
       CreateControl();
       layoutThread.Start();
@@ -1541,7 +1551,6 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       if (localSugiyamaSettings != null) {
         // Insert hard coded constraints for tests
 
-        TestSomeGraphs();
       }
       OriginalGraph.CreateGeometryGraph();
       GeometryGraph geometryGraph = OriginalGraph.GeometryGraph;
@@ -1559,53 +1568,6 @@ namespace Microsoft.Msagl.GraphViewerGdi {
       }
     }
 
-    void TestSomeGraphs() {
-      if (fileName.EndsWith("lovett.dot")) {
-        OriginalGraph.LayerConstraints.AddUpDownVerticalConstraint(OriginalGraph.FindNode("Logica"),
-                                                                   OriginalGraph.FindNode("IBM"));
-        OriginalGraph.LayerConstraints.AddUpDownVerticalConstraint(OriginalGraph.FindNode("IBM"),
-                                                                   OriginalGraph.FindNode("Taligent"));
-        OriginalGraph.LayerConstraints.AddUpDownVerticalConstraint(OriginalGraph.FindNode("Taligent"),
-                                                                   OriginalGraph.FindNode("Walkabout"));
-        OriginalGraph.LayerConstraints.AddUpDownVerticalConstraint(OriginalGraph.FindNode("Walkabout"),
-                                                                   OriginalGraph.FindNode("Microsoft"));
-        OriginalGraph.LayerConstraints.AddSameLayerNeighbors(OriginalGraph.FindNode("MSXML"),
-                                                             OriginalGraph.FindNode("sysxml"),
-                                                             OriginalGraph.FindNode("xsharp"),
-                                                             OriginalGraph.FindNode("xmled"),
-                                                             OriginalGraph.FindNode("Progression"));
-      }
-      else if (fileName.EndsWith("dependenciesForTaskCrashTest.dot")) {
-        OriginalGraph.LayerConstraints.PinNodesToSameLayer(
-            OriginalGraph.FindNode("C1"),
-            OriginalGraph.FindNode("C2"),
-            OriginalGraph.FindNode("C3"),
-            OriginalGraph.FindNode("C4"),
-            OriginalGraph.FindNode("C5"),
-            OriginalGraph.FindNode("C6"),
-            OriginalGraph.FindNode("C7"),
-            OriginalGraph.FindNode("C8"),
-            OriginalGraph.FindNode("C9"),
-            OriginalGraph.FindNode("C10"));
-        OriginalGraph.LayerConstraints.PinNodesToSameLayer(
-            OriginalGraph.FindNode("R1"),
-            OriginalGraph.FindNode("R2"),
-            OriginalGraph.FindNode("R3"),
-            OriginalGraph.FindNode("R4"),
-            OriginalGraph.FindNode("R5"),
-            OriginalGraph.FindNode("R6"),
-            OriginalGraph.FindNode("R7"),
-            OriginalGraph.FindNode("R8"),
-            OriginalGraph.FindNode("R9"),
-            OriginalGraph.FindNode("R10"));
-      }
-      else if (fileName.EndsWith("andrei.dot")) {
-        OriginalGraph.LayerConstraints.AddUpDownVerticalConstraint(OriginalGraph.FindNode("open"),
-                                                                   OriginalGraph.FindNode("bezier"));
-        OriginalGraph.LayerConstraints.AddUpDownVerticalConstraint(OriginalGraph.FindNode("closed"),
-                                                                   OriginalGraph.FindNode("ellipse"));
-      }
-    }
 
 
     /// <summary>
