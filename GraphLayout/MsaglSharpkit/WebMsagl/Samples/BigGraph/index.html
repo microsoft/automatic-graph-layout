@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>MSAGL_JS Big Graph Sample</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../samples.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="/Samples/BigGraph/boot"></script>
+</head>
+<body>
+    <div id="controls">
+        Nodes:
+        <input type="number" id="nodeCount" value="100"/>
+        Edges:
+        <input type="number" id="edgeCount" value="100"/>
+        <span>Edge routing mode:</span>
+        <select id="edgeRoutingSelect">
+            <option value="splines">Splines</option>
+            <option value="splinesbundling">Splines with Bundling</option>
+            <option value="straightline">Straight Line</option>
+            <option value="sugiyamasplines" selected>Sugiyama Splines</option>
+            <option value="rectilinear">Rectilinear</option>
+            <option value="rectilineartocenter">Rectilinear to Center</option>
+        </select>
+        <input type="checkbox" class="graphToolbarCheckBox" id="layeredLayoutCheckBox" checked />
+        <span>Layered layout</span>
+        <button id="startButton">START</button>
+        <button id="stopButton" disabled>STOP</button>
+        <span id="working">WORKING...</span>
+        <span id="elapsed"></span>
+    </div>
+    <div id="graphContainer"><div id="graphView"></div></div>
+</body>
+</html>

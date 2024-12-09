@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FB0E4270-DF2C-4D82-818D-CC5B9B59D75C}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WebMsagl</RootNamespace>
+    <AssemblyName>WebMsagl</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TypeScriptToolsVersion>2.4</TypeScriptToolsVersion>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+    <Content Include="Samples\BigGraph\index.html" />
+    <Content Include="Samples\BigGraph\styles.css" />
+    <Content Include="Samples\Clusters\index.html" />
+    <Content Include="Samples\Clusters\styles.css" />
+    <Content Include="Samples\CustomLabels\index.html" />
+    <Content Include="Samples\CustomLabels\styles.css" />
+    <Content Include="Samples\GraphFromJson\index.html" />
+    <Content Include="Samples\GraphFromJson\styles.css" />
+    <Content Include="Samples\HiddenRendering\index.html" />
+    <Content Include="Samples\HiddenRendering\styles.css" />
+    <Content Include="Samples\Interactivity\index.html" />
+    <Content Include="Samples\Interactivity\styles.css" />
+    <Content Include="Samples\Options\index.html" />
+    <Content Include="Samples\Options\styles.css" />
+    <Content Include="Samples\samples.css" />
+    <Content Include="Scripts\src\jsclr.js" />
+    <Content Include="Scripts\src\jsclr.min.js">
+      <DependentUpon>jsclr.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\src\Microsoft.Msagl.js" />
+    <Content Include="Scripts\src\Microsoft.Msagl.min.js">
+      <DependentUpon>Microsoft.Msagl.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\src\sharpkit_post.js" />
+    <Content Include="Scripts\src\sharpkit_pre.js" />
+    <Content Include="Scripts\src\workerBoot.js" />
+    <Content Include="web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Samples\BigGraph\app.ts" />
+    <TypeScriptCompile Include="Samples\BigGraph\boot.ts" />
+    <TypeScriptCompile Include="Samples\Clusters\app.ts" />
+    <TypeScriptCompile Include="Samples\Clusters\boot.ts" />
+    <TypeScriptCompile Include="Samples\config.ts" />
+    <TypeScriptCompile Include="Samples\CustomLabels\app.ts" />
+    <TypeScriptCompile Include="Samples\CustomLabels\boot.ts" />
+    <TypeScriptCompile Include="Samples\GraphFromJson\app.ts" />
+    <TypeScriptCompile Include="Samples\GraphFromJson\boot.ts" />
+    <TypeScriptCompile Include="Samples\HiddenRendering\app.ts" />
+    <TypeScriptCompile Include="Samples\HiddenRendering\boot.ts" />
+    <TypeScriptCompile Include="Samples\Interactivity\app.ts" />
+    <TypeScriptCompile Include="Samples\Interactivity\boot.ts" />
+    <TypeScriptCompile Include="Samples\Options\app.ts" />
+    <TypeScriptCompile Include="Samples\Options\boot.ts" />
+    <TypeScriptCompile Include="Scripts\src\contextgraph.ts" />
+    <TypeScriptCompile Include="Scripts\src\ggraph.ts" />
+    <TypeScriptCompile Include="Scripts\src\iddgraph.ts" />
+    <TypeScriptCompile Include="Scripts\src\iddsvggraph.ts" />
+    <TypeScriptCompile Include="Scripts\src\messages.ts" />
+    <TypeScriptCompile Include="Scripts\src\msagl.worker.ts" />
+    <TypeScriptCompile Include="Scripts\src\svggraph.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\requirejs\require.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Samples\Options\samplegraph1.json" />
+    <Content Include="Samples\Options\samplegraph2.json" />
+    <Content Include="Samples\GraphFromJson\samplegraph.json" />
+    <None Include="bundleconfig.json" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TypeScriptModuleKind>amd</TypeScriptModuleKind>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptModuleKind>amd</TypeScriptModuleKind>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>59245</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:59245/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup>
+    <PreBuildEvent>if exist "$(SolutionDir)MsaglSharpKit\res\Microsoft.Msagl.js" xcopy /y "$(SolutionDir)MsaglSharpKit\res\Microsoft.Msagl.js" "$(ProjectDir)Scripts\src\"
+if exist "$(SolutionDir)MsaglDrawingSharpkit\res\Microsoft.Msagl.Drawing.js" xcopy /y "$(SolutionDir)MsaglDrawingSharpkit\res\Microsoft.Msagl.Drawing.js" "$(ProjectDir)Scripts\src\"</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

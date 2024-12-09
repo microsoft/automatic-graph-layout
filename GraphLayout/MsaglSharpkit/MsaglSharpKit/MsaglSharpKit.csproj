@@ -1,0 +1,1592 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AE7F3261-AA3C-4EE5-BE63-28ACAA83088E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Msagl</RootNamespace>
+    <AssemblyName>Microsoft.Msagl</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SHARPKIT;PERSISTENCE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>5</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;SHARPKIT</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="SharpKit.Html, Version=1.0.0.0, Culture=neutral, PublicKeyToken=2575297a09c47a96, processorArchitecture=MSIL" />
+    <Reference Include="SharpKit.JavaScript, Version=1.5.0.0, Culture=neutral, PublicKeyToken=2575297a09c47a96, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\MSAGL\Core\Layout\ProximityOverlapRemoval\MST\GTreeOverlapRemoval.cs">
+      <Link>GTreeOverlapRemoval.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\Angle.cs">
+      <Link>Angle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\ComponentCollection.cs">
+      <Link>ComponentCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\DijkstraAlgo.cs">
+      <Link>DijkstraAlgo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\LocalModifications.cs">
+      <Link>LocalModifications.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\MeshCreator.cs">
+      <Link>MeshCreator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\MeshGraph.cs">
+      <Link>MeshGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\MsaglUtilities.cs">
+      <Link>MsaglUtilities.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\Network.cs">
+      <Link>Network.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\PlanarGraphUtilities.cs">
+      <Link>PlanarGraphUtilities.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\PointSet.cs">
+      <Link>PointSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\PointToSegmentDistance.cs">
+      <Link>PointToSegmentDistance.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\SteinerTree.cs">
+      <Link>SteinerTree.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MSAGL\GraphmapsWithMesh\Tiling.cs">
+      <Link>Tiling.cs</Link>
+    </Compile>
+    <Compile Include="ExtensionsForSharpKit.cs" />
+    <Compile Include="GlobalSharpKit.cs" />
+    <Compile Include="..\..\msagl\Core\AlgorithmBase.cs">
+      <Link>AlgorithmBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\DataStructures\CollectionUtilities.cs">
+      <Link>CollectionUtilities.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\DataStructures\GenericBinaryHeapPriorityQueueWithTimestamp.cs">
+      <Link>GenericBinaryHeapPriorityQueueWithTimestamp.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\DataStructures\GenericHeapElementWithTimestamp.cs">
+      <Link>GenericHeapElementWithTimestamp.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\DataStructures\Size.cs">
+      <Link>Size.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\DataStructures\SymmetricTuple.cs">
+      <Link>SymmetricTuple.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\ApproximateComparer.cs">
+      <Link>ApproximateComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\ConvexHull\ConvexHull.cs">
+      <Link>ConvexHull.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\ConvexHull\HullPoint.cs">
+      <Link>HullPoint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\ConvexHull\HullPointComparer.cs">
+      <Link>HullPointComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\ConvexHull\HullStack.cs">
+      <Link>HullStack.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\RoundedRect.cs">
+      <Link>RoundedRect.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\RectanglePacking\ColumnPacking.cs">
+      <Link>ColumnPacking.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\RectanglePacking\OptimalColumnPacking.cs">
+      <Link>OptimalColumnPacking.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\RectanglePacking\OptimalPacking.cs">
+      <Link>OptimalPacking.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\RectanglePacking\OptimalRectanglePacking.cs">
+      <Link>OptimalRectanglePacking.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\OverlapRemoval\BorderInfo.cs">
+      <Link>BorderInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\PointNodesList.cs">
+      <Link>PointNodesList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\PointPair.cs">
+      <Link>PointPair.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\RectanglePacking\Packing.cs">
+      <Link>Packing.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\RectanglePacking\PackingConstants.cs">
+      <Link>PackingConstants.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\RectanglePacking\RectangleToPack.cs">
+      <Link>RectangleToPack.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\RectanglePacking\RectanglePacking.cs">
+      <Link>RectanglePacking.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\RTree\IntervalNode.cs">
+      <Link>IntervalNode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\RTree\IntervalNodeUtils.cs">
+      <Link>IntervalNodeUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\RTree\IntervalRTree.cs">
+      <Link>IntervalRTree.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\RTree\RectangleNodeUtils.cs">
+      <Link>RectangleNodeUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Site.cs">
+      <Link>Site.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\GraphAlgorithms\MinimumSpanningTreeByPrim.cs">
+      <Link>MinimumSpanningTreeByPrim.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\Arrowhead.cs">
+      <Link>Arrowhead.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\Arrowheads.cs">
+      <Link>Arrowheads.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\CurvePort.cs">
+      <Link>CurvePort.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\EdgeCollection.cs">
+      <Link>EdgeCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\EdgeLabelPlacement.cs">
+      <Link>EdgeLabelPlacement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\HookUpAnywhereFromInsidePort.cs">
+      <Link>HookUpAnywhereFromInsidePort.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\IdealEdgeLengthSettings.cs">
+      <Link>IdealEdgeLengthSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\IObstacle.cs">
+      <Link>IObstacle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\IsOpenChangeEventArgs.cs">
+      <Link>IsOpenChangeEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\LabelPlacementResult.cs">
+      <Link>LabelPlacementResult.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\LgInfoBase.cs">
+      <Link>LgInfoBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\LgNodeInfo.cs">
+      <Link>LgNodeInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\LayoutAlgorithmHelpers.cs">
+      <Link>LayoutAlgorithmHelpers.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\LayoutChangeEventArgs.cs">
+      <Link>LayoutChangeEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\LgNodeInfoKind.cs">
+      <Link>LgNodeInfoKind.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\NodeCollection.cs">
+      <Link>NodeCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\PackingMethod.cs">
+      <Link>PackingMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\PortObstacle.cs">
+      <Link>PortObstacle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\ConjugateGradient\SparseMatrix.cs">
+      <Link>SparseMatrix.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\ConjugateGradient\LinearSystemSolver.cs">
+      <Link>LinearSystemSolver.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\ConjugateGradient\Vector.cs">
+      <Link>Vector.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\IOverlapRemoval.cs">
+      <Link>IOverlapRemoval.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\MST\MstLineSweeper.cs">
+      <Link>MstLineSweeper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\OverlapRemovalSettings.cs">
+      <Link>OverlapRemovalSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\ProximityOverlapRemoval.cs">
+      <Link>ProximityOverlapRemoval.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\MST\MstOnDelaunayTriangulation.cs">
+      <Link>MstOnDelaunayTriangulation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\StressEnergy\ExampleStressMajorization.cs">
+      <Link>ExampleStressMajorization.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\StressEnergy\MaxIterationMethod.cs">
+      <Link>MaxIterationMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\StressEnergy\NodeVoting.cs">
+      <Link>NodeVoting.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\StressEnergy\StressMajorizationSettings.cs">
+      <Link>StressMajorizationSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\StressEnergy\SolvingMethod.cs">
+      <Link>SolvingMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\StressEnergy\StressMajorization.cs">
+      <Link>StressMajorization.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\StressEnergy\UpdateMethod.cs">
+      <Link>UpdateMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\StressEnergy\Vote.cs">
+      <Link>Vote.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\StressEnergy\VoteBlock.cs">
+      <Link>VoteBlock.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\RectangleObstacle.cs">
+      <Link>RectangleObstacle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\SimpleIntEdge.cs">
+      <Link>SimpleIntEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ProjectionSolver\SolverAlgorithm.cs">
+      <Link>SolverAlgorithm.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ParallelUtilities.cs">
+      <Link>ParallelUtilities.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Routing\BundlingSettings.cs">
+      <Link>BundlingSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\Persistence\CharStreamElement.cs">
+      <Link>CharStreamElement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\Persistence\GeometryGraphReader.cs">
+      <Link>GeometryGraphReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\Persistence\GeometryGraphWriter.cs">
+      <Link>GeometryGraphWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\Persistence\CurveStream.cs">
+      <Link>CurveStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\Persistence\CurveStreamElement.cs">
+      <Link>CurveStreamElement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\Persistence\DoubleStreamElement.cs">
+      <Link>DoubleStreamElement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Incremental\Relayout.cs">
+      <Link>Relayout.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Initial\InitialLayoutByCluster.cs">
+      <Link>InitialLayoutByCluster.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Initial\InitialLayoutHelpers.cs">
+      <Link>InitialLayoutHelpers.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\DeviceIndependedZoomCalculatorForNodes.cs">
+      <Link>DeviceIndependedZoomCalculatorForNodes.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\EdgePicker.cs">
+      <Link>EdgePicker.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\IZoomLevelCalculator.cs">
+      <Link>IZoomLevelCalculator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LgCellInfo.cs">
+      <Link>LgCellInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LgData.cs">
+      <Link>LgData.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LgEdgeInfo.cs">
+      <Link>LgEdgeInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LgInteractor.cs">
+      <Link>LgInteractor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LgLayoutSettings.cs">
+      <Link>LgLayoutSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LevelCalculator.cs">
+      <Link>LevelCalculator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LgLevel.cs">
+      <Link>LgLevel.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LgNodeCollection.cs">
+      <Link>LgNodeCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LgSkeletonLevel.cs">
+      <Link>LgSkeletonLevel.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\NodeRailLevelCalculator\GreedyNodeRailLevelCalculator.cs">
+      <Link>GreedyNodeRailLevelCalculator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\Rail.cs">
+      <Link>Rail.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\RailGraph.cs">
+      <Link>RailGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\Interval.cs">
+      <Link>Interval.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\RouteSimplifier.cs">
+      <Link>RouteSimplifier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\ShortestPartRouterForLg.cs">
+      <Link>ShortestPartRouterForLg.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\SimpleEdgeCollection.cs">
+      <Link>SimpleEdgeCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\SimpleNodeCollection.cs">
+      <Link>SimpleNodeCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\LayeredLayoutEngine.cs">
+      <Link>LayeredLayoutEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\RecoveryLayerCalculator.cs">
+      <Link>RecoveryLayerCalculator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\RecoveryLayeredLayoutEngine.cs">
+      <Link>RecoveryLayeredLayoutEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\ProximityOverlapRemoval\OverlapRemovalMethod.cs">
+      <Link>OverlapRemovalMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\OverlapRemovalFixedSegments\FakeBitmap.cs">
+      <Link>FakeBitmap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\OverlapRemovalFixedSegments\OverlapRemovalFixedSegmentsBitmap.cs">
+      <Link>OverlapRemovalFixedSegmentsBitmap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\OverlapRemovalFixedSegments\OverlapRemovalFixedSegmentsMst.cs">
+      <Link>OverlapRemovalFixedSegmentsMst.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\OverlapRemovalFixedSegments\PixelPoint.cs">
+      <Link>PixelPoint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\OverlapRemovalFixedSegments\RectSegIntersection.cs">
+      <Link>RectSegIntersection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\ConstrainedSkeleton\SteinerCdt.cs">
+      <Link>SteinerCdt.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\Constraints\AlignmentConstraint.cs">
+      <Link>AlignmentConstraint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\LayoutEditing\BumperPusher.cs">
+      <Link>BumperPusher.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\LayoutEditing\IncrementalDragger.cs">
+      <Link>IncrementalDragger.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\LayoutEditing\LabelFixture.cs">
+      <Link>LabelFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\LayoutHelpers.cs">
+      <Link>LayoutHelpers.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\LayoutEditing\EdgeRestoreData.cs">
+      <Link>EdgeRestoreData.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\LayoutEditing\GraphRestoreData.cs">
+      <Link>GraphRestoreData.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\LayoutEditing\LabelRestoreData.cs">
+      <Link>LabelRestoreData.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\LayoutEditing\NodeRestoreData.cs">
+      <Link>NodeRestoreData.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\LayoutEditing\ObstacleCalculator.cs">
+      <Link>ObstacleCalculator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\LayoutEditing\RestoreData.cs">
+      <Link>RestoreData.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\LayoutEditing\RestoreHelper.cs">
+      <Link>RestoreHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\LayoutEditing\RouterBetweenTwoNodes.cs">
+      <Link>RouterBetweenTwoNodes.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\LayoutEditing\WeightedEdge.cs">
+      <Link>WeightedEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\MultiScale\MultiScaleLayout.cs">
+      <Link>MultiScaleLayout.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\NonOverlappingBoundaries\AllPairsNonOverlappingBoundaries.cs">
+      <Link>AllPairsNonOverlappingBoundaries.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\NonOverlappingBoundaries\ProximityQuery.cs">
+      <Link>ProximityQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\Phylo\PhyloEdge.cs">
+      <Link>PhyloEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\Phylo\PhyloTree.cs">
+      <Link>PhyloTree.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\Phylo\PhyloTreeLayoutCalclulation.cs">
+      <Link>PhyloTreeLayoutCalclulation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\Ranking\Centrality.cs">
+      <Link>Centrality.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\Ranking\RankingLayout.cs">
+      <Link>RankingLayout.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\Ranking\RankingLayoutSettings.cs">
+      <Link>RankingLayoutSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\RegularGrid\GridTraversal.cs">
+      <Link>GridTraversal.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\LargeGraphLayout\LgPathRouter.cs">
+      <Link>LgPathRouter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Miscellaneous\Routing\ShortestPathTree.cs">
+      <Link>ShortestPathTree.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\ClusterBoundaryPort.cs">
+      <Link>ClusterBoundaryPort.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\ConstrainedDelaunayTriangulation\CdtEdge.cs">
+      <Link>CdtEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\ConstrainedDelaunayTriangulation\CdtFront.cs">
+      <Link>CdtFront.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\ConstrainedDelaunayTriangulation\CdtFrontElement.cs">
+      <Link>CdtFrontElement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\ConstrainedDelaunayTriangulation\CdtSite.cs">
+      <Link>CdtSite.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\ConstrainedDelaunayTriangulation\CdtSweeper.cs">
+      <Link>CdtSweeper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\ConstrainedDelaunayTriangulation\Cdt.cs">
+      <Link>Cdt.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\ConstrainedDelaunayTriangulation\CdtTriangle.cs">
+      <Link>CdtTriangle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\ConstrainedDelaunayTriangulation\EdgeInserter.cs">
+      <Link>EdgeInserter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\ConstrainedDelaunayTriangulation\EdgeTracer.cs">
+      <Link>EdgeTracer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\ConstrainedDelaunayTriangulation\PerimeterEdge.cs">
+      <Link>PerimeterEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\ConstrainedDelaunayTriangulation\ThreeArray.cs">
+      <Link>ThreeArray.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Corner.cs">
+      <Link>Corner.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\MultiEdgeRouter.cs">
+      <Link>MultiEdgeRouter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\MultipleSourceMultipleTargetsShortestPathOnVisibilityGraph.cs">
+      <Link>MultipleSourceMultipleTargetsShortestPathOnVisibilityGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\PreGraph.cs">
+      <Link>PreGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\AxisCoordinateEvent.cs">
+      <Link>AxisCoordinateEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Clump.cs">
+      <Link>Clump.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\EnumeratorWrapper.cs">
+      <Link>EnumeratorWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\FullVisibilityGraphGenerator.cs">
+      <Link>FullVisibilityGraphGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\NeighborSides.cs">
+      <Link>NeighborSides.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\OverlapConvexHull.cs">
+      <Link>OverlapConvexHull.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\ScanSegmentVectorItem.cs">
+      <Link>ScanSegmentVectorItem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\ScanSegmentVector.cs">
+      <Link>ScanSegmentVector.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\SparseVisibilityGraphGenerator.cs">
+      <Link>SparseVisibilityGraphGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\VertexEntry.cs">
+      <Link>VertexEntry.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\VisibilityVertexRectilinear.cs">
+      <Link>VisibilityVertexRectilinear.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\ShapeCreator.cs">
+      <Link>ShapeCreator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\ShapeCreatorForRoutingToParents.cs">
+      <Link>ShapeCreatorForRoutingToParents.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\ShapeObstacleCalculator.cs">
+      <Link>ShapeObstacleCalculator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\CdtThreader.cs">
+      <Link>CdtThreader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\SdBoneEdge.cs">
+      <Link>SdBoneEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\SdVertex.cs">
+      <Link>SdVertex.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\SdShortestPath.cs">
+      <Link>SdShortestPath.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\SingleSourceMultipleTargetsShortestPathOnVisibilityGraph.cs">
+      <Link>SingleSourceMultipleTargetsShortestPathOnVisibilityGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\BundleBase.cs">
+      <Link>BundleBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\BundleBasesCalculator.cs">
+      <Link>BundleBasesCalculator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\BundleInfo.cs">
+      <Link>BundleInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\BundleRouter.cs">
+      <Link>BundleRouter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\BundlingStatus.cs">
+      <Link>BundlingStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\CdtIntersections.cs">
+      <Link>CdtIntersections.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\ChannelFlag.cs">
+      <Link>ChannelFlag.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\EdgeNudger.cs">
+      <Link>EdgeNudger.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\FlipCollapser.cs">
+      <Link>FlipCollapser.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\FlipSwitcher.cs">
+      <Link>FlipSwitcher.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\GeneralMetroMapOrdering.cs">
+      <Link>GeneralMetroMapOrdering.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\HubDebugger.cs">
+      <Link>HubDebugger.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\HubRadiiCalculator.cs">
+      <Link>HubRadiiCalculator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\IMetroMapOrderingAlgorithm.cs">
+      <Link>IMetroMapOrderingAlgorithm.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\CostCalculator.cs">
+      <Link>CostCalculator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\IntersectionCache.cs">
+      <Link>IntersectionCache.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\Intersections.cs">
+      <Link>Intersections.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\LinearMetroMapOrdering.cs">
+      <Link>LinearMetroMapOrdering.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\MetroGraphData.cs">
+      <Link>MetroGraphData.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\Metroline.cs">
+      <Link>Metroline.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\MetroNodeInfo.cs">
+      <Link>MetroNodeInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\NodePositionsAdjuster.cs">
+      <Link>NodePositionsAdjuster.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\OrientedHubSegment.cs">
+      <Link>OrientedHubSegment.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\PathFixer.cs">
+      <Link>PathFixer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\PointPairOrder.cs">
+      <Link>PointPairOrder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\SimulatedAnnealing.cs">
+      <Link>SimulatedAnnealing.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\Station.cs">
+      <Link>Station.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\StationEdgeInfo.cs">
+      <Link>StationEdgeInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\Bundling\TimeMeasurer.cs">
+      <Link>TimeMeasurer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\TightLooseCouple.cs">
+      <Link>TightLooseCouple.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\StraightLineEdges.cs">
+      <Link>StraightLineEdges.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\GraphAlgorithms\CycleRemoval\ConnectedComponentCalculator.cs">
+      <Link>ConnectedComponentCalculator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\GraphAlgorithms\CycleRemoval\CycleRemoval.cs">
+      <Link>CycleRemoval.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\GraphAlgorithms\CycleRemoval\CycleRemovalWithConstraints.cs">
+      <Link>CycleRemovalWithConstraints.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\GraphAlgorithms\CycleRemoval\GraphForCycleRemoval.cs">
+      <Link>GraphForCycleRemoval.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\GraphAlgorithms\CycleRemoval\NodeInfo.cs">
+      <Link>NodeInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\LayeredLayout.cs">
+      <Link>LayeredLayout.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\MDS\AllPairsDistances.cs">
+      <Link>AllPairsDistances.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\MDS\PivotDistances.cs">
+      <Link>PivotDistances.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Incremental\AxisSolver.cs">
+      <Link>AxisSolver.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\MinEnclosingDisc\Disc.cs">
+      <Link>Disc.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\MDS\PivotMDS.cs">
+      <Link>PivotMDS.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\Cluster.cs">
+      <Link>Cluster.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Incremental\Feasibility.cs">
+      <Link>Feasibility.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Incremental\EdgeConstraintGenerator.cs">
+      <Link>EdgeConstraintGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Incremental\FastIncrementalLayout.cs">
+      <Link>FastIncrementalLayout.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Incremental\FiEdge.cs">
+      <Link>FiEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Incremental\FiNode.cs">
+      <Link>FiNode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Incremental\HorizontalSeparationConstraint.cs">
+      <Link>HorizontalSeparationConstraint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Incremental\IConstraint.cs">
+      <Link>IConstraint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Incremental\LockPosition.cs">
+      <Link>LockPosition.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Incremental\MaxSeparationConstraint.cs">
+      <Link>MaxSeparationConstraint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Incremental\MinSeparationConstraint.cs">
+      <Link>MinSeparationConstraint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Incremental\Multipole\KDTree.cs">
+      <Link>KDTree.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Incremental\FastIncrementalLayoutSettings.cs">
+      <Link>FastIncrementalLayoutSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\MinEnclosingDisc\MinimumEnclosingDisc.cs">
+      <Link>MinimumEnclosingDisc.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Incremental\Multipole\MultipoleCoefficients.cs">
+      <Link>MultipoleCoefficients.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Incremental\ProcrustesCircleConstraint.cs">
+      <Link>ProcrustesCircleConstraint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\OverlapRemoval\RectangularClusterBoundary.cs">
+      <Link>RectangularClusterBoundary.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Initial\InitialLayout.cs">
+      <Link>InitialLayout.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Incremental\StickConstraint.cs">
+      <Link>StickConstraint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Incremental\VerticalSeparationConstraint.cs">
+      <Link>VerticalSeparationConstraint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\DataStructures\BinaryHeapPriorityQueue.cs">
+      <Link>BinaryHeapPriorityQueue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\DataStructures\BinaryHeapWithComparer.cs">
+      <Link>BinaryHeapWithComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\GraphConnectedComponents.cs">
+      <Link>GraphConnectedComponents.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\PortEntryOnCurve.cs">
+      <Link>PortEntryOnCurve.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ProgressChangedEventArgs.cs">
+      <Link>ProgressChangedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Routing\EdgeRoutingSettings.cs">
+      <Link>EdgeRoutingSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\RTree\RTree.cs">
+      <Link>RTree.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\CancelToken.cs">
+      <Link>CancelToken.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\DebugCurve.cs">
+      <Link>DebugCurve.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\DebugCurveCollection.cs">
+      <Link>DebugCurveCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\DebugGraphics.cs">
+      <Link>DebugGraphics.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Routing\EdgeRoutingMode.cs">
+      <Link>EdgeRoutingMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\IDebugGraphics.cs">
+      <Link>IDebugGraphics.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\DebugRectangle.cs">
+      <Link>DebugRectangle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\DebugShape.cs">
+      <Link>DebugShape.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\DebugEllipse.cs">
+      <Link>DebugEllipse.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\EdgeGeometry.cs">
+      <Link>EdgeGeometry.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\FloatingPort.cs">
+      <Link>FloatingPort.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\GeometryGraph.cs">
+      <Link>GeometryGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\GeometryObject.cs">
+      <Link>GeometryObject.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\DataStructures\GenericHeapElement.cs">
+      <Link>GenericHeapElement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\HorizontalConstraintsForSugiyama.cs">
+      <Link>HorizontalConstraintsForSugiyama.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\GraphAlgorithms\IEdge.cs">
+      <Link>IEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\ILabeledObject.cs">
+      <Link>ILabeledObject.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\DataStructures\GenericBinaryHeapPriorityQueue.cs">
+      <Link>GenericBinaryHeapPriorityQueue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\Label.cs">
+      <Link>Label.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\MultiLocationFloatingPort.cs">
+      <Link>MultiLocationFloatingPort.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\NetworkEdge.cs">
+      <Link>NetworkEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\NetworkSimplexForGeneralGraph.cs">
+      <Link>NetworkSimplexForGeneralGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Point.cs">
+      <Link>Point.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\Port.cs">
+      <Link>Port.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\PortEntry.cs">
+      <Link>PortEntry.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\DataStructures\RBTree\DefaultComperer.cs">
+      <Link>DefaultComperer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\DataStructures\RBTree\RBColor.cs">
+      <Link>RBColor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\DataStructures\RBTree\RBNode.cs">
+      <Link>RBNode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\DataStructures\RBTree\RBTree.cs">
+      <Link>RBTree.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\DataStructures\RBTree\RBTreeEnumerator.cs">
+      <Link>RBTreeEnumerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\DataStructures\RealNumberSpan.cs">
+      <Link>RealNumberSpan.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\RelativeFloatingPort.cs">
+      <Link>RelativeFloatingPort.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\Show.cs">
+      <Link>Show.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\ShowDatabase.cs">
+      <Link>ShowDatabase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\ShowDebugCurves.cs">
+      <Link>ShowDebugCurves.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\ShowDebugCurvesEnumeration.cs">
+      <Link>ShowDebugCurvesEnumeration.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\SmoothedPolyline.cs">
+      <Link>SmoothedPolyline.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\TriangleOrientation.cs">
+      <Link>TriangleOrientation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\VerticalConstraintsForSugiyama.cs">
+      <Link>VerticalConstraintsForSugiyama.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\MDS\MDSLayoutSettings.cs">
+      <Link>MDSLayoutSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\MultidimensionalScaling.cs">
+      <Link>MultidimensionalScaling.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\MDS\SingleSourceDistances.cs">
+      <Link>SingleSourceDistances.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\MDS\MDSGraphLayout.cs">
+      <Link>MDSGraphLayout.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\MDS\Transform.cs">
+      <Link>Transform.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\Ordering\AdjacentSwapsWithConstraints.cs">
+      <Link>AdjacentSwapsWithConstraints.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\Ordering\ConstrainedOrdering.cs">
+      <Link>ConstrainedOrdering.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\Ordering\ConstrainedOrderMeasure.cs">
+      <Link>ConstrainedOrderMeasure.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\Ordering\MetroMapOrdering.cs">
+      <Link>MetroMapOrdering.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\Ordering\EdgeComparerBySource.cs">
+      <Link>EdgeComparerBySource.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\Ordering\EdgeComparerByTarget.cs">
+      <Link>EdgeComparerByTarget.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ProjectionSolver\ISolverShell.cs">
+      <Link>ISolverShell.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\Ordering\LayerInfo.cs">
+      <Link>LayerInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ProjectionSolver\SolverShell.cs">
+      <Link>SolverShell.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\Ordering\SweepMode.cs">
+      <Link>SweepMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\OverlapRemoval\OverlapRemovalCluster.cs">
+      <Link>OverlapRemovalCluster.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\OverlapRemoval\OverlapRemovalGlobalConfiguration.cs">
+      <Link>OverlapRemovalGlobalConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\OverlapRemoval\OverlapRemovalParameters.cs">
+      <Link>OverlapRemovalParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\Persistence\ClusterWithChildLists.cs">
+      <Link>ClusterWithChildLists.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\Persistence\GeometryToken.cs">
+      <Link>GeometryToken.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\ProperLayeredGraph.cs">
+      <Link>ProperLayeredGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\GlobalSuppressions.cs">
+      <Link>GlobalSuppressions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\LayerCalculator.cs">
+      <Link>LayerCalculator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\GraphAlgorithms\TopologicalSort.cs">
+      <Link>TopologicalSort.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\Layering\LongestPathLayering.cs">
+      <Link>LongestPathLayering.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\Layering\NetworkSimplex.cs">
+      <Link>NetworkSimplex.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\Ordering\AdjacentSwaps.cs">
+      <Link>AdjacentSwaps.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\EdgePathsInserter.cs">
+      <Link>EdgePathsInserter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\SugiyamaLayoutLogger.cs">
+      <Link>SugiyamaLayoutLogger.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\LayerInserter.cs">
+      <Link>LayerInserter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\Balancing.cs">
+      <Link>Balancing.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\GraphAlgorithms\BasicGraph.cs">
+      <Link>BasicGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\DataBase.cs">
+      <Link>DataBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\Edge.cs">
+      <Link>Edge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\Timer.cs">
+      <Link>Timer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\IntEdge.cs">
+      <Link>IntEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\GraphAlgorithms\IntPair.cs">
+      <Link>IntPair.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\LayerArrays.cs">
+      <Link>LayerArrays.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\SugiyamaLayoutSettings.cs">
+      <Link>SugiyamaLayoutSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\LayoutAlgorithmSettings.cs">
+      <Link>LayoutAlgorithmSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Layout\Node.cs">
+      <Link>Node.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\Anchor.cs">
+      <Link>Anchor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\DataStructures\Set.cs">
+      <Link>Set.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\LayerEdge.cs">
+      <Link>LayerEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\VertexEnumerators.cs">
+      <Link>VertexEnumerators.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\XLayoutGraph.cs">
+      <Link>XLayoutGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\Ordering\Ordering.cs">
+      <Link>Ordering.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\Ordering\OrderingMeasure.cs">
+      <Link>OrderingMeasure.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ProjectionSolver\Block.cs">
+      <Link>Block.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ProjectionSolver\BlockVector.cs">
+      <Link>BlockVector.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ProjectionSolver\Constraint.cs">
+      <Link>Constraint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ProjectionSolver\ConstraintVector.cs">
+      <Link>ConstraintVector.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ProjectionSolver\DfDvNode.cs">
+      <Link>DfDvNode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ProjectionSolver\GlobalConfiguration.cs">
+      <Link>GlobalConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ProjectionSolver\Parameters.cs">
+      <Link>Parameters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ProjectionSolver\QPSC.cs">
+      <Link>QPSC.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ProjectionSolver\SimpleStopwatch.cs">
+      <Link>SimpleStopwatch.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ProjectionSolver\Solution.cs">
+      <Link>Solution.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ProjectionSolver\Solver.cs">
+      <Link>Solver.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ProjectionSolver\Variable.cs">
+      <Link>Variable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ProjectionSolver\ViolationCache.cs">
+      <Link>ViolationCache.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\OverlapRemoval\ConstraintGenerator.cs">
+      <Link>ConstraintGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\OverlapRemoval\OverlapRemovalClusterEvent.cs">
+      <Link>OverlapRemovalClusterEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\OverlapRemoval\OverlapRemovalNode.cs">
+      <Link>OverlapRemovalNode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\OverlapRemoval\OverlapRemovalClusterScanLine.cs">
+      <Link>OverlapRemovalClusterScanLine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Nudging\SegWithIndex.cs">
+      <Link>SegWithIndex.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Nudging\StaircaseRemover.cs">
+      <Link>StaircaseRemover.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\GroupBoundaryCrossing.cs">
+      <Link>GroupBoundaryCrossing.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\GroupBoundaryCrossingMap.cs">
+      <Link>GroupBoundaryCrossingMap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\PointAndCrossings.cs">
+      <Link>PointAndCrossings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\PointAndCrossingsList.cs">
+      <Link>PointAndCrossingsList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\ObstacleTree.cs">
+      <Link>ObstacleTree.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\ConeSpannerForPortLocations.cs">
+      <Link>ConeSpannerForPortLocations.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\FlatEdgeRouter.cs">
+      <Link>FlatEdgeRouter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\RTree\HitTestBehavior.cs">
+      <Link>HitTestBehavior.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\InteractiveEdgeRouter.cs">
+      <Link>InteractiveEdgeRouter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\InteractiveObstacleCalculator.cs">
+      <Link>InteractiveObstacleCalculator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Nudging\AxisEdge.cs">
+      <Link>AxisEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Nudging\AxisEdgesContainer.cs">
+      <Link>AxisEdgesContainer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Nudging\CombinatorialNudger.cs">
+      <Link>CombinatorialNudger.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Nudging\AxisEdgeHighPointEvent.cs">
+      <Link>AxisEdgeHighPointEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Nudging\AxisEdgeLowPointEvent.cs">
+      <Link>AxisEdgeLowPointEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\DataStructures\RBTree\ComparerOnDelegate.cs">
+      <Link>ComparerOnDelegate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Nudging\FreeSpaceFinder.cs">
+      <Link>FreeSpaceFinder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Nudging\LinkedPointSplitter.cs">
+      <Link>LinkedPointSplitter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Nudging\Nudger.cs">
+      <Link>Nudger.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Nudging\PointProjection.cs">
+      <Link>PointProjection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ProjectionSolver\UniformOneDimensionalSolver.cs">
+      <Link>UniformOneDimensionalSolver.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Nudging\LinkedPoint.cs">
+      <Link>LinkedPoint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Nudging\PathRefiner.cs">
+      <Link>PathRefiner.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Nudging\PointByDelegateComparer.cs">
+      <Link>PointByDelegateComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\ProjectionSolver\UniformSolverVar.cs">
+      <Link>UniformSolverVar.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Nudging\SpaceCalculationEvent.cs">
+      <Link>SpaceCalculationEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Nudging\PathEdge.cs">
+      <Link>PathEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Nudging\LongestNudgedSegment.cs">
+      <Link>LongestNudgedSegment.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Nudging\Path.cs">
+      <Link>Path.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\RTree\RectangleNode.cs">
+      <Link>RectangleNode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\BasicObstacleSide.cs">
+      <Link>BasicObstacleSide.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\BasicReflectionEvent.cs">
+      <Link>BasicReflectionEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\BasicVertexEvent.cs">
+      <Link>BasicVertexEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\OpenVertexEvent.cs">
+      <Link>OpenVertexEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Direction.cs">
+      <Link>Direction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\CompassVector.cs">
+      <Link>CompassVector.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\HighBendVertexEvent.cs">
+      <Link>HighBendVertexEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\LowBendVertexEvent.cs">
+      <Link>LowBendVertexEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\ScanSegmentTree.cs">
+      <Link>ScanSegmentTree.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\StaticGraphUtility.cs">
+      <Link>StaticGraphUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\CloseVertexEvent.cs">
+      <Link>CloseVertexEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\TransientGraphUtility.cs">
+      <Link>TransientGraphUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\PortObstacleEvent.cs">
+      <Link>PortObstacleEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\TollFreeVisibilityEdge.cs">
+      <Link>TollFreeVisibilityEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\EventQueue.cs">
+      <Link>EventQueue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\FreePoint.cs">
+      <Link>FreePoint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\HighObstacleSide.cs">
+      <Link>HighObstacleSide.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\LowReflectionEvent.cs">
+      <Link>LowReflectionEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\LookaheadScan.cs">
+      <Link>LookaheadScan.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\LowObstacleSide.cs">
+      <Link>LowObstacleSide.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\MsmtRectilinearPath.cs">
+      <Link>MsmtRectilinearPath.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Obstacle.cs">
+      <Link>Obstacle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\ObstaclePort.cs">
+      <Link>ObstaclePort.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\ObstaclePortEntrance.cs">
+      <Link>ObstaclePortEntrance.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\PortManager.cs">
+      <Link>PortManager.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\RectilinearInteractiveEditor.cs">
+      <Link>RectilinearInteractiveEditor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\RelativeShape.cs">
+      <Link>RelativeShape.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Shape.cs">
+      <Link>Shape.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\Nudging\PathMerger.cs">
+      <Link>PathMerger.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\SpliceUtility.cs">
+      <Link>SpliceUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\VisibilityGraphGenerator.cs">
+      <Link>VisibilityGraphGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\SsstRectilinearPath.cs">
+      <Link>SsstRectilinearPath.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\RectilinearEdgeRouter.cs">
+      <Link>RectilinearEdgeRouter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\HighReflectionEvent.cs">
+      <Link>HighReflectionEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\ScanDirection.cs">
+      <Link>ScanDirection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\RectilinearScanLine.cs">
+      <Link>RectilinearScanLine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\ScanSegment.cs">
+      <Link>ScanSegment.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\SegmentIntersector.cs">
+      <Link>SegmentIntersector.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\WaypointPort.cs">
+      <Link>WaypointPort.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\RelaxedPolylinePoint.cs">
+      <Link>RelaxedPolylinePoint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\HierarchyCalculator.cs">
+      <Link>HierarchyCalculator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\NodeKind.cs">
+      <Link>NodeKind.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\RefinerBetweenTwoLayers.cs">
+      <Link>RefinerBetweenTwoLayers.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\Routing.cs">
+      <Link>Routing.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\SplineRouter.cs">
+      <Link>SplineRouter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\SingleSourceSingleTargetShortestPathOnVisibilityGraph.cs">
+      <Link>SingleSourceSingleTargetShortestPathOnVisibilityGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\SmoothedPolylineCalculator.cs">
+      <Link>SmoothedPolylineCalculator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\TwoLayerFlatEdgeRouter.cs">
+      <Link>TwoLayerFlatEdgeRouter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\DevTrace.cs">
+      <Link>DevTrace.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\Cone.cs">
+      <Link>Cone.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\ConeClosureEvent.cs">
+      <Link>ConeClosureEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\ConeLeftSide.cs">
+      <Link>ConeLeftSide.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\ConeRightSide.cs">
+      <Link>ConeRightSide.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\ConeSpanner.cs">
+      <Link>ConeSpanner.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\ClosestPointOnCurve.cs">
+      <Link>ClosestPointOnCurve.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\CubicBezierSegment.cs">
+      <Link>CubicBezierSegment.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\CurvatureDerivative.cs">
+      <Link>CurvatureDerivative.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\Curve.cs">
+      <Link>Curve.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\CurveFactory.cs">
+      <Link>CurveFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\CurveLengthAndParams.cs">
+      <Link>CurveLengthAndParams.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\DebugHelpers\CurveSerializer.cs">
+      <Link>CurveSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\CurveTangent.cs">
+      <Link>CurveTangent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\Ellipse.cs">
+      <Link>Ellipse.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\ICurve.cs">
+      <Link>ICurve.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\IFunction.cs">
+      <Link>IFunction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\IntersectionInfo.cs">
+      <Link>IntersectionInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\LinearSystem2.cs">
+      <Link>LinearSystem2.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\LineSegment.cs">
+      <Link>LineSegment.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\MinDistCurveCurve.cs">
+      <Link>MinDistCurveCurve.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\Parallelogram.cs">
+      <Link>Parallelogram.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\ParallelogramBinaryTreeNode.cs">
+      <Link>ParallelogramBinaryTreeNode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\ParallelogramInternalTreeNode.cs">
+      <Link>ParallelogramInternalTreeNode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\ParallelogramLeaf.cs">
+      <Link>ParallelogramLeaf.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\ParallelogramNode.cs">
+      <Link>ParallelogramNode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\ParallelogramNodeOverICurve.cs">
+      <Link>ParallelogramNodeOverICurve.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\PenetrationDepth.cs">
+      <Link>PenetrationDepth.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\PlaneTransformation.cs">
+      <Link>PlaneTransformation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\PolylinePoint.cs">
+      <Link>PolylinePoint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\PointLocation.cs">
+      <Link>PointLocation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\Polyline.cs">
+      <Link>Polyline.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\PolylineIterator.cs">
+      <Link>PolylineIterator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Rectangle.cs">
+      <Link>Rectangle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Core\Geometry\Curves\RootFinder.cs">
+      <Link>RootFinder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\ActiveDiagonalComparerWithRay.cs">
+      <Link>ActiveDiagonalComparerWithRay.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\ActiveEdgeComparerWithRay.cs">
+      <Link>ActiveEdgeComparerWithRay.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\BimodalSequence.cs">
+      <Link>BimodalSequence.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\IConeSweeper.cs">
+      <Link>IConeSweeper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\LeftIntersectionEvent.cs">
+      <Link>LeftIntersectionEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\LeftObstacleSide.cs">
+      <Link>LeftObstacleSide.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\LineSweeperForPortLocations.cs">
+      <Link>LineSweeperForPortLocations.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\PortLocationEvent.cs">
+      <Link>PortLocationEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\LineSweeperBase.cs">
+      <Link>LineSweeperBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\LowestVertexEvent.cs">
+      <Link>LowestVertexEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\ObstacleSide.cs">
+      <Link>ObstacleSide.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\ObstacleSideComparer.cs">
+      <Link>ObstacleSideComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\RightIntersectionEvent.cs">
+      <Link>RightIntersectionEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\LeftVertexEvent.cs">
+      <Link>LeftVertexEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\LineSweeper.cs">
+      <Link>LineSweeper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\SweepEvent.cs">
+      <Link>SweepEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\BrokenConeSide.cs">
+      <Link>BrokenConeSide.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\RightObstacleSide.cs">
+      <Link>RightObstacleSide.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\RightVertexEvent.cs">
+      <Link>RightVertexEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\ConeSide.cs">
+      <Link>ConeSide.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\ConeSideComparer.cs">
+      <Link>ConeSideComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Spline\ConeSpanner\VertexEvent.cs">
+      <Link>VertexEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\Diagonal.cs">
+      <Link>Diagonal.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\InteractiveTangentVisibilityGraphCalculator.cs">
+      <Link>InteractiveTangentVisibilityGraphCalculator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Rectilinear\PointComparer.cs">
+      <Link>PointComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\PointVisibilityCalculator.cs">
+      <Link>PointVisibilityCalculator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\Polygon.cs">
+      <Link>Polygon.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\SegmentBase.cs">
+      <Link>SegmentBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\StemStartPointComparer.cs">
+      <Link>StemStartPointComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\UnimodalSequence.cs">
+      <Link>UnimodalSequence.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\VisibilityKind.cs">
+      <Link>VisibilityKind.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\VisibilityEdge.cs">
+      <Link>VisibilityEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\VisibilityGraph.cs">
+      <Link>VisibilityGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\VisibilityVertex.cs">
+      <Link>VisibilityVertex.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\Stem.cs">
+      <Link>Stem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\Tangent.cs">
+      <Link>Tangent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\TangentPair.cs">
+      <Link>TangentPair.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Routing\Visibility\TangentVisibilityGraphCalculator.cs">
+      <Link>TangentVisibilityGraphCalculator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\Layout\Layered\XCoordsWithAlignment.cs">
+      <Link>XCoordsWithAlignment.cs</Link>
+    </Compile>
+    <Compile Include="..\..\msagl\ValidateArg.cs">
+      <Link>ValidateArg.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildBinPath)\SharpKit\5\SharpKit.Build.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2027A5E4-8943-4A7B-A373-6FB4C3FE1225}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MsaglDrawingSharpkit</RootNamespace>
+    <AssemblyName>Microsoft.Msagl.Drawing</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>5</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="SharpKit.JsClr, Version=4.1.0.0, Culture=neutral, PublicKeyToken=2575297a09c47a96, processorArchitecture=MSIL" />
+    <Reference Include="SharpKit.JavaScript" />
+    <Reference Include="SharpKit.Html" />
+    <Reference Include="SharpKit.jQuery" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Drawing\AttributeBase.cs">
+      <Link>AttributeBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\Color.cs">
+      <Link>Color.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\ConnectionToGraph.cs">
+      <Link>ConnectionToGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\DrawingEnums.cs">
+      <Link>DrawingEnums.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\DrawingObject.cs">
+      <Link>DrawingObject.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\Edge.cs">
+      <Link>Edge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\EdgeAttr.cs">
+      <Link>EdgeAttr.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\Enums.cs">
+      <Link>Enums.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\FontStyle.cs">
+      <Link>FontStyle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\GeometryGraphCreator.cs">
+      <Link>GeometryGraphCreator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\GlobalSuppressions.cs">
+      <Link>GlobalSuppressions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\Graph.cs">
+      <Link>Graph.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\GraphAttr.cs">
+      <Link>GraphAttr.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\GraphReader.cs">
+      <Link>GraphReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\GraphWriter.cs">
+      <Link>GraphWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\HorizontalConstraintsForLayeredLayout.cs">
+      <Link>HorizontalConstraintsForLayeredLayout.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\Label.cs">
+      <Link>Label.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayerConstraints.cs">
+      <Link>LayerConstraints.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\AddEdgeUndoAction.cs">
+      <Link>LayoutEditing\AddEdgeUndoAction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\AddNodeUndoAction.cs">
+      <Link>LayoutEditing\AddNodeUndoAction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\DelegateForEdge.cs">
+      <Link>LayoutEditing\DelegateForEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\DelegateForIViewerObject.cs">
+      <Link>LayoutEditing\DelegateForIViewerObject.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\DraggingMode.cs">
+      <Link>DraggingMode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\EdgeDragUndoRedoAction.cs">
+      <Link>LayoutEditing\EdgeDragUndoRedoAction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\GeometryGraphEditor.cs">
+      <Link>LayoutEditing\GeometryGraphEditor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\IEditableObject.cs">
+      <Link>LayoutEditing\IEditableObject.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\ILabeledObject.cs">
+      <Link>LayoutEditing\ILabeledObject.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\IViewer.cs">
+      <Link>LayoutEditing\IViewer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\IViewerEdge.cs">
+      <Link>LayoutEditing\IViewerEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\IViewerGraph.cs">
+      <Link>LayoutEditing\IViewerGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\IViewerNode.cs">
+      <Link>LayoutEditing\IViewerNode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\IViewerObject.cs">
+      <Link>LayoutEditing\IViewerObject.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\MouseAndKeysAnalyzer.cs">
+      <Link>LayoutEditing\MouseAndKeysAnalyzer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\NewNodeFactory.cs">
+      <Link>LayoutEditing\NewNodeFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\ObjectDragUndoRedoAction.cs">
+      <Link>LayoutEditing\ObjectDragUndoRedoAction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\ObjectUnderMouseCursorChangedArgs.cs">
+      <Link>LayoutEditing\ObjectUnderMouseCursorChangedArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\PolylineCornerType.cs">
+      <Link>LayoutEditing\PolylineCornerType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\RemoveEdgeUndoAction.cs">
+      <Link>LayoutEditing\RemoveEdgeUndoAction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\RemoveNodeAndoAction.cs">
+      <Link>LayoutEditing\RemoveNodeAndoAction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\SiteInsertUndoAction.cs">
+      <Link>LayoutEditing\SiteInsertUndoAction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\SiteRemoveUndoAction.cs">
+      <Link>LayoutEditing\SiteRemoveUndoAction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\UndoRedoAction.cs">
+      <Link>LayoutEditing\UndoRedoAction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\UndoRedoActionsList.cs">
+      <Link>LayoutEditing\UndoRedoActionsList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\LayoutEditing\VoidDelegate.cs">
+      <Link>LayoutEditing\VoidDelegate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\ModifierKeys.cs">
+      <Link>ModifierKeys.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\MouseButtons.cs">
+      <Link>MouseButtons.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\MsaglMouseEventArgs.cs">
+      <Link>MsaglMouseEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\Node.cs">
+      <Link>Node.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\NodeAttr.cs">
+      <Link>NodeAttr.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\NodeBoundaryCurves.cs">
+      <Link>NodeBoundaryCurves.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\PhyloEdge.cs">
+      <Link>PhyloEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\PhyloTree.cs">
+      <Link>PhyloTree.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\Subgraph.cs">
+      <Link>Subgraph.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\SubgraphTemplate.cs">
+      <Link>SubgraphTemplate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\SvgGraphWriter.cs">
+      <Link>SvgGraphWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\Tokens.cs">
+      <Link>Tokens.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Drawing\VerticalConstraintsForLayeredLayout.cs">
+      <Link>VerticalConstraintsForLayeredLayout.cs</Link>
+    </Compile>
+    <Compile Include="..\MsaglSharpKit\ExtensionsForSharpKit.cs">
+      <Link>ExtensionsForSharpKit.cs</Link>
+    </Compile>
+    <Compile Include="..\MsaglSharpKit\GlobalSharpKit.cs">
+      <Link>GlobalSharpKit.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MsaglSharpKit\MsaglSharpKit.csproj">
+      <Project>{ae7f3261-aa3c-4ee5-be63-28acaa83088e}</Project>
+      <Name>MsaglSharpKit</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildBinPath)\SharpKit\5\SharpKit.Build.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

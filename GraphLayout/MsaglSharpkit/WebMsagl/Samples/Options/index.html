@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>MSAGL_JS Options Sample</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../samples.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="/Samples/Options/boot"></script>
+</head>
+<body>
+    <div id="controls">
+        <div class="controlsRow">
+            <button id="loadGraph1Button">Graph 1</button>
+            <button id="loadGraph2Button">Graph 2</button>
+        </div>
+        <div class="controlsRow">
+            <input type="checkbox" class="graphToolbarCheckBox" id="layeredLayoutCheckBox" checked />
+            <span>Layered layout</span>
+            <input type="checkbox" class="graphToolbarCheckBox" id="horizontalLayoutCheckBox" />
+            <span>Horizontal layout</span>
+            <span style="margin-left: 10px">Aspect ratio</span>
+            <input type="text" class="graphToolbarTextBox" id="aspectRatioTextBox" />
+        </div>
+        <div class="controlsRow">
+            <span>Edge routing mode:</span>
+            <select id="edgeRoutingSelect">
+                <option value="splines">Splines</option>
+                <option value="splinesbundling">Splines with Bundling</option>
+                <option value="straightline">Straight Line</option>
+                <option value="sugiyamasplines" selected>Sugiyama Splines</option>
+                <option value="rectilinear">Rectilinear</option>
+                <option value="rectilineartocenter">Rectilinear to Center</option>
+            </select>
+            <button id="layoutButton">Layout</button>
+            <button id="routeButton">Route Edges</button>
+            <button id="stopButton">Stop</button>
+        </div>
+    </div>
+    <div id="graphContainer">
+        <div id="workingIndicator">WORKING...</div>
+        <div id="graphView"></div>
+    </div>
+</body>
+</html>
