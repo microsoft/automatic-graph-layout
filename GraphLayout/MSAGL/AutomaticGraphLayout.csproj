@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net9.0;net8.0-windows;net9.0-windows</TargetFrameworks>
     <NuspecFile>AutomaticGraphLayout.nuspec</NuspecFile>
     <AssemblyName>Microsoft.Msagl</AssemblyName>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

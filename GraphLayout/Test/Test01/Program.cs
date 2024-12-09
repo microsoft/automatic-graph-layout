@@ -23,11 +23,9 @@ using Microsoft.Msagl.Routing;
 using Microsoft.Msagl.Routing.ConstrainedDelaunayTriangulation;
 using Microsoft.Msagl.Routing.Spline.Bundling;
 using Microsoft.Msagl.Routing.Visibility;
-using Microsoft.Msagl.UnitTests;
 using TestFormForGViewer;
 using Edge = Microsoft.Msagl.Core.Layout.Edge;
 using Node = Microsoft.Msagl.Core.Layout.Node;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Test01 {
     internal class Program {
@@ -39,8 +37,6 @@ namespace Test01 {
         const string BundlingOption = "-bundling";
         const string ListOfFilesOption = "-listoffiles";
         const string TestCdtOption = "-tcdt";
-        const string TestCdtOption2 = "-tcdt2";
-        const string TestCdtOption0 = "-tcdt0";
         const string TestCdtOption1 = "-tcdt1";
         const string ReverseXOption = "-rx";
         const string MdsOption = "-mds";
@@ -70,12 +66,8 @@ namespace Test01 {
                 Console.WriteLine(argsParser.UsageString());
                 Environment.Exit(0);
             }
-            if (argsParser.OptionIsUsed(PolygonDistanceTestOption))
-                TestPolygonDistance();
             else if (argsParser.OptionIsUsed(TestCdtThreaderOption))
                 TestCdtThreader();
-            else if (argsParser.OptionIsUsed(RandomBundlingTest))
-                RandomBundlingTests.RsmContent();
 
 
             bundling = argsParser.OptionIsUsed(BundlingOption);
@@ -172,24 +164,6 @@ namespace Test01 {
                     }
                 }
             }
-            else if (argsParser.OptionIsUsed(TestCdtOption)) {
-                Triangulation(argsParser.OptionIsUsed(ReverseXOption));
-                Environment.Exit(0);
-            }
-            else if (argsParser.OptionIsUsed(TestCdtOption0)) {
-                TestTriangulationOnSmallGraph(argsParser);
-                Environment.Exit(0);
-            }
-            else if (argsParser.OptionIsUsed(TestCdtOption2)) {
-                TestTriangulationOnPolys();
-                Environment.Exit(0);
-            }
-            else if (argsParser.OptionIsUsed(TestCdtOption1)) {
-                ThreadThroughCdt();
-                Environment.Exit(0);
-            }
-            else if (argsParser.OptionIsUsed(ConstraintsTestOption))
-                TestGraphWithConstraints();
             if (!argsParser.OptionIsUsed(QuietOption))
                 Application.Run(form);
 
@@ -274,17 +248,6 @@ namespace Test01 {
             return CurveFactory.CreateRectangleWithRoundedCorners(size, size, size / 10, size / 10, new Point(x, y));
         }
 
-
-        static void TestTriangulationOnPolys() {
-            FileStream stream = File.Open("polys", FileMode.Open);
-            var bformatter = new BinaryFormatter();
-
-            var polys = (Polyline[])bformatter.Deserialize(stream);
-            stream.Close();
-            var cdt = new Cdt(null, polys, null);
-            cdt.Run();
-        }
-
         static void TestCdtThreader() {
             //            var rnd = new Random(1);
             //            double boxSize = 100;
@@ -302,37 +265,6 @@ namespace Test01 {
             //            }
         }
 
-
-        private static void ThreadThroughCdt() {
-            FileStream stream = File.Open("triangles2", FileMode.Open);
-            var bformatter = new BinaryFormatter();
-
-            var trs = (CdtTriangle[])bformatter.Deserialize(stream);
-            var start = (Point)bformatter.Deserialize(stream);
-            var end = (Point)bformatter.Deserialize(stream);
-            stream.Close();
-            foreach (var t in FindStartTriangle(trs, start)) {
-
-                var ll = ThreadOnTriangle(start, end, t);
-                foreach (var cdtTriangle in trs) {
-                    AddTriangleToListOfDebugCurves(ll, cdtTriangle, 50, 1, "blue");
-                }
-                DisplayGeometryGraph.ShowDebugCurves(ll.ToArray());
-            }
-
-        }
-
-        static List<DebugCurve> ThreadOnTriangle(Point start, Point end, CdtTriangle t) {
-            var l = new List<DebugCurve> { new DebugCurve(10, "red", new LineSegment(start, end)) };
-            AddTriangleToListOfDebugCurves(l, t, 100, 3, "brown");
-            var threader = new CdtThreader(t, start, end);
-            foreach (var triangle in threader.Triangles()) {
-                AddTriangleToListOfDebugCurves(l, triangle, 100, 3, "black");
-                //                CdtSweeper.ShowFront(trs, null, new ICurve[] { new LineSegment(start, end), new Polyline(triangle.Sites.Select(s => s.Point)) { Closed = true } }, new []{new LineSegment(threader.CurrentPiercedEdge.lowerSite.Point,threader.CurrentPiercedEdge.upperSite.Point) });
-            }
-            return l;
-        }
-
         static void AddTriangleToListOfDebugCurves(List<DebugCurve> debugCurves, CdtTriangle triangle, byte transparency,
                                                    double width, string color) {
             foreach (CdtEdge cdtEdge in triangle.Edges) {
@@ -347,15 +279,6 @@ namespace Test01 {
                 if (loc != PointLocation.Outside)
                     yield return t;
             }
-        }
-
-
-        static void TestPolygonDistance() {
-            IFormatter formatter = new BinaryFormatter();
-            var stream = new FileStream(@"data\polygons", FileMode.Open, FileAccess.Read, FileShare.None);
-            var a = (Polygon)formatter.Deserialize(stream);
-            var b = (Polygon)formatter.Deserialize(stream);
-            Polygon.Distance(a, b);
         }
 
         static void FixHookPorts(GeometryGraph geometryGraph) {
@@ -733,11 +656,6 @@ namespace Test01 {
             argsParser.AddOptionWithAfterStringWithHelp(ListOfFilesOption,
                                                   "the name of the file containing a list of files");
             argsParser.AddAllowedOptionWithHelpString(TestCdtOption, "testing Constrained Delaunay Triangulation");
-            argsParser.AddAllowedOptionWithHelpString(TestCdtOption0,
-                                                      "testing Constrained Delaunay Triangulation on a small graph");
-            argsParser.AddAllowedOptionWithHelpString(TestCdtOption1, "testing threading through a CDT");
-            argsParser.AddAllowedOptionWithHelpString(TestCdtOption2,
-                                                      "testing Constrained Delaunay Triangulation on file \'polys\'");
             argsParser.AddAllowedOptionWithHelpString(ReverseXOption, "reversing X coordinate");
             argsParser.AddOptionWithAfterStringWithHelp(EdgeSeparationOption, "use specified edge separation");
             argsParser.AddAllowedOptionWithHelpString(MdsOption, "use mds layout");
@@ -751,7 +669,6 @@ namespace Test01 {
             argsParser.AddOptionWithAfterStringWithHelp(CapacityCoeffOption, "capacity coeffiecient");
             argsParser.AddAllowedOptionWithHelpString(PolygonDistanceTestOption, "test Polygon.Distance");
             argsParser.AddAllowedOptionWithHelpString(PolygonDistanceTestOption3, "test PolygonDistance3");
-            argsParser.AddAllowedOptionWithHelpString(RandomBundlingTest, "random bundling test");
             argsParser.AddAllowedOptionWithHelpString(TestCdtThreaderOption, "test CdtThreader");
             argsParser.AddAllowedOptionWithHelpString(AsyncLayoutOption, "test viewer in the async mode");
 

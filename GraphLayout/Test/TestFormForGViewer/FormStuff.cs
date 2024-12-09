@@ -36,9 +36,9 @@ using Microsoft.Msagl.GraphViewerGdi;
 
 namespace TestFormForGViewer {
     public class FormStuff {
-        public static bool initialLayout;
+        protected static bool initialLayout;
         static string lastFileName;
-        public static GViewer GViewer;
+        protected static GViewer GViewer;
 
         public static Form CreateOrAttachForm(GViewer gviewer, Form form) {
             GViewer=gviewer;
@@ -137,8 +137,6 @@ namespace TestFormForGViewer {
                 MessageBox.Show(String.Format("{0}({1},{2}): cannot process the file", fileName, eLine, eColumn));
 
             else {
-                
-                graph.LayoutAlgorithmSettings.Reporting = Test.verbose;
                 gViewer.FileName = fileName;
                 Stopwatch sw = null;
                 if (verbose) {
