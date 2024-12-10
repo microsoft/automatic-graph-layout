@@ -5,32 +5,15 @@
 		<RootNamespace>DgmlParser</RootNamespace>
 		<AssemblyName>DgmlParser</AssemblyName>
 	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<DefineConstants>TRACE;DEBUG;TEST_MSAGL</DefineConstants>
-		<Optimize>false</Optimize>
-		<OutputPath>bin\Debug\</OutputPath>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<DefineConstants>TRACE;GRAPH_MODEL</DefineConstants>
-		<Optimize>true</Optimize>
-		<OutputPath>bin\Release\</OutputPath>
-	</PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\Drawing\AutomaticGraphLayout.Drawing.csproj" />
 		<ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.VisualStudio.GraphModel" Version="17.12.40391" />
-	</ItemGroup>
-	<ItemGroup>
-		<Reference Include="PresentationCore" />
 		<Reference Include="System" />
 		<Reference Include="System.Core" />
 		<Reference Include="System.Transactions" />
 		<Reference Include="System.Xml.Linq" />
-		<Reference Include="System.Data.DataSetExtensions" />
-		<Reference Include="Microsoft.CSharp" />
-		<Reference Include="System.Data" />
-		<Reference Include="System.Xml" />
+		
 	</ItemGroup>
 </Project>

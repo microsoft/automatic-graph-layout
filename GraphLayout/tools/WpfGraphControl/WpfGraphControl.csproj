@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net9.0;net7.0-windows7.0</TargetFrameworks>
+    <TargetFrameworks>net8.0-windows;net9.0-windows</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <AssemblyName>Microsoft.Msagl.WpfGraphControl</AssemblyName>
   </PropertyGroup>
@@ -10,10 +10,7 @@
       <OutputPath>bin\$(Configuration)</OutputPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net8.0' OR '$(TargetFramework)' == 'net9.0' OR '$(TargetFramework)' == 'net7.0-windows7.0' ">
-    <DefineConstants>$(DefineConstants);FEATURE_PIXELS_PER_DPI</DefineConstants>
-  </PropertyGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\..\Drawing\AutomaticGraphLayout.Drawing.csproj" />
     <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj" />
