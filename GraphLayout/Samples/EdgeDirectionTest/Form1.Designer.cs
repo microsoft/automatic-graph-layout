@@ -71,7 +71,7 @@ namespace EdgeDirectionTest
             this.gv.TabIndex = 0;
             this.gv.TightOffsetForRouting = 0.125D;
             this.gv.ToolBarIsVisible = true;
-            this.gv.Transform = ((Microsoft.Msagl.Core.Geometry.Curves.PlaneTransformation)(resources.GetObject("gv.Transform")));
+            //this.gv.Transform = ((Microsoft.Msagl.Core.Geometry.Curves.PlaneTransformation)(resources.GetObject("gv.Transform")));
             this.gv.UndoRedoButtonsVisible = true;
             this.gv.WindowZoomButtonPressed = false;
             this.gv.ZoomF = 1D;
