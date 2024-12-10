@@ -32,47 +32,52 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Microsoft.Msagl.DebugHelpers;
 using Microsoft.Msagl.GraphViewerGdi;
-
+using System.Text.Json;
 namespace DebugCurveViewer {
-    static class Program {
+    static class Program
+    {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main(string[] args) {
-            if (args.Length < 1){
+        static void Main(string[] args)
+        {
+            if (args.Length < 1)
+            {
                 System.Diagnostics.Debug.WriteLine("no file name was given");
                 return;
             }
             var debugCurves = GetDebugCurves(args[0]);
-            if (null != debugCurves) {
-                DisplayGeometryGraph.ShowDebugCurvesEnumerationOnForm(debugCurves, new Form1());
+            if (debugCurves != null)
+            {
+                var f = new Form1();
+                DisplayGeometryGraph.ShowDebugCurvesEnumerationOnForm(debugCurves, f);
+                f.Dispose();
             }
         }
 
-        static DebugCurve[] GetDebugCurves(string fileName){
-            IFormatter formatter = new BinaryFormatter();
-            Stream file = null;
-
-            try {
-                file = File.Open(fileName, FileMode.Open);
-                var debugCurveCollection = formatter.Deserialize(file) as DebugCurveCollection;
-                if (null == debugCurveCollection) {
+        static DebugCurve[] GetDebugCurves(string fileName)
+        {
+            try
+            {
+                var jsonString = File.ReadAllText(fileName);
+                var debugCurveCollection = JsonSerializer.Deserialize<DebugCurveCollection>(jsonString);
+                if (null == debugCurveCollection)
+                {
                     System.Diagnostics.Debug.WriteLine("cannot read debugcurves from " + fileName);
                     return null;
                 }
                 return debugCurveCollection.DebugCurvesArray;
-            } catch (System.IO.FileNotFoundException ex) {
+            }
+            catch (System.IO.FileNotFoundException ex)
+            {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 throw;
-            } finally {
-                if (null != file) {
-                    file.Close();
-                }
             }
             return null;
-
         }
     }
 }

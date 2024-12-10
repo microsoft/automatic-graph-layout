@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
 using Dot2Graph;
@@ -27,6 +28,7 @@ using Path = System.IO.Path;
 namespace TestForGdi {
     
     internal partial class Form2 : Form {
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public bool VerbosePar { get; set; }
         readonly StatusStrip statusStrip;
         readonly ToolTip toolTip = new ToolTip();
@@ -66,7 +68,7 @@ namespace TestForGdi {
             Controls.Add(statusStrip);
             ResumeLayout();
             Invalidate();
-            ContextMenu = new ContextMenu();
+            ContextMenuStrip = new ContextMenuStrip();
             demoPauseValueNumericValue.Value = 2;
             //  this.ContextMenu.Popup+=new EventHandler(ContextMenu_Popup);
             toolTip.SetToolTip(nodeSeparMult, "Multiplier for node separation");
@@ -115,21 +117,25 @@ namespace TestForGdi {
             
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public GViewer GViewer {
             get { return gViewer; }
 
             set { gViewer = value; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public string DemoFileName { get; set; }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public Thread GraphLayoutCalculationThread { get; set; }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public Graph GeneratedGraph {
             get { return generatedGraph; }
             set { generatedGraph = value; }
         }
-
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]   
         public double CornerFitRadius {
             get { return cornerFitRadius; }
             set { cornerFitRadius = value; }
@@ -321,7 +327,6 @@ namespace TestForGdi {
             }
             else {
                 if (GraphLayoutCalculationThread != null) {
-                    GraphLayoutCalculationThread.Abort();
                     GraphLayoutCalculationThread = null;
                 }
                 demoButton.Text = "Demo";
@@ -574,6 +579,7 @@ namespace TestForGdi {
 
 
         EdgeRoutingMode edgeRoutingMode;
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         internal EdgeRoutingMode EdgeRoutingMode {
             get { return edgeRoutingMode; }
             set { 
@@ -589,6 +595,7 @@ namespace TestForGdi {
 
        
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         internal double BendPenalty {
             get { return null == EdgeRoutingSettings ? SsstRectilinearPath.DefaultBendPenaltyAsAPercentageOfDistance : this.EdgeRoutingSettings.BendPenalty; }
             set {

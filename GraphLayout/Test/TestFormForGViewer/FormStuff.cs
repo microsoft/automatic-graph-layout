@@ -36,7 +36,7 @@ using Microsoft.Msagl.GraphViewerGdi;
 
 namespace TestFormForGViewer {
     public class FormStuff {
-        protected static bool initialLayout;
+        public static bool initialLayout;
         static string lastFileName;
         protected static GViewer GViewer;
 

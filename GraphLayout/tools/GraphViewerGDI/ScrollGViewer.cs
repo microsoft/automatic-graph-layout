@@ -52,6 +52,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
     /// <summary>
     /// Summary description for DOTViewer.
     /// </summary>
+    [System.ComponentModel.DesignerCategory("")]
     partial class GViewer : IViewer{
         const string windowZoomButtonDisabledToolTipText = "Zoom in by dragging a rectangle, is disabled now";
         internal static double Dpi = GetDotsPerInch();

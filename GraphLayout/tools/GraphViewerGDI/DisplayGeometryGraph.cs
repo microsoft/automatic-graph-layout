@@ -41,6 +41,7 @@ using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.Layout.Layered;
 using Size=System.Drawing.Size;
 using GeomNode = Microsoft.Msagl.Core.Layout.Node;
+using System.Text.Json;
 
 namespace Microsoft.Msagl.GraphViewerGdi{
     /// <summary>
@@ -441,4 +442,5 @@ namespace Microsoft.Msagl.GraphViewerGdi{
           
         }
     }
+
 }
