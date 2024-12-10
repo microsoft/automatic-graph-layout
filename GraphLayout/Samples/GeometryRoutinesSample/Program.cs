@@ -6,9 +6,7 @@ using Microsoft.Msagl.Core.Layout;
 namespace GeometryRoutinesSample {
     class Program {
         static void Main(string[] args) {
-#if TEST
             Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-#endif
 
             //define a polygone
             var polygon=new Polyline(new []{new Point(0,0), new Point(7,8), new Point(7,7), new Point(8,8), new Point(5,0)}){Closed=true};
@@ -17,9 +15,7 @@ namespace GeometryRoutinesSample {
             var ellipse = new Ellipse(0.5, 0.5, point);//just to show the point
 
             //showing the polygon and the ellipse with the center at the point
-#if TEST
             LayoutAlgorithmSettings.Show(polygon, ellipse);
-#endif
 
             // prints out the location of the point relative ot the polygon
             System.Diagnostics.Debug.WriteLine(Curve.PointRelativeToCurveLocation(point, polygon));
@@ -27,9 +23,7 @@ namespace GeometryRoutinesSample {
             //=====================================================================//
             // find out if one curve intersects another 
             var polygon0 = new Polyline(new[] { new Point(7.041886, 4.683227), new Point(7.102811, 5.797279), new Point(8.303899, 6.467452), new Point(8.547598, 5.1097) }) { Closed = true };
-#if TEST
             LayoutAlgorithmSettings.Show(polygon, polygon0);
-#endif
 
             if (PolylinesIntersect(polygon0, polygon))
                 System.Diagnostics.Debug.WriteLine("intersects");
@@ -37,9 +31,7 @@ namespace GeometryRoutinesSample {
                 System.Diagnostics.Debug.WriteLine("do not intersects");
 
             (polygon0 as ICurve).Translate(new Point(1, 0));
-#if TEST
             LayoutAlgorithmSettings.Show(polygon, polygon0);
-#endif
 
             if (PolylinesIntersect(polygon0, polygon))
                 System.Diagnostics.Debug.WriteLine("intersect");

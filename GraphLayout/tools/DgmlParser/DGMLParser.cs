@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
 using Microsoft.Msagl.Drawing;
 using Microsoft.VisualStudio.GraphModel;
 using DgmlGraph = Microsoft.VisualStudio.GraphModel.Graph;
@@ -6,20 +8,37 @@ using DgmlGraph = Microsoft.VisualStudio.GraphModel.Graph;
 namespace DgmlParser {
     public static class DgmlParser {
         public static Microsoft.Msagl.Drawing.Graph Parse(string filename) {
-            var dgmlGraph = Microsoft.VisualStudio.GraphModel.Graph.Load(filename,
-                                                                         delegate { });
-            Microsoft.Msagl.Drawing.Graph drawingGraph = new Microsoft.Msagl.Drawing.Graph();
+            XDocument doc = XDocument.Load(filename);
+            var drawingGraph = new Microsoft.Msagl.Drawing.Graph();
 
-            Dictionary<string, Subgraph> subgraphTable = GetSubgraphIds(dgmlGraph);
+            // Parse nodes
+            var nodes = doc.Descendants().Where(e => e.Name.LocalName == "Node");
+            foreach (var nodeElement in nodes) {
+                string id = nodeElement.Attribute("Id")?.Value;
+                if (id == null)
+                    continue;
 
-            ProcessNodes(dgmlGraph, subgraphTable, drawingGraph);
+                string label = nodeElement.Attribute("Label")?.Value ?? id;
 
-            ProcessLinks(dgmlGraph, subgraphTable, drawingGraph);
+                var node = drawingGraph.AddNode(id);
+                node.LabelText = label;
+            }
 
-            foreach (var subgraph in subgraphTable.Values)
-                if (subgraph.ParentSubgraph == null)
-                    drawingGraph.RootSubgraph.AddSubgraph(subgraph);
+            // Parse links
+            var links = doc.Descendants().Where(e => e.Name.LocalName == "Link");
+            foreach (var linkElement in links) {
+                string sourceId = linkElement.Attribute("Source")?.Value;
+                string targetId = linkElement.Attribute("Target")?.Value;
 
+                if (sourceId != null && targetId != null) {
+                    var edge = drawingGraph.AddEdge(sourceId, targetId);
+                    // Optionally set edge attributes
+                    string label = linkElement.Attribute("Label")?.Value;
+                    if (!string.IsNullOrEmpty(label)) {
+                        edge.LabelText = label;
+                    }
+                }
+            }
             return drawingGraph;
         }
 
