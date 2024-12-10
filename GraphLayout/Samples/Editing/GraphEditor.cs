@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -131,6 +132,7 @@ namespace Editing {
         /// <summary>
         /// Gets or sets the graph associated to the viewer.
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         internal Graph Graph {
             get { return gViewer.Graph; }
             set { gViewer.Graph = value; }
