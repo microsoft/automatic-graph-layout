@@ -10,6 +10,7 @@ using System.Linq;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Node = Microsoft.Msagl.Core.Layout.Node;
+using Microsoft.Msagl.GraphViewerGdi;
 
 namespace LocationLabeling {
     public partial class Form1 : Form {
@@ -43,8 +44,8 @@ namespace LocationLabeling {
             il.AddNode(n2);
             il.AddNode(n3);
             il.Layout();
-            GeometryGraph graph = LocationLabeler.PositionLabels(new[] { n0, n1, n2, n3, n4, n5 }, 5, false, -1);
-
+            GeometryGraph geomGraph = LocationLabeler.PositionLabels(new[] { n0, n1, n2, n3, n4, n5 }, 5, false, -1);
+            DisplayGeometryGraph.ShowGraph(geomGraph);
 //           var g=GeometryGraph.CreateFromFile("c:/tmp/graph");
            // ChangeShapes(g);
   //          var graph = LocationLabeler.PositionLabels(  g.Nodes , 6, false, -6);
