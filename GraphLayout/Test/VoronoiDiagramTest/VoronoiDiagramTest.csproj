@@ -13,7 +13,7 @@
     <ProjectReference Include="..\..\tools\Dot2Graph\Dot2Graph.csproj" />
     <ProjectReference Include="..\..\tools\QUT.ShiftReduceParser\QUT.ShiftReduceParser.csproj" />
     <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj" />
-    <ProjectReference Include="..\FormForGViewer\FormForGViewer.csproj" />
+    <ProjectReference Include="..\..\tools\FormForGViewer\FormForGViewer.csproj" />
   </ItemGroup>
 
   

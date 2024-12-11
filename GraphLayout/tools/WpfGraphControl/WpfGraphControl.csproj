@@ -6,8 +6,8 @@
     <AssemblyName>Microsoft.Msagl.WpfGraphControl</AssemblyName>
   </PropertyGroup>
 
-  <PropertyGroup> 
-      <OutputPath>bin\$(Configuration)</OutputPath>
+  <PropertyGroup Condition="  '$(TargetFramework)' == 'net8.0-windows' OR '$(TargetFramework)' == 'net9.0-windows' ">
+    <DefineConstants>$(DefineConstants);FEATURE_PIXELS_PER_DPI</DefineConstants>
   </PropertyGroup>
 
   

@@ -11,30 +11,7 @@
 		<UseWindowsForms>true</UseWindowsForms>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-		<DefineConstants>TRACE;DEBUG;TEST_MSAGL</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-		<DefineConstants>TRACE</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-		<DefineConstants>TRACE;DEBUG;TEST_MSAGL</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-		<DefineConstants>TRACE</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-		<DefineConstants>TRACE;DEBUG;TEST_MSAGL</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-		<DefineConstants>TRACE</DefineConstants>
-	</PropertyGroup>
-
+	
 	<ItemGroup>
 		<ProjectReference Include="..\..\Drawing\AutomaticGraphLayout.Drawing.csproj" />
 		<ProjectReference Include="..\..\tools\GraphViewerGDI\GraphViewerGDI.csproj" />
@@ -42,13 +19,17 @@
 		<ProjectReference Include="..\..\tools\Dot2Graph\Dot2Graph.csproj" />
 		<ProjectReference Include="..\..\tools\QUT.ShiftReduceParser\QUT.ShiftReduceParser.csproj" />
 		<ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj" />
-		<ProjectReference
-                    Include="..\..\MSAGL\AutomaticGraphLayout.csproj"
-                    />
-                <ProjectReference
-                    Include="..\TestFormForGViewer\TestFormForGViewer.csproj"
-                    />
+		        <ProjectReference Include="..\TestFormForGViewer\TestFormForGViewer.csproj" />
                 
+	</ItemGroup>
+
+	
+	<ItemGroup>
+	  <Compile Update="Properties\Settings.Designer.cs">
+	    <DesignTimeSharedInput>True</DesignTimeSharedInput>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Settings.settings</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -79,6 +60,10 @@
 		</None>
 		<None Update="polys">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Properties\Settings.settings">
+		  <Generator>SettingsSingleFileGenerator</Generator>
+		  <LastGenOutput>Settings.Designer.cs</LastGenOutput>
 		</None>
 		<None Update="triangles1">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
