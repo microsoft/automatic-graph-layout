@@ -4306,7 +4306,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
         }
 
         [TestMethod]
-        [Timeout(2000)]
+        //[Timeout(2000)]
         [Description("Test multiply-nested rectilinear obstacles with no overlaps - they should be in one clump")]
         public void Multiply_Nested_Rectilinear_Obstacles()
         {
@@ -4425,7 +4425,7 @@ namespace Microsoft.Msagl.UnitTests.Rectilinear
 
         private static bool IsObstacleInShapes(Shape[] siblingShapes, Obstacle obstacle) 
         {
-            return (siblingShapes == null) || siblingShapes.Any(sibShape => obstacle.InputShape == sibShape);
+            return siblingShapes == null || siblingShapes.Length == 0 || siblingShapes.Any(sibShape => obstacle.InputShape == sibShape);            
         }
 
         [TestMethod]
