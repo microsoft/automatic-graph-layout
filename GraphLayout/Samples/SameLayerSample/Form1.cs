@@ -1,10 +1,12 @@
 ﻿using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.GraphViewerGdi;
 using Microsoft.Msagl.Layout.Layered;
+using System.Runtime.Versioning;
 using System.Windows.Forms;
 
 namespace SameLayerSample
 {
+    [SupportedOSPlatform("windows")]
     public partial class Form1 : Form
     {
         public Form1()

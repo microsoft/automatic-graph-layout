@@ -137,8 +137,6 @@ namespace FormForGViewer {
                 MessageBox.Show(String.Format("{0}({1},{2}): cannot process the file", fileName, eLine, eColumn));
 
             else {
-                
-                graph.LayoutAlgorithmSettings.Reporting = Test.verbose;
                 gViewer.FileName = fileName;
                 Stopwatch sw = null;
                 if (verbose) {

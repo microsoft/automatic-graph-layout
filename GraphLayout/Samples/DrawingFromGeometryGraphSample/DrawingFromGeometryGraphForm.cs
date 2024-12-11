@@ -1,5 +1,6 @@
 using System;
 using System.Drawing.Drawing2D;
+using System.Runtime.Versioning;
 using System.Windows.Forms;
 using CommonDrawingUtilsForSamples;
 using Microsoft.Msagl.Core.Geometry.Curves;
@@ -10,6 +11,7 @@ using Edge = Microsoft.Msagl.Core.Layout.Edge;
 
 namespace DrawingFromGeometryGraphSample
 {
+    [SupportedOSPlatform("windows")]
     public partial class DrawingFromGeometryGraphForm : Form {
         GeometryGraph _geometryGraph;
         public DrawingFromGeometryGraphForm() {

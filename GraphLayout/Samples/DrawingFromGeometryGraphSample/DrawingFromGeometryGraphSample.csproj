@@ -21,62 +21,6 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugDevTrace|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\DebugDevTrace\</OutputPath>
-    <DefineConstants>TRACE;TEST_MSAGL;DEVTRACE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <OutputPath>bin\x86\Debug\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugDevTrace|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\DebugDevTrace\</OutputPath>
-    <DefineConstants>TRACE;TEST_MSAGL;DEVTRACE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <OutputPath>bin\x64\Debug\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugDevTrace|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\DebugDevTrace\</OutputPath>
-    <DefineConstants>TRACE;TEST_MSAGL;DEVTRACE</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="..\DrawingUtilsForSamples.cs">
-      <Link>DrawingUtilsForSamples.cs</Link>
-    </Compile>
-    <Compile Update="DrawingFromGeometryGraphForm.cs" />
-    <Compile Update="DrawingFromGeometryGraphForm.Designer.cs">
-      <DependentUpon>DrawingFromGeometryGraphForm.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <EmbeddedResource Update="DrawingFromGeometryGraphForm.resx">
-      <DependentUpon>DrawingFromGeometryGraphForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ReadMe.txt" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj" />
     <ProjectReference Include="..\..\Tools\GraphViewerGDI\GraphViewerGDI.csproj" />

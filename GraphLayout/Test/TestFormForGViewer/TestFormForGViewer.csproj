@@ -5,7 +5,6 @@
 		<TargetFrameworks>net8.0-windows;net9.0-windows</TargetFrameworks>
 		<RootNamespace>TestFormForGViewer</RootNamespace>
 		<AssemblyName>TestFormForGViewer</AssemblyName>
-		<Platforms>AnyCPU;x86;x64</Platforms>
 		<Configurations>Debug;Release</Configurations>
 		<UseWPF>false</UseWPF>
 		<UseWindowsForms>true</UseWindowsForms>
