@@ -14,6 +14,9 @@
     <language>en-US</language>
     <tags>MSAGL Graph Layout</tags>
     <dependencies>
+    <group targetFramework=".NETStandard2.0">
+        <!-- Add any dependencies here -->
+      </group>
     </dependencies>
     <frameworkAssemblies>
     </frameworkAssemblies>

@@ -8,7 +8,8 @@
     <NuspecFile>GraphViewerGDI.nuspec</NuspecFile>
     <IsPackable>true</IsPackable>
     <NoWarn>1591,CA1416</NoWarn>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>  
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   
   <ItemGroup>
