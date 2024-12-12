@@ -23,15 +23,6 @@ namespace Microsoft.Msagl.Drawing {
         public Subgraph RootSubgraph { get { return rootSubgraph; } set { rootSubgraph = value; } }
 
 
-        [NonSerialized] Database dataBase;
-
-        /// <summary>
-        /// debug only
-        /// </summary>
-        public Database DataBase {
-            get { return dataBase; }
-            set { dataBase = value; }
-        }
         Label label;
 
         /// <summary>
