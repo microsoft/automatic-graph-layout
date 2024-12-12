@@ -135,7 +135,7 @@ namespace Microsoft.Msagl.Routing {
     /// <param name="inParentEdges"></param>
     /// <param name="outParentEdges"></param>
     public SplineRouter(GeometryGraph graph, double tightPadding, double loosePadding, double coneAngle, List<Edge> inParentEdges, List<Edge> outParentEdges) {
-      graph.CheckClusterConsistency();
+      //graph.CheckClusterConsistency();
       geometryGraph = graph;
       LoosePadding = loosePadding;
       this.tightPadding = tightPadding;
