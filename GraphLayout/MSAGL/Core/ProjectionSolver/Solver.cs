@@ -1090,15 +1090,7 @@ namespace Microsoft.Msagl.Core.ProjectionSolver
                 blockTo.AddVariable(variable);
             }
             blockTo.UpdateReferencePosFromSums();
-            blockTo.DebugVerifyReferencePos();
 
-            // Do any final bookkeeping necessary.
-            blockTo.Debug_PostMerge(blockFrom);
-
-#if VERBOSE
-            System.Diagnostics.Debug.WriteLine("MergeBlocks result: {0}", blockTo);
-            blockTo.DumpState(null /* no prefix */);
-#endif // VERBOSE
 
             // Make the (no-longer-) violated constraint active.
             this.allConstraints.ActivateConstraint(violatedConstraint);

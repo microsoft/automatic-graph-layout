@@ -73,12 +73,5 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval.MinimumSpanningTre
             return d;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static void Test()
-        {
-
-        }
     }
 }

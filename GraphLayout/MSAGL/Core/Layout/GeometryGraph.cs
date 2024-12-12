@@ -319,8 +319,6 @@ namespace Microsoft.Msagl.Core.Layout {
                 return;
             foreach (var child in cluster.Clusters.Concat(cluster.Nodes)) {
                 var inside=Curve.CurveIsInsideOther(child.BoundaryCurve, cluster.BoundaryCurve);
-//                if (!inside)
-//                    LayoutAlgorithmSettings.ShowDebugCurves(new DebugCurve("green", cluster.BoundaryCurve), new DebugCurve("red", child.BoundaryCurve));
 
                 Debug.Assert(inside,
                              "A child of a cluster has to have the BoundaryCurve inside of the BoundaryCurve of the cluster");
