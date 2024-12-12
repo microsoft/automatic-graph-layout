@@ -462,7 +462,7 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                 myPen.Color = Color.Blue;
         }
 
-
+    
 
         static int DrawAnchor(Graphics g, int i, Anchor p) {
             string stringToShow = i + (p.UserData != null ? (" " + p.UserData) : String.Empty);

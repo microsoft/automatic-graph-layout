@@ -158,19 +158,8 @@ namespace Microsoft.Msagl.Core.Geometry {
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object,System.Object)")]
         internal static Polyline CreateConvexHullAsClosedPolyline(IEnumerable<Point> points) {
-            var convexHull = new Polyline(CalculateConvexHull(points)) { Closed = true };
-            foreach (var point in points) {
-                if (Curve.PointRelativeToCurveLocation(point, convexHull) == PointLocation.Outside) {
-                    var hullPoint = convexHull[convexHull.ClosestParameter(point)];
+            return new Polyline(CalculateConvexHull(points)) { Closed = true };
 
-                    // This can be too restrictive if very close points are put into the hull.  It is probably 
-                    // better to clean up in the caller before doing this, but this assert can also be relaxed.
-                  Debug.Assert(ApproximateComparer.Close(point, hullPoint, ApproximateComparer.IntersectionEpsilon * 20), String.Format("not CloseIntersections: initial point {0}, hull point {1}", point, hullPoint));
-                    
-                }
-            }
- // TEST_MSAGL
-            return convexHull;
         }
     }
 }

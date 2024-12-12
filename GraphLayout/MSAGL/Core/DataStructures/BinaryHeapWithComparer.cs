@@ -108,30 +108,11 @@ namespace Microsoft.Msagl.Core.DataStructures {
             this.comparer = comparer;
         }
 
-        public override string ToString() {
-            int i = 1;
-            return "{" + Print(i) + "}";
-        }
-
-        string Print(int i) {
-            if (2*i + 1 <= heapSize)
-                return String.Format(CultureInfo.InvariantCulture, "({0}->{1},{2})", A[i], A[i*2], A[i*2 + 1]) +
-                       Print(i*2) + Print(i*2 + 1);
-            if (2*i == heapSize)
-                return String.Format(CultureInfo.InvariantCulture, "({0}->{1}", A[i], A[i*2]);
-            if (i == heapSize && i == 1)
-                return " " + A[i].ToString() + " ";
-            return "";
-        }
-
 
 
         public T GetMinimum() {
             return A[1];
         }
 
-        //internal void UpdateMinimum() {
-        //    throw new NotImplementedException();
-        //}
     }
 }
