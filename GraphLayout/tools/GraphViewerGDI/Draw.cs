@@ -463,59 +463,6 @@ namespace Microsoft.Msagl.GraphViewerGdi {
         }
 
 
-        [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Int32.ToString"
-            )]
-        internal static void DrawDataBase(Graphics g, Pen myPen, DrawingGraph dg) {
-            int i = 0;
-
-            foreach (Anchor p in dg.DataBase.Anchors)
-                i = DrawAnchor(g, i, p);
-
-
-            myPen.Color = Color.Blue;
-            Pen myOtherPen = new Pen(Color.FromArgb(100, 0, 0, 255), 1);
-            foreach (var edges in dg.DataBase.Multiedges.Values)
-                foreach (PolyIntEdge e in edges) {
-                    //                    if (e.LayerEdges != null)
-                    //                        foreach (LayerEdge le in e.LayerEdges) {
-                    //                            g.DrawLine(myPen, PointF(dg.DataBase.Anchors[le.Source].Origin),
-                    //                                       PointF(dg.DataBase.Anchors[le.Target].Origin));
-                    //                        }
-                    if (e.Edge.UnderlyingPolyline == null) continue;
-                    var points = e.Edge.UnderlyingPolyline.ToArray();
-                    for (int j = 0; j < points.Length - 1; j++)
-                        g.DrawLine(myOtherPen, PointF(points[j]), PointF(points[j + 1]));
-                }
-
-            myPen.Color = Color.Red;
-            if (dg.DataBase.nodesToShow == null)
-                foreach (var li in dg.DataBase.Multiedges.Values)
-                    foreach (PolyIntEdge ie in li)
-                        if (ie.Edge.Curve is Curve) {
-                            foreach (ICurve s in (ie.Edge.Curve as Curve).Segments) {
-                                var bs = s as CubicBezierSegment;
-                                if (bs != null) {
-                                    g.DrawBezier(myPen, (float)bs.B(0).X, (float)bs.B(0).Y,
-                                                 (float)bs.B(1).X, (float)bs.B(1).Y,
-                                                 (float)bs.B(2).X, (float)bs.B(2).Y,
-                                                 (float)bs.B(3).X, (float)bs.B(3).Y);
-                                }
-                                else {
-                                    var ls = s as LineSegment;
-                                    g.DrawLine(myPen, (float)ls.Start.X, (float)ls.Start.Y,
-                                               (float)ls.End.X, (float)ls.End.Y);
-                                }
-                            }
-
-                            myPen.Color = Color.FromArgb(50, 100, 100, 0);
-                            if (ie.Edge.UnderlyingPolyline != null)
-                                foreach (LineSegment ls in ie.Edge.UnderlyingPolyline.GetSegments())
-                                    g.DrawLine(myPen, (float)ls.Start.X, (float)ls.Start.Y,
-                                               (float)ls.End.X, (float)ls.End.Y);
-                            myPen.Color = Color.Red;
-                        }
-        }
-
 
         static int DrawAnchor(Graphics g, int i, Anchor p) {
             string stringToShow = i + (p.UserData != null ? (" " + p.UserData) : String.Empty);

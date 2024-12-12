@@ -165,15 +165,7 @@ namespace Microsoft.Msagl.Drawing {
             get { return GeometryGraph != null ? GeometryGraph.Right + Attr.Border : 1; }
         }
 
-        List<Node> history = new List<Node>();
-
-        /// <summary>
-        /// debug only visible
-        /// </summary>
-        public ICollection<Node> History {
-            get { return history; }
-            set { history = (List<Node>) value; }
-        }
+      
 
         /// <summary>
         /// Creates a new node and returns it or returns the old node.
@@ -198,7 +190,6 @@ namespace Microsoft.Msagl.Drawing {
             if (ret == null) {
                 ret = new Node(nodeId);
                 nodeMap[nodeId] = ret;
-                history.Add(ret);
             }
             return ret;
         }

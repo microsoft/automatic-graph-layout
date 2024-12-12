@@ -269,23 +269,6 @@ namespace Microsoft.Msagl.GraphViewerGdi {
 
 
         internal void DrawGraph(Graphics g) {
-            #region drawing of database for debugging only
-
-            Graph dg = DrawingGraph;
-
-            if (dg.DataBase != null) {
-                var myPen = new Pen(Color.Blue, (float)(1 / 1000.0));
-                Draw.DrawDataBase(g, myPen, dg);
-            }
-
-            if (NeedToDrawDebugStuff()) {
-                var myPen = new Pen(Color.Blue, (float)(1 / 1000.0));
-                Draw.DrawDebugStuff(g, this, myPen);
-            }
-
-
-
-            #endregion
 
             if (drawingGraph.Attr.Border > 0)
                 DrawGraphBorder(drawingGraph.Attr.Border, g);
@@ -318,13 +301,6 @@ namespace Microsoft.Msagl.GraphViewerGdi {
                 DrawPortAtLocation(g, Viewer.SourcePortLocation);
             if (Viewer.TargetPortIsPresent)
                 DrawPortAtLocation(g, Viewer.TargetPortLocation);
-        }
-
-        bool NeedToDrawDebugStuff() {
-            return drawingGraph.DebugCurves != null ||
-                   drawingGraph.DebugICurves != null && drawingGraph.DebugICurves.Count > 0 ||
-                   drawingGraph.DataBase != null ||
-                   drawingGraph.GeometryGraph != null;
         }
 
 
