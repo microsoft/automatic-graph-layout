@@ -2,14 +2,14 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "WindowsApplicationSample",
-            "command": "dotnet",
+            "label": "all",
+            "command": "msbuild",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "args": ["build"],
-            "options": {"cwd": "C:/dev/agl/GraphLayout/Samples/WindowsApplicationSample"}
+            "args": ["GraphLayout.sln"],
+            "options": {"cwd": "C:/dev/agl/GraphLayout/"}
 
         },
         {
@@ -17,7 +17,7 @@
             "command": "dotnet",
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "args": ["build"],
             "options": {"cwd": "c:/dev/agl/GraphLayout/Test/MSAGLTests"}

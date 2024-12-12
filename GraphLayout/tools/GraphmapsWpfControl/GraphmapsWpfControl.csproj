@@ -3,7 +3,7 @@
 		<OutputType>Library</OutputType>
 		<RootNamespace>Microsoft.Msagl.GraphmapsWpfControl</RootNamespace>
 		<AssemblyName>Microsoft.Msagl.GraphmapsWpfControl</AssemblyName>
-		<TargetFrameworks>net8.0-windowsttt;net9.0-windowsttt</TargetFrameworks>
+		<TargetFrameworks>net8.0-windows;net9.0-windows</TargetFrameworks>
 		<UseWPF>true</UseWPF>
 		<WarningLevel>4</WarningLevel>
 		<Nullable>enable</Nullable>
