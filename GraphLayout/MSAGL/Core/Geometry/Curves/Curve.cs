@@ -308,17 +308,6 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             ValidateArg.IsNotNull(curve0, "curve0");
             ValidateArg.IsNotNull(curve1, "curve1");
             Debug.Assert(curve0 != curve1, "curve0 == curve1");
-//            double c0S = curve0.ParStart, c1S = curve1.ParStart;
-//            if (CurvesAreCloseAtParams(curve0, curve1, c0S, c1S)) {
-//                double mc0 = 0.5 * (curve0.ParStart + curve0.ParEnd);
-//                double mc1 = 0.5 * (curve1.ParStart + curve1.ParEnd);
-//                double c0E = curve0.ParEnd;
-//                if (CurvesAreCloseAtParams(curve0, curve1, mc0, mc1)) {
-//                    double c1E = curve1.ParEnd;
-//                    CurvesAreCloseAtParams(curve0, curve1, c0E, c1E);
-//                    throw new InvalidOperationException();
-//                }
-//            }
 
             //recurse down to find all PBLeaf pairs which intesect and try to cross their segments
 
@@ -343,18 +332,6 @@ namespace Microsoft.Msagl.Core.Geometry.Curves {
             ValidateArg.IsNotNull(curve0, "curve0");
             ValidateArg.IsNotNull(curve1, "curve1");
             Debug.Assert(curve0 != curve1);
-//            var c0S = curve0.ParStart;
-//            var c1S = curve1.ParStart;
-//            var c0E = curve0.ParEnd;
-//            var c1E = curve1.ParEnd;
-//            if (CurvesAreCloseAtParams(curve0, curve1, c0S, c1S)) {
-//                if (CurvesAreCloseAtParams(curve0, curve1, c0E, c1E)) {
-//                    var mc0 = 0.5*(curve0.ParStart + curve0.ParEnd);
-//                    var mc1 = 0.5*(curve1.ParStart + curve1.ParEnd);
-//                    if (CurvesAreCloseAtParams(curve0, curve1, mc0, mc1))
-//                        throw new InvalidOperationException();
-//                }
-//            }
 
 
             var lineSeg = curve0 as LineSegment;
