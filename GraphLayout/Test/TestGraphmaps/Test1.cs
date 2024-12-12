@@ -116,7 +116,7 @@ namespace TestGraphmaps
             var tiles = grid.GetTilesIntersectedByLineSeg(p1, p2);
 
             Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions(); 
-            ShowTiles(tiles, grid, p1, p2);
+            // ShowTiles(tiles, grid, p1, p2);
 
         }
 
@@ -137,7 +137,7 @@ namespace TestGraphmaps
             GridTraversal grid = new GridTraversal(new Rectangle(bl, bl + new Point(gridSize, gridSize)), 20);
             var tiles = grid.GetTilesIntersectedByLineSeg(p1, p2);
             Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
-            ShowTiles(tiles, grid, p1, p2);
+            //ShowTiles(tiles, grid, p1, p2);
 
         }
     }

@@ -314,7 +314,7 @@ namespace Microsoft.Msagl.UnitTests
             g.Edges.Add(e);
             var sr = new SplineRouter(g, 2, 4, Math.PI / 6);
             sr.Run();
-            GraphViewerGdi.DisplayGeometryGraph.ShowGraph(g);
+           // GraphViewerGdi.DisplayGeometryGraph.ShowGraph(g);
         }
 
         [TestMethod]
@@ -387,7 +387,7 @@ namespace Microsoft.Msagl.UnitTests
                                                                Math.PI / 6, null);
             splineRouter.Run();
 
-            DisplayGeometryGraph.ShowGraph(geometryGraph);
+            // DisplayGeometryGraph.ShowGraph(geometryGraph);
         }
 
 

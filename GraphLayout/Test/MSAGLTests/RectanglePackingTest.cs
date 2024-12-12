@@ -90,6 +90,7 @@ namespace Microsoft.Msagl.UnitTests
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "rectangles")]
         private static void ShowDebugView(List<RectangleToPack<int>> rectangles)
         {
+            return;
             if (!MsaglTestBase.EnableDebugViewer())
             {
                 return;

@@ -53,7 +53,7 @@ namespace Microsoft.Msagl.GraphViewerGdi{
         ///</summary>
         ///<param name="geomGraph"></param>
         static public void ShowGraph(GeometryGraph geomGraph) {
-            var graph = new Graph();
+             var graph = new Graph();
             geomGraph.UpdateBoundingBox();
             var bb = geomGraph.BoundingBox;
             bb.Pad(geomGraph.Margins);
