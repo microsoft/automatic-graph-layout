@@ -27,22 +27,17 @@
 
     <dependencies>
       <group targetFramework=".NETFramework4.7.2" >
-        <dependency id="Microsoft.Msagl.Drawing" version="1.1.6" />
+        <dependency id="Microsoft.Msagl.Drawing" version="BuildVersion" />
       </group>
       <group targetFramework="net6.0-windows7.0">
-        <dependency id="Microsoft.Msagl.Drawing" version="1.1.6" />
-      </group>
-      <group targetFramework="net7.0-windows7.0">
-        <dependency id="Microsoft.Msagl.Drawing" version="1.1.6" />
-      </group>
+        <dependency id="Microsoft.Msagl.Drawing" version="BuildVersion" />
+      </group>      
     </dependencies>
     <frameworkReferences>
       <group targetFramework="net6.0-windows7.0">
         <frameworkReference name="Microsoft.WindowsDesktop.App.WinForms" />
       </group>
-      <group targetFramework="net7.0-windows7.0">
-        <frameworkReference name="Microsoft.WindowsDesktop.App.WinForms" />
-      </group>
+      
     </frameworkReferences>
   </metadata>
 
@@ -51,7 +46,5 @@
     <file src="./bin/Release/net472/Microsoft.Msagl.GraphViewerGdi.xml" target="lib\net472" />
     <file src="./bin/Release/net6.0-windows/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net6.0-windows7.0" />
     <file src="./bin/Release/net6.0-windows/Microsoft.Msagl.GraphViewerGdi.xml" target="lib\net6.0-windows7.0" />
-    <file src="./bin/Release/net7.0-windows/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net7.0-windows7.0" />
-    <file src="./bin/Release/net7.0-windows/Microsoft.Msagl.GraphViewerGdi.xml" target="lib\net7.0-windows7.0" />
-  </files>
+   </files>
 </package>
