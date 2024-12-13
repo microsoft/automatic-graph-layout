@@ -15,10 +15,10 @@
     <tags>MSAGL Graph Layout</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.7.2">
-        <dependency id="AutomaticGraphLayout.Drawing" version="BuildVersion" />
+        <dependency id="Msagl.Drawing" version="BuildVersion" />
       </group>
       <group targetFramework="net6.0-windows7.0">
-        <dependency id="AutomaticGraphLayout.Drawing" version="BuildVersion" />
+        <dependency id="Msagl.Drawing" version="BuildVersion" />
       </group>      
     </dependencies>
     <frameworkReferences>

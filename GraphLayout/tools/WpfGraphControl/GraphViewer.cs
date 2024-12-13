@@ -742,7 +742,8 @@ namespace Microsoft.Msagl.WpfGraphControl {
 
                 CancelToken = new CancelToken();
 
-                if (_drawingGraph == null) return;
+                if (_drawingGraph == null)
+                    _drawingGraph = new Graph(); // assign an empty graph
 
                 HideCanvas();
                 ClearGraphViewer();
