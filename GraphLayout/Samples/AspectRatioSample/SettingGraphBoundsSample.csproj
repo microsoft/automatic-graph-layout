@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFrameworks>net8.0-windows;net9.0-windows</TargetFrameworks>
+    <TargetFrameworks>net472;net6.0-windows</TargetFrameworks>
     <OutputType>WinExe</OutputType>
     <RootNamespace>AspectRatioSample</RootNamespace>
     <OldToolsVersion>3.5</OldToolsVersion>

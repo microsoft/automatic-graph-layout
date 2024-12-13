@@ -11,7 +11,7 @@ using Edge = Microsoft.Msagl.Core.Layout.Edge;
 
 namespace DrawingFromGeometryGraphSample
 {
-    [SupportedOSPlatform("windows")]
+    
     public partial class DrawingFromGeometryGraphForm : Form {
         GeometryGraph _geometryGraph;
         public DrawingFromGeometryGraphForm() {

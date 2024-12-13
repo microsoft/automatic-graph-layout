@@ -5,7 +5,7 @@ using System.Runtime.Versioning;
 using System.Windows.Forms;
 
 namespace FindEmptySpotSample {
-    [SupportedOSPlatform("windows")]
+    
     static class Program {
         /// <summary>
         /// The main entry point for the application.

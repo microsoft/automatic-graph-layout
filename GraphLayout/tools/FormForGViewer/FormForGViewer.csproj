@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFrameworks>net8.0-windows;net9.0-windows</TargetFrameworks>
+		<TargetFrameworks>net472;net6.0-windows</TargetFrameworks>
 		<RootNamespace>TestFormForGViewer</RootNamespace>
 		<AssemblyName>TestFormForGViewer</AssemblyName>
 		<Configurations>Debug;Release</Configurations>

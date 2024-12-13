@@ -18,7 +18,7 @@ using Shape = Microsoft.Msagl.Drawing.Shape;
 using System.Runtime.Versioning;
 
 namespace FastIncrementalLayoutWithGdi {
-    [SupportedOSPlatform("windows")]
+    
     public partial class Form1 : Form {
         readonly GViewer gViewer = new GViewer();
         public Form1() {

@@ -23,12 +23,8 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
         /// 
         /// </summary>
         public static bool DebugMode { get; set; }
-
-
-         List<Polyline> trajectories;
-
         
-         OverlapRemovalSettings settings;
+        OverlapRemovalSettings settings;
 
         /// <summary>
         ///     Overlap Removal Parameters
@@ -46,8 +42,6 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
         /// Stores the needed number of iterations for the last run.
         /// </summary>
         public int LastRunIterations { get; set; }
-
-         TimeSpan lastCpuTime;
 
         /// <summary>
         /// Bounding boxes of nodes.
@@ -520,14 +514,6 @@ namespace Microsoft.Msagl.Core.Layout.ProximityOverlapRemoval {
         /// <returns></returns>
         public int GetLastRunIterations() {
             return LastRunIterations;
-        }
-
-        /// <summary>
-        /// CpuTime of the last run.
-        /// </summary>
-        /// <returns></returns>
-        public TimeSpan GetLastRunCpuTime() {
-            return lastCpuTime;
         }
     }
 }

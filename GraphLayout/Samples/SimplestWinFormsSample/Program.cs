@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Versioning;
 
-[SupportedOSPlatform("windows")]
+
 class ViewerSample
 {
     public static void Main()

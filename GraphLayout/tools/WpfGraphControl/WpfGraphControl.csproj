@@ -1,25 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0-windows;net9.0-windows</TargetFrameworks>
+    <TargetFrameworks>net472;net6.0-windows</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <AssemblyName>Microsoft.Msagl.WpfGraphControl</AssemblyName>
   </PropertyGroup>
 
-  <PropertyGroup Condition="  '$(TargetFramework)' == 'net8.0-windows' OR '$(TargetFramework)' == 'net9.0-windows' ">
+ <PropertyGroup Condition=" '$(TargetFramework)' == 'net472' OR '$(TargetFramework)' == 'net6.0-windows' OR '$(TargetFramework)' == 'net7.0-windows' ">
     <DefineConstants>$(DefineConstants);FEATURE_PIXELS_PER_DPI</DefineConstants>
   </PropertyGroup>
 
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\Drawing\AutomaticGraphLayout.Drawing.csproj" />
     <ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="System.Resources.Extensions" Version="7.0.0" />
   </ItemGroup>
 </Project>

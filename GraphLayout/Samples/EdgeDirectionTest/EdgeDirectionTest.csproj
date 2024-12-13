@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFrameworks>net8.0-windows;net9.0-windows</TargetFrameworks>
+		<TargetFrameworks>net472;net6.0-windows</TargetFrameworks>
 		<UseWPF>false</UseWPF>
 		<UseWindowsForms>true</UseWindowsForms>
 		<RootNamespace>EdgeDirectionTest</RootNamespace>

@@ -4,10 +4,10 @@
 		<OutputType>WinExe</OutputType>
 		<RootNamespace>TestGraphmaps</RootNamespace>
 		<AssemblyName>TestGraphmaps</AssemblyName>
-		<TargetFrameworks>net8.0-windows;net9.0-windows</TargetFrameworks>
+		<TargetFrameworks>net6.0-windows</TargetFrameworks>
 		<UseWPF>true</UseWPF>
 		<NoWarn>CS8618;CS8603</NoWarn>
-		<Nullable>enable</Nullable>
+		
 		<StartupObject>TestGraphmaps.App</StartupObject>
 	</PropertyGroup>
 	<ItemGroup>

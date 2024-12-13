@@ -3,10 +3,10 @@
 		<OutputType>WinExe</OutputType>
 		<RootNamespace>TestWpfViewer</RootNamespace>
 		<AssemblyName>TestWpfViewer</AssemblyName>
-		<TargetFrameworks>net8.0-windows;net9.0-windows</TargetFrameworks>
+		<TargetFramework>net4.7.2</TargetFramework>
 		<UseWPF>true</UseWPF>
 		<WarningLevel>4</WarningLevel>
-		<Nullable>enable</Nullable>
+		
 	</PropertyGroup>
 
 
@@ -20,6 +20,11 @@
 		<ProjectReference Include="..\..\tools\GraphViewerGDI\GraphViewerGDI.csproj" />
 		<ProjectReference Include="..\..\tools\QUT.ShiftReduceParser\QUT.ShiftReduceParser.csproj" />
 		<ProjectReference Include="..\..\tools\WpfGraphControl\WpfGraphControl.csproj" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <Reference Include="System.Windows.Forms" />
 	</ItemGroup>
 
 

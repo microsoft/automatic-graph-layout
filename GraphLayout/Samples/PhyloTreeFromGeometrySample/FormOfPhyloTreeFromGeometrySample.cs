@@ -13,7 +13,7 @@ using Microsoft.Msagl.Routing;
 
 namespace PhyloTreeFromGeometrySample
 {
-    [SupportedOSPlatform("windows")]
+    
     public partial class FormOfPhyloTreeFromGeometrySample : Form
     {
         GeometryGraph _geometryGraph;

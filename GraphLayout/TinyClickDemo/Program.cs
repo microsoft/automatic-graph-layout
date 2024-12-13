@@ -1,7 +1,7 @@
 ﻿namespace TinyClickDemo {
     using System.Runtime.Versioning;
     using System.Windows.Forms;
-    [SupportedOSPlatform("windows")]
+    
     class ViewerSample {
         public static void Main() {
             //create a form 

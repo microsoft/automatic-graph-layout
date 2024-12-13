@@ -8,7 +8,7 @@ namespace DrawingFromGeometryGraphSample {
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        [SupportedOSPlatform("windows")]
+        
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
