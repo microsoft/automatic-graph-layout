@@ -31,4 +31,4 @@ jobs:
         uses: Malcolmnixon/Setup-VSTest@v4
 
       - name : Test
-        run: vstest.console GraphLayout\Test\MSAGLTests\bin\Debug\Microsoft.Msagl.UnitTests.dll
+        run: vstest.console GraphLayout\Test\MSAGLTests\bin\Debug\net6.0-windows\Microsoft.Msagl.UnitTests.dll
