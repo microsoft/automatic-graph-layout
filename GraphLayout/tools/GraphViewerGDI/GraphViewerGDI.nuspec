@@ -18,8 +18,8 @@
       (5) Collapse and open subgraphs
       (6) Edit the graph
     </description>
-    <releaseNotes></releaseNotes>
-    <copyright>
+      <releaseNotes>The release contains bug fixes and code cleanup. Some defines like TEST_MSAGL were removed.</releaseNotes>
+     <copyright>
       Copyright © Microsoft Corporation
     </copyright>
     <language>en-US</language>

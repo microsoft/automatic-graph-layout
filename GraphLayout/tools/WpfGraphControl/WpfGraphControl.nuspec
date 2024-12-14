@@ -7,11 +7,16 @@
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/Microsoft/automatic-graph-layout</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>The MSAGL WpfGraphControl lets you visualize graphs and has and some other rendering functionality. Key features: (1) Pan and Zoom (2) Navigate Forward and Backward (3) tooltips and highlighting on graph entities (4) Search for and focus on graph entities (5) Collapse and opening of subgraphs.</description>
-    <releaseNotes>
-    </releaseNotes>
-    <copyright>Copyright © Microsoft Corporation</copyright>
-    <language>en-US</language>
+    <description>The MSAGL WpfGraphControl lets you visualize graphs and has and some other rendering functionality. 
+    Key features: 
+    (1) Pan and Zoom 
+    (2) Navigate Forward and Backward 
+    (3) tooltips and highlighting on graph entities 
+    (4) Search for and focus on graph entities
+    (5) Collapse and opening of subgraphs 
+    (6) Graph editing</description>
+  <releaseNotes>The release contains bug fixes and code cleanup. Some defines like TEST_MSAGL were removed.</releaseNotes>
+  <language>en-US</language>
     <tags>MSAGL Graph Layout</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.7.2">
