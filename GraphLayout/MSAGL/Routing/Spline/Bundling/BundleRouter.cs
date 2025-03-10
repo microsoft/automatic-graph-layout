@@ -92,7 +92,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                 LayoutAlgorithmSettings.ShowDebugCurves(
                     TightHierarchy.GetAllLeaves().Select(p => new DebugCurve(100, 1, "black", p)).ToArray());*/
                 Status = BundlingStatus.Overlaps;
-                TimeMeasurer.DebugOutput("overlaps in edge bundling");
+                //TimeMeasurer.DebugOutput("overlaps in edge bundling");
                 return;
             }
 
@@ -256,7 +256,7 @@ namespace Microsoft.Msagl.Routing.Spline.Bundling {
                 return true; //we can even enlarge it here
 
             if (es <= 0.02) {
-                TimeMeasurer.DebugOutput("edge bundling can't be executed: not enough free space around obstacles");
+                //TimeMeasurer.DebugOutput("edge bundling can't be executed: not enough free space around obstacles");
                 foreach (var e in regularEdges)
                     e.Curve = null;
 
