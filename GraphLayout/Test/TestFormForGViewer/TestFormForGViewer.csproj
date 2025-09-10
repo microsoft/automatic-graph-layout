@@ -13,6 +13,7 @@
 	
 	<ItemGroup>
 		<ProjectReference Include="..\..\Drawing\AutomaticGraphLayout.Drawing.csproj" />
+		<ProjectReference Include="..\..\tools\DgmlParser\DgmlParser.csproj" />
 		<ProjectReference Include="..\..\tools\GraphViewerGDI\GraphViewerGDI.csproj" />
 		<ProjectReference Include="..\..\MSAGL\AutomaticGraphLayout.csproj" />
 		<ProjectReference Include="..\..\tools\Dot2Graph\Dot2Graph.csproj" />

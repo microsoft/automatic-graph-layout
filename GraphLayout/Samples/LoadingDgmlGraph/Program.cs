@@ -1,5 +1,6 @@
 ﻿
 
+using System;
 using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.Layout.Incremental;
 using Microsoft.Msagl.Layout.Layered;
@@ -7,6 +8,7 @@ using Microsoft.Msagl.Layout.MDS;
 
 namespace LoadingDgmlGraph {
     class Program {
+        [STAThread]
         static void Main(string[] args) {
             Microsoft.Msagl.GraphViewerGdi.DisplayGeometryGraph.SetShowFunctions();
             //create a form
