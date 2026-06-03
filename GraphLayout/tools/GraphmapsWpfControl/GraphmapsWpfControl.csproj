@@ -3,8 +3,7 @@
 		<OutputType>Library</OutputType>
 		<RootNamespace>Microsoft.Msagl.GraphmapsWpfControl</RootNamespace>
 		<AssemblyName>Microsoft.Msagl.GraphmapsWpfControl</AssemblyName>
-		<TargetFrameworks>net472;net6.0-windows</TargetFrameworks>
-		<UseWPF>true</UseWPF>
+		<TargetFrameworks>net472;net6.0-windows;net8.0-windows;net9.0-windows;net10.0-windows</TargetFrameworks>
 		<WarningLevel>4</WarningLevel>
 		
 	</PropertyGroup>

@@ -31,7 +31,16 @@
       </group>
       <group targetFramework="net6.0-windows7.0">
         <dependency id="Msagl.Drawing" version="BuildVersion" />
-      </group>      
+      </group>
+      <group targetFramework="net8.0-windows7.0">
+        <dependency id="Msagl.Drawing" version="BuildVersion" />
+      </group>
+      <group targetFramework="net9.0-windows7.0">
+        <dependency id="Msagl.Drawing" version="BuildVersion" />
+      </group>
+      <group targetFramework="net10.0-windows7.0">
+        <dependency id="Msagl.Drawing" version="BuildVersion" />
+      </group>
     </dependencies>
     <frameworkReferences>
       <group targetFramework="net6.0-windows7.0">
@@ -46,7 +55,15 @@
       <group targetFramework="net10.0-windows7.0">
         <frameworkReference name="Microsoft.WindowsDesktop.App.WindowsForms" />
       </group>
-      
+      <group targetFramework="net8.0-windows7.0">
+        <frameworkReference name="Microsoft.WindowsDesktop.App.WinForms" />
+      </group>
+      <group targetFramework="net9.0-windows7.0">
+        <frameworkReference name="Microsoft.WindowsDesktop.App.WinForms" />
+      </group>
+      <group targetFramework="net10.0-windows7.0">
+        <frameworkReference name="Microsoft.WindowsDesktop.App.WinForms" />
+      </group>
     </frameworkReferences>
   </metadata>
 
@@ -55,5 +72,11 @@
     <file src="./bin/Release/net472/Microsoft.Msagl.GraphViewerGdi.xml" target="lib\net472" />
     <file src="./bin/Release/net6.0-windows/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net6.0-windows7.0" />
     <file src="./bin/Release/net6.0-windows/Microsoft.Msagl.GraphViewerGdi.xml" target="lib\net6.0-windows7.0" />
-   </files>
+   <file src="./bin/Release/net8.0-windows/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net8.0-windows7.0" />
+   <file src="./bin/Release/net8.0-windows/Microsoft.Msagl.GraphViewerGdi.xml" target="lib\net8.0-windows7.0" />
+   <file src="./bin/Release/net9.0-windows/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net9.0-windows7.0" />
+   <file src="./bin/Release/net9.0-windows/Microsoft.Msagl.GraphViewerGdi.xml" target="lib\net9.0-windows7.0" />
+   <file src="./bin/Release/net10.0-windows/Microsoft.Msagl.GraphViewerGdi.dll" target="lib\net10.0-windows7.0" />
+   <file src="./bin/Release/net10.0-windows/Microsoft.Msagl.GraphViewerGdi.xml" target="lib\net10.0-windows7.0" />
+  </files>
 </package>
