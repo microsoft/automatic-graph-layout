@@ -2,7 +2,8 @@
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFrameworks>net6.0-windows;net8.0-windows;net9.0-windows;net10.0-windows</TargetFrameworks></RootNamespace>
+		<TargetFrameworks>net6.0-windows;net8.0-windows;net9.0-windows;net10.0-windows</TargetFrameworks>
+		<RootNamespace>Test01</RootNamespace>
 		<AssemblyName>Test01</AssemblyName>
 		<Platforms>x86;x64;AnyCPU</Platforms>
 		<Configurations>Debug;Release</Configurations>

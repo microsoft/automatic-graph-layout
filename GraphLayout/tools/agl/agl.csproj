@@ -4,6 +4,8 @@
     <RootNamespace>Agl</RootNamespace>
     <AssemblyName>agl</AssemblyName>
     <TargetFrameworks>net472;net6.0-windows;net8.0-windows;net9.0-windows;net10.0-windows</TargetFrameworks>
+    <UseWindowsForms>true</UseWindowsForms>
+    <WarningLevel>4</WarningLevel>
     
     <NoWarn>CA1303;CA1801;CA2000;CA1304;CA1031</NoWarn>
   </PropertyGroup>
