@@ -55,15 +55,6 @@
       <group targetFramework="net10.0-windows7.0">
         <frameworkReference name="Microsoft.WindowsDesktop.App.WindowsForms" />
       </group>
-      <group targetFramework="net8.0-windows7.0">
-        <frameworkReference name="Microsoft.WindowsDesktop.App.WinForms" />
-      </group>
-      <group targetFramework="net9.0-windows7.0">
-        <frameworkReference name="Microsoft.WindowsDesktop.App.WinForms" />
-      </group>
-      <group targetFramework="net10.0-windows7.0">
-        <frameworkReference name="Microsoft.WindowsDesktop.App.WinForms" />
-      </group>
     </frameworkReferences>
   </metadata>
 
