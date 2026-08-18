@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1.1
+        uses: microsoft/setup-msbuild@34cfbaee7f672c76950673338facd8a73f637506 # v1.1.3
 
       - name: Restore NuGet Packages
         run: nuget restore GraphLayout/GraphLayout.sln
@@ -28,7 +28,7 @@ jobs:
         run: msbuild GraphLayout\GraphLayout.sln /p:Configuration=Debug
 
       - name: Setup VSTest.exe
-        uses: Malcolmnixon/Setup-VSTest@v4
+        uses: Malcolmnixon/Setup-VSTest@e29792f6ec069e574dc43f73a13c9ce66669a317 # v4
 
       - name : Test
         run: vstest.console GraphLayout\Test\MSAGLTests\bin\Debug\net8.0-windows\Microsoft.Msagl.UnitTests.dll
