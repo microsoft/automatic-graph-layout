@@ -27,14 +27,14 @@ jobs:
     runs-on: windows-latest
     steps:
      - name: Checkout Code
-       uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # v1.2.0
+       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       
      - name: Add msbuild to PATH
-       uses: microsoft/setup-msbuild@34cfbaee7f672c76950673338facd8a73f637506 # v1.1.3
+       uses: microsoft/setup-msbuild@30375c66a4eea26614e0d39710365f22f8b0af57 # v3.0.0
        
      - name: Setup NuGet
-       uses: NuGet/setup-nuget@255f46e14d51fbc603743e2aa2907954463fbeb9 # v1.0.2
+       uses: NuGet/setup-nuget@b26b823c478ee115be5c9403e62c90b0bf943843 # v3.1.0
        env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'     
 
