@@ -63,6 +63,6 @@
 		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.6" PrivateAssets="all" />
 	</ItemGroup>
 <ItemGroup>
-  <PackageReference Include="System.Text.Json" Version="8.0.0" />
+  <PackageReference Include="System.Text.Json" Version="8.0.5" />
 </ItemGroup>
 </Project>
