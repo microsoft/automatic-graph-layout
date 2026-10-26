@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Create Release
         id: create_release
-        uses: actions/create-release@latest
+        uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e # latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
@@ -56,4 +56,3 @@ jobs:
          tag: ${{ github.ref }}
          overwrite: true
          body: "The zip file of agl driver"
-
